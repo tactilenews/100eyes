@@ -1,0 +1,21 @@
+version: "3.4"
+
+services:
+  mailserver:
+    image: djfarrelly/maildev
+    ports:
+      - 1080:80
+    networks:
+      - 100eyes
+  desk:
+    image: 100eyes/desk
+    build: desk
+    ports:
+      - 3000:3000
+    networks:
+      - 100eyes
+    environment:
+      - HOST=0.0.0.0
+
+networks:
+  100eyes:
