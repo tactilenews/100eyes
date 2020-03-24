@@ -27,7 +27,10 @@ export default {
   methods: {
     submit() {
       const { subject, question } = this
-      console.log(subject, question)
+      this.$axios.$post('/api/mail', {
+        subject,
+        text: question
+      })
     }
   }
 }

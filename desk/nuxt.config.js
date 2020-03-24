@@ -45,7 +45,8 @@ export default {
   modules: [
     '@nuxtjs/pwa',
     // Doc: https://github.com/nuxt-community/dotenv-module
-    '@nuxtjs/dotenv'
+    '@nuxtjs/dotenv',
+    '@nuxtjs/axios'
   ],
   /*
    ** vuetify module configuration
@@ -81,5 +82,7 @@ export default {
         overlay: false
       }
     }
-  }
+  },
+
+  serverMiddleware: ['~/api/mail']
 }
