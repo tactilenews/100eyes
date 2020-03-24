@@ -12,6 +12,8 @@ services:
     build: desk
     ports:
       - 3000:3000
+    volumes:
+      - ./desk:/desk
     networks:
       - 100eyes
     environment:
