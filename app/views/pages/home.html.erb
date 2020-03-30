@@ -1,1 +1,19 @@
-Hello World!
+<%= c 'page_wrapper' do %>
+
+    <%= c 'button' do %>
+        Primary Action
+    <% end %>
+
+    <%= c 'button', title: 'Lorem Ipsum', style: 'secondary' do %>
+        Secondary Action
+    <% end %>
+
+    <%= c 'collapsible', title: 'Was ist 100eyes?' do %>
+        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.</p>
+    <% end %>
+
+    <%= c 'collapsible', title: 'Wie hilft 100eyes im Redaktionsalltag?' do %>
+        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.</p>
+    <% end %>
+
+<% end %>

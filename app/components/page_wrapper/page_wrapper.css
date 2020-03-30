@@ -1,0 +1,6 @@
+.c-page-wrapper {
+    max-width: 48rem;
+    min-height: 100vh;
+    margin: auto;
+    padding: var(--spacing-unit);
+}

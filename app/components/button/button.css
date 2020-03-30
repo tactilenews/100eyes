@@ -1,0 +1,23 @@
+.c-button {
+    -webkit-appearance: none;
+    text-decoration: none;
+    font-size: var(--font-size);
+    line-height: var(--spacing-unit);
+
+    display: inline-block;
+    padding: calc(.5 * var(--spacing-unit)) var(--spacing-unit);
+    margin: calc(.5 * var(--spacing-unit)) 0;
+
+    font-weight: 600;
+    border-radius: var(--border-radius);
+    border: 2px solid var(--primary-color);
+}
+
+.c-button--primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.c-button--secondary {
+    color: var(--primary-color);
+}

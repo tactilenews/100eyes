@@ -1,0 +1,15 @@
+<div class="c-collapsible" data-controller="collapsible">
+    <button
+        data-target="collapsible.title"
+        data-action="click->collapsible#toggle"
+
+        class="c-collapsible__title"
+        aria-expanded="true"
+        tabindex="0"
+    >
+        <%= @title %>
+    </button>
+    <div class="c-collapsible__content">
+        <%= @content %>
+    </div>
+</div>

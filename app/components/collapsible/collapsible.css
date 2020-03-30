@@ -1,0 +1,31 @@
+.c-collapsible__title {
+    -webkit-appearance: none;
+    border: none;
+    background: transparent;
+    text-align: left;
+
+    width: 100%;
+    padding: calc(.5 * var(--spacing-unit)) 0;
+    font-size: var(--font-size);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.c-collapsible__title::before {
+    content: '▶︎';
+    display: inline-block;
+    width: 1rem;
+}
+
+.c-collapsible__title[aria-expanded="true"]::before {
+    transform: rotate(90deg);
+}
+
+.c-collapsible__content {
+    display: none;
+    margin-bottom: calc(.5 * var(--spacing-unit));
+}
+
+.c-collapsible__title[aria-expanded="true"] + .c-collapsible__content {
+    display: block;
+}
