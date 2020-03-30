@@ -1,0 +1,9 @@
+:root {
+    --font-size: 20px;
+    --spacing-unit: 30px;
+    --border-radius: 5px;
+
+    --font-family: system-ui;
+    --primary-color: #00616b;
+    --gray: #adb6bb;
+}
