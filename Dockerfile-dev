@@ -24,4 +24,6 @@ RUN gem install bundler
 RUN bundle install
 
 COPY package.json yarn.lock ./
-RUN yarn install
+RUN yarn install --production=false
+
+COPY . .
