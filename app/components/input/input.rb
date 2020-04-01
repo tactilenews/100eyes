@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Input
   class Input < ViewComponent::Base
     def initialize(label:)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ComponentHelper
   def component(name, props = {}, &block)
     component_class = class_from_identifier(name)
@@ -16,7 +18,7 @@ module ComponentHelper
     class_name = path.camelize
 
     unless class_name.safe_constantize
-      raise ArgumentError.new("View component #{class_name} is not defined.")
+      raise ArgumentError, "View component #{class_name} is not defined."
     end
 
     class_name.constantize

@@ -2,29 +2,58 @@ version: '3.7'
 
 services:
   app:
-    container_name: 100eyes_app
     build:
       context: .
-      dockerfile: Dockerfile-dev
-    command: foreman start
+    command: bundle exec rails server
     environment:
-      DATABASE_URL: postgres://postgres:postgres@db:5432
+      - RAILS_ENV=development
+      - HOST=0.0.0.0
+      - PORT=3000
+      - APP_DATABASE_HOST=db
+      - APP_DATABASE_USERNAME=postgres
+      - APP_DATABASE_PASSWORD=postgres
     volumes:
-      - .:/app:cached
+      - .:/app
       - bundle:/usr/local/bundle
-      - rails_cache:/app/tmp/cache
-      - node_modules:/app/node_modules
       - packs:/app/public/packs
     ports:
       - '3000:3000'
-      - '3035:3035'
     stdin_open: true
     tty: true
     depends_on:
+      - webpack
       - db
+      - mailserver
+
+  webpack:
+    build:
+      context: .
+    command: ./bin/webpack-dev-server
+    environment:
+      - WEBPACKER_DEV_SERVER_HOST=0.0.0.0
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+      - packs:/app/public/packs
+    ports:
+      - '3035:3035'
+
+  telegram:
+    build:
+      context: .
+    command: rake telegram:bot:poller
+    environment:
+      - RAILS_ENV=development
+      - APP_DATABASE_HOST=db
+      - APP_DATABASE_USERNAME=postgres
+      - APP_DATABASE_PASSWORD=postgres
+    volumes:
+      - .:/app
+      - bundle:/usr/local/bundle
+    stdin_open: true
+    tty: true
 
   db:
-    container_name: 100eyes_db
     image: postgres:12.2-alpine
     environment:
       POSTGRES_DB: app_development
@@ -37,12 +66,10 @@ services:
   mailserver:
     image: djfarrelly/maildev
     ports:
-      - 25
       - 1080:80
 
 volumes:
   bundle:
-  rails_cache:
   node_modules:
-  packs:
   postgres_data:
+  packs:
