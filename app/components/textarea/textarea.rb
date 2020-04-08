@@ -13,6 +13,10 @@ module Textarea
         value,
         id: id,
         class: 'c-textarea',
+        data: {
+          controller: 'textarea',
+          action: 'input->textarea#resize',
+        },
         required: required,
         placeholder: placeholder
       )
