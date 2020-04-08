@@ -1,8 +1,6 @@
 require 'test_helper'
 
 class ButtonTest < ViewComponentTestCase
-  include ComponentHelper
-
   test 'render content' do
     component_inline('button') { 'Button label' }
     assert_text('Button label')
