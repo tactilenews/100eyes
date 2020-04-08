@@ -1,5 +1,5 @@
 .c-page-wrapper {
-    max-width: 48rem;
+    max-width: var(--grid-max-width);
     min-height: 100vh;
     margin: auto;
     padding: var(--spacing-unit);

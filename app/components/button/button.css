@@ -5,19 +5,19 @@
     line-height: var(--spacing-unit);
 
     display: inline-block;
-    padding: calc(.5 * var(--spacing-unit)) var(--spacing-unit);
-    margin: calc(.5 * var(--spacing-unit)) 0;
+    padding: var(--spacing-unit-s) var(--spacing-unit);
+    margin: var(--spacing-unit-s) 0;
 
     font-weight: 600;
     border-radius: var(--border-radius);
-    border: 2px solid var(--primary-color);
+    border: 2px solid var(--color-primary);
 }
 
 .c-button--primary {
-    background-color: var(--primary-color);
+    background-color: var(--color-primary);
     color: white;
 }
 
 .c-button--secondary {
-    color: var(--primary-color);
+    color: var(--color-primary);
 }

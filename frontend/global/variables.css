@@ -1,9 +1,21 @@
 :root {
     --font-size: 20px;
+    --line-height: 30px;
+
     --spacing-unit: 30px;
+    --spacing-unit-s: calc(.5 * var(--spacing-unit));
+    --spacing-unit-xs: calc(.25 * var(--spacing-unit));
+    --spacing-unit-l: calc(1.5 * var(--spacing-unit));
+    --spacing-unit-xl: calc(2 * var(--spacing-unit));
+
+    --grid-max-width: 48rem;
+
     --border-radius: 5px;
 
-    --font-family: system-ui;
-    --primary-color: #00616b;
-    --gray: #adb6bb;
+    --color-bg: #fff;
+    --color-text: #333;
+    --color-primary: #333;
+
+    --font-family: system-ui, Helvetica Neue, Helvetica, sans-serif;
+
 }
