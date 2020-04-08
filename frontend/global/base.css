@@ -13,3 +13,9 @@ html, body {
 
     font-family: var(--font-family);
 }
+
+input, button, textarea {
+    font-size: var(--font-size);
+    line-height: var(--spacing-unit);
+    font-family: var(--font-family);
+}

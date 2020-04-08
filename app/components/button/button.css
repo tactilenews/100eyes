@@ -1,12 +1,14 @@
 .c-button {
     -webkit-appearance: none;
+    -moz-appearance: none;
+
     text-decoration: none;
-    font-size: var(--font-size);
-    line-height: var(--spacing-unit);
 
     display: inline-block;
-    padding: var(--spacing-unit-s) var(--spacing-unit);
-    margin: var(--spacing-unit-s) 0;
+    margin: var(--input-margin);
+    padding: var(--input-padding);
+    padding-left: var(--spacing-unit);
+    padding-right: var(--spacing-unit);
 
     font-weight: 600;
     border-radius: var(--border-radius);

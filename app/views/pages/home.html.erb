@@ -1,8 +1,7 @@
 <%= c 'page_wrapper' do %>
 
     <%= form_with url: '/broadcast/deliver', method: 'post' do %>
-      <%= c 'form_input', label: 'Subject' %>
-      <%= c 'form_input', label: 'Text' %>
+      <%= c 'textarea', id: 'question', required: true, placeholder: 'Gib hier deine Frage ein…' %>
       <%= c 'button', type: 'submit', label: 'Frage senden' %>
     <% end %>
 
