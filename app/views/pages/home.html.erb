@@ -1,11 +1,9 @@
 <%= c 'page_wrapper' do %>
 
-    <%= c 'button', type: 'submit' do %>
-        Primary Action
-    <% end %>
-
-    <%= c 'button', style: 'secondary' do %>
-        Secondary Action
+    <%= form_with url: '/broadcast/deliver', method: 'post' do %>
+      <%= c 'form_input', label: 'Subject' %>
+      <%= c 'form_input', label: 'Text' %>
+      <%= submit_tag("Submit") %>
     <% end %>
 
 <% end %>

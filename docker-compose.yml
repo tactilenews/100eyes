@@ -34,6 +34,12 @@ services:
     ports:
       - 5432
 
+  mailserver:
+    image: djfarrelly/maildev
+    ports:
+      - 25
+      - 1080:80
+
 volumes:
   bundle:
   rails_cache:
