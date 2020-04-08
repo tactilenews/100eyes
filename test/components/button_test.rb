@@ -1,6 +1,6 @@
-require 'view_component/test_case'
+require 'test_helper'
 
-class ButtonTest < ViewComponent::TestCase
+class ButtonTest < ViewComponentTestCase
   include ComponentHelper
 
   test 'render content' do
