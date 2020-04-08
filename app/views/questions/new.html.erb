@@ -1,6 +1,6 @@
 <%= c 'page_wrapper' do %>
 
-    <%= form_with url: '/broadcast/deliver', method: 'post' do %>
+    <%= form_with url: questions_path do %>
       <%= c 'textarea', id: 'question', required: true, placeholder: 'Gib hier deine Frage ein…' %>
       <%= c 'button', type: 'submit', label: 'Frage senden' %>
     <% end %>
