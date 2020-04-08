@@ -17,4 +17,9 @@ class ButtonTest < ViewComponent::TestCase
     component_inline('button', style: 'secondary')
     assert_selector('.c-button.c-button--secondary')
   end
+
+  test 'use optional type' do
+    component_inline('button', type: 'submit')
+    assert_selector('.c-button[type="submit"]')
+  end
 end
