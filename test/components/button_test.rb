@@ -8,6 +8,11 @@ class ButtonTest < ViewComponentTestCase
     assert_text('Button label')
   end
 
+  test 'optionally set content via label parameter' do
+    component_inline('button', label: 'Button label')
+    assert_text('Button label')
+  end
+
   test 'render primary button' do
     component_inline('button')
     assert_selector('.c-button.c-button--primary')

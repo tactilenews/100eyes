@@ -1,6 +1,7 @@
 module Button
   class Button < ViewComponent::Base
-    def initialize(style: 'primary', type: nil)
+    def initialize(label: nil, style: 'primary', type: nil)
+      @label = label
       @style = style
       @type = type
     end
@@ -9,12 +10,16 @@ module Button
       content_tag(:button, content, class: class_names, type: type)
     end
 
+    private
+
     def class_names
       ['c-button', "c-button--#{style}"]
     end
 
-    private
+    def content
+      return label || @content
+    end
 
-    attr_reader :content, :style, :type
+    attr_reader :label, :style, :type
   end
 end
