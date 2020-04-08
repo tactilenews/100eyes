@@ -3,6 +3,9 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    BroadcastMailer.with(subject: params[:subject], text: params[:text]).question_email.deliver_now
+    QuestionMailer
+      .with(question: params[:question])
+      .new_question_email
+      .deliver_now
   end
 end

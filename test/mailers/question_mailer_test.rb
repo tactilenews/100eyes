@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class BroadcastControllerTest < ActionDispatch::IntegrationTest
+class QuestionMailerTest < ActionMailer::TestCase
   # test "the truth" do
   #   assert true
   # end

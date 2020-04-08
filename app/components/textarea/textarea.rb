@@ -12,6 +12,7 @@ module Textarea
         :textarea,
         value,
         id: id,
+        name: id,
         class: 'c-textarea',
         data: {
           controller: 'textarea',
