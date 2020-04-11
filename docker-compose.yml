@@ -1,0 +1,48 @@
+version: '3.7'
+
+services:
+  app:
+    container_name: 100eyes_app
+    build:
+      context: .
+      dockerfile: Dockerfile-dev
+    command: foreman start
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432
+    volumes:
+      - .:/app:cached
+      - bundle:/usr/local/bundle
+      - rails_cache:/app/tmp/cache
+      - node_modules:/app/node_modules
+      - packs:/app/public/packs
+    ports:
+      - '3000:3000'
+      - '3035:3035'
+    stdin_open: true
+    tty: true
+    depends_on:
+      - db
+
+  db:
+    container_name: 100eyes_db
+    image: postgres:12.2-alpine
+    environment:
+      POSTGRES_DB: app_development
+      POSTGRES_HOST_AUTH_METHOD: trust
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - 5432
+
+  mailserver:
+    image: djfarrelly/maildev
+    ports:
+      - 25
+      - 1080:80
+
+volumes:
+  bundle:
+  rails_cache:
+  node_modules:
+  packs:
+  postgres_data:

@@ -1,0 +1,11 @@
+.c-input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    display: inline-block;
+    padding: var(--spacing-unit-s) var(--spacing-unit-s);
+    margin: var(--spacing-unit-s) 0;
+
+    border-radius: var(--border-radius);
+    border: 2px solid var(--color-border);
+}

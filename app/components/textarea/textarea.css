@@ -1,0 +1,14 @@
+.c-textarea {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    display: block;
+    width: 100%;
+    padding: var(--input-padding);
+    margin: var(--input-margin);
+
+    border-radius: var(--border-radius);
+    border: 2px solid var(--color-border);
+
+    resize: none;
+}

@@ -1,0 +1,21 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    font-size: var(--font-size);
+    line-height: var(--spacing-unit);
+
+    background-color: var(--color-bg);
+    color: var(--color-bg);
+
+    font-family: var(--font-family);
+}
+
+input, button, textarea {
+    font-size: var(--font-size);
+    line-height: var(--spacing-unit);
+    font-family: var(--font-family);
+}

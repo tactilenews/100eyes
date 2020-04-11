@@ -1,0 +1,5 @@
+pre-commit:
+  commands:
+    prettier:
+      glob: "*.{js}"
+      run:  "yarn prettier --list-different {staged_files}"
