@@ -9,7 +9,6 @@ html, body {
     line-height: var(--spacing-unit);
 
     background-color: var(--color-bg);
-    color: var(--color-bg);
 
     font-family: var(--font-family);
 }
