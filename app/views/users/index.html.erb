@@ -1,0 +1,23 @@
+<%= c 'page_wrapper' do %>
+<p id="notice"><%= notice %></p>
+
+<h1>Users</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>E-Mail</th>
+      <th>Chat ID</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @users.each do |user| %>
+      <%= c 'user_wrapper', user: user %>
+    <% end %>
+  </tbody>
+</table>
+<% end %>
