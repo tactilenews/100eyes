@@ -35,8 +35,9 @@ Rails.application.configure do
 
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.smtp_settings = {
-    address: 'mailserver',
-    openssl_verify_mode: 'none'
+    address: ENV['MAILSERVER_HOST'] || 'localhost',
+    port: ENV['MAILSERVER_PORT'] || 1025,
+    enable_starttls_auto: false,
   }
 
   config.action_mailer.perform_caching = false
