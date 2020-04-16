@@ -5,7 +5,7 @@ module Tiles
     def initialize(*); end
 
     def call
-      content_tag(:div, @content, class: 'tiles')
+      content_tag(:div, @content, class: 'Tiles')
     end
   end
 end
