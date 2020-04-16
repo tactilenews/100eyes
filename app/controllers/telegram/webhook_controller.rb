@@ -7,7 +7,10 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
     unless user
       user = User.new(
         telegram_chat_id: telegram_chat_id,
-        telegram_id: message['from']['id']
+        telegram_id: message['from']['id'],
+        first_name: from['first_name'],
+        last_name: from['last_name'],
+        username: from['username']
       )
       user.save!
     end
