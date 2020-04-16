@@ -1,6 +1,7 @@
-<%= link_to url do %>
-  <div>
-    <svg><use xlink:href="<%= icon_url %>"/></svg>
-    <%= content %>
-  </div>
-<% end %>
+<a class="Tile" href="<%= url %>">
+    <div class="Tile-icon">
+        <%= c 'icon', icon: icon %>
+    </div>
+    <span class="Tile-action"><%= action %></span>
+    <span class="Tile-subject"><%= subject %></span>
+</a>
