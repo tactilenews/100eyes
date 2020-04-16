@@ -9,6 +9,7 @@ html, body {
     line-height: var(--spacing-unit);
 
     background-color: var(--color-bg);
+    color: var(--color-text);
 
     font-family: var(--font-family);
 }
@@ -17,4 +18,9 @@ input, button, textarea {
     font-size: var(--font-size);
     line-height: var(--spacing-unit);
     font-family: var(--font-family);
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
 }
