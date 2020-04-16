@@ -2,34 +2,11 @@
   <h1>Kontaktiere sofort 50 Menschen aus der Region:</h1>
 
   <%= c 'tiles' do %>
-    <%= c 'tile', url: pending_not_implemented_path, icon: 'nc-icon-survey-glyph-48'  do %>
-      Starte eine
-      <strong>Umfrage</strong>
-    <% end %>
-
-    <%= c 'tile', url: new_question_path, icon: 'nc-icon-pin-search-glyph-48' do %>
-      Finde
-      <strong>Orte</strong>
-    <% end %>
-
-    <%= c 'tile', url: pending_not_implemented_path, icon: 'nc-icon-a-search-glyph-48'  do %>
-      Finde einen
-      <strong>Experten</strong>
-    <% end %>
-
-    <%= c 'tile', url: pending_not_implemented_path, icon: 'nc-icon-camera-2-glyph-48'  do %>
-      Erhalte
-      <strong>Fotos</strong>
-    <% end %>
-
-    <%= c 'tile', url: pending_not_implemented_path, icon: 'nc-icon-feedback-glyph-48'  do %>
-      Erhalte
-      <strong>Feedback</strong>
-    <% end %>
-
-    <%= c 'tile', url: pending_not_implemented_path, icon: 'nc-icon-s-question-glyph-48'  do %>
-      Stelle eine
-      <strong>andere Frage</strong>
-    <% end %>
+    <%= c 'tile', icon: 'survey', action: 'Starte eine', subject: 'Umfrage', url: pending_not_implemented_path %>
+    <%= c 'tile', icon: 'pin-search', action: 'Finde', subject: 'Orte', url: pending_not_implemented_path %>
+    <%= c 'tile', icon: 'a-search', action: 'Finde einen', subject: 'Experten', url: pending_not_implemented_path %>
+    <%= c 'tile', icon: 'camera-2', action: 'Erhalte', subject: 'Fotos', url: pending_not_implemented_path %>
+    <%= c 'tile', icon: 'feedback', action: 'Erhalte', subject: 'Feedback', url: pending_not_implemented_path %>
+    <%= c 'tile', icon: 's-question', action: 'Stelle eine', subject: 'andere Frage', url: pending_not_implemented_path %>
   <% end %>
 <% end %>
