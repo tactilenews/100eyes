@@ -1,5 +1,5 @@
 .UserRow > td {
-    border: 1.5px solid var(--color-border);
+    border: 2px solid var(--color-border);
     border-left: none;
     border-right: none;
     padding: var(--spacing-unit-s);
