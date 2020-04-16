@@ -16,7 +16,7 @@
 .Tile-icon {
     width: 3rem;
     height: 3rem;
-    margin-bottom: var(--spacing-unit-s);
+    margin: var(--spacing-unit-s) 0;
     fill: var(--color-text);
 }
 
