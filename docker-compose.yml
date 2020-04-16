@@ -1,60 +1,41 @@
 version: '3.7'
 
 services:
-  app:
-    build:
-      context: .
-    command: bundle exec rails server
+  app: &app
+    build: .
     environment:
-      - RAILS_ENV=development
-      - HOST=0.0.0.0
-      - PORT=3000
-      - APP_DATABASE_HOST=db
-      - APP_DATABASE_USERNAME=postgres
-      - APP_DATABASE_PASSWORD=postgres
-      - MAILSERVER_HOST=mailserver
-      - MAILSERVER_PORT=25
-      - WEBPACKER_DEV_SERVER_HOST=webpack
+      RAILS_ENV: development
+      NODE_ENV: development
+      BINDING: 0.0.0.0
+      PORT: 3000
+      APP_DATABASE_HOST: db
+      APP_DATABASE_USERNAME: postgres
+      APP_DATABASE_PASSWORD: postgres
+      MAILSERVER_HOST: mailserver
+      MAILSERVER_PORT: 25
+      WEBPACKER_DEV_SERVER_HOST: webpack
     volumes:
       - .:/app
       - bundle:/usr/local/bundle
       - packs:/app/public/packs
-    ports:
-      - '3000:3000'
     stdin_open: true
     tty: true
-    depends_on:
-      - webpack
-      - db
-      - mailserver
+
+  rails:
+    <<: *app
+    command: bundle exec rails server
+    ports: ['3000:3000']
+    depends_on: [ webpack, db, mailserver ]
 
   webpack:
-    build:
-      context: .
+    <<: *app
     command: ./bin/webpack-dev-server
-    environment:
-      - WEBPACKER_DEV_SERVER_HOST=0.0.0.0
-    volumes:
-      - .:/app
-      - node_modules:/app/node_modules
-      - packs:/app/public/packs
-    ports:
-      - '3035:3035'
+    environment: { WEBPACKER_DEV_SERVER_HOST: 0.0.0.0 }
+    ports: [ '3035:3035' ]
 
   telegram:
-    build:
-      context: .
+    <<: *app
     command: rake telegram:bot:poller
-    environment:
-      - RAILS_ENV=development
-      - APP_DATABASE_HOST=db
-      - APP_DATABASE_USERNAME=postgres
-      - APP_DATABASE_PASSWORD=postgres
-    volumes:
-      - .:/app
-      - bundle:/usr/local/bundle
-    stdin_open: true
-    tty: true
 
   db:
     image: postgres:12.2-alpine
@@ -63,14 +44,11 @@ services:
       POSTGRES_HOST_AUTH_METHOD: trust
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - 5432:5432
+    ports: [ '5432:5432' ]
 
   mailserver:
     image: djfarrelly/maildev
-    ports:
-      - 1080:80
-      - "1025:25"
+    ports: [ '1080:80', '1025:25' ]
 
 volumes:
   bundle:
