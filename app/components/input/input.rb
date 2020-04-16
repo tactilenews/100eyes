@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Input
-  class Input < ViewComponent::Base
+  class Input < ApplicationComponent
     def initialize(label:)
       @label = label
     end

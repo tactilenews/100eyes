@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Tile
-  class Tile < ViewComponent::Base
+  class Tile < ApplicationComponent
     def initialize(url:, icon:)
       @url = url
       @icon = icon

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Tiles
-  class Tiles < ViewComponent::Base
+  class Tiles < ApplicationComponent
     def initialize(*); end
 
     def call

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Textarea
-  class Textarea < ViewComponent::Base
+  class Textarea < ApplicationComponent
     def initialize(id: nil, value: nil, placeholder: nil, required: false)
       @id = id
       @value = value
