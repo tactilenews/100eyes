@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
-module UserWrapper
-  class UserWrapper < ViewComponent::Base
+module UserRow
+  class UserRow < ViewComponent::Base
+    include ComponentHelper
+
     def initialize(user:)
       @user = user
     end

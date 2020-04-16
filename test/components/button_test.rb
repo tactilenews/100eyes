@@ -27,4 +27,9 @@ class ButtonTest < ViewComponentTestCase
     component_inline('button', type: 'submit')
     assert_selector('.c-button[type="submit"]')
   end
+
+  test 'use a tag if given link' do
+    component_inline('button', link: '#')
+    assert_selector('a.c-button[href="#"]')
+  end
 end

@@ -1,0 +1,16 @@
+<tr class="UserRow">
+    <td class="UserRow-avatar">
+        <%= c 'avatar', url: user.avatar %>
+    </td>
+    <td class="UserRow-main">
+        <div class="UserRow-name">
+            <%= user.first_name %> <%= user.last_name %>
+        </div>
+        <div class="UserRow-note">
+            <%= user.note %>
+        </div>
+    </td>
+    <td class="UserRow-actions">
+        <%= c 'button', style: 'link', label: 'Bearbeiten', link: '#' %>
+    </td>
+</tr>
