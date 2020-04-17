@@ -37,7 +37,7 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
     address: ENV['MAILSERVER_HOST'] || 'localhost',
     port: ENV['MAILSERVER_PORT'] || 1025,
-    enable_starttls_auto: false,
+    enable_starttls_auto: false
   }
 
   config.action_mailer.perform_caching = false
