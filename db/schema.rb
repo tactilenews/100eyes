@@ -34,11 +34,12 @@ ActiveRecord::Schema.define(version: 2020_04_17_134641) do
 
   create_table "users", force: :cascade do |t|
     t.string "email"
-    t.integer "chat_id"
+    t.integer "telegram_chat_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "telegram_id"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["telegram_chat_id"], name: "index_users_on_telegram_chat_id", unique: true
     t.index ["telegram_id"], name: "index_users_on_telegram_id", unique: true
   end
 

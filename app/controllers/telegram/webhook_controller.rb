@@ -2,10 +2,13 @@
 
 class Telegram::WebhookController < Telegram::Bot::UpdatesController
   def message(message)
-    chat_id = message['chat']['id']
-    user = User.find_by(chat_id: chat_id)
+    telegram_chat_id = message['from']['chat_id']
+    user = User.find_by(telegram_chat_id: telegram_chat_id)
     unless user
-      user = User.new(chat_id: chat_id)
+      user = User.new(
+        telegram_chat_id: telegram_chat_id,
+        telegram_id: message['from']['telegram_id']
+      )
       user.save!
     end
     user.respond_feedback(answer: message['text'])
