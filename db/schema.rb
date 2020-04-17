@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_07_195158) do
+ActiveRecord::Schema.define(version: 2020_04_17_134641) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,8 +37,9 @@ ActiveRecord::Schema.define(version: 2020_04_07_195158) do
     t.integer "chat_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["chat_id"], name: "index_users_on_chat_id", unique: true
+    t.integer "telegram_id"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["telegram_id"], name: "index_users_on_telegram_id", unique: true
   end
 
   add_foreign_key "feedbacks", "issues"
