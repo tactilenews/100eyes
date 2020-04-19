@@ -38,7 +38,7 @@ jobs:
       - name: Install frontend dependencies and build assets
         run: |
           yarn install
-          bundle exec rails webpacker:compile
+          bin/rails webpacker:compile
 
       - name: Run tests
         env:
@@ -46,6 +46,6 @@ jobs:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432
         run: |
-          bundle exec rake db:create
-          bundle exec rake db:migrate
-          bundle exec rake test
+          bin/rails db:create
+          bin/rails db:migrate
+          bin/rails test
