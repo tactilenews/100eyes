@@ -10,7 +10,7 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
   end
 
   describe '#message' do
-    subject { -> { dispatch_message 'Hello Bot!', { from: { telegram_id: 47, username: 'Joe' } } } }
+    subject { -> { dispatch_message 'Hello Bot!', { from: { id: 47, username: 'Joe' } } } }
     it { should change { User.count }.from(0).to(1) }
     describe 'created user' do
       before(:each) { subject.call }
