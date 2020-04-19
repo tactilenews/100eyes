@@ -38,7 +38,7 @@ jobs:
       - name: Install frontend dependencies and build assets
         run: |
           yarn install
-          RAILS_ENV=test bundle exec rails webpacker:compile
+          bundle exec rails webpacker:compile
 
       - name: Run tests
         env:
