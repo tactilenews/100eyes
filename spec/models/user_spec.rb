@@ -19,18 +19,18 @@ RSpec.describe User, type: :model do
 
   let(:user) { User.create! }
   describe '#respond' do
-    it 'ignores feedback without issue' do
+    it 'ignores feedback without request' do
       expect { user.respond_feedback(answer: 'some answer') }.not_to raise_error
-      expect { user.respond_feedback(answer: 'some answer') }.not_to(change { Feedback.count })
+      expect { user.respond_feedback(answer: 'some answer') }.not_to(change { Reply.count })
     end
 
-    describe 'given feedback was requested on a recent issue' do
+    describe 'given feedback was requested on a recent request' do
       before(:each) do
-        Issue.create!(text: "Hey what's up?")
+        Request.create!(text: "Hey what's up?")
       end
 
-      it 'saves user feedback along with an issue' do
-        expect { user.respond_feedback(answer: 'some answer') }.to(change { Feedback.count }.from(0).to(1))
+      it 'saves user feedback along with a request' do
+        expect { user.respond_feedback(answer: 'some answer') }.to(change { Reply.count }.from(0).to(1))
       end
     end
   end

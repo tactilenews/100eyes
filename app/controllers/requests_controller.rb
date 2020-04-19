@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class QuestionsController < ApplicationController
+class RequestsController < ApplicationController
   def new; end
 
   def create

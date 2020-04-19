@@ -3,9 +3,9 @@
 require 'rails_helper'
 require 'telegram/bot/rspec/integration/rails'
 
-RSpec.describe 'Questions', telegram_bot: :rails do
-  describe 'POST /questions' do
-    subject { -> { post questions_path, params: { question: 'How do you do?' } } }
+RSpec.describe 'Requests', telegram_bot: :rails do
+  describe 'POST /requests' do
+    subject { -> { post requests_path, params: { question: 'How do you do?' } } }
     describe 'without users' do
       it { should_not raise_error }
     end

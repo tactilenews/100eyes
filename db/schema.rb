@@ -15,17 +15,17 @@ ActiveRecord::Schema.define(version: 2020_04_17_134641) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "feedbacks", force: :cascade do |t|
+  create_table "replies", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.bigint "issue_id", null: false
+    t.bigint "request_id", null: false
     t.string "text"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["issue_id"], name: "index_feedbacks_on_issue_id"
-    t.index ["user_id"], name: "index_feedbacks_on_user_id"
+    t.index ["request_id"], name: "index_replies_on_request_id"
+    t.index ["user_id"], name: "index_replies_on_user_id"
   end
 
-  create_table "issues", force: :cascade do |t|
+  create_table "requests", force: :cascade do |t|
     t.string "title"
     t.string "text"
     t.datetime "created_at", precision: 6, null: false
@@ -43,6 +43,6 @@ ActiveRecord::Schema.define(version: 2020_04_17_134641) do
     t.index ["telegram_id"], name: "index_users_on_telegram_id", unique: true
   end
 
-  add_foreign_key "feedbacks", "issues"
-  add_foreign_key "feedbacks", "users"
+  add_foreign_key "replies", "requests"
+  add_foreign_key "replies", "users"
 end

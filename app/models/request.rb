@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
-class Issue < ApplicationRecord
+class Request < ApplicationRecord
   has_many :feedbacks, dependent: :destroy
 end

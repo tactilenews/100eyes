@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class CreateIssues < ActiveRecord::Migration[6.0]
+class CreateRequests < ActiveRecord::Migration[6.0]
   def change
-    create_table :issues do |t|
+    create_table :requests do |t|
       t.string :title
       t.string :text
 
