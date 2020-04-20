@@ -1,10 +1,10 @@
 <%= c 'page_wrapper' do %>
   <p id="notice"><%= notice %></p>
-    <%= c 'user_table' do %>
-        <tbody>
-            <% @users.each do |user| %>
-                <%= c 'user_row', user: user %>
-            <% end %>
-        </tbody>
-    <% end %>
+  <%= c 'user_table' do %>
+      <tbody>
+          <% @users.each do |user| %>
+              <%= c 'user_row', user: user %>
+          <% end %>
+      </tbody>
+  <% end %>
 <% end %>
