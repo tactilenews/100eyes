@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Button
   class Button < ViewComponent::Base
     def initialize(label: nil, style: 'primary', type: nil)
@@ -17,7 +19,7 @@ module Button
     end
 
     def content
-      return label || @content
+      label || @content
     end
 
     attr_reader :label, :style, :type

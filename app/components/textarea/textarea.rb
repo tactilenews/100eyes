@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Textarea
   class Textarea < ViewComponent::Base
     def initialize(id: nil, value: nil, placeholder: nil, required: false)
@@ -16,7 +18,7 @@ module Textarea
         class: 'c-textarea',
         data: {
           controller: 'textarea',
-          action: 'input->textarea#resize',
+          action: 'input->textarea#resize'
         },
         required: required,
         placeholder: placeholder

@@ -1,48 +1,59 @@
 version: '3.7'
 
 services:
-  app:
-    container_name: 100eyes_app
-    build:
-      context: .
-      dockerfile: Dockerfile-dev
-    command: foreman start
+  app: &app
+    build: .
     environment:
-      DATABASE_URL: postgres://postgres:postgres@db:5432
+      RAILS_ENV: development
+      NODE_ENV: development
+      BINDING: 0.0.0.0
+      PORT: 3000
+      APP_DATABASE_HOST: db
+      APP_DATABASE_USERNAME: postgres
+      APP_DATABASE_PASSWORD: postgres
+      MAILSERVER_HOST: mailserver
+      MAILSERVER_PORT: 25
+      WEBPACKER_DEV_SERVER_HOST: webpack
+      RUBYOPT: "-W:no-deprecated"
     volumes:
-      - .:/app:cached
+      - .:/app
       - bundle:/usr/local/bundle
-      - rails_cache:/app/tmp/cache
-      - node_modules:/app/node_modules
       - packs:/app/public/packs
-    ports:
-      - '3000:3000'
-      - '3035:3035'
     stdin_open: true
     tty: true
-    depends_on:
-      - db
+    depends_on: [ db ]
+
+  rails:
+    <<: *app
+    command: bundle exec rails server
+    ports: ['3000:3000']
+    depends_on: [ webpack, db, mailserver ]
+
+  webpack:
+    <<: *app
+    command: ./bin/webpack-dev-server
+    environment: { WEBPACKER_DEV_SERVER_HOST: 0.0.0.0 }
+    ports: [ '3035:3035' ]
+
+  telegram:
+    <<: *app
+    command: rake telegram:bot:poller
 
   db:
-    container_name: 100eyes_db
     image: postgres:12.2-alpine
     environment:
       POSTGRES_DB: app_development
       POSTGRES_HOST_AUTH_METHOD: trust
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - 5432
+    ports: [ '5432:5432' ]
 
   mailserver:
     image: djfarrelly/maildev
-    ports:
-      - 25
-      - 1080:80
+    ports: [ '1080:80', '1025:25' ]
 
 volumes:
   bundle:
-  rails_cache:
   node_modules:
-  packs:
   postgres_data:
+  packs:

@@ -25,7 +25,7 @@ jobs:
       - name: Install ruby
         uses: actions/setup-ruby@v1
         with:
-          ruby-version: 2.7.0
+          ruby-version: 2.7.1
 
       - name: Install Postgres client
         run: sudo apt-get -y install libpq-dev
@@ -38,7 +38,7 @@ jobs:
       - name: Install frontend dependencies and build assets
         run: |
           yarn install
-          RAILS_ENV=test bundle exec rails webpacker:compile
+          bin/rails webpacker:compile
 
       - name: Run tests
         env:
@@ -46,6 +46,6 @@ jobs:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432
         run: |
-          bundle exec rake db:create
-          bundle exec rake db:migrate
-          bundle exec rake test
+          bin/rails db:create
+          bin/rails db:migrate
+          bin/rails test

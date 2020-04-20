@@ -19,7 +19,10 @@ default: &default
   encoding: unicode
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  pool: <%= ENV["RAILS_MAX_THREADS"] { 5 } %>
+  host: <%= ENV["APP_DATABASE_HOST"] || 'localhost' %>
+  username: <%= ENV["APP_DATABASE_USERNAME"]  || 'postgres' %>
+  password: <%= ENV["APP_DATABASE_PASSWORD"]  || 'postgres' %>
 
 development:
   <<: *default
@@ -37,7 +40,6 @@ development:
   # Connect on a TCP socket. Omitted by default since the client uses a
   # domain socket that doesn't need configuration. Windows does not have
   # domain sockets, so uncomment these lines.
-  #host: localhost
 
   # The TCP port the server listens on. Defaults to 5432.
   # If your server runs on a different port number, change accordingly.

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class QuestionMailer < ApplicationMailer
   def new_question_email
     mail(
