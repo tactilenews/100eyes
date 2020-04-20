@@ -17,6 +17,7 @@ module Button
 
     def tag
       return :a if link
+
       :button
     end
 

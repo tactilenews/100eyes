@@ -3,7 +3,7 @@
 
 <h1>Users</h1>
 
-<table>
+<%= c 'user_table' do %>
   <thead>
     <tr>
       <th>Name</th>
@@ -16,9 +16,9 @@
 
   <tbody>
     <% @users.each do |user| %>
-      <%= c 'user_wrapper', user: user %>
+      <%= c 'user_row', user: user %>
     <% end %>
   </tbody>
-</table>
 
+<% end %>
 <% end %>

@@ -1,6 +1,6 @@
 <tr class="UserRow">
     <td class="UserRow-avatar">
-        <%= c 'avatar', url: user.avatar %>
+        <%= c 'avatar', url: user.avatar_url %>
     </td>
     <td class="UserRow-main">
         <div class="UserRow-name">
@@ -11,6 +11,6 @@
         </div>
     </td>
     <td class="UserRow-actions">
-        <%= c 'button', style: 'link', label: 'Bearbeiten', link: '#' %>
+        <%= c 'button', style: 'link', label: 'Bearbeiten', link: edit_user_path(user) %>
     </td>
 </tr>
