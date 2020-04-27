@@ -2,6 +2,7 @@
 
 class User < ApplicationRecord
   has_many :replies, dependent: :destroy
+  has_many :requests, through: :replies
 
   def name
     "#{first_name} #{last_name}"

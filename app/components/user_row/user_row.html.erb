@@ -4,11 +4,17 @@
     </td>
     <td class="UserRow-main">
         <div class="UserRow-name">
-            <%= user.first_name %> <%= user.last_name %>
+            <%= user.name %>
         </div>
         <div class="UserRow-note">
             <%= user.note %>
         </div>
+    </td>
+    <td class="UserRow-email">
+    <%= user.email %>
+    </td>
+    <td class="UserRow-actions">
+        <%= c 'button', style: 'link', label: 'Verlauf anzeigen', link: user_path(user) %>
     </td>
     <td class="UserRow-actions">
         <%= c 'button', styles: ['link'], label: 'Bearbeiten', link: edit_user_path(user) %>
