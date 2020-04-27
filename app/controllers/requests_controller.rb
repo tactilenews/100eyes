@@ -5,10 +5,11 @@ class RequestsController < ApplicationController
 
   def create
     question = params[:question]
+    Request.create!(text: question)
     QuestionMailer
       .with(question: question)
       .new_question_email
-      .deliver_now
+      .deliver_later
     User.where.not(telegram_chat_id: nil).find_each do |user|
       Telegram.bot.send_message(chat_id: user.telegram_chat_id, text: question)
     end

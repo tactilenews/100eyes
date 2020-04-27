@@ -8,11 +8,23 @@ RSpec.describe 'Requests', telegram_bot: :rails do
     subject { -> { post requests_path, params: { question: 'How do you do?' } } }
     describe 'without users' do
       it { should_not raise_error }
+      it { should change { Request.count }.from(0).to(1) }
     end
 
     describe 'given a user with an email' do
       before(:each) { User.create!(email: 'user@example.org') }
-      it { should change { ActionMailer::Base.deliveries.count }.from(0).to(1) }
+      it {
+        should have_enqueued_job.on_queue('mailers').with(
+          'QuestionMailer',
+          'new_question_email',
+          'deliver_now',
+          {
+            params: { question: 'How do you do?' },
+            args: []
+          }
+        )
+      }
+
       it { should_not respond_with_message }
     end
 

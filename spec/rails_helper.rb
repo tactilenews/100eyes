@@ -69,4 +69,6 @@ RSpec.configure do |config|
   config.after { Telegram.bot.reset }
   # or for multiple bots:
   config.after { Telegram.bots.each_value(&:reset) }
+
+  config.include ActionMailbox::TestHelper, type: :mailbox
 end
