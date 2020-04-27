@@ -34,7 +34,7 @@ RSpec.describe RepliesMailbox, type: :mailbox do
 
     describe 'and a recent request' do
       before { Request.create!(title: 'Wie geht es euren Haustieren in Corona-Zeiten?') }
-      it { should(change { Reply.count }) }
+      it { should(change { Reply.count }).by(1) }
       it 'assigns reply to user' do
         subject.call
         expect(Reply.first.user.first_name).to eq('Till')
