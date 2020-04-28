@@ -70,6 +70,8 @@ jobs:
 
     needs: test
 
+    if: ${{ github.ref == 'master' }}
+
     env:
       RUBYOPT: "-W:no-deprecated"
       RAILS_ENV: production
@@ -111,8 +113,6 @@ jobs:
 
       - name: Deploy app using rsync
         run: ./scripts/deploy
-        # TODO remove comment after testing
-        # if: ${{ github.ref == 'master' }}
         env:
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
           DEPLOY_USER_PRIVATE_KEY: ${{ secrets.DEPLOY_USER_PRIVATE_KEY }}
