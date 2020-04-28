@@ -1,0 +1,65 @@
+#!/bin/bash
+
+# This workflow builds and deploys the master-branch to the production
+# web server. Deployment is done using rsync over SSH, only uploading
+# files that have changed since the last deployment.
+#
+# `DEPLOY_USER`
+#    User account used to connect via SSH to the web server
+#
+# `DEPLOY_USER_PRIVATE_KEY`
+#    Base64 encoded private key of the user specified in `DEPLOY_USER`
+#
+# `DEPLOY_TARGET`
+#    Host of the production server
+#
+# `DEPLOY_TARGET_PUBLIC_KEY`
+#    Base64 encoded public key of the web server
+
+deploy_exclude="scripts/deploy-exclude"
+deploy_include="scripts/deploy-include"
+deploy_path="~/100eyes"
+
+# Write master.key
+echo $RAILS_MASTER_KEY > config/master.key
+
+# Add user's private key
+mkdir $HOME/.ssh
+echo $DEPLOY_USER_PRIVATE_KEY | base64 --decode > $HOME/.ssh/deploy_rsa
+chmod 400 $HOME/.ssh/deploy_rsa
+
+# Add target's key
+echo $DEPLOY_TARGET_PUBLIC_KEY | base64 --decode >> $HOME/.ssh/known_hosts
+
+# Upload changes using rsync. Only files that match a pattern whitelisted
+# in `scripts/deploy-include` will be uploaded
+#
+# --checksum
+#   enables comparision via checksums instead of the default comparison
+#   method (date and size), as those might differ between CI servers and
+#   production servers.
+#
+# --delete
+#   enable deletion of files that are present on the production server but
+#   not in the current source files anymore.
+
+rsync \
+  --checksum \
+  --delete \
+  --recursive \
+  --links \
+  --compress \
+  --human-readable \
+  --info=name1,stats2 \
+  --rsh="ssh -i $HOME/.ssh/deploy_rsa" \
+  --exclude-from=$deploy_exclude \
+  --include-from=$deploy_include \
+  --exclude='*' \
+  "$GITHUB_WORKSPACE/" \
+  "$DEPLOY_USER@$DEPLOY_TARGET:$deploy_path"
+
+  ssh -i $HOME/.ssh/deploy_rsa $DEPLOY_USER@$DEPLOY_TARGET \
+    "cd $deploy_path &&" \
+    "BUNDLE_PATH=vendor/bundle bundle install --without development test &&" \
+    "RAILS_ENV=production bin/rake db:prepare &&" \
+    "supervisorctl restart 100eyes"
