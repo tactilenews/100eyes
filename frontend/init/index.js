@@ -3,6 +3,11 @@ import { identifierForContextKey } from 'stimulus/webpack-helpers';
 
 import '../global/index.js';
 
+// Rails helpers
+import Rails from '@rails/ujs';
+Rails.start();
+
+// Start Stimulus
 const application = Application.start();
 
 // Import all component styles
