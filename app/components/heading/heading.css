@@ -1,0 +1,16 @@
+.Heading {
+    line-height: 1.25;
+    font-weight: 700;
+}
+
+.Heading--alpha {
+    font-size: 2.25rem;
+}
+
+.Heading--beta {
+    font-size: 1.25rem;
+}
+
+.Heading--gamma {
+    font-size: 1rem;
+}

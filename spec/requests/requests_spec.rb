@@ -34,7 +34,7 @@ RSpec.describe 'Requests', telegram_bot: :rails do
       it { should respond_with_message 'How do you do?' }
       it {
         pending('Once we have users with email addresses, skip them')
-        should_not(change { ActionMailer::Base.deliveries.count })
+        should_not have_enqueued_job.on_queue('mailers')
       }
     end
   end

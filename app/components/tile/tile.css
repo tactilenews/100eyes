@@ -1,0 +1,25 @@
+.Tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    padding: var(--spacing-unit) var(--spacing-unit-s);
+    border: 1.5px solid var(--color-border);
+
+    border-radius: var(--border-radius);
+    box-shadow: 2px 2px 0 rgba(0, 0, 0, .05);
+
+}
+
+.Tile-icon {
+    width: 3rem;
+    height: 3rem;
+    margin: var(--spacing-unit-s) 0;
+    fill: var(--color-text);
+}
+
+.Tile-subject {
+    font-weight: 600;
+}

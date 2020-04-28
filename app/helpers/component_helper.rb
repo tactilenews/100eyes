@@ -11,6 +11,8 @@ module ComponentHelper
     render_inline(component_class.new(**props), &block)
   end
 
+  alias c component
+
   private
 
   def class_from_identifier(name)
@@ -23,6 +25,4 @@ module ComponentHelper
 
     class_name.constantize
   end
-
-  alias c component
 end

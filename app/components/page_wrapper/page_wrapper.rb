@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module PageWrapper
-  class PageWrapper < ViewComponent::Base
+  class PageWrapper < ApplicationComponent
     def initialize(*); end
 
     def call

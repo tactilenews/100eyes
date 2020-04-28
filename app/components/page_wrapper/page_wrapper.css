@@ -2,5 +2,5 @@
     max-width: var(--grid-max-width);
     min-height: 100vh;
     margin: auto;
-    padding: var(--spacing-unit);
+    padding: 0 var(--spacing-unit);
 }

@@ -1,0 +1,4 @@
+.PageHeader {
+    padding: var(--spacing-unit-xl) 0;
+    text-align: center;
+}
