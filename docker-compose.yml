@@ -1,42 +1,42 @@
 version: '3.7'
 
-services:
-  app: &app
-    build: .
-    environment:
-      RAILS_ENV: development
-      NODE_ENV: development
-      BINDING: 0.0.0.0
-      PORT: 3000
-      APP_DATABASE_HOST: db
-      APP_DATABASE_USERNAME: postgres
-      APP_DATABASE_PASSWORD: postgres
-      MAILSERVER_HOST: mailserver
-      MAILSERVER_PORT: 25
-      WEBPACKER_DEV_SERVER_HOST: webpack
-      RUBYOPT: "-W:no-deprecated"
-    volumes:
-      - .:/app
-      - bundle:/usr/local/bundle
-      - packs:/app/public/packs
-    stdin_open: true
-    tty: true
-    depends_on: [ db ]
+x-defaults: &x-defaults
+  build: .
+  environment:
+    RAILS_ENV: development
+    NODE_ENV: development
+    BINDING: 0.0.0.0
+    PORT: 3000
+    APP_DATABASE_HOST: db
+    APP_DATABASE_USERNAME: postgres
+    APP_DATABASE_PASSWORD: postgres
+    MAILSERVER_HOST: mailserver
+    MAILSERVER_PORT: 25
+    WEBPACKER_DEV_SERVER_HOST: webpack
+    RUBYOPT: "-W:no-deprecated"
+  volumes:
+    - .:/app
+    - bundle:/usr/local/bundle
+    - packs:/app/public/packs
+  stdin_open: true
+  tty: true
+  depends_on: [ db ]
 
-  rails:
-    <<: *app
+services:
+  app:
+    <<: *x-defaults
     command: bundle exec rails server
     ports: ['3000:3000']
     depends_on: [ webpack, db, mailserver ]
 
   webpack:
-    <<: *app
+    <<: *x-defaults
     command: ./bin/webpack-dev-server
     environment: { WEBPACKER_DEV_SERVER_HOST: 0.0.0.0 }
     ports: [ '3035:3035' ]
 
   telegram:
-    <<: *app
+    <<: *x-defaults
     command: rake telegram:bot:poller
 
   db:
