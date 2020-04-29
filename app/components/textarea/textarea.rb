@@ -2,7 +2,9 @@
 
 module Textarea
   class Textarea < ApplicationComponent
-    def initialize(id: nil, value: nil, placeholder: nil, required: false)
+    def initialize(id: nil, value: nil, placeholder: nil, required: false, styles: [])
+      super(styles: styles)
+
       @id = id
       @value = value
       @placeholder = placeholder
@@ -15,7 +17,7 @@ module Textarea
         value,
         id: id,
         name: id,
-        class: 'c-textarea',
+        class: class_names,
         data: {
           controller: 'textarea',
           action: 'input->textarea#resize'

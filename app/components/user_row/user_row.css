@@ -1,0 +1,27 @@
+.UserRow > td {
+    border: 2px solid var(--color-border);
+    border-left: none;
+    border-right: none;
+    padding: var(--spacing-unit-s);
+}
+
+.UserRow > td:first-child {
+    padding-left: 0;
+}
+
+.UserRow > td:last-child {
+    padding-right: 0;
+}
+
+.UserRow-main {
+    /* Use remaining space */
+    width: 100%;
+}
+
+.UserRow-name {
+    font-weight: 600;
+}
+
+.UserRow-note {
+    color: var(--color-text-light);
+}

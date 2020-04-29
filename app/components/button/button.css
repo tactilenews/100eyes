@@ -1,4 +1,4 @@
-.c-button {
+.Button {
     -webkit-appearance: none;
     -moz-appearance: none;
 
@@ -12,14 +12,21 @@
 
     font-weight: 600;
     border-radius: var(--border-radius);
-    border: 2px solid var(--color-primary);
+    border: var(--input-border-width) solid var(--color-primary);
 }
 
-.c-button--primary {
+.Button--primary {
     background-color: var(--color-primary);
     color: white;
 }
 
-.c-button--secondary {
+.Button--secondary {
     color: var(--color-primary);
+}
+
+.Button--link {
+    color: var(--color-primary);
+    padding-left: 0;
+    padding-right: 0;
+    border: none;
 }

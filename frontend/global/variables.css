@@ -10,15 +10,21 @@
 
     --grid-max-width: 44rem;
 
-    --border-radius: 5px;
+    --border-radius: 3px;
 
     --color-bg: #fff;
     --color-text: #333;
+    --color-text-light: #888;
     --color-primary: #333;
     --color-border: #ccc;
+    --color-focus: #007eff;
 
-    --font-family: system-ui, Helvetica Neue, Helvetica, sans-serif;
+    --font-family: Inter, Helvetica Neue, Helvetica, sans-serif;
 
+    --input-border-width: 1px;
+    --input-focus-shadow: 0 0 0 3px #007eff40;
     --input-padding: var(--spacing-unit-s) var(--spacing-unit-s);
     --input-margin: var(--spacing-unit-xs) 0;
+
+    --soft-shadow: 0 0 3px -3px rgba(0, 0, 0, .1), 0 3px 15px rgba(0, 0, 0, .1);
 }

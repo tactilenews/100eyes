@@ -1,4 +1,4 @@
-.c-textarea {
+.Textarea {
     -webkit-appearance: none;
     -moz-appearance: none;
 
@@ -8,7 +8,24 @@
     margin: var(--input-margin);
 
     border-radius: var(--border-radius);
-    border: 2px solid var(--color-border);
+    border: var(--input-border-width) solid var(--color-border);
 
     resize: none;
+}
+
+.Textarea:focus {
+    border-color: var(--color-focus);
+}
+
+.Textarea--clickToEdit {
+    padding-top: var(--spacing-unit-xs);
+    padding-bottom: var(--spacing-unit-xs);
+}
+
+.Textarea--clickToEdit:not(:focus):not(:active):not(:hover) {
+    border-color: transparent;
+}
+
+.Textarea--center {
+    text-align: center;
 }

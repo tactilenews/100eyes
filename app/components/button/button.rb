@@ -1,27 +1,31 @@
 # frozen_string_literal: true
 
 module Button
-  class Button < ViewComponent::Base
-    def initialize(label: nil, style: 'primary', type: nil)
+  class Button < ApplicationComponent
+    def initialize(label: nil, type: nil, link: nil, styles: ['primary'])
+      super(styles: styles)
+
       @label = label
-      @style = style
       @type = type
+      @link = link
     end
 
     def call
-      content_tag(:button, content, class: class_names, type: type)
+      content_tag(tag, content, class: class_names, type: type, href: link)
     end
 
     private
 
-    def class_names
-      ['c-button', "c-button--#{style}"]
+    def tag
+      return :a if link
+
+      :button
     end
 
     def content
       label || @content
     end
 
-    attr_reader :label, :style, :type
+    attr_reader :label, :type, :link
   end
 end
