@@ -70,7 +70,7 @@ jobs:
 
     needs: test
 
-    if: ${{ github.ref == 'master' }}
+    if: ${{ github.ref == 'refs/head/master' }}
 
     env:
       RUBYOPT: "-W:no-deprecated"
