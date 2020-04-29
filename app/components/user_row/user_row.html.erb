@@ -12,14 +12,14 @@
     </td>
     <td class="UserRow-email">
       <% if user.email %>
-        <%= c 'button', style: 'link', label: user.email, link: "mailto:#{user.email}" %>
+        <%= c 'button', styles: ['link'], label: user.email, link: "mailto:#{user.email}" %>
       <% end %>
       <% if user.username %>
-        <%= c 'button', style: 'link', label: user.username, link: "https://t.me/#{user.username}" %>
+        <%= c 'button', styles: ['link'], label: user.username, link: "https://t.me/#{user.username}" %>
       <% end %>
     </td>
     <td class="UserRow-actions">
-        <%= c 'button', style: 'link', label: 'Verlauf anzeigen', link: user_path(user) %>
+        <%= c 'button', styles: ['link'], label: 'Verlauf anzeigen', link: user_path(user) %>
     </td>
     <td class="UserRow-actions">
         <%= c 'button', styles: ['link'], label: 'Bearbeiten', link: edit_user_path(user) %>

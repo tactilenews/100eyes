@@ -1,5 +1,5 @@
 <%= c 'page_wrapper' do %>
-  <h1>Nachrichtenverlauf mit <%= @user.name %> zum Thema "<%= @request.title %>"</h1>
+  <h1>Nachrichtenverlauf mit <%= @user.name %> zum Thema "<%= @request.text %>"</h1>
   <ol>
     <% @user.replies.each do |reply| %>
       <%= c 'message', message: reply.text %>

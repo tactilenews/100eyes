@@ -1,5 +1,4 @@
 <%= c 'page_wrapper' do %>
-  <p id="notice"><%= notice %></p>
   <%= c 'user_table' do %>
     <thead>
       <tr>
@@ -16,4 +15,5 @@
       <% end %>
     </tbody>
   <% end %>
+  <%= c 'button', label: 'Zurück zum Dashboard', link: dashboard_path %>
 <% end %>
