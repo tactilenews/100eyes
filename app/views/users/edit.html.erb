@@ -1,5 +1,5 @@
 <%= c 'page_wrapper' do %>
-  <p id="notice"><%= notice %></p>
+  <%= c 'notice', notice: notice %>
   <%= c 'user_profile', user: @user %>
   <%= c 'button', label: 'Zurück zur Benutzer-Liste', link: users_path %>
 <% end %>
