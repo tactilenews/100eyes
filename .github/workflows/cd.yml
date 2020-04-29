@@ -1,27 +1,16 @@
-name: CI
+name: CD
 
 on:
-  pull_request:
+  push:
     branches: [ master ]
 
 jobs:
-  test:
+  deploy:
     runs-on: ubuntu-latest
-
     env:
       RUBYOPT: "-W:no-deprecated"
-      RAILS_ENV: test
-      DATABASE_URL: postgres://postgres:postgres@localhost:5432
-
-    services:
-      postgres:
-        image: postgres:12.2
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: app_test
-        ports: [ "5432:5432" ]
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+      RAILS_ENV: production
+      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
 
     steps:
       - name: Checkout repository
@@ -57,8 +46,10 @@ jobs:
       - name: Build packs
         run: bin/rails webpacker:compile
 
-      - name: Run database migrations
-        run: bin/rails db:migrate
-
-      - name: Run tests
-        run: bin/rake spec
+      - name: Deploy app using rsync
+        run: ./scripts/deploy
+        env:
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_USER_PRIVATE_KEY: ${{ secrets.DEPLOY_USER_PRIVATE_KEY }}
+          DEPLOY_TARGET: ${{ secrets.DEPLOY_TARGET }}
+          DEPLOY_TARGET_PUBLIC_KEY: ${{ secrets.DEPLOY_TARGET_PUBLIC_KEY }}
