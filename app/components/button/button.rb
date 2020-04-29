@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 module Button
-  class Button < ViewComponent::Base
-    def initialize(label: nil, style: 'primary', type: nil, link: nil)
+  class Button < ApplicationComponent
+    def initialize(label: nil, type: nil, link: nil, styles: ['primary'])
+      super(styles: styles)
+
       @label = label
-      @style = style
       @type = type
       @link = link
     end
@@ -21,14 +22,10 @@ module Button
       :button
     end
 
-    def class_names
-      ['c-button', "c-button--#{style}"]
-    end
-
     def content
       label || @content
     end
 
-    attr_reader :label, :style, :type, :link
+    attr_reader :label, :type, :link
   end
 end
