@@ -1,11 +1,18 @@
-.c-input {
+.Input {
     -webkit-appearance: none;
     -moz-appearance: none;
 
-    display: inline-block;
-    padding: var(--spacing-unit-s) var(--spacing-unit-s);
-    margin: var(--spacing-unit-s) 0;
+    display: block;
+    width: 100%;
+    padding: var(--input-padding);
+    margin: var(--input-margin);
 
     border-radius: var(--border-radius);
-    border: 2px solid var(--color-border);
+    border: var(--input-border-width) solid var(--color-border);
+
+    resize: none;
+}
+
+.Input:focus {
+    border-color: var(--color-focus);
 }

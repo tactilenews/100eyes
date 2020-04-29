@@ -20,6 +20,11 @@ input, button, textarea {
     font-family: var(--font-family);
 }
 
+:-webkit-any(input, button, textarea):focus{
+    outline: none;
+    box-shadow: var(--input-focus-shadow);
+}
+
 a {
     color: inherit;
     text-decoration: none;
