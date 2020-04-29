@@ -1,0 +1,17 @@
+<div class="UserProfile" data-controller="user_profile" data-action="input->user_profile#setDirty">
+    <%= c 'avatar', url: user.avatar_url %>
+    <%= c 'input',
+        placeholder: 'Vor- und Nachname',
+        value: user.first_name,
+        styles: ['clickToEdit', 'center', 'heading']
+    %>
+    <%= c 'textarea',
+            placeholder: 'Klicken, um eine Notiz zu dieser Person zu hinterlegen.',
+            value: user.note,
+            styles: ['clickToEdit', 'center']
+    %>
+    <div class="UserProfile-actions">
+        <%= c 'button', type: 'submit', label: 'Änderungen übernehmen' %>
+        <%= c 'button', type: 'reset', label: 'Änderungen verwerfen', styles: ['secondary'] %>
+    </div>
+</div>

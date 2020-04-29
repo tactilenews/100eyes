@@ -16,3 +16,16 @@
 .Textarea:focus {
     border-color: var(--color-focus);
 }
+
+.Textarea--clickToEdit {
+    padding-top: var(--spacing-unit-xs);
+    padding-bottom: var(--spacing-unit-xs);
+}
+
+.Textarea--clickToEdit:not(:focus):not(:active):not(:hover) {
+    border-color: transparent;
+}
+
+.Textarea--center {
+    text-align: center;
+}

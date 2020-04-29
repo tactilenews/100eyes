@@ -16,3 +16,21 @@
 .Input:focus {
     border-color: var(--color-focus);
 }
+
+.Input--center {
+    text-align: center;
+}
+
+.Input--clickToEdit {
+    padding-top: var(--spacing-unit-xs);
+    padding-bottom: var(--spacing-unit-xs);
+}
+
+.Input--clickToEdit:not(:focus):not(:active):not(:hover) {
+    border-color: transparent;
+}
+
+.Input--heading {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
