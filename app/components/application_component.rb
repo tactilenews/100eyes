@@ -16,10 +16,10 @@ class ApplicationComponent < ViewComponent::Base
   end
 
   def modifiers
-    styles.map { |style| "Input--#{style}"}
+    styles.map { |style| "Input--#{style}" }
   end
 
   def class_names
-    [block_name] + styles.map { |style| "#{block_name}--#{style}"}
+    [block_name] + styles.map { |style| "#{block_name}--#{style}" }
   end
 end

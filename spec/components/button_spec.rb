@@ -6,7 +6,7 @@ RSpec.describe Button::Button, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
   describe 'given a block' do
-    subject { render_inline(described_class.new()) { 'Slot content' } }
+    subject { render_inline(described_class.new) { 'Slot content' } }
     it { should have_text('Slot content') }
     it { should have_css('button.Button') }
   end

@@ -3,7 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe ApplicationComponent, type: :component do
-
   describe '#class_names' do
     subject { described_class.new(**params).send(:class_names) }
 
@@ -11,9 +10,8 @@ RSpec.describe ApplicationComponent, type: :component do
     it { should eq(['ApplicationComponent']) }
 
     describe 'given a list of styles' do
-      let(:params) { { styles: ['large', 'brandColor'] } }
-      it { should eq(['ApplicationComponent', 'ApplicationComponent--large', 'ApplicationComponent--brandColor'] ) }
+      let(:params) { { styles: %w[large brandColor] } }
+      it { should eq(['ApplicationComponent', 'ApplicationComponent--large', 'ApplicationComponent--brandColor']) }
     end
   end
-
 end
