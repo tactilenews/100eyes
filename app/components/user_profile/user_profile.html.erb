@@ -1,12 +1,15 @@
+<%= form_with(model: @user) do %>
 <div class="UserProfile" data-controller="user_profile" data-action="input->user_profile#setDirty">
     <%= c 'avatar', url: user.avatar_url %>
     <%= c 'input',
         placeholder: 'Vor- und Nachname',
-        value: user.first_name,
+        value: user.name,
+        id: 'user[name]',
         styles: ['clickToEdit', 'center', 'heading']
     %>
     <%= c 'textarea',
             placeholder: 'Klicken, um eine Notiz zu dieser Person zu hinterlegen.',
+            id: 'user[note]',
             value: user.note,
             styles: ['clickToEdit', 'center']
     %>
@@ -15,3 +18,4 @@
         <%= c 'button', type: 'reset', label: 'Änderungen verwerfen', styles: ['secondary'] %>
     </div>
 </div>
+<% end %>
