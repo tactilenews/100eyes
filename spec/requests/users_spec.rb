@@ -33,6 +33,14 @@ RSpec.describe '/users', type: :request do
     end
   end
 
+  describe 'GET /show' do
+    it 'render a successful response' do
+      user = User.create! valid_attributes
+      get user_url(user)
+      expect(response).to be_successful
+    end
+  end
+
   describe 'GET /edit' do
     it 'render a successful response' do
       user = User.create! valid_attributes
