@@ -1,0 +1,21 @@
+#!/bin/bash
+
+
+# Setup service
+printf "\n\n🔷  Setup service...\n"
+cat <<EOT >> ~/etc/services.d/100eyes-telegram-bot-poller.ini
+[program:100eyes-telegram-bot-poller]
+directory=$HOME/100eyes
+command=bin/bundle exec rails telegram:bot:poller
+environment=RUBYOPT="-W:no-deprecated",RAILS_ENV=production
+autostart=yes
+autorestart=yes
+EOT
+supervisorctl reread
+supervisorctl update
+printf "\n✅  Done!\n"
+
+# Start telegram bot poller
+printf "\n\n🔷  Start polling telegram messages...\n"
+supervisorctl start 100eyes-telegram-bot-poller
+printf "\n✅  Done!\n"
