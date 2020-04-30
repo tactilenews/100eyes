@@ -1,7 +1,5 @@
 #!/bin/bash
 
-db=app_production
-user=app
 
 # Setup service
 printf "\n\n🔷  Setup service...\n"
