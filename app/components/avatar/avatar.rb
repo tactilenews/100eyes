@@ -21,8 +21,7 @@ module Avatar
     attr_reader :key
 
     def url
-      return fallback_url unless @url
-      @url
+      @url || fallback_url
     end
 
     def fallback_url
