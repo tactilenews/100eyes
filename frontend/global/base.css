@@ -6,7 +6,7 @@
 
 html, body {
     font-size: var(--font-size);
-    line-height: 2*var(--spacing-unit);
+    line-height: var(--spacing-unit);
 
     background-color: var(--color-bg);
     color: var(--color-text);
@@ -16,7 +16,7 @@ html, body {
 
 input, button, textarea {
     font-size: var(--font-size);
-    line-height: 2*var(--spacing-unit);
+    line-height: var(--spacing-unit);
     font-family: var(--font-family);
 }
 

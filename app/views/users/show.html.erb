@@ -1,5 +1,5 @@
 <%= c 'page_wrapper' do %>
-  <h1>Alle Nachrichtenverläufe mit <%= @user.name %></h1>
+  <%= c 'page_header',  title: "Alle Nachrichtenverläufe mit #{@user.name}" %>
   <ul>
   <% @user.requests.uniq.each do |request| %>
     <li>
