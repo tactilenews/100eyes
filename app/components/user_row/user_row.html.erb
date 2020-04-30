@@ -10,7 +10,7 @@
             <%= user.note %>
         </div>
     </td>
-    <td class="UserRow-email">
+    <td class="UserRow-contact">
       <% if user.email %>
         <%= c 'button', styles: ['link'], label: user.email, link: "mailto:#{user.email}" %>
       <% end %>
