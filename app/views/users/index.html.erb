@@ -1,9 +1,19 @@
 <%= c 'page_wrapper' do %>
-    <%= c 'user_table' do %>
-        <tbody>
-            <% @users.each do |user| %>
-                <%= c 'user_row', user: user %>
-            <% end %>
-        </tbody>
-    <% end %>
+  <%= c 'user_table' do %>
+    <thead>
+      <tr>
+        <th>Avatar</th>
+        <th>Name</th>
+        <th>Kontaktmöglichkeiten</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @users.each do |user| %>
+        <%= c 'user_row', user: user %>
+      <% end %>
+    </tbody>
+  <% end %>
+  <%= c 'button', label: 'Zurück zum Dashboard', link: dashboard_path %>
 <% end %>

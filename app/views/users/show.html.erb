@@ -1,0 +1,12 @@
+<%= c 'page_wrapper' do %>
+  <%= c 'page_header',  title: "Alle Nachrichtenverläufe mit #{@user.name}" %>
+  <ul>
+  <% @user.requests.uniq.each do |request| %>
+    <li>
+      <%= c 'button', label: request.text, styles: ['link'], link: user_request_path(@user, request)%>
+    </li>
+  <% end %>
+  </ul>
+
+  <%= c 'button', label: 'Zurück zur Benutzer-Liste', link: users_path %>
+<% end %>

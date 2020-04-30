@@ -1,4 +1,4 @@
-<%= form_with(model: @user) do %>
+<%= form_with(model: @user, local: true) do %>
 <div class="UserProfile" data-controller="user_profile" data-action="input->user_profile#setDirty">
     <%= c 'avatar', url: user.avatar_url %>
     <%= c 'input',
