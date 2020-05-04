@@ -8,8 +8,8 @@ module Avatar
       'fallback-dog.jpg',
       'fallback-otter.jpg',
       'fallback-seal.jpg',
-      'fallback-squirrel.jpg',
-    ]
+      'fallback-squirrel.jpg'
+    ].freeze
 
     def initialize(url: nil, key: 0)
       @url = url

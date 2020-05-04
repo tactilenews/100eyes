@@ -14,6 +14,7 @@ x-defaults: &x-defaults
     MAILSERVER_PORT: 25
     WEBPACKER_DEV_SERVER_HOST: webpack
     RUBYOPT: "-W:no-deprecated"
+    BOT: "${BOT:-default}"
   volumes:
     - .:/app
     - bundle:/usr/local/bundle
