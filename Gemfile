@@ -63,4 +63,4 @@ gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 gem 'telegram-bot'
 
-gem "pg_search", "~> 2.3"
+gem 'pg_search', '~> 2.3'

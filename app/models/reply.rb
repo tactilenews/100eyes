@@ -2,7 +2,7 @@
 
 class Reply < ApplicationRecord
   include PgSearch::Model
-  pg_search_scope :search_text, against: :text
+  multisearchable against: :text
 
   belongs_to :user
   belongs_to :request
