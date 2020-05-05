@@ -1,0 +1,8 @@
+<li>
+  <% case result.searchable_type %>
+  <% when 'User' %>
+    <%= c 'button', label: result.content , styles: [:link], link: user_path(id: result.searchable_id) %>
+  <% when 'Reply' %>
+    <%= result.content %>
+  <% end %>
+</li>
