@@ -54,4 +54,6 @@ Rails.application.configure do
   # CUSTOM:
   #
   config.active_job.queue_adapter = :test
+
+  config.bot_id = :default
 end
