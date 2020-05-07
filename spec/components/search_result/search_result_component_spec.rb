@@ -3,13 +3,19 @@
 require 'rails_helper'
 
 RSpec.describe SearchResultComponent::SearchResultComponent, type: :component do
-  pending "add some examples to (or delete) #{__FILE__}"
+  subject { render_inline(described_class.new(result: result)) }
+  let(:user) { create(:user, id: 1) }
+  let(:the_request) { create(:request, id: 1) }
 
-  # it "renders something useful" do
-  #   expect(
-  #     render_inline(described_class.new(attr: "value")) { "Hello, components!" }.css("p").to_html
-  #   ).to include(
-  #     "Hello, components!"
-  #   )
-  # end
+  describe 'given a reply' do
+    let(:result) { create(:reply, user: user, request: the_request, text: 'I am a reply') }
+    it {
+      should have_link('I am a reply', href: '/users/1/requests/1')
+    }
+  end
+
+  describe 'given a user' do
+    let(:result) { user }
+    it { should have_link('John Doe', href: '/users/1') }
+  end
 end
