@@ -1,8 +1,0 @@
-<li>
-  <% case result.class.to_s %>
-  <% when 'User' %>
-    <%= c 'button', label: result.name , styles: [:link], link: user_path(id: result.id) %>
-  <% when 'Reply' %>
-    <%= c 'button', label: result.text , styles: [:link], link: user_request_path(user_id: result.user_id, id: result.request_id) %>
-  <% end %>
-</li>

@@ -7,7 +7,7 @@
   <% end %>
 
   <% @results.each do |result| %>
-    <%= c 'search_result_component', result: result %>
+    <%= c 'search_result', result: result %>
   <% end %>
 
   <%= link_to 'Zurück zur Übersicht', :dashboard %>

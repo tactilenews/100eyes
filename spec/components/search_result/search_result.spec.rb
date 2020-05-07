@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe SearchResultComponent::SearchResultComponent, type: :component do
+RSpec.describe SearchResult::SearchResult, type: :component do
   subject { render_inline(described_class.new(result: result)) }
   let(:user) { create(:user, id: 1) }
   let(:the_request) { create(:request, id: 1) }
