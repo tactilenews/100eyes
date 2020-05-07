@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
-BOT_ID = (ENV['BOT'] || :default).to_sym
-
 Rails.application.routes.draw do
   root to: redirect('/dashboard')
-  telegram_webhook Telegram::WebhookController, BOT_ID
+  telegram_webhook Telegram::WebhookController, Rails.configuration.bot_id
   resources :requests, only: %i[new create]
   get 'pending/not_implemented'
   get 'dashboard', to: 'dashboard#index'
