@@ -60,4 +60,7 @@ Rails.application.configure do
 
   # CUSTOM
   config.bot_id = (ENV['BOT'] || :default).to_sym
+  config.mailer = {
+    from: '100eyes-development-account@example.org'
+  }
 end

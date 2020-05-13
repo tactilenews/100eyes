@@ -18,6 +18,6 @@ RSpec.describe QuestionMailer, type: :mailer do
 
   describe 'from' do
     subject { mail.from }
-    it { pending('why does this not fail?'); should eq(['from@example.com']) }
+    it { should eq(['100eyes-test-account@example.org']) }
   end
 end

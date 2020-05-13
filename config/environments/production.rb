@@ -114,4 +114,8 @@ Rails.application.configure do
     port: 587,
     authentication: :plain
   }
+
+  config.mailer = {
+    from: Rails.application.credentials.sendgrid[:from]
+  }
 end
