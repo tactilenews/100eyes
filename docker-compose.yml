@@ -3,8 +3,8 @@ version: '3.7'
 x-defaults: &x-defaults
   build: .
   environment:
-    RAILS_ENV: development
-    NODE_ENV: development
+    RAILS_ENV: "${RAILS_ENV:-development}"
+    NODE_ENV: "${NODE_ENV:-development}"
     BINDING: 0.0.0.0
     PORT: 3000
     APP_DATABASE_HOST: db
