@@ -214,6 +214,8 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    sucker_punch (2.1.2)
+      concurrent-ruby (~> 1.0)
     telegram-bot (0.14.3)
       actionpack (>= 4.0, < 6.1)
       activesupport (>= 4.0, < 6.1)
@@ -267,6 +269,7 @@ DEPENDENCIES
   spring
   spring-commands-rspec
   spring-watcher-listen (~> 2.0.0)
+  sucker_punch (~> 2.1)
   telegram-bot
   tzinfo-data
   view_component (~> 2.x)
