@@ -1,8 +1,5 @@
 <%= c 'page_wrapper' do %>
   <h1>Nachrichtenverlauf mit <%= @user.name %></h1>
-  <%= c 'message', message: @request.text %>
-  <% @user.replies_for_request(@request).each do |reply| %>
-    <%= c 'message', message: reply.text, user: @user %>
-  <% end %>
+  <%= c 'chat', messages: @chat_messages %>
   <%= c 'button', label: 'Zurück', link: user_path(@user) %>
 <% end %>
