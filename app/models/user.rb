@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  include PgSearch::Model
+  multisearchable against: %i[first_name last_name username note]
   has_many :replies, dependent: :destroy
   has_many :requests, through: :replies
 

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  get '/search', to: 'search#index'
   root to: redirect('/dashboard')
   telegram_webhook Telegram::WebhookController, Rails.configuration.bot_id
   resources :requests, only: %i[new create]
