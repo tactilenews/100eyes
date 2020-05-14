@@ -1,5 +1,5 @@
 <%= c 'page_wrapper' do %>
-  <h1>Nachrichtenverlauf mit <%= @user.name %></h1>
+  <%= c 'page_header', title: "Nachrichtenverlauf mit #{@user.name}" %>
   <%= c 'chat', messages: @chat_messages %>
   <%= c 'button', label: 'Zurück', link: user_path(@user) %>
 <% end %>

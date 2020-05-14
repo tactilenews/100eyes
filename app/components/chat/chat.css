@@ -1,0 +1,7 @@
+.Chat {
+  border: 2px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-unit-l);
+  margin: var(--spacing-unit-l) 0;
+  background-color: #f1f1f1;
+}
