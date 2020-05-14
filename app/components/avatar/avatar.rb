@@ -11,17 +11,20 @@ module Avatar
       'fallback-squirrel.jpg'
     ].freeze
 
-    def initialize(url: nil, key: 0)
-      @url = url
-      @key = key
+    def initialize(user: nil)
+      @user = user
     end
 
     private
 
-    attr_reader :key
+    attr_reader :user
+
+    def key
+      @key = user&.id || 0
+    end
 
     def url
-      @url || fallback_url
+      user&.avatar_url || fallback_url
     end
 
     def fallback_url
