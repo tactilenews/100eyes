@@ -106,4 +106,16 @@ Rails.application.configure do
 
   # CUSTOM
   config.bot_id = (ENV['BOT'] || :default).to_sym
+  config.action_mailer.smtp_settings = {
+    user_name: Rails.application.credentials.sendgrid[:user_name],
+    password: Rails.application.credentials.sendgrid[:password],
+    domain: Rails.application.credentials.sendgrid[:domain],
+    address: 'smtp.sendgrid.net',
+    port: 587,
+    authentication: :plain
+  }
+
+  config.mailer = {
+    from: Rails.application.credentials.sendgrid[:from]
+  }
 end
