@@ -1,0 +1,14 @@
+.Message {
+  display: flex;
+  align-items: center;
+  margin: auto;
+  justify-content: flex-end;
+}
+
+.Message-left {
+  flex-direction: row-reverse;
+}
+
+.Message > .Avatar {
+  margin: var(--spacing-unit-s);
+}

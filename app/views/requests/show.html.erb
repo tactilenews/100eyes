@@ -1,10 +1,8 @@
 <%= c 'page_wrapper' do %>
-  <h1>Nachrichtenverlauf mit <%= @user.name %> zum Thema "<%= @request.text %>"</h1>
-  <ol>
-    <% @user.replies_for_request(@request).each do |reply| %>
-      <%= c 'message', message: reply.text %>
-    <% end %>
-  </ol>
-
-  <%= c 'button', label: 'Zurück', link: user_path(@user) %> 
+  <h1>Nachrichtenverlauf mit <%= @user.name %></h1>
+  <%= c 'message', message: @request.text %>
+  <% @user.replies_for_request(@request).each do |reply| %>
+    <%= c 'message', message: reply.text, user: @user %>
+  <% end %>
+  <%= c 'button', label: 'Zurück', link: user_path(@user) %>
 <% end %>
