@@ -15,4 +15,8 @@ class User < ApplicationRecord
     self.first_name = first_name
     self.last_name = last_name
   end
+
+  def replies_for_request(request)
+    replies.where(request_id: request)
+  end
 end

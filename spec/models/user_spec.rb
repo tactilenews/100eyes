@@ -23,4 +23,19 @@ RSpec.describe User, type: :model do
       expect { User.create!(telegram_id: 1) }.to raise_error(ActiveRecord::RecordNotUnique)
     end
   end
+
+  describe '#replies_for_request' do
+    subject { user.replies_for_request(the_request) }
+    let(:the_request) { Request.create! text: 'One request' }
+    let(:user) { User.create! first_name: 'Max', last_name: 'Mustermann' }
+
+    describe 'given two replies for two different requests' do
+      before(:each) do
+        @reply_a = Reply.create! text: 'This is included', user: user, request: the_request
+        @reply_b = Reply.create! text: 'This is not included', user: user, request: (Request.create! text: 'Another request')
+      end
+      it { should include(@reply_a) }
+      it { should_not include(@reply_b) }
+    end
+  end
 end
