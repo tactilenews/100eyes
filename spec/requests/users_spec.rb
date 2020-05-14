@@ -52,7 +52,7 @@ RSpec.describe '/users', type: :request do
   describe 'PATCH /update' do
     context 'with valid parameters' do
       let(:new_attributes) do
-        { name: 'Till Prochaska', note: "He's a really nice guy! <3" }
+        { name: 'Till Prochaska', note: "He's a really nice guy! <3", email: 'ich-mag@den-till.de' }
       end
 
       it 'updates the requested user' do
@@ -61,6 +61,7 @@ RSpec.describe '/users', type: :request do
         user.reload
         expect(user.first_name).to eq('Till')
         expect(user.note).to eq("He's a really nice guy! <3")
+        expect(user.email).to eq('ich-mag@den-till.de')
       end
 
       it 'redirects to the user' do
