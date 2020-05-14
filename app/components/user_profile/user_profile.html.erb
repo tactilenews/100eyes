@@ -7,6 +7,12 @@
         id: 'user[name]',
         styles: ['clickToEdit', 'center', 'heading']
     %>
+    <%= c 'input',
+        placeholder: 'E-Mail Adresse',
+        value: user.email,
+        id: 'user[email]',
+        styles: ['clickToEdit', 'center']
+    %>
     <%= c 'textarea',
             placeholder: 'Klicken, um eine Notiz zu dieser Person zu hinterlegen.',
             id: 'user[note]',
