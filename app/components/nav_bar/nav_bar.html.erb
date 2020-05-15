@@ -1,19 +1,26 @@
-<div class="NavBar">
+<header class="NavBar">
+  <nav>
     <ul>
-        <li class="NavBar-item">
-            <a class="NavBar-logo" href="#">
-                100eyes
-            </a>
-        </li>
-        <li class="NavBar-item">
-            <a href="<%= users_path %>">
-                Lokalexpert*innen
-            </a>
-        </li>
-        <li class="NavBar-item">
-            <a class="NavBar-item" href="<%= pending_not_implemented_path %>">
-                Recherchen
-            </a>
-        </li>
+      <li class="NavBar-item">
+        <a class="NavBar-logo" href="#">
+          100eyes
+        </a>
+      </li>
+      <li class="NavBar-item">
+        <a href="<%= users_path %>">
+          Lokalexpert*innen
+        </a>
+      </li>
+      <li class="NavBar-item">
+        <a class="NavBar-item" href="<%= pending_not_implemented_path %>">
+          Recherchen
+        </a>
+      </li>
     </ul>
-</div>
+  </nav>
+  <div class="NavBar-search">
+    <%= form_with url: search_path, local: true, method: :get do %>
+      <%= c 'input', type: :search, id: 'q', required: true, styles: [:inverted, :small], placeholder: 'Suchen' %>
+    <% end %>
+  </div>
+</header>

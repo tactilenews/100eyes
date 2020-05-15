@@ -1,28 +1,32 @@
 .NavBar {
-    padding: var(--spacing-unit-s) var(--spacing-unit);
-    background: var(--color-blue-dark);
-    color: rgba(255, 255, 255, .8);
-    font-size: .85rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-unit-s) var(--spacing-unit);
+  background: var(--color-blue-dark);
+  color: rgba(255, 255, 255, .8);
+  font-size: .85rem;
 }
 
 .NavBar > ul {
-    list-style: none;
+  list-style: none;
 }
 
 .NavBar-item {
-    display: inline-block;
+  display: inline-block;
 }
 
 .NavBar-item:hover {
-    color: #fff;
-    text-decoration: underline;
+  color: #fff;
+  text-decoration: underline;
 }
 
 .NavBar-item + .NavBar-item {
-    margin-left: var(--spacing-unit);
+  margin-left: var(--spacing-unit);
 }
 
 .NavBar-logo {
-    font-weight: 600;
-    color: #fff;
+  font-weight: 600;
+  color: #fff;
 }
+

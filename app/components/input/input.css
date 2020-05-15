@@ -1,35 +1,58 @@
 .Input {
-    -webkit-appearance: none;
-    -moz-appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 
-    display: block;
-    width: 100%;
-    padding: var(--input-padding);
+  display: block;
+  width: 100%;
+  padding: var(--input-padding);
 
-    border-radius: var(--border-radius);
-    border: var(--input-border-width) solid var(--color-border);
+  border-radius: var(--border-radius);
+  border: var(--input-border-width) solid var(--color-border);
 
-    resize: none;
+  resize: none;
 }
 
 .Input:focus {
-    border-color: var(--color-focus);
+  border-color: var(--color-focus);
 }
 
 .Input--center {
-    text-align: center;
+  text-align: center;
 }
 
 .Input--clickToEdit {
-    padding-top: var(--spacing-unit-xs);
-    padding-bottom: var(--spacing-unit-xs);
+  padding-top: var(--spacing-unit-xs);
+  padding-bottom: var(--spacing-unit-xs);
 }
 
 .Input--clickToEdit:not(:focus):not(:active):not(:hover) {
-    border-color: transparent;
+  border-color: transparent;
 }
 
 .Input--heading {
-    font-size: 1.5rem;
-    font-weight: 500;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.Input--small {
+  padding: var(--spacing-unit-xs);
+}
+
+.Input--inverted {
+  border: none;
+  background: rgba(255, 255, 255, .2);
+}
+
+.Input--inverted:focus {
+  color: var(--color-text);
+  background: rgba(255, 255, 255, 1);
+}
+
+.Input--inverted::placeholder,
+.Input--inverted {
+  color: rgba(255,255, 255,.8);
+}
+
+.Input--inverted:focus::placeholder {
+  color: var(--color-text-light);
 }

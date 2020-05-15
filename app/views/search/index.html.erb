@@ -1,10 +1,5 @@
 <%= c 'page_wrapper' do %>
-  <%= c 'page_header', title: 'Suche' %>
-
-  <%= form_with url: search_path, local: true, method: :get do %>
-    <%= c 'input', id: 'q', required: true, placeholder: 'Suchen' %>
-    <%= c 'button', type: 'submit', label: 'Suche starten' %>
-  <% end %>
+  <%= c 'page_header', title: 'Suchergebnisse' %>
 
   <% @results.each do |result| %>
     <%= c 'search_result', result: result %>
