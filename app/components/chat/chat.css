@@ -1,7 +1,16 @@
-.Chat {
+.Chat-header {
+  display: flex;
+  align-items: center;
+}
+
+.Chat-username {
+  padding: var(--spacing-unit);
+}
+
+.Chat-messages {
   border: 2px solid var(--color-border);
   border-radius: var(--border-radius);
   padding: var(--spacing-unit-l);
-  margin: var(--spacing-unit-l) 0;
+  margin: var(--spacing-unit) 0;
   background-color: #f1f1f1;
 }

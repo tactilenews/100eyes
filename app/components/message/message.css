@@ -1,14 +1,17 @@
 .Message {
   display: flex;
-  align-items: center;
-  margin: auto;
-  justify-content: flex-end;
+  flex-direction: column;
+  background-color: var(--color-bg);
+  padding: var(--spacing-unit-xs) var(--spacing-unit-s);
+  border: 2px solid var(--color-border);
+  border-radius: calc(3 * var(--border-radius));
 }
 
-.Message-left {
-  flex-direction: row-reverse;
-}
 
 .Message > .Avatar {
   margin: var(--spacing-unit-s);
+}
+
+.Message-date {
+  color: var(--color-text-light);
 }

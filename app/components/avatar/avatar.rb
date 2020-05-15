@@ -11,14 +11,13 @@ module Avatar
       'fallback-squirrel.jpg'
     ].freeze
 
-    def initialize(user: nil, size: :large)
+    def initialize(user: nil)
       @user = user
-      @size = size
     end
 
     private
 
-    attr_reader :user, :size
+    attr_reader :user
 
     def key
       @key = user&.id || 0
@@ -31,10 +30,6 @@ module Avatar
     def fallback_url
       file = FALLBACK_IMAGES[key % FALLBACK_IMAGES.length]
       "#{FALLBACK_BASE_URL}/#{file}"
-    end
-
-    def css_class
-      "Avatar Avatar-#{size}"
     end
   end
 end

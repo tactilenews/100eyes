@@ -13,12 +13,6 @@ module Message
 
     attr_reader :message, :user
 
-    def css_class
-      return 'Message Message-right' if user
-
-      'Message Message-left'
-    end
-
     def avatar_url
       return user.avatar_url if user
 

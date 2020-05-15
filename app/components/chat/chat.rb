@@ -4,12 +4,13 @@ module Chat
   class Chat < ViewComponent::Base
     include ComponentHelper
 
-    def initialize(messages:)
+    def initialize(messages:, user:)
       @messages = messages
+      @user = user
     end
 
     private
 
-    attr_reader :messages
+    attr_reader :messages, :user
   end
 end

@@ -1,6 +1,8 @@
-<div class="<%= css_class %>">
+<div class="Message">
   <div class="Message-text">
     <%= message.text %>
   </div>
-  <%= c 'avatar', user: user, size: :small %>
+  <div class="Message-date">
+    <%= time_ago_in_words(message.created_at) %> ago
+  </div>
 </div>
