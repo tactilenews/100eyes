@@ -1,0 +1,20 @@
+.RequestForm {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.RequestForm-form,
+.RequestForm-preview {
+    width: 50%;
+    padding: var(--spacing-unit);
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.RequestForm-preview {
+    border-left: 1px solid rgba(0, 0, 0, .15);
+}
+
+.RequestForm-preview p + p {
+    margin-top: .75rem;
+}

@@ -1,0 +1,16 @@
+.Checkbox {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+.Checkbox-input {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.Checkbox-label {
+  padding-left: .25em;
+  flex-grow: 1;
+  flex-shrink: 1;
+}

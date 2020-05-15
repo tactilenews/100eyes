@@ -1,0 +1,9 @@
+.Field-label {
+  font-weight: 600;
+}
+
+.Field-help {
+  color: var(--color-text-light);
+  font-size: .8rem;
+  line-height: 1.5;
+}

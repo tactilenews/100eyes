@@ -5,7 +5,6 @@
     display: block;
     width: 100%;
     padding: var(--input-padding);
-    margin: var(--input-margin);
 
     border-radius: var(--border-radius);
     border: var(--input-border-width) solid var(--color-border);
