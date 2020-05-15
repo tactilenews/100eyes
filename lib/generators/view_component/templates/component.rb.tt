@@ -1,0 +1,9 @@
+# frozen_string_literal: true
+
+module <%= class_name.deconstantize %>
+  class <%= class_name.demodulize %> < ApplicationComponent
+    def initialize
+
+    end
+  end
+end

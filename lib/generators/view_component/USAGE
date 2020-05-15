@@ -1,0 +1,13 @@
+Description:
+    Creates a new component and spec file.
+    Pass the component name either CamelCase or under_scored.
+
+Example:
+    rails generate component MyButton
+
+    This will create:
+        Component:           app/components/my_button/my_button.rb
+        Template:            app/components/my_button/my_button.html.erb
+        CSS:                 app/components/my_button/my_button.css
+        Stimulus Controller: app/components/my_button/my_button.js
+        Spec:                spec/components/my_button_spec.rb
