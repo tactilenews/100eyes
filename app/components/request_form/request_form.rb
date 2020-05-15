@@ -2,8 +2,6 @@
 
 module RequestForm
   class RequestForm < ApplicationComponent
-    def initialize
-
-    end
+    def initialize; end
   end
 end

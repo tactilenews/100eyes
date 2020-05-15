@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ViewComponentGenerator < Rails::Generators::NamedBase
   source_root File.expand_path('templates', __dir__)
 
@@ -12,7 +14,7 @@ class ViewComponentGenerator < Rails::Generators::NamedBase
   def initialize(args, *options)
     super
 
-    # Every component should be inside it’s own model,
+    # Every component should be inside its own model,
     # e.g. my_button will create MyButton::MyButton
     @class_path.unshift(file_name)
   end
@@ -23,21 +25,25 @@ class ViewComponentGenerator < Rails::Generators::NamedBase
 
   def create_template_file
     return unless options[:template]
+
     template 'component.html.erb', component_file_path('html.erb')
   end
 
   def create_css_file
     return unless options[:css]
+
     template 'component.css', component_file_path('css')
   end
 
   def create_js_file
     return unless options[:js]
+
     template 'component.js', component_file_path('js')
   end
 
   def create_spec_file
     return unless options[:spec]
+
     template 'component_spec.rb', SPEC_PATH + file_name + '_spec.rb'
   end
 
