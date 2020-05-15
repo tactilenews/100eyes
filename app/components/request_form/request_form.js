@@ -9,22 +9,19 @@ const NOTE_TEXTS = {
   confidential: 'Textbaustein für vertrauliche Informationen',
 };
 
-const template = ({ name, message, notes, deadline }) => {
-  name = sanitize(name) || '<span class="Placeholder">Name</span>';
+const template = ({ message, notes, deadline }) => {
   message =
     sanitize(message).replace(/\n/g, '<br>') ||
     '<span class="Placeholder">Nachricht</span>';
-  const noteTexts = [];
 
-  for (const [key, isActive] of Object.entries(notes)) {
-    if (!isActive) continue;
-    noteTexts.push(NOTE_TEXTS[key]);
-  }
+  notes = Object.entries(notes)
+    .filter(([key, isActive]) => isActive)
+    .map(([key]) => NOTE_TEXTS[key]);
 
   return `
-        <p>Hallo ${name}, die Redaktion hat eine neue Frage an dich!</p>
+        <p>Hallo <span class="Placeholder">Name</span>, die Redaktion hat eine neue Frage an dich!</p>
         <p>${message}</p>
-        ${noteTexts.map(text => `<p>${text}</p>`).join('')}
+        ${notes.map(note => `<p>${note}</p>`).join('')}
         <p>Vielen Dank für deine Hilfe bei unserer Recherche!</p>
     `;
 };
