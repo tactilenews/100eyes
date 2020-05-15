@@ -1,0 +1,42 @@
+<div class="RequestForm" data-controller="request-form">
+    <div class="RequestForm-form" data-action="input->request-form#updatePreview">
+        <%= c 'stack', size: :large do %>
+
+            <%= c 'field', label: 'Was möchtest du wissen?' do %>
+                <%= c 'textarea',
+                    id: :message,
+                    placeholder: 'Gib hier deine Nachricht ein…',
+                    stimulus_target: 'request-form.message'
+                %>
+            <% end %>
+
+            <%= c 'field', label: 'Hinweise anhängen', help: 'Erinnere die Teilnehmer*innen, welche Inhalte du benötigst und wofür du sie verwendest. Hierfür gibt es Textbausteine:' do %>
+
+                <%= c 'stack', size: :small do %>
+                    <%= c 'checkbox', label: 'Fotos', stimulus_target: 'request-form.photo' %>
+                    <%= c 'checkbox', label: 'Adressen', stimulus_target: 'request-form.address' %>
+                    <%= c 'checkbox', label: 'Kontaktdaten', stimulus_target: 'request-form.contact' %>
+                    <%= c 'checkbox', label: 'Medizinische Informationen', stimulus_target: 'request-form.medicalInfo' %>
+                    <%= c 'checkbox', label: 'Vertrauliche Informationen', stimulus_target: 'request-form.confidential' %>
+                <% end %>
+
+            <% end %>
+
+            <%= c 'field', label: 'Gibt es eine Deadline für Antworten?' do %>
+                <%= c 'input',
+                    type: 'datetime-local',
+                    value: '2020-05-15T11:30',
+                    stimulus_target: 'request-form.deadline'
+                %>
+            <% end %>
+
+            <%= c 'button', type: 'submit', label: 'Nachricht an alle Kontakte senden' %>
+
+        <% end %>
+    </div>
+
+    <div class="RequestForm-preview">
+        <div style="font-weight: 600;margin-bottom:.5rem;">Diese Nachricht erhalten Teilnehmer*innen:</div>
+        <div data-target="request-form.preview"></div>
+    </div>
+</div>

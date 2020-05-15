@@ -2,14 +2,15 @@
 
 module Input
   class Input < ApplicationComponent
-    def initialize(id: nil, value: nil, placeholder: nil, required: false, type: 'text', styles: [])
-      super(styles: styles)
+    def initialize(id: nil, value: nil, placeholder: nil, required: false, type: 'text', stimulus_target: nil, **)
+      super
 
       @id = id
+      @type = type
       @value = value
       @placeholder = placeholder
       @required = required
-      @type = type
+      @stimulus_target = stimulus_target
     end
 
     def call
@@ -17,14 +18,18 @@ module Input
         :input,
         nil,
         id: id,
+        type: type,
         name: id,
         value: value,
         class: class_names,
         required: required,
-        placeholder: placeholder
+        placeholder: placeholder,
+        data: {
+          target: stimulus_target
+        }
       )
     end
 
-    attr_reader :id, :value, :placeholder, :required, :type
+    attr_reader :id, :type, :value, :placeholder, :required, :stimulus_target
   end
 end

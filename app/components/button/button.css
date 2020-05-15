@@ -5,12 +5,11 @@
     text-decoration: none;
 
     display: inline-block;
-    margin: var(--input-margin);
     padding: var(--input-padding);
     padding-left: var(--spacing-unit);
     padding-right: var(--spacing-unit);
 
-    font-weight: 600;
+    font-weight: 500;
     border-radius: var(--border-radius);
     border: var(--input-border-width) solid var(--color-primary);
 }

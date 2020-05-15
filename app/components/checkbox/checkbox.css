@@ -1,0 +1,18 @@
+.Checkbox {
+    display: flex;
+    width: 100%;
+}
+
+.Checkbox-input {
+    flex-grow: 0;
+    flex-shrink: 0;
+
+    /* Fix vertical alignment on macOS */
+    transform: translateY(-17.5%);
+}
+
+.Checkbox-label {
+    padding-left: .25em;
+    flex-grow: 1;
+    flex-shrink: 1;
+}

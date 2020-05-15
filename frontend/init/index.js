@@ -17,7 +17,7 @@ const styles = require.context('../../app/components', true, /\.css$/);
 const controllers = require.context('../../app/components', true, /\.js$/);
 
 for(const key of controllers.keys()) {
-    const identifier = key.match(/([^-\/\.]+)\.js$/)[1];
+    const identifier = key.match(/([^-\/\.]+)\.js$/)[1].replace('_', '-');
     const controller = controllers(key).default;
     application.register(identifier, controller);
 }

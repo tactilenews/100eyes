@@ -3,7 +3,7 @@
 class ApplicationComponent < ViewComponent::Base
   include ComponentHelper
 
-  def initialize(styles: [])
+  def initialize(styles: [], **)
     @styles = styles
   end
 
