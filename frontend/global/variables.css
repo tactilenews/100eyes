@@ -12,6 +12,14 @@
 
     --border-radius: 3px;
 
+    --color-blue: #0898FF;
+    --color-blue-dark: #1A2D3A;
+    --color-blue-light: #F4F9FD;
+
+    --color-gray-light: #E9EDF0;
+    --color-gray: #888;
+    --color-gray-dark: #333;
+
     --color-bg: #fff;
     --color-text: #333;
     --color-text-light: #888;
