@@ -20,7 +20,9 @@ input, button, textarea {
     font-family: var(--font-family);
 }
 
-:-webkit-any(input, button, textarea):focus{
+input:not([type="checkbox"]):not([type="radio"]):focus,
+textarea:focus,
+button:focus {
     outline: none;
     box-shadow: var(--input-focus-shadow);
 }
