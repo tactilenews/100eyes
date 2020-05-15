@@ -3,6 +3,8 @@
 class Request < ApplicationRecord
   has_many :feedbacks, dependent: :destroy
 
+  default_scope { order(:created_at) }
+
   def self.add_reply(answer:, user:)
     recent_request = Request.order('created_at').last
     recent_request || return
