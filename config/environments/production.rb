@@ -118,4 +118,6 @@ Rails.application.configure do
   config.mailer = {
     from: Rails.application.credentials.sendgrid[:from]
   }
+
+  config.action_mailbox.ingress = :sendgrid
 end
