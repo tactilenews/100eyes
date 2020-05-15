@@ -2,6 +2,9 @@
 
 class Reply < ApplicationRecord
   include PgSearch::Model
+
+  default_scope { order(:created_at) }
+
   multisearchable against: :text
 
   belongs_to :user
