@@ -1,6 +1,6 @@
 <div class="RequestForm" data-controller="request-form">
     <div class="RequestForm-form" data-action="input->request-form#updatePreview">
-        <%= c 'stack', size: :large do %>
+        <%= c 'stack', space: :large do %>
 
             <%= c 'field', label: 'Was möchtest du wissen?' do %>
                 <%= c 'textarea',
@@ -12,7 +12,7 @@
 
             <%= c 'field', label: 'Hinweise anhängen', help: 'Erinnere die Teilnehmer*innen, welche Inhalte du benötigst und wofür du sie verwendest. Hierfür gibt es Textbausteine:' do %>
 
-                <%= c 'stack', size: :small do %>
+                <%= c 'stack', space: :small do %>
                     <%= c 'checkbox', label: 'Fotos', stimulus_target: 'request-form.photo' %>
                     <%= c 'checkbox', label: 'Adressen', stimulus_target: 'request-form.address' %>
                     <%= c 'checkbox', label: 'Kontaktdaten', stimulus_target: 'request-form.contact' %>

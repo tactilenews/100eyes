@@ -2,9 +2,9 @@
 
 module Stack
   class Stack < ApplicationComponent
-    def initialize(size: nil)
+    def initialize(space: nil)
       super
-      @styles = [size] if size
+      @styles = [space] if space
     end
 
     def call
