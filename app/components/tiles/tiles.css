@@ -1,5 +1,0 @@
-.Tiles {
-    display: grid;
-    grid-gap: var(--spacing-unit);
-    grid-template-columns: repeat(auto-fit, minmax(12rem, auto));
-}
