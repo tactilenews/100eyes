@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 module ChatRow
-  class ChatRow < ViewComponent::Base
-    include ComponentHelper
+  class ChatRow < ApplicationComponent
 
     def initialize(message:)
       @message = message
