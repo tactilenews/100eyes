@@ -2,6 +2,7 @@
 
 class Request < ApplicationRecord
   has_many :feedbacks, dependent: :destroy
+  attribute :hints, :string, array: true, default: []
   default_scope { order(:created_at) }
 
   HINT_TEXTS = {
@@ -22,7 +23,7 @@ class Request < ApplicationRecord
     parts = []
     parts << 'Hallo, die Redaktion hat eine neue Frage an dich:'
     parts << text
-    parts +=  hints.map {|hint| HINT_TEXTS[hint.to_sym] }
+    parts += hints.map {|hint| HINT_TEXTS[hint.to_sym] }
     parts << 'Vielen Dank für deine Hilfe bei unserer Recherche!'
     parts.join("\n\n")
   end

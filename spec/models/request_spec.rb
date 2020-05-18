@@ -19,7 +19,12 @@ RSpec.describe Request, type: :model do
     expect(subject.attributes.keys).to include('title', 'text', 'hints')
   end
 
-  describe 'plaintext' do
+  describe '.hints' do
+    subject { Request.new(title: 'Example').hints }
+    it { should match_array([]) }
+  end
+
+  describe '.plaintext' do
     subject { request.plaintext }
 
     it 'renders correct plaintext message' do
@@ -30,6 +35,10 @@ RSpec.describe Request, type: :model do
       expected += "Vielen Dank für deine Hilfe bei unserer Recherche!"
 
       expect(subject).to eql(expected)
+    end
+
+    describe 'without hints' do
+      subject { Request.new(title: 'Example', text: 'Hello World!').plaintext }
     end
   end
 
