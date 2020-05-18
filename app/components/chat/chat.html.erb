@@ -1,15 +1,17 @@
 <div class="Chat">
-  <div class="Chat-header">
-    <%= c 'avatar', user: user %>
-    <div class="Chat-username">
-      <%= user.name %>
+  <%= c 'stack' do %>
+    <div class="Chat-header">
+      <%= c 'avatar', user: user %>
+      <div class="Chat-username">
+        <%= user.name %>
+      </div>
     </div>
-  </div>
-  <div class="Chat-messages">
-    <%= c 'stack' do %>
-      <% messages.each do |message| %>
-        <%= c 'chat_row', message: message %>
+    <div class="Chat-messages">
+      <%= c 'stack' do %>
+        <% messages.each do |message| %>
+          <%= c 'chat_row', message: message %>
+        <% end %>
       <% end %>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 </div>
