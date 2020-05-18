@@ -3,7 +3,9 @@
 module ChatRow
   class ChatRow < ApplicationComponent
 
-    def initialize(message:)
+    def initialize(message:, **)
+      super
+
       @message = message
     end
 
@@ -11,10 +13,9 @@ module ChatRow
 
     attr_reader :message
 
-    def css_class
-      return 'ChatRow ChatRow--left' if message.respond_to? :user
-
-      'ChatRow ChatRow--right'
+    def styles
+      return [:left] if message.respond_to? :user
+      [:right]
     end
   end
 end
