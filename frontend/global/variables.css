@@ -1,6 +1,7 @@
 :root {
     --font-size: 20px;
     --line-height: 30px;
+    --font-size-s: .85rem;
 
     --spacing-unit: 30px;
     --spacing-unit-s: calc(.5 * var(--spacing-unit));

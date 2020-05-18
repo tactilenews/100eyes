@@ -1,0 +1,12 @@
+.ChatRow {
+  display: flex;
+}
+
+.ChatRow--left {
+  padding-right: 20%;
+}
+
+.ChatRow--right {
+  padding-left: 20%;
+  flex-direction: row-reverse;
+}

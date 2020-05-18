@@ -3,28 +3,36 @@
 require 'rails_helper'
 
 RSpec.describe Avatar::Avatar, type: :component do
-  subject { render_inline(described_class.new(**params)) }
+  let(:params) { {} }
+  let(:component) { render_inline(described_class.new(**params)) }
 
-  describe 'given a url' do
-    let(:params) { { url: '/my-avatar.jpg' } }
-    it { should have_css('.Avatar > img[alt=""]') }
-    it { should have_css('.Avatar > img[src="/my-avatar.jpg"]') }
+  describe 'img[alt]' do
+    subject { component.css('img').first['alt'] }
+    it { should eq('') }
   end
 
-  describe 'without a url' do
-    let(:params) { {} }
+  describe 'img[src]' do
+    subject { component.css('img').first['src'] }
 
-    it 'shows fallback images' do
-      expect(subject.css('img').first['src']).to eq('/avatars/fallback-cat.jpg')
+    describe 'given no user' do
+      let(:params) { {} }
+      it { should eq('/avatars/fallback-cat.jpg') }
     end
 
-    describe 'given different keys' do
-      let(:first_avatar) { render_inline(described_class.new(key: 0)) }
-      let(:other_avatar) { render_inline(described_class.new(key: 1)) }
+    describe 'given a a user with `avatar_url`' do
+      let(:params) { { user: build(:user, avatar_url: '/my-avatar.jpg') } }
+      it { should eq('/my-avatar.jpg') }
+    end
 
-      it 'shows different fallback images' do
-        expect(first_avatar.css('img').first['src']).to eq('/avatars/fallback-cat.jpg')
-        expect(other_avatar.css('img').first['src']).to eq('/avatars/fallback-dog.jpg')
+    describe 'given user without `avatar_url`' do
+      describe 'id === 1' do
+        let(:params) { { user: build(:user, id: 1) } }
+        it { should eq('/avatars/fallback-dog.jpg') }
+      end
+
+      describe 'id === 2' do
+        let(:params) { { user: build(:user, id: 2) } }
+        it { should eq('/avatars/fallback-otter.jpg') }
       end
     end
   end

@@ -6,10 +6,11 @@ module Message
 
     def initialize(message:)
       @message = message
+      @user = message.user if message.respond_to?(:user)
     end
 
     private
 
-    attr_reader :message
+    attr_reader :message, :user
   end
 end

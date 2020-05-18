@@ -1,0 +1,15 @@
+.Chat-header {
+  display: flex;
+  align-items: center;
+}
+
+.Chat-username {
+  padding: var(--spacing-unit);
+}
+
+.Chat-messages {
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-unit);
+  background-color: var(--color-gray-light);
+}

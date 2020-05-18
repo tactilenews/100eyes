@@ -1,3 +1,8 @@
-<li>
-  <%= message %>
-</li>
+<div class="Message">
+  <div class="Message-text">
+    <%= message.text %>
+  </div>
+  <div class="Message-date">
+    <%= time_ago_in_words(message.created_at) %> ago
+  </div>
+</div>
