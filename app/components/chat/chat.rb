@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 module Chat
-  class Chat < ViewComponent::Base
-    include ComponentHelper
+  class Chat < ApplicationComponent
 
     def initialize(messages:, user:)
       @messages = messages
