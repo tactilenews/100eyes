@@ -18,9 +18,9 @@ class Request < ApplicationRecord
     Reply.create(user: user, request: recent_request, text: answer)
   end
 
-  def deliverable_message
+  def plaintext
     parts = []
-    parts << 'Hallo, die Redaktion hat eine neue Frage an dich!'
+    parts << 'Hallo, die Redaktion hat eine neue Frage an dich:'
     parts << text
     parts +=  hints.map {|hint| HINT_TEXTS[hint.to_sym] }
     parts << 'Vielen Dank für deine Hilfe bei unserer Recherche!'

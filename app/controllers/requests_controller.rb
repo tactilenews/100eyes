@@ -7,16 +7,28 @@ class RequestsController < ApplicationController
   def new; end
 
   def create
-    question = params[:question]
-    Request.create!(text: question)
+    title = params[:title]
+    text = params[:text]
+    hints = params[:hints]
+
+    request = Request.create!(
+      title: title,
+      text: text,
+      hints: hints
+    )
+
     User.where.not(email: nil).find_each do |user|
       QuestionMailer
-        .with(question: question, to: user.email)
+        .with(question: request.plaintext, to: user.email)
         .new_question_email
         .deliver_later
     end
+
     User.where.not(telegram_chat_id: nil).find_each do |user|
-      Telegram.bots[Rails.configuration.bot_id].send_message(chat_id: user.telegram_chat_id, text: question)
+      Telegram.bots[Rails.configuration.bot_id].send_message(
+        chat_id: user.telegram_chat_id,
+        text: request.plaintext
+      )
     end
   end
 

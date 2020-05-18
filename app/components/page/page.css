@@ -1,0 +1,13 @@
+.Page {
+  padding: var(--spacing-unit);
+  background-color: var(--color-gray-light);
+}
+
+.Page-content {
+  max-width: var(--grid-max-width);
+  margin: auto;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
+}

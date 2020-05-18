@@ -1,18 +1,22 @@
 .RequestForm {
     display: flex;
-    flex-wrap: wrap;
-}
-
-.RequestForm-form,
-.RequestForm-preview {
-    width: 50%;
     padding: var(--spacing-unit);
-    flex-grow: 0;
-    flex-shrink: 0;
+}
+
+.RequestForm-column {
+    width: 50%;
+}
+
+.RequestForm-column + .RequestForm-column {
+    margin-left: var(--spacing-unit);
 }
 
 .RequestForm-preview {
-    border-left: 1px solid rgba(0, 0, 0, .15);
+    position: sticky;
+    top: var(--spacing-unit);
+    padding: var(--spacing-unit-s);
+    border-radius: var(--border-radius);
+    background-color: var(--color-gray-light);
 }
 
 .RequestForm-preview p + p {

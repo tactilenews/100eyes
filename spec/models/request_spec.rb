@@ -4,25 +4,33 @@ require 'rails_helper'
 
 RSpec.describe Request, type: :model do
   let(:user) { User.create! }
+
   let(:request) do
     Request.new(
-      text: 'What is the answer to life, the universe and everything?',
+      title: 'Hitchhiker’s Guide',
+      text: 'What is the answer to life, the universe, and everything?',
       hints: ['photo', 'confidential']
     )
   end
 
-  describe 'hints' do
-    subject { request.hints }
-    it { should contain_exactly('photo', 'confidential') }
+  subject { request }
+
+  it 'has title, text, and hints' do
+    expect(subject.attributes.keys).to include('title', 'text', 'hints')
   end
 
-  describe 'deliverable_message' do
-    subject { request.deliverable_message }
-    it { should include 'Hallo, die Redaktion hat eine neue Frage an dich!' }
-    it { should include 'What is the answer to life, the universe and everything?' }
-    it { should include 'Textbaustein für Foto' }
-    it { should include 'Textbaustein für vertrauliche Informationen' }
-    it { should_not include 'Textbaustein für Kontaktweitergabe' }
+  describe 'plaintext' do
+    subject { request.plaintext }
+
+    it 'renders correct plaintext message' do
+      expected  = "Hallo, die Redaktion hat eine neue Frage an dich:\n\n"
+      expected += "What is the answer to life, the universe, and everything?\n\n"
+      expected += "Textbaustein für Foto\n\n"
+      expected += "Textbaustein für vertrauliche Informationen\n\n"
+      expected += "Vielen Dank für deine Hilfe bei unserer Recherche!"
+
+      expect(subject).to eql(expected)
+    end
   end
 
   describe '::add_reply' do
