@@ -5,7 +5,7 @@
   padding: var(--spacing-unit-s) var(--spacing-unit);
   background: var(--color-blue-dark);
   color: rgba(255, 255, 255, .8);
-  font-size: .85rem;
+  font-size: var(--font-size-s);
 }
 
 .NavBar > ul {
