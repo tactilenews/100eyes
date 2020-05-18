@@ -6,8 +6,10 @@
     </div>
   </div>
   <div class="Chat-messages">
-    <% messages.each do |message| %>
-      <%= c 'chat_row', message: message %>
-    <% end%>
+    <%= c 'stack' do %>
+      <% messages.each do |message| %>
+        <%= c 'chat_row', message: message %>
+      <% end %>
+    <% end %>
   </div>
 </div>

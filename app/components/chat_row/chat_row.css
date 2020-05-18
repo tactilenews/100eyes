@@ -2,10 +2,6 @@
   display: flex;
 }
 
-.ChatRow + .ChatRow {
-  margin-top: var(--spacing-unit);
-}
-
 .ChatRow--left {
   padding-right: 20%;
 }
