@@ -7,11 +7,6 @@
   border-radius: calc(3 * var(--border-radius));
 }
 
-
-.Message > .Avatar {
-  margin: var(--spacing-unit-s);
-}
-
 .Message-date {
   color: var(--color-text-light);
 }

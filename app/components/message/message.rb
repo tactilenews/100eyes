@@ -12,11 +12,5 @@ module Message
     private
 
     attr_reader :message, :user
-
-    def avatar_url
-      return user.avatar_url if user
-
-      nil
-    end
   end
 end
