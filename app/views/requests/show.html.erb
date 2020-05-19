@@ -1,0 +1,31 @@
+<%= c 'page' do %>
+  <%= c 'page_title' do %>
+    <%= @request.title %>
+  <% end %>
+
+  <%= c 'box' do %>
+    <%= c 'stack', space: :xlarge do %>
+      <%= c 'plaintext_message', message: @request.text %>
+
+      <%= c 'stack' do %>
+        <%= c 'heading', styles: [:section] do %>
+          Alle Antworten
+        <% end %>
+
+        <%= c 'excerpt',
+          title: 'Max Mustermann',
+          date: 'vor 2 Stunden',
+          text: 'Weit hinten, hinter den Wortbergen, fern der Länder Vokalien und Konsonantien leben die Blindtexte. Abgeschieden wohnen sie in Buchstabhausen an der Küste des Semantik, eines großen Sprachozeans.',
+          link: '#'
+        %>
+
+        <%= c 'excerpt',
+          title: 'Beate Beispiel',
+          date: 'vor 5 Stunden',
+          text: 'Ein kleines Bächlein namens Duden fließt durch ihren Ort und versorgt sie mit den nötigen Regelialien. Es ist ein paradiesmatisches Land, in dem einem gebratene Satzteile in den Mund fliegen. ',
+          link: '#'
+        %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
