@@ -2,7 +2,7 @@
 de:
   message:
     message:
-      message_date: vor %{time_ago}
+      message_date: "%{time_ago} vorher"
   telegram:
     welcome_message: >
       Hallo, schön, dass du an #%{project_name} teilnimmst. Ich bin der Bot der
@@ -72,10 +72,6 @@ de:
     - :year
   datetime:
     distance_in_words:
-      vor:
-        x_days:
-          one: einem Tag
-          other: "%{count} Tagen"
       about_x_hours:
         one: etwa eine Stunde
         other: etwa %{count} Stunden
