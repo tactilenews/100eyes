@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class RequestsController < ApplicationController
-  before_action :set_user, only: %i[show]
-  before_action :set_request, only: %i[show]
+  before_action :set_user, only: %i[show_user_messages]
+  before_action :set_request, only: %i[show_user_messages]
 
   def new; end
 
@@ -28,7 +28,7 @@ class RequestsController < ApplicationController
     end
   end
 
-  def show
+  def show_user_messages
     @chat_messages = [@request] + @user.replies_for_request(@request)
   end
 
