@@ -19,7 +19,7 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
 
   def start!(_data = nil, *)
     project_name = Rails.configuration.project_name
-    response = I18n.t '100eyes.telegram.welcome_message', project_name: project_name
+    response = I18n.t 'telegram.welcome_message', project_name: project_name
     respond_with :message, text: response.strip
   end
 end
