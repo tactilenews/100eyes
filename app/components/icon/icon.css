@@ -1,0 +1,12 @@
+.Icon {
+  width: 100%;
+}
+
+.Icon--inline {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  /* Ensure the icon is centered along with the
+   * center of the lines x-height */
+  vertical-align: -10%;
+}
