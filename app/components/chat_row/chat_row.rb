@@ -2,7 +2,6 @@
 
 module ChatRow
   class ChatRow < ApplicationComponent
-
     def initialize(message:, **)
       super
 
@@ -15,6 +14,7 @@ module ChatRow
 
     def styles
       return [:left] if message.respond_to? :user
+
       [:right]
     end
   end

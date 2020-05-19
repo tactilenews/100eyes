@@ -120,4 +120,5 @@ Rails.application.configure do
   }
 
   config.action_mailbox.ingress = :sendgrid
+  config.project_name = ENV['HUNDRED_EYES_PROJECT_NAME'] || '100eyes'
 end
