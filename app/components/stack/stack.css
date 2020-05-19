@@ -10,3 +10,7 @@
 .Stack--large > * + * {
     margin-top: var(--spacing-unit-l);
 }
+
+.Stack--xlarge > * + * {
+    margin-top: var(--spacing-unit-xl);
+}
