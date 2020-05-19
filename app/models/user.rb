@@ -6,6 +6,27 @@ class User < ApplicationRecord
   has_many :replies, dependent: :destroy
   has_many :requests, through: :replies
 
+  def self.upsert_via_telegram(message)
+    from, chat = message.values_at('from', 'chat')
+    telegram_chat_id = chat['id']
+    telegram_id, username, first_name, last_name = from.values_at('id', 'username', 'first_name', 'last_name')
+    user = User.find_by(telegram_id: telegram_id)
+    if user
+      user.username = username
+      user.telegram_chat_id = telegram_chat_id
+      user.save!
+    else
+      user = User.create!(
+        telegram_id: telegram_id,
+        telegram_chat_id: telegram_chat_id,
+        username: username,
+        first_name: first_name,
+        last_name: last_name
+      )
+    end
+    user
+  end
+
   def name
     "#{first_name} #{last_name}"
   end

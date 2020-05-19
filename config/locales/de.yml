@@ -6,9 +6,7 @@ de:
   telegram:
     welcome_message: >
       Hallo, schön, dass du an #%{project_name} teilnimmst. Ich bin der Bot der
-      Dialogsoftware #100eyes. Ich freue mich auf den Dialog mit dir. Bitte
-      antworte kurz mit "Hallo" auf diese Nachricht, damit ich weiß, dass
-      ich dir auf diesem Weg Nachrichten schicken darf.
+      Dialogsoftware #100eyes. Ich freue mich auf den Dialog mit dir.
   activerecord:
     errors:
       messages:

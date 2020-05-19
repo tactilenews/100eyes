@@ -14,7 +14,8 @@ module Checkbox
 
     def name
       return "#{id}[]" if group
-      return id
+
+      id
     end
 
     attr_reader :id, :value, :group, :label, :stimulus_target
