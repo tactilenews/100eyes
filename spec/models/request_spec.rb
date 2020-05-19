@@ -27,7 +27,7 @@ RSpec.describe Request, type: :model do
   describe '.plaintext' do
     subject { request.plaintext }
 
-    it 'renders correct plaintext message' do
+    it 'returns correct plaintext message' do
       expected  = "Hallo, die Redaktion hat eine neue Frage an dich:\n\n"
       expected += "What is the answer to life, the universe, and everything?\n\n"
       expected += "Textbaustein für Foto\n\n"
@@ -38,7 +38,15 @@ RSpec.describe Request, type: :model do
     end
 
     describe 'without hints' do
-      subject { Request.new(title: 'Example', text: 'Hello World!').plaintext }
+      subject { Request.new(title: 'Example', text: 'Hello World!', hints: []).plaintext }
+
+      it 'returns correct plaintext message' do
+        expected  = "Hallo, die Redaktion hat eine neue Frage an dich:\n\n"
+        expected += "Hello World!\n\n"
+        expected += "Vielen Dank für deine Hilfe bei unserer Recherche!"
+
+        expect(subject).to eql(expected)
+      end
     end
   end
 

@@ -7,14 +7,10 @@ class RequestsController < ApplicationController
   def new; end
 
   def create
-    title = params[:title]
-    text = params[:text]
-    hints = params[:hints]
-
     request = Request.create!(
-      title: title,
-      text: text,
-      hints: hints
+      title: params.fetch(:title),
+      text: params.fetch(:text),
+      hints: params.fetch(:hints, [])
     )
 
     User.where.not(email: nil).find_each do |user|
