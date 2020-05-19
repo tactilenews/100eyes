@@ -2,6 +2,8 @@
 
 module Page
   class Page < ApplicationComponent
-    def initialize; end
+    def initialize(**)
+      super
+    end
   end
 end

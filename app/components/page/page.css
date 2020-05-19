@@ -11,3 +11,7 @@
   border-radius: var(--border-radius);
   box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
 }
+
+.Page--wide .Page-content {
+  max-width: var(--grid-max-width-l);
+}

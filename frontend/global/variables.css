@@ -9,7 +9,8 @@
     --spacing-unit-l: calc(1.5 * var(--spacing-unit));
     --spacing-unit-xl: calc(2 * var(--spacing-unit));
 
-    --grid-max-width: 52rem;
+    --grid-max-width: 44rem;
+    --grid-max-width-l: 56rem;
 
     --border-radius: 3px;
 
