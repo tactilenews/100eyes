@@ -1,0 +1,15 @@
+<a class="<%= class_names.join(' ') %>" href="<%= link %>">
+  <div class="Excerpt-header">
+    <div class="Excerpt-title">
+      <%= c 'heading', tag: :h3 do %>
+        <%= title %>
+      <% end %>
+    </div>
+    <span class="Excerpt-date">
+      <%= date %>
+    </span>
+  </div>
+  <span class="Excerpt-text">
+    <%= text %>
+  </span>
+</a>
