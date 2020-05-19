@@ -1,23 +1,24 @@
 .UserRow {
   display: flex;
-  padding: var(--spacing-unit) 0;
+  align-items: center;
 }
 
-.UserRow + .UserRow {
-  border-top: 2px solid var(--color-border);
+a.UserRow:hover .UserRow-name {
+  text-decoration: underline;
 }
 
-.UserRow-main {
-  display: flex;
-  flex-flow: column;
-  padding: 0 var(--spacing-unit);
+.UserRow-channels {
+  margin-left: .25em;
 }
 
-.UserRow-name {
-  font-weight: 600;
+.UserRow-avatar {
+  margin-right: var(--spacing-unit-s);
 }
 
 .UserRow-note {
-  padding-top: var(--spacing-unit);
   color: var(--color-text-light);
+}
+
+.UserRow-channels {
+  color: var(--color-blue);
 }

@@ -1,19 +1,25 @@
-<div class="UserRow">
-  <%= link_to(user_path(user), class: 'UserRow-avatar') do %>
+<a
+  class="<%= class_names.join(' ') %>"
+  href="<%= url %>"
+>
+
+  <div class="UserRow-avatar">
     <%= c 'avatar', user: user %>
-  <% end %>
-  <div class="UserRow-main">
-    <%= link_to(user_path(user), class: 'UserRow-name') do %>
-      <%= user.name %>
-    <% end %>
-    <% if user.email %>
-      <%= link_to user.email, "mailto:#{user.email}" %>
-    <% end %>
-    <% if user.username %>
-      <%= link_to user.username,"https://t.me/#{user.username}" %>
-    <% end %>
-    <%= link_to(edit_user_path(user), class: 'UserRow-note') do %>
-      <%= user.note %>
-    <% end %>
   </div>
-</div>
+
+  <div>
+    <strong>
+      <span class="UserRow-name"><%= user.name %></span>
+    </strong>
+
+    <span class="UserRow-channels">
+      <% channel_icons.each do |icon| %>
+        <%= c 'icon', icon: icon, styles: [:inline] %>
+      <% end %>
+    </span>
+
+    <p class="UserRow-note">
+      <%= user.note %>
+    </p>
+  </div>
+</a>
