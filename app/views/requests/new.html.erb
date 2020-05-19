@@ -1,10 +1,9 @@
-<%= c 'page_wrapper' do %>
+<%= c 'page' do %>
+  <%= c 'page_title' do %>
+    Stelle eine neue Recherchefrage
+  <% end %>
 
-    <%= form_with url: requests_path do %>
-      <%= c 'textarea', id: 'question', required: true, placeholder: 'Gib hier deine Frage ein…' %>
-      <%= c 'button', type: 'submit', label: 'Frage senden' %>
-    <% end %>
-
-  <%= link_to 'Zurück zur Übersicht', :root %>
-
+  <%= form_with url: requests_path, local: true do %>
+    <%= c 'request_form' %>
+  <% end %>
 <% end %>

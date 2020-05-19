@@ -9,17 +9,17 @@ const NOTE_TEXTS = {
   confidential: 'Textbaustein für vertrauliche Informationen',
 };
 
-const template = ({ message, notes, deadline }) => {
+const template = ({ message, notes }) => {
   message =
     sanitize(message).replace(/\n/g, '<br>') ||
-    '<span class="Placeholder">Nachricht</span>';
+    '<span class="Placeholder">Frage</span>';
 
   notes = Object.entries(notes)
     .filter(([key, isActive]) => isActive)
     .map(([key]) => NOTE_TEXTS[key]);
 
   return `
-        <p>Hallo <span class="Placeholder">Name</span>, die Redaktion hat eine neue Frage an dich!</p>
+        <p>Hallo, die Redaktion hat eine neue Frage an dich:</p>
         <p>${message}</p>
         ${notes.map(note => `<p>${note}</p>`).join('')}
         <p>Vielen Dank für deine Hilfe bei unserer Recherche!</p>
@@ -35,7 +35,6 @@ export default class extends Controller {
     'contact',
     'medicalInfo',
     'confidential',
-    'deadline',
   ];
 
   connect() {
@@ -52,7 +51,6 @@ export default class extends Controller {
         medicalInfo: this.medicalInfoTarget.checked,
         confidential: this.confidentialTarget.checked,
       },
-      deadline: this.deadlineTarget.value,
     };
 
     this.previewTarget.innerHTML = template(data);
