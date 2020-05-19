@@ -8,7 +8,16 @@
 }
 
 .RequestForm-column + .RequestForm-column {
+    display: flex;
+    flex-direction: column;
     margin-left: var(--spacing-unit);
+}
+
+.RequestForm-column > * {
+    /* Ensure direct children take the full column height,
+     * allowing the preview to stick to the top
+     */
+    flex-grow: 1;
 }
 
 .RequestForm-preview {
