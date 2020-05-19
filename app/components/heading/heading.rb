@@ -8,7 +8,9 @@ module Heading
       h3: :gamma
     }.freeze
 
-    def initialize(tag: :h1)
+    def initialize(tag: :h1, **)
+      super
+
       @tag = tag
     end
 
@@ -18,8 +20,8 @@ module Heading
 
     private
 
-    def class_names
-      ['Heading', "Heading--#{size}"]
+    def styles
+      @styles.presence || [size]
     end
 
     def size
