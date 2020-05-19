@@ -1,3 +1,6 @@
-<li>
-  <%= c 'button', label: label, styles: [:link], link: link %>
-</li>
+  <% case type %>
+  <% when :user %>
+    <%= c 'user_row', user: result %>
+  <% else %>
+  <%= c 'button', label: result.text, styles: [:link], link: user_request_path(user_id: result.user_id, id: result.request_id) %>
+  <% end %>

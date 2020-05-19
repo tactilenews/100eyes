@@ -1,27 +1,23 @@
-.UserRow > td {
-    border: 2px solid var(--color-border);
-    border-left: none;
-    border-right: none;
-    padding: var(--spacing-unit-s);
+.UserRow {
+  display: flex;
+  padding: var(--spacing-unit) 0;
 }
 
-.UserRow > td:first-child {
-    padding-left: 0;
-}
-
-.UserRow > td:last-child {
-    padding-right: 0;
+.UserRow + .UserRow {
+  border-top: 2px solid var(--color-border);
 }
 
 .UserRow-main {
-    /* Use remaining space */
-    width: 100%;
+  display: flex;
+  flex-flow: column;
+  padding: 0 var(--spacing-unit);
 }
 
 .UserRow-name {
-    font-weight: 600;
+  font-weight: 600;
 }
 
 .UserRow-note {
-    color: var(--color-text-light);
+  padding-top: var(--spacing-unit);
+  color: var(--color-text-light);
 }

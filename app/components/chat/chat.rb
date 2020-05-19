@@ -2,7 +2,6 @@
 
 module Chat
   class Chat < ApplicationComponent
-
     def initialize(messages:, user:)
       @messages = messages
       @user = user
