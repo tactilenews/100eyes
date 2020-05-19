@@ -4,7 +4,9 @@ class RequestsController < ApplicationController
   before_action :set_request, only: %i[show show_user_messages]
   before_action :set_user, only: %i[show_user_messages]
 
-  def new; end
+  def show
+    @replies = @request.replies
+  end
 
   def create
     request = Request.create!(

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Request < ApplicationRecord
-  has_many :feedbacks, dependent: :destroy
+  has_many :replies, dependent: :destroy
   attribute :hints, :string, array: true, default: []
   default_scope { order(:created_at) }
 
