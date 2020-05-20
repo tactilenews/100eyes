@@ -2,7 +2,6 @@
 
 module UserRow
   class UserRow < ApplicationComponent
-
     def initialize(user:, **)
       super
 
@@ -20,13 +19,9 @@ module UserRow
     def channel_icons
       channels = []
 
-      if user.email?
-        channels << :mail
-      end
+      channels << :mail if user.email?
 
-      if user.telegram?
-        channels << :email
-      end
+      channels << :email if user.telegram?
 
       channels
     end

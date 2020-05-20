@@ -19,7 +19,7 @@ const template = ({ message, notes }) => {
   const intro = 'Hallo, die Redaktion hat eine neue Frage an dich:';
   const outro = 'Vielen Dank für deine Hilfe bei unserer Recherche!';
 
-  return [ intro, message, ...notes, outro ].join('\n\n');
+  return [intro, message, ...notes, outro].join('\n\n');
 };
 
 export default class extends Controller {

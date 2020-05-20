@@ -28,12 +28,12 @@ RSpec.describe User, type: :model do
     subject { user.channels }
 
     describe 'given a user without telegram or email' do
-      let(:user) { User.create!() }
+      let(:user) { User.create! }
       it { should be_empty }
     end
 
     describe 'given a user with email' do
-      let(:user) { User.create!(email: 'user@example.org' ) }
+      let(:user) { User.create!(email: 'user@example.org') }
       it { should contain_exactly(:email) }
     end
 
@@ -52,7 +52,7 @@ RSpec.describe User, type: :model do
     end
 
     describe 'given a user without telegram_id and telegram_chat_id' do
-      let(:user) { User.create!() }
+      let(:user) { User.create! }
       it { should be(false) }
     end
   end
@@ -66,7 +66,7 @@ RSpec.describe User, type: :model do
     end
 
     describe 'given a user without an email address' do
-      let(:user) { User.create!() }
+      let(:user) { User.create! }
       it { should be(false) }
     end
   end
