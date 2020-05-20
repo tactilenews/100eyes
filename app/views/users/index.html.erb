@@ -4,12 +4,11 @@
     Deine Lokalexpert*innen
   <% end %>
 
-  <!-- This needs to be wrapped in a Box component
-       once #62 is merged -->
-  <%= c 'stack' do %>
-    <% @users.each do |user| %>
-      <%= c 'user_row', user: user %>
-      <%= c 'user_row', user: user %>
+  <%= c 'box' do %>
+    <%= c 'stack' do %>
+      <% @users.each do |user| %>
+        <%= c 'user_row', user: user %>
+      <% end %>
     <% end %>
   <% end %>
 
