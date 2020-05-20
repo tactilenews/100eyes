@@ -60,5 +60,11 @@ jobs:
       - name: Run database migrations
         run: bin/rails db:migrate
 
+      - name: Run rubocop
+        run: bundle exec rubocop
+
+      - name: Run prettier
+        run: yarn run prettier --check "{app,frontend}/**/*.js"
+
       - name: Run tests
         run: bin/rake spec

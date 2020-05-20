@@ -1,5 +1,6 @@
-pre-commit:
+pre-push:
   commands:
     prettier:
-      glob: "*.{js}"
-      run:  "yarn prettier --list-different {staged_files}"
+      run: 'yarn run prettier --check "{app,frontend}/**/*.js"'
+    rubocop:
+      run: 'bundle exec rubocop'
