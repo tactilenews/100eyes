@@ -1,4 +1,10 @@
-<%= c 'page_wrapper' do %>
-  <%= c 'page_header', title: 'Noch nicht programmiert' %>
-  <%= link_to 'Zurück zur Übersicht', :root %>
+<%= c 'page' do %>
+  <%= c 'page_title' do %>
+    Noch nicht programmiert
+  <% end %>
+  <%= c 'box' do %>
+    <%= c 'stack', space: :xlarge do %>
+      <%= c 'button', label: 'Zurück zur Übersicht', link: root_path %>
+    <% end %>
+  <% end %>
 <% end %>
