@@ -10,7 +10,7 @@ class Request < ApplicationRecord
     address: 'Textbaustein für Adressweitergabe',
     contact: 'Textbaustein für Kontaktweitergabe',
     medicalInfo: 'Textbaustein für medizinische Informationen',
-    confidential: 'Textbaustein für vertrauliche Informationen',
+    confidential: 'Textbaustein für vertrauliche Informationen'
   }.freeze
 
   def self.add_reply(answer:, user:)
@@ -23,7 +23,7 @@ class Request < ApplicationRecord
     parts = []
     parts << 'Hallo, die Redaktion hat eine neue Frage an dich:'
     parts << text
-    parts += hints.map {|hint| HINT_TEXTS[hint.to_sym] }
+    parts += hints.map { |hint| HINT_TEXTS[hint.to_sym] }
     parts << 'Vielen Dank für deine Hilfe bei unserer Recherche!'
     parts.join("\n\n")
   end
