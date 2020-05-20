@@ -4,14 +4,10 @@
   <% end %>
   <%= c 'box' do %>
     <%= c 'stack', space: :xlarge do %>
-      <%= c 'stack' do %>
-        <% @requests.each do |request| %>
-          <%= c 'excerpt', title: request.title, text: request.text, link: request_path(request), date: request.created_at %>
-        <% end %>
+      <% @requests.each do |request| %>
+        <%= c 'excerpt', title: request.title, text: request.text, link: request_path(request), date: request.created_at %>
       <% end %>
-      <%= c 'stack' do %>
-        <%= c 'button', label: 'Neue Recherche', link: new_request_path %>
-      <% end %>
+      <%= c 'button', label: 'Neue Recherche', link: new_request_path %>
     <% end %>
   <% end %>
 <% end %>
