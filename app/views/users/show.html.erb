@@ -1,13 +1,24 @@
-<%= c 'page_wrapper' do %>
-  <%= c 'page_header',  title: 'Benutzerprofil' %>
-  <%= c 'user_row', user: @user %>
-  <ul>
-  <% @user.requests.uniq.each do |request| %>
-    <li>
-      <%= c 'button', label: request.text, styles: ['link'], link: user_request_path(@user, request)%>
-    </li>
+<%= c 'page' do %>
+  <%= c 'page_title' do %>
+    Benutzerprofil
   <% end %>
-  </ul>
-
-  <%= c 'button', label: 'Zurück zur Benutzer-Liste', link: users_path %>
+  <%= c 'box' do %>
+    <%= c 'stack', space: :xlarge do %>
+      <%= c 'user_row', user: @user %>
+    <% end %>
+    <%= c 'stack' do %>
+      <%= c 'heading', styles: [:section] do %>
+        Alle beantworteten Recherchen
+      <% end %>
+      <% @user.requests.uniq.each do |request| %>
+        <%= c 'excerpt',
+          title: request.title,
+          text: request.text,
+          date: request.created_at,
+          link: request_path(request)
+        %>
+      <% end %>
+      <%= c 'button', label: 'Zurück zur Benutzer-Liste', link: users_path %>
+    <% end %>
+  <% end %>
 <% end %>
