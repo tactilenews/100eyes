@@ -11,15 +11,13 @@ module SearchResult
     attr_reader :result
 
     def link
-      return helpers.user_request_path(user_id: result.user_id, id: result.request_id) if result.respond_to?(:user_id)
-
-      helpers.user_path(id: result.id)
+      helpers.user_request_path(user_id: result.user_id, id: result.request_id)
     end
 
-    def label
-      return result.name if result.respond_to?(:name)
+    def type
+      return :request if result.respond_to?(:user_id)
 
-      result.text
+      :user
     end
   end
 end

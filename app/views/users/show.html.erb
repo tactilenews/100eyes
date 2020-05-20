@@ -1,5 +1,6 @@
 <%= c 'page_wrapper' do %>
-  <%= c 'page_header',  title: "Alle Nachrichtenverläufe mit #{@user.name}" %>
+  <%= c 'page_header',  title: 'Benutzerprofil' %>
+  <%= c 'user_row', user: @user %>
   <ul>
   <% @user.requests.uniq.each do |request| %>
     <li>

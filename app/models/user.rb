@@ -40,4 +40,16 @@ class User < ApplicationRecord
   def replies_for_request(request)
     replies.where(request_id: request)
   end
+
+  def channels
+    { email: email?, telegram: telegram? }.select { |k,v| v }.keys
+  end
+
+  def telegram?
+    telegram_id.present? && telegram_chat_id.present?
+  end
+
+  def email?
+    email.present?
+  end
 end

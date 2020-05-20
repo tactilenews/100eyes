@@ -24,6 +24,53 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '#channels' do
+    subject { user.channels }
+
+    describe 'given a user without telegram or email' do
+      let(:user) { User.create!() }
+      it { should be_empty }
+    end
+
+    describe 'given a user with email' do
+      let(:user) { User.create!(email: 'user@example.org' ) }
+      it { should contain_exactly(:email) }
+    end
+
+    describe 'given a user with telegram and email' do
+      let(:user) { User.create!(telegram_id: '123', telegram_chat_id: '456', email: 'user@example.org') }
+      it { should contain_exactly(:telegram, :email) }
+    end
+  end
+
+  describe '#telegram?' do
+    subject { user.telegram? }
+
+    describe 'given a user with a telegram_id and telegram_chat_id' do
+      let(:user) { User.create!(telegram_id: '123', telegram_chat_id: '456') }
+      it { should be(true) }
+    end
+
+    describe 'given a user without telegram_id and telegram_chat_id' do
+      let(:user) { User.create!() }
+      it { should be(false) }
+    end
+  end
+
+  describe '#email?' do
+    subject { user.email? }
+
+    describe 'given a user with an email address' do
+      let(:user) { User.create!(email: 'user@example.org') }
+      it { should be(true) }
+    end
+
+    describe 'given a user without an email address' do
+      let(:user) { User.create!() }
+      it { should be(false) }
+    end
+  end
+
   describe '#replies_for_request' do
     subject { user.replies_for_request(the_request) }
     let(:the_request) { Request.create! text: 'One request' }

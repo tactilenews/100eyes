@@ -1,27 +1,25 @@
-<tr class="UserRow">
-    <td class="UserRow-avatar">
-        <%= c 'avatar', user: user %>
-    </td>
-    <td class="UserRow-main">
-        <div class="UserRow-name">
-            <%= user.name %>
-        </div>
-        <div class="UserRow-note">
-            <%= user.note %>
-        </div>
-    </td>
-    <td class="UserRow-contact">
-      <% if user.email %>
-        <%= c 'button', styles: ['link'], label: user.email, link: "mailto:#{user.email}" %>
+<a
+  class="<%= class_names.join(' ') %>"
+  href="<%= url %>"
+>
+
+  <div class="UserRow-avatar">
+    <%= c 'avatar', user: user %>
+  </div>
+
+  <div>
+    <strong>
+      <span class="UserRow-name"><%= user.name %></span>
+    </strong>
+
+    <span class="UserRow-channels">
+      <% channel_icons.each do |icon| %>
+        <%= c 'icon', icon: icon, styles: [:inline] %>
       <% end %>
-      <% if user.username %>
-        <%= c 'button', styles: ['link'], label: user.username, link: "https://t.me/#{user.username}" %>
-      <% end %>
-    </td>
-    <td class="UserRow-actions">
-        <%= c 'button', styles: ['link'], label: 'Verlauf anzeigen', link: user_path(user) %>
-    </td>
-    <td class="UserRow-actions">
-        <%= c 'button', styles: ['link'], label: 'Bearbeiten', link: edit_user_path(user) %>
-    </td>
-</tr>
+    </span>
+
+    <p class="UserRow-note">
+      <%= user.note %>
+    </p>
+  </div>
+</a>

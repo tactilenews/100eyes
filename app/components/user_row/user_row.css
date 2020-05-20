@@ -1,27 +1,24 @@
-.UserRow > td {
-    border: 2px solid var(--color-border);
-    border-left: none;
-    border-right: none;
-    padding: var(--spacing-unit-s);
+.UserRow {
+  display: flex;
+  align-items: center;
 }
 
-.UserRow > td:first-child {
-    padding-left: 0;
+a.UserRow:hover .UserRow-name {
+  text-decoration: underline;
 }
 
-.UserRow > td:last-child {
-    padding-right: 0;
+.UserRow-channels {
+  margin-left: .25em;
 }
 
-.UserRow-main {
-    /* Use remaining space */
-    width: 100%;
-}
-
-.UserRow-name {
-    font-weight: 600;
+.UserRow-avatar {
+  margin-right: var(--spacing-unit-s);
 }
 
 .UserRow-note {
-    color: var(--color-text-light);
+  color: var(--color-text-light);
+}
+
+.UserRow-channels {
+  color: var(--color-blue);
 }

@@ -1,19 +1,16 @@
-<%= c 'page_wrapper' do %>
-  <%= c 'user_table' do %>
-    <thead>
-      <tr>
-        <th>Avatar</th>
-        <th>Name</th>
-        <th>Kontaktmöglichkeiten</th>
-        <th></th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @users.each do |user| %>
-        <%= c 'user_row', user: user %>
-      <% end %>
-    </tbody>
+<%= c 'page' do %>
+
+  <%= c 'page_title' do %>
+    Deine Lokalexpert*innen
   <% end %>
-  <%= c 'button', label: 'Zurück zur Übersicht', link: root_path %>
+
+  <!-- This needs to be wrapped in a Box component
+       once #62 is merged -->
+  <%= c 'stack' do %>
+    <% @users.each do |user| %>
+      <%= c 'user_row', user: user %>
+      <%= c 'user_row', user: user %>
+    <% end %>
+  <% end %>
+
 <% end %>
