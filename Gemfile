@@ -25,7 +25,7 @@ gem 'jbuilder', '~> 2.7'
 gem 'bootsnap', '>= 1.4.2', require: false
 
 # Use Webpack & Co.
-gem 'webpacker', '~> 4.x'
+gem 'webpacker', '~> 5'
 
 # Enable component-driven frontend architecture
 gem 'view_component', '~> 2.x'
