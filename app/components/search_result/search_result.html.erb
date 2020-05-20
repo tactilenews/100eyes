@@ -2,5 +2,5 @@
   <% when :user %>
     <%= c 'user_row', user: result %>
   <% else %>
-  <%= c 'button', label: result.text, styles: [:link], link: user_request_path(user_id: result.user_id, id: result.request_id) %>
+    <%= c 'excerpt', title: result.user.name, text: result.text, link: user_request_path(user_id: result.user_id, id: result.request_id), date: result.created_at %>
   <% end %>
