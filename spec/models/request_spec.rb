@@ -9,7 +9,7 @@ RSpec.describe Request, type: :model do
     Request.new(
       title: 'Hitchhiker’s Guide',
       text: 'What is the answer to life, the universe, and everything?',
-      hints: ['photo', 'confidential']
+      hints: %w[photo confidential]
     )
   end
 
@@ -32,7 +32,7 @@ RSpec.describe Request, type: :model do
       expected += "What is the answer to life, the universe, and everything?\n\n"
       expected += "Textbaustein für Foto\n\n"
       expected += "Textbaustein für vertrauliche Informationen\n\n"
-      expected += "Vielen Dank für deine Hilfe bei unserer Recherche!"
+      expected += 'Vielen Dank für deine Hilfe bei unserer Recherche!'
 
       expect(subject).to eql(expected)
     end
@@ -43,7 +43,7 @@ RSpec.describe Request, type: :model do
       it 'returns correct plaintext message' do
         expected  = "Hallo, die Redaktion hat eine neue Frage an dich:\n\n"
         expected += "Hello World!\n\n"
-        expected += "Vielen Dank für deine Hilfe bei unserer Recherche!"
+        expected += 'Vielen Dank für deine Hilfe bei unserer Recherche!'
 
         expect(subject).to eql(expected)
       end
