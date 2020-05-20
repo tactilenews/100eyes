@@ -4,10 +4,8 @@
   <% end %>
   <%= c 'box' do %>
     <%= c 'stack', space: :xlarge do %>
-      <%= c 'stack' do %>
-        <% @results.each do |result| %>
-          <%= c 'search_result', result: result %>
-        <% end %>
+      <% @results.each do |result| %>
+        <%= c 'search_result', result: result %>
       <% end %>
       <%= c 'button', label: 'Zurück zur Übersicht', link: root_path %>
     <% end %>
