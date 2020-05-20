@@ -216,7 +216,7 @@ GEM
       sprockets (>= 3.0.0)
     sucker_punch (2.1.2)
       concurrent-ruby (~> 1.0)
-    telegram-bot (0.14.3)
+    telegram-bot (0.14.4)
       actionpack (>= 4.0, < 6.1)
       activesupport (>= 4.0, < 6.1)
       httpclient (~> 2.7)
