@@ -1,0 +1,10 @@
+<%= c 'page_wrapper' do %>
+  <%= c 'page_header', title: 'Recherchen' %>
+  <% @requests.each do |request| %>
+    <%= c 'box' do %>
+      <%= link_to request_path(request) do %>
+        <%= c 'plaintext_message', message: request.text %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

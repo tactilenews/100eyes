@@ -1,0 +1,24 @@
+.Excerpt {
+  display: block;
+}
+
+.Excerpt-header {
+  display: flex;
+}
+
+.Excerpt-title {
+  flex-shrink: 1;
+  flex-grow: 0;
+}
+
+a.Excerpt:hover .Excerpt-title {
+  text-decoration: underline;
+}
+
+.Excerpt-date {
+  flex-shrink: 0;
+  flex-grow: 0;
+  font-size: var(--font-size-s);
+  color: var(--color-text-light);
+  margin-left: var(--spacing-unit-s);
+}

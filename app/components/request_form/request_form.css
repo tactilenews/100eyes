@@ -7,9 +7,12 @@
     width: 50%;
 }
 
-.RequestForm-column + .RequestForm-column {
+.RequestForm-column {
     display: flex;
     flex-direction: column;
+}
+
+.RequestForm-column + .RequestForm-column {
     margin-left: var(--spacing-unit);
 }
 
@@ -23,11 +26,5 @@
 .RequestForm-preview {
     position: sticky;
     top: var(--spacing-unit);
-    padding: var(--spacing-unit-s);
-    border-radius: var(--border-radius);
-    background-color: var(--color-gray-light);
 }
 
-.RequestForm-preview p + p {
-    margin-top: .75rem;
-}

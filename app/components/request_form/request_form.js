@@ -10,20 +10,16 @@ const NOTE_TEXTS = {
 };
 
 const template = ({ message, notes }) => {
-  message =
-    sanitize(message).replace(/\n/g, '<br>') ||
-    '<span class="Placeholder">Frage</span>';
+  message = sanitize(message) || '<span class="Placeholder">Frage</span>';
 
   notes = Object.entries(notes)
     .filter(([key, isActive]) => isActive)
     .map(([key]) => NOTE_TEXTS[key]);
 
-  return `
-        <p>Hallo, die Redaktion hat eine neue Frage an dich:</p>
-        <p>${message}</p>
-        ${notes.map(note => `<p>${note}</p>`).join('')}
-        <p>Vielen Dank für deine Hilfe bei unserer Recherche!</p>
-    `;
+  const intro = 'Hallo, die Redaktion hat eine neue Frage an dich:';
+  const outro = 'Vielen Dank für deine Hilfe bei unserer Recherche!';
+
+  return [ intro, message, ...notes, outro ].join('\n\n');
 };
 
 export default class extends Controller {

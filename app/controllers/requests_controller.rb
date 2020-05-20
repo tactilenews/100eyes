@@ -1,10 +1,16 @@
 # frozen_string_literal: true
 
 class RequestsController < ApplicationController
-  before_action :set_user, only: %i[show]
-  before_action :set_request, only: %i[show]
+  before_action :set_request, only: %i[show show_user_messages]
+  before_action :set_user, only: %i[show_user_messages]
 
-  def new; end
+  def index
+    @requests = Request.all
+  end
+
+  def show
+    @replies = @request.replies
+  end
 
   def create
     request = Request.create!(
@@ -28,10 +34,6 @@ class RequestsController < ApplicationController
     end
   end
 
-  def show
-    @chat_messages = [@request] + @user.replies_for_request(@request)
-  end
-
   private
 
   def set_user
@@ -40,5 +42,9 @@ class RequestsController < ApplicationController
 
   def set_request
     @request = Request.find(params[:id])
+  end
+
+  def show_user_messages
+    @chat_messages = [@request] + @user.replies_for_request(@request)
   end
 end

@@ -1,7 +1,26 @@
-<%= c 'page_wrapper' do %>
-  <%= c 'page_header', title: "Nachrichtenverlauf" %>
-  <%= c 'stack' do %>
-    <%= c 'chat', user: @user, messages: @chat_messages %>
-    <%= c 'button', label: 'Zurück', link: user_path(@user) %>
+<%= c 'page' do %>
+  <%= c 'page_title' do %>
+    <%= @request.title %>
+  <% end %>
+
+  <%= c 'box' do %>
+    <%= c 'stack', space: :xlarge do %>
+      <%= c 'plaintext_message', message: @request.text %>
+
+      <%= c 'stack' do %>
+        <%= c 'heading', styles: [:section] do %>
+          Alle Antworten
+        <% end %>
+
+        <% @replies.each do |reply| %>
+          <%= c 'excerpt',
+            title: reply.user.name,
+            date: time_ago_in_words(reply.created_at),
+            text: reply.text,
+            link: user_request_path(reply: reply, user_id: reply.user.id,)
+          %>
+        <% end %>
+      <% end %>
+    <% end %>
   <% end %>
 <% end %>

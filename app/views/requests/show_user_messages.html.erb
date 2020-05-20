@@ -1,0 +1,7 @@
+<%= c 'page_wrapper' do %>
+  <%= c 'page_header', title: "Nachrichtenverlauf" %>
+  <%= c 'stack' do %>
+    <%= c 'chat', user: @user, messages: @chat_messages %>
+    <%= c 'button', label: 'Zurück', link: user_path(@user) %>
+  <% end %>
+<% end %>
