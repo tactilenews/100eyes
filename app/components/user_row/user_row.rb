@@ -18,11 +18,8 @@ module UserRow
 
     def channel_icons
       channels = []
-
       channels << :mail if user.email?
-
-      channels << :email if user.telegram?
-
+      channels << :telegram if user.telegram?
       channels
     end
   end
