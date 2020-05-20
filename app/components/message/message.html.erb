@@ -3,6 +3,6 @@
     <%= message.text %>
   </div>
   <div class="Message-date">
-    <%= time_ago_in_words(message.created_at) %> ago
+    <%= t '.message_date', time_ago: time_ago_in_words(message.created_at) %>
   </div>
 </div>

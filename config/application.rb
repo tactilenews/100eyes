@@ -36,5 +36,8 @@ module App
     config.generators.helper = false
 
     config.active_job.queue_adapter = :sucker_punch
+
+    config.i18n.available_locales = [:de]
+    config.i18n.default_locale = :de
   end
 end

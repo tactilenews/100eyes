@@ -59,4 +59,5 @@ Rails.application.configure do
   config.mailer = {
     from: '100eyes-test-account@example.org'
   }
+  config.project_name = '100-test-eyes'
 end
