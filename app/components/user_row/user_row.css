@@ -20,5 +20,5 @@ a.UserRow:hover .UserRow-name {
 }
 
 .UserRow-channels {
-  color: var(--color-blue);
+  color: var(--color-accent);
 }
