@@ -9,7 +9,7 @@ class UsersController < ApplicationController
 
   def update
     if @user.update(user_params)
-      redirect_to user_url, flash: { success: 'User was successfully updated.' }
+      redirect_to user_url, flash: { success: I18n.t('contributor.saved', name: @user.name) }
     else
       render :edit
     end
