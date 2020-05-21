@@ -2,19 +2,19 @@
   <nav>
     <ul>
       <li class="NavBar-item">
-        <a class="NavBar-logo" href="#">
+        <%= link_to root_path, class: 'NavBar-logo' do %>
           100eyes
-        </a>
+        <% end %>
       </li>
       <li class="NavBar-item">
-        <a href="<%= users_path %>">
+        <%= link_to users_path do %>
           Lokalexpert*innen
-        </a>
+        <% end %>
       </li>
       <li class="NavBar-item">
-        <a class="NavBar-item" href="<%= requests_path %>">
+        <%= link_to requests_path do %>
           Recherchen
-        </a>
+        <% end %>
       </li>
     </ul>
   </nav>

@@ -1,10 +1,13 @@
-<%= c 'page_wrapper' do %>
-  <%= c 'page_header', title: 'Recherchen' %>
-  <% @requests.each do |request| %>
-    <%= c 'box' do %>
-      <%= link_to request_path(request) do %>
-        <%= c 'plaintext_message', message: request.text %>
+<%= c 'page' do %>
+  <%= c 'page_title' do %>
+    Recherchen
+  <% end %>
+  <%= c 'box' do %>
+    <%= c 'stack', space: :xlarge do %>
+      <% @requests.each do |request| %>
+        <%= c 'excerpt', title: request.title, text: request.text, link: request_path(request), date: request.created_at %>
       <% end %>
+      <%= c 'button', label: 'Neue Recherche', link: new_request_path %>
     <% end %>
   <% end %>
 <% end %>

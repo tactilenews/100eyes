@@ -1,9 +1,13 @@
-<%= c 'page_wrapper' do %>
-  <%= c 'page_header', title: 'Suchergebnisse' %>
-
-  <% @results.each do |result| %>
-    <%= c 'search_result', result: result %>
+<%= c 'page' do %>
+  <%= c 'page_title' do %>
+    Suchergebnisse
   <% end %>
-
-  <%= link_to 'Zurück zur Übersicht', :root %>
+  <%= c 'box' do %>
+    <%= c 'stack', space: :xlarge do %>
+      <% @results.each do |result| %>
+        <%= c 'search_result', result: result %>
+      <% end %>
+      <%= c 'button', label: 'Zurück zur Übersicht', link: root_path %>
+    <% end %>
+  <% end %>
 <% end %>

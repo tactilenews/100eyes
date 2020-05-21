@@ -15,7 +15,7 @@
         <% @replies.each do |reply| %>
           <%= c 'excerpt',
             title: reply.user.name,
-            date: time_ago_in_words(reply.created_at),
+            date: reply.created_at,
             text: reply.text,
             link: user_request_path(reply: reply, user_id: reply.user.id,)
           %>

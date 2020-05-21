@@ -1,5 +1,5 @@
 .Avatar {
-  display: inline-block;
+  display: block;
   box-sizing: content-box;
   border-radius: 50%;
   overflow: hidden;
