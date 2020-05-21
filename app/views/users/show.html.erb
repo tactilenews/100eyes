@@ -12,12 +12,12 @@
           <%= I18n.t 'contributor.answered_requests' %>
         <% end %>
 
-        <% @user.requests.uniq.each do |request| %>
+        <% @user.replies.each do |reply| %>
           <%= c 'excerpt',
-            title: request.title,
-            text: request.text,
-            date: request.created_at,
-            link: user_request_path(id: request.id, user_id: @user.id)
+            title: reply.request.title,
+            text: reply.text,
+            date: reply.created_at,
+            link: user_request_path(id: reply.request.id, user_id: @user.id)
           %>
         <% end %>
       <% end %>
