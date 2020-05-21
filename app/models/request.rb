@@ -4,7 +4,10 @@ class Request < ApplicationRecord
   has_many :replies, dependent: :destroy
   attribute :hints, :string, array: true, default: []
   default_scope { order(created_at: :desc) }
-  scope :active_request, -> { order(created_at: :desc).first }
+
+  def self.active_request
+    order(created_at: :desc).first
+  end
 
   HINT_TEXTS = {
     photo: 'Textbaustein für Foto',

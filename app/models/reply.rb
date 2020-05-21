@@ -19,7 +19,9 @@ class Reply < ApplicationRecord
     ActiveRecord::Base.transaction do
       reply = Reply.find_by(telegram_media_group_id: media_group_id) if media_group_id
       reply ||= create!(text: text, user: user, request: request, telegram_media_group_id: media_group_id)
-      reply.photos << Photo.create(telegram_message: message, reply: reply)
+      if message['photo']
+        reply.photos << Photo.create(telegram_message: message, reply: reply)
+      end
     end
   end
 end
