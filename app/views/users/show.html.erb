@@ -17,7 +17,7 @@
             title: request.title,
             text: request.text,
             date: request.created_at,
-            link: request_path(request)
+            link: user_request_path(id: request.id, user_id: @user.id)
           %>
         <% end %>
       <% end %>
