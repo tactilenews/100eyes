@@ -29,3 +29,7 @@
   padding-right: 0;
   border: none;
 }
+
+.Button--small {
+  padding: var(--input-padding-s);
+}

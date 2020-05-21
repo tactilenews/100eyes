@@ -36,7 +36,7 @@
 }
 
 .Input--small {
-  padding: var(--spacing-unit-xs);
+  padding: var(--input-padding-s);
 }
 
 .Input--inverted {
