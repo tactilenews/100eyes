@@ -3,7 +3,7 @@
 class Reply < ApplicationRecord
   include PgSearch::Model
 
-  default_scope { order(:created_at) }
+  default_scope { order(created_at: :desc) }
 
   multisearchable against: :text
 
