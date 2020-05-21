@@ -2,19 +2,19 @@
 <div class="UserProfile" data-controller="user_profile" data-action="input->user_profile#setDirty">
   <%= c 'avatar', user: user %>
   <%= c 'input',
-    placeholder: 'Vor- und Nachname',
+    placeholder: I18n.t('contributor.name'),
     value: user.name,
     id: 'user[name]',
     styles: ['clickToEdit', 'center', 'heading']
   %>
   <%= c 'input',
-    placeholder: 'E-Mail-Adresse',
+    placeholder: I18n.t('contributor.email'),
     value: user.email,
     id: 'user[email]',
     styles: ['clickToEdit', 'center']
   %>
   <%= c 'textarea',
-      placeholder: 'Klicken, um eine Notiz zu dieser Person zu hinterlegen.',
+      placeholder: I18n.t('contributor.click_to_add_note'),
       id: 'user[note]',
       value: user.note,
       styles: ['clickToEdit', 'center']

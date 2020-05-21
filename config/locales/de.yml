@@ -1,8 +1,34 @@
----
 de:
-  message:
-    message:
-      message_date: "%{time_ago} vorher"
+  search: Suchen
+  search_result:
+    one: Suchergebnis
+    other: Suchergebnisse
+
+  contributor:
+    contributor:
+      one: Lokalexpert*in
+      other: Lokalexpert*innen
+    name: Vor- und Nachname
+    email: E-Mail-Adresse
+    note: Notiz
+    click_to_add_note: Klicken, um eine Notiz zu dieser Person zu hinterlegen.
+    answered_requests: Alle beantworteten Fragen
+
+
+  request:
+    request:
+      one: Frage
+      other: Fragen
+    create: Neue Frage stellen
+    replies: Alle Antworten
+
+  conversation:
+    conversation:
+      one: Nachrichtenverlauf
+      other: Nachrichtenverläufe
+
+  time_ago: '%{time_ago} vorher'
+
   telegram:
     welcome_message: >
       Hallo, schön, dass du an #%{project_name} teilnimmst. Ich bin der Bot der
