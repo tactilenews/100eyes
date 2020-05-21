@@ -13,25 +13,14 @@ class RequestsController < ApplicationController
   end
 
   def create
-    request = Request.create!(
+    @request = Request.create!(
       title: params.fetch(:title),
       text: params.fetch(:text),
       hints: params.fetch(:hints, [])
     )
 
-    User.where.not(email: nil).find_each do |user|
-      QuestionMailer
-        .with(question: request.plaintext, to: user.email)
-        .new_question_email
-        .deliver_later
-    end
-
-    User.where.not(telegram_chat_id: nil).find_each do |user|
-      Telegram.bots[Rails.configuration.bot_id].send_message(
-        chat_id: user.telegram_chat_id,
-        text: request.plaintext
-      )
-    end
+    send_emails
+    send_telegram_messages
 
     return unless @request
 
@@ -50,5 +39,23 @@ class RequestsController < ApplicationController
 
   def set_request
     @request = Request.find(params[:id])
+  end
+
+  def send_emails
+    User.where.not(email: nil).find_each do |user|
+      QuestionMailer
+        .with(question: @request.plaintext, to: user.email)
+        .new_question_email
+        .deliver_later
+    end
+  end
+
+  def send_telegram_messages
+    User.where.not(telegram_chat_id: nil).find_each do |user|
+      Telegram.bots[Rails.configuration.bot_id].send_message(
+        chat_id: user.telegram_chat_id,
+        text: @request.plaintext
+      )
+    end
   end
 end
