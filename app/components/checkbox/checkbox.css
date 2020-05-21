@@ -10,7 +10,7 @@
 }
 
 .Checkbox-label {
-  padding-left: .25em;
+  padding-left: 0.25em;
   flex-grow: 1;
   flex-shrink: 1;
 }

@@ -1,16 +1,15 @@
 .Stack > * + * {
-    margin-top: var(--spacing-unit);
+  margin-top: var(--spacing-unit);
 }
 
-
 .Stack--small > * + * {
-    margin-top: var(--spacing-unit-s);
+  margin-top: var(--spacing-unit-s);
 }
 
 .Stack--large > * + * {
-    margin-top: var(--spacing-unit-l);
+  margin-top: var(--spacing-unit-l);
 }
 
 .Stack--xlarge > * + * {
-    margin-top: var(--spacing-unit-xl);
+  margin-top: var(--spacing-unit-xl);
 }

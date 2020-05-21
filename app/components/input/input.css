@@ -41,7 +41,7 @@
 
 .Input--inverted {
   border: none;
-  background: rgba(255, 255, 255, .2);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .Input--inverted:focus {
@@ -51,7 +51,7 @@
 
 .Input--inverted::placeholder,
 .Input--inverted {
-  color: rgba(255,255, 255,.8);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .Input--inverted:focus::placeholder {

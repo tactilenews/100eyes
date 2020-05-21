@@ -8,7 +8,7 @@ a.UserRow:hover .UserRow-name {
 }
 
 .UserRow-channels {
-  margin-left: .25em;
+  margin-left: 0.25em;
 }
 
 .UserRow-avatar {

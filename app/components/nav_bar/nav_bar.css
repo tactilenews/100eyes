@@ -4,7 +4,7 @@
   justify-content: space-between;
   padding: var(--spacing-unit-s) var(--spacing-unit);
   background: var(--color-blue-dark);
-  color: rgba(255, 255, 255, .8);
+  color: rgba(255, 255, 255, 0.8);
   font-size: var(--font-size-s);
 }
 
@@ -29,4 +29,3 @@
   font-weight: 600;
   color: #fff;
 }
-

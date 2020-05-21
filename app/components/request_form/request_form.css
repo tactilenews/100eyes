@@ -1,30 +1,29 @@
 .RequestForm {
-    display: flex;
-    padding: var(--spacing-unit);
+  display: flex;
+  padding: var(--spacing-unit);
 }
 
 .RequestForm-column {
-    width: 50%;
+  width: 50%;
 }
 
 .RequestForm-column {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .RequestForm-column + .RequestForm-column {
-    margin-left: var(--spacing-unit);
+  margin-left: var(--spacing-unit);
 }
 
 .RequestForm-column > * {
-    /* Ensure direct children take the full column height,
-     * allowing the preview to stick to the top
-     */
-    flex-grow: 1;
+  /* Ensure direct children take the full column height,
+   * allowing the preview to stick to the top
+   */
+  flex-grow: 1;
 }
 
 .RequestForm-preview {
-    position: sticky;
-    top: var(--spacing-unit);
+  position: sticky;
+  top: var(--spacing-unit);
 }
-

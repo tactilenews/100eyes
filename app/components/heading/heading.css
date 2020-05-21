@@ -1,44 +1,44 @@
 .Heading--alpha,
 .Heading--beta {
-    line-height: 1.25;
-    font-weight: 500;
+  line-height: 1.25;
+  font-weight: 500;
 }
 
 .Heading--alpha {
-    font-size: 1.75rem;
+  font-size: 1.75rem;
 }
 
 .Heading--beta {
-    font-size: 1.25rem;
+  font-size: 1.25rem;
 }
 
 .Heading--gamma {
-    font-size: inherit;
-    font-weight: 600;
+  font-size: inherit;
+  font-weight: 600;
 }
 
 .Heading--section {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: var(--font-size-s);
-    letter-spacing: .1em;
-    color: var(--color-text-light);
+  display: flex;
+  align-items: center;
+  width: 100%;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: var(--font-size-s);
+  letter-spacing: 0.1em;
+  color: var(--color-text-light);
 }
 
 .Heading--section::before,
 .Heading--section::after {
-    content: '';
-    display: block;
-    margin-right: var(--spacing-unit-l);
-    border-bottom: 1px solid var(--color-border);
-    flex-grow: 1;
-    flex-shrink: 1;
+  content: '';
+  display: block;
+  margin-right: var(--spacing-unit-l);
+  border-bottom: 1px solid var(--color-border);
+  flex-grow: 1;
+  flex-shrink: 1;
 }
 
 .Heading--section::after {
-    margin: 0;
-    margin-left: var(--spacing-unit-l);
+  margin: 0;
+  margin-left: var(--spacing-unit-l);
 }

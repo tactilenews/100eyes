@@ -1,31 +1,31 @@
 .Button {
-    -webkit-appearance: none;
-    -moz-appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 
-    text-decoration: none;
+  text-decoration: none;
 
-    display: inline-block;
-    padding: var(--input-padding);
-    padding-left: var(--spacing-unit);
-    padding-right: var(--spacing-unit);
+  display: inline-block;
+  padding: var(--input-padding);
+  padding-left: var(--spacing-unit);
+  padding-right: var(--spacing-unit);
 
-    font-weight: 500;
-    border-radius: var(--border-radius);
-    border: var(--input-border-width) solid var(--color-primary);
+  font-weight: 500;
+  border-radius: var(--border-radius);
+  border: var(--input-border-width) solid var(--color-primary);
 }
 
 .Button--primary {
-    background-color: var(--color-primary);
-    color: white;
+  background-color: var(--color-primary);
+  color: white;
 }
 
 .Button--secondary {
-    color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 .Button--link {
-    color: var(--color-primary);
-    padding-left: 0;
-    padding-right: 0;
-    border: none;
+  color: var(--color-primary);
+  padding-left: 0;
+  padding-right: 0;
+  border: none;
 }
