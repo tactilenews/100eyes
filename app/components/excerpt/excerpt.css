@@ -22,3 +22,7 @@ a.Excerpt:hover .Excerpt-title {
   color: var(--color-text-light);
   margin-left: var(--spacing-unit-s);
 }
+
+.Excerpt-text {
+  color: var(--color-text-light);
+}
