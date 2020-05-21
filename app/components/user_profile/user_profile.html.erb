@@ -1,27 +1,39 @@
-<%= form_with(model: @user, local: true) do %>
-<div class="UserProfile" data-controller="user_profile" data-action="input->user_profile#setDirty">
-  <%= c 'avatar', user: user %>
-  <%= c 'input',
-    placeholder: I18n.t('contributor.name'),
-    value: user.name,
-    id: 'user[name]',
-    styles: ['clickToEdit', 'center', 'heading']
-  %>
-  <%= c 'input',
-    placeholder: I18n.t('contributor.email'),
-    value: user.email,
-    id: 'user[email]',
-    styles: ['clickToEdit', 'center']
-  %>
-  <%= c 'textarea',
-      placeholder: I18n.t('contributor.click_to_add_note'),
-      id: 'user[note]',
-      value: user.note,
-      styles: ['clickToEdit', 'center']
-  %>
-  <div class="UserProfile-actions">
-    <%= c 'button', type: 'submit', label: 'Änderungen übernehmen' %>
-    <%= c 'button', type: 'reset', label: 'Änderungen verwerfen', styles: ['secondary'] %>
+<div
+  class="UserProfile"
+  data-controller="user-profile"
+  data-action="input->user-profile#setDirty"
+>
+  <div class="UserProfile-content">
+    <%= c 'stack', space: :xsmall do %>
+      <div class="UserProfile-avatar">
+        <%= c 'avatar', user: user %>
+      </div>
+
+      <%= c 'input',
+        placeholder: I18n.t('contributor.name'),
+        value: user.name,
+        id: 'user[name]',
+        styles: ['clickToEdit', 'center', 'heading']
+      %>
+
+      <%= c 'input',
+        placeholder: I18n.t('contributor.email'),
+        value: user.email,
+        id: 'user[email]',
+        styles: ['clickToEdit', 'center']
+      %>
+
+      <%= c 'textarea',
+          placeholder: I18n.t('contributor.click_to_add_note'),
+          id: 'user[note]',
+          value: user.note,
+          styles: ['clickToEdit', 'center']
+      %>
+    <% end %>
+
+    <div class="UserProfile-actions">
+      <%= c 'button', type: 'submit', label: 'Änderungen übernehmen', styles: [:primary, :small] %>
+      <%= c 'button', type: 'reset', label: 'Änderungen verwerfen', styles: [:small, :secondary] %>
+    </div>
   </div>
 </div>
-<% end %>

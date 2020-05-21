@@ -1,5 +1,19 @@
 .UserProfile {
   text-align: center;
+  padding-top: var(--spacing-unit-l);
+}
+
+.UserProfile-content {
+  max-width: var(--grid-max-width-s);
+  margin: auto;
+}
+
+.UserProfile-avatar {
+  display: inline-block;
+}
+
+.UserProfile-actions {
+  margin-top: var(--spacing-unit);
 }
 
 .UserProfile:not(.UserProfile--dirty) .UserProfile-actions {

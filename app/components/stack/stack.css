@@ -2,6 +2,10 @@
   margin-top: var(--spacing-unit);
 }
 
+.Stack--xsmall > * + * {
+  margin-top: var(--spacing-unit-xs);
+}
+
 .Stack--small > * + * {
   margin-top: var(--spacing-unit-s);
 }
