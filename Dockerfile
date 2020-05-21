@@ -12,6 +12,7 @@ RUN apk --update add \
     tzdata \
     libxslt-dev \
     libxml2-dev
+    less
 
 RUN mkdir -p /app
 WORKDIR /app
