@@ -1,49 +1,49 @@
 <div class="RequestForm" data-controller="request-form">
-    <div class="RequestForm-column" data-action="input->request-form#updatePreview">
-        <%= c 'stack', space: :large do %>
+  <div class="RequestForm-column" data-action="input->request-form#updatePreview">
+    <%= c 'stack', space: :large do %>
 
-            <%= c 'field', label: 'Interner Titel', help: 'Damit du zwischen all deinen Fragen den Überblick behältst. Der Titel wird nicht an die Lokalexpert*innen gesandt.' do %>
-                <%= c 'input',
-                    id: :title,
-                    placeholder: 'z.B. Thema der Frage',
-                    required: true
-                %>
-            <% end %>
+      <%= c 'field', label: 'Interner Titel', help: 'Damit du zwischen all deinen Fragen den Überblick behältst. Der Titel wird nicht an die Lokalexpert*innen gesandt.' do %>
+        <%= c 'input',
+          id: :title,
+          placeholder: 'z.B. Thema der Frage',
+          required: true
+        %>
+      <% end %>
 
-            <%= c 'field', label: 'Was möchtest du wissen?', help: 'Wähle eine kurze, einfache Formulierung. Beschreibe genau, welche Informationen du benötigst.' do %>
-                <%= c 'textarea',
-                    id: :text,
-                    placeholder: 'Gib hier deine Frage ein…',
-                    required: true,
-                    stimulus_target: 'request-form.message'
-                %>
-            <% end %>
+      <%= c 'field', label: 'Was möchtest du wissen?', help: 'Wähle eine kurze, einfache Formulierung. Beschreibe genau, welche Informationen du benötigst.' do %>
+        <%= c 'textarea',
+          id: :text,
+          placeholder: 'Gib hier deine Frage ein…',
+          required: true,
+          stimulus_target: 'request-form.message'
+        %>
+      <% end %>
 
-            <%= c 'field', label: 'Hinweise anhängen', help: 'Erinnere die Lokalexpert*innen, welche Inhalte du benötigst und wofür du sie verwendest. Hierfür gibt es Textbausteine:' do %>
+      <%= c 'field', label: 'Hinweise anhängen', help: 'Erinnere die Lokalexpert*innen, welche Inhalte du benötigst und wofür du sie verwendest. Hierfür gibt es Textbausteine:' do %>
 
-                <%= c 'stack', space: :small do %>
-                    <% hints.each do |key, label| %>
-                        <%= c 'checkbox',
-                            id: :hints,
-                            group: true,
-                            value: key,
-                            label: label,
-                            stimulus_target: "request-form.#{key}"
-                        %>
-                    <% end %>
-                <% end %>
-
-            <% end %>
-
-            <%= c 'button', type: 'submit', label: 'Frage an alle Lokalexpert*innen senden' %>
-
-        <% end %>
-    </div>
-
-    <div class="RequestForm-column">
         <%= c 'stack', space: :small do %>
-            <strong>Diese Nachricht erhalten die Lokalexpert*innen:</strong>
-            <div class="RequestForm-preview PlaintextMessage" data-target="request-form.preview"></div>
+          <% hints.each do |key, label| %>
+            <%= c 'checkbox',
+              id: :hints,
+              group: true,
+              value: key,
+              label: label,
+              stimulus_target: "request-form.#{key}"
+            %>
+          <% end %>
         <% end %>
-    </div>
+
+      <% end %>
+
+      <%= c 'button', type: 'submit', label: 'Frage an alle Lokalexpert*innen senden' %>
+
+    <% end %>
+  </div>
+
+  <div class="RequestForm-column">
+    <%= c 'stack', space: :small do %>
+      <strong>Diese Nachricht erhalten die Lokalexpert*innen:</strong>
+      <div class="RequestForm-preview PlaintextMessage" data-target="request-form.preview"></div>
+    <% end %>
+  </div>
 </div>
