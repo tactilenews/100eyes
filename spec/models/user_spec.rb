@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe User, type: :model do
+RSpec.describe User, type: :model do # rubocop:disable Metrics/BlockLength
   it 'is sorted in alphabetical order' do
     zora = create(:user, first_name: 'Zora', last_name: 'Zimmermann')
     adam_zimmermann = create(:user, first_name: 'Adam', last_name: 'Zimmermann')
