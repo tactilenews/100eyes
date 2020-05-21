@@ -45,18 +45,6 @@ a {
   text-decoration: none;
 }
 
-a[href*='mailto:'] {
-  background: url(/email.svg) no-repeat left center;
-  background-size: 22px;
-  padding-left: 30px;
-}
-
-a[href*="//t.me/"]
-{
-  background: url(/telegram.svg) no-repeat left center;
-  background-size: 22px;
-  padding-left: 30px;
-}
 strong {
   font-weight: 600;
 }
