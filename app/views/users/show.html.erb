@@ -2,22 +2,26 @@
   <%= c 'page_title' do %>
     Benutzerprofil
   <% end %>
+
   <%= c 'box' do %>
     <%= c 'stack', space: :xlarge do %>
       <%= c 'user_row', user: @user %>
-    <% end %>
-    <%= c 'stack' do %>
-      <%= c 'heading', styles: [:section] do %>
-        Alle beantworteten Recherchen
+
+      <%= c 'stack' do %>
+        <%= c 'heading', styles: [:section] do %>
+          Alle beantworteten Recherchen
+        <% end %>
+
+        <% @user.requests.uniq.each do |request| %>
+          <%= c 'excerpt',
+            title: request.title,
+            text: request.text,
+            date: request.created_at,
+            link: request_path(request)
+          %>
+        <% end %>
       <% end %>
-      <% @user.requests.uniq.each do |request| %>
-        <%= c 'excerpt',
-          title: request.title,
-          text: request.text,
-          date: request.created_at,
-          link: request_path(request)
-        %>
-      <% end %>
+
       <%= c 'button', label: 'Zurück zur Benutzer-Liste', link: users_path %>
     <% end %>
   <% end %>
