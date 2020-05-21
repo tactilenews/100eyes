@@ -41,6 +41,14 @@ RSpec.describe '/users', type: :request do
     end
   end
 
+  describe 'GET /requests/:id' do
+    let(:request) { Request.create! }
+    let(:user) { User.create! }
+    subject { -> { get user_request_path(id: request.id, user_id: user.id) } }
+
+    it { should_not raise_error }
+  end
+
   describe 'GET /edit' do
     it 'render a successful response' do
       user = User.create! valid_attributes

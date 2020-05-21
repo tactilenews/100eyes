@@ -17,7 +17,7 @@
             title: reply.user.name,
             date: reply.created_at,
             text: reply.text,
-            link: user_request_path(reply: reply, user_id: reply.user.id,)
+            link: user_request_path(id: reply.request.id, user_id: reply.user.id,)
           %>
         <% end %>
       <% end %>
