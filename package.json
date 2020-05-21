@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "prettier-write": "prettier --write '{app,frontend}/**/*.{js,css}'",
+    "prettier-check": "prettier --check '{app,frontend}/**/*.{js,css}'"
+  },
   "dependencies": {
     "@rails/ujs": "^6.0.3",
     "@rails/webpacker": "5.1.1",
