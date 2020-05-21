@@ -5,6 +5,7 @@ class User < ApplicationRecord
   multisearchable against: %i[first_name last_name username note]
   has_many :replies, dependent: :destroy
   has_many :requests, through: :replies
+  default_scope { order(:first_name, :last_name) }
 
   def self.upsert_via_telegram(message)
     from, chat = message.values_at('from', 'chat')

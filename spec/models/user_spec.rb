@@ -2,7 +2,17 @@
 
 require 'rails_helper'
 
-RSpec.describe User, type: :model do
+RSpec.describe User, type: :model do # rubocop:disable Metrics/BlockLength
+  it 'is sorted in alphabetical order' do
+    zora = create(:user, first_name: 'Zora', last_name: 'Zimmermann')
+    adam_zimmermann = create(:user, first_name: 'Adam', last_name: 'Zimmermann')
+    adam_ackermann = create(:user, first_name: 'Adam', last_name: 'Ackermann')
+
+    expect(User.first).to eq(adam_ackermann)
+    expect(User.second).to eq(adam_zimmermann)
+    expect(User.third).to eq(zora)
+  end
+
   describe '#name=' do
     let(:user) { User.new(first_name: 'John', last_name: 'Doe') }
     subject { -> { user.name = 'Till Prochaska' } }

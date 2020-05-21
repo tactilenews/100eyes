@@ -19,6 +19,14 @@ RSpec.describe Request, type: :model do
     expect(subject.attributes.keys).to include('title', 'text', 'hints')
   end
 
+  it 'is by default sorted in reverse chronological order' do
+    oldest_request = create(:request, created_at: 2.hours.ago)
+    newest_request = create(:request, created_at: 1.hour.ago)
+
+    expect(described_class.first).to eq(newest_request)
+    expect(described_class.last).to eq(oldest_request)
+  end
+
   describe '.hints' do
     subject { Request.new(title: 'Example').hints }
     it { should match_array([]) }

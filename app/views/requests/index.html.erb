@@ -11,7 +11,7 @@
   <% end %>
 
   <%= c 'box' do %>
-    <%= c 'stack', space: :xlarge do %>
+    <%= c 'stack' do %>
       <% @requests.each do |request| %>
         <%= c 'excerpt',
           title: request.title,

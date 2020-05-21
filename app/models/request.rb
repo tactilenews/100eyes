@@ -3,7 +3,7 @@
 class Request < ApplicationRecord
   has_many :replies, dependent: :destroy
   attribute :hints, :string, array: true, default: []
-  default_scope { order(:created_at) }
+  default_scope { order(created_at: :desc) }
 
   HINT_TEXTS = {
     photo: 'Textbaustein für Foto',

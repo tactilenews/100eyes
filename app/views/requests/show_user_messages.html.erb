@@ -3,9 +3,6 @@
     <%= I18n.t 'conversation.conversation', count: 1 %>
   <% end %>
   <%= c 'box' do %>
-    <%= c 'stack' do %>
-      <%= c 'chat', user: @user, messages: @chat_messages %>
-      <%= c 'button', label: 'Zurück', link: user_path(@user) %>
-    <% end %>
+    <%= c 'chat', user: @user, messages: @chat_messages %>
   <% end %>
 <% end %>
