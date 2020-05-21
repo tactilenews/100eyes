@@ -3,7 +3,7 @@
     Nachrichtenverlauf
   <% end %>
   <%= c 'box' do %>
-    <%= c 'stack', space: :xlarge do %>
+    <%= c 'stack' do %>
       <%= c 'chat', user: @user, messages: @chat_messages %>
       <%= c 'button', label: 'Zurück', link: user_path(@user) %>
     <% end %>
