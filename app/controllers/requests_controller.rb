@@ -32,6 +32,8 @@ class RequestsController < ApplicationController
         text: request.plaintext
       )
     end
+
+    redirect_to request if request
   end
 
   def show_user_messages
