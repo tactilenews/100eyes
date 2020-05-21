@@ -28,7 +28,7 @@ gem 'bootsnap', '>= 1.4.2', require: false
 gem 'webpacker', '~> 5'
 
 # Enable component-driven frontend architecture
-gem 'view_component', '~> 2.x'
+gem 'view_component', '~> 2'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
