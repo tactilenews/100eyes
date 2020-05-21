@@ -2,24 +2,24 @@
   <div class="RequestForm-column" data-action="input->request-form#updatePreview">
     <%= c 'stack', space: :large do %>
 
-      <%= c 'field', label: 'Interner Titel', help: 'Damit du zwischen all deinen Fragen den Überblick behältst. Der Titel wird nicht an die Lokalexpert*innen gesandt.' do %>
+      <%= c 'field',label: I18n.t('request.form.title.label'), help: I18n.t('request.form.title.help') do %>
         <%= c 'input',
           id: :title,
-          placeholder: 'z.B. Thema der Frage',
+          placeholder: I18n.t('request.form.title.placeholder'),
           required: true
         %>
       <% end %>
 
-      <%= c 'field', label: 'Was möchtest du wissen?', help: 'Wähle eine kurze, einfache Formulierung. Beschreibe genau, welche Informationen du benötigst.' do %>
+      <%= c 'field', label: I18n.t('request.form.text.label'), help: I18n.t('request.form.text.help') do %>
         <%= c 'textarea',
           id: :text,
-          placeholder: 'Gib hier deine Frage ein…',
+          placeholder: I18n.t('request.form.text.placeholder'),
           required: true,
           stimulus_target: 'request-form.message'
         %>
       <% end %>
 
-      <%= c 'field', label: 'Hinweise anhängen', help: 'Erinnere die Lokalexpert*innen, welche Inhalte du benötigst und wofür du sie verwendest. Hierfür gibt es Textbausteine:' do %>
+      <%= c 'field', label: I18n.t('request.form.hints.label'), help: I18n.t('request.form.hints.help') do %>
 
         <%= c 'stack', space: :small do %>
           <% hints.each do |key, label| %>
@@ -35,14 +35,14 @@
 
       <% end %>
 
-      <%= c 'button', type: 'submit', label: 'Frage an alle Lokalexpert*innen senden' %>
+      <%= c 'button', type: 'submit', label: I18n.t('request.send') %>
 
     <% end %>
   </div>
 
   <div class="RequestForm-column">
     <%= c 'stack', space: :small do %>
-      <strong>Diese Nachricht erhalten die Lokalexpert*innen:</strong>
+      <strong><%= I18n.t('request.form.preview') %></strong>
       <div class="RequestForm-preview PlaintextMessage" data-target="request-form.preview"></div>
     <% end %>
   </div>

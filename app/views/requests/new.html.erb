@@ -1,6 +1,6 @@
 <%= c 'page', styles: [:wide] do %>
   <%= c 'page_title' do %>
-    Stelle eine neue Recherchefrage
+    <%= I18n.t 'request.create' %>
   <% end %>
 
   <%= form_with url: requests_path, local: true do %>

@@ -9,7 +9,7 @@
 
       <%= c 'stack' do %>
         <%= c 'heading', styles: [:section] do %>
-          Alle Antworten
+          <%= I18n.t 'request.replies' %>
         <% end %>
 
         <% @replies.each do |reply| %>

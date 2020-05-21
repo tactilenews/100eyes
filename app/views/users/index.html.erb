@@ -1,7 +1,7 @@
 <%= c 'page' do %>
 
   <%= c 'page_title' do %>
-    Deine Lokalexpert*innen
+    <%= I18n.t 'contributor.contributor', count: :many %>
   <% end %>
 
   <%= c 'box' do %>

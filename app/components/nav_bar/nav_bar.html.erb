@@ -3,24 +3,30 @@
     <ul>
       <li class="NavBar-item">
         <%= link_to root_path, class: 'NavBar-logo' do %>
-          100eyes
+          <%= Rails.configuration.project_name %>
         <% end %>
       </li>
       <li class="NavBar-item">
         <%= link_to users_path do %>
-          Lokalexpert*innen
+          <%= I18n.t 'contributor.contributor', count: :many %>
         <% end %>
       </li>
       <li class="NavBar-item">
         <%= link_to requests_path do %>
-          Recherchen
+          <%= I18n.t 'request.request', count: :many %>
         <% end %>
       </li>
     </ul>
   </nav>
   <div class="NavBar-search">
     <%= form_with url: search_path, local: true, method: :get do %>
-      <%= c 'input', type: :search, id: 'q', required: true, styles: [:inverted, :small], placeholder: 'Suchen' %>
+      <%= c 'input',
+        type: :search,
+        id: 'q',
+        required: true,
+        styles: [:inverted, :small],
+        placeholder: I18n.t('search')
+      %>
     <% end %>
   </div>
 </header>

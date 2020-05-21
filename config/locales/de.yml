@@ -1,12 +1,51 @@
----
 de:
-  message:
-    message:
-      message_date: "%{time_ago} vorher"
+  time_ago: '%{time_ago} vorher'
+  search: Suchen
+  search_result:
+    one: Suchergebnis
+    other: Suchergebnisse
+
+  contributor:
+    contributor:
+      one: Lokalexpert*in
+      other: Lokalexpert*innen
+    name: Vor- und Nachname
+    email: E-Mail-Adresse
+    note: Notiz
+    click_to_add_note: Klicken, um eine Notiz zu dieser Person zu hinterlegen.
+    answered_requests: Alle beantworteten Fragen
+
+  request:
+    request:
+      one: Frage
+      other: Fragen
+    create: Neue Frage stellen
+    send: Frage an alle Lokalexpert*innen senden
+    replies: Alle Antworten
+    form:
+      preview: Diese Nachricht erhalten die Lokalexpert*innen
+      title:
+        label: Interner Titel
+        help: Damit du zwischen all deinen Fragen den Überblick behältst. Der Titel wird nicht an die Lokalexpert*innen gesandt.
+        placeholder: z.B. Thema der Frage
+      text:
+        label: Was möchtest du wissen?
+        help: Wähle eine kurze, einfache Formulierung. Beschreibe genau, welche Informationen du benötigst.
+        placeholder: Gib hier deine Frage ein…
+      hints:
+        label: Hinweise anhängen
+        help: Erinnere die Lokalexpert*innen, welche Inhalte du benötigst und wofür du sie verwendest. Hierfür gibt es die folgenden Textbausteine.
+
+  conversation:
+    conversation:
+      one: Nachrichtenverlauf
+      other: Nachrichtenverläufe
+
   telegram:
     welcome_message: >
       Hallo, schön, dass du an #%{project_name} teilnimmst. Ich bin der Bot der
       Dialogsoftware #100eyes. Ich freue mich auf den Dialog mit dir.
+
   activerecord:
     errors:
       messages:

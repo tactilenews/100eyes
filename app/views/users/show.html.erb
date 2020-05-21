@@ -1,6 +1,6 @@
 <%= c 'page' do %>
   <%= c 'page_title' do %>
-    Benutzerprofil
+    <%= I18n.t 'contributor.contributor', count: 1 %>
   <% end %>
 
   <%= c 'box' do %>
@@ -9,7 +9,7 @@
 
       <%= c 'stack' do %>
         <%= c 'heading', styles: [:section] do %>
-          Alle beantworteten Recherchen
+          <%= I18n.t 'contributor.answered_requests' %>
         <% end %>
 
         <% @user.requests.uniq.each do |request| %>
