@@ -16,7 +16,13 @@
 
   --color-blue: #0375c7;
   --color-blue-dark: #1a2d3a;
-  --color-blue-light: #0898ff;
+  --color-blue-light: #7ac8ff;
+  --color-blue-lightest: #dbefff;
+
+  --color-green: #50b83c;
+  --color-green-dark: #0d6b37;
+  --color-green-light: #88cc7b;
+  --color-green-lightest: #e3f1df;
 
   --color-gray-light: #e9edf0;
   --color-gray: #888;
@@ -26,7 +32,7 @@
   --color-text: #333;
   --color-text-light: #666;
   --color-primary: var(--color-blue);
-  --color-accent: var(--color-blue-light);
+  --color-accent: var(--color-blue);
   --color-border: #ccc;
   --color-focus: #007eff;
 

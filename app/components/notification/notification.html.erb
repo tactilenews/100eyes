@@ -1,0 +1,13 @@
+<div
+  class="<%= class_names.join(' ') %>"
+  data-controller="notification"
+>
+  <%= @content %>
+  <button
+    data-action="notification#close"
+    class="Notification-close"
+    title="<%= I18n.t 'close' %>"
+  >
+    <%= c 'icon', icon: 'i-remove', styles: [:inline] %>
+  </button>
+</div>

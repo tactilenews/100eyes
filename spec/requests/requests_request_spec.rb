@@ -10,6 +10,17 @@ RSpec.describe 'Requests', telegram_bot: :rails do
 
     it { should change { Request.count }.from(0).to(1) }
 
+    it 'redirects to requests#show' do
+      response = subject.call
+      request = Request.last
+      expect(response).to redirect_to request
+    end
+
+    it 'shows success notification' do
+      subject.call
+      expect(flash[:success]).not_to be_empty
+    end
+
     describe 'without hints param' do
       let(:params) { { title: 'Example Question', text: 'How do you do?' } }
       it { should_not raise_error }
