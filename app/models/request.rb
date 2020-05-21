@@ -4,6 +4,7 @@ class Request < ApplicationRecord
   has_many :replies, dependent: :destroy
   attribute :hints, :string, array: true, default: []
   default_scope { order(created_at: :desc) }
+  scope :active_request, -> { order(created_at: :desc).first }
 
   HINT_TEXTS = {
     photo: 'Textbaustein für Foto',
@@ -12,12 +13,6 @@ class Request < ApplicationRecord
     medicalInfo: 'Textbaustein für medizinische Informationen',
     confidential: 'Textbaustein für vertrauliche Informationen'
   }.freeze
-
-  def self.add_reply(answer:, user:)
-    recent_request = Request.order('created_at').last
-    recent_request || return
-    Reply.create(user: user, request: recent_request, text: answer)
-  end
 
   def plaintext
     parts = []

@@ -1,4 +1,11 @@
 <div class="Message">
+  <% unless photos.empty? %>
+    <div class="Message-photos">
+      <% photos.each do |photo| %>
+        <img src="<%= url_for(photo.images.last) %>" alt="">
+      <% end %>
+    </div>
+  <% end %>
   <div class="Message-text">
     <%= message.text %>
   </div>

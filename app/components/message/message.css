@@ -11,3 +11,14 @@
   color: var(--color-text-light);
   font-size: var(--font-size-s);
 }
+
+.Message-photos {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.Message-photos > img {
+  max-width: 100%;
+  height: auto;
+}
