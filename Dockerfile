@@ -11,7 +11,7 @@ RUN apk --update add \
     postgresql-client=~12.2 \
     tzdata \
     libxslt-dev \
-    libxml2-dev
+    libxml2-dev \
     less
 
 RUN mkdir -p /app
