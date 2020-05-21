@@ -1,0 +1,29 @@
+.Notification {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-unit-s) var(--spacing-unit);
+
+  font-weight: 500;
+  font-size: var(--font-size-s);
+  text-align: center;
+  border-bottom: 1px solid;
+
+  color: var(--color-blue-dark);
+  background-color: var(--color-blue-lightest);
+  border-color: var(--color-blue-light);
+}
+
+.Notification-close {
+  font-size: 1.5rem;
+  color: inherit;
+  appearance: none;
+  background: transparent;
+  border: none;
+}
+
+.Notification--success {
+  color: var(--color-green-dark);
+  background-color: var(--color-green-lightest);
+  border-color: var(--color-green-light);
+}
