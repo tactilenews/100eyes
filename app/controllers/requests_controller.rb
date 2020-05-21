@@ -33,7 +33,9 @@ class RequestsController < ApplicationController
       )
     end
 
-    redirect_to request if request
+    return unless @request
+
+    redirect_to @request, flash: { success: I18n.t('request.success') }
   end
 
   def show_user_messages

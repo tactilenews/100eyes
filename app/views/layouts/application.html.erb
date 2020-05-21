@@ -11,6 +11,14 @@
   <body>
     <%= c 'nav_bar' %>
 
+    <%= flash.notice %>
+
+    <% flash.each do |type, message| %>
+      <%= c 'notification', styles: [type] do %>
+        <%= message %>
+      <% end %>
+    <% end %>
+
     <%= yield %>
 
     <%= javascript_pack_tag 'application' %>
