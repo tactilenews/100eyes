@@ -1,6 +1,6 @@
 pre-push:
   commands:
     prettier:
-      run: 'yarn run prettier --check "{app,frontend}/**/*.js"'
+      run: 'yarn prettier-check'
     rubocop:
       run: 'bundle exec rubocop'

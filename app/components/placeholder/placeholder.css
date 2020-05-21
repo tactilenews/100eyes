@@ -1,15 +1,15 @@
 .Placeholder {
-    padding: .25em;
-    border-radius: var(--border-radius);
-    font-weight: 500;
-    color: var(--color-text-light);
-    background-color: rgba(0, 0, 0, .05);
+  padding: 0.25em;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  color: var(--color-text-light);
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .Placeholder::before {
-    content: '{{';
+  content: '{{';
 }
 
 .Placeholder::after {
-    content: '}}';
+  content: '}}';
 }
