@@ -29,6 +29,24 @@ class User < ApplicationRecord
     user
   end
 
+  def reply_via_telegram(message)
+    user = self
+    request = Request.active_request or return nil
+    media_group_id = message['media_group_id']
+    text = message['text'] || message['caption']
+    ActiveRecord::Base.transaction do
+      reply = Reply.find_by(telegram_media_group_id: media_group_id) if media_group_id
+      reply ||= Reply.create!(text: text, user: user, request: request, telegram_media_group_id: media_group_id)
+      reply.photos << Photo.create(telegram_message: message, reply: reply) if message['photo']
+    end
+  end
+
+  def reply_via_mail(mail)
+    user = self
+    request = Request.active_request or return nil
+    Reply.create!(request: request, text: mail.decoded, user: user)
+  end
+
   def name
     "#{first_name} #{last_name}"
   end

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe User, type: :model do # rubocop:disable Metrics/BlockLength
+RSpec.describe User, type: :model do
   it 'is sorted in alphabetical order' do
     zora = create(:user, first_name: 'Zora', last_name: 'Zimmermann')
     adam_zimmermann = create(:user, first_name: 'Adam', last_name: 'Zimmermann')
@@ -119,6 +119,65 @@ RSpec.describe User, type: :model do # rubocop:disable Metrics/BlockLength
     describe 'given an existing but outdated user record' do
       before(:each) { create(:user, telegram_id: 47, username: 'bob') }
       it { should(change { User.first.username }.from('bob').to('alice')) }
+    end
+  end
+
+  describe '#reply_via_mail' do
+    let(:user) { create(:user) }
+    let(:mail) { instance_double('Mail::Message', decoded: 'A nice email') }
+
+    subject { -> { user.reply_via_mail(mail) } }
+    it { should_not raise_error }
+    it { should_not(change { Reply.count }) }
+    describe 'given a recent request' do
+      before(:each) { request.save! }
+      let(:request) do
+        Request.new(
+          title: 'Hitchhiker’s Guide',
+          text: 'What is the answer to life, the universe, and everything?',
+          hints: %w[photo confidential]
+        )
+      end
+
+      it { should change { Reply.count }.from(0).to(1) }
+      it { should_not(change { Photo.count }) }
+    end
+  end
+
+  describe '#reply_via_telegram' do
+    let(:user) { create(:user) }
+
+    subject do
+      lambda {
+        user.reply_via_telegram(
+          'text' => 'The answer is 42.',
+          'from' => {
+            'id' => 4711,
+            'is_bot' => false,
+            'first_name' => 'Robert',
+            'last_name' => 'Schäfer',
+            'language_code' => 'en'
+          },
+          'chat' => { 'id' => 146_338_764 }
+        )
+      }
+    end
+
+    it { should_not raise_error }
+    it { should_not(change { Reply.count }) }
+
+    describe 'given a recent request' do
+      before(:each) { request.save! }
+      let(:request) do
+        Request.new(
+          title: 'Hitchhiker’s Guide',
+          text: 'What is the answer to life, the universe, and everything?',
+          hints: %w[photo confidential]
+        )
+      end
+
+      it { should change { Reply.count }.from(0).to(1) }
+      it { should_not(change { Photo.count }) }
     end
   end
 end
