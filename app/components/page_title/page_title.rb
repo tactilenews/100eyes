@@ -2,6 +2,7 @@
 
 module PageTitle
   class PageTitle < ApplicationComponent
-    def initialize(*); end
+    with_content_areas :actions
+    def initialize(**); end
   end
 end
