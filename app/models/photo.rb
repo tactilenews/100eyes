@@ -6,6 +6,7 @@ class Photo < ApplicationRecord
 
   def telegram_message=(message)
     return unless message['photo']
+
     message['photo'].each do |telegram_file|
       file_id = telegram_file['file_id']
       bot_token = "bot#{Rails.application.credentials.dig(:telegram, :bots, Rails.configuration.bot_id)}"
