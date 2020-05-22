@@ -26,6 +26,8 @@ Metrics/MethodLength:
 # Configuration parameters: CountKeywordArgs.
 Metrics/ParameterLists:
   Max: 7
+  Exclude:
+    - 'app/components/**/*.rb'
 
 # Offense count: 1
 # Configuration parameters: EnforcedStyle.
@@ -60,3 +62,5 @@ Style/IfUnlessModifier:
 # URISchemes: http, https
 Layout/LineLength:
   Max: 130
+  Exclude:
+    - 'app/components/**/*.rb'

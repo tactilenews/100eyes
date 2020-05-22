@@ -7,6 +7,8 @@ class UsersController < ApplicationController
     @users = User.all
   end
 
+  def show; end
+
   def update
     if @user.update(user_params)
       redirect_to user_url, flash: { success: I18n.t('contributor.saved', name: @user.name) }
