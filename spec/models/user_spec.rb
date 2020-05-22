@@ -96,32 +96,6 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '::upsert_via_telegram' do
-    let(:telegram_message) { { 'chat' => { 'id' => 42 }, 'from' => { 'id' => 47, 'username' => 'alice' } } }
-    subject(:upsert) { -> { described_class.upsert_via_telegram(telegram_message) } }
-
-    describe 'return value' do
-      subject(:return_value) { upsert.call }
-      it { should be_a(User) }
-    end
-
-    describe 'given no user' do
-      let(:user) { User.first }
-      it { should(change { User.count }.from(0).to(1)) }
-
-      describe 'when user is created' do
-        before(:each) { upsert.call }
-        subject(:user) { User.first }
-        it { should have_attributes(telegram_chat_id: 42, telegram_id: 47, username: 'alice') }
-      end
-    end
-
-    describe 'given an existing but outdated user record' do
-      before(:each) { create(:user, telegram_id: 47, username: 'bob') }
-      it { should(change { User.first.username }.from('bob').to('alice')) }
-    end
-  end
-
   describe '#reply_via_mail' do
     let(:user) { create(:user) }
     let(:mail) { instance_double('Mail::Message', decoded: 'A nice email') }

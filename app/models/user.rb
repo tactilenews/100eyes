@@ -8,13 +8,6 @@ class User < ApplicationRecord
   default_scope { order(:first_name, :last_name) }
   validates :email, presence: false, 'valid_email_2/email': true
 
-  def self.upsert_via_telegram(message)
-    tm = TelegramMessage.new(message)
-    user = tm.user
-    user.save!
-    user
-  end
-
   def reply_via_telegram(message)
     user = self
     request = Request.active_request or return nil

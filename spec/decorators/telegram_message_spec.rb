@@ -23,4 +23,25 @@ RSpec.describe TelegramMessage do
       it { should eq('Das hier ist die Überschrift eine Fotos') }
     end
   end
+
+  describe '#user' do
+    subject { telegram_message.user }
+    let(:message) { { 'chat' => { 'id' => 42 }, 'from' => { 'id' => 47, 'username' => 'alice' } } }
+    it { should be_a(User) }
+
+    describe 'calling #save! on the user' do
+      it { expect { subject.save! }.to(change { User.count }.from(0).to(1)) }
+
+      describe 'attributes of the created user' do
+        before(:each) { subject.save! }
+        let(:user) { User.first }
+        it { expect(user).to have_attributes(telegram_chat_id: 42, telegram_id: 47, username: 'alice') }
+      end
+
+      describe 'given an existing but outdated user record' do
+        before(:each) { create(:user, telegram_id: 47, username: 'bob') }
+        it { expect { subject.save! }.to(change { User.first.username }.from('bob').to('alice')) }
+      end
+    end
+  end
 end
