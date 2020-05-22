@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
 class TelegramMessage
-  attr_reader :user, :text, :photo
+  attr_reader :user, :text, :reply, :photos
 
   def initialize(message)
     message = message.with_indifferent_access
     @text = message[:text] || message[:caption]
     @user = initialize_user(message)
+    @reply = initialize_reply(message)
+    @photos = initialize_photos(message)
   end
 
   def initialize_user(message)
@@ -29,5 +31,18 @@ class TelegramMessage
       )
     end
     user
+  end
+
+  def initialize_reply(message)
+    media_group_id = message['media_group_id']
+    reply = Reply.find_by(telegram_media_group_id: media_group_id) if media_group_id
+    reply ||= Reply.new(text: text, user: user, request: request, telegram_media_group_id: media_group_id)
+    reply
+  end
+
+  def initialize_photos(message)
+    return [] unless messsage['photo']
+
+    [Photo.new(telegram_message: message)]
   end
 end
