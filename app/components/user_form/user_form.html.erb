@@ -43,8 +43,8 @@
       <% end %>
 
       <div class="UserForm-actions">
-        <%= c 'button', type: 'submit', label: 'Speichern', styles: [:primary] %>
-        <%= c 'button', type: 'reset', label: 'Änderungen verwerfen', styles: [:plain, :danger] %>
+        <%= c 'button', type: 'submit', label: I18n.t('save'), styles: [:primary] %>
+        <%= c 'button', type: 'reset', label: I18n.t('discard'), styles: [:plain, :danger] %>
       </div>
     <% end %>
   <% end %>

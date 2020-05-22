@@ -1,9 +1,13 @@
 de:
   time_ago: '%{time_ago} vorher'
-  search: Suchen
-  search_result:
-    one: Suchergebnis
-    other: Suchergebnisse
+  save: Speichern
+  discard: Änderungen verwerfen
+
+  search:
+    search: Suchen
+    result:
+      one: Suchergebnis
+      other: Suchergebnisse
 
   contributor:
     contributor:
