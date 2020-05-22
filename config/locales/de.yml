@@ -23,6 +23,7 @@ de:
       telegram:
         label: Telegram
         placeholder: Kein Telegram-Nutzername hinterlegt
+        title: Du kannst den Nutzernamen nicht selbst ändern. Sobald %{name} das erste Mal via Telegram interagiert, erscheint hier der Nutzername.
       note:
         label: Notiz
         placeholder: Klicke hier, um eine Notiz zu %{name} zu hinterlegen

@@ -26,6 +26,7 @@
       <%= c 'field', label: I18n.t('contributor.form.telegram.label'), styles: [:horizontal] do %>
         <%= c 'input',
           placeholder: I18n.t('contributor.form.telegram.placeholder'),
+          title: I18n.t('contributor.form.telegram.title', name: user.name),
           value: user.username,
           id: 'user[username]',
           disabled: true,
