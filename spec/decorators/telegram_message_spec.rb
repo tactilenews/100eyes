@@ -13,13 +13,7 @@ RSpec.describe TelegramMessage do
     end
 
     describe 'given a photo with a `caption`' do
-      let(:message) do
-        {  photo: [
-          { file_id: 'AAA', file_size: 6293, width: 320, height: 120 },
-          { file_id: 'AAB', file_size: 23_388, width: 800, height: 299 },
-          { file_id: 'AAC', file_size: 41_585, width: 1280, height: 478 }
-        ], caption: 'Das hier ist die Überschrift eine Fotos' }
-      end
+      let(:message) { { caption: 'Das hier ist die Überschrift eine Fotos' } }
       it { should eq('Das hier ist die Überschrift eine Fotos') }
     end
   end
@@ -32,58 +26,16 @@ RSpec.describe TelegramMessage do
     end
 
     describe 'given a message with one photo' do
-      let(:message) do
-        {
-          message: {
-            # message_id: 182,
-            from: {
-              id: 4711,
-              first_name: 'Robert',
-              last_name: 'Schäfer',
-              username: 'roschaefer'
-              # ...
-            },
-            chat: {
-              id: 4711
-              # ...
-            },
-            date: 1_590_154_462,
-            photo: [
-              {
-                file_id: 'f1',
-                file_unique_id: 'fu1',
-                file_size: 6293,
-                width: 320,
-                height: 120
-              },
+      let(:message) { message_with_photo }
 
-              {
-                file_id: 'f2',
-                file_unique_id: 'fu2',
-                file_size: 23_388,
-                width: 800,
-                height: 299
-              },
-              {
-                file_id: 'f3',
-                file_unique_id: 'fu3',
-                file_size: 41_585,
-                width: 1280,
-                height: 478
-              }
-            ],
-            caption: 'Ich bin eine Caption'
-          }
-        }
-      end
+      it { VCR.use_cassette(:photo_with_image) { should_not be_empty } }
+      it { VCR.use_cassette(:photo_with_image) { should all(be_a(Photo)) } }
 
-      it { should_not be_empty }
-      it { should all(be_a(Photo)) }
-
-      it 'calls Telegram API twice to get the download link' do
-      end
-
-      it 'chooses the largest image file for the Photo' do
+      it 'chooses the largest image' do
+        VCR.use_cassette(:photo_with_image) do
+          photo = subject.first
+          expect(photo.image.blob.byte_size).to eq(90_449)
+        end
       end
     end
   end
@@ -107,5 +59,43 @@ RSpec.describe TelegramMessage do
         it { expect { subject.save! }.to(change { User.first.username }.from('bob').to('alice')) }
       end
     end
+  end
+
+  let(:message_with_photo) do
+    { 'message_id' => 186,
+      'from' =>
+    { 'id' => 4711,
+      'is_bot' => false,
+      'first_name' => 'Robert',
+      'last_name' => 'Schäfer',
+      'username' => 'roschaefer',
+      'language_code' => 'en' },
+      'chat' =>
+    { 'id' => 4711,
+      'first_name' => 'Robert',
+      'last_name' => 'Schäfer',
+      'username' => 'roschaefer',
+      'type' => 'private' },
+      'date' => 1_590_173_947,
+      'photo' =>
+    [{ 'file_id' =>
+       'AgACAgIAAxkBAAO6Xsgg-634JM6OTCBsZd9x6Iv5rbcAAtyuMRvWu0FK4BnZYCoEVwF2DQWSLgADAQADAgADbQAD8LoBAAEZBA',
+       'file_unique_id' => 'AQADdg0Fki4AA_C6AQAB',
+       'file_size' => 17_659,
+       'width' => 213,
+       'height' => 320 },
+     { 'file_id' =>
+       'AgACAgIAAxkBAAO6Xsgg-634JM6OTCBsZd9x6Iv5rbcAAtyuMRvWu0FK4BnZYCoEVwF2DQWSLgADAQADAgADeAAD8roBAAEZBA',
+       'file_unique_id' => 'AQADdg0Fki4AA_K6AQAB',
+       'file_size' => 68_574,
+       'width' => 533,
+       'height' => 800 },
+     { 'file_id' =>
+       'AgACAgIAAxkBAAO6Xsgg-634JM6OTCBsZd9x6Iv5rbcAAtyuMRvWu0FK4BnZYCoEVwF2DQWSLgADAQADAgADeQAD8boBAAEZBA',
+       'file_unique_id' => 'AQADdg0Fki4AA_G6AQAB',
+       'file_size' => 90_449,
+       'width' => 640,
+       'height' => 961 }],
+      'caption' => 'A cute kitten' }
   end
 end

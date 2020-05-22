@@ -36,13 +36,23 @@ class TelegramMessage
   def initialize_reply(message)
     media_group_id = message['media_group_id']
     reply = Reply.find_by(telegram_media_group_id: media_group_id) if media_group_id
-    reply ||= Reply.new(text: text, user: user, request: request, telegram_media_group_id: media_group_id)
+    reply ||= Reply.new(text: text, user: user, telegram_media_group_id: media_group_id)
     reply
   end
 
   def initialize_photos(message)
-    return [] unless messsage['photo']
+    return [] unless message[:photo]
 
-    [Photo.new(telegram_message: message)]
+    photo = Photo.new
+    bot_token = "bot#{Rails.application.credentials.dig(:telegram, :bots, Rails.configuration.bot_id)}"
+    telegram_file = message[:photo].max { |a, b| a[:file_size] <=> b[:file_size] }
+    file_id = telegram_file[:file_id]
+    uri = URI("https://api.telegram.org/#{bot_token}/getFile")
+    uri.query = URI.encode_www_form({ file_id: file_id })
+    response = JSON.parse(URI.open(uri).read)
+    file_path = response.dig('result', 'file_path')
+    remote_file_location = URI("https://api.telegram.org/file/#{bot_token}/#{file_path}")
+    photo.image.attach(io: URI.open(remote_file_location), filename: File.basename(remote_file_location.path))
+    [photo]
   end
 end

@@ -55,7 +55,7 @@ Rails.application.configure do
   #
   config.active_job.queue_adapter = :test
 
-  config.bot_id = :default
+  config.bot_id = (ENV['BOT'] || :default).to_sym
   config.mailer = {
     from: '100eyes-test-account@example.org'
   }
