@@ -5,7 +5,9 @@ class Photo < ApplicationRecord
   has_many_attached :images
 
   def telegram_message=(message)
-    (message['photo'] || []).each do |telegram_file|
+    return unless message.any?
+    
+    message['photo'].each do |telegram_file|
       file_id = telegram_file['file_id']
       bot_token = "bot#{Rails.application.credentials.dig(:telegram, :bots, Rails.configuration.bot_id)}"
       uri = URI("https://api.telegram.org/#{bot_token}/getFile")
