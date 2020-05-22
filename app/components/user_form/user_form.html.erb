@@ -1,7 +1,7 @@
 <div
-  class="UserProfile"
-  data-controller="user-profile"
-  data-action="input->user-profile#setDirty reset->user-profile#resetDirty"
+  class="UserForm"
+  data-controller="user-form"
+  data-action="input->user-form#setDirty reset->user-form#resetDirty"
 >
   <%= form_with(model: @user, local: true) do %>
     <%= c 'stack' do %>
@@ -42,9 +42,9 @@
         %>
       <% end %>
 
-      <div class="UserProfile-actions">
-        <%= c 'button', type: 'submit', label: 'Speichern', styles: [:primary, :small] %>
-        <%= c 'button', type: 'reset', label: 'Änderungen verwerfen', styles: [:secondary, :small, :danger] %>
+      <div class="UserForm-actions">
+        <%= c 'button', type: 'submit', label: 'Speichern', styles: [:primary] %>
+        <%= c 'button', type: 'reset', label: 'Änderungen verwerfen', styles: [:plain, :danger] %>
       </div>
     <% end %>
   <% end %>

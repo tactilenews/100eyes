@@ -1,0 +1,3 @@
+.UserForm:not(.UserForm--dirty) .UserForm-actions {
+  display: none;
+}
