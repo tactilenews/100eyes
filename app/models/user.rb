@@ -9,14 +9,13 @@ class User < ApplicationRecord
   validates :email, presence: false, 'valid_email_2/email': true
 
   def reply_via_telegram(message)
-    user = self
     request = Request.active_request or return nil
-    media_group_id = message['media_group_id']
-    text = message['text'] || message['caption']
     ActiveRecord::Base.transaction do
-      reply = Reply.find_by(telegram_media_group_id: media_group_id) if media_group_id
-      reply ||= Reply.create!(text: text, user: user, request: request, telegram_media_group_id: media_group_id)
-      reply.photos << Photo.create(telegram_message: message, reply: reply) if message['photo']
+      reply = message.reply
+      reply.user = self
+      reply.request = request
+      reply.save!
+      reply.photos << message.photos
     end
   end
 

@@ -120,22 +120,21 @@ RSpec.describe User, type: :model do
 
   describe '#reply_via_telegram' do
     let(:user) { create(:user) }
-
-    subject do
-      lambda {
-        user.reply_via_telegram(
-          'text' => 'The answer is 42.',
-          'from' => {
-            'id' => 4711,
-            'is_bot' => false,
-            'first_name' => 'Robert',
-            'last_name' => 'Schäfer',
-            'language_code' => 'en'
-          },
-          'chat' => { 'id' => 146_338_764 }
-        )
-      }
+    let(:telegram_message) do
+      TelegramMessage.new(
+        'text' => 'The answer is 42.',
+        'from' => {
+          'id' => 4711,
+          'is_bot' => false,
+          'first_name' => 'Robert',
+          'last_name' => 'Schäfer',
+          'language_code' => 'en'
+        },
+        'chat' => { 'id' => 146_338_764 }
+      )
     end
+
+    subject { -> { user.reply_via_telegram(telegram_message) } }
 
     it { should_not raise_error }
     it { should_not(change { Reply.count }) }

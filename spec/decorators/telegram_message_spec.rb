@@ -25,17 +25,46 @@ RSpec.describe TelegramMessage do
       it { should eq([]) }
     end
 
-    describe 'given a message with one photo' do
+    describe 'given a message with one photo', vcr: { cassette_name: :photo_with_image } do
       let(:message) { message_with_photo }
 
-      it { VCR.use_cassette(:photo_with_image) { should_not be_empty } }
-      it { VCR.use_cassette(:photo_with_image) { should all(be_a(Photo)) } }
+      it { should_not be_empty }
+      it { should all(be_a(Photo)) }
 
       it 'chooses the largest image' do
-        VCR.use_cassette(:photo_with_image) do
-          photo = subject.first
-          expect(photo.image.blob.byte_size).to eq(90_449)
+        photo = subject.first
+        expect(photo.image.blob.byte_size).to eq(90_449)
+      end
+    end
+  end
+
+  describe '#reply', vcr: { cassette_name: :photo_with_image } do
+    let(:request) { create(:request) }
+    let(:message) { message_with_photo }
+    subject { telegram_message.reply }
+    it { should be_a(Reply) }
+    describe 'assigning a request and calling #save! on the reply' do
+      it {
+        expect do
+          subject.request = request
+          subject.save!
+        end.to(change { Reply.count }.from(0).to(1))
+      }
+
+      describe 'given the user sends a series of images as album', vcr: { cassette_name: :photo_album } do
+        let(:message_with_media_group_id) { message_with_photo.merge(media_group_id: '42') }
+        let(:save_reply_and_photo) do
+          lambda {
+            tm = TelegramMessage.new message_with_media_group_id
+            reply = tm.reply
+            reply.request = request
+            reply.save
+            reply.photos << tm.photos
+          }
         end
+
+        it { expect { 3.times { save_reply_and_photo.call } }.to(change { Reply.count }.from(0).to(1)) }
+        it { expect { 3.times { save_reply_and_photo.call } }.to(change { Photo.count }.from(0).to(3)) }
       end
     end
   end
