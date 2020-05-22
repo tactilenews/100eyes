@@ -31,6 +31,7 @@ textarea {
   font-size: var(--font-size);
   line-height: var(--spacing-unit);
   font-family: var(--font-family);
+  box-sizing: border-box;
 }
 
 input:not([type='checkbox']):not([type='radio']):focus,

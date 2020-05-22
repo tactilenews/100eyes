@@ -15,18 +15,23 @@
 
   --border-radius: 3px;
 
-  --color-blue: #0375c7;
+  --color-blue: #007eff;
   --color-blue-dark: #1a2d3a;
   --color-blue-light: #7ac8ff;
   --color-blue-lightest: #dbefff;
 
-  --color-green: #50b83c;
+  --color-green: #3cb868;
   --color-green-dark: #0d6b37;
   --color-green-light: #88cc7b;
   --color-green-lightest: #e3f1df;
 
-  --color-gray-light: #e9edf0;
+  --color-red: #c50834;
+  --color-red-light: #f99cb4;
+  --color-red-lightest: #ffe2e9;
+  --color-red-dark: #79001c;
+
   --color-gray: #888;
+  --color-gray-light: #e9edf0;
   --color-gray-dark: #333;
 
   --color-bg: #fff;
@@ -35,13 +40,14 @@
   --color-primary: var(--color-blue);
   --color-accent: var(--color-blue);
   --color-border: #ccc;
-  --color-focus: #007eff;
+  --color-focus: var(--color-blue);
+  --color-focus-outline: var(--color-blue-light);
 
   --font-family: Inter, Helvetica Neue, Helvetica, sans-serif;
 
   --input-border-width: 1px;
   --input-focus-shadow: 0 0 0 3px #007eff40;
-  --input-padding: var(--spacing-unit-s) var(--spacing-unit-s);
+  --input-padding: calc(0.33 * var(--spacing-unit)) var(--spacing-unit-s);
   --input-padding-s: var(--spacing-unit-xs) var(--spacing-unit-s);
   --input-margin: var(--spacing-unit-xs) 0;
 

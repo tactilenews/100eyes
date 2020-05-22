@@ -1,35 +1,47 @@
 .Button {
+  --button-color: var(--color-blue);
+
   -webkit-appearance: none;
   -moz-appearance: none;
-
-  text-decoration: none;
 
   display: inline-block;
   padding: var(--input-padding);
   padding-left: var(--spacing-unit);
   padding-right: var(--spacing-unit);
-
-  font-weight: 500;
   border-radius: var(--border-radius);
-  border: var(--input-border-width) solid var(--color-primary);
+
+  text-decoration: none;
+  background: none;
+  border: none;
+  font-weight: 500;
 }
 
 .Button--primary {
-  background-color: var(--color-primary);
-  color: white;
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+  background-color: var(--button-color);
+  background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.1));
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .Button--secondary {
-  color: var(--color-primary);
+  --button-color: var(--color-gray-dark);
+  color: var(--button-color);
+  border: var(--input-border-width) solid;
 }
 
-.Button--link {
-  color: var(--color-primary);
-  padding-left: 0;
-  padding-right: 0;
-  border: none;
+.Button--plain {
+  --button-color: var(--color-gray-dark);
+  color: var(--button-color);
+  padding: var(--input-padding);
 }
 
 .Button--small {
   padding: var(--input-padding-s);
+}
+
+.Button--danger {
+  --button-color: var(--color-red);
 }
