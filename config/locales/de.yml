@@ -9,12 +9,21 @@ de:
     contributor:
       one: Lokalexpert*in
       other: Lokalexpert*innen
-    name: Vor- und Nachname
-    email: E-Mail-Adresse
-    note: Notiz
-    click_to_add_note: Klicken, um eine Notiz zu dieser Person zu hinterlegen.
+    form:
+      name:
+        label: Name
+        placeholder: Vor- und Nachname
+      email:
+        label: E-Mail-Adresse
+        placeholder: Keine E-Mail-Adresse hinterlegt
+      telegram:
+        label: Telegram
+        placeholder: Kein Telegram-Nutzername hinterlegt
+      note:
+        label: Notiz
+        placeholder: Klicke hier, um eine Notiz zu %{name} zu hinterlegen
     answered_requests: Alle beantworteten Fragen
-    saved: Informationen zu %{name} erfolgreich gespeichert
+    saved: Informationen zu %{name} gespeichert
 
   request:
     request:

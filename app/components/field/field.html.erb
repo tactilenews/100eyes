@@ -1,11 +1,9 @@
-<div class="Field">
-  <%= c 'stack', space: :small do %>
-    <div>
-      <div class="Field-label"><%= label %></div>
-      <% if help %>
-        <div class="Field-help"><%= help %></div>
-      <% end %>
-    </div>
-    <%= content %>
-  <% end %>
+<div class="<%= class_names.join(' ') %>">
+  <div class="Field-header">
+    <div class="Field-label"><%= label %></div>
+    <% if help %>
+      <div class="Field-help"><%= help %></div>
+    <% end %>
+  </div>
+  <%= content %>
 </div>

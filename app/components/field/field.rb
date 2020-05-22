@@ -2,7 +2,9 @@
 
 module Field
   class Field < ApplicationComponent
-    def initialize(label:, help: nil)
+    def initialize(label:, help: nil, **)
+      super
+
       @label = label
       @help = help
     end

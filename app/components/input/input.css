@@ -9,8 +9,6 @@
   font-size: inherit;
   border-radius: var(--border-radius);
   border: var(--input-border-width) solid var(--color-border);
-
-  resize: none;
 }
 
 .Input:focus {
@@ -19,15 +17,6 @@
 
 .Input--center {
   text-align: center;
-}
-
-.Input--clickToEdit {
-  padding-top: var(--spacing-unit-xs);
-  padding-bottom: var(--spacing-unit-xs);
-}
-
-.Input--clickToEdit:not(:focus):not(:active):not(:hover) {
-  border-color: transparent;
 }
 
 .Input--heading {
@@ -56,4 +45,9 @@
 
 .Input--inverted:focus::placeholder {
   color: var(--color-text-light);
+}
+
+.Input[disabled] {
+  cursor: not-allowed;
+  border-style: dashed;
 }

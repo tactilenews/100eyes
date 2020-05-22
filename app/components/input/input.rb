@@ -2,7 +2,7 @@
 
 module Input
   class Input < ApplicationComponent
-    def initialize(id: nil, value: nil, placeholder: nil, required: false, type: 'text', stimulus_target: nil, **)
+    def initialize(id: nil, value: nil, placeholder: nil, required: false, disabled: false, type: 'text', stimulus_target: nil, **)
       super
 
       @id = id
@@ -10,6 +10,7 @@ module Input
       @value = value
       @placeholder = placeholder
       @required = required
+      @disabled = disabled
       @stimulus_target = stimulus_target
     end
 
@@ -23,6 +24,7 @@ module Input
         value: value,
         class: class_names,
         required: required,
+        disabled: disabled,
         placeholder: placeholder,
         data: {
           target: stimulus_target
@@ -30,6 +32,8 @@ module Input
       )
     end
 
-    attr_reader :id, :type, :value, :placeholder, :required, :stimulus_target
+    private
+
+    attr_reader :id, :type, :value, :placeholder, :required, :disabled, :stimulus_target
   end
 end

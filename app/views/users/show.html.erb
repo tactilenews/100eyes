@@ -1,9 +1,11 @@
 <%= c 'page' do %>
+  <%= c 'page_title' do %>
+    <%= @user.name %>
+  <% end %>
+
   <%= c 'box' do %>
     <%= c 'stack', space: :xlarge do %>
-      <%= form_with(model: @user, local: true) do %>
-        <%= c 'user_profile', user: @user %>
-      <% end %>
+      <%= c 'user_profile', user: @user %>
 
       <%= c 'stack' do %>
         <%= c 'heading', styles: [:section] do %>

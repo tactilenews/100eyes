@@ -1,39 +1,51 @@
 <div
   class="UserProfile"
   data-controller="user-profile"
-  data-action="input->user-profile#setDirty"
+  data-action="input->user-profile#setDirty reset->user-profile#resetDirty"
 >
-  <div class="UserProfile-content">
-    <%= c 'stack', space: :xsmall do %>
-      <div class="UserProfile-avatar">
-        <%= c 'avatar', user: user %>
+  <%= form_with(model: @user, local: true) do %>
+    <%= c 'stack' do %>
+      <%= c 'field', label: I18n.t('contributor.form.name.label'), styles: [:horizontal] do %>
+        <%= c 'input',
+          placeholder: I18n.t('contributor.form.name.placeholder'),
+          value: user.name,
+          id: 'user[name]',
+          styles: [:small]
+        %>
+      <% end %>
+
+      <%= c 'field', label: I18n.t('contributor.form.email.label'), styles: [:horizontal] do %>
+        <%= c 'input',
+          placeholder: I18n.t('contributor.form.email.placeholder'),
+          value: user.email,
+          id: 'user[email]',
+          styles: [:small]
+        %>
+      <% end %>
+
+      <%= c 'field', label: I18n.t('contributor.form.telegram.label'), styles: [:horizontal] do %>
+        <%= c 'input',
+          placeholder: I18n.t('contributor.form.telegram.placeholder'),
+          value: user.username,
+          id: 'user[username]',
+          disabled: true,
+          styles: [:small]
+        %>
+      <% end %>
+
+      <%= c 'field', label: I18n.t('contributor.form.note.label'), styles: [:horizontal] do %>
+        <%= c 'textarea',
+            placeholder: I18n.t('contributor.form.note.placeholder', name: @user.name),
+            id: 'user[note]',
+            value: user.note,
+            styles: [:small]
+        %>
+      <% end %>
+
+      <div class="UserProfile-actions">
+        <%= c 'button', type: 'submit', label: 'Speichern', styles: [:primary, :small] %>
+        <%= c 'button', type: 'reset', label: 'Änderungen verwerfen', styles: [:secondary, :small, :danger] %>
       </div>
-
-      <%= c 'input',
-        placeholder: I18n.t('contributor.name'),
-        value: user.name,
-        id: 'user[name]',
-        styles: ['clickToEdit', 'center', 'heading']
-      %>
-
-      <%= c 'input',
-        placeholder: I18n.t('contributor.email'),
-        value: user.email,
-        id: 'user[email]',
-        styles: ['clickToEdit', 'center']
-      %>
-
-      <%= c 'textarea',
-          placeholder: I18n.t('contributor.click_to_add_note'),
-          id: 'user[note]',
-          value: user.note,
-          styles: ['clickToEdit', 'center']
-      %>
     <% end %>
-
-    <div class="UserProfile-actions">
-      <%= c 'button', type: 'submit', label: 'Änderungen übernehmen', styles: [:primary, :small] %>
-      <%= c 'button', type: 'reset', label: 'Änderungen verwerfen', styles: [:small, :secondary] %>
-    </div>
-  </div>
+  <% end %>
 </div>
