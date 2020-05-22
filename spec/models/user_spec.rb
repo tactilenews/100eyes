@@ -90,9 +90,13 @@ RSpec.describe User, type: :model do
       before(:each) do
         @reply_a = Reply.create! text: 'This is included', user: user, request: the_request
         @reply_b = Reply.create! text: 'This is not included', user: user, request: (Request.create! text: 'Another request')
+        @reply_c = Reply.create! text: 'This is included, too', user: user, request: the_request
       end
       it { should include(@reply_a) }
       it { should_not include(@reply_b) }
+      it 'should be orderd by `created_at`' do
+        should eq([@reply_a, @reply_c])
+      end
     end
   end
 

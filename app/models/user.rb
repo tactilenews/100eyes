@@ -36,7 +36,7 @@ class User < ApplicationRecord
   end
 
   def replies_for_request(request)
-    replies.where(request_id: request)
+    replies.unscoped.where(request_id: request).order(created_at: :asc)
   end
 
   def channels

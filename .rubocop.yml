@@ -6,3 +6,8 @@ Layout/LineLength:
   Max: 125
   Exclude:
     - 'app/components/**/*.rb'
+    - 'spec/vcr_setup.rb'
+
+Metrics/BlockLength:
+  Exclude:
+    - '**/*_spec.rb'
