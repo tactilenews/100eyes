@@ -44,7 +44,7 @@ class TelegramMessage
     return [] unless message[:photo]
 
     photo = Photo.new
-    bot_token = "bot#{Rails.application.credentials.dig(:telegram, :bots, Rails.configuration.bot_id)}"
+    bot_token = "bot#{Telegram.bot.token}"
     telegram_file = message[:photo].max { |a, b| a[:file_size] <=> b[:file_size] }
     file_id = telegram_file[:file_id]
     uri = URI("https://api.telegram.org/#{bot_token}/getFile")
