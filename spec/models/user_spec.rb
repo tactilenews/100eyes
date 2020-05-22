@@ -34,6 +34,18 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '#requests' do
+    let(:user) { create(:user) }
+    let(:request) { create(:request) }
+
+    it 'omits duplicates' do
+      create(:reply, request: request, user: user)
+      create(:reply, request: request, user: user)
+
+      expect(user.requests).to contain_exactly(request)
+    end
+  end
+
   describe '#channels' do
     subject { user.channels }
 

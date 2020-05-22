@@ -1,0 +1,32 @@
+.RequestsFeedItem {
+  position: relative;
+  padding-left: var(--spacing-unit);
+  font-size: var(--font-size-s);
+  color: var(--color-text-light);
+}
+
+.RequestsFeedItem::before {
+  content: '';
+
+  position: absolute;
+  left: 0;
+  top: calc(0.5 * var(--line-height));
+  transform: translateY(-50%);
+
+  display: block;
+  width: var(--bullet-size);
+  height: var(--bullet-size);
+  border-radius: 50%;
+
+  background-color: var(--color-blue);
+  box-shadow: 0 0 0 5px var(--color-blue-lightest), 0 0 0 10px #fff;
+}
+
+.RequestsFeedItem > strong {
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.RequestsFeedItem > a {
+  text-decoration: underline;
+}
