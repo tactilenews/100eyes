@@ -45,3 +45,7 @@
 .Button--danger {
   --button-color: var(--color-red);
 }
+
+.Button--positive {
+  --button-color: var(--color-green);
+}
