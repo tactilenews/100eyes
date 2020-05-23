@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+##
+# Telegram represents a message containing multiple photos as multiple
+# messages each containing a single photo.
 class TelegramMessage
   attr_reader :user, :text, :reply, :photos
 
@@ -10,6 +13,8 @@ class TelegramMessage
     @reply = initialize_reply(message)
     @photos = initialize_photos(message)
   end
+
+  private
 
   def initialize_user(message)
     telegram_chat_id = message.dig(:chat, :id)
@@ -40,6 +45,8 @@ class TelegramMessage
     reply
   end
 
+  ## Each photo from the Telegram API is available in multiple resolutions,
+  # we save only the largest (i.e. original) variant.
   def initialize_photos(message)
     return [] unless message[:photo]
 
