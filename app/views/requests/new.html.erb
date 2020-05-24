@@ -3,7 +3,5 @@
     <%= I18n.t 'request.create' %>
   <% end %>
 
-  <%= form_with url: requests_path, local: true do %>
-    <%= c 'request_form' %>
-  <% end %>
+  <%= c 'request_form', request: @request %>
 <% end %>

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module UserProfile
-  class UserProfile < ViewComponent::Base
+module UserForm
+  class UserForm < ViewComponent::Base
     include ComponentHelper
 
     def initialize(user:)

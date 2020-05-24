@@ -1,15 +1,15 @@
 <%= c 'page' do %>
   <%= c 'page_title' do %>
-    <%= I18n.t 'contributor.contributor', count: 1 %>
+    <%= @user.name %>
   <% end %>
 
   <%= c 'box' do %>
     <%= c 'stack', space: :xlarge do %>
-      <%= c 'user_row', user: @user %>
+      <%= c 'user_form', user: @user %>
 
       <%= c 'stack' do %>
         <%= c 'heading', styles: [:section] do %>
-          <%= I18n.t 'contributor.answered_requests' %>
+          <%= I18n.t 'user.answered_requests' %>
         <% end %>
 
         <% @user.replies.each do |reply| %>

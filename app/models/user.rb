@@ -6,6 +6,7 @@ class User < ApplicationRecord
   has_many :replies, dependent: :destroy
   has_many :requests, through: :replies
   default_scope { order(:first_name, :last_name) }
+  validates :email, presence: false, 'valid_email_2/email': true
 
   def self.upsert_via_telegram(message)
     from, chat = message.values_at('from', 'chat')

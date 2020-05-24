@@ -1,3 +1,7 @@
+.Field-header {
+  margin-bottom: var(--spacing-unit-s);
+}
+
 .Field-label {
   font-weight: 600;
 }
@@ -6,4 +10,27 @@
   color: var(--color-text-light);
   font-size: 0.8rem;
   line-height: 1.5;
+}
+
+.Field-error {
+  color: var(--color-red);
+  font-size: 0.8rem;
+}
+.Field-error:before {
+  content: '*';
+}
+
+.Field--horizontal {
+  display: flex;
+}
+
+.Field--horizontal .Field-header {
+  width: 20%;
+  flex-shrink: 0;
+  flex-grow: 0;
+  margin: 0;
+  margin-right: var(--spacing-unit);
+  padding: var(--input-padding-s);
+  padding-left: 0;
+  padding-right: 0;
 }

@@ -65,3 +65,5 @@ gem 'sucker_punch', '~> 2.1'
 gem 'telegram-bot'
 
 gem 'pg_search', '~> 2.3'
+
+gem 'valid_email2', '~> 3.2'

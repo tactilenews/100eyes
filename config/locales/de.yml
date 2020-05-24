@@ -1,19 +1,35 @@
 de:
   time_ago: '%{time_ago} vorher'
-  search: Suchen
-  search_result:
-    one: Suchergebnis
-    other: Suchergebnisse
+  save: Speichern
+  discard: Änderungen verwerfen
 
-  contributor:
-    contributor:
+  search:
+    search: Suchen
+    result:
+      one: Suchergebnis
+      other: Suchergebnisse
+
+  user:
+    user:
       one: Lokalexpert*in
       other: Lokalexpert*innen
-    name: Vor- und Nachname
-    email: E-Mail-Adresse
-    note: Notiz
-    click_to_add_note: Klicken, um eine Notiz zu dieser Person zu hinterlegen.
     answered_requests: Alle beantworteten Fragen
+    saved: Informationen zu %{name} gespeichert
+    invalid: Informationen zu %{name} sind ungültig
+    form:
+      name:
+        label: Name
+        placeholder: Vor- und Nachname
+      email:
+        label: E-Mail-Adresse
+        placeholder: Keine E-Mail-Adresse hinterlegt
+      username:
+        label: Telegram
+        placeholder: Kein Telegram-Nutzername hinterlegt
+        title: Du kannst den Nutzernamen nicht selbst ändern. Sobald %{value} das erste Mal via Telegram interagiert, erscheint hier der Nutzername.
+      note:
+        label: Notiz
+        placeholder: Klicke hier, um eine Notiz zu %{value} zu hinterlegen
 
   request:
     request:

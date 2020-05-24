@@ -224,6 +224,9 @@ GEM
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
     unicode-display_width (1.7.0)
+    valid_email2 (3.2.2)
+      activemodel (>= 3.2)
+      mail (~> 2.5)
     view_component (2.7.0)
       activesupport (>= 5.0.0, < 7.0)
     web-console (4.0.2)
@@ -271,6 +274,7 @@ DEPENDENCIES
   sucker_punch (~> 2.1)
   telegram-bot
   tzinfo-data
+  valid_email2 (~> 3.2)
   view_component (~> 2)
   web-console (>= 3.3.0)
   webdrivers

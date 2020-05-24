@@ -1,11 +1,16 @@
-<div class="Field">
-  <%= c 'stack', space: :small do %>
-    <div>
-      <div class="Field-label"><%= label %></div>
-      <% if help %>
-        <div class="Field-help"><%= help %></div>
-      <% end %>
-    </div>
-    <%= content %>
+<div class="<%= class_names.join(' ') %>">
+  <div class="Field-header">
+    <div class="Field-label"><%= label %></div>
+    <% if help %>
+      <div class="Field-help"><%= help %></div>
+    <% end %>
+  <% if validation_errors.any? %>
+    <% validation_errors.each do |error| %>
+      <div class="Field-error">
+        <%= error %>
+      </div>
+    <% end %>
   <% end %>
+  </div>
+  <%= content %>
 </div>

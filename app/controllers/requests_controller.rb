@@ -13,18 +13,18 @@ class RequestsController < ApplicationController
   end
 
   def create
-    @request = Request.create!(
-      title: params.fetch(:title),
-      text: params.fetch(:text),
-      hints: params.fetch(:hints, [])
-    )
+    @request = Request.new(request_params)
+    if @request.save
+      send_emails
+      send_telegram_messages
+      redirect_to @request, flash: { success: I18n.t('request.success') }
+    else
+      render :new
+    end
+  end
 
-    send_emails
-    send_telegram_messages
-
-    return unless @request
-
-    redirect_to @request, flash: { success: I18n.t('request.success') }
+  def new
+    @request = Request.new
   end
 
   def show_user_messages
@@ -39,6 +39,10 @@ class RequestsController < ApplicationController
 
   def set_request
     @request = Request.find(params[:id])
+  end
+
+  def request_params
+    params.require(:request).permit(:title, :text, hints: [])
   end
 
   def send_emails
