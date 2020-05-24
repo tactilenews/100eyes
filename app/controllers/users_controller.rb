@@ -11,9 +11,10 @@ class UsersController < ApplicationController
 
   def update
     if @user.update(user_params)
-      redirect_to user_url, flash: { success: I18n.t('contributor.saved', name: @user.name) }
+      redirect_to user_url, flash: { success: I18n.t('user.saved', name: @user.name) }
     else
-      render :edit
+      flash[:error] = I18n.t('user.invalid', name: @user.name)
+      render :show
     end
   end
 

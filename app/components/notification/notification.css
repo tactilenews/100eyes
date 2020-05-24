@@ -27,3 +27,9 @@
   background-color: var(--color-green-lightest);
   border-color: var(--color-green-light);
 }
+
+.Notification--error {
+  color: var(--color-red-dark);
+  background-color: var(--color-red-lightest);
+  border-color: var(--color-red-light);
+}

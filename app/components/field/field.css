@@ -12,6 +12,14 @@
   line-height: 1.5;
 }
 
+.Field-error {
+  color: var(--color-red);
+  font-size: 0.8rem;
+}
+.Field-error:before {
+  content: '*';
+}
+
 .Field--horizontal {
   display: flex;
 }

@@ -4,6 +4,13 @@
     <% if help %>
       <div class="Field-help"><%= help %></div>
     <% end %>
+  <% if validation_errors.any? %>
+    <% validation_errors.each do |error| %>
+      <div class="Field-error">
+        <%= error %>
+      </div>
+    <% end %>
+  <% end %>
   </div>
   <%= content %>
 </div>

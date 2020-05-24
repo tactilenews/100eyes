@@ -1,39 +1,32 @@
-<div class="RequestForm" data-controller="request-form">
+<%= form_with(scope: :request, url: requests_path, local: true, class: "RequestForm", data: { controller: "request-form"}) do %>
   <div class="RequestForm-column" data-action="input->request-form#updatePreview">
     <%= c 'stack', space: :large do %>
 
-      <%= c 'field',label: I18n.t('request.form.title.label'), help: I18n.t('request.form.title.help') do %>
-        <%= c 'input',
-          id: :title,
-          placeholder: I18n.t('request.form.title.placeholder'),
-          required: true
-        %>
+      <%= c 'field', object: @request, id: :title, help: I18n.t('request.form.title.help') do |field| %>
+        <%= c 'input', field.input_defaults.merge(required: true) %>
       <% end %>
 
-      <%= c 'field', label: I18n.t('request.form.text.label'), help: I18n.t('request.form.text.help') do %>
-        <%= c 'textarea',
-          id: :text,
-          placeholder: I18n.t('request.form.text.placeholder'),
+      <%= c 'field', object: @request, id: :text, help: I18n.t('request.form.text.help') do |field| %>
+        <%= c 'textarea', field.input_defaults.merge(
           required: true,
           stimulus_target: 'request-form.message'
-        %>
+        ) %>
       <% end %>
-
-      <%= c 'field', label: I18n.t('request.form.hints.label'), help: I18n.t('request.form.hints.help') do %>
-
-        <%= c 'stack', space: :small do %>
-          <% hints.each do |key, label| %>
-            <%= c 'checkbox',
-              id: :hints,
-              group: true,
-              value: key,
-              label: label,
-              stimulus_target: "request-form.#{key}"
-            %>
-          <% end %>
+      <%= c 'field', object: @request, id: :hints, help: I18n.t('request.form.hints.help') do |field|%>
+      <%= c 'stack', space: :small do %>
+        <% hints.each do |key, label| %>
+          <%= c 'checkbox',
+            field.checkbox_defaults.merge(
+            group: true,
+            value: key,
+            label: label,
+            stimulus_target: "request-form.#{key}"
+          )
+          %>
         <% end %>
-
       <% end %>
+
+    <% end %>
 
       <%= c 'button', type: 'submit', label: I18n.t('request.send') %>
 
@@ -46,4 +39,4 @@
       <div class="RequestForm-preview PlaintextMessage" data-target="request-form.preview"></div>
     <% end %>
   </div>
-</div>
+<% end %>

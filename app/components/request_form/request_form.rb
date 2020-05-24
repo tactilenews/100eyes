@@ -10,10 +10,16 @@ module RequestForm
       confidential: 'Vertrauliche Informationen'
     }.freeze
 
-    def initialize(); end
+    def initialize(request:)
+      @request = request
+    end
 
     def hints
       HINTS
     end
+
+    private
+
+    attr_reader :request
   end
 end

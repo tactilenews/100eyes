@@ -9,10 +9,13 @@ de:
       one: Suchergebnis
       other: Suchergebnisse
 
-  contributor:
-    contributor:
+  user:
+    user:
       one: Lokalexpert*in
       other: Lokalexpert*innen
+    answered_requests: Alle beantworteten Fragen
+    saved: Informationen zu %{name} gespeichert
+    invalid: Informationen zu %{name} sind ungültig
     form:
       name:
         label: Name
@@ -20,15 +23,13 @@ de:
       email:
         label: E-Mail-Adresse
         placeholder: Keine E-Mail-Adresse hinterlegt
-      telegram:
+      username:
         label: Telegram
         placeholder: Kein Telegram-Nutzername hinterlegt
-        title: Du kannst den Nutzernamen nicht selbst ändern. Sobald %{name} das erste Mal via Telegram interagiert, erscheint hier der Nutzername.
+        title: Du kannst den Nutzernamen nicht selbst ändern. Sobald %{value} das erste Mal via Telegram interagiert, erscheint hier der Nutzername.
       note:
         label: Notiz
-        placeholder: Klicke hier, um eine Notiz zu %{name} zu hinterlegen
-    answered_requests: Alle beantworteten Fragen
-    saved: Informationen zu %{name} gespeichert
+        placeholder: Klicke hier, um eine Notiz zu %{value} zu hinterlegen
 
   request:
     request:

@@ -6,7 +6,7 @@ require 'telegram/bot/rspec/integration/rails'
 RSpec.describe 'Requests', telegram_bot: :rails do
   describe 'POST /requests' do
     subject { -> { post requests_path, params: params } }
-    let(:params) { { title: 'Example Question', text: 'How do you do?', hints: ['confidential'] } }
+    let(:params) { { request: { title: 'Example Question', text: 'How do you do?', hints: ['confidential'] } } }
 
     it { should change { Request.count }.from(0).to(1) }
 
@@ -22,7 +22,7 @@ RSpec.describe 'Requests', telegram_bot: :rails do
     end
 
     describe 'without hints param' do
-      let(:params) { { title: 'Example Question', text: 'How do you do?' } }
+      let(:params) { { request: {  title: 'Example Question', text: 'How do you do?' } } }
       it { should_not raise_error }
     end
 
