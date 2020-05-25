@@ -4,7 +4,7 @@ class RepliesMailbox < ApplicationMailbox
   before_processing :ensure_sender_is_a_user
 
   def process
-    Request.add_reply(user: user, answer: mail.decoded)
+    user.reply_via_mail(mail)
   end
 
   private

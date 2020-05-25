@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe User, type: :model do # rubocop:disable Metrics/BlockLength
+RSpec.describe User, type: :model do
   it 'is sorted in alphabetical order' do
     zora = create(:user, first_name: 'Zora', last_name: 'Zimmermann')
     adam_zimmermann = create(:user, first_name: 'Adam', last_name: 'Zimmermann')
@@ -90,35 +90,71 @@ RSpec.describe User, type: :model do # rubocop:disable Metrics/BlockLength
       before(:each) do
         @reply_a = Reply.create! text: 'This is included', user: user, request: the_request
         @reply_b = Reply.create! text: 'This is not included', user: user, request: (Request.create! text: 'Another request')
+        @reply_c = Reply.create! text: 'This is included, too', user: user, request: the_request
       end
       it { should include(@reply_a) }
       it { should_not include(@reply_b) }
+      it 'should be orderd by `created_at`' do
+        should eq([@reply_a, @reply_c])
+      end
     end
   end
 
-  describe '::upsert_via_telegram' do
-    let(:telegram_message) { { 'chat' => { 'id' => 42 }, 'from' => { 'id' => 47, 'username' => 'alice' } } }
-    subject(:upsert) { -> { described_class.upsert_via_telegram(telegram_message) } }
+  describe '#reply_via_mail' do
+    let(:user) { create(:user) }
+    let(:mail) { instance_double('Mail::Message', decoded: 'A nice email') }
 
-    describe 'return value' do
-      subject(:return_value) { upsert.call }
-      it { should be_a(User) }
-    end
-
-    describe 'given no user' do
-      let(:user) { User.first }
-      it { should(change { User.count }.from(0).to(1)) }
-
-      describe 'when user is created' do
-        before(:each) { upsert.call }
-        subject(:user) { User.first }
-        it { should have_attributes(telegram_chat_id: 42, telegram_id: 47, username: 'alice') }
+    subject { -> { user.reply_via_mail(mail) } }
+    it { should_not raise_error }
+    it { should_not(change { Reply.count }) }
+    describe 'given a recent request' do
+      before(:each) { request.save! }
+      let(:request) do
+        Request.new(
+          title: 'Hitchhiker’s Guide',
+          text: 'What is the answer to life, the universe, and everything?',
+          hints: %w[photo confidential]
+        )
       end
+
+      it { should change { Reply.count }.from(0).to(1) }
+      it { should_not(change { Photo.count }) }
+    end
+  end
+
+  describe '#reply_via_telegram' do
+    let(:user) { create(:user) }
+    let(:telegram_message) do
+      TelegramMessage.new(
+        'text' => 'The answer is 42.',
+        'from' => {
+          'id' => 4711,
+          'is_bot' => false,
+          'first_name' => 'Robert',
+          'last_name' => 'Schäfer',
+          'language_code' => 'en'
+        },
+        'chat' => { 'id' => 146_338_764 }
+      )
     end
 
-    describe 'given an existing but outdated user record' do
-      before(:each) { create(:user, telegram_id: 47, username: 'bob') }
-      it { should(change { User.first.username }.from('bob').to('alice')) }
+    subject { -> { user.reply_via_telegram(telegram_message) } }
+
+    it { should_not raise_error }
+    it { should_not(change { Reply.count }) }
+
+    describe 'given a recent request' do
+      before(:each) { request.save! }
+      let(:request) do
+        Request.new(
+          title: 'Hitchhiker’s Guide',
+          text: 'What is the answer to life, the universe, and everything?',
+          hints: %w[photo confidential]
+        )
+      end
+
+      it { should change { Reply.count }.from(0).to(1) }
+      it { should_not(change { Photo.count }) }
     end
   end
 end

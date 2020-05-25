@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_15_151637) do
+ActiveRecord::Schema.define(version: 2020_05_21_153806) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -55,13 +55,22 @@ ActiveRecord::Schema.define(version: 2020_05_15_151637) do
     t.index ["searchable_type", "searchable_id"], name: "index_pg_search_documents_on_searchable_type_and_searchable_id"
   end
 
+  create_table "photos", force: :cascade do |t|
+    t.bigint "reply_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["reply_id"], name: "index_photos_on_reply_id"
+  end
+
   create_table "replies", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "request_id", null: false
     t.string "text"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "telegram_media_group_id"
     t.index ["request_id"], name: "index_replies_on_request_id"
+    t.index ["telegram_media_group_id"], name: "index_replies_on_telegram_media_group_id", unique: true
     t.index ["user_id"], name: "index_replies_on_user_id"
   end
 
@@ -90,6 +99,7 @@ ActiveRecord::Schema.define(version: 2020_05_15_151637) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "photos", "replies"
   add_foreign_key "replies", "requests"
   add_foreign_key "replies", "users"
 end

@@ -8,25 +8,21 @@ class User < ApplicationRecord
   default_scope { order(:first_name, :last_name) }
   validates :email, presence: false, 'valid_email_2/email': true
 
-  def self.upsert_via_telegram(message)
-    from, chat = message.values_at('from', 'chat')
-    telegram_chat_id = chat['id']
-    telegram_id, username, first_name, last_name = from.values_at('id', 'username', 'first_name', 'last_name')
-    user = User.find_by(telegram_id: telegram_id)
-    if user
-      user.username = username
-      user.telegram_chat_id = telegram_chat_id
-      user.save!
-    else
-      user = User.create!(
-        telegram_id: telegram_id,
-        telegram_chat_id: telegram_chat_id,
-        username: username,
-        first_name: first_name,
-        last_name: last_name
-      )
+  def reply_via_telegram(message)
+    request = Request.active_request or return nil
+    ActiveRecord::Base.transaction do
+      reply = message.reply
+      reply.user = self
+      reply.request = request
+      reply.save!
+      reply.photos << message.photos
     end
-    user
+  end
+
+  def reply_via_mail(mail)
+    user = self
+    request = Request.active_request or return nil
+    Reply.create!(request: request, text: mail.decoded, user: user)
   end
 
   def name
@@ -40,7 +36,7 @@ class User < ApplicationRecord
   end
 
   def replies_for_request(request)
-    replies.where(request_id: request)
+    replies.unscoped.where(request_id: request).order(created_at: :asc)
   end
 
   def channels

@@ -9,4 +9,5 @@ class Reply < ApplicationRecord
 
   belongs_to :user
   belongs_to :request
+  has_many :photos, dependent: :destroy
 end

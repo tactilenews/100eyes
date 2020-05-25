@@ -11,6 +11,12 @@ module Message
 
     private
 
+    def photos
+      return [] unless message.respond_to?(:photos)
+
+      message.photos
+    end
+
     attr_reader :message, :user
   end
 end

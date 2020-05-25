@@ -11,3 +11,16 @@
   color: var(--color-text-light);
   font-size: var(--font-size-s);
 }
+
+.Message-photos {
+  padding-bottom: var(--spacing-unit);
+}
+
+.Message-photos > img {
+  border: 3px solid rgba(0, 0, 0, 0.05);
+  max-width: 100%;
+}
+
+.Message-photos > img + img {
+  margin-top: var(--spacing-unit);
+}

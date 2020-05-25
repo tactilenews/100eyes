@@ -57,15 +57,4 @@ RSpec.describe Request, type: :model do
       end
     end
   end
-
-  describe '::add_reply' do
-    subject { -> { Request.add_reply(answer: 'The answer is 42.', user: user) } }
-    it { should_not raise_error }
-    it { should_not(change { Reply.count }) }
-
-    describe 'given a recent request' do
-      before(:each) { request.save! }
-      it { should change { Reply.count }.from(0).to(1) }
-    end
-  end
 end
