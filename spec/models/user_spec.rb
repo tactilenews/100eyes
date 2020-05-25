@@ -87,15 +87,26 @@ RSpec.describe User, type: :model do
     let(:user) { User.create! first_name: 'Max', last_name: 'Mustermann' }
 
     describe 'given two replies for two different requests' do
-      before(:each) do
-        @reply_a = Reply.create! text: 'This is included', user: user, request: the_request
-        @reply_b = Reply.create! text: 'This is not included', user: user, request: (Request.create! text: 'Another request')
-        @reply_c = Reply.create! text: 'This is included, too', user: user, request: the_request
+      let(:replies) do
+        [
+          create(:reply, text: 'This is included', user: user, request: the_request),
+          create(:reply, text: 'This is not included', user: user, request: (Request.create! text: 'Another request')),
+          create(:reply, text: 'This is included, too', user: user, request: the_request),
+          create(:reply, text: 'This is not a reply of the user', request: the_request)
+        ]
       end
-      it { should include(@reply_a) }
-      it { should_not include(@reply_b) }
+
+      before(:each) do
+        replies # make sure all records are written to the database
+      end
+
+      it { should include(replies[0]) }
+      it { should_not include(replies[1]) }
       it 'should be orderd by `created_at`' do
-        should eq([@reply_a, @reply_c])
+        should eq([replies[0], replies[2]])
+      end
+      it 'does not include replies of other users' do
+        should_not include(replies[3])
       end
     end
   end
