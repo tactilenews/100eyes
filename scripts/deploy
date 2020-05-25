@@ -62,4 +62,5 @@ rsync \
     "cd $deploy_path &&" \
     "BUNDLE_PATH=vendor/bundle bundle install --without development test &&" \
     "RAILS_ENV=production bin/rake db:prepare &&" \
-    "supervisorctl restart 100eyes"
+    "supervisorctl restart 100eyes &&" \
+    "supervisorctl restart 100eyes-telegram-bot-poller"
