@@ -6,7 +6,7 @@ class Request < ApplicationRecord
   default_scope { order(created_at: :desc) }
 
   def self.active_request
-    order(created_at: :desc).first
+    reorder(created_at: :desc).first
   end
 
   HINT_TEXTS = {

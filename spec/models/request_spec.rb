@@ -57,4 +57,12 @@ RSpec.describe Request, type: :model do
       end
     end
   end
+
+  describe '::active_request' do
+    it 'overrides any order() scope' do
+      create(:request, id: 1)
+      request2 = create(:request, id: 2)
+      expect(Request.reorder(created_at: :asc).active_request).to eq(request2)
+    end
+  end
 end
