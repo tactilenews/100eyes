@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_21_153806) do
+ActiveRecord::Schema.define(version: 2020_05_26_171425) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(version: 2020_05_21_153806) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "telegram_media_group_id"
+    t.integer "photos_count"
     t.index ["request_id"], name: "index_replies_on_request_id"
     t.index ["telegram_media_group_id"], name: "index_replies_on_telegram_media_group_id", unique: true
     t.index ["user_id"], name: "index_replies_on_user_id"
@@ -80,6 +81,7 @@ ActiveRecord::Schema.define(version: 2020_05_21_153806) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "hints", default: [], array: true
+    t.integer "replies_count"
   end
 
   create_table "users", force: :cascade do |t|
