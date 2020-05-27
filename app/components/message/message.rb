@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Message
-  class Message < ViewComponent::Base
-    include ComponentHelper
-
+  class Message < ApplicationComponent
     def initialize(message:)
       @message = message
       @user = message.user if message.respond_to?(:user)

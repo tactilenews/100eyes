@@ -2,6 +2,7 @@
 
 class ApplicationComponent < ViewComponent::Base
   include ComponentHelper
+  include DateTimeHelper
 
   def initialize(styles: [], **)
     @styles = styles
