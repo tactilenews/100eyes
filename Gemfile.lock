@@ -231,7 +231,7 @@ GEM
     valid_email2 (3.2.2)
       activemodel (>= 3.2)
       mail (~> 2.5)
-    vcr (5.1.0)
+    vcr (6.0.0)
     view_component (2.7.0)
       activesupport (>= 5.0.0, < 7.0)
     web-console (4.0.2)
