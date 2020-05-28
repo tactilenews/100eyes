@@ -39,10 +39,10 @@ RSpec.describe 'Requests', telegram_bot: :rails do
           'deliver_now',
           {
             params: {
-              question: ['Hallo, die Redaktion hat eine neue Frage an dich:',
+              question: ['Hallo, die Redaktion hat eine neue Frage an Sie:',
                          'How do you do?',
-                         'Textbaustein für vertrauliche Informationen',
-                         'Vielen Dank für deine Hilfe bei unserer Recherche!'].join("\n\n"),
+                         I18n.t('request.hints.confidential.text'),
+                         'Vielen Dank für Ihre Hilfe bei unserer Recherche!'].join("\n\n"),
               to: 'user@example.org'
             },
             args: []
@@ -57,10 +57,10 @@ RSpec.describe 'Requests', telegram_bot: :rails do
       let(:chat_id) { 4711 }
       let(:expected_message) do
         [
-          'Hallo, die Redaktion hat eine neue Frage an dich:',
+          'Hallo, die Redaktion hat eine neue Frage an Sie:',
           'How do you do?',
-          'Textbaustein für vertrauliche Informationen',
-          'Vielen Dank für deine Hilfe bei unserer Recherche!'
+          I18n.t('request.hints.confidential.text'),
+          'Vielen Dank für Ihre Hilfe bei unserer Recherche!'
         ].join("\n\n")
       end
       before(:each) { User.create!(telegram_chat_id: 4711, email: nil) }
