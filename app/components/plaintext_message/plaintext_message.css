@@ -1,6 +1,3 @@
 .PlaintextMessage {
-  padding: var(--spacing-unit-s);
-  background-color: var(--color-gray-light);
-  border-radius: var(--border-radius);
   white-space: pre-line;
 }

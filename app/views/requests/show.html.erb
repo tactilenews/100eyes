@@ -5,11 +5,19 @@
 
   <%= c 'box' do %>
     <%= c 'stack', space: :xlarge do %>
-      <%= c 'plaintext_message', message: @request.text %>
+      <%= c 'box', styles: [:gray, :small] do %>
+        <%= c 'plaintext_message', message: @request.text %>
+      <% end %>
 
       <%= c 'stack' do %>
         <%= c 'heading', styles: [:section] do %>
           <%= I18n.t 'request.replies' %>
+        <% end %>
+
+        <% if @replies.blank? %>
+          <%= c 'empty_state' do %>
+            <%= I18n.t 'request.no_replies' %>
+          <% end %>
         <% end %>
 
         <% @replies.each do |reply| %>

@@ -1,0 +1,12 @@
+.EmptyState {
+  text-align: center;
+  font-size: 2rem;
+  color: var(--color-text-light);
+}
+
+.EmptyState-icon {
+  margin: auto;
+  margin-bottom: var(--spacing-unit);
+  width: var(--spacing-unit-xl);
+  height: var(--spacing-unit-xl);
+}
