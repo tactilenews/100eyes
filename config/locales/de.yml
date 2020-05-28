@@ -12,7 +12,9 @@ de:
     user:
       one: Lokalexpert*in
       other: Lokalexpert*innen
-    answered_requests: Alle beantworteten Fragen
+    activity: Aktivität
+    show_replies: Antworten anzeigen
+    has_replied_to: hat auf „%{title}” geantwortet
     saved: Informationen zu %{name} gespeichert
     invalid: Informationen zu %{name} sind ungültig
     form:

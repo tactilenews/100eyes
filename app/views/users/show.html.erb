@@ -9,16 +9,13 @@
 
       <%= c 'stack' do %>
         <%= c 'heading', styles: [:section] do %>
-          <%= I18n.t 'user.answered_requests' %>
+          <%= I18n.t 'user.activity' %>
         <% end %>
 
-        <% @user.replies.each do |reply| %>
-          <%= c 'excerpt',
-            title: reply.request.title,
-            text: reply.text,
-            date: reply.created_at,
-            link: user_request_path(id: reply.request.id, user_id: @user.id)
-          %>
+        <%= c 'requests_feed' do %>
+          <% @user.requests.each do |request| %>
+            <%= c 'requests_feed_item', user: @user, request: request %>
+          <% end %>
         <% end %>
       <% end %>
     <% end %>

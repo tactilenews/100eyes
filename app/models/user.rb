@@ -4,7 +4,7 @@ class User < ApplicationRecord
   include PgSearch::Model
   multisearchable against: %i[first_name last_name username note]
   has_many :replies, dependent: :destroy
-  has_many :requests, through: :replies
+  has_many :requests, -> { reorder(created_at: :desc).distinct }, through: :replies
   default_scope { order(:first_name, :last_name) }
   validates :email, presence: false, 'valid_email_2/email': true
 
