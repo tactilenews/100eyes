@@ -1,0 +1,11 @@
+<div class="EmptyState">
+  <%= c 'box' do %>
+    <div class="EmptyState-icon">
+      <%= c 'icon', icon: 'a-chat' %>
+    </div>
+
+    <%= c 'heading', tag: :span, styles: [:beta] do %>
+      <%= @content %>
+    <% end %>
+  <% end %>
+</div>
