@@ -10,18 +10,18 @@
     </span>
   </div>
     <div class="RequestRow-stats">
-    <span class="RequestRow-stat">
-      <%= request.stats[:counts][:replies] %>
-      <%= c 'icon', icon: 'a-chat', styles: [:inline] %>
-    </span>
-    <span class="RequestRow-stat">
-      <%= request.stats[:counts][:users] %>
-      <%= c 'icon', icon: 'users-ww', styles: [:inline] %>
-    </span>
-    <span class="RequestRow-stat">
-      <%= request.stats[:counts][:photos] %>
-      <%= c 'icon', icon: 'camera', styles: [:inline] %>
-    </span>
+      <span class="RequestRow-stat">
+        <%= request.stats[:counts][:replies] %>
+        <%= c 'icon', icon: 'a-chat', styles: [:inline] %>
+      </span>
+      <span class="RequestRow-stat">
+        <%= request.stats[:counts][:users] %>
+        <%= c 'icon', icon: 'users-ww', styles: [:inline] %>
+      </span>
+      <span class="RequestRow-stat">
+        <%= request.stats[:counts][:photos] %>
+        <%= c 'icon', icon: 'camera', styles: [:inline] %>
+      </span>
     </div>
   <p class="RequestRow-text">
     <%= request.text %>
