@@ -8,6 +8,10 @@ class User < ApplicationRecord
   default_scope { order(:first_name, :last_name) }
   validates :email, presence: false, 'valid_email_2/email': true
 
+  before_validation do
+    self.email = nil if email.blank?
+  end
+
   def reply_via_telegram(message)
     request = Request.active_request or return nil
     ActiveRecord::Base.transaction do
