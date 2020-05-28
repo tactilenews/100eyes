@@ -7,7 +7,7 @@
     </div>
   <% end %>
   <div class="Message-text">
-    <%= message.text %>
+    <%= c 'plaintext_message', message: message.text %>
   </div>
   <div class="Message-date">
     <%= date_time(message.created_at) %>
