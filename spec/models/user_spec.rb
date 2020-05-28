@@ -22,8 +22,26 @@ RSpec.describe User, type: :model do
 
   describe '#email' do
     it 'must be unique' do
-      User.create!(email: 'user@example.org')
-      expect { User.create!(email: 'user@example.org') }.to raise_error(ActiveRecord::RecordNotUnique)
+      create(:user, email: 'user@example.org')
+      expect { create(:user, email: 'user@example.org') }.to raise_error(ActiveRecord::RecordNotUnique)
+    end
+
+    describe 'no email' do
+      subject { -> { build(:user, email: '').save! } }
+
+      it { should_not raise_error }
+      it { should change { User.count }.from(0).to(1) }
+      it { should change { User.pluck(:email) }.from([]).to([nil]) }
+
+      describe 'given an existing invalid user with empty string as email address' do
+        before(:each) do
+          create(:user, id: 1)
+          User.update(1, email: '')
+        end
+
+        it { should_not raise_error }
+        it { should change { User.count }.from(1).to(2) }
+      end
     end
   end
 
