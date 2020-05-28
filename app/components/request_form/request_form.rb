@@ -3,11 +3,11 @@
 module RequestForm
   class RequestForm < ApplicationComponent
     HINTS = {
-      photo: 'Fotos',
-      address: 'Adressen',
-      contact: 'Kontaktdaten',
-      medicalInfo: 'Medizinische Informationen',
-      confidential: 'Vertrauliche Informationen'
+      photo: (I18n.t 'request.hints.photo.label'),
+      address: (I18n.t 'request.hints.address.label'),
+      contact: (I18n.t 'request.hints.contact.label'),
+      medicalInfo: (I18n.t 'request.hints.medicalInfo.label'),
+      confidential: (I18n.t 'request.hints.confidential.label')
     }.freeze
 
     def initialize(request:)
