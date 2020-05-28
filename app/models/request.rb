@@ -32,7 +32,7 @@ class Request < ApplicationRecord
     {
       counts: {
         users: replies.map(&:user_id).uniq.size,
-        photos: replies.map { |reply| reply.photos_count || 0 }.reduce(0, :+),
+        photos: replies.map { |reply| reply.photos_count || 0 }.sum,
         replies: replies.size
       }
     }
