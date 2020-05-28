@@ -10,9 +10,9 @@ module Message
     private
 
     def photos
-      return [] unless message.respond_to?(:photos)
+      return message.photos if message.is_a? Reply
 
-      message.photos
+      []
     end
 
     attr_reader :message, :user
