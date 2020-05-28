@@ -1,0 +1,29 @@
+<%= link_to request_path(id: request.id), class: "RequestRow" do %>
+  <div class="RequestRow-header">
+    <div class="RequestRow-title">
+      <%= c 'heading', tag: :h3 do %>
+        <%= request.title %>
+      <% end %>
+    </div>
+    <span class="RequestRow-date">
+      <%= time_ago_in_words(request.created_at) %>
+    </span>
+  </div>
+    <div class="RequestRow-stats">
+      <span class="RequestRow-stat">
+        <%= request.stats[:counts][:replies] %>
+        <%= c 'icon', icon: 'a-chat', styles: [:inline] %>
+      </span>
+      <span class="RequestRow-stat">
+        <%= request.stats[:counts][:users] %>
+        <%= c 'icon', icon: 'users-ww', styles: [:inline] %>
+      </span>
+      <span class="RequestRow-stat">
+        <%= request.stats[:counts][:photos] %>
+        <%= c 'icon', icon: 'camera', styles: [:inline] %>
+      </span>
+    </div>
+  <p class="RequestRow-text">
+    <%= request.text %>
+  </p>
+  <% end %>

@@ -13,11 +13,8 @@
   <%= c 'box' do %>
     <%= c 'stack' do %>
       <% @requests.each do |request| %>
-        <%= c 'excerpt',
-          title: request.title,
-          text: request.text,
-          link: request_path(request),
-          date: request.created_at
+        <%= c 'request_row',
+          request: request
         %>
       <% end %>
     <% end %>

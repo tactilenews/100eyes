@@ -5,7 +5,7 @@ class RequestsController < ApplicationController
   before_action :set_user, only: %i[show_user_messages]
 
   def index
-    @requests = Request.all
+    @requests = Request.eager_load(:replies)
   end
 
   def show

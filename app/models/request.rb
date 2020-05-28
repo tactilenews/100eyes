@@ -2,6 +2,8 @@
 
 class Request < ApplicationRecord
   has_many :replies, dependent: :destroy
+  has_many :users, through: :replies
+  has_many :photos, through: :replies
   attribute :hints, :string, array: true, default: []
   default_scope { order(created_at: :desc) }
 
@@ -24,5 +26,15 @@ class Request < ApplicationRecord
     parts += hints.map { |hint| HINT_TEXTS[hint.to_sym] }
     parts << 'Vielen Dank für deine Hilfe bei unserer Recherche!'
     parts.join("\n\n")
+  end
+
+  def stats
+    {
+      counts: {
+        users: replies.map(&:user_id).uniq.size,
+        photos: replies.map { |reply| reply.photos_count || 0 }.sum,
+        replies: replies.size
+      }
+    }
   end
 end
