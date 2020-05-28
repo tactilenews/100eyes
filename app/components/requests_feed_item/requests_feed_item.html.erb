@@ -1,7 +1,7 @@
 <div class="RequestsFeedItem">
   <%= text %> ·
-  <%= time_ago_in_words(request.created_at) %> ·
-  <a href="<%= link %>">
+  <%= date_time(request.created_at) %> ·
+  <%= link_to link do %>
     <%= I18n.t 'user.show_replies' %>
-  </a>
+  <% end %>
 </div>
