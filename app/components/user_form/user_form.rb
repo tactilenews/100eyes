@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module UserForm
-  class UserForm < ViewComponent::Base
-    include ComponentHelper
-
+  class UserForm < ApplicationComponent
     def initialize(user:)
       @user = user
     end

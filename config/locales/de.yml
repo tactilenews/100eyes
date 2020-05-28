@@ -1,5 +1,4 @@
 de:
-  time_ago: '%{time_ago} vorher'
   save: Speichern
   discard: Änderungen verwerfen
 
@@ -283,4 +282,5 @@ de:
       default: "%A, %d. %B %Y, %H:%M Uhr"
       long: "%A, %d. %B %Y, %H:%M Uhr"
       short: "%d. %B, %H:%M Uhr"
+      time_only: "%H:%M Uhr"
     pm: nachmittags

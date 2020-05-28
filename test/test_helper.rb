@@ -17,4 +17,5 @@ end
 
 class ViewComponentTestCase < ViewComponent::TestCase
   include ComponentHelper
+  include DateTimeHelper
 end
