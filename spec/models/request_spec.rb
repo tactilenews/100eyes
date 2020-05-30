@@ -80,11 +80,31 @@ RSpec.describe Request, type: :model do
       describe '[:counts][:replies]' do
         subject { stats[:counts][:replies] }
         it { should eq(8) } # unique users
+
+        describe 'messages from us' do
+          before(:each) do
+            create(:message, request: request, user: nil)
+          end
+
+          it 'are excluded' do
+            should eq(8)
+          end
+        end
       end
 
       describe '[:counts][:users]' do
         subject { stats[:counts][:users] }
         it { should eq(6) } # unique users
+
+        describe 'messages from us' do
+          before(:each) do
+            create(:message, request: request, user: nil)
+          end
+
+          it 'are excluded' do
+            should eq(6)
+          end
+        end
       end
 
       describe '[:counts][:photos]' do

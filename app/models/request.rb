@@ -31,11 +31,9 @@ class Request < ApplicationRecord
   def stats
     {
       counts: {
-        # TODO: compact
-        users: messages.map(&:user_id).uniq.size,
+        users: messages.map(&:user_id).compact.uniq.size,
         photos: messages.map { |message| message.photos_count || 0 }.sum,
-        # TODO: filter by replies
-        replies: messages.size
+        replies: messages.count(&:reply?)
       }
     }
   end

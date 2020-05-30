@@ -10,4 +10,17 @@ RSpec.describe Message, type: :model do
     expect(described_class.first).to eq(newest_message)
     expect(described_class.last).to eq(oldest_message)
   end
+
+  describe '#reply?' do
+    subject { message.reply? }
+    describe 'message has a user' do
+      let(:message) { build(:message, user: build(:user)) }
+      it { should be(true) }
+    end
+
+    describe 'message has no user' do
+      let(:message) { build(:message, user: nil) }
+      it { should be(false) }
+    end
+  end
 end
