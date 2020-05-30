@@ -17,5 +17,9 @@ module ChatRow
 
       [:right]
     end
+
+    def id
+      "chat-row-#{message.id}"
+    end
   end
 end

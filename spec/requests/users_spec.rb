@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'telegram/bot/rspec/integration/rails'
 
 RSpec.describe '/users', type: :request do
   let(:user) { create(:user) }
@@ -64,6 +65,57 @@ RSpec.describe '/users', type: :request do
     it 'redirects to the users list' do
       subject.call
       expect(response).to redirect_to(users_url)
+    end
+  end
+
+  describe 'POST /message', telegram_bot: :rails do
+    subject { -> { post user_message_url(user), params: { message: { text: 'Forgot to ask: How are you?' } } } }
+
+    describe 'given a user' do
+      let(:params) { {} }
+      let(:user) { create(:user, **params) }
+
+      describe 'response' do
+        before(:each) { subject.call }
+        it { expect(response).to have_http_status(:bad_request) }
+      end
+
+      describe 'given an active request' do
+        let(:request) { create(:request) }
+        before(:each) { request }
+
+        describe 'response' do
+          before(:each) { subject.call }
+          it { expect(response).to redirect_to(user_request_path(user_id: user.id, id: request.id)) }
+        end
+
+        describe 'with a `telegram_chat_id`' do
+          let(:params) { { email: nil, telegram_id: 3, telegram_chat_id: 4 } }
+          let(:chat_id) { 4 }
+          let(:expected_message) { 'Forgot to ask: How are you?' }
+          it { should respond_with_message expected_message }
+          it { should_not have_enqueued_job.on_queue('mailers') }
+        end
+
+        describe 'with an `email`' do
+          let(:params) { { email: 'user@example.org' } }
+          it { should_not respond_with_message }
+          it {
+            should have_enqueued_job.on_queue('mailers').with(
+              'QuestionMailer',
+              'new_message_email',
+              'deliver_now',
+              {
+                params: {
+                  message: 'Forgot to ask: How are you?',
+                  to: 'user@example.org'
+                },
+                args: []
+              }
+            )
+          }
+        end
+      end
     end
   end
 end

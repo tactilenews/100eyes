@@ -1,4 +1,15 @@
 de:
+  components:
+    chat_form:
+      placeholder: Gib hier deine Nachfrage ein..
+      submit: Absenden
+
+  question_mailer:
+    new_question_email:
+      subject: Die Redaktion hat eine neue Frage an Sie
+    new_message_email:
+      subject: Die Redaktion hat eine Nachfrage an Sie
+
   save: Speichern
   discard: Änderungen verwerfen
 
@@ -21,6 +32,7 @@ de:
     has_replied_to: hat auf „%{title}” geantwortet
     saved: Informationen zu %{name} gespeichert
     invalid: Informationen zu %{name} sind ungültig
+    message-send: Nachricht an %{name} wurde verschickt
     form:
       name:
         label: Name

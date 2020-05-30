@@ -12,4 +12,5 @@ Rails.application.routes.draw do
   resources :users, only: %i[index show update destroy] do
     resources :requests, only: %i[show], to: 'requests#show_user_messages'
   end
+  post '/users/:id/message', to: 'users#message', as: :user_message
 end
