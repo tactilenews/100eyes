@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Reply < ApplicationRecord
+class Message < ApplicationRecord
   include PgSearch::Model
 
   default_scope { order(created_at: :desc) }

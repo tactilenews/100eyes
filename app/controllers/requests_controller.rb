@@ -5,11 +5,12 @@ class RequestsController < ApplicationController
   before_action :set_user, only: %i[show_user_messages]
 
   def index
-    @requests = Request.eager_load(:replies)
+    @requests = Request.eager_load(:messages)
   end
 
   def show
-    @replies = @request.replies
+    # TODO: implement Request#replies
+    @replies = @request.messages
   end
 
   def create
@@ -28,7 +29,7 @@ class RequestsController < ApplicationController
   end
 
   def show_user_messages
-    @chat_messages = [@request] + @user.replies_for_request(@request)
+    @chat_messages = [@request] + @user.messages_for_request(@request)
   end
 
   private

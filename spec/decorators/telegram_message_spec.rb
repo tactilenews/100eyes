@@ -38,33 +38,33 @@ RSpec.describe TelegramMessage do
     end
   end
 
-  describe '#reply', vcr: { cassette_name: :photo_with_image } do
+  describe '#message', vcr: { cassette_name: :photo_with_image } do
     let(:request) { create(:request) }
     let(:message) { message_with_photo }
-    subject { telegram_message.reply }
-    it { should be_a(Reply) }
-    describe 'assigning a request and calling #save! on the reply' do
+    subject { telegram_message.message }
+    it { should be_a(Message) }
+    describe 'assigning a request and calling #save! on the message' do
       it {
         expect do
           subject.request = request
           subject.save!
-        end.to(change { Reply.count }.from(0).to(1))
+        end.to(change { Message.count }.from(0).to(1))
       }
 
       describe 'given the user sends a series of images as album', vcr: { cassette_name: :photo_album } do
-        let(:message_with_media_group_id) { message_with_photo.merge(media_group_id: '42') }
-        let(:save_reply_and_photo) do
+        let(:telegram_message_with_media_group_id) { message_with_photo.merge(media_group_id: '42') }
+        let(:save_message_and_photo) do
           lambda {
-            tm = TelegramMessage.new message_with_media_group_id
-            reply = tm.reply
-            reply.request = request
-            reply.save
-            reply.photos << tm.photos
+            tm = TelegramMessage.new telegram_message_with_media_group_id
+            message = tm.message
+            message.request = request
+            message.save
+            message.photos << tm.photos
           }
         end
 
-        it { expect { 3.times { save_reply_and_photo.call } }.to(change { Reply.count }.from(0).to(1)) }
-        it { expect { 3.times { save_reply_and_photo.call } }.to(change { Photo.count }.from(0).to(3)) }
+        it { expect { 3.times { save_message_and_photo.call } }.to(change { Message.count }.from(0).to(1)) }
+        it { expect { 3.times { save_message_and_photo.call } }.to(change { Photo.count }.from(0).to(3)) }
       end
     end
   end

@@ -72,9 +72,9 @@ RSpec.describe Request, type: :model do
 
     describe 'given a number of requests, replies and photos' do
       before(:each) do
-        create_list(:reply, 2)
-        create_list(:reply, 3, request: request, user: user)
-        create_list(:reply, 5, :with_a_photo, request: request)
+        create_list(:message, 2)
+        create_list(:message, 3, request: request, user: user)
+        create_list(:message, 5, :with_a_photo, request: request)
       end
 
       describe '[:counts][:replies]' do
@@ -96,8 +96,8 @@ RSpec.describe Request, type: :model do
         subject { -> { Request.find_each.map(&:stats) } }
         it { should make_database_queries(count: 4) }
 
-        describe 'eager_load(:replies)' do
-          subject { -> { Request.eager_load(:replies).find_each.map(&:stats) } }
+        describe 'eager_load(:messages)' do
+          subject { -> { Request.eager_load(:messages).find_each.map(&:stats) } }
           it { should make_database_queries(count: 2) } # better
         end
       end

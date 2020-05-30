@@ -57,8 +57,8 @@ RSpec.describe User, type: :model do
     let(:request) { create(:request) }
 
     it 'omits duplicates' do
-      create(:reply, request: request, user: user)
-      create(:reply, request: request, user: user)
+      create(:message, request: request, user: user)
+      create(:message, request: request, user: user)
 
       expect(user.requests).to contain_exactly(request)
     end
@@ -111,32 +111,32 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '#replies_for_request' do
-    subject { user.replies_for_request(the_request) }
+  describe '#messages_for_request' do
+    subject { user.messages_for_request(the_request) }
     let(:the_request) { Request.create! text: 'One request' }
     let(:user) { User.create! first_name: 'Max', last_name: 'Mustermann' }
 
-    describe 'given two replies for two different requests' do
-      let(:replies) do
+    describe 'given two messages for two different requests' do
+      let(:messages) do
         [
-          create(:reply, text: 'This is included', user: user, request: the_request),
-          create(:reply, text: 'This is not included', user: user, request: (Request.create! text: 'Another request')),
-          create(:reply, text: 'This is included, too', user: user, request: the_request),
-          create(:reply, text: 'This is not a reply of the user', request: the_request)
+          create(:message, text: 'This is included', user: user, request: the_request),
+          create(:message, text: 'This is not included', user: user, request: (Request.create! text: 'Another request')),
+          create(:message, text: 'This is included, too', user: user, request: the_request),
+          create(:message, text: 'This is not a message of the user', request: the_request)
         ]
       end
 
       before(:each) do
-        replies # make sure all records are written to the database
+        messages # make sure all records are written to the database
       end
 
-      it { should include(replies[0]) }
-      it { should_not include(replies[1]) }
+      it { should include(messages[0]) }
+      it { should_not include(messages[1]) }
       it 'should be orderd by `created_at`' do
-        should eq([replies[0], replies[2]])
+        should eq([messages[0], messages[2]])
       end
-      it 'does not include replies of other users' do
-        should_not include(replies[3])
+      it 'does not include messages of other users' do
+        should_not include(messages[3])
       end
     end
   end
@@ -147,7 +147,7 @@ RSpec.describe User, type: :model do
 
     subject { -> { user.reply_via_mail(mail) } }
     it { should_not raise_error }
-    it { should_not(change { Reply.count }) }
+    it { should_not(change { Message.count }) }
     describe 'given a recent request' do
       before(:each) { request.save! }
       let(:request) do
@@ -158,7 +158,7 @@ RSpec.describe User, type: :model do
         )
       end
 
-      it { should change { Reply.count }.from(0).to(1) }
+      it { should change { Message.count }.from(0).to(1) }
       it { should_not(change { Photo.count }) }
     end
   end
@@ -182,7 +182,7 @@ RSpec.describe User, type: :model do
     subject { -> { user.reply_via_telegram(telegram_message) } }
 
     it { should_not raise_error }
-    it { should_not(change { Reply.count }) }
+    it { should_not(change { Message.count }) }
 
     describe 'given a recent request' do
       before(:each) { request.save! }
@@ -194,7 +194,7 @@ RSpec.describe User, type: :model do
         )
       end
 
-      it { should change { Reply.count }.from(0).to(1) }
+      it { should change { Message.count }.from(0).to(1) }
       it { should_not(change { Photo.count }) }
     end
   end

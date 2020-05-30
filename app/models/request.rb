@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class Request < ApplicationRecord
-  has_many :replies, dependent: :destroy
-  has_many :users, through: :replies
-  has_many :photos, through: :replies
+  has_many :messages, dependent: :destroy
+  has_many :users, through: :messages
+  has_many :photos, through: :messages
   attribute :hints, :string, array: true, default: []
   default_scope { order(created_at: :desc) }
 
@@ -31,9 +31,11 @@ class Request < ApplicationRecord
   def stats
     {
       counts: {
-        users: replies.map(&:user_id).uniq.size,
-        photos: replies.map { |reply| reply.photos_count || 0 }.sum,
-        replies: replies.size
+        # TODO: compact
+        users: messages.map(&:user_id).uniq.size,
+        photos: messages.map { |message| message.photos_count || 0 }.sum,
+        # TODO: filter by replies
+        replies: messages.size
       }
     }
   end

@@ -18,7 +18,7 @@ class UsersController < ApplicationController
         .new_message_email
         .deliver_later
     end
-    last_message = request.replies.where(user: user).reorder(created_at: :desc).first
+    last_message = request.messages.where(user: user).reorder(created_at: :desc).first
     redirect_to user_request_path(user, request, anchor: "chat-row-#{last_message.id}"), flash: { success: I18n.t('user.message-send', name: @user.name) }
   end
 

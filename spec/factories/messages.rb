@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :reply do
+  factory :message do
     association :user
     association :request
     trait :with_a_photo do
-      after(:create) do |reply|
-        create(:photo, reply: reply)
+      after(:create) do |message|
+        create(:photo, message: message)
       end
     end
   end
