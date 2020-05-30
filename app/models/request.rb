@@ -31,7 +31,7 @@ class Request < ApplicationRecord
   def stats
     {
       counts: {
-        users: messages.map(&:user_id).compact.uniq.size,
+        users: messages.map(&:sender_id).compact.uniq.size,
         photos: messages.map { |message| message.photos_count || 0 }.sum,
         replies: messages.count(&:reply?)
       }

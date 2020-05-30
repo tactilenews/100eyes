@@ -73,7 +73,7 @@ RSpec.describe Request, type: :model do
     describe 'given a number of requests, replies and photos' do
       before(:each) do
         create_list(:message, 2)
-        create_list(:message, 3, request: request, user: user)
+        create_list(:message, 3, request: request, sender: user)
         create_list(:message, 5, :with_a_photo, request: request)
       end
 
@@ -83,7 +83,7 @@ RSpec.describe Request, type: :model do
 
         describe 'messages from us' do
           before(:each) do
-            create(:message, request: request, user: nil)
+            create(:message, request: request, sender: nil)
           end
 
           it 'are excluded' do
@@ -98,7 +98,7 @@ RSpec.describe Request, type: :model do
 
         describe 'messages from us' do
           before(:each) do
-            create(:message, request: request, user: nil)
+            create(:message, request: request, sender: nil)
           end
 
           it 'are excluded' do
@@ -121,6 +121,20 @@ RSpec.describe Request, type: :model do
           it { should make_database_queries(count: 2) } # better
         end
       end
+    end
+  end
+
+  describe '::after_create' do
+    subject { -> { request.save! } }
+    describe 'given some existing users in the moment of creation' do
+      before(:each) do
+        create(:user, id: 1, email: 'somebody@example.org')
+        create(:user, id: 2, email: nil, telegram_id: 22, telegram_chat_id: 23)
+      end
+
+      it { should change { Message.count }.from(0).to(2) }
+      it { should change { Message.pluck(:recipient_id) }.from([]).to([1, 2]) }
+      it { should change { Message.pluck(:sender_id) }.from([]).to([nil, nil]) }
     end
   end
 end

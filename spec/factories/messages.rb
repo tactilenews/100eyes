@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :message do
-    association :user
+    association :sender, factory: :user
     association :request
     trait :with_a_photo do
       after(:create) do |message|
