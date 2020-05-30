@@ -18,7 +18,8 @@ class UsersController < ApplicationController
         .new_message_email
         .deliver_later
     end
-    redirect_to user_request_path(user, request), flash: { success: I18n.t('user.message-send', name: @user.name) }
+    last_message = request.replies.where(user: user).reorder(created_at: :desc).first
+    redirect_to user_request_path(user, request, anchor: "chat-row-#{last_message.id}"), flash: { success: I18n.t('user.message-send', name: @user.name) }
   end
 
   def index
