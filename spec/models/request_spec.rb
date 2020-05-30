@@ -125,6 +125,7 @@ RSpec.describe Request, type: :model do
   end
 
   describe '::after_create' do
+    before(:each) { allow(Request).to receive(:broadcast!).and_call_original } # is stubbed for every other test
     subject { -> { request.save! } }
     describe 'given some existing users in the moment of creation' do
       before(:each) do
@@ -133,7 +134,7 @@ RSpec.describe Request, type: :model do
       end
 
       it { should change { Message.count }.from(0).to(2) }
-      it { should change { Message.pluck(:recipient_id) }.from([]).to([1, 2]) }
+      it { should change { Message.pluck(:recipient_id) }.from([]).to([2, 1]) }
       it { should change { Message.pluck(:sender_id) }.from([]).to([nil, nil]) }
     end
   end

@@ -4,12 +4,12 @@
 # Telegram represents a message containing multiple photos as multiple
 # messages each containing a single photo.
 class TelegramMessage
-  attr_reader :user, :text, :message, :photos
+  attr_reader :sender, :text, :message, :photos
 
   def initialize(telegram_message)
     telegram_message = telegram_message.with_indifferent_access
     @text = telegram_message[:text] || telegram_message[:caption]
-    @user = initialize_user(telegram_message)
+    @sender = initialize_user(telegram_message)
     @message = initialize_message(telegram_message)
     @photos = initialize_photos(telegram_message)
   end
@@ -22,12 +22,12 @@ class TelegramMessage
     first_name = telegram_message.dig(:from, :first_name)
     last_name = telegram_message.dig(:from, :last_name)
     username = telegram_message.dig(:from, :username)
-    user = User.find_by(telegram_id: telegram_id)
-    if user
-      user.username = username
-      user.telegram_chat_id = telegram_chat_id
+    sender = User.find_by(telegram_id: telegram_id)
+    if sender
+      sender.username = username
+      sender.telegram_chat_id = telegram_chat_id
     else
-      user = User.new(
+      sender = User.new(
         telegram_id: telegram_id,
         telegram_chat_id: telegram_chat_id,
         username: username,
@@ -35,13 +35,13 @@ class TelegramMessage
         last_name: last_name
       )
     end
-    user
+    sender
   end
 
   def initialize_message(telegram_message)
     media_group_id = telegram_message['media_group_id']
     message = Message.find_by(telegram_media_group_id: media_group_id) if media_group_id
-    message ||= Message.new(text: text, user: user, telegram_media_group_id: media_group_id)
+    message ||= Message.new(text: text, sender: sender, telegram_media_group_id: media_group_id)
     message
   end
 

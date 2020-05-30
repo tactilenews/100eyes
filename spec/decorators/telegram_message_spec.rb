@@ -69,12 +69,12 @@ RSpec.describe TelegramMessage do
     end
   end
 
-  describe '#user' do
-    subject { telegram_message.user }
+  describe '#sender' do
+    subject { telegram_message.sender }
     let(:message) { { 'chat' => { 'id' => 42 }, 'from' => { 'id' => 47, 'username' => 'alice' } } }
     it { should be_a(User) }
 
-    describe 'calling #save! on the user' do
+    describe 'calling #save! on the sender' do
       it { expect { subject.save! }.to(change { User.count }.from(0).to(1)) }
 
       describe 'attributes of the created user' do

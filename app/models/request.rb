@@ -7,6 +7,8 @@ class Request < ApplicationRecord
   attribute :hints, :string, array: true, default: []
   default_scope { order(created_at: :desc) }
 
+  after_create { Request.broadcast!(self)  }
+
   def self.active_request
     reorder(created_at: :desc).first
   end
@@ -36,5 +38,9 @@ class Request < ApplicationRecord
         replies: messages.count(&:reply?)
       }
     }
+  end
+
+  def self.broadcast!(request)
+    User.find_each { |user| Message.create! sender: nil, recipient: user, text: request.plaintext, request: request }
   end
 end

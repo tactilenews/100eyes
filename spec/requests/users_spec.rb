@@ -86,7 +86,17 @@ RSpec.describe '/users', type: :request do
 
         describe 'response' do
           before(:each) { subject.call }
-          it { expect(response).to redirect_to(user_request_path(user_id: user.id, id: request.id)) }
+          let(:last_message) { Message.last }
+          it do
+            expect(response)
+              .to redirect_to(
+                user_request_path(
+                  user_id: user.id,
+                  id: request.id,
+                  anchor: "chat-row-#{last_message.id}"
+                )
+              )
+          end
         end
 
         describe 'with a `telegram_chat_id`' do
@@ -102,7 +112,7 @@ RSpec.describe '/users', type: :request do
           it { should_not respond_with_message }
           it {
             should have_enqueued_job.on_queue('mailers').with(
-              'QuestionMailer',
+              'MessageMailer',
               'new_message_email',
               'deliver_now',
               {

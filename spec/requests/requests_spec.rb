@@ -5,6 +5,7 @@ require 'telegram/bot/rspec/integration/rails'
 
 RSpec.describe 'Requests', telegram_bot: :rails do
   describe 'POST /requests' do
+    before(:each) { allow(Request).to receive(:broadcast!).and_call_original } # is stubbed for every other test
     subject { -> { post requests_path, params: params } }
     let(:params) { { request: { title: 'Example Question', text: 'How do you do?', hints: ['confidential'] } } }
 
@@ -34,15 +35,15 @@ RSpec.describe 'Requests', telegram_bot: :rails do
       before(:each) { User.create!(email: 'user@example.org', telegram_chat_id: nil) }
       it {
         should have_enqueued_job.on_queue('mailers').with(
-          'QuestionMailer',
-          'new_question_email',
+          'MessageMailer',
+          'new_message_email',
           'deliver_now',
           {
             params: {
-              question: ['Hallo, die Redaktion hat eine neue Frage an Sie:',
-                         'How do you do?',
-                         I18n.t('request.hints.confidential.text'),
-                         'Vielen Dank für Ihre Hilfe bei unserer Recherche!'].join("\n\n"),
+              message: ['Hallo, die Redaktion hat eine neue Frage an Sie:',
+                        'How do you do?',
+                        I18n.t('request.hints.confidential.text'),
+                        'Vielen Dank für Ihre Hilfe bei unserer Recherche!'].join("\n\n"),
               to: 'user@example.org'
             },
             args: []

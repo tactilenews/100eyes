@@ -4,11 +4,9 @@ de:
       placeholder: Gib hier deine Nachfrage ein..
       submit: Absenden
 
-  question_mailer:
-    new_question_email:
-      subject: Die Redaktion hat eine neue Frage an Sie
+  message_mailer:
     new_message_email:
-      subject: Die Redaktion hat eine Nachfrage an Sie
+      subject: Die Redaktion hat eine neue Frage an Sie
 
   save: Speichern
   discard: Änderungen verwerfen

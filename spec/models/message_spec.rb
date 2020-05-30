@@ -13,13 +13,13 @@ RSpec.describe Message, type: :model do
 
   describe '#reply?' do
     subject { message.reply? }
-    describe 'message has a user' do
-      let(:message) { build(:message, user: build(:user)) }
+    describe 'message has a sender' do
+      let(:message) { create(:message, sender: create(:user)) }
       it { should be(true) }
     end
 
-    describe 'message has no user' do
-      let(:message) { build(:message, user: nil) }
+    describe 'message has no sender' do
+      let(:message) { create(:message, sender: nil) }
       it { should be(false) }
     end
   end

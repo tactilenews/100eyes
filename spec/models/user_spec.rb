@@ -57,8 +57,8 @@ RSpec.describe User, type: :model do
     let(:request) { create(:request) }
 
     it 'omits duplicates' do
-      create(:message, request: request, user: user)
-      create(:message, request: request, user: user)
+      create(:message, request: request, sender: user)
+      create(:message, request: request, sender: user)
 
       expect(user.requests).to contain_exactly(request)
     end
@@ -111,17 +111,17 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '#messages_for_request' do
-    subject { user.messages_for_request(the_request) }
+  describe '#replies_for_request' do
+    subject { user.replies_for_request(the_request) }
     let(:the_request) { Request.create! text: 'One request' }
     let(:user) { User.create! first_name: 'Max', last_name: 'Mustermann' }
 
     describe 'given two messages for two different requests' do
       let(:messages) do
         [
-          create(:message, text: 'This is included', user: user, request: the_request),
-          create(:message, text: 'This is not included', user: user, request: (Request.create! text: 'Another request')),
-          create(:message, text: 'This is included, too', user: user, request: the_request),
+          create(:message, text: 'This is included', sender: user, request: the_request),
+          create(:message, text: 'This is not included', sender: user, request: (Request.create! text: 'Another request')),
+          create(:message, text: 'This is included, too', sender: user, request: the_request),
           create(:message, text: 'This is not a message of the user', request: the_request)
         ]
       end

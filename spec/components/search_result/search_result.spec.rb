@@ -8,7 +8,7 @@ RSpec.describe SearchResult::SearchResult, type: :component do
   let(:the_request) { create(:request, id: 1) }
 
   describe 'given a message' do
-    let(:result) { create(:message, user: user, request: the_request, text: 'I am a message') }
+    let(:result) { create(:message, sender: user, request: the_request, text: 'I am a message') }
     it {
       should have_link('I am a message', href: '/users/1/requests/1')
     }

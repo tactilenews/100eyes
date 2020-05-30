@@ -14,7 +14,32 @@ class Message < ApplicationRecord
 
   has_many :photos, dependent: :destroy
 
+  after_create do
+    send_email
+    send_telegram_message
+  end
+
   def reply?
     !!sender_id
+  end
+
+  private
+
+  def send_email
+    return unless recipient&.email
+
+    MessageMailer
+      .with(message: text, to: recipient.email)
+      .new_message_email
+      .deliver_later
+  end
+
+  def send_telegram_message
+    return unless recipient&.telegram_chat_id
+
+    Telegram.bots[Rails.configuration.bot_id].send_message(
+      chat_id: recipient.telegram_chat_id,
+      text: text
+    )
   end
 end
