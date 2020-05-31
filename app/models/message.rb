@@ -16,8 +16,6 @@ class Message < ApplicationRecord
 
   scope :replies, -> { where.not(sender_id: nil) }
 
-  delegate :name, to: :sender, prefix: true, allow_nil: true
-
   after_create do
     send_email
     send_telegram_message
@@ -25,6 +23,12 @@ class Message < ApplicationRecord
 
   def reply?
     !!sender_id
+  end
+
+  def sender_name
+    return sender.name if sender
+
+    I18n.t('application_name')
   end
 
   def conversation_link
