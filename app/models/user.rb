@@ -39,8 +39,11 @@ class User < ApplicationRecord
     self.last_name = last_name
   end
 
-  def replies_for_request(request)
-    replies.where(request_id: request).reorder(created_at: :asc)
+  def conversation_about(request)
+    Message
+      .where(request: request, sender: self)
+      .or(Message.where(request: request, recipient: self))
+      .reorder(created_at: :asc)
   end
 
   def channels

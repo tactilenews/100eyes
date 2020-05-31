@@ -26,7 +26,7 @@ class RequestsController < ApplicationController
   end
 
   def show_user_messages
-    @chat_messages = [@request] + @user.replies_for_request(@request)
+    @chat_messages = @user.conversation_about(@request)
   end
 
   private

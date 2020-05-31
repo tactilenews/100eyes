@@ -111,18 +111,19 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '#replies_for_request' do
-    subject { user.replies_for_request(the_request) }
+  describe '#conversation_about' do
+    subject { user.conversation_about(the_request) }
     let(:the_request) { Request.create! text: 'One request' }
     let(:user) { User.create! first_name: 'Max', last_name: 'Mustermann' }
 
-    describe 'given two messages for two different requests' do
+    describe 'given some requests and messages' do
       let(:messages) do
         [
           create(:message, text: 'This is included', sender: user, request: the_request),
           create(:message, text: 'This is not included', sender: user, request: (Request.create! text: 'Another request')),
           create(:message, text: 'This is included, too', sender: user, request: the_request),
-          create(:message, text: 'This is not a message of the user', request: the_request)
+          create(:message, text: 'This is not a message of the user', request: the_request),
+          create(:message, text: 'This is a message with the user as recipient', recipient: user, request: the_request)
         ]
       end
 
@@ -133,11 +134,12 @@ RSpec.describe User, type: :model do
       it { should include(messages[0]) }
       it { should_not include(messages[1]) }
       it 'should be orderd by `created_at`' do
-        should eq([messages[0], messages[2]])
+        should eq([messages[0], messages[2], messages[4]])
       end
       it 'does not include messages of other users' do
         should_not include(messages[3])
       end
+      it { should include(messages[4]) }
     end
   end
 
