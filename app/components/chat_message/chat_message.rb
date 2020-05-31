@@ -10,10 +10,7 @@ module ChatMessage
     private
 
     def photos
-      # TODO: refactor and remove guard clause
-      return message.photos if message.is_a? Message
-
-      []
+      message.photos
     end
 
     attr_reader :message, :user
