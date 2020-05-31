@@ -13,7 +13,7 @@ module ChatRow
     attr_reader :message
 
     def styles
-      return [:left] if message.respond_to? :user
+      return [:left] if message.reply?
 
       [:right]
     end
