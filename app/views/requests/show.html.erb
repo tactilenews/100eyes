@@ -22,10 +22,10 @@
 
         <% @replies.each do |reply| %>
           <%= c 'excerpt',
-            title: reply.user.name,
+            title: reply.sender_name,
             date: reply.created_at,
             text: reply.text,
-            link: user_request_path(id: reply.request.id, user_id: reply.user.id,)
+            link: reply.conversation_link
           %>
         <% end %>
       <% end %>

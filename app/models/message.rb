@@ -10,9 +10,13 @@ class Message < ApplicationRecord
   belongs_to :sender, class_name: 'User', optional: true
   belongs_to :recipient, class_name: 'User', optional: true
   belongs_to :request
+  has_many :photos, dependent: :destroy
+
   counter_culture :request, column_name: proc { |model| model.reply? ? 'replies_count' : nil }
 
-  has_many :photos, dependent: :destroy
+  scope :replies, -> { where.not(sender_id: nil) }
+
+  delegate :name, to: :sender, prefix: true, allow_nil: true
 
   after_create do
     send_email
@@ -21,6 +25,11 @@ class Message < ApplicationRecord
 
   def reply?
     !!sender_id
+  end
+
+  def conversation_link
+    user = sender || recipient
+    Rails.application.routes.url_helpers.user_request_path(id: request.id, user_id: user.id)
   end
 
   private

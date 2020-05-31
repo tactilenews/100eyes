@@ -9,8 +9,7 @@ class RequestsController < ApplicationController
   end
 
   def show
-    # TODO: implement Request#replies
-    @replies = @request.messages
+    @replies = @request.replies
   end
 
   def create

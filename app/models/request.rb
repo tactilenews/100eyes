@@ -13,6 +13,8 @@ class Request < ApplicationRecord
     reorder(created_at: :desc).first
   end
 
+  delegate :replies, to: :messages
+
   HINT_TEXTS = {
     photo: (I18n.t 'request.hints.photo.text'),
     address: (I18n.t 'request.hints.address.text'),

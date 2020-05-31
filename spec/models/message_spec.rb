@@ -23,4 +23,21 @@ RSpec.describe Message, type: :model do
       it { should be(false) }
     end
   end
+
+  describe '#conversation_link' do
+    subject { message.conversation_link }
+    let(:user) { create(:user, id: 7) }
+    let(:request) { create(:request, id: 6) }
+    let(:message) { create(:message, request: request, **params) }
+
+    describe 'given a recipient' do
+      let(:params) { { sender: nil, recipient: user } }
+      it { should eq('/users/7/requests/6') }
+    end
+
+    describe 'given a sender' do
+      let(:params) { { recipient: nil, sender: user } }
+      it { should eq('/users/7/requests/6') }
+    end
+  end
 end
