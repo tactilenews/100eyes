@@ -5,7 +5,7 @@ class Message < ApplicationRecord
 
   default_scope { order(created_at: :desc) }
 
-  multisearchable against: :text
+  multisearchable against: :text, if: :reply?
 
   belongs_to :sender, class_name: 'User', optional: true
   belongs_to :recipient, class_name: 'User', optional: true
