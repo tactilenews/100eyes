@@ -24,20 +24,29 @@ RSpec.describe Message, type: :model do
     end
   end
 
-  describe '#conversation_link' do
-    subject { message.conversation_link }
+  describe 'deeplinks' do
     let(:user) { create(:user, id: 7) }
     let(:request) { create(:request, id: 6) }
     let(:message) { create(:message, request: request, **params) }
 
-    describe 'given a recipient' do
-      let(:params) { { sender: nil, recipient: user } }
-      it { should eq('/users/7/requests/6') }
+    describe '#conversation_link' do
+      subject { message.conversation_link }
+
+      describe 'given a recipient' do
+        let(:params) { { sender: nil, recipient: user } }
+        it { should eq('/users/7/requests/6') }
+      end
+
+      describe 'given a sender' do
+        let(:params) { { recipient: nil, sender: user } }
+        it { should eq('/users/7/requests/6') }
+      end
     end
 
-    describe 'given a sender' do
-      let(:params) { { recipient: nil, sender: user } }
-      it { should eq('/users/7/requests/6') }
+    describe '#chat_message_link' do
+      subject { message.chat_message_link }
+      let(:params) { { id: 8, recipient: nil, sender: user } }
+      it { should eq('/users/7/requests/6#chat-row-8') }
     end
   end
 end

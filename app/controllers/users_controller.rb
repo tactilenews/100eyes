@@ -9,11 +9,7 @@ class UsersController < ApplicationController
 
     text = message_params[:text]
     message = Message.create!(text: text, request: request, recipient: user, sender: nil)
-    redirect_to user_request_path(
-      user,
-      request,
-      anchor: "chat-row-#{message.id}"
-    ), flash: { success: I18n.t('user.message-send', name: user.name) }
+    redirect_to message.chat_message_link, flash: { success: I18n.t('user.message-send', name: user.name) }
   end
 
   def index

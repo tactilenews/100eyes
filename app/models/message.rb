@@ -32,6 +32,15 @@ class Message < ApplicationRecord
     Rails.application.routes.url_helpers.user_request_path(id: request.id, user_id: user.id)
   end
 
+  def chat_message_link
+    user = sender || recipient
+    Rails.application.routes.url_helpers.user_request_path(
+      user,
+      request,
+      anchor: "chat-row-#{id}"
+    )
+  end
+
   private
 
   def send_email
