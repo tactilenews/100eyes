@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   before_action :set_user, only: %i[update destroy show message]
 
   def message
-    request = Request.active_request
+    request = user.active_request
     render(plain: 'No active request for this user', status: :bad_request) and return unless request
 
     text = message_params[:text]

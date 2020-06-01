@@ -5,6 +5,7 @@ require 'telegram/bot/rspec/integration/rails'
 
 RSpec.describe '/users', type: :request do
   let(:user) { create(:user) }
+  let(:the_request) { create(:request) }
 
   describe 'GET /index' do
     it 'should be successful' do
@@ -21,10 +22,8 @@ RSpec.describe '/users', type: :request do
   end
 
   describe 'GET /requests/:id' do
-    let(:request) { create(:request) }
-
     it 'should be successful' do
-      get user_request_path(id: request.id, user_id: user.id)
+      get user_request_path(id: the_request.id, user_id: user.id)
       expect(response).to be_successful
     end
   end
@@ -81,19 +80,18 @@ RSpec.describe '/users', type: :request do
       end
 
       describe 'given an active request' do
-        let(:request) { create(:request) }
-        before(:each) { request }
+        before(:each) { create(:message, request: the_request, recipient: user) }
 
         describe 'response' do
           before(:each) { subject.call }
-          let(:last_message) { Message.last }
+          let(:newest_message) { Message.reorder(created_at: :desc).first }
           it do
             expect(response)
               .to redirect_to(
                 user_request_path(
                   user_id: user.id,
-                  id: request.id,
-                  anchor: "chat-row-#{last_message.id}"
+                  id: the_request.id,
+                  anchor: "chat-row-#{newest_message.id}"
                 )
               )
           end

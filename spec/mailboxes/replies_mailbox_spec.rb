@@ -29,15 +29,19 @@ RSpec.describe RepliesMailbox, type: :mailbox do
   }
 
   describe 'given a user with a corresponding email' do
-    before { User.create!(first_name: 'Till', email: 'till@example.org') }
+    let(:user) { create(:user, id: 3, first_name: 'Till', email: 'till@example.org') }
+    before(:each) { user }
     it { should_not(change { Message.count }) }
 
-    describe 'and a recent request' do
-      before { Request.create!(title: 'Wie geht es euren Haustieren in Corona-Zeiten?') }
-      it { should(change { Message.count }.by(1)) }
-      it 'assigns message to sender' do
-        subject.call
-        expect(Message.first.sender.first_name).to eq('Till')
+    describe 'and an active request' do
+      let(:the_request) { create(:request, title: 'Wie geht es euren Haustieren in Corona-Zeiten?') }
+      before(:each) { create(:message, request: the_request, sender: nil, recipient: user) }
+      it { should(change { Message.count }.from(1).to(2)) }
+      describe 'after the email is processed' do
+        before(:each) { subject.call }
+        it 'sender is assigned' do
+          expect(Message.pluck(:sender_id)).to match_array([3, nil])
+        end
       end
     end
   end

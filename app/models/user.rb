@@ -4,7 +4,9 @@ class User < ApplicationRecord
   include PgSearch::Model
   multisearchable against: %i[first_name last_name username note]
   has_many :replies, class_name: 'Message', inverse_of: :sender, foreign_key: 'sender_id', dependent: :destroy
-  has_many :requests, -> { reorder(created_at: :desc).distinct }, through: :replies
+  has_many :received_messages, class_name: 'Message', inverse_of: :recipient, foreign_key: 'recipient_id', dependent: :destroy
+  has_many :replied_to_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :replies
+  has_many :received_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :received_messages
   default_scope { order(:first_name, :last_name) }
   validates :email, presence: false, 'valid_email_2/email': true
 
@@ -13,7 +15,7 @@ class User < ApplicationRecord
   end
 
   def reply_via_telegram(telegram_message)
-    request = Request.active_request or return nil
+    request = active_request or return nil
     ActiveRecord::Base.transaction do
       message = telegram_message.message
       message.sender = self
@@ -25,7 +27,7 @@ class User < ApplicationRecord
 
   def reply_via_mail(mail)
     user = self
-    request = Request.active_request or return nil
+    request = active_request or return nil
     Message.create!(request: request, text: mail.decoded, sender: user)
   end
 
@@ -48,6 +50,10 @@ class User < ApplicationRecord
 
   def channels
     { email: email?, telegram: telegram? }.select { |_k, v| v }.keys
+  end
+
+  def active_request
+    received_requests.reorder(created_at: :desc).first
   end
 
   def telegram?

@@ -9,10 +9,6 @@ class Request < ApplicationRecord
 
   after_create { Request.broadcast!(self)  }
 
-  def self.active_request
-    reorder(created_at: :desc).first
-  end
-
   delegate :replies, to: :messages
 
   HINT_TEXTS = {

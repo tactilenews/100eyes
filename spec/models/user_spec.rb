@@ -3,6 +3,14 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
+  let(:the_request) do
+    create(:request,
+           title: 'Hitchhiker’s Guide',
+           text: 'What is the answer to life, the universe, and everything?',
+           hints: %w[photo confidential])
+  end
+  let(:user) { create(:user) }
+
   it 'is sorted in alphabetical order' do
     zora = create(:user, first_name: 'Zora', last_name: 'Zimmermann')
     adam_zimmermann = create(:user, first_name: 'Adam', last_name: 'Zimmermann')
@@ -52,15 +60,12 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '#requests' do
-    let(:user) { create(:user) }
-    let(:request) { create(:request) }
-
+  describe '#replied_to_requests' do
     it 'omits duplicates' do
-      create(:message, request: request, sender: user)
-      create(:message, request: request, sender: user)
+      create(:message, request: the_request, sender: user)
+      create(:message, request: the_request, sender: user)
 
-      expect(user.requests).to contain_exactly(request)
+      expect(user.replied_to_requests).to contain_exactly(the_request)
     end
   end
 
@@ -68,17 +73,17 @@ RSpec.describe User, type: :model do
     subject { user.channels }
 
     describe 'given a user without telegram or email' do
-      let(:user) { User.create! }
+      let(:user) { create(:user, telegram_id: nil, telegram_chat_id: nil, email: nil) }
       it { should be_empty }
     end
 
     describe 'given a user with email' do
-      let(:user) { User.create!(email: 'user@example.org') }
+      let(:user) { create(:user, email: 'user@example.org') }
       it { should contain_exactly(:email) }
     end
 
     describe 'given a user with telegram and email' do
-      let(:user) { User.create!(telegram_id: '123', telegram_chat_id: '456', email: 'user@example.org') }
+      let(:user) { create(:user, telegram_id: '123', telegram_chat_id: '456', email: 'user@example.org') }
       it { should contain_exactly(:telegram, :email) }
     end
   end
@@ -87,12 +92,12 @@ RSpec.describe User, type: :model do
     subject { user.telegram? }
 
     describe 'given a user with a telegram_id and telegram_chat_id' do
-      let(:user) { User.create!(telegram_id: '123', telegram_chat_id: '456') }
+      let(:user) { create(:user, telegram_id: '123', telegram_chat_id: '456') }
       it { should be(true) }
     end
 
     describe 'given a user without telegram_id and telegram_chat_id' do
-      let(:user) { User.create! }
+      let(:user) { create(:user, telegram_id: nil, telegram_chat_id: nil) }
       it { should be(false) }
     end
   end
@@ -101,26 +106,24 @@ RSpec.describe User, type: :model do
     subject { user.email? }
 
     describe 'given a user with an email address' do
-      let(:user) { User.create!(email: 'user@example.org') }
+      let(:user) { create(:user, email: 'user@example.org') }
       it { should be(true) }
     end
 
     describe 'given a user without an email address' do
-      let(:user) { User.create! }
+      let(:user) { create(:user, email: nil) }
       it { should be(false) }
     end
   end
 
   describe '#conversation_about' do
     subject { user.conversation_about(the_request) }
-    let(:the_request) { Request.create! text: 'One request' }
-    let(:user) { User.create! first_name: 'Max', last_name: 'Mustermann' }
 
     describe 'given some requests and messages' do
       let(:messages) do
         [
           create(:message, text: 'This is included', sender: user, request: the_request),
-          create(:message, text: 'This is not included', sender: user, request: (Request.create! text: 'Another request')),
+          create(:message, text: 'This is not included', sender: user, request: create(:request, text: 'Another request')),
           create(:message, text: 'This is included, too', sender: user, request: the_request),
           create(:message, text: 'This is not a message of the user', request: the_request),
           create(:message, text: 'This is a message with the user as recipient', recipient: user, request: the_request)
@@ -144,29 +147,20 @@ RSpec.describe User, type: :model do
   end
 
   describe '#reply_via_mail' do
-    let(:user) { create(:user) }
     let(:mail) { instance_double('Mail::Message', decoded: 'A nice email') }
 
     subject { -> { user.reply_via_mail(mail) } }
     it { should_not raise_error }
     it { should_not(change { Message.count }) }
     describe 'given a recent request' do
-      before(:each) { request.save! }
-      let(:request) do
-        Request.new(
-          title: 'Hitchhiker’s Guide',
-          text: 'What is the answer to life, the universe, and everything?',
-          hints: %w[photo confidential]
-        )
-      end
+      before(:each) { create(:message, request: the_request, recipient: user) }
 
-      it { should change { Message.count }.from(0).to(1) }
+      it { should change { Message.count }.from(1).to(2) }
       it { should_not(change { Photo.count }) }
     end
   end
 
   describe '#reply_via_telegram' do
-    let(:user) { create(:user) }
     let(:telegram_message) do
       TelegramMessage.new(
         'text' => 'The answer is 42.',
@@ -187,17 +181,30 @@ RSpec.describe User, type: :model do
     it { should_not(change { Message.count }) }
 
     describe 'given a recent request' do
-      before(:each) { request.save! }
-      let(:request) do
-        Request.new(
-          title: 'Hitchhiker’s Guide',
-          text: 'What is the answer to life, the universe, and everything?',
-          hints: %w[photo confidential]
-        )
+      before(:each) { create(:message, request: the_request, recipient: user) }
+
+      it { should change { Message.count }.from(1).to(2) }
+      it { should_not(change { Photo.count }) }
+    end
+  end
+
+  describe '#active_request' do
+    subject { user.active_request }
+    it { should be(nil) }
+
+    describe 'once a request was sent as a message to the user' do
+      before(:each) { create(:message, request: the_request, recipient: user) }
+      it { should eq(the_request) }
+    end
+
+    describe 'when many requests are sent to the user' do
+      before(:each) do
+        another_request = create(:request, created_at: 1.day.ago)
+        create(:message, request: the_request, recipient: user)
+        create(:message, request: another_request, recipient: user)
       end
 
-      it { should change { Message.count }.from(0).to(1) }
-      it { should_not(change { Photo.count }) }
+      it { should eq(the_request) }
     end
   end
 end
