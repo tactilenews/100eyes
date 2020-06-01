@@ -19,13 +19,11 @@
     </ul>
   </nav>
   <%= form_with url: search_path, local: true, method: :get, class: 'NavBar-search' do %>
-    <div class="NavBar-search-icon">
-      <%= c 'icon', icon: 'zoom' %>
-    </div>
     <%= c 'input',
       type: :search,
       id: 'q',
       required: true,
+      icon: 'zoom',
       styles: [:inverted, :small],
       placeholder: I18n.t('search.placeholder')
     %>
