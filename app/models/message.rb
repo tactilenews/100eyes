@@ -22,7 +22,7 @@ class Message < ApplicationRecord
   end
 
   def reply?
-    !!sender_id
+    sender_id.present?
   end
 
   def sender_name

@@ -2,7 +2,7 @@ de:
   application_name: 100eyes
   components:
     chat_form:
-      placeholder: Gib hier deine Nachfrage ein..
+      placeholder: Gib hier deine Nachfrage ein…
       submit: Absenden
 
   message_mailer:
