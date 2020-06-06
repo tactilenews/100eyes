@@ -4,7 +4,7 @@ class EmailMessage
   attr_reader :sender, :text, :message, :photos
 
   def initialize(mail)
-    @text = mail.text_part.decoded
+    @text = mail.text_part&.decoded
     @sender = initialize_user(mail)
     @message = initialize_message(mail)
     @photos = initialize_photos(mail)

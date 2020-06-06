@@ -147,9 +147,30 @@ RSpec.describe User, type: :model do
   end
 
   describe '#reply_via_mail' do
-    let(:mail) { instance_double('Mail::Message', decoded: 'A nice email') }
+    subject { -> { user.reply_via_mail(email_message) } }
+    let(:mail) do
+      mail = Mail.new do |m|
+        m.from 'user@example.org'
+        m.to '100eyes@example.org'
+        m.subject 'This is a test email'
+      end
+      mail.text_part = 'This is a text body part'
+      mail
+    end
+    let(:email_message) { EmailMessage.new(mail) }
 
-    subject { -> { user.reply_via_mail(mail) } }
+    describe 'given no text part' do
+      let(:mail) do
+        Mail.new do |m|
+          m.from 'user@example.org'
+          m.to '100eyes@example.org'
+          m.subject 'This is a test email'
+          m.body 'This is a body'
+        end
+      end
+      it { should_not raise_error }
+    end
+
     it { should_not raise_error }
     it { should_not(change { Message.count }) }
     describe 'given a recent request' do
