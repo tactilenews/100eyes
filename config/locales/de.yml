@@ -1,4 +1,14 @@
 de:
+  application_name: 100eyes
+  components:
+    chat_form:
+      placeholder: Gib hier deine Nachfrage ein…
+      submit: Absenden
+
+  message_mailer:
+    new_message_email:
+      subject: Die Redaktion hat eine neue Frage an Sie
+
   save: Speichern
   discard: Änderungen verwerfen
 
@@ -21,6 +31,7 @@ de:
     has_replied_to: hat auf „%{title}” geantwortet
     saved: Informationen zu %{name} gespeichert
     invalid: Informationen zu %{name} sind ungültig
+    message-send: Nachricht an %{name} wurde verschickt
     form:
       name:
         label: Name

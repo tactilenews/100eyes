@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module Message
-  class Message < ApplicationComponent
+module ChatMessage
+  class ChatMessage < ApplicationComponent
     def initialize(message:)
       @message = message
       @user = message.user if message.respond_to?(:user)
@@ -10,9 +10,7 @@ module Message
     private
 
     def photos
-      return message.photos if message.is_a? Reply
-
-      []
+      message.photos
     end
 
     attr_reader :message, :user

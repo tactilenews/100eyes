@@ -4,30 +4,30 @@
 # Telegram represents a message containing multiple photos as multiple
 # messages each containing a single photo.
 class TelegramMessage
-  attr_reader :user, :text, :reply, :photos
+  attr_reader :sender, :text, :message, :photos
 
-  def initialize(message)
-    message = message.with_indifferent_access
-    @text = message[:text] || message[:caption]
-    @user = initialize_user(message)
-    @reply = initialize_reply(message)
-    @photos = initialize_photos(message)
+  def initialize(telegram_message)
+    telegram_message = telegram_message.with_indifferent_access
+    @text = telegram_message[:text] || telegram_message[:caption]
+    @sender = initialize_user(telegram_message)
+    @message = initialize_message(telegram_message)
+    @photos = initialize_photos(telegram_message)
   end
 
   private
 
-  def initialize_user(message)
-    telegram_chat_id = message.dig(:chat, :id)
-    telegram_id = message.dig(:from, :id)
-    first_name = message.dig(:from, :first_name)
-    last_name = message.dig(:from, :last_name)
-    username = message.dig(:from, :username)
-    user = User.find_by(telegram_id: telegram_id)
-    if user
-      user.username = username
-      user.telegram_chat_id = telegram_chat_id
+  def initialize_user(telegram_message)
+    telegram_chat_id = telegram_message.dig(:chat, :id)
+    telegram_id = telegram_message.dig(:from, :id)
+    first_name = telegram_message.dig(:from, :first_name)
+    last_name = telegram_message.dig(:from, :last_name)
+    username = telegram_message.dig(:from, :username)
+    sender = User.find_by(telegram_id: telegram_id)
+    if sender
+      sender.username = username
+      sender.telegram_chat_id = telegram_chat_id
     else
-      user = User.new(
+      sender = User.new(
         telegram_id: telegram_id,
         telegram_chat_id: telegram_chat_id,
         username: username,
@@ -35,24 +35,24 @@ class TelegramMessage
         last_name: last_name
       )
     end
-    user
+    sender
   end
 
-  def initialize_reply(message)
-    media_group_id = message['media_group_id']
-    reply = Reply.find_by(telegram_media_group_id: media_group_id) if media_group_id
-    reply ||= Reply.new(text: text, user: user, telegram_media_group_id: media_group_id)
-    reply
+  def initialize_message(telegram_message)
+    media_group_id = telegram_message['media_group_id']
+    message = Message.find_by(telegram_media_group_id: media_group_id) if media_group_id
+    message ||= Message.new(text: text, sender: sender, telegram_media_group_id: media_group_id)
+    message
   end
 
   ## Each photo from the Telegram API is available in multiple resolutions,
   # we save only the largest (i.e. original) variant.
-  def initialize_photos(message)
-    return [] unless message[:photo]
+  def initialize_photos(telegram_message)
+    return [] unless telegram_message[:photo]
 
     photo = Photo.new
     bot_token = "bot#{Telegram.bots[Rails.configuration.bot_id].token}"
-    telegram_file = message[:photo].max { |a, b| a[:file_size] <=> b[:file_size] }
+    telegram_file = telegram_message[:photo].max { |a, b| a[:file_size] <=> b[:file_size] }
     file_id = telegram_file[:file_id]
     uri = URI("https://api.telegram.org/#{bot_token}/getFile")
     uri.query = URI.encode_www_form({ file_id: file_id })

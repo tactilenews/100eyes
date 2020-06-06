@@ -1,0 +1,9 @@
+.ChatForm {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.ChatForm > button {
+  margin-top: var(--spacing-unit);
+}

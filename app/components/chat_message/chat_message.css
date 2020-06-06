@@ -1,4 +1,4 @@
-.Message {
+.ChatMessage {
   display: flex;
   flex-direction: column;
   background-color: var(--color-bg);
@@ -7,20 +7,20 @@
   border-radius: calc(3 * var(--border-radius));
 }
 
-.Message-date {
+.ChatMessage-date {
   color: var(--color-text-light);
   font-size: var(--font-size-s);
 }
 
-.Message-photos {
+.ChatMessage-photos {
   padding-bottom: var(--spacing-unit);
 }
 
-.Message-photos > img {
+.ChatMessage-photos > img {
   border: 3px solid rgba(0, 0, 0, 0.05);
   max-width: 100%;
 }
 
-.Message-photos > img + img {
+.ChatMessage-photos > img + img {
   margin-top: var(--spacing-unit);
 }

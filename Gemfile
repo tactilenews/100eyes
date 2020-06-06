@@ -70,3 +70,5 @@ gem 'telegram-bot'
 gem 'pg_search', '~> 2.3'
 
 gem 'valid_email2', '~> 3.2'
+
+gem 'counter_culture', '~> 2.5'

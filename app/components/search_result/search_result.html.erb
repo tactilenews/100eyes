@@ -1,6 +1,8 @@
   <% case type %>
-  <% when :user %>
+  <% when 'User' %>
     <%= c 'user_row', user: result %>
+  <% when 'Message' %>
+    <%= c 'excerpt', title: result.sender_name, text: result.text, link: result.chat_message_link, date: result.created_at %>
   <% else %>
-    <%= c 'excerpt', title: result.user.name, text: result.text, link: user_request_path(user_id: result.user_id, id: result.request_id), date: result.created_at %>
+    <% raise ArgumentError.new "Unknown search result type #{type}. This should never happen." %>
   <% end %>

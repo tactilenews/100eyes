@@ -15,7 +15,7 @@ RSpec.describe RepliesMailbox, type: :mailbox do
     }
   end
 
-  it { should_not(change { Reply.count }) }
+  it { should_not(change { Message.count }) }
   it {
     should have_enqueued_job.on_queue('mailers').with(
       'ReplyMailer',
@@ -29,15 +29,19 @@ RSpec.describe RepliesMailbox, type: :mailbox do
   }
 
   describe 'given a user with a corresponding email' do
-    before { User.create!(first_name: 'Till', email: 'till@example.org') }
-    it { should_not(change { Reply.count }) }
+    let(:user) { create(:user, id: 3, first_name: 'Till', email: 'till@example.org') }
+    before(:each) { user }
+    it { should_not(change { Message.count }) }
 
-    describe 'and a recent request' do
-      before { Request.create!(title: 'Wie geht es euren Haustieren in Corona-Zeiten?') }
-      it { should(change { Reply.count }.by(1)) }
-      it 'assigns reply to user' do
-        subject.call
-        expect(Reply.first.user.first_name).to eq('Till')
+    describe 'and an active request' do
+      let(:the_request) { create(:request, title: 'Wie geht es euren Haustieren in Corona-Zeiten?') }
+      before(:each) { create(:message, request: the_request, sender: nil, recipient: user) }
+      it { should(change { Message.count }.from(1).to(2)) }
+      describe 'after the email is processed' do
+        before(:each) { subject.call }
+        it 'sender is assigned' do
+          expect(Message.pluck(:sender_id)).to match_array([3, nil])
+        end
       end
     end
   end

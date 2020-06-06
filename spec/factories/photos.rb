@@ -2,6 +2,6 @@
 
 FactoryBot.define do
   factory :photo do
-    association :reply
+    association :message
   end
 end

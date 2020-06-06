@@ -1,15 +1,15 @@
-<div class="Message">
+<div class="ChatMessage">
   <% unless photos.empty? %>
-    <div class="Message-photos">
+    <div class="ChatMessage-photos">
       <% photos.each do |photo| %>
         <img src="<%= url_for(photo.image) %>" alt="">
       <% end %>
     </div>
   <% end %>
-  <div class="Message-text">
+  <div class="ChatMessage-text">
     <%= c 'plaintext_message', message: message.text %>
   </div>
-  <div class="Message-date">
+  <div class="ChatMessage-date">
     <%= date_time(message.created_at) %>
   </div>
 </div>

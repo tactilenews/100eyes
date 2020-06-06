@@ -58,33 +58,45 @@ RSpec.describe Request, type: :model do
     end
   end
 
-  describe '::active_request' do
-    it 'overrides any order() scope' do
-      create(:request, id: 1)
-      request2 = create(:request, id: 2)
-      expect(Request.reorder(created_at: :asc).active_request).to eq(request2)
-    end
-  end
-
   describe '#stats' do
     let(:request) { create(:request) }
     let(:stats) { request.stats }
 
     describe 'given a number of requests, replies and photos' do
       before(:each) do
-        create_list(:reply, 2)
-        create_list(:reply, 3, request: request, user: user)
-        create_list(:reply, 5, :with_a_photo, request: request)
+        create_list(:message, 2)
+        create_list(:message, 3, request: request, sender: user)
+        create_list(:message, 5, :with_a_photo, request: request)
       end
 
       describe '[:counts][:replies]' do
         subject { stats[:counts][:replies] }
         it { should eq(8) } # unique users
+
+        describe 'messages from us' do
+          before(:each) do
+            create(:message, request: request, sender: nil)
+          end
+
+          it 'are excluded' do
+            should eq(8)
+          end
+        end
       end
 
       describe '[:counts][:users]' do
         subject { stats[:counts][:users] }
         it { should eq(6) } # unique users
+
+        describe 'messages from us' do
+          before(:each) do
+            create(:message, request: request, sender: nil)
+          end
+
+          it 'are excluded' do
+            should eq(6)
+          end
+        end
       end
 
       describe '[:counts][:photos]' do
@@ -96,11 +108,26 @@ RSpec.describe Request, type: :model do
         subject { -> { Request.find_each.map(&:stats) } }
         it { should make_database_queries(count: 4) }
 
-        describe 'eager_load(:replies)' do
-          subject { -> { Request.eager_load(:replies).find_each.map(&:stats) } }
+        describe 'eager_load(:messages)' do
+          subject { -> { Request.eager_load(:messages).find_each.map(&:stats) } }
           it { should make_database_queries(count: 2) } # better
         end
       end
+    end
+  end
+
+  describe '::after_create' do
+    before(:each) { allow(Request).to receive(:broadcast!).and_call_original } # is stubbed for every other test
+    subject { -> { request.save! } }
+    describe 'given some existing users in the moment of creation' do
+      before(:each) do
+        create(:user, id: 1, email: 'somebody@example.org')
+        create(:user, id: 2, email: nil, telegram_id: 22, telegram_chat_id: 23)
+      end
+
+      it { should change { Message.count }.from(0).to(2) }
+      it { should change { Message.pluck(:recipient_id) }.from([]).to([2, 1]) }
+      it { should change { Message.pluck(:sender_id) }.from([]).to([nil, nil]) }
     end
   end
 end

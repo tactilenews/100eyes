@@ -3,7 +3,7 @@ inherit_from: .rubocop_todo.yml
 require: rubocop-rails
 
 Layout/LineLength:
-  Max: 125
+  Max: 126
   Exclude:
     - 'app/components/**/*.rb'
     - 'spec/vcr_setup.rb'

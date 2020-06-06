@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_26_171425) do
+ActiveRecord::Schema.define(version: 2020_05_30_212247) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -46,6 +46,21 @@ ActiveRecord::Schema.define(version: 2020_05_26_171425) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
+  create_table "messages", force: :cascade do |t|
+    t.integer "sender_id"
+    t.bigint "request_id", null: false
+    t.string "text"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "telegram_media_group_id"
+    t.integer "photos_count"
+    t.bigint "recipient_id"
+    t.index ["recipient_id"], name: "index_messages_on_recipient_id"
+    t.index ["request_id"], name: "index_messages_on_request_id"
+    t.index ["sender_id"], name: "index_messages_on_sender_id"
+    t.index ["telegram_media_group_id"], name: "index_messages_on_telegram_media_group_id", unique: true
+  end
+
   create_table "pg_search_documents", force: :cascade do |t|
     t.text "content"
     t.string "searchable_type"
@@ -56,23 +71,10 @@ ActiveRecord::Schema.define(version: 2020_05_26_171425) do
   end
 
   create_table "photos", force: :cascade do |t|
-    t.bigint "reply_id", null: false
+    t.bigint "message_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["reply_id"], name: "index_photos_on_reply_id"
-  end
-
-  create_table "replies", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "request_id", null: false
-    t.string "text"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "telegram_media_group_id"
-    t.integer "photos_count"
-    t.index ["request_id"], name: "index_replies_on_request_id"
-    t.index ["telegram_media_group_id"], name: "index_replies_on_telegram_media_group_id", unique: true
-    t.index ["user_id"], name: "index_replies_on_user_id"
+    t.index ["message_id"], name: "index_photos_on_message_id"
   end
 
   create_table "requests", force: :cascade do |t|
@@ -101,7 +103,8 @@ ActiveRecord::Schema.define(version: 2020_05_26_171425) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "photos", "replies"
-  add_foreign_key "replies", "requests"
-  add_foreign_key "replies", "users"
+  add_foreign_key "messages", "requests"
+  add_foreign_key "messages", "users", column: "recipient_id"
+  add_foreign_key "messages", "users", column: "sender_id"
+  add_foreign_key "photos", "messages"
 end

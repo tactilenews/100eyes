@@ -15,9 +15,7 @@ module SearchResult
     end
 
     def type
-      return :request if result.respond_to?(:user_id)
-
-      :user
+      result.model_name.name
     end
   end
 end
