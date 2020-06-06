@@ -1,6 +1,9 @@
 de:
   application_name: 100eyes
   components:
+    chat:
+      outdated_request: Es gibt bereits eine aktuellere Anfrage an diesen User.
+      link_to_active_request: Zur aktuellen Anfrage
     chat_form:
       placeholder: Gib hier deine Nachfrage ein…
       submit: Absenden

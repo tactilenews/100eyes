@@ -9,7 +9,14 @@
       <% end %>
     </div>
     <%= c 'stack' do %>
-      <%= c 'chat_form', user: user %>
+      <% if active_request %>
+        <%= c 'chat_form', user: user %>
+      <% else %>
+        <p>
+          <%= t 'components.chat.outdated_request' %>
+        </p>
+        <%= c 'button', label: t('components.chat.link_to_active_request'), link: request_path(request) %>
+      <% end %>
     <% end %>
   <% end %>
 </div>
