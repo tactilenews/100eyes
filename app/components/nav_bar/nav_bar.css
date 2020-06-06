@@ -1,6 +1,5 @@
 .NavBar {
   position: sticky;
-  position: -webkit-sticky;
   top: 0;
 
   display: flex;
