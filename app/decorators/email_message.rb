@@ -4,13 +4,19 @@ class EmailMessage
   attr_reader :sender, :text, :message, :photos
 
   def initialize(mail)
-    @text = mail.text_part&.decoded
+    @text = initialize_text(mail)
     @sender = initialize_user(mail)
     @message = initialize_message(mail)
     @photos = initialize_photos(mail)
   end
 
   private
+
+  def initialize_text(mail)
+    return mail.decoded unless  mail.multipart?
+
+    mail.text_part&.decoded
+  end
 
   def initialize_user(mail)
     User.find_by(email: mail.from)

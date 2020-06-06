@@ -159,18 +159,6 @@ RSpec.describe User, type: :model do
     end
     let(:email_message) { EmailMessage.new(mail) }
 
-    describe 'given no text part' do
-      let(:mail) do
-        Mail.new do |m|
-          m.from 'user@example.org'
-          m.to '100eyes@example.org'
-          m.subject 'This is a test email'
-          m.body 'This is a body'
-        end
-      end
-      it { should_not raise_error }
-    end
-
     it { should_not raise_error }
     it { should_not(change { Message.count }) }
     describe 'given a recent request' do
