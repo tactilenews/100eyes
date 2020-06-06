@@ -146,54 +146,54 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '#reply_via_mail' do
-    subject { -> { user.reply_via_mail(email_message) } }
-    let(:mail) do
-      mail = Mail.new do |m|
-        m.from 'user@example.org'
-        m.to '100eyes@example.org'
-        m.subject 'This is a test email'
+  describe '#reply' do
+    subject { -> { user.reply(message_decorator) } }
+    describe 'given an EmailMessage' do
+      let(:mail) do
+        mail = Mail.new do |m|
+          m.from 'user@example.org'
+          m.to '100eyes@example.org'
+          m.subject 'This is a test email'
+        end
+        mail.text_part = 'This is a text body part'
+        mail
       end
-      mail.text_part = 'This is a text body part'
-      mail
-    end
-    let(:email_message) { EmailMessage.new(mail) }
+      let(:message_decorator) { EmailMessage.new(mail) }
 
-    it { should_not raise_error }
-    it { should_not(change { Message.count }) }
-    describe 'given a recent request' do
-      before(:each) { create(:message, request: the_request, recipient: user) }
+      it { should_not raise_error }
+      it { should_not(change { Message.count }) }
+      describe 'given a recent request' do
+        before(:each) { create(:message, request: the_request, recipient: user) }
 
-      it { should change { Message.count }.from(1).to(2) }
-      it { should_not(change { Photo.count }) }
-    end
-  end
-
-  describe '#reply_via_telegram' do
-    let(:telegram_message) do
-      TelegramMessage.new(
-        'text' => 'The answer is 42.',
-        'from' => {
-          'id' => 4711,
-          'is_bot' => false,
-          'first_name' => 'Robert',
-          'last_name' => 'Schäfer',
-          'language_code' => 'en'
-        },
-        'chat' => { 'id' => 146_338_764 }
-      )
+        it { should change { Message.count }.from(1).to(2) }
+        it { should_not(change { Photo.count }) }
+      end
     end
 
-    subject { -> { user.reply_via_telegram(telegram_message) } }
+    describe 'given a TelegramMessage' do
+      let(:message_decorator) do
+        TelegramMessage.new(
+          'text' => 'The answer is 42.',
+          'from' => {
+            'id' => 4711,
+            'is_bot' => false,
+            'first_name' => 'Robert',
+            'last_name' => 'Schäfer',
+            'language_code' => 'en'
+          },
+          'chat' => { 'id' => 146_338_764 }
+        )
+      end
 
-    it { should_not raise_error }
-    it { should_not(change { Message.count }) }
+      it { should_not raise_error }
+      it { should_not(change { Message.count }) }
 
-    describe 'given a recent request' do
-      before(:each) { create(:message, request: the_request, recipient: user) }
+      describe 'given a recent request' do
+        before(:each) { create(:message, request: the_request, recipient: user) }
 
-      it { should change { Message.count }.from(1).to(2) }
-      it { should_not(change { Photo.count }) }
+        it { should change { Message.count }.from(1).to(2) }
+        it { should_not(change { Photo.count }) }
+      end
     end
   end
 

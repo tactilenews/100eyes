@@ -5,7 +5,7 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
     tm = TelegramMessage.new(message)
     user = tm.sender
     user.save!
-    user.reply_via_telegram(tm)
+    user.reply(tm)
   end
 
   def start!(_data = nil, *)
