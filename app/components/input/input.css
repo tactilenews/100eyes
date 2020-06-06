@@ -64,6 +64,10 @@
   pointer-events: none;
 }
 
+.Input--icon:focus-within > .Icon {
+  color: var(--color-text-light);
+}
+
 .Input--icon > input {
   padding-left: calc(1em + 2 * var(--spacing-unit-s));
 }
