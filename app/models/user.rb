@@ -25,10 +25,14 @@ class User < ApplicationRecord
     end
   end
 
-  def reply_via_mail(mail)
-    user = self
+  def reply_via_mail(email_message)
     request = active_request or return nil
-    Message.create!(request: request, text: mail.decoded, sender: user)
+    ActiveRecord::Base.transaction do
+      message = email_message.message
+      message.request = request
+      message.save!
+      message.photos << email_message.photos
+    end
   end
 
   def name
