@@ -2,16 +2,17 @@
 
 module RequestsFeedItem
   class RequestsFeedItem < ApplicationComponent
-    def initialize(user:, request:, **)
+    def initialize(user:, request:, first_answer:, **)
       super
 
       @user = user
       @request = request
+      @first_answer = first_answer
     end
 
     private
 
-    attr_reader :user, :request
+    attr_reader :user, :request, :first_answer
 
     def text
       # rubocop:disable Rails/OutputSafety

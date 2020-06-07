@@ -56,4 +56,8 @@ class User < ApplicationRecord
   def email?
     email.present?
   end
+
+  def replies_by_request
+    replies.eager_load(:request).reorder('requests.created_at DESC, messages.created_at ASC').group_by(&:request)
+  end
 end
