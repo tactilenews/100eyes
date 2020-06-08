@@ -5,7 +5,7 @@ module PageWrapper
     def initialize(*); end
 
     def call
-      content_tag(:div, @content, class: 'c-page-wrapper')
+      tag.div(@content, class: 'c-page-wrapper')
     end
   end
 end
