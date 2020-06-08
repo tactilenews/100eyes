@@ -15,7 +15,7 @@ module RequestsFeedItem
 
     def text
       # rubocop:disable Rails/OutputSafety
-      I18n.t('user.has_replied_to', title: content_tag(:strong, request.title)).html_safe
+      I18n.t('user.has_replied_to', title: tag.strong(request.title)).html_safe
       # rubocop:enable Rails/OutputSafety
     end
 

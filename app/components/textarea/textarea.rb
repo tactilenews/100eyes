@@ -13,8 +13,7 @@ module Textarea
     end
 
     def call
-      content_tag(
-        :textarea,
+      tag.textarea(
         value,
         id: id,
         name: id,

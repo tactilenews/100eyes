@@ -18,8 +18,7 @@ module Input
     end
 
     def input_tag
-      content_tag(
-        :input,
+      tag.input(
         nil,
         id: id,
         type: type,

@@ -9,7 +9,7 @@ module PlaintextMessage
     end
 
     def call
-      content_tag(:div, content, class: class_names)
+      tag.div(content, class: class_names)
     end
 
     private
