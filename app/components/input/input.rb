@@ -2,7 +2,7 @@
 
 module Input
   class Input < ApplicationComponent
-    def initialize(id: nil, value: nil, placeholder: nil, title: nil, required: false, disabled: false, type: 'text', stimulus_target: nil, **)
+    def initialize(id: nil, value: nil, placeholder: nil, title: nil, required: false, disabled: false, type: 'text', stimulus_target: nil, icon: nil, **)
       super
 
       @id = id
@@ -13,9 +13,11 @@ module Input
       @required = required
       @disabled = disabled
       @stimulus_target = stimulus_target
+      @icon = icon
+      styles << :icon if icon
     end
 
-    def call
+    def input_tag
       content_tag(
         :input,
         nil,
@@ -23,7 +25,6 @@ module Input
         type: type,
         name: id,
         value: value,
-        class: class_names,
         required: required,
         disabled: disabled,
         placeholder: placeholder,
@@ -36,6 +37,6 @@ module Input
 
     private
 
-    attr_reader :id, :type, :value, :placeholder, :title, :required, :disabled, :stimulus_target
+    attr_reader :id, :type, :value, :placeholder, :title, :required, :disabled, :stimulus_target, :icon
   end
 end

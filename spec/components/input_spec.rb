@@ -6,7 +6,7 @@ RSpec.describe Input::Input, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
   let(:params) { {} }
-  it { should have_css('input.Input') }
+  it { should have_css('.Input input') }
 
   describe 'given an id' do
     let(:params) { { id: 'name' } }
