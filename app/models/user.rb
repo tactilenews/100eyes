@@ -14,21 +14,14 @@ class User < ApplicationRecord
     self.email = nil if email.blank?
   end
 
-  def reply_via_telegram(telegram_message)
+  def reply(message_decorator)
     request = active_request or return nil
     ActiveRecord::Base.transaction do
-      message = telegram_message.message
-      message.sender = self
+      message = message_decorator.message
       message.request = request
       message.save!
-      message.photos << telegram_message.photos
+      message.photos << message_decorator.photos
     end
-  end
-
-  def reply_via_mail(mail)
-    user = self
-    request = active_request or return nil
-    Message.create!(request: request, text: mail.decoded, sender: user)
   end
 
   def name
