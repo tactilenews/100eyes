@@ -3,6 +3,6 @@
     <%= I18n.t 'conversation.conversation', count: 1 %>
   <% end %>
   <%= c 'box' do %>
-    <%= c 'chat', user: @user, messages: @chat_messages %>
+    <%= c 'chat', user: @user, messages: @chat_messages, request: @request %>
   <% end %>
 <% end %>
