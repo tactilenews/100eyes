@@ -216,4 +216,34 @@ RSpec.describe User, type: :model do
       it { should eq(the_request) }
     end
   end
+
+  describe '#recent_replies' do
+    subject { user.recent_replies }
+    let(:old_date) { ActiveSupport::TimeZone['Berlin'].parse('2011-04-12 2pm') }
+    let(:old_message) { create(:message, created_at: old_date, sender: user, request: the_request) }
+    let(:another_request) { create(:request) }
+    let(:old_request) { create(:request, created_at: (old_date - 1.day)) }
+
+    before(:each) do
+      create_list(:message, 3, sender: user, request: the_request)
+      create(:message, sender: user, request: old_request)
+      create(:message, sender: user, request: another_request)
+      old_message
+    end
+
+    it { expect(subject.length).to eq(3) }
+
+    it 'chooses one reply per request' do
+      expect(subject.map(&:request)).to match_array([the_request, another_request, old_request])
+    end
+
+    it 'orders replies chronologically in descending order' do
+      expect(subject).to eq(subject.sort_by(&:created_at).reverse)
+    end
+
+    describe 'number of database calls' do
+      subject { -> { user.recent_replies.first.request } }
+      it { should make_database_queries(count: 1) }
+    end
+  end
 end
