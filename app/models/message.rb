@@ -16,7 +16,7 @@ class Message < ApplicationRecord
 
   scope :replies, -> { where.not(sender_id: nil) }
 
-  has_one_attached :raw_data
+  has_many_attached :raw_data
   validates :raw_data, presence: true, if: -> { sender.present? }
 
   after_create do
@@ -48,16 +48,24 @@ class Message < ApplicationRecord
     )
   end
 
-  def renew
-    mapping = {
-      'application/json' => TelegramMessage,
-      'message/rfc822' => EmailMessage
-    }
-    decorator_class = mapping[raw_data.content_type]
-    return unless decorator_class
+  def self.renew!(message)
+    ActiveRecord::Base.transaction do
+      message.photos.destroy_all
+      message.raw_data.each do |raw|
+        mapping = {
+          'application/json' => TelegramMessage,
+          'message/rfc822' => EmailMessage
+        }
+        decorator_class = mapping[raw.content_type]
+        break unless decorator_class
 
-    decorator = decorator_class.from(raw_data)
-    update(decorator.message.attributes)
+        message_decorator = decorator_class.from(raw)
+
+        message.text = message_decorator.message.text
+        message.save!
+        message.photos << message_decorator.photos
+      end
+    end
   end
 
   private
