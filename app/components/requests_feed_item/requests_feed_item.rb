@@ -2,17 +2,17 @@
 
 module RequestsFeedItem
   class RequestsFeedItem < ApplicationComponent
-    def initialize(user:, request:, first_answer:, **)
+    def initialize(latest_reply:, **)
       super
 
-      @user = user
-      @request = request
-      @first_answer = first_answer
+      @user = latest_reply.sender
+      @request = latest_reply.request
+      @latest_reply = latest_reply
     end
 
     private
 
-    attr_reader :user, :request, :first_answer
+    attr_reader :user, :request, :latest_reply
 
     def text
       # rubocop:disable Rails/OutputSafety
@@ -21,7 +21,7 @@ module RequestsFeedItem
     end
 
     def link
-      user_request_path(id: request.id, user_id: @user.id)
+      user_request_path(id: request.id, user_id: user.id)
     end
   end
 end

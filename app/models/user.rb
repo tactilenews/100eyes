@@ -57,7 +57,10 @@ class User < ApplicationRecord
     email.present?
   end
 
-  def replies_by_request
-    replies.eager_load(:request).reorder('requests.created_at DESC, messages.created_at ASC').group_by(&:request)
+  def recent_replies
+    result = replies.eager_load(:request, :sender).reorder(created_at: :desc)
+    result = result.group_by(&:request).values # array or groups
+    result = result.map(&:first) # choose most recent message per group
+    result.sort_by(&:created_at).reverse # ensure descending order
   end
 end

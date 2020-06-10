@@ -1,6 +1,6 @@
 <div class="RequestsFeedItem">
   <%= text %> ·
-  <%= date_time(first_answer.created_at) %> ·
+  <%= date_time(latest_reply.created_at) %> ·
   <%= link_to link do %>
     <%= I18n.t 'user.show_replies' %>
   <% end %>

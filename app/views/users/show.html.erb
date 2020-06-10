@@ -13,8 +13,8 @@
         <% end %>
 
         <%= c 'requests_feed' do %>
-          <% @user.replies_by_request.each do |request, replies| %>
-            <%= c 'requests_feed_item', user: @user, request: request, first_answer: replies.first %>
+          <% @user. recent_replies.each do |reply| %>
+            <%= c 'requests_feed_item', latest_reply: reply %>
           <% end %>
         <% end %>
       <% end %>
