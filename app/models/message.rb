@@ -48,6 +48,18 @@ class Message < ApplicationRecord
     )
   end
 
+  def renew
+    mapping = {
+      'application/json' => TelegramMessage,
+      'message/rfc822' => EmailMessage
+    }
+    decorator_class = mapping[raw_data.content_type]
+    return unless decorator_class
+
+    decorator = decorator_class.from(raw_data)
+    update(decorator.message.attributes)
+  end
+
   private
 
   def send_email

@@ -64,4 +64,50 @@ RSpec.describe Message, type: :model do
       end
     end
   end
+
+  describe '#renew' do
+    subject { -> { message.renew } }
+
+    describe 'given an old message with unparsed data of a encoded Email' do
+      let(:mail) do
+        mail = Mail.new do |m|
+          m.from 'user@example.org'
+          m.to '100eyes@example.org'
+          m.subject 'This is a test email'
+        end
+        mail.text_part = 'This is the new stuff'
+        mail
+      end
+
+      let(:message) do
+        message = build(:message, sender: create(:user))
+        message.raw_data.attach(
+          io: StringIO.new(mail.encoded),
+          filename: 'unparsed.eml',
+          content_type: 'message/rfc822'
+        )
+        message.text = nil
+        message.save!
+        message
+      end
+
+      it { should change { message.text }.from(nil).to('This is the new stuff') }
+    end
+
+    describe 'given an old message with unparsed data of a Telegram API call' do
+      let(:message) do
+        message = build(:message, sender: create(:user))
+        message.raw_data.attach(
+          io: StringIO.new(JSON.generate({ text: 'This is the new stuff' })),
+          filename: 'unparsed.json',
+          content_type: 'application/json'
+        )
+        message.text = nil
+        message.save!
+        message
+      end
+
+      it { should change { message.text }.from(nil).to('This is the new stuff') }
+    end
+  end
 end

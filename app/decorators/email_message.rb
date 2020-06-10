@@ -3,6 +3,10 @@
 class EmailMessage
   attr_reader :sender, :text, :message, :photos
 
+  def self.from(raw_data)
+    new(Mail.new(raw_data.download))
+  end
+
   def initialize(mail)
     @text = initialize_text(mail)
     @sender = initialize_user(mail)
