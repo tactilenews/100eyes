@@ -49,4 +49,19 @@ RSpec.describe Message, type: :model do
       it { should eq('/users/7/requests/6#chat-row-8') }
     end
   end
+
+  describe 'validations' do
+    let(:message) { build(:message, sender: nil) }
+    subject { message }
+    describe '#raw_data' do
+      describe 'missing' do
+        before(:each) { message.raw_data = nil }
+        it { should be_valid }
+        describe 'but with a given sender' do
+          before(:each) { message.sender = build(:user) }
+          it { should_not be_valid }
+        end
+      end
+    end
+  end
 end

@@ -4,6 +4,15 @@ FactoryBot.define do
   factory :message do
     association :sender, factory: :user
     association :request
+
+    after(:build) do |message|
+      message.raw_data.attach(
+        io: StringIO.new(JSON.generate({ text: 'Hello' })),
+        filename: 'text.json',
+        content_type: 'application/json'
+      )
+    end
+
     trait :with_a_photo do
       after(:create) do |message|
         create(

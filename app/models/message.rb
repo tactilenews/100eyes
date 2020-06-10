@@ -16,6 +16,9 @@ class Message < ApplicationRecord
 
   scope :replies, -> { where.not(sender_id: nil) }
 
+  has_one_attached :raw_data
+  validates :raw_data, presence: true, if: -> { sender.present? }
+
   after_create do
     send_email
     send_telegram_message
