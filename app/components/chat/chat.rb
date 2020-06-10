@@ -12,7 +12,7 @@ module Chat
 
     attr_reader :messages, :user, :request
 
-    def active_request
+    def active_request?
       user.active_request == request
     end
   end

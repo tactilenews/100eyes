@@ -9,7 +9,7 @@
       <% end %>
     </div>
     <%= c 'stack' do %>
-      <% if active_request %>
+      <% if active_request? %>
         <%= c 'chat_form', user: user %>
       <% else %>
         <p>
