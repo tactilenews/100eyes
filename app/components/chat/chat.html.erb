@@ -1,14 +1,15 @@
 <div class="Chat">
   <%= c 'stack' do %>
     <%= c 'user_row', user: user %>
-    <div class="Chat-messages">
-      <%= c 'stack' do %>
-        <% messages.each do |message| %>
-          <%= c 'chat_row', message: message %>
-        <% end %>
+
+    <%= c 'stack', space: :small do %>
+      <% messages.each do |message| %>
+        <%= c 'chat_row', message: message %>
       <% end %>
-    </div>
+    <% end %>
+
     <%= c 'stack' do %>
+
       <% if active_request? %>
         <%= c 'chat_form', user: user %>
       <% else %>
@@ -17,6 +18,7 @@
         </p>
         <%= c 'button', label: t('components.chat.link_to_active_request'), link: request_path(request) %>
       <% end %>
+
     <% end %>
   <% end %>
 </div>

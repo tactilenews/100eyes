@@ -2,7 +2,7 @@ de:
   application_name: 100eyes
   components:
     chat:
-      outdated_request: Du hast diese*r Lokalexpert*in bereits eine neue Frage gestellt. Nachfragen zu dieser Frage sind deshalb nicht mehr möglich. 
+      outdated_request: Du hast diese*r Lokalexpert*in bereits eine neue Frage gestellt. Nachfragen zu dieser Frage sind deshalb nicht mehr möglich.
       link_to_active_request: Zur aktuellen Frage
     chat_form:
       placeholder: Gib hier deine Nachfrage ein…
@@ -340,6 +340,7 @@ de:
     formats:
       default: "%A, %d. %B %Y, %H:%M Uhr"
       long: "%A, %d. %B %Y, %H:%M Uhr"
-      short: "%d. %B, %H:%M Uhr"
+      short: "%a, %d. %b, %H:%M"
       time_only: "%H:%M Uhr"
+      today: "heute, %H:%M"
     pm: nachmittags
