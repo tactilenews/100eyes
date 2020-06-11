@@ -7,7 +7,10 @@
         data-target="chat-message.expand"
         data-action="click->chat-message#expand"
       >
-        <%= c 'button', styles: [:inline], label: 'weiterlesen' %>
+        <%= c 'button', styles: [:inline] do %>
+          <%= I18n.t('components.chat_message.expand') %>
+          <%= c 'icon', icon: 'small-down', styles: [:inline] %>
+        <% end %>
       </div>
     </div>
 

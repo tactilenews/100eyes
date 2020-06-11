@@ -5,4 +5,8 @@ class Photo < ApplicationRecord
   counter_culture :message
   has_one_attached :image
   validates :image, presence: true, blob: { content_type: :image }
+
+  def thumbnail
+    image.variant(resize: '200x200').processed
+  end
 end

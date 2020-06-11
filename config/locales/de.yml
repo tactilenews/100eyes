@@ -4,6 +4,8 @@ de:
     chat:
       outdated_request: Du hast diese*r Lokalexpert*in bereits eine neue Frage gestellt. Nachfragen zu dieser Frage sind deshalb nicht mehr möglich.
       link_to_active_request: Zur aktuellen Frage
+    chat_message:
+      expand: weiterlesen
     chat_form:
       placeholder: Gib hier deine Nachfrage ein…
       submit: Absenden
