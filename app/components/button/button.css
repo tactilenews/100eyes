@@ -14,6 +14,7 @@
   background: none;
   border: none;
   font-weight: 500;
+  font-size: inherit;
 }
 
 .Button--primary {
@@ -32,10 +33,15 @@
   border: var(--input-border-width) solid;
 }
 
-.Button--plain {
+.Button--plain,
+.Button--inline {
   --button-color: var(--color-gray-dark);
   color: var(--button-color);
   padding: var(--input-padding);
+}
+
+.Button--inline {
+  padding: 0;
 }
 
 .Button--small {

@@ -1,4 +1,4 @@
-<div class="ChatMessage">
+<div class="ChatMessage" data-controller="chat-message">
   <% unless photos.empty? %>
     <div class="ChatMessage-photos">
       <% photos.each do |photo| %>
@@ -6,8 +6,16 @@
       <% end %>
     </div>
   <% end %>
-  <div class="ChatMessage-text">
+  <div class="ChatMessage-text" data-target="chat-message.text">
     <%= c 'plaintext_message', message: message.text %>
+
+    <div
+      class="ChatMessage-expand"
+      data-target="chat-message.expand"
+      data-action="click->chat-message#expand"
+    >
+      <%= c 'button', styles: [:inline], label: 'weiterlesen' %>
+    </div>
   </div>
   <div class="ChatMessage-date">
     <%= date_time(message.created_at) %>

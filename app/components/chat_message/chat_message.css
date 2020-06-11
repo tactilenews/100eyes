@@ -4,6 +4,34 @@
   border-radius: var(--border-radius-l);
 }
 
+.ChatMessage-text {
+  position: relative;
+}
+
+.ChatMessage:not([aria-expanded="true"]) > .ChatMessage-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+.ChatMessage-expand {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  display: none;
+  padding-left: var(--spacing-unit-l);
+  background: linear-gradient(
+    to right,
+    transparent 0,
+    var(--color-gray-light) var(--spacing-unit)
+  );
+}
+
+.ChatMessage--truncated[aria-expanded="false"] .ChatMessage-expand {
+  display: block;
+}
+
 .ChatMessage-date {
   color: var(--color-text-light);
   font-size: var(--font-size-xs);
