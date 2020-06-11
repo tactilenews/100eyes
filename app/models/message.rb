@@ -16,6 +16,9 @@ class Message < ApplicationRecord
 
   scope :replies, -> { where.not(sender_id: nil) }
 
+  has_many_attached :raw_data
+  validates :raw_data, presence: true, if: -> { sender.present? }
+
   after_create do
     send_email
     send_telegram_message
@@ -43,6 +46,26 @@ class Message < ApplicationRecord
       request,
       anchor: "chat-row-#{id}"
     )
+  end
+
+  def self.renew!(message)
+    ActiveRecord::Base.transaction do
+      message.photos.destroy_all
+      message.raw_data.each do |raw|
+        mapping = {
+          'application/json' => TelegramMessage,
+          'message/rfc822' => EmailMessage
+        }
+        decorator_class = mapping[raw.content_type]
+        break unless decorator_class
+
+        message_decorator = decorator_class.from(raw)
+
+        message.text = message_decorator.message.text
+        message.save!
+        message.photos << message_decorator.photos
+      end
+    end
   end
 
   private

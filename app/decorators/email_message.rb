@@ -3,6 +3,10 @@
 class EmailMessage
   attr_reader :sender, :text, :message, :photos
 
+  def self.from(raw_data)
+    new(Mail.new(raw_data.download))
+  end
+
   def initialize(mail)
     @text = initialize_text(mail)
     @sender = initialize_user(mail)
@@ -22,8 +26,14 @@ class EmailMessage
     User.find_by(email: mail.from)
   end
 
-  def initialize_message(_mail)
-    Message.new(text: text, sender: sender)
+  def initialize_message(mail)
+    message = Message.new(text: text, sender: sender)
+    message.raw_data.attach(
+      io: StringIO.new(mail.encoded),
+      filename: 'email.eml',
+      content_type: 'message/rfc822'
+    )
+    message
   end
 
   def initialize_photos(mail)

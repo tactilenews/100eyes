@@ -6,6 +6,10 @@
 class TelegramMessage
   attr_reader :sender, :text, :message, :photos
 
+  def self.from(raw_data)
+    new(JSON.parse(raw_data.download))
+  end
+
   def initialize(telegram_message)
     telegram_message = telegram_message.with_indifferent_access
     @text = telegram_message[:text] || telegram_message[:caption]
@@ -42,6 +46,11 @@ class TelegramMessage
     media_group_id = telegram_message['media_group_id']
     message = Message.find_by(telegram_media_group_id: media_group_id) if media_group_id
     message ||= Message.new(text: text, sender: sender, telegram_media_group_id: media_group_id)
+    message.raw_data.attach(
+      io: StringIO.new(JSON.generate(telegram_message)),
+      filename: 'telegram_api.json',
+      content_type: 'application/json'
+    )
     message
   end
 
