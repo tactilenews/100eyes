@@ -1,4 +1,8 @@
-<div class="ChatMessage" data-controller="chat-message">
+<div
+  class="ChatMessage"
+  data-controller="chat-message"
+  id="<%= id %>"
+>
     <div class="ChatMessage-text" data-target="chat-message.text">
       <%= c 'plaintext_message', message: message.text %>
 
@@ -19,6 +23,6 @@
     <% end %>
 
     <div class="ChatMessage-date">
-      <%= date_time(message.created_at) %>
+      <a href="#<%= id %>"><%= date_time(message.created_at) %></a>
     </div>
 </div>
