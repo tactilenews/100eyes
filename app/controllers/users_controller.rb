@@ -18,6 +18,19 @@ class UsersController < ApplicationController
 
   def show; end
 
+  def new
+    @user = User.new
+  end
+
+  def create
+    @user = User.new(user_params)
+    if @user.save
+      redirect_to @user, flash: { success: I18n.t('user.success') }
+    else
+      render :new
+    end
+  end
+
   def update
     if @user.update(user_params)
       redirect_to user_url, flash: { success: I18n.t('user.saved', name: @user.name) }
