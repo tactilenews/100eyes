@@ -34,13 +34,15 @@ class Message < ApplicationRecord
     I18n.t('application_name')
   end
 
+  def user
+    sender || recipient
+  end
+
   def conversation_link
-    user = sender || recipient
     Rails.application.routes.url_helpers.user_request_path(id: request.id, user_id: user.id)
   end
 
   def chat_message_link
-    user = sender || recipient
     Rails.application.routes.url_helpers.user_request_path(
       user,
       request,

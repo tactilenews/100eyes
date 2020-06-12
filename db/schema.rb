@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_06_140853) do
+ActiveRecord::Schema.define(version: 2020_06_12_124611) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(version: 2020_06_06_140853) do
     t.string "telegram_media_group_id"
     t.integer "photos_count"
     t.bigint "recipient_id"
+    t.boolean "broadcasted", default: false
     t.index ["recipient_id"], name: "index_messages_on_recipient_id"
     t.index ["request_id"], name: "index_messages_on_request_id"
     t.index ["sender_id"], name: "index_messages_on_sender_id"

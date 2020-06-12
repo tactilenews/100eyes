@@ -1,6 +1,0 @@
-.Chat-messages {
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius);
-  padding: var(--spacing-unit);
-  background-color: var(--color-gray-light);
-}

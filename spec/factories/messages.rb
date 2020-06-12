@@ -4,6 +4,7 @@ FactoryBot.define do
   factory :message do
     association :sender, factory: :user
     association :request
+    with_sender
 
     after(:build) do |message|
       message.raw_data.attach(
@@ -11,6 +12,16 @@ FactoryBot.define do
         filename: 'text.json',
         content_type: 'application/json'
       )
+    end
+
+    trait :with_sender do
+      recipient { nil }
+      association :sender, factory: :user
+    end
+
+    trait :with_recipient do
+      sender { nil }
+      association :recipient, factory: :user
     end
 
     trait :with_a_photo do

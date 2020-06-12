@@ -2,6 +2,7 @@
   --font-size: 20px;
   --line-height: 30px;
   --font-size-s: 0.85rem;
+  --font-size-xs: 0.75rem;
 
   --spacing-unit: 30px;
   --spacing-unit-s: calc(0.5 * var(--spacing-unit));
@@ -14,6 +15,7 @@
   --grid-max-width-l: 56rem;
 
   --border-radius: 3px;
+  --border-radius-l: 9px;
 
   --color-blue: #007eff;
   --color-blue-dark: #1a2d3a;

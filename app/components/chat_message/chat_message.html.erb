@@ -1,15 +1,28 @@
-<div class="ChatMessage">
-  <% unless photos.empty? %>
-    <div class="ChatMessage-photos">
-      <% photos.each do |photo| %>
-        <img src="<%= url_for(photo.image) %>" alt="">
-      <% end %>
+<div
+  class="<%= class_names.join(' ') %>"
+  data-controller="chat-message"
+  id="<%= id %>"
+>
+    <div class="ChatMessage-text" data-target="chat-message.text">
+      <%= c 'plaintext_message', message: message.text %>
+
+      <div
+        class="ChatMessage-expand"
+        data-target="chat-message.expand"
+        data-action="click->chat-message#expand"
+      >
+        <%= c 'button', styles: [:inline] do %>
+          <%= I18n.t('components.chat_message.expand') %>
+          <%= c 'icon', icon: 'small-down', styles: [:inline] %>
+        <% end %>
+      </div>
     </div>
-  <% end %>
-  <div class="ChatMessage-text">
-    <%= c 'plaintext_message', message: message.text %>
-  </div>
-  <div class="ChatMessage-date">
-    <%= date_time(message.created_at) %>
-  </div>
+
+    <% unless photos.empty? %>
+      <%= c 'chat_message_photos', photos: photos %>
+    <% end %>
+
+    <div class="ChatMessage-date">
+      <a href="#<%= id %>"><%= date_time(message.created_at) %></a>
+    </div>
 </div>

@@ -1,0 +1,9 @@
+<div class="<%= class_names.join(' ') %>">
+  <%= c 'stack', space: :xsmall do %>
+    <% messages.each do |message| %>
+      <div class="ChatMessages-item ChatMessages-item--<%= message.reply? ? 'left' : 'right' %>">
+        <%= c 'chat_message', message: message, styles: styles %>
+      </div>
+    <% end %>
+  <% end %>
+</div>

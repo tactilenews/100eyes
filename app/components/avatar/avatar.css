@@ -1,10 +1,15 @@
 .Avatar {
-  display: block;
+  display: inline-block;
   box-sizing: content-box;
   border-radius: 50%;
   overflow: hidden;
   width: calc(3 * var(--spacing-unit));
   height: calc(3 * var(--spacing-unit));
+}
+
+.Avatar--small {
+  width: var(--spacing-unit-l);
+  height: var(--spacing-unit-l);
 }
 
 .Avatar > img {

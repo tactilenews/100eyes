@@ -12,6 +12,7 @@ RUN apk --update add \
     tzdata \
     libxslt-dev \
     libxml2-dev \
+    imagemagick \
     less
 
 RUN mkdir -p /app

@@ -27,12 +27,12 @@ RSpec.describe Request, type: :model do
     expect(described_class.last).to eq(oldest_request)
   end
 
-  describe '.hints' do
+  describe '#hints' do
     subject { Request.new(title: 'Example').hints }
     it { should match_array([]) }
   end
 
-  describe '.plaintext' do
+  describe '#plaintext' do
     subject { request.plaintext }
 
     it 'returns correct plaintext message' do
@@ -46,7 +46,8 @@ RSpec.describe Request, type: :model do
     end
 
     describe 'without hints' do
-      subject { Request.new(title: 'Example', text: 'Hello World!', hints: []).plaintext }
+      let(:request) { create(:request, text: 'Hello World!', hints: []) }
+      subject { request.plaintext }
 
       it 'returns correct plaintext message' do
         expected  = "Hallo, die Redaktion hat eine neue Frage an Sie:\n\n"
@@ -55,6 +56,30 @@ RSpec.describe Request, type: :model do
 
         expect(subject).to eql(expected)
       end
+    end
+  end
+
+  describe '#messages_by_user' do
+    subject { request.messages_by_user }
+    let(:request) { create(:request) }
+
+    describe 'with messages by multiple users' do
+      let(:request) { create(:request, :with_interlapping_messages_from_two_users) }
+
+      it 'groups by user' do
+        expect(subject.keys).to all(be_a User)
+        expect(subject.length).to eq(2)
+      end
+
+      it 'sorts by most recent message' do
+        expect(subject.keys.first.name).to eq('Adam Ackermann')
+        expect(subject.keys.second.name).to eq('Zora Zimmermann')
+      end
+    end
+
+    it 'ignores broadcasted messages' do
+      create(:message, request: request, broadcasted: true)
+      expect(subject).to be_empty
     end
   end
 
@@ -128,6 +153,7 @@ RSpec.describe Request, type: :model do
       it { should change { Message.count }.from(0).to(2) }
       it { should change { Message.pluck(:recipient_id) }.from([]).to([2, 1]) }
       it { should change { Message.pluck(:sender_id) }.from([]).to([nil, nil]) }
+      it { should change { Message.pluck(:broadcasted) }.from([]).to([true, true]) }
     end
   end
 end

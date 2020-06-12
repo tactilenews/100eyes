@@ -1,0 +1,24 @@
+<div class="ChatMessagesGroup">
+  <div class="ChatMessagesGroup-header">
+    <div class="ChatMessagesGroup-avatar">
+      <%= c 'avatar', user: user, styles: [:small] %>
+    </div>
+
+    <%= c 'heading', tag: :h3 do %>
+      <a class="ChatMessagesGroup-user" href="<%= user_path(user) %>">
+        <%= user.name %>
+      </a>
+    <% end %>
+
+    <div class="ChatMessagesGroup-actions">
+      <a href="<%= conversation_link %>">
+        <%= c 'icon', icon: 'reply-arrow', styles: [:inline] %>
+        <%= I18n.t('components.chat_messages_group.reply') %>
+      </a>
+    </div>
+  </div>
+
+  <div class="ChatMessagesGroup-messages">
+    <%= c 'chat_messages', messages: messages, styles: [:compact] %>
+  </div>
+</div>

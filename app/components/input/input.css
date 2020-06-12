@@ -1,5 +1,6 @@
 .Input {
   position: relative;
+  width: 100%;
 }
 
 .Input > input {
@@ -11,6 +12,7 @@
   padding: var(--input-padding);
 
   font-size: inherit;
+  color: inherit;
   border-radius: var(--border-radius);
   border: var(--input-border-width) solid var(--color-border);
 }
@@ -19,36 +21,30 @@
   border-color: var(--color-focus);
 }
 
-.Input--center > input {
-  text-align: center;
-}
-
-.Input--heading > input {
-  font-size: 1.5rem;
-  font-weight: 500;
-}
-
 .Input--small > input {
   padding: var(--input-padding-s);
 }
 
-.Input--inverted > input {
-  border: none;
-  background: rgba(255, 255, 255, 0.2);
+.Input--inverted {
+  color: rgba(255, 255, 255, 0.8);
 }
 
-.Input--inverted > input:focus {
+.Input--inverted:focus-within {
   color: var(--color-text);
-  background: rgba(255, 255, 255, 1);
+}
+
+.Input--inverted > input {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
 }
 
 .Input--inverted > input::placeholder,
 .Input--inverted > input {
-  color: rgba(255, 255, 255, 0.8);
+  color: inherit;
 }
 
-.Input--inverted > input:focus::placeholder {
-  color: var(--color-text-light);
+.Input--inverted > input:focus {
+  background: #fff;
 }
 
 .Input > input[disabled] {
@@ -64,10 +60,6 @@
   pointer-events: none;
 }
 
-.Input--icon:focus-within > .Icon {
-  color: var(--color-text-light);
-}
-
 .Input--icon > input {
-  padding-left: calc(1em + 2 * var(--spacing-unit-s));
+  padding-left: calc(1em + var(--spacing-unit-s) + var(--spacing-unit-xs));
 }

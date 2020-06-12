@@ -2,17 +2,21 @@
 
 module ChatMessage
   class ChatMessage < ApplicationComponent
-    def initialize(message:)
+    def initialize(message:, **)
+      super
       @message = message
-      @user = message.user if message.respond_to?(:user)
     end
 
     private
+
+    def id
+      "message-#{message.id}"
+    end
 
     def photos
       message.photos
     end
 
-    attr_reader :message, :user
+    attr_reader :message
   end
 end
