@@ -4,11 +4,16 @@
   border-radius: var(--border-radius-l);
 }
 
+.ChatMessage-date {
+  color: var(--color-text-light);
+  font-size: var(--font-size-xs);
+}
+
 .ChatMessage-text {
   position: relative;
 }
 
-.ChatMessage:not([aria-expanded="true"]) > .ChatMessage-text {
+.ChatMessage:not(.ChatMessage--expanded) .ChatMessage-text {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
@@ -28,24 +33,6 @@
   );
 }
 
-.ChatMessage--truncated[aria-expanded="false"] .ChatMessage-expand {
+.ChatMessage--truncated:not(.ChatMessage--expanded) .ChatMessage-expand {
   display: block;
-}
-
-.ChatMessage-date {
-  color: var(--color-text-light);
-  font-size: var(--font-size-xs);
-}
-
-.ChatMessage-photos {
-  padding-bottom: var(--spacing-unit);
-}
-
-.ChatMessage-photos > img {
-  border: 3px solid rgba(0, 0, 0, 0.05);
-  max-width: 100%;
-}
-
-.ChatMessage-photos > img + img {
-  margin-top: var(--spacing-unit);
 }

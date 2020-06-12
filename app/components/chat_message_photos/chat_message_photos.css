@@ -1,0 +1,46 @@
+.ChatMessagePhotos {
+  display: grid;
+  padding: var(--spacing-unit-s) 0;
+  gap: var(--spacing-unit-xs);
+
+  /*
+   * Each column has a minimum width of 3 units, but will never get
+   * wider than its contents. The contents, in turn, has a max-width
+   * of 5 units, i.e. columns will be between 3 and 5 units wide.
+   */
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(calc(3 * var(--spacing-unit)), max-content)
+  );
+}
+
+.ChatMessagePhotos-photo {
+  position: relative;
+  overflow: hidden;
+
+  max-width: calc(5 * var(--spacing-unit));
+  box-sizing: content-box;
+  padding-bottom: 100%;
+
+  border-radius: var(--border-radius);
+  background-color: var(--color-gray-dark);
+}
+
+.ChatMessagePhotos-photo > img {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The only way to get a subtle inside border with border radius */
+.ChatMessagePhotos-photo::after {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--border-radius);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+}

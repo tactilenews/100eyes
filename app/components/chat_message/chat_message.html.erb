@@ -1,23 +1,21 @@
 <div class="ChatMessage" data-controller="chat-message">
-  <% unless photos.empty? %>
-    <div class="ChatMessage-photos">
-      <% photos.each do |photo| %>
-        <img src="<%= url_for(photo.image) %>" alt="">
-      <% end %>
-    </div>
-  <% end %>
-  <div class="ChatMessage-text" data-target="chat-message.text">
-    <%= c 'plaintext_message', message: message.text %>
+    <div class="ChatMessage-text" data-target="chat-message.text">
+      <%= c 'plaintext_message', message: message.text %>
 
-    <div
-      class="ChatMessage-expand"
-      data-target="chat-message.expand"
-      data-action="click->chat-message#expand"
-    >
-      <%= c 'button', styles: [:inline], label: 'weiterlesen' %>
+      <div
+        class="ChatMessage-expand"
+        data-target="chat-message.expand"
+        data-action="click->chat-message#expand"
+      >
+        <%= c 'button', styles: [:inline], label: 'weiterlesen' %>
+      </div>
     </div>
-  </div>
-  <div class="ChatMessage-date">
-    <%= date_time(message.created_at) %>
-  </div>
+
+    <% unless photos.empty? %>
+      <%= c 'chat_message_photos', photos: photos %>
+    <% end %>
+
+    <div class="ChatMessage-date">
+      <%= date_time(message.created_at) %>
+    </div>
 </div>
