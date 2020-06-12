@@ -8,7 +8,7 @@ class User < ApplicationRecord
   has_many :replied_to_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :replies
   has_many :received_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :received_messages
   default_scope { order(:first_name, :last_name) }
-  validates :email, presence: false, 'valid_email_2/email': true
+  validates :email, uniqueness: true, presence: false, 'valid_email_2/email': true
 
   before_validation do
     self.email = nil if email.blank?

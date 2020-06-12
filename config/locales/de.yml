@@ -2,7 +2,7 @@ de:
   application_name: 100eyes
   components:
     chat:
-      outdated_request: Du hast diese*r Lokalexpert*in bereits eine neue Frage gestellt. Nachfragen zu dieser Frage sind deshalb nicht mehr möglich. 
+      outdated_request: Du hast diese*r Lokalexpert*in bereits eine neue Frage gestellt. Nachfragen zu dieser Frage sind deshalb nicht mehr möglich.
       link_to_active_request: Zur aktuellen Frage
     chat_form:
       placeholder: Gib hier deine Nachfrage ein…
@@ -29,6 +29,8 @@ de:
     user:
       one: Lokalexpert*in
       other: Lokalexpert*innen
+    create: Neue Lokalexpert*in erstellen
+    success: Lokalexpert*in wurde erstellt
     activity: Aktivität
     show_replies: Antworten anzeigen
     has_replied_to: hat auf „%{title}” geantwortet

@@ -31,7 +31,7 @@ RSpec.describe User, type: :model do
   describe '#email' do
     it 'must be unique' do
       create(:user, email: 'user@example.org')
-      expect { create(:user, email: 'user@example.org') }.to raise_error(ActiveRecord::RecordNotUnique)
+      expect { build(:user, email: 'user@example.org').save!(validate: false) }.to raise_error(ActiveRecord::RecordNotUnique)
     end
 
     describe 'no email' do
@@ -43,8 +43,7 @@ RSpec.describe User, type: :model do
 
       describe 'given an existing invalid user with empty string as email address' do
         before(:each) do
-          create(:user, id: 1)
-          User.update(1, email: '')
+          build(:user, id: 1).save!(validate: false)
         end
 
         it { should_not raise_error }
@@ -55,8 +54,8 @@ RSpec.describe User, type: :model do
 
   describe '#telegram_id' do
     it 'must be unique' do
-      User.create!(telegram_id: 1)
-      expect { User.create!(telegram_id: 1) }.to raise_error(ActiveRecord::RecordNotUnique)
+      create(:user, telegram_id: 1)
+      expect { build(:user, telegram_id: 1).save!(validate: false) }.to raise_error(ActiveRecord::RecordNotUnique)
     end
   end
 

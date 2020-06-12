@@ -9,7 +9,7 @@ Rails.application.routes.draw do
 
   resources :requests, only: %i[index show new create]
 
-  resources :users, only: %i[index show update destroy] do
+  resources :users, except: :edit do
     resources :requests, only: %i[show], to: 'requests#show_user_messages'
   end
   post '/users/:id/message', to: 'users#message', as: :user_message
