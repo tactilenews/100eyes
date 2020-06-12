@@ -39,10 +39,21 @@ class Request < ApplicationRecord
   end
 
   def messages_by_user
-    messages.group_by(&:user).transform_values { |messages| messages.sort_by(&:created_at) }
+    messages
+      .where(broadcasted: false)
+      .group_by(&:user)
+      .transform_values { |messages| messages.sort_by(&:created_at) }
   end
 
   def self.broadcast!(request)
-    User.find_each { |user| Message.create! sender: nil, recipient: user, text: request.plaintext, request: request }
+    User.find_each do |user|
+      Message.create!(
+        sender: nil,
+        recipient: user,
+        text: request.plaintext,
+        request: request,
+        broadcasted: true
+      )
+    end
   end
 end

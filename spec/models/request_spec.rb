@@ -60,17 +60,26 @@ RSpec.describe Request, type: :model do
   end
 
   describe '#messages_by_user' do
-    let(:request) { create(:request, :with_interlapping_messages_from_two_users) }
     subject { request.messages_by_user }
+    let(:request) { create(:request) }
 
-    it 'groups by user' do
-      expect(subject.keys).to all(be_a User)
-      expect(subject.length).to eq(2)
+    describe 'with messages by multiple users' do
+      let(:request) { create(:request, :with_interlapping_messages_from_two_users) }
+
+      it 'groups by user' do
+        expect(subject.keys).to all(be_a User)
+        expect(subject.length).to eq(2)
+      end
+
+      it 'sorts by most recent message' do
+        expect(subject.keys.first.name).to eq('Adam Ackermann')
+        expect(subject.keys.second.name).to eq('Zora Zimmermann')
+      end
     end
 
-    it 'sorts by most recent message' do
-      expect(subject.keys.first.name).to eq('Adam Ackermann')
-      expect(subject.keys.second.name).to eq('Zora Zimmermann')
+    it 'ignores broadcasted messages' do
+      create(:message, request: request, broadcasted: true)
+      expect(subject).to be_empty
     end
   end
 
@@ -144,6 +153,7 @@ RSpec.describe Request, type: :model do
       it { should change { Message.count }.from(0).to(2) }
       it { should change { Message.pluck(:recipient_id) }.from([]).to([2, 1]) }
       it { should change { Message.pluck(:sender_id) }.from([]).to([nil, nil]) }
+      it { should change { Message.pluck(:broadcasted) }.from([]).to([true, true]) }
     end
   end
 end
