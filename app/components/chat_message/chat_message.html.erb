@@ -25,4 +25,11 @@
     <div class="ChatMessage-date">
       <a href="#<%= id %>"><%= date_time(message.created_at) %></a>
     </div>
+
+    <% if unknown_content? %>
+      <div class="ChatMessage-unknownContent">
+      <%= c 'icon', icon: 't-warning', styles: [:inline] %>
+      <%= t 'components.chat_message.contains_unknown_content' %>
+      </div>
+    <% end %>
 </div>

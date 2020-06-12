@@ -36,3 +36,7 @@
 .ChatMessage--truncated:not(.ChatMessage--expanded) .ChatMessage-expand {
   display: block;
 }
+
+.ChatMessage-unknownContent {
+  color: var(--color-red);
+}

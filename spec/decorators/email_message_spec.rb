@@ -34,6 +34,39 @@ RSpec.describe EmailMessage do
     end
   end
 
+  describe '#message' do
+    describe '.unknown_content' do
+      subject { email_message.message.unknown_content }
+      describe 'given a mail attachment' do
+        describe 'with a .txt multipart' do
+          let(:mail) do
+            mail = Mail.new do |m|
+              m.from 'user@example.org'
+              m.to '100eyes@example.org'
+              m.subject 'This is a test email'
+            end
+            mail.add_file(Rails.root.join('README.md').to_s)
+            mail
+          end
+          it { should be(true) }
+        end
+
+        describe 'with a .png multipart' do
+          let(:mail) do
+            mail = Mail.new do |m|
+              m.from 'user@example.org'
+              m.to '100eyes@example.org'
+              m.subject 'This is a test email'
+            end
+            mail.add_file(Rails.root.join('example-image.png').to_s)
+            mail
+          end
+          it { should be(false) }
+        end
+      end
+    end
+  end
+
   describe '#photos' do
     subject { email_message.photos }
     describe 'given a file attachment' do

@@ -4,7 +4,12 @@
 # Telegram represents a message containing multiple photos as multiple
 # messages each containing a single photo.
 class TelegramMessage
-  attr_reader :sender, :text, :message, :photos
+  UNKNOWN_CONTENT_KEYS = %w[
+    animation audio document sticker video video_note
+    voice contact dice game poll venue location
+    invoice successful_payment passport_data
+  ].freeze
+  attr_reader :sender, :text, :message, :photos, :unknown_content
 
   def self.from(raw_data)
     new(JSON.parse(raw_data.download))
@@ -14,6 +19,7 @@ class TelegramMessage
     telegram_message = telegram_message.with_indifferent_access
     @text = telegram_message[:text] || telegram_message[:caption]
     @sender = initialize_user(telegram_message)
+    @unknown_content = initialize_unknown_content(telegram_message)
     @message = initialize_message(telegram_message)
     @photos = initialize_photos(telegram_message)
   end
@@ -42,6 +48,10 @@ class TelegramMessage
     sender
   end
 
+  def initialize_unknown_content(telegram_message)
+    @unknown_content = telegram_message.keys.any? { |key| UNKNOWN_CONTENT_KEYS.include?(key) }
+  end
+
   def initialize_message(telegram_message)
     media_group_id = telegram_message['media_group_id']
     message = Message.find_by(telegram_media_group_id: media_group_id) if media_group_id
@@ -51,6 +61,7 @@ class TelegramMessage
       filename: 'telegram_api.json',
       content_type: 'application/json'
     )
+    message.unknown_content = unknown_content
     message
   end
 
