@@ -11,6 +11,21 @@ RSpec.describe Message, type: :model do
     expect(described_class.last).to eq(oldest_message)
   end
 
+  describe '#user' do
+    let(:user) { create(:user) }
+    subject { message.user }
+
+    describe 'with sender' do
+      let(:message) { create(:message, sender: user) }
+      it { should eql(user) }
+    end
+
+    context 'with recipient' do
+      let(:message) { create(:message, :with_recipient, recipient: user) }
+      it { should eql(user) }
+    end
+  end
+
   describe '#reply?' do
     subject { message.reply? }
     describe 'message has a sender' do
