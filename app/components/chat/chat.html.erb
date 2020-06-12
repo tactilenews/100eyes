@@ -2,11 +2,7 @@
   <%= c 'stack' do %>
     <%= c 'user_row', user: user %>
 
-    <%= c 'stack', space: :small do %>
-      <% messages.each do |message| %>
-        <%= c 'chat_row', message: message %>
-      <% end %>
-    <% end %>
+    <%= c 'chat_messages', messages: messages %>
 
     <%= c 'stack' do %>
 

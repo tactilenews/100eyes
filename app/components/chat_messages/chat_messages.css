@@ -1,12 +1,12 @@
-.ChatRow {
+.ChatMessages-item {
   display: flex;
 }
 
-.ChatRow--left {
+.ChatMessages-item--left {
   padding-right: 20%;
 }
 
-.ChatRow--right {
+.ChatMessages-item--right {
   padding-left: 20%;
   flex-direction: row-reverse;
 }
