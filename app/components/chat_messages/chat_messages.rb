@@ -3,6 +3,7 @@
 module ChatMessages
   class ChatMessages < ApplicationComponent
     def initialize(messages:, **)
+      super
       @messages = messages
     end
 

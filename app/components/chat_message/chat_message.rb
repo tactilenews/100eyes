@@ -2,7 +2,8 @@
 
 module ChatMessage
   class ChatMessage < ApplicationComponent
-    def initialize(message:)
+    def initialize(message:, **)
+      super
       @message = message
     end
 
