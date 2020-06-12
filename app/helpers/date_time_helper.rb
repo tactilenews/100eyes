@@ -2,7 +2,7 @@
 
 module DateTimeHelper
   def date_time(date)
-    return I18n.l date, format: :time_only if (Time.zone.now - 1.day) < date
+    return I18n.l date, format: :today if date.today?
 
     I18n.l date, format: :default
   end
