@@ -6,6 +6,8 @@ de:
       link_to_active_request: Zur aktuellen Frage
     chat_message:
       expand: weiterlesen
+    chat_messages_group:
+      reply: nachfragen
     chat_form:
       placeholder: Gib hier deine Nachfrage ein…
       submit: Absenden
