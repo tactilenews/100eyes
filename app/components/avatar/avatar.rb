@@ -11,7 +11,8 @@ module Avatar
       'fallback-squirrel.jpg'
     ].freeze
 
-    def initialize(user: nil)
+    def initialize(user: nil, **)
+      super
       @user = user
     end
 

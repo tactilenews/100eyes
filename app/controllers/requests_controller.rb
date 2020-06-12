@@ -9,7 +9,7 @@ class RequestsController < ApplicationController
   end
 
   def show
-    @replies = @request.replies
+    @message_groups = @request.messages_by_user
   end
 
   def create

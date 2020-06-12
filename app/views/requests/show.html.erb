@@ -14,19 +14,14 @@
           <%= I18n.t 'request.replies' %>
         <% end %>
 
-        <% if @replies.blank? %>
+        <% if @message_groups.blank? %>
           <%= c 'empty_state' do %>
             <%= I18n.t 'request.no_replies' %>
           <% end %>
         <% end %>
 
-        <% @replies.each do |reply| %>
-          <%= c 'excerpt',
-            title: reply.sender_name,
-            date: reply.created_at,
-            text: reply.text,
-            link: reply.conversation_link
-          %>
+        <% @message_groups.each do |user, messages| %>
+          <%= c 'chat_messages_group', user: user, messages: messages %>
         <% end %>
       <% end %>
     <% end %>
