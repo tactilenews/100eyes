@@ -9,28 +9,28 @@ RSpec.describe '/users', type: :request do
 
   describe 'GET /index' do
     it 'should be successful' do
-      get users_url
+      get users_url, headers: auth_headers
       expect(response).to be_successful
     end
   end
 
   describe 'GET /show' do
     it 'should be successful' do
-      get user_url(user)
+      get user_url(user), headers: auth_headers
       expect(response).to be_successful
     end
   end
 
   describe 'GET /requests/:id' do
     it 'should be successful' do
-      get user_request_path(id: the_request.id, user_id: user.id)
+      get user_request_path(id: the_request.id, user_id: user.id), headers: auth_headers
       expect(response).to be_successful
     end
   end
 
   describe 'PATCH /update' do
     let(:new_attrs) { { name: 'Zora Zimmermann', note: '11 Jahre alt', email: 'zora@example.org' } }
-    subject { -> { patch user_url(user), params: { user: new_attrs } } }
+    subject { -> { patch user_url(user), params: { user: new_attrs }, headers: auth_headers } }
 
     it 'updates the requested user' do
       subject.call
@@ -54,7 +54,7 @@ RSpec.describe '/users', type: :request do
   end
 
   describe 'DELETE /destroy' do
-    subject { -> { delete user_url(user) } }
+    subject { -> { delete user_url(user), headers: auth_headers } }
     before(:each) { user }
 
     it 'destroys the requested user' do
@@ -68,7 +68,11 @@ RSpec.describe '/users', type: :request do
   end
 
   describe 'POST /message', telegram_bot: :rails do
-    subject { -> { post user_message_url(user), params: { message: { text: 'Forgot to ask: How are you?' } } } }
+    subject do
+      lambda do
+        post user_message_url(user), params: { message: { text: 'Forgot to ask: How are you?' } }, headers: auth_headers
+      end
+    end
 
     describe 'given a user' do
       let(:params) { {} }

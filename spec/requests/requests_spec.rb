@@ -6,7 +6,7 @@ require 'telegram/bot/rspec/integration/rails'
 RSpec.describe 'Requests', telegram_bot: :rails do
   describe 'POST /requests' do
     before(:each) { allow(Request).to receive(:broadcast!).and_call_original } # is stubbed for every other test
-    subject { -> { post requests_path, params: params } }
+    subject { -> { post requests_path, params: params, headers: auth_headers } }
     let(:params) { { request: { title: 'Example Question', text: 'How do you do?', hints: ['confidential'] } } }
 
     it { should change { Request.count }.from(0).to(1) }
