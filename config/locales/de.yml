@@ -6,7 +6,7 @@ de:
       link_to_active_request: Zur aktuellen Frage
     chat_message:
       expand: weiterlesen
-      contains_unknown_content: Enthält unverarbeitbare Inhalte
+      contains_unknown_content: Enthält nicht unterstützte Inhalte
     chat_messages_group:
       reply: nachfragen
     chat_form:

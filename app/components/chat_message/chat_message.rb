@@ -18,7 +18,7 @@ module ChatMessage
     end
 
     def unknown_content?
-      message.unknown_content
+      message.unknown_content?
     end
 
     attr_reader :message
