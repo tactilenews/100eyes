@@ -20,7 +20,7 @@ class Message < ApplicationRecord
   validates :raw_data, presence: true, if: -> { sender.present? }
   validates :unknown_content, inclusion: { in: [true, false] }
 
-  after_create do
+  before_create do
     send_email
     send_telegram_message
   end
@@ -85,9 +85,13 @@ class Message < ApplicationRecord
   def send_telegram_message
     return unless recipient&.telegram_chat_id
 
-    Telegram.bots[Rails.configuration.bot_id].send_message(
-      chat_id: recipient.telegram_chat_id,
-      text: text
-    )
+    begin
+      Telegram.bots[Rails.configuration.bot_id].send_message(
+        chat_id: recipient.telegram_chat_id,
+        text: text
+      )
+    rescue Telegram::Bot::Forbidden
+      self.blocked = true
+    end
   end
 end

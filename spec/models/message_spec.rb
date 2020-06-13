@@ -134,6 +134,21 @@ RSpec.describe Message, type: :model do
     end
   end
 
+  describe '#before_create' do
+    let(:message) { create(:message, sender: nil, recipient: recipient) }
+    describe 'given a recipient with telegram' do
+      let(:recipient) { create(:user, telegram_chat_id: 47, telegram_id: 11) }
+      describe '#blocked' do
+        subject { message.blocked }
+        it { should be(false) }
+        describe 'but if user blocked the telegram bot' do
+          before(:each) { allow(Telegram.bots[Rails.configuration.bot_id]).to receive(:send_message).and_raise(Telegram::Bot::Forbidden) }
+          it { should be(true) }
+        end
+      end
+    end
+  end
+
   let(:telegram_message_with_photo) do
     {
       'message_id' => 186,
