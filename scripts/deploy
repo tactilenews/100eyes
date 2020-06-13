@@ -1,35 +1,36 @@
 #!/bin/bash
 
-# This workflow builds and deploys the master-branch to the production
-# web server. Deployment is done using rsync over SSH, only uploading
+# This script deploys the application via rsync over SSH, only uploading
 # files that have changed since the last deployment.
 #
 # `DEPLOY_USER`
 #    User account used to connect via SSH to the web server
 #
-# `DEPLOY_USER_PRIVATE_KEY`
-#    Base64 encoded private key of the user specified in `DEPLOY_USER`
-#
 # `DEPLOY_TARGET`
 #    Host of the production server
 #
-# `DEPLOY_TARGET_PUBLIC_KEY`
-#    Base64 encoded public key of the web server
+# `DEPLOY_DRY_RUN`
+#    Set to `true` to run without actually changing anything, only displaying
+#    a list of changes that would be made during a real deployment
+
+# Exit with error code if any command fails
+set -e
+
+# Check if called inside of a rails root directory
+if [[ ! -f "./bin/rails" ]]; then
+  echo "Switch to the root directory of a Rails project to deploy!"
+  exit 1
+fi
+
+# Check if $RAILS_ENV is set
+if [[ -z ${RAILS_ENV+x} ]]; then
+  echo "Set RAILS_ENV in order to deploy!"
+  exit 1
+fi
 
 deploy_exclude="scripts/deploy-exclude"
 deploy_include="scripts/deploy-include"
 deploy_path="~/100eyes"
-
-# Write master.key
-echo $RAILS_MASTER_KEY > config/master.key
-
-# Add user's private key
-mkdir $HOME/.ssh
-echo $DEPLOY_USER_PRIVATE_KEY | base64 --decode > $HOME/.ssh/deploy_rsa
-chmod 400 $HOME/.ssh/deploy_rsa
-
-# Add target's key
-echo $DEPLOY_TARGET_PUBLIC_KEY | base64 --decode >> $HOME/.ssh/known_hosts
 
 # Upload changes using rsync. Only files that match a pattern whitelisted
 # in `scripts/deploy-include` will be uploaded
@@ -43,24 +44,35 @@ echo $DEPLOY_TARGET_PUBLIC_KEY | base64 --decode >> $HOME/.ssh/known_hosts
 #   enable deletion of files that are present on the production server but
 #   not in the current source files anymore.
 
-rsync \
-  --checksum \
-  --delete \
-  --recursive \
-  --links \
-  --compress \
-  --human-readable \
-  --info=name1,stats2 \
-  --rsh="ssh -i $HOME/.ssh/deploy_rsa" \
-  --exclude-from=$deploy_exclude \
-  --include-from=$deploy_include \
-  --exclude='*' \
-  "$GITHUB_WORKSPACE/" \
-  "$DEPLOY_USER@$DEPLOY_TARGET:$deploy_path"
+rsync_args=(
+  --checksum
+  --delete
+  --recursive
+  --links
+  --compress
+  --human-readable
+  --info=name1,stats2
+  --exclude-from=$deploy_exclude
+  --include-from=$deploy_include
+  --exclude='*'
+)
 
-  ssh -i $HOME/.ssh/deploy_rsa $DEPLOY_USER@$DEPLOY_TARGET \
-    "cd $deploy_path &&" \
-    "BUNDLE_PATH=vendor/bundle bundle install --without development test &&" \
-    "RAILS_ENV=production bin/rake db:prepare &&" \
-    "supervisorctl restart 100eyes &&" \
-    "supervisorctl restart 100eyes-telegram-bot-poller"
+# Add dry run flag
+if [[ -n ${DEPLOY_DRY_RUN+x} ]]; then
+    rsync_args+=(--dry-run)
+fi
+
+rsync ${rsync_args[@]} "./" "$DEPLOY_USER@$DEPLOY_TARGET:$deploy_path"
+
+# No need to run the following commands in case of a dry run
+if [[ -n ${DEPLOY_DRY_RUN+x} ]]; then
+  exit 0
+fi
+
+# Restart services, run migrations, install ruby dependencies
+ssh $DEPLOY_USER@$DEPLOY_TARGET \
+  "cd $deploy_path &&" \
+  "BUNDLE_PATH=vendor/bundle bundle install --without development test &&" \
+  "RAILS_ENV=$RAILS_ENV bin/rake db:prepare &&" \
+  "supervisorctl restart 100eyes &&" \
+  "supervisorctl restart 100eyes-telegram-bot-poller"

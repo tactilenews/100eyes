@@ -80,8 +80,15 @@ test:
 #   production:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
-production:
+
+common_production: &common_production
   <<: *default
-  database: app_production
-  username: app
-  password: <%= Rails.application.credentials.dig(:production, :postgres_password) %>
+  database: <%= Rails.application.credentials.dig(:postgres, :database) %>
+  username: <%= Rails.application.credentials.dig(:postgres, :user) %>
+  password: <%= Rails.application.credentials.dig(:postgres, :password) %>
+
+production:
+  <<: *common_production
+
+staging:
+  <<: *common_production
