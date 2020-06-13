@@ -34,6 +34,12 @@ RSpec.describe User, type: :model do
       expect { build(:user, email: 'user@example.org').save!(validate: false) }.to raise_error(ActiveRecord::RecordNotUnique)
     end
 
+    describe 'two user accounts without email' do
+      before(:each) { create(:user, email: nil) }
+      subject { build(:user, email: nil) }
+      it { should be_valid }
+    end
+
     describe 'no email' do
       subject { -> { build(:user, email: '').save! } }
 
