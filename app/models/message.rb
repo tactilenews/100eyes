@@ -18,6 +18,7 @@ class Message < ApplicationRecord
 
   has_many_attached :raw_data
   validates :raw_data, presence: true, if: -> { sender.present? }
+  validates :unknown_content, inclusion: { in: [true, false] }
 
   after_create do
     send_email

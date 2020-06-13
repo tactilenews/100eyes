@@ -2,6 +2,7 @@
 
 FactoryBot.define do
   factory :message do
+    unknown_content { false }
     association :sender, factory: :user
     association :request
     with_sender

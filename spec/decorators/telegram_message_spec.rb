@@ -43,6 +43,7 @@ RSpec.describe TelegramMessage do
     let(:message) { message_with_photo }
     subject { telegram_message.message }
     it { should be_a(Message) }
+
     describe 'assigning a request and calling #save! on the message' do
       it {
         expect do
@@ -65,6 +66,21 @@ RSpec.describe TelegramMessage do
 
         it { expect { 3.times { save_message_and_photo.call } }.to(change { Message.count }.from(0).to(1)) }
         it { expect { 3.times { save_message_and_photo.call } }.to(change { Photo.count }.from(0).to(3)) }
+      end
+    end
+
+    describe '.unknown_content' do
+      subject { telegram_message.message.unknown_content }
+      describe 'given a telegram api message' do
+        describe 'with a photo' do
+          let(:message) { message_with_photo }
+          it { should be(false) }
+        end
+
+        describe 'with a voice message' do
+          let(:message) { message_with_photo.merge({ audio: 'something' }) }
+          it { should be(true) }
+        end
       end
     end
   end
