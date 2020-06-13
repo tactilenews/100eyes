@@ -9,12 +9,26 @@ jobs:
     runs-on: ubuntu-latest
     env:
       RUBYOPT: "-W:no-deprecated"
-      RAILS_ENV: production
-      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+      RAILS_ENV: staging
+      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY_STAGING }}
+      DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+      DEPLOY_TARGET: ${{ secrets.DEPLOY_TARGET }}
+      SSH_AUTH_SOCK: /tmp/ssh_agent.sock
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+
+      - name: Start SSH agent and add deploy user's private key
+        run: |
+          mkdir $HOME/.ssh
+          echo ${{ secrets.DEPLOY_USER_PRIVATE_KEY }} | base64 --decode > $HOME/.ssh/deploy_rsa
+          chmod 400 $HOME/.ssh/deploy_rsa > /dev/null
+          ssh-agent -a $SSH_AUTH_SOCK
+          ssh-add $HOME/.ssh/deploy_rsa
+
+      - name: Add deployment target's public key
+        run: echo ${{ secrets.DEPLOY_TARGET_PUBLIC_KEY }} | base64 --decode >> $HOME/.ssh/known_hosts
 
       - name: Install ruby
         uses: actions/setup-ruby@v1
@@ -48,8 +62,3 @@ jobs:
 
       - name: Deploy app using rsync
         run: ./scripts/deploy
-        env:
-          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-          DEPLOY_USER_PRIVATE_KEY: ${{ secrets.DEPLOY_USER_PRIVATE_KEY }}
-          DEPLOY_TARGET: ${{ secrets.DEPLOY_TARGET }}
-          DEPLOY_TARGET_PUBLIC_KEY: ${{ secrets.DEPLOY_TARGET_PUBLIC_KEY }}
