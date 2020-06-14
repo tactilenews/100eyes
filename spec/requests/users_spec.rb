@@ -29,7 +29,18 @@ RSpec.describe '/users', type: :request do
   end
 
   describe 'PATCH /update' do
-    let(:new_attrs) { { name: 'Zora Zimmermann', note: '11 Jahre alt', email: 'zora@example.org' } }
+    let(:new_attrs) do
+      {
+        name: 'Zora Zimmermann',
+        phone: '012345678',
+        street: 'Musterstraße 123',
+        zip_code: '12345',
+        city: 'Musterstadt',
+        note: '11 Jahre alt',
+        email: 'zora@example.org'
+      }
+    end
+
     subject { -> { patch user_url(user), params: { user: new_attrs }, headers: auth_headers } }
 
     it 'updates the requested user' do
@@ -38,6 +49,10 @@ RSpec.describe '/users', type: :request do
 
       expect(user.first_name).to eq('Zora')
       expect(user.last_name).to eq('Zimmermann')
+      expect(user.phone).to eq('012345678')
+      expect(user.street).to eq('Musterstraße 123')
+      expect(user.zip_code).to eq('12345')
+      expect(user.city).to eq('Musterstadt')
       expect(user.note).to eq('11 Jahre alt')
       expect(user.email).to eq('zora@example.org')
     end

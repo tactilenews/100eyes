@@ -16,7 +16,7 @@ module Field
     def input_defaults
       basic_defaults
         .merge({
-                 placeholder: I18n.t("#{type}.form.#{id}.placeholder", value: value),
+                 placeholder: I18n.t("#{type}.form.#{id}.placeholder", value: value, default: nil),
                  title: I18n.t("#{type}.form.#{id}.title", value: value, default: nil),
                  styles: [:small]
                })

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_13_115522) do
+ActiveRecord::Schema.define(version: 2020_06_14_220817) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -100,6 +100,10 @@ ActiveRecord::Schema.define(version: 2020_06_13_115522) do
     t.integer "telegram_id"
     t.string "avatar_url"
     t.string "note"
+    t.string "street"
+    t.string "zip_code"
+    t.string "city"
+    t.string "phone"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["telegram_chat_id"], name: "index_users_on_telegram_chat_id", unique: true
     t.index ["telegram_id"], name: "index_users_on_telegram_id", unique: true
