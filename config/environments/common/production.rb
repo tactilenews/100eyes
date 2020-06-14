@@ -105,7 +105,6 @@ Rails.application.configure do
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
 
   # CUSTOM
-  config.bot_id = (ENV['BOT'] || :default).to_sym
   config.action_mailer.smtp_settings = {
     user_name: Rails.application.credentials.sendgrid[:user],
     password: Rails.application.credentials.sendgrid[:password],

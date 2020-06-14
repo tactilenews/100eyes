@@ -37,6 +37,8 @@
   display: block;
 }
 
-.ChatMessage-unknownContent {
+.ChatMessage-warnings {
+  display: flex;
+  flex-direction: column;
   color: var(--color-red);
 }
