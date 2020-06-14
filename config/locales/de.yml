@@ -125,10 +125,9 @@ de:
       other: Nachrichtenverläufe
 
   telegram:
-    welcome_message: >
-      Hallo, schön, dass du an #%{project_name} teilnimmst. Ich bin der Bot der
-      Dialogsoftware #100eyes. Ich freue mich auf den Dialog mit dir.
-
+    welcome_message: |
+      Herzlich Willkommen bei #50survivors. Danke, dass Sie an unserer Dialogrecherche teilnehmen. In den kommenden Wochen nutzen wir Telegram für den Austausch. Ein Bot arbeitet wie ein Postbote für uns und stellt Fragen und Antworten zu. Ihre Nachrichten lesen und beantworten wir aber selbstverständlich persönlich. Wir freuen uns sehr auf den Dialog mit Ihnen!
+      Isabelle Buckow, Astrid Csuraji, Jakob Vicari und Bertram Weiß
   activerecord:
     errors:
       messages:
