@@ -21,10 +21,8 @@ class Request < ApplicationRecord
 
   def plaintext
     parts = []
-    parts << 'Hallo, die Redaktion hat eine neue Frage an Sie:'
     parts << text
     parts += hints.map { |hint| HINT_TEXTS[hint.to_sym] }
-    parts << 'Vielen Dank für Ihre Hilfe bei unserer Recherche!'
     parts.join("\n\n")
   end
 

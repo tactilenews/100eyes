@@ -36,11 +36,11 @@ RSpec.describe Request, type: :model do
     subject { request.plaintext }
 
     it 'returns correct plaintext message' do
-      expected  = "Hallo, die Redaktion hat eine neue Frage an Sie:\n\n"
-      expected += "What is the answer to life, the universe, and everything?\n\n"
-      expected += "#{I18n.t 'request.hints.photo.text'}\n\n"
-      expected += "#{I18n.t 'request.hints.confidential.text'}\n\n"
-      expected += 'Vielen Dank für Ihre Hilfe bei unserer Recherche!'
+      expected = [
+        'What is the answer to life, the universe, and everything?',
+        I18n.t('request.hints.photo.text'),
+        I18n.t('request.hints.confidential.text')
+      ].join("\n\n")
 
       expect(subject).to eql(expected)
     end
@@ -49,13 +49,7 @@ RSpec.describe Request, type: :model do
       let(:request) { create(:request, text: 'Hello World!', hints: []) }
       subject { request.plaintext }
 
-      it 'returns correct plaintext message' do
-        expected  = "Hallo, die Redaktion hat eine neue Frage an Sie:\n\n"
-        expected += "Hello World!\n\n"
-        expected += 'Vielen Dank für Ihre Hilfe bei unserer Recherche!'
-
-        expect(subject).to eql(expected)
-      end
+      it { should eql('Hello World!') }
     end
   end
 
