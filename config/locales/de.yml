@@ -47,6 +47,8 @@ de:
       name:
         label: Name
         placeholder: Vor- und Nachname
+      phone:
+        label: Telefon
       email:
         label: E-Mail-Adresse
         placeholder: Keine E-Mail-Adresse hinterlegt
@@ -54,6 +56,12 @@ de:
         label: Telegram
         placeholder: Kein Telegram-Nutzername hinterlegt
         title: Du kannst den Nutzernamen nicht selbst ändern. Sobald %{value} das erste Mal via Telegram interagiert, erscheint hier der Nutzername.
+      street:
+        label: Straße
+      zip_code:
+        label: Postleitzahl
+      city:
+        label: Stadt
       note:
         label: Notiz
         placeholder: Klicke hier, um eine Notiz zu %{value} zu hinterlegen

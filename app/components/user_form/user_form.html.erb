@@ -4,12 +4,28 @@
       <%= c 'input', field.input_defaults %>
     <% end %>
 
+    <%= c 'field', object: user, id: :phone, styles: [:horizontal] do |field| %>
+      <%= c 'input', field.input_defaults.merge(type: :phone) %>
+    <% end %>
+
     <%= c 'field', object: user, id: :email, styles: [:horizontal] do |field| %>
       <%= c 'input', field.input_defaults %>
     <% end %>
 
     <%= c 'field', object: user, id: :username, styles: [:horizontal] do |field | %>
       <%= c 'input', field.input_defaults.merge(disabled: true) %>
+    <% end %>
+
+    <%= c 'field', object: user, id: :street, styles: [:horizontal] do |field | %>
+      <%= c 'input', field.input_defaults %>
+    <% end %>
+
+    <%= c 'field', object: user, id: :zip_code, styles: [:horizontal] do |field | %>
+      <%= c 'input', field.input_defaults %>
+    <% end %>
+
+    <%= c 'field', object: user, id: :city, styles: [:horizontal] do |field | %>
+      <%= c 'input', field.input_defaults %>
     <% end %>
 
     <%= c 'field', object: user, id: :note, styles: [:horizontal] do |field| %>
