@@ -1,2 +1,4 @@
 vendor/bundle/***
 *.key
+.DS_Store
+public/packs-test
