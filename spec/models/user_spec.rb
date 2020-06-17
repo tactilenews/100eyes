@@ -211,6 +211,14 @@ RSpec.describe User, type: :model do
       it { should eq(the_request) }
     end
 
+    describe 'if a request was created' do
+      before(:each) { the_request }
+      describe 'and afterwards a user joins' do
+        before(:each) { user }
+        it { should eq(the_request) }
+      end
+    end
+
     describe 'when many requests are sent to the user' do
       before(:each) do
         another_request = create(:request, created_at: 1.day.ago)
