@@ -26,7 +26,7 @@ default: &default
 
 development:
   <<: *default
-  database: app_development
+  database: <%= ENV["APP_DATABASE_NAME"] || 'app_development' %>
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.

@@ -11,6 +11,7 @@ x-defaults: &x-defaults
     APP_DATABASE_HOST: db
     APP_DATABASE_USERNAME: postgres
     APP_DATABASE_PASSWORD: postgres
+    APP_DATABASE_NAME: "${APP_DATABASE_NAME:-app_development}"
     MAILSERVER_HOST: mailserver
     MAILSERVER_PORT: 25
     WEBPACKER_DEV_SERVER_HOST: webpack
@@ -44,7 +45,7 @@ services:
   db:
     image: postgres:12.2-alpine
     environment:
-      POSTGRES_DB: app_development
+      POSTGRES_DB: "${APP_DATABASE_NAME:-app_development}"
       POSTGRES_HOST_AUTH_METHOD: trust
     volumes:
       - postgres_data:/var/lib/postgresql/data
