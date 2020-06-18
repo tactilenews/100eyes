@@ -254,7 +254,7 @@ GEM
     vcr (6.0.0)
     view_component (2.11.1)
       activesupport (>= 5.0.0, < 7.0)
-    web-console (4.0.2)
+    web-console (4.0.3)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
