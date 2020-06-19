@@ -21,6 +21,31 @@ RSpec.describe User, type: :model do
     expect(User.third).to eq(zora)
   end
 
+  describe '.find_by_email' do
+    subject { described_class.find_by_email(address) }
+
+    describe 'with lowercase address' do
+      let(:user) { create(:user, email: 'UPPER@EXAMPLE.ORG') }
+      let(:address) { 'upper@example.org' }
+
+      it { should eq(user) }
+    end
+
+    describe 'with uppercase address' do
+      let(:user) { create(:user, email: 'lower@example.org') }
+      let(:address) { 'LOWER@EXAMPLE.ORG' }
+
+      it { should eq(user) }
+    end
+
+    describe 'with multiple addresses' do
+      let(:user) { create(:user, email: 'zora@example.org') }
+      let(:address) { ['other@example.org', 'zora@example.org'] }
+
+      it { should eq(user) }
+    end
+  end
+
   describe '#name=' do
     let(:user) { User.new(first_name: 'John', last_name: 'Doe') }
     subject { -> { user.name = 'Till Prochaska' } }
@@ -31,7 +56,8 @@ RSpec.describe User, type: :model do
   describe '#email' do
     it 'must be unique' do
       create(:user, email: 'user@example.org')
-      expect { build(:user, email: 'user@example.org').save!(validate: false) }.to raise_error(ActiveRecord::RecordNotUnique)
+      expect { create(:user, email: 'user@example.org') }.to raise_error(ActiveRecord::RecordInvalid)
+      expect { create(:user, email: 'USER@example.org') }.to raise_error(ActiveRecord::RecordInvalid)
     end
 
     describe 'two user accounts without email' do
