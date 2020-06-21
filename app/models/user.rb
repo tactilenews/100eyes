@@ -50,7 +50,7 @@ class User < ApplicationRecord
   end
 
   def active_request
-    received_requests.reorder(created_at: :desc).first
+    received_requests.reorder(created_at: :desc).first || Request.reorder(created_at: :desc).first
   end
 
   def telegram?
