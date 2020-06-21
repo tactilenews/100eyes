@@ -24,7 +24,7 @@ class EmailMessage
   end
 
   def initialize_user(mail)
-    User.find_by(email: mail.from)
+    User.find_by_email(mail.from)
   end
 
   def initialize_message(mail)

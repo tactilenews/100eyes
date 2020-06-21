@@ -8,10 +8,14 @@ class User < ApplicationRecord
   has_many :replied_to_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :replies
   has_many :received_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :received_messages
   default_scope { order(:first_name, :last_name) }
-  validates :email, uniqueness: true, allow_nil: true, 'valid_email_2/email': true
+  validates :email, uniqueness: { case_sensitive: false }, allow_nil: true, 'valid_email_2/email': true
 
   before_validation do
     self.email = nil if email.blank?
+  end
+
+  def self.find_by_email(email)
+    find_by('lower(email) in (?)', Array.wrap(email).map(&:downcase))
   end
 
   def reply(message_decorator)
