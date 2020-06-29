@@ -6,8 +6,8 @@ FactoryBot.define do
 
     trait :with_interlapping_messages_from_two_users do
       after(:create) do |request, _|
-        adam = create(:user, name: 'Adam Ackermann')
-        zora = create(:user, name: 'Zora Zimmermann')
+        adam = create(:user, first_name: 'Adam', last_name: 'Ackermann')
+        zora = create(:user, first_name: 'Zora', last_name: 'Zimmermann')
 
         create(:message, request: request, sender: adam, created_at: 3.hours.ago)
         create(:message, request: request, sender: zora, created_at: 2.hours.ago)
