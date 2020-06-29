@@ -1,3 +1,7 @@
 <div class="<%= class_names.join(' ') %>">
-  <img src="<%= url %>" alt="" />
+  <% if url %>
+    <img src="<%= url %>" alt="<%= alt_text %>" />
+  <% else %>
+    <span class="Avatar-initials"><%= initials %></span>
+  <% end %>
 </div>

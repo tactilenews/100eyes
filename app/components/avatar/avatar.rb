@@ -2,15 +2,6 @@
 
 module Avatar
   class Avatar < ApplicationComponent
-    FALLBACK_BASE_URL = '/avatars'
-    FALLBACK_IMAGES = [
-      'fallback-cat.jpg',
-      'fallback-dog.jpg',
-      'fallback-otter.jpg',
-      'fallback-seal.jpg',
-      'fallback-squirrel.jpg'
-    ].freeze
-
     def initialize(user: nil, **)
       super
       @user = user
@@ -25,12 +16,22 @@ module Avatar
     end
 
     def url
-      user&.avatar_url || fallback_url
+      user&.avatar_url
     end
 
-    def fallback_url
-      file = FALLBACK_IMAGES[key % FALLBACK_IMAGES.length]
-      "#{FALLBACK_BASE_URL}/#{file}"
+    def alt_text
+      return 'Unknown avatar' unless user
+
+      "#{user.name}'s avatar"
+    end
+
+    def initials
+      return '?' unless user
+
+      initials = [user.first_name, user.last_name].map { |name| name&.first }.compact
+      return '?' if initials.empty?
+
+      initials.join('')
     end
   end
 end
