@@ -86,39 +86,39 @@ de:
       photo:
         label: Fotos
         text: >
-          Schicken Sie uns doch auch ein Foto (oder mehrere). Bitte schicken Sie
-          nur Fotos, die Sie selber gemacht haben. Mit der Zusendung von Fotos
-          geben Sie gleichzeitig Ihr Einverständnis für eine mögliche
-          Veröffentlichung. Bei Veröffentlichung nennen wir Sie als Urheber
+          Schick uns doch auch ein Foto (oder mehrere). Bitte schick uns
+          nur Fotos, die du selber gemacht hast. Mit der Zusendung von Fotos
+          gibst du gleichzeitig dein Einverständnis für eine mögliche
+          Veröffentlichung. Bei Veröffentlichung nennen wir dich als Urheber
           (Foto: Max Mustermann/100eyes).
       address:
         label: Adressen
         text: >
-          Schicken Sie uns doch eine Adresse oder genaue Koordinaten. Wir nutzen
+          Schick uns doch eine Adresse oder genaue Koordinaten. Wir nutzen
           die Geodaten für unsere Recherchen und werden sie eventuell in einem
           Text verarbeiten oder als Datenpunkt auf einer Karte verwenden.
       contact:
         label: Kontaktdaten
         text: >
-          Schicken Sie uns gerne Kontaktdaten. Wir nutzen die Kontaktdaten für
+          Schick uns gerne Kontaktdaten. Wir nutzen die Kontaktdaten für
           unsere Recherchen und werden die Person eventuell kontaktieren, aber
           keine Kontaktdaten veröffentlichen.
       medicalInfo:
         label: Medizinische Informationen
         text: >
-          Sie stellen uns hier möglicherweise sensible medizinische
-          Informationen bereit. Wir sind uns dessen bewusst und behandeln Ihre
-          Daten mit aller gebotenen Vorsicht. Wenn Sie uns Daten schicken,
-          helfen uns diese Informationen für unsere weiteren Recherchen. Ihre
+          Du stellst uns hier möglicherweise sensible medizinische
+          Informationen bereit. Wir sind uns dessen bewusst und behandeln deine
+          Daten mit aller gebotenen Vorsicht. Wenn du uns Daten schickst,
+          helfen uns diese Informationen für unsere weiteren Recherchen. Deine
           Daten werden wir nur intern auswerten, aber nicht veröffentlichen. Es
-          sei denn, Sie geben Ihr ausdrückliches Einverständnis, nachdem wir Sie
-          separat darum gebeten haben.
+          sei denn, du gibst uns dein ausdrückliches Einverständnis, nachdem wir
+          dich separat darum gebeten haben.
       confidential:
         label: Vertrauliche Informationen
         text: >
-          Sie stellen uns hier möglicherweise vertrauliche Informationen bereit.
+          Du stellst uns hier möglicherweise vertrauliche Informationen bereit.
           Wir sind uns dessen bewusst und behandeln diese Informationen mit
-          aller gebotenen Vorsicht. Wir werden Ihre Informationen nur intern
+          aller gebotenen Vorsicht. Wir werden deine Informationen nur intern
           auswerten, aber nicht ungefragt veröffentlichen.
     no_replies: Bisher hat noch niemand auf diese Frage geantwortet. Schau doch später noch einmal rein!
     form:
@@ -287,7 +287,7 @@ de:
         one: hat die falsche Länge (muss genau 1 Zeichen haben)
         other: hat die falsche Länge (muss genau %{count} Zeichen haben)
     template:
-      body: 'Bitte überprüfen Sie die folgenden Felder:'
+      body: 'Bitte überprüfe die folgenden Felder:'
       header:
         one: 'Konnte %{model} nicht speichern: ein Fehler.'
         other: 'Konnte %{model} nicht speichern: %{count} Fehler.'
