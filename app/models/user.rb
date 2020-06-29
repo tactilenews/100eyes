@@ -32,12 +32,6 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
-  def name=(full_name)
-    first_name, last_name = full_name.split(' ')
-    self.first_name = first_name
-    self.last_name = last_name
-  end
-
   def conversation_about(request)
     Message
       .where(request: request, sender: self)
