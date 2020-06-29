@@ -44,9 +44,10 @@ de:
     invalid: Informationen zu %{name} sind ungültig
     message-send: Nachricht an %{name} wurde verschickt
     form:
-      name:
-        label: Name
-        placeholder: Vor- und Nachname
+      first_name:
+        label: Vorname
+      last_name:
+        label: Nachname
       phone:
         label: Telefon
       email:

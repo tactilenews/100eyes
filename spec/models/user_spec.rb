@@ -46,13 +46,6 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '#name=' do
-    let(:user) { User.new(first_name: 'John', last_name: 'Doe') }
-    subject { -> { user.name = 'Till Prochaska' } }
-    it { should change { user.first_name }.from('John').to('Till') }
-    it { should change { user.last_name }.from('Doe').to('Prochaska') }
-  end
-
   describe '#email' do
     it 'must be unique' do
       create(:user, email: 'user@example.org')

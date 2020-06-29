@@ -31,7 +31,8 @@ RSpec.describe '/users', type: :request do
   describe 'PATCH /update' do
     let(:new_attrs) do
       {
-        name: 'Zora Zimmermann',
+        first_name: 'Zora',
+        last_name: 'Zimmermann',
         phone: '012345678',
         street: 'Musterstraße 123',
         zip_code: '12345',

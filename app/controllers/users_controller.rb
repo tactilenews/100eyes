@@ -52,7 +52,7 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:note, :name, :email, :phone, :street, :zip_code, :city)
+    params.require(:user).permit(:note, :first_name, :last_name, :email, :phone, :street, :zip_code, :city)
   end
 
   def message_params
