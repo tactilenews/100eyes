@@ -56,7 +56,7 @@ Rails.application.configure do
   config.active_job.queue_adapter = :test
 
   config.mailer = {
-    from: '100eyes-test-account@example.org'
+    from: '100eyes <100eyes-test-account@example.org>'
   }
   config.project_name = '100-test-eyes'
 end
