@@ -3,6 +3,7 @@
 class Telegram::WebhookController < Telegram::Bot::UpdatesController
   def message(message)
     tm = TelegramMessage.new(message)
+    respond_with :message, text: I18n.t('telegram.unknown_content_message') if tm.unknown_content
     user = tm.sender
     user.save!
     user.reply(tm)

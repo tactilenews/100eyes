@@ -29,5 +29,19 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
       before(:each) { subject.call }
       it { expect(User.first.telegram_id).to eq(47) }
     end
+
+    describe 'sending an audio message' do
+      let(:unknown_content_message) do
+        [
+          'Unsere Software kann derzeit Textnachrichten und Bilder verarbeiten',
+          'aber noch keine besonderen Inhalte wie Sprachnachrichten oder',
+          'Dokumente. Für die Zwischenzeit bitten wir dich, Nachrichten mit',
+          'solchen Inhalten an @FrauCsu (Astrid Csuraji) zu schicken. Vielen',
+          "Dank!\n"
+        ].join(' ')
+      end
+      subject { -> { dispatch_message 'Hello Bot!', { from: { id: 47, username: 'Joe' }, audio: 'something' } } }
+      it { should respond_with_message unknown_content_message }
+    end
   end
 end
