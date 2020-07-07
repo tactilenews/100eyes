@@ -8,12 +8,12 @@
       </li>
       <li class="NavBar-item">
         <%= link_to users_path do %>
-          <%= I18n.t 'user.user', count: :many %>
+          <%= I18n.t 'components.nav_bar.community', count: :many %>
         <% end %>
       </li>
       <li class="NavBar-item">
         <%= link_to requests_path do %>
-          <%= I18n.t 'request.request', count: :many %>
+          <%= I18n.t 'components.nav_bar.investigation', count: :many %>
         <% end %>
       </li>
     </ul>

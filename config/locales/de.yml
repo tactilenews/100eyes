@@ -2,27 +2,35 @@ de:
   application_name: 100eyes
   components:
     chat:
-      outdated_request: Du hast diese*r Lokalexpert*in bereits eine neue Frage gestellt. Nachfragen zu dieser Frage sind deshalb nicht mehr möglich.
+      outdated_request: Du hast diesem Mitglied bereits eine neue Frage gestellt. Nachfragen zu dieser Frage sind deshalb nicht mehr möglich.
       link_to_active_request: Zur aktuellen Frage
     chat_message:
       expand: weiterlesen
       contains_unknown_content: Enthält nicht unterstützte Inhalte
-      blocked_by_user: Wurde von der Lokalexpert*in blockiert
+      blocked_by_user: wurde von diesem Mitglied blockiert
     chat_messages_group:
       reply: nachfragen
     chat_form:
       placeholder: Gib hier deine Nachfrage ein…
       submit: Absenden
+    nav_bar:
+      community: Community
+      investigation: Recherche
 
   message_mailer:
     new_message_email:
-      subject: Die Redaktion hat eine neue Frage an Sie
+      subject: Die Redaktion hat eine neue Frage an dich
+
+  reply_mailer:
+    user_not_found_email:
+      subject: Wir können deine E-Mail Adresse nicht zuordnen
+      body: Wir können deine E-Mail Adresse %{email} leider keinem unserer Benutzerprofile zuordnen.
 
   save: Speichern
   discard: Änderungen verwerfen
 
   dashboard:
-    title: Willkommen bei 100eyes. Nutzen Sie die Intelligenz der Community.
+    title: Willkommen bei 100eyes. Nutze die Intelligenz der Community.
     subtitle: Mit 100eyes kannst du 50 Menschen aus deiner Region Fragen stellen.
 
   search:
@@ -33,10 +41,10 @@ de:
 
   user:
     user:
-      one: Lokalexpert*in
-      other: Lokalexpert*innen
-    create: Neue Lokalexpert*in erstellen
-    success: Lokalexpert*in wurde erstellt
+      one: Mitglied
+      other: Mitglieder
+    create: Neues Mitglied erstellen
+    success: Mitglied wurde erstellt
     activity: Aktivität
     show_replies: Antworten anzeigen
     has_replied_to: hat auf „%{title}” geantwortet
@@ -72,53 +80,53 @@ de:
       one: Frage
       other: Fragen
     create: Neue Frage stellen
-    send: Frage an alle Lokalexpert*innen senden
-    success: Deine Frage wurde erfolgreich an alle Lokalexpert*innen gesendet
+    send: Frage an die Community senden
+    success: Deine Frage wurde erfolgreich an die Community gesendet
     replies: Alle Antworten
     hints:
       photo:
         label: Fotos
         text: >
-          Schicken Sie uns doch auch ein Foto (oder mehrere). Bitte schicken Sie
-          nur Fotos, die Sie selber gemacht haben. Mit der Zusendung von Fotos
-          geben Sie gleichzeitig Ihr Einverständnis für eine mögliche
-          Veröffentlichung. Bei Veröffentlichung nennen wir Sie als Urheber
+          Schick uns doch auch ein Foto (oder mehrere). Bitte schick uns
+          nur Fotos, die du selber gemacht hast. Mit der Zusendung von Fotos
+          gibst du gleichzeitig dein Einverständnis für eine mögliche
+          Veröffentlichung. Bei Veröffentlichung nennen wir dich als Urheber
           (Foto: Max Mustermann/100eyes).
       address:
         label: Adressen
         text: >
-          Schicken Sie uns doch eine Adresse oder genaue Koordinaten. Wir nutzen
+          Schick uns doch eine Adresse oder genaue Koordinaten. Wir nutzen
           die Geodaten für unsere Recherchen und werden sie eventuell in einem
           Text verarbeiten oder als Datenpunkt auf einer Karte verwenden.
       contact:
         label: Kontaktdaten
         text: >
-          Schicken Sie uns gerne Kontaktdaten. Wir nutzen die Kontaktdaten für
+          Schick uns gerne Kontaktdaten. Wir nutzen die Kontaktdaten für
           unsere Recherchen und werden die Person eventuell kontaktieren, aber
           keine Kontaktdaten veröffentlichen.
       medicalInfo:
         label: Medizinische Informationen
         text: >
-          Sie stellen uns hier möglicherweise sensible medizinische
-          Informationen bereit. Wir sind uns dessen bewusst und behandeln Ihre
-          Daten mit aller gebotenen Vorsicht. Wenn Sie uns Daten schicken,
-          helfen uns diese Informationen für unsere weiteren Recherchen. Ihre
+          Du stellst uns hier möglicherweise sensible medizinische
+          Informationen bereit. Wir sind uns dessen bewusst und behandeln deine
+          Daten mit aller gebotenen Vorsicht. Wenn du uns Daten schickst,
+          helfen uns diese Informationen für unsere weiteren Recherchen. Deine
           Daten werden wir nur intern auswerten, aber nicht veröffentlichen. Es
-          sei denn, Sie geben Ihr ausdrückliches Einverständnis, nachdem wir Sie
-          separat darum gebeten haben.
+          sei denn, du gibst uns dein ausdrückliches Einverständnis, nachdem wir
+          dich separat darum gebeten haben.
       confidential:
         label: Vertrauliche Informationen
         text: >
-          Sie stellen uns hier möglicherweise vertrauliche Informationen bereit.
+          Du stellst uns hier möglicherweise vertrauliche Informationen bereit.
           Wir sind uns dessen bewusst und behandeln diese Informationen mit
-          aller gebotenen Vorsicht. Wir werden Ihre Informationen nur intern
+          aller gebotenen Vorsicht. Wir werden deine Informationen nur intern
           auswerten, aber nicht ungefragt veröffentlichen.
     no_replies: Bisher hat noch niemand auf diese Frage geantwortet. Schau doch später noch einmal rein!
     form:
-      preview: Diese Nachricht erhalten die Lokalexpert*innen
+      preview: Diese Nachricht erhält die Community
       title:
         label: Interner Titel
-        help: Damit du zwischen all deinen Fragen den Überblick behältst. Der Titel wird nicht an die Lokalexpert*innen gesandt.
+        help: Damit du zwischen all deinen Fragen den Überblick behältst. Der Titel wird nicht an die Community gesandt.
         placeholder: z.B. Thema der Frage
       text:
         label: Was möchtest du wissen?
@@ -126,7 +134,7 @@ de:
         placeholder: Gib hier deine Frage ein…
       hints:
         label: Hinweise anhängen
-        help: Erinnere die Lokalexpert*innen, welche Inhalte du benötigst und wofür du sie verwendest. Hierfür gibt es die folgenden Textbausteine.
+        help: Erinnere die Community, welche Inhalte du benötigst und wofür du sie verwendest. Hierfür gibt es die folgenden Textbausteine.
 
   conversation:
     conversation:
@@ -280,7 +288,7 @@ de:
         one: hat die falsche Länge (muss genau 1 Zeichen haben)
         other: hat die falsche Länge (muss genau %{count} Zeichen haben)
     template:
-      body: 'Bitte überprüfen Sie die folgenden Felder:'
+      body: 'Bitte überprüfe die folgenden Felder:'
       header:
         one: 'Konnte %{model} nicht speichern: ein Fehler.'
         other: 'Konnte %{model} nicht speichern: %{count} Fehler.'

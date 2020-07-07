@@ -10,7 +10,7 @@ RSpec.describe MessageMailer, type: :mailer do
 
     describe 'subject' do
       subject { mail.subject }
-      it { should eq('Die Redaktion hat eine neue Frage an Sie') }
+      it { should eq('Die Redaktion hat eine neue Frage an dich') }
     end
 
     describe 'to' do
