@@ -2,14 +2,7 @@
 
 module Avatar
   class Avatar < ApplicationComponent
-    FALLBACK_BASE_URL = '/avatars'
-    FALLBACK_IMAGES = [
-      'fallback-cat.jpg',
-      'fallback-dog.jpg',
-      'fallback-otter.jpg',
-      'fallback-seal.jpg',
-      'fallback-squirrel.jpg'
-    ].freeze
+    COLORS = ['#F4C317', '#0898FF', '#67D881', '#F4177A'].freeze
 
     def initialize(user: nil, **)
       super
@@ -21,16 +14,25 @@ module Avatar
     attr_reader :user
 
     def key
-      @key = user&.id || 0
+      user&.id
+    end
+
+    def color
+      COLORS[key % COLORS.length] if key
     end
 
     def url
-      user&.avatar_url || fallback_url
+      user&.avatar_url
     end
 
-    def fallback_url
-      file = FALLBACK_IMAGES[key % FALLBACK_IMAGES.length]
-      "#{FALLBACK_BASE_URL}/#{file}"
+    def initials
+      return '?' unless user
+
+      initials = user.name.split(' ').map { |part| part&.first }
+
+      return '?' if initials.empty?
+
+      initials.join('')
     end
   end
 end
