@@ -19,12 +19,6 @@ module Avatar
       user&.avatar_url
     end
 
-    def alt_text
-      return 'Unknown avatar' unless user
-
-      "#{user.name}'s avatar"
-    end
-
     def initials
       return '?' unless user
 
