@@ -5,7 +5,7 @@
   width: calc(3 * var(--spacing-unit));
   height: calc(3 * var(--spacing-unit));
 
-  background-color: var(--color-gray-light);
+  background-color: var(--color-gray-dark);
   border-radius: 50%;
 }
 
@@ -26,4 +26,5 @@
   font-weight: 600;
   text-anchor: middle;
   dominant-baseline: central;
+  fill: #fff;
 }
