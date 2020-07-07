@@ -60,7 +60,7 @@ Rails.application.configure do
 
   # CUSTOM
   config.mailer = {
-    from: '100eyes-development-account@example.org'
+    from: '100eyes <100eyes-development-account@example.org>'
   }
   config.project_name = ENV['HUNDRED_EYES_PROJECT_NAME'] || '100eyes'
 end
