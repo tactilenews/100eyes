@@ -21,10 +21,8 @@ module Avatar
 
     def initials
       return '?' unless user
-
-      initials = [user.first_name, user.last_name].map { |name| name&.first }.compact
+      initials = user.name.split(' ').map { |part| part&.first }
       return '?' if initials.empty?
-
       initials.join('')
     end
   end

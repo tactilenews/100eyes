@@ -18,33 +18,34 @@ RSpec.describe Avatar::Avatar, type: :component do
     end
   end
 
-  describe 'img[alt]' do
-    subject { component.css('img').first['alt'] }
-    describe 'given a user called "Till Popaska" with an avatar url' do
-      let(:params) { { user: build(:user, first_name: 'Till', last_name: 'Popaska', avatar_url: '/fallback-dog.jpg') } }
-      it { should eq('Till Popaska\'s avatar') }
-    end
-  end
-
-  describe 'span.Avatar-initials' do
-    subject { component.css('span.Avatar-initials').text }
+  describe '.Avatar-initials > text' do
+    subject { component.css('.Avatar-initials > text').text }
     describe 'given no user' do
       it { should eq('?') }
     end
 
     describe 'given a user without name' do
-      let(:params) { { user: build(:user, first_name: nil, last_name: nil) } }
+      let(:user) { build(:user, first_name: nil, last_name: nil) }
+      let(:params) { { user: user } }
       it { should eq('?') }
     end
 
-    describe 'given a user called "Till"' do
-      let(:params) { { user: build(:user, first_name: 'Till', last_name: nil) } }
-      it { should eq('T') }
+    describe 'given a user called "Zora"' do
+      let(:user) { build(:user, first_name: 'Zora', last_name: nil) }
+      let(:params) { { user: user } }
+      it { should eq('Z') }
     end
 
-    describe 'given a user called "Till Popaska"' do
-      let(:params) { { user: build(:user, first_name: 'Till', last_name: 'Popaska') } }
-      it { should eq('TP') }
+    describe 'given a user called "Zora Ackermann"' do
+      let(:user) { build(:user, first_name: 'Zora', last_name: 'Ackermann') }
+      let(:params) { { user: user } }
+      it { should eq('ZA') }
+    end
+
+    describe 'given a user called "Vicco von Bülow"' do
+      let(:user) { build(:user, first_name: 'Vicco', last_name: 'von Bülow') }
+      let(:params) { { user: user } }
+      it { should eq('VvB') }
     end
   end
 
