@@ -12,8 +12,16 @@ module Chat
 
     attr_reader :messages, :user, :request
 
+    def active_request
+      user.active_request
+    end
+
     def active_request?
-      user.active_request == request
+      active_request == request
+    end
+
+    def active_conversation_path
+      user_request_path(id: active_request.id, user_id: user.id)
     end
   end
 end
