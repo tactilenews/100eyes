@@ -248,7 +248,7 @@ GEM
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
     unicode-display_width (1.7.0)
-    valid_email2 (3.2.3)
+    valid_email2 (3.2.4)
       activemodel (>= 3.2)
       mail (~> 2.5)
     vcr (6.0.0)
