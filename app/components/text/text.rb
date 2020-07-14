@@ -7,7 +7,7 @@ module Text
     end
 
     def call
-      content_tag(:span, @content, class: class_attr)
+      tag.span(@content, class: class_attr)
     end
   end
 end

@@ -7,7 +7,7 @@ module Wrapper
     end
 
     def call
-      content_tag(:div, @content, class: class_attr)
+      tag.div(@content, class: class_attr)
     end
   end
 end
