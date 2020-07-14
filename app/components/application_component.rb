@@ -4,8 +4,9 @@ class ApplicationComponent < ViewComponent::Base
   include ComponentHelper
   include DateTimeHelper
 
-  def initialize(styles: [], **)
+  def initialize(styles: [], style: nil, **)
     @styles = styles
+    @styles << style if style
   end
 
   private
