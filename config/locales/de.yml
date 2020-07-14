@@ -14,8 +14,11 @@ de:
       placeholder: Gib hier deine Nachfrage ein…
       submit: Absenden
     nav_bar:
-      community: Community
-      investigation: Recherche
+      community:
+        other: Community
+      investigation:
+        one: Recherche
+        other: Recherchen
 
   message_mailer:
     new_message_email:
