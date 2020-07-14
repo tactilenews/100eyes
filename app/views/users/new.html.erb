@@ -1,9 +1,13 @@
-<%= c 'page' do %>
-  <%= c 'page_title' do %>
-    <%= t 'user.create' %>
+<%= c 'box', styles: [:large, :gray] do %>
+  <%= c 'wrapper' do %>
+    <%= c 'heading' do %>
+      <%= t 'user.create' %>
+    <% end %>
   <% end %>
+<% end %>
 
-  <%= c 'box' do %>
+<%= c 'box' do %>
+  <%= c 'wrapper' do %>
     <%= c 'stack', space: :xlarge do %>
       <%= c 'user_form', user: @user %>
     <% end %>
