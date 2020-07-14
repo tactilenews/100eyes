@@ -86,6 +86,7 @@ de:
     send: Frage an die Community senden
     success: Deine Frage wurde erfolgreich an die Community gesendet
     replies: Alle Antworten
+    created_at: Frage gestellt %{created_at}
     hints:
       photo:
         label: Fotos
