@@ -1,0 +1,7 @@
+.RequestMiniStats {
+  display: inline-flex;
+}
+
+.RequestMiniStats > * + * {
+  margin-left: var(--spacing-unit-xs);
+}

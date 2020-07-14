@@ -1,37 +1,9 @@
-.RequestRow {
-  display: block;
-  background-color: var(--color-gray-light);
-  padding: var(--spacing-unit);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius);
-}
-
-.RequestRow-header {
+.RequestRow-meta {
   display: flex;
-}
-
-.RequestRow-title {
-  flex-shrink: 1;
-  flex-grow: 0;
-}
-
-a.RequestRow:hover .RequestRow-title {
-  text-decoration: underline;
-}
-
-.RequestRow-date {
-  flex-shrink: 0;
-  flex-grow: 0;
   font-size: var(--font-size-s);
   color: var(--color-text-light);
-  margin-left: var(--spacing-unit-s);
 }
 
-.RequestRow-text {
-  color: var(--color-text-light);
-}
-
-.RequestRow-stat {
-  font-size: var(--font-size-s);
-  padding-right: var(--spacing-unit-s);
+.RequestRow-meta > * + * {
+  margin-left: var(--spacing-unit);
 }
