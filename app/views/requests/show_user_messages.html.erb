@@ -1,8 +1,13 @@
-<%= c 'page' do %>
-  <%= c 'page_title' do %>
-    <%= I18n.t 'conversation.conversation', count: 1 %>
+<%= c 'box', styles: [:large, :gray] do %>
+  <%= c 'wrapper' do %>
+    <% c 'heading' do %>
+      <%= I18n.t 'conversation.conversation', count: 1 %>
+    <% end %>
   <% end %>
-  <%= c 'box' do %>
+<% end %>
+
+<%= c 'box' do %>
+  <%= c 'wrapper' do %>
     <%= c 'chat', user: @user, messages: @chat_messages, request: @request %>
   <% end %>
 <% end %>
