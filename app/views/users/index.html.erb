@@ -1,22 +1,24 @@
-<%= c 'page' do %>
+<%= c 'box', styles: [:large, :gray] do %>
+  <%= c 'wrapper' do %>
+    <%= c 'flex' do %>
+      <%= c 'heading' do %>
+        <%= I18n.t 'user.user', count: :many %>
+      <% end %>
 
-  <%= c 'page_title' do |c| %>
-    <%= I18n.t 'user.user', count: :many %>
-
-    <% c.with(:actions) do %>
       <%= c 'button',
         label: I18n.t('user.create'),
         link: new_user_path
       %>
     <% end %>
   <% end %>
+<% end %>
 
-  <%= c 'box' do %>
+<%= c 'box' do %>
+  <%= c 'wrapper' do %>
     <%= c 'stack' do %>
       <% @users.each do |user| %>
         <%= c 'user_row', user: user %>
       <% end %>
     <% end %>
   <% end %>
-
 <% end %>
