@@ -23,4 +23,8 @@ class ApplicationComponent < ViewComponent::Base
   def class_names
     [block_name] + styles.map { |style| "#{block_name}--#{style}" }
   end
+
+  def class_attr
+    class_names.join(' ')
+  end
 end
