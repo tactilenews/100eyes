@@ -1,0 +1,4 @@
+.Wrapper {
+  max-width: var(--grid-max-width);
+  margin: auto;
+}

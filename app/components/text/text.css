@@ -1,0 +1,11 @@
+.Text--light {
+  color: var(--color-text-light);
+}
+
+.Text--small {
+  font-size: var(--font-size-s);
+}
+
+.Text--xsmall {
+  font-size: var(--font-size-xs);
+}

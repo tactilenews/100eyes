@@ -26,7 +26,4 @@
 .ChatMessagesGroup-messages {
   font-size: var(--font-size-s);
   line-height: 1.6;
-
-  /* width of an avatar + the space between the avatar and the user name */
-  padding-left: calc(1.5 * var(--spacing-unit) + var(--spacing-unit-s));
 }
