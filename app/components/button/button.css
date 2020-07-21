@@ -17,6 +17,10 @@
   font-size: inherit;
 }
 
+.Button:hover {
+  opacity: 0.8;
+}
+
 .Button--primary {
   color: #fff;
   background-color: var(--button-color);
