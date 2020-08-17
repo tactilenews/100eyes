@@ -5,7 +5,7 @@
   },
   "dependencies": {
     "@rails/ujs": "^6.0.3",
-    "@rails/webpacker": "5.1.1",
+    "@rails/webpacker": "5.2.0",
     "stimulus": "^1.1.1"
   },
   "devDependencies": {
