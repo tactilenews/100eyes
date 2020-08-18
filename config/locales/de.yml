@@ -43,6 +43,12 @@ de:
       users: haben geantwortet
       replies: Nachrichten insgesamt
       photos: Fotos
+    steps:
+      steps:
+        - Stelle mit einem Klick 50 Menschen eine Frage.
+        - Menschen antworten auf ihrem favorisierten Kanal.
+        - Werte mit Hilfe von 100eyes die Antworten aus.
+        - Komponiere deine Veröffentlichung.
 
   message_mailer:
     new_message_email:
@@ -55,7 +61,8 @@ de:
 
   save: Speichern
   discard: Änderungen verwerfen
-
+  dashboard:
+    how_it_works: So funktioniert 100eyes…
   search:
     placeholder: Suchen
     result:
