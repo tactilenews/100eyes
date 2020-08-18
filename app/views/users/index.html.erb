@@ -2,7 +2,7 @@
   <%= c 'wrapper' do %>
     <%= c 'flex' do %>
       <%= c 'heading' do %>
-        <%= I18n.t 'user.user', count: :many %>
+        <%= User.count %> <%= I18n.t 'user.user', count: User.count %>
       <% end %>
 
       <%= c 'button',
@@ -13,7 +13,7 @@
   <% end %>
 <% end %>
 
-<%= c 'box' do %>
+<%= c 'box', style: :large do %>
   <%= c 'wrapper' do %>
     <%= c 'stack' do %>
       <% @users.each do |user| %>
