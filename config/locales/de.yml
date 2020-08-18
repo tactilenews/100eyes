@@ -22,6 +22,19 @@ de:
         other: Recherchen
     hero:
       title: Willkommen bei 100eyes. Nutze die Intelligenz der Community.
+    footer:
+      authors:
+        heading: Ein Projekt von
+        text: |
+          tactile.news
+          Csuraji Vicari GbR
+          Große Bäckerstraße 19
+          21335 Lüneburg
+      funding:
+        heading: Unterstützt durch
+      license:
+        heading: Lizenz
+        licensed_under: Lizensiert unter MIZ‑Lizenz
 
   message_mailer:
     new_message_email:

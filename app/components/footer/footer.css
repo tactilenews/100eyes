@@ -1,0 +1,18 @@
+.Footer {
+  display: flex;
+  width: 100%;
+  gap: var(--spacing-unit-l);
+  justify-content: space-between;
+
+  font-size: var(--font-size-s);
+  color: var(--color-text-light);
+}
+
+.Footer-column {
+  flex-basis: 100%;
+}
+
+.Footer-logo {
+  opacity: 0.75;
+  height: calc(2 * var(--line-height));
+}
