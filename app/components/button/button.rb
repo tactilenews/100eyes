@@ -6,7 +6,7 @@ module Button
       super
 
       if @styles.empty?
-        styles = [:primary]
+        @styles = [:primary]
       end
 
       @label = label
