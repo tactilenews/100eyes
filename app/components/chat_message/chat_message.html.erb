@@ -7,13 +7,19 @@
       <%= c 'plaintext_message', message: message.text %>
 
       <div
-        class="ChatMessage-expand"
-        data-target="chat-message.expand"
-        data-action="click->chat-message#expand"
+        class="ChatMessage-toggle"
+        data-target="chat-message.toggle"
+        data-action="click->chat-message#toggle"
       >
         <%= c 'button', styles: [:inline] do %>
-          <%= I18n.t('components.chat_message.expand') %>
-          <%= c 'icon', icon: 'small-down', styles: [:inline] %>
+          <span class="ChatMessage-expand">
+            <%= I18n.t('components.chat_message.expand') %>
+            <%= c 'icon', icon: 'small-down', styles: [:inline] %>
+          </span>
+          <span class="ChatMessage-collapse">
+            <%= I18n.t('components.chat_message.collapse') %>
+            <%= c 'icon', icon: 'small-up', styles: [:inline] %>
+          </span>
         <% end %>
       </div>
     </div>
