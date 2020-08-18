@@ -9,6 +9,8 @@ de:
       collapse: weniger
       copy: kopieren
       copied: Nachricht kopiert!
+      highlight: markieren
+      unhighlight: Markierung entfernen
       contains_unknown_content: Enthält nicht unterstützte Inhalte
       blocked_by_user: wurde von diesem Mitglied blockiert
     chat_messages_group:

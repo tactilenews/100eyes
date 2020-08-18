@@ -3,7 +3,7 @@ import { Controller } from 'stimulus';
 const SUCCESS_NOTIFICATION_DURATION = 2000;
 
 export default class extends Controller {
-  static targets = ['text', 'toggle', 'copy'];
+  static targets = ['text', 'toggle'];
 
   connect() {
     if (this.isTruncated()) {
@@ -56,5 +56,25 @@ export default class extends Controller {
     setTimeout(() => {
       this.element.classList.remove('ChatMessage--copied');
     }, SUCCESS_NOTIFICATION_DURATION);
+  }
+
+  isHighlighted() {
+    return this.element.classList.contains('ChatMessage--highlighted');
+  }
+
+  toggleHighlighted() {
+    if (this.isHighlighted()) {
+      this.unhighlight();
+    } else {
+      this.highlight();
+    }
+  }
+
+  highlight() {
+    this.element.classList.add('ChatMessage--highlighted');
+  }
+
+  unhighlight() {
+    this.element.classList.remove('ChatMessage--highlighted');
   }
 }
