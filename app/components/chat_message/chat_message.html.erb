@@ -36,12 +36,12 @@
         <%= c 'button', style: :inline do %>
           <div class="ChatMessage-copy">
             <%= c 'icon', icon: 'ungroup', style: :inline %>
-            kopieren
+            <%= I18n.t('components.chat_message.copy') %>
           </div>
 
           <div class="ChatMessage-copied">
             <%= c 'icon', icon: 'f-check', style: :inline %>
-            Nachricht kopiert!
+            <%= I18n.t('components.chat_message.copied') %>
           </div>
         <% end %>
       </span>
