@@ -1,7 +1,7 @@
 import { Controller } from 'stimulus';
 
 export default class extends Controller {
-  static targets = ['text', 'toggle'];
+  static targets = ['text', 'toggle', 'copy'];
 
   connect() {
     if (this.isTruncated()) {
@@ -34,5 +34,25 @@ export default class extends Controller {
   collapse() {
     this.element.classList.remove('ChatMessage--expanded');
     this.toggleTarget.setAttribute('aria-expanded', 'false');
+  }
+
+  copy() {
+    const text = this.textTarget.innerText;
+    const sender = this.data.get('sender-name');
+    let clipboardText = `${sender}: ${text}`;
+
+    if (!sender) {
+      clipboardText = text;
+    }
+
+    navigator.clipboard.writeText(clipboardText).then(() => this.onCopy());
+  }
+
+  onCopy() {
+    this.element.classList.add('ChatMessage--copied');
+
+    setTimeout(() => {
+      this.element.classList.remove('ChatMessage--copied');
+    }, 2000);
   }
 }
