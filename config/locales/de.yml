@@ -20,6 +20,12 @@ de:
       investigation:
         one: Recherche
         other: Recherchen
+    steps:
+      steps:
+        - Stelle mit einem Klick 50 Menschen eine Frage.
+        - Menschen antworten auf ihrem favorisierten Kanal.
+        - Werte mit Hilfe von 100eyes die Antworten aus.
+        - Komponiere deine Veröffentlichung.
 
   message_mailer:
     new_message_email:
@@ -35,7 +41,8 @@ de:
 
   dashboard:
     title: Willkommen bei 100eyes. Nutze die Intelligenz der Community.
-    subtitle: Mit 100eyes kannst du 50 Menschen aus deiner Region Fragen stellen.
+    subtitle: Mit 100eyes kannst du mit einem Klick 50 Menschen aus deiner Region Fragen stellen.
+    how_it_works: So funktioniert 100eyes…
 
   search:
     placeholder: Suchen

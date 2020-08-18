@@ -1,0 +1,36 @@
+.Steps {
+  display: flex;
+  list-style: none;
+  gap: var(--spacing-unit);
+}
+
+.Steps-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-basis: 100%;
+
+  text-align: center;
+  color: var(--color-text-light);
+  font-size: var(--font-size-s);
+  line-height: 1.7;
+
+  counter-increment: step;
+}
+
+.Steps-step::before {
+  content: counter(step);
+
+  display: block;
+  width: var(--spacing-unit-l);
+  height: var(--spacing-unit-l);
+  margin-bottom: var(--spacing-unit-s);
+
+  background: var(--color-blue-dark);
+  color: #fff;
+  border-radius: 50%;
+  text-align: center;
+  line-height: var(--spacing-unit-l);
+  font-size: calc(1.25 * var(--font-size));
+  font-weight: 700;
+}
