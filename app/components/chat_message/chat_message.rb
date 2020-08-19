@@ -4,10 +4,17 @@ module ChatMessage
   class ChatMessage < ApplicationComponent
     def initialize(message:, **)
       super
+
       @message = message
     end
 
     private
+
+    def styles
+      return super unless @message.highlighted?
+
+      super + [:highlighted]
+    end
 
     def id
       "message-#{message.id}"

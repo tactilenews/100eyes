@@ -1,6 +1,7 @@
 <div
-  class="<%= class_names.join(' ') %>"
+  class="<%= class_attr %>"
   data-controller="chat-message"
+  data-chat-message-id="<%= message.id %>"
   data-chat-message-sender-name="<%= message.sender&.name %>"
   id="<%= id %>"
 >

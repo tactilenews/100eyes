@@ -1,4 +1,5 @@
 import { Controller } from 'stimulus';
+import Rails from '@rails/ujs';
 
 const SUCCESS_NOTIFICATION_DURATION = 2000;
 
@@ -63,6 +64,12 @@ export default class extends Controller {
   }
 
   toggleHighlighted() {
+    Rails.ajax({
+      url: `/messages/${this.data.get('id')}/highlight`,
+      type: 'POST',
+      data: `highlighted=${!this.isHighlighted()}`,
+    });
+
     if (this.isHighlighted()) {
       this.unhighlight();
     } else {
