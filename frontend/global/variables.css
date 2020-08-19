@@ -1,8 +1,8 @@
 :root {
   --font-size: 20px;
   --line-height: 30px;
-  --font-size-s: 0.85rem;
-  --font-size-xs: 0.75rem;
+  --font-size-s: 0.85em;
+  --font-size-xs: 0.75em;
 
   --spacing-unit: 30px;
   --spacing-unit-s: calc(0.5 * var(--spacing-unit));
