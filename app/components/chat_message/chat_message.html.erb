@@ -9,9 +9,9 @@
       <%= c 'plaintext_message', message: message.text %>
 
       <div
-        class="ChatMessage-toggle"
-        data-target="chat-message.toggle"
-        data-action="click->chat-message#toggle"
+        class="ChatMessage-toggleExpanded"
+        data-target="chat-message.toggleExpanded"
+        data-action="click->chat-message#toggleExpanded"
       >
         <%= c 'button', styles: [:inline] do %>
           <span class="ChatMessage-expand">

@@ -4,7 +4,7 @@ import Rails from '@rails/ujs';
 const SUCCESS_NOTIFICATION_DURATION = 2000;
 
 export default class extends Controller {
-  static targets = ['text', 'toggle'];
+  static targets = ['text', 'toggleExpanded'];
 
   connect() {
     if (this.isTruncated()) {
@@ -21,7 +21,7 @@ export default class extends Controller {
     return this.element.classList.contains('ChatMessage--expanded');
   }
 
-  toggle() {
+  toggleExpanded() {
     if (this.isExpanded()) {
       this.collapse();
     } else {
@@ -31,12 +31,12 @@ export default class extends Controller {
 
   expand() {
     this.element.classList.add('ChatMessage--expanded');
-    this.toggleTarget.setAttribute('aria-expanded', 'true');
+    this.toggleExpandedTarget.setAttribute('aria-expanded', 'true');
   }
 
   collapse() {
     this.element.classList.remove('ChatMessage--expanded');
-    this.toggleTarget.setAttribute('aria-expanded', 'false');
+    this.toggleExpandedTarget.setAttribute('aria-expanded', 'false');
   }
 
   copy() {

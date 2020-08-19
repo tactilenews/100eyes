@@ -22,7 +22,7 @@
   overflow: hidden;
 }
 
-.ChatMessage-toggle {
+.ChatMessage-toggleExpanded {
   position: absolute;
   bottom: 0;
   right: 0;
@@ -44,7 +44,7 @@
   display: initial;
 }
 
-.ChatMessage--truncated .ChatMessage-toggle {
+.ChatMessage--truncated .ChatMessage-toggleExpanded {
   display: block;
 }
 
