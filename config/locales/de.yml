@@ -39,6 +39,10 @@ de:
       license:
         heading: Lizenz
         licensed_under: Lizenziert unter MIZ‑Lizenz
+    request_metrics:
+      users: haben geantwortet
+      replies: Nachrichten insgesamt
+      photos: Fotos
 
   message_mailer:
     new_message_email:

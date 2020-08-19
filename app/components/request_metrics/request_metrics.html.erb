@@ -1,0 +1,25 @@
+<div class="RequestMetrics">
+  <%= c 'flex', styles: [:equal, :gap] do %>
+    <%= c 'box', styles: [:zero, :card] do %>
+      <%= c 'metric',
+        value: request.stats[:counts][:users],
+        label: I18n.t('components.request_metrics.users'),
+        icon: 'single-03'
+      %>
+    <% end %>
+    <%= c 'box', styles: [:zero, :card] do %>
+      <%= c 'metric',
+        value: request.stats[:counts][:replies],
+        label: I18n.t('components.request_metrics.replies'),
+        icon: 'a-chat'
+      %>
+    <% end %>
+    <%= c 'box', styles: [:zero, :card] do %>
+      <%= c 'metric',
+        value: request.stats[:counts][:photos],
+        label: I18n.t('components.request_metrics.photos'),
+        icon: 'camera'
+      %>
+    <% end %>
+  <% end %>
+</div>

@@ -1,5 +1,11 @@
 .Box {
+  position: relative;
   padding: var(--spacing-unit);
+  overflow: hidden;
+}
+
+.Box--zero {
+  padding: 0;
 }
 
 .Box--small {

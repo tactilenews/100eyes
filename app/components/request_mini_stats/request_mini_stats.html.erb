@@ -1,12 +1,12 @@
 <div class="<%= class_attr %>">
   <div class="RequestMiniStats-stat">
     <%= c 'icon', icon: 'a-chat', styles: [:inline] %>
-    <%= request.stats[:counts][:replies] %>
+    <%= request.stats[:counts][:users] %>
   </div>
 
   <div class="RequestMiniStats-stat">
-    <%= c 'icon', icon: 'users-ww', styles: [:inline] %>
-    <%= request.stats[:counts][:users] %>
+    <%= c 'icon', icon: 'single-03', styles: [:inline] %>
+    <%= request.stats[:counts][:replies] %>
   </div>
 
   <div class="RequestMiniStats-stat">

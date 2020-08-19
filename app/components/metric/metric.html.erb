@@ -1,0 +1,20 @@
+<div class="Metric">
+  <% unless total.nil? %>
+    <div
+      class="Metric-progress"
+      style="--progress: calc(<%= value %> / <%= total %> * 100%)"
+    ></div>
+  <% end %>
+
+  <div class="Metric-value">
+    <%= formatted %>
+  </div>
+
+  <div class="Metric-label">
+    <%= label %>
+  </div>
+
+  <div class="Metric-icon">
+    <%= c 'icon', icon: icon %>
+  </div>
+</div>
