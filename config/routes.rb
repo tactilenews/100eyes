@@ -15,6 +15,10 @@ Rails.application.routes.draw do
       post 'message'
     end
   end
-  end
 
+  resources :messages do
+    member do
+      post 'highlight', format: /json/
+    end
+  end
 end
