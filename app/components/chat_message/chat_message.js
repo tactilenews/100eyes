@@ -1,5 +1,7 @@
 import { Controller } from 'stimulus';
 
+const SUCCESS_NOTIFICATION_DURATION = 2000;
+
 export default class extends Controller {
   static targets = ['text', 'toggle', 'copy'];
 
@@ -53,6 +55,6 @@ export default class extends Controller {
 
     setTimeout(() => {
       this.element.classList.remove('ChatMessage--copied');
-    }, 2000);
+    }, SUCCESS_NOTIFICATION_DURATION);
   }
 }
