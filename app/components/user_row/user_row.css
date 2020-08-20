@@ -17,6 +17,7 @@ a.UserRow:hover .UserRow-name {
 
 .UserRow-note {
   color: var(--color-text-light);
+  font-size: var(--font-size-s);
 }
 
 .UserRow-channels {
