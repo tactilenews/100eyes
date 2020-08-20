@@ -1,16 +1,18 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe "Messages", type: :request do
+RSpec.describe 'Messages', type: :request do
   describe 'POST /messages/:id/highlight' do
     let(:params) { {} }
 
-    subject {
-      -> {
+    subject do
+      lambda do
         post(highlight_message_url(message, format: :json),
              headers: auth_headers,
              params: params)
-      }
-    }
+      end
+    end
 
     describe 'given an non-highlighted message' do
       let(:message) { create(:message, highlighted: false) }
@@ -24,7 +26,7 @@ RSpec.describe "Messages", type: :request do
 
       describe 'given highlighted=false' do
         let(:params) { { highlighted: false } }
-        it { should_not change { message.reload.highlighted? } }
+        it { should_not(change { message.reload.highlighted? }) }
       end
     end
 
@@ -33,7 +35,7 @@ RSpec.describe "Messages", type: :request do
 
       describe 'given highlighted=true' do
         let(:params) { { highlighted: true } }
-        it { should_not change { message.reload.highlighted? } }
+        it { should_not(change { message.reload.highlighted? }) }
       end
 
       describe 'given highlighted=false' do
