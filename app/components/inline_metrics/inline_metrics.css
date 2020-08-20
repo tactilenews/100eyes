@@ -1,0 +1,4 @@
+.InlineMetrics {
+  display: inline-flex;
+  gap: var(--spacing-unit-s);
+}
