@@ -26,13 +26,17 @@
 
     <% else %>
 
-      <%= c 'stack' do %>
-        <%= c 'heading', tag: :h2 do %>
-          <%= I18n.t 'request.replies' %>
-        <% end %>
+      <%= c 'stack', space: :xlarge do %>
+        <%= c 'request_metrics', request: @request, style: :cards %>
 
-        <% @message_groups.each do |user, messages| %>
-          <%= c 'chat_messages_group', user: user, messages: messages %>
+        <%= c 'stack' do %>
+          <%= c 'heading', tag: :h2 do %>
+            <%= I18n.t 'request.replies' %>
+          <% end %>
+
+          <% @message_groups.each do |user, messages| %>
+            <%= c 'chat_messages_group', user: user, messages: messages %>
+          <% end %>
         <% end %>
       <% end %>
 

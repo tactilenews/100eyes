@@ -1,0 +1,38 @@
+<footer class="Footer">
+
+  <div class="Footer-column">
+    <%= c 'heading', tag: :h3, style: :upper do %>
+      <%= I18n.t 'components.footer.authors.heading' %>
+    <% end %>
+
+    <%= simple_format(I18n.t('components.footer.authors.text')) %>
+  </div>
+
+  <div class="Footer-column">
+    <%= c 'heading', tag: :h3, style: :upper do %>
+      <%= I18n.t 'components.footer.funding.heading' %>
+    <% end %>
+
+    <div class="Footer-logos">
+      <a href="https://prototypefund.de" target="_blank">
+        <img class="Footer-logo" src="/footer/prototypefund-logo.svg" alt="Logo: Prototype Fund" />
+      </a>
+
+      <a href="https://bmbf.de" target="_blank">
+        <img class="Footer-logo" src="/footer/bmbf-logo.svg" alt="Logo: Bundesministerium für Bildung und Forschung" />
+      </a>
+    </div>
+  </div>
+
+  <div class="Footer-column">
+    <%= c 'heading', tag: :h3, style: :upper do %>
+      <%= I18n.t 'components.footer.license.heading' %>
+    <% end %>
+
+    <%= c 'icon', icon: 'scale', style: :inline %>
+    <%= I18n.t 'components.footer.license.licensed_under' %><br>
+
+    <%= c 'icon', icon: 'logo-github', style: :inline %>
+    <a href="https://github.com/tactilenews/100eyes" target="_blank">GitHub</a>
+
+</footer>

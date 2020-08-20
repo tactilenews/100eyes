@@ -1,8 +1,8 @@
 :root {
   --font-size: 20px;
   --line-height: 30px;
-  --font-size-s: 0.85rem;
-  --font-size-xs: 0.75rem;
+  --font-size-s: 0.85em;
+  --font-size-xs: 0.75em;
 
   --spacing-unit: 30px;
   --spacing-unit-s: calc(0.5 * var(--spacing-unit));
@@ -22,17 +22,23 @@
   --color-blue-light: #7ac8ff;
   --color-blue-lightest: #dbefff;
 
-  --color-blue-gray-dark: #386382;
+  --color-blue-gray: #5c9fcb;
+  --color-blue-gray-dark: #3d5464;
 
-  --color-green: #3cb868;
+  --color-green: #67d881;
   --color-green-dark: #0d6b37;
   --color-green-light: #88cc7b;
-  --color-green-lightest: #e3f1df;
+  --color-green-lightest: #e1f7e6;
 
   --color-red: #c50834;
   --color-red-light: #f99cb4;
   --color-red-lightest: #ffe2e9;
   --color-red-dark: #79001c;
+
+  --color-yellow-light: #f3e38e;
+  --color-yellow-lightest: #fffae0;
+  --color-yellow-dark: #92853e;
+  --color-yellow-darkest: #5a4d07;
 
   --color-gray: #888;
   --color-gray-light: #e9edf0;

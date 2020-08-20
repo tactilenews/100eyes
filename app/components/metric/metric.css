@@ -1,0 +1,54 @@
+.Metric:not(.Metric--large) .Metric-label {
+  font-size: 0;
+}
+
+.Metric-icon {
+  opacity: 0.8;
+}
+
+.Metric--large {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.Metric--large .Metric-value {
+  display: block;
+  order: 1;
+  font-size: calc(1.125 * var(--spacing-unit));
+  line-height: calc(1.5 * var(--spacing-unit));
+  font-weight: 700;
+}
+
+.Metric--large .Metric-icon {
+  order: 2;
+  font-size: var(--spacing-unit);
+  margin-left: var(--spacing-unit-xs);
+  color: var(--color-blue-gray);
+}
+
+.Metric--large .Metric-label {
+  display: block;
+  order: 3;
+  width: 100%;
+  font-size: var(--font-size-s);
+  color: var(--color-text-light);
+}
+
+.Metric-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background-color: var(--color-green-lightest);
+}
+
+.Metric-progress::after {
+  content: '';
+  display: block;
+  width: var(--progress);
+  height: 100%;
+  background-color: var(--color-green);
+}

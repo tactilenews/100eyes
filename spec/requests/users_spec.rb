@@ -86,7 +86,7 @@ RSpec.describe '/users', type: :request do
   describe 'POST /message', telegram_bot: :rails do
     subject do
       lambda do
-        post user_message_url(user), params: { message: { text: 'Forgot to ask: How are you?' } }, headers: auth_headers
+        post message_user_url(user), params: { message: { text: 'Forgot to ask: How are you?' } }, headers: auth_headers
       end
     end
 

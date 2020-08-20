@@ -19,7 +19,15 @@
       <% end %>
     <% end %>
 
-    <%= yield %>
+    <main>
+      <%= yield %>
+    </main>
+
+    <%= c 'box', styles: [:gray, :large] do %>
+      <%= c 'wrapper' do %>
+        <%= c 'footer' %>
+      <% end %>
+    <% end %>
 
     <%= javascript_pack_tag 'application' %>
   </body>

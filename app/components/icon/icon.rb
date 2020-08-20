@@ -2,19 +2,20 @@
 
 module Icon
   class Icon < ApplicationComponent
-    def initialize(icon:, title: nil, **)
+    def initialize(icon:, title: nil, size: 24, **)
       super
 
       @icon = icon
       @title = title
+      @size = size
     end
 
     private
 
-    attr_reader :icon, :title
+    attr_reader :icon, :title, :size
 
     def url
-      "/icons.svg#nc-icon-#{icon}-glyph-24"
+      "/icons.svg#nc-icon-#{icon}-glyph-#{size}"
     end
   end
 end

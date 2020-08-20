@@ -1,0 +1,11 @@
+<div class="<%= class_attr %>">
+  <%= c 'flex', styles: [:equal, :gap] do %>
+    <% metrics.each do |metric| %>
+      <%= c 'card' do %>
+        <%= c 'box', style: :small do %>
+          <%= c 'metric', style: :large, **metric %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
