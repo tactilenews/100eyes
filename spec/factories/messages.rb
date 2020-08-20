@@ -2,6 +2,7 @@
 
 FactoryBot.define do
   factory :message do
+    created_at { Time.zone.now }
     unknown_content { false }
     association :sender, factory: :user
     association :request

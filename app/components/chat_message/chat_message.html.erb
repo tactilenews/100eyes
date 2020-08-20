@@ -1,6 +1,7 @@
 <div
-  class="<%= class_names.join(' ') %>"
+  class="<%= class_attr %>"
   data-controller="chat-message"
+  data-chat-message-id="<%= message.id %>"
   data-chat-message-sender-name="<%= message.sender&.name %>"
   id="<%= id %>"
 >
@@ -8,9 +9,9 @@
       <%= c 'plaintext_message', message: message.text %>
 
       <div
-        class="ChatMessage-toggle"
-        data-target="chat-message.toggle"
-        data-action="click->chat-message#toggle"
+        class="ChatMessage-toggleExpanded"
+        data-target="chat-message.toggleExpanded"
+        data-action="click->chat-message#toggleExpanded"
       >
         <%= c 'button', styles: [:inline] do %>
           <span class="ChatMessage-expand">
@@ -32,17 +33,31 @@
     <div class="ChatMessage-meta">
       <a href="#<%= id %>"><%= date_time(message.created_at) %></a>
 
-      <span data-target="chat-message.copy" data-action="click->chat-message#copy">
+      <span data-action="click->chat-message#copy">
         <%= c 'button', style: :inline do %>
-          <div class="ChatMessage-copy">
+          <span class="ChatMessage-copy">
             <%= c 'icon', icon: 'ungroup', style: :inline %>
             <%= I18n.t('components.chat_message.copy') %>
-          </div>
+          </span>
 
-          <div class="ChatMessage-copied">
+          <span class="ChatMessage-copied">
             <%= c 'icon', icon: 'f-check', style: :inline %>
             <%= I18n.t('components.chat_message.copied') %>
-          </div>
+          </span>
+        <% end %>
+      </span>
+
+      <span data-action="click->chat-message#toggleHighlighted">
+        <%= c 'button', style: :inline do %>
+          <span class="ChatMessage-highlight">
+            <%= c 'icon', icon: 'shape-star', style: :inline %>
+            <%= I18n.t('components.chat_message.highlight') %>
+          </span>
+
+          <span class="ChatMessage-unhighlight">
+            <%= c 'icon', icon: 'shape-star', style: :inline %>
+            <%= I18n.t('components.chat_message.unhighlight') %>
+          </span>
         <% end %>
       </span>
     </div>
