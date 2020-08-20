@@ -1,0 +1,10 @@
+# This file includes Unicode ranges used to subset
+# the Inter webfont for use with this application.
+# You may use a tool like `pyftsubset` to create
+# a subset from source files.
+
+0020-007F # Basic latin
+00A0-00FF # Latin supplement
+2000-2005 # Dashes
+2008-200F # Quotation marks
+2022-202F # Bulletes, dots, spaces
