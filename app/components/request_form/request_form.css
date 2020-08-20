@@ -1,6 +1,6 @@
 .RequestForm {
   display: flex;
-  padding: var(--spacing-unit);
+  gap: var(--spacing-unit-l);
 }
 
 .RequestForm-column {
@@ -10,10 +10,6 @@
 .RequestForm-column {
   display: flex;
   flex-direction: column;
-}
-
-.RequestForm-column + .RequestForm-column {
-  margin-left: var(--spacing-unit);
 }
 
 .RequestForm-column > * {

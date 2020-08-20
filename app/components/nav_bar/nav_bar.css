@@ -6,7 +6,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--spacing-unit-s) var(--spacing-unit);
+  padding: var(--spacing-unit-s) var(--spacing-unit-l);
+
   background: var(--color-blue-dark);
   color: rgba(255, 255, 255, 0.8);
   font-size: var(--font-size-s);

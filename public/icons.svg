@@ -8,6 +8,7 @@
   <symbol id="nc-icon-camera-glyph-24" viewBox="0 0 24 24"><title>camera</title><g transform="translate(0, 0)"><path d="M21,4H17L15,1H9L7,4H3A3,3,0,0,0,0,7V19a3,3,0,0,0,3,3H21a3,3,0,0,0,3-3V7A3,3,0,0,0,21,4ZM12,18a5,5,0,1,1,5-5A5,5,0,0,1,12,18Z"/></g></symbol>
   <symbol id="nc-icon-zoom-glyph-24" viewBox="0 0 24 24"><title>zoom</title><g transform="translate(0, 0)"><path d="M23.061,20.939l-5.733-5.733a9.028,9.028,0,1,0-2.122,2.122l5.733,5.733ZM3,10a7,7,0,1,1,7,7A7.008,7.008,0,0,1,3,10Z"/></g></symbol>
   <symbol id="nc-icon-small-down-glyph-24" viewBox="0 0 24 24"><g transform="translate(0, 0)"><path d="M12,15c-0.256,0-0.512-0.098-0.707-0.293L6.586,10L8,8.586l4,4l4-4L17.414,10l-4.707,4.707 C12.512,14.902,12.256,15,12,15z"></path></g></symbol>
+  <symbol id="nc-icon-small-up-glyph-24" viewBox="0 0 24 24"><g transform="translate(0, 0)"><path d="M16,15.414l-4-4l-4,4L6.586,14l4.707-4.707c0.391-0.391,1.023-0.391,1.414,0L17.414,14L16,15.414z"></path></g></symbol>
   <symbol id="nc-icon-reply-arrow-glyph-24" viewBox="0 0 24 24"><g transform="translate(0, 0)"><path d="M11,7V0.6L0.6,11L11,21.4V15c6.3,0.1,8.7,1.4,11.1,5.5l1.9,3.2V20C24,9.1,15.6,7.2,11,7z"></path></g></symbol>
   <symbol id="nc-icon-t-warning-glyph-24" viewBox="0 0 24 24"><title>t warning</title><g transform="translate(0, 0)"><path d="M23.865,20.5l-11-19a1.04,1.04,0,0,0-1.73,0l-11,19A1,1,0,0,0,1,22H23a1,1,0,0,0,.865-1.5ZM13.206,8l-.473,6.6H11.267L10.821,8ZM12,19a1.467,1.467,0,1,1,1.467-1.467A1.467,1.467,0,0,1,12,19Z" fill="currentColor"/></g></symbol>
 </svg>

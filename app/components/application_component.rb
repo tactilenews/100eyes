@@ -4,8 +4,9 @@ class ApplicationComponent < ViewComponent::Base
   include ComponentHelper
   include DateTimeHelper
 
-  def initialize(styles: [], **)
+  def initialize(styles: [], style: nil, **)
     @styles = styles
+    @styles << style if style
   end
 
   private
@@ -22,5 +23,9 @@ class ApplicationComponent < ViewComponent::Base
 
   def class_names
     [block_name] + styles.map { |style| "#{block_name}--#{style}" }
+  end
+
+  def class_attr
+    class_names.join(' ')
   end
 end

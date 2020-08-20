@@ -1,29 +1,42 @@
-<%= c 'page' do %>
-  <%= c 'page_title' do %>
-    <%= @request.title %>
-  <% end %>
-
-  <%= c 'box' do %>
-    <%= c 'stack', space: :xlarge do %>
-      <%= c 'box', styles: [:gray, :small] do %>
-        <%= c 'plaintext_message', message: @request.text %>
-      <% end %>
-
-      <%= c 'stack' do %>
-        <%= c 'heading', styles: [:section] do %>
-          <%= I18n.t 'request.replies' %>
+<%= c 'box', styles: [:large, :gray] do %>
+  <%= c 'wrapper' do %>
+    <%= c 'stack', space: :small do %>
+      <div>
+        <%= c 'heading', style: :alpha do %>
+          <%= @request.title %>
         <% end %>
 
-        <% if @message_groups.blank? %>
-          <%= c 'empty_state' do %>
-            <%= I18n.t 'request.no_replies' %>
-          <% end %>
+        <%= c 'text', styles: [:small, :light] do %>
+          <%= I18n.t('request.created_at', created_at: date_time(@request.created_at)) %>
+        <% end %>
+      </div>
+      <%= c 'plaintext_message', message: @request.text %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= c 'box', style: :large do %>
+  <%= c 'wrapper' do %>
+
+    <% if @message_groups.blank? %>
+
+      <%= c 'empty_state' do %>
+        <%= I18n.t 'request.no_replies' %>
+      <% end %>
+
+    <% else %>
+
+      <%= c 'stack' do %>
+        <%= c 'heading', tag: :h2 do %>
+          <%= I18n.t 'request.replies' %>
         <% end %>
 
         <% @message_groups.each do |user, messages| %>
           <%= c 'chat_messages_group', user: user, messages: messages %>
         <% end %>
       <% end %>
+
     <% end %>
+
   <% end %>
 <% end %>

@@ -1,15 +1,17 @@
-<%= c 'page' do %>
-  <%= c 'page_title' do %>
-    <%= I18n.t 'search.result', count: :many %>
+<%= c 'box', styles: [:large, :gray] do %>
+  <%= c 'wrapper' do %>
+    <%= c 'heading' do %>
+      <%= I18n.t 'search.result', count: :many %>
+    <% end %>
   <% end %>
+<% end %>
 
-  <%= c 'box' do %>
+<%= c 'box' do %>
+  <%= c 'wrapper' do %>
     <%= c 'stack', space: :xlarge do %>
       <% @results.each do |result| %>
         <%= c 'search_result', result: result %>
       <% end %>
-
-      <%= c 'button', label: 'Zurück zur Übersicht', link: root_path %>
     <% end %>
   <% end %>
 <% end %>

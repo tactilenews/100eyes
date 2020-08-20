@@ -36,10 +36,12 @@
   --color-gray-light: #e9edf0;
   --color-gray-dark: #333;
 
+  --color-pink: #f4177a;
+
   --color-bg: #fff;
   --color-text: #333;
   --color-text-light: #666;
-  --color-primary: var(--color-blue);
+  --color-primary: var(--color-pink);
   --color-accent: var(--color-blue);
   --color-border: #ccc;
   --color-focus: var(--color-blue);

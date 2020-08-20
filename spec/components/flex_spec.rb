@@ -2,9 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.describe Dashboard::Dashboard, type: :component do
+RSpec.describe Flex::Flex, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
   let(:params) { {} }
-  it { should have_css('.Dashboard') }
+  it { should have_css('.Flex') }
 end

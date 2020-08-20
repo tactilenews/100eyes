@@ -2,9 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.describe Page::Page, type: :component do
+RSpec.describe Wrapper::Wrapper, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
   let(:params) { {} }
-  it { should have_css('.Page') }
+  it { should have_css('.Wrapper') }
 end

@@ -1,12 +1,12 @@
 import { Controller } from 'stimulus';
 
 export default class extends Controller {
-  static targets = ['text', 'expand'];
+  static targets = ['text', 'toggle'];
 
   connect() {
     if (this.isTruncated()) {
       this.element.classList.add('ChatMessage--truncated');
-      this.expandTarget.setAttribute('aria-expanded', 'false');
+      this.collapse();
     }
   }
 
@@ -14,8 +14,25 @@ export default class extends Controller {
     return this.textTarget.clientHeight < this.textTarget.scrollHeight;
   }
 
+  isExpanded() {
+    return this.element.classList.contains('ChatMessage--expanded');
+  }
+
+  toggle() {
+    if (this.isExpanded()) {
+      this.collapse();
+    } else {
+      this.expand();
+    }
+  }
+
   expand() {
     this.element.classList.add('ChatMessage--expanded');
-    this.expandTarget.setAttribute('aria-expanded', 'true');
+    this.toggleTarget.setAttribute('aria-expanded', 'true');
+  }
+
+  collapse() {
+    this.element.classList.remove('ChatMessage--expanded');
+    this.toggleTarget.setAttribute('aria-expanded', 'false');
   }
 }

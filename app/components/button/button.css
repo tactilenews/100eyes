@@ -1,5 +1,5 @@
 .Button {
-  --button-color: var(--color-blue);
+  --button-color: var(--color-primary);
 
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -8,7 +8,7 @@
   padding: var(--input-padding);
   padding-left: var(--spacing-unit);
   padding-right: var(--spacing-unit);
-  border-radius: var(--border-radius);
+  border-radius: 999px;
 
   text-decoration: none;
   background: none;
@@ -17,13 +17,13 @@
   font-size: inherit;
 }
 
+.Button:hover {
+  opacity: 0.8;
+}
+
 .Button--primary {
   color: #fff;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
   background-color: var(--button-color);
-  background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.1));
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
 

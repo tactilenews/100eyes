@@ -20,7 +20,7 @@
   overflow: hidden;
 }
 
-.ChatMessage-expand {
+.ChatMessage-toggle {
   position: absolute;
   bottom: 0;
   right: 0;
@@ -28,12 +28,21 @@
   padding-left: var(--spacing-unit-l);
   background: linear-gradient(
     to right,
-    transparent 0,
+    rgba(255, 255, 255, 0) 0,
     var(--color-gray-light) var(--spacing-unit)
   );
 }
 
-.ChatMessage--truncated:not(.ChatMessage--expanded) .ChatMessage-expand {
+.ChatMessage-collapse,
+.ChatMessage--expanded .ChatMessage-expand {
+  display: none;
+}
+
+.ChatMessage--expanded .ChatMessage-collapse {
+  display: initial;
+}
+
+.ChatMessage--truncated .ChatMessage-toggle {
   display: block;
 }
 

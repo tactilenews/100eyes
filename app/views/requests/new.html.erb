@@ -1,7 +1,13 @@
-<%= c 'page', styles: [:wide] do %>
-  <%= c 'page_title' do %>
-    <%= I18n.t 'request.create' %>
+<%= c 'box', styles: [:large, :gray] do %>
+  <%= c 'wrapper' do %>
+    <%= c 'heading', style: :alpha do %>
+      <%= I18n.t 'request.create' %>
+    <% end %>
   <% end %>
+<% end %>
 
-  <%= c 'request_form', request: @request %>
+<%= c 'box', style: :large do %>
+  <%= c 'wrapper' do %>
+    <%= c 'request_form', request: @request %>
+  <% end %>
 <% end %>
