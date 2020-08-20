@@ -1,15 +1,17 @@
 <div
-  class="<%= class_names.join(' ') %>"
+  class="<%= class_attr %>"
   data-controller="chat-message"
+  data-chat-message-id="<%= message.id %>"
+  data-chat-message-sender-name="<%= message.sender&.name %>"
   id="<%= id %>"
 >
     <div class="ChatMessage-text" data-target="chat-message.text">
       <%= c 'plaintext_message', message: message.text %>
 
       <div
-        class="ChatMessage-toggle"
-        data-target="chat-message.toggle"
-        data-action="click->chat-message#toggle"
+        class="ChatMessage-toggleExpanded"
+        data-target="chat-message.toggleExpanded"
+        data-action="click->chat-message#toggleExpanded"
       >
         <%= c 'button', styles: [:inline] do %>
           <span class="ChatMessage-expand">
@@ -31,15 +33,43 @@
     <div class="ChatMessage-meta">
       <a href="#<%= id %>"><%= date_time(message.created_at) %></a>
 
-      <% if warnings.any? %>
-        <div class="ChatMessage-warnings">
-          <% warnings.each do |warning| %>
-            <span>
-              <%= c 'icon', icon: 't-warning', styles: [:inline] %>
-              <%= warning %>
-            </span>
-          <% end %>
-        </div>
-      <% end %>
+      <span data-action="click->chat-message#copy">
+        <%= c 'button', style: :inline do %>
+          <span class="ChatMessage-copy">
+            <%= c 'icon', icon: 'ungroup', style: :inline %>
+            <%= I18n.t('components.chat_message.copy') %>
+          </span>
+
+          <span class="ChatMessage-copied">
+            <%= c 'icon', icon: 'f-check', style: :inline %>
+            <%= I18n.t('components.chat_message.copied') %>
+          </span>
+        <% end %>
+      </span>
+
+      <span data-action="click->chat-message#toggleHighlighted">
+        <%= c 'button', style: :inline do %>
+          <span class="ChatMessage-highlight">
+            <%= c 'icon', icon: 'shape-star', style: :inline %>
+            <%= I18n.t('components.chat_message.highlight') %>
+          </span>
+
+          <span class="ChatMessage-unhighlight">
+            <%= c 'icon', icon: 'shape-star', style: :inline %>
+            <%= I18n.t('components.chat_message.unhighlight') %>
+          </span>
+        <% end %>
+      </span>
     </div>
+
+    <% if warnings.any? %>
+      <div class="ChatMessage-meta ChatMessage-warnings">
+        <% warnings.each do |warning| %>
+          <span>
+            <%= c 'icon', icon: 't-warning', style: :inline %>
+            <%= warning %>
+          </span>
+        <% end %>
+      </div>
+    <% end %>
 </div>

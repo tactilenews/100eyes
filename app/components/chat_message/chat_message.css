@@ -1,6 +1,7 @@
 .ChatMessage {
-  background-color: var(--color-gray-light);
-  padding: var(--spacing-unit-xs) var(--spacing-unit-s);
+  --background: var(--color-gray-light);
+  background-color: var(--background);
+  padding: calc(1 / 3 * var(--spacing-unit)) var(--spacing-unit-s);
   border-radius: var(--border-radius-l);
   border: 1px solid transparent;
 }
@@ -8,11 +9,6 @@
 .ChatMessage:target {
   border-color: var(--color-focus);
   box-shadow: var(--input-focus-shadow);
-}
-
-.ChatMessage-meta {
-  color: var(--color-text-light);
-  font-size: var(--font-size-xs);
 }
 
 .ChatMessage-text {
@@ -26,7 +22,7 @@
   overflow: hidden;
 }
 
-.ChatMessage-toggle {
+.ChatMessage-toggleExpanded {
   position: absolute;
   bottom: 0;
   right: 0;
@@ -35,7 +31,7 @@
   background: linear-gradient(
     to right,
     rgba(255, 255, 255, 0) 0,
-    var(--color-gray-light) var(--spacing-unit)
+    var(--background) var(--spacing-unit)
   );
 }
 
@@ -48,12 +44,49 @@
   display: initial;
 }
 
-.ChatMessage--truncated .ChatMessage-toggle {
+.ChatMessage--truncated .ChatMessage-toggleExpanded {
   display: block;
 }
 
+.ChatMessage-meta {
+  color: var(--color-text-light);
+  font-size: var(--font-size-s);
+}
+
+.ChatMessage-meta > * + * {
+  display: inline-block;
+  margin-left: var(--spacing-unit-s);
+}
+
 .ChatMessage-warnings {
-  display: flex;
-  flex-direction: column;
   color: var(--color-red);
+}
+
+.ChatMessage-copied,
+.ChatMessage--copied .ChatMessage-copy {
+  display: none;
+}
+
+.ChatMessage--copied .ChatMessage-copied {
+  display: initial;
+  color: var(--color-green-dark);
+}
+
+.ChatMessage--highlighted {
+  --background: var(--color-yellow-lightest);
+  color: var(--color-yellow-darkest);
+  border-color: var(--color-yellow-light);
+}
+
+.ChatMessage--highlighted .ChatMessage-meta:not(.ChatMessage-warnings) {
+  color: var(--color-yellow-dark);
+}
+
+.ChatMessage-unhighlight,
+.ChatMessage--highlighted .ChatMessage-highlight {
+  display: none;
+}
+
+.ChatMessage--highlighted .ChatMessage-unhighlight {
+  display: initial;
 }

@@ -1,0 +1,29 @@
+.Footer {
+  display: flex;
+  width: 100%;
+  gap: var(--spacing-unit-l);
+  justify-content: space-between;
+
+  font-size: var(--font-size-s);
+  color: var(--color-text-light);
+}
+
+.Footer-column {
+  flex-basis: 100%;
+}
+
+.Footer-logos {
+  display: flex;
+  gap: var(--spacing-unit);
+}
+
+.Footer-logo {
+  height: calc(3 * var(--line-height));
+  padding: var(--spacing-unit-xs) 0;
+  opacity: 0.75;
+  filter: grayscale(100%);
+}
+
+.Footer-logo:hover {
+  opacity: 0.6;
+}

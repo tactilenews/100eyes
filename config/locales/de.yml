@@ -7,6 +7,10 @@ de:
     chat_message:
       expand: weiterlesen
       collapse: weniger
+      copy: kopieren
+      copied: Nachricht kopiert!
+      highlight: markieren
+      unhighlight: Markierung entfernen
       contains_unknown_content: Enthält nicht unterstützte Inhalte
       blocked_by_user: wurde von diesem Mitglied blockiert
     chat_messages_group:
@@ -22,6 +26,33 @@ de:
         other: Recherchen
     hero:
       title: Willkommen bei 100eyes. Nutze die Intelligenz der Community.
+    footer:
+      authors:
+        heading: Ein Projekt von
+        text: |
+          tactile.news
+          Csuraji Vicari GbR
+          Große Bäckerstraße 19
+          21335 Lüneburg
+      funding:
+        heading: Unterstützt durch
+      license:
+        heading: Lizenz
+        licensed_under: Lizenziert unter MIZ‑Lizenz
+    request_metrics:
+      users: haben geantwortet
+      replies: Nachrichten insgesamt
+      photos: Fotos
+    steps:
+      steps:
+        - icon: r-chat
+          text: Stelle in 100eyes eine Frage und sende sie mit einem Klick an 50 Menschen.
+        - icon: mobile-chat
+          text: Deine Frage erreicht die Empfänger per Telegram-Messenger oder eMail, je nachdem wie sie es wünschen.
+        - icon: bullet-list-68
+          text: 100eyes sammelt alle Antworten und stellt sie dir übersichtlich zur Auswertung dar.
+        - icon: app-services
+          text: Werte die Antworten mit Hilfe von 100eyes aus und komponiere deine Veröffentlichung.
 
   message_mailer:
     new_message_email:
@@ -34,7 +65,8 @@ de:
 
   save: Speichern
   discard: Änderungen verwerfen
-
+  dashboard:
+    how_it_works: So funktioniert 100eyes…
   search:
     placeholder: Suchen
     result:

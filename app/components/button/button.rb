@@ -2,8 +2,10 @@
 
 module Button
   class Button < ApplicationComponent
-    def initialize(label: nil, type: nil, link: nil, styles: ['primary'])
-      super(styles: styles)
+    def initialize(label: nil, type: nil, link: nil, **)
+      super
+
+      @styles = [:primary] if @styles.empty?
 
       @label = label
       @type = type

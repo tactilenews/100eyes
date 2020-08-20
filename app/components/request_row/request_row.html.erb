@@ -1,24 +1,26 @@
 <article class="<%= class_attr %>">
   <%= link_to request_path(id: request.id) do %>
-    <%= c 'box', style: :card do %>
-      <%= c 'stack', space: :small do %>
+    <%= c 'card' do %>
+      <%= c 'box', style: :card do %>
+        <%= c 'stack', space: :small do %>
 
-        <%= c 'stack', space: :xsmall do %>
-          <%= c 'heading', tag: :h2 do %>
-            <%= request.title %>
+          <%= c 'stack', space: :xsmall do %>
+            <%= c 'heading', tag: :h2 do %>
+              <%= request.title %>
+            <% end %>
+
+            <div class="RequestRow-meta">
+              <span>
+                <%= I18n.t('request.created_at', created_at: date_time(request.created_at)) %>
+              </span>
+              <%= c 'request_metrics', request: request, style: :inline %>
+            </div>
           <% end %>
 
-          <div class="RequestRow-meta">
-            <span>
-              <%= I18n.t('request.created_at', created_at: date_time(request.created_at)) %>
-            </span>
-            <%= c 'request_mini_stats', request: request %>
-          </div>
+          <%= c 'plaintext_message', message: request.text %>
         <% end %>
 
-        <%= c 'plaintext_message', message: request.text %>
       <% end %>
-
     <% end %>
   <% end %>
 </article>
