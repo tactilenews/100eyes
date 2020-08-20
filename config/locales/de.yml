@@ -43,6 +43,16 @@ de:
       users: haben geantwortet
       replies: Nachrichten insgesamt
       photos: Fotos
+    steps:
+      steps:
+        - icon: r-chat
+          text: Stelle in 100eyes eine Frage und sende sie mit einem Klick an 50 Menschen.
+        - icon: mobile-chat
+          text: Deine Frage erreicht die Empfänger per Telegram-Messenger oder eMail, je nachdem wie sie es wünschen.
+        - icon: bullet-list-68
+          text: 100eyes sammelt alle Antworten und stellt sie dir übersichtlich zur Auswertung dar.
+        - icon: app-services
+          text: Werte die Antworten mit Hilfe von 100eyes aus und komponiere deine Veröffentlichung.
 
   message_mailer:
     new_message_email:
@@ -55,7 +65,8 @@ de:
 
   save: Speichern
   discard: Änderungen verwerfen
-
+  dashboard:
+    how_it_works: So funktioniert 100eyes…
   search:
     placeholder: Suchen
     result:
