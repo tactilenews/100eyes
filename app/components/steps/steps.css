@@ -26,7 +26,7 @@
   height: var(--spacing-unit-l);
   margin-bottom: var(--spacing-unit-s);
 
-  background: var(--color-blue-dark);
+  background: var(--color-blue-gray-dark);
   color: #fff;
   border-radius: 50%;
   text-align: center;
