@@ -1,0 +1,22 @@
+.Hero {
+  overflow: hidden;
+  padding: calc(3 * var(--spacing-unit)) var(--spacing-unit-l);
+  background-color: var(--color-gray-light);
+}
+
+.Hero .Wrapper {
+  position: relative;
+}
+
+.Hero-text {
+  width: 60%;
+}
+
+.Hero-peacock > svg {
+  position: absolute;
+  right: 0;
+  top: -20%;
+  width: 75%;
+  fill: var(--color-blue-gray-dark);
+  opacity: 0.2;
+}

@@ -3,6 +3,7 @@
 class ApplicationComponent < ViewComponent::Base
   include ComponentHelper
   include DateTimeHelper
+  include SvgHelper
 
   def initialize(styles: [], style: nil, **)
     @styles = styles
