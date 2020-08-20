@@ -1,7 +1,12 @@
+.Heading--hero,
 .Heading--alpha,
 .Heading--beta {
   line-height: 1.25;
   font-weight: 700;
+}
+
+.Heading--hero {
+  font-size: 2rem;
 }
 
 .Heading--alpha {

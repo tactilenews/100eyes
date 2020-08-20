@@ -20,6 +20,8 @@ de:
       investigation:
         one: Recherche
         other: Recherchen
+    hero:
+      title: Willkommen bei 100eyes. Nutze die Intelligenz der Community.
 
   message_mailer:
     new_message_email:
@@ -32,10 +34,6 @@ de:
 
   save: Speichern
   discard: Änderungen verwerfen
-
-  dashboard:
-    title: Willkommen bei 100eyes. Nutze die Intelligenz der Community.
-    subtitle: Mit 100eyes kannst du 50 Menschen aus deiner Region Fragen stellen.
 
   search:
     placeholder: Suchen
