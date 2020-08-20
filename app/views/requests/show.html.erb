@@ -27,7 +27,7 @@
     <% else %>
 
       <%= c 'stack', space: :xlarge do %>
-        <%= c 'request_metrics', request: @request %>
+        <%= c 'request_metrics', request: @request, style: :cards %>
 
         <%= c 'stack' do %>
           <%= c 'heading', tag: :h2 do %>

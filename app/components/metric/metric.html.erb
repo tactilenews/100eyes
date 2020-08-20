@@ -1,20 +1,20 @@
-<div class="Metric">
-  <% unless total.nil? %>
+<div class="<%= class_attr %>">
+  <% if total.present? && styles.include?(:large) %>
     <div
       class="Metric-progress"
       style="--progress: calc(<%= value %> / <%= total %> * 100%)"
     ></div>
   <% end %>
 
-  <div class="Metric-value">
+  <span class="Metric-icon">
+    <%= c 'icon', icon: icon, style: :inline %>
+  </span>
+
+  <span class="Metric-value">
     <%= formatted %>
-  </div>
+  </span>
 
-  <div class="Metric-label">
+  <span class="Metric-label">
     <%= label %>
-  </div>
-
-  <div class="Metric-icon">
-    <%= c 'icon', icon: icon %>
-  </div>
+  </span>
 </div>

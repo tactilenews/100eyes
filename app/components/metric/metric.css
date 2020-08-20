@@ -1,27 +1,35 @@
-.Metric {
-  position: relative;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  padding: var(--spacing-unit-s);
+.Metric:not(.Metric--large) .Metric-label {
+  font-size: 0;
 }
 
-.Metric-value {
+.Metric-icon {
+  opacity: 0.8;
+}
+
+.Metric--large {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.Metric--large .Metric-value {
+  display: block;
   order: 1;
   font-size: calc(1.125 * var(--spacing-unit));
   line-height: calc(1.5 * var(--spacing-unit));
   font-weight: 700;
 }
 
-.Metric-icon {
+.Metric--large .Metric-icon {
   order: 2;
-  width: var(--spacing-unit);
-  height: var(--spacing-unit);
+  font-size: var(--spacing-unit);
   margin-left: var(--spacing-unit-xs);
   color: var(--color-blue-gray);
 }
 
-.Metric-label {
+.Metric--large .Metric-label {
+  display: block;
   order: 3;
   width: 100%;
   font-size: var(--font-size-s);

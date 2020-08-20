@@ -1,11 +1,5 @@
 .Box {
-  position: relative;
   padding: var(--spacing-unit);
-  overflow: hidden;
-}
-
-.Box--zero {
-  padding: 0;
 }
 
 .Box--small {
@@ -22,9 +16,4 @@
 
 .Box--gray {
   background-color: var(--color-gray-light);
-}
-
-.Box--card {
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25), 0 2px 20px rgba(0, 0, 0, 0.15);
-  border-radius: var(--border-radius-l);
 }
