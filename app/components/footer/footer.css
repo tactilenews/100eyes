@@ -18,19 +18,12 @@
 }
 
 .Footer-logo {
-  opacity: 0.75;
+  height: calc(3 * var(--line-height));
   padding: var(--spacing-unit-xs) 0;
+  opacity: 0.75;
   filter: grayscale(100%);
 }
 
 .Footer-logo:hover {
   opacity: 0.6;
-}
-
-.Footer-ptfLogo {
-  height: calc(1.5 * var(--line-height));
-}
-
-.Footer-bmbfLogo {
-  height: calc(2.5 * var(--line-height));
 }
