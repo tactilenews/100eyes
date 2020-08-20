@@ -10,11 +10,6 @@
   box-shadow: var(--input-focus-shadow);
 }
 
-.ChatMessage-meta {
-  color: var(--color-text-light);
-  font-size: var(--font-size-xs);
-}
-
 .ChatMessage-text {
   position: relative;
 }
@@ -52,8 +47,26 @@
   display: block;
 }
 
+.ChatMessage-meta {
+  color: var(--color-text-light);
+  font-size: var(--font-size-xs);
+}
+
+.ChatMessage-meta > * + * {
+  display: inline-block;
+  margin-left: var(--spacing-unit-s);
+}
+
 .ChatMessage-warnings {
-  display: flex;
-  flex-direction: column;
   color: var(--color-red);
+}
+
+.ChatMessage-copied,
+.ChatMessage--copied .ChatMessage-copy {
+  display: none;
+}
+
+.ChatMessage--copied .ChatMessage-copied {
+  display: initial;
+  color: var(--color-green-dark);
 }
