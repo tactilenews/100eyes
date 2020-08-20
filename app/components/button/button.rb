@@ -5,9 +5,7 @@ module Button
     def initialize(label: nil, type: nil, link: nil, **)
       super
 
-      if @styles.empty?
-        @styles = [:primary]
-      end
+      @styles = [:primary] if @styles.empty?
 
       @label = label
       @type = type
