@@ -23,14 +23,18 @@
   font-weight: 700;
 }
 
+.Heading--upper,
 .Heading--section {
-  display: flex;
-  align-items: center;
-  width: 100%;
   font-weight: 600;
   text-transform: uppercase;
   font-size: var(--font-size-s);
   letter-spacing: 0.1em;
+}
+
+.Heading--section {
+  display: flex;
+  align-items: center;
+  width: 100%;
   color: var(--color-text-light);
 }
 
