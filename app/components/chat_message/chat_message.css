@@ -2,6 +2,12 @@
   background-color: var(--color-gray-light);
   padding: var(--spacing-unit-xs) var(--spacing-unit-s);
   border-radius: var(--border-radius-l);
+  border: 1px solid transparent;
+}
+
+.ChatMessage:target {
+  border-color: var(--color-focus);
+  box-shadow: var(--input-focus-shadow);
 }
 
 .ChatMessage-meta {
