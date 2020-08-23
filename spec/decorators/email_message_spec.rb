@@ -43,6 +43,40 @@ RSpec.describe EmailMessage do
       let(:text_part) { '<h1>This is a text body part</h1>' }
       it { expect(subject.call).to eq('This is a text body part') }
     end
+
+    describe '<br> tags present in text' do
+      let(:text_part) { 'First paragraph<br>Second paragraph' }
+
+      it 'converts <br> to line breaks' do
+        sanitized = <<~TEXT.strip
+          First paragraph
+          Second paragraph
+        TEXT
+
+        expect(subject.call).to eq(sanitized)
+      end
+    end
+
+    describe '<p> tags present in text' do
+      let(:text_part) { '<p>First paragraph</p><p>Second paragraph</p>' }
+
+      it 'converts <p> to line breaks' do
+        sanitized = <<~TEXT.strip
+          First paragraph
+          Second paragraph
+        TEXT
+
+        expect(subject.call).to eq(sanitized)
+      end
+    end
+
+    describe 'encoded special chars in text' do
+      let(:text_part) { '&auml;&ouml;&uuml;' }
+
+      it 'decodes encoded special chars' do
+        expect(subject.call).to eq('äöü')
+      end
+    end
   end
 
   describe '#message' do
