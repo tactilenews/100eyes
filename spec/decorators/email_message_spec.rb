@@ -77,6 +77,14 @@ RSpec.describe EmailMessage do
         expect(subject.call).to eq('äöü')
       end
     end
+
+    describe '<a> tags present in text' do
+      let(:text_part) { 'Have a look at my <a href="https://example.org">website</a>!' }
+
+      it 'keeps link URLs' do
+        expect(subject.call).to eq('Have a look at my website (https://example.org)!')
+      end
+    end
   end
 
   describe '#message' do
