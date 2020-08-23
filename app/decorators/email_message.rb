@@ -18,9 +18,8 @@ class EmailMessage
   private
 
   def initialize_text(mail)
-    return mail.decoded unless mail.multipart?
-
-    mail.text_part&.decoded
+    text = mail.multipart? ? mail.text_part&.decoded : mail.decoded
+    ActionView::Base.full_sanitizer.sanitize(text)
   end
 
   def initialize_user(mail)
