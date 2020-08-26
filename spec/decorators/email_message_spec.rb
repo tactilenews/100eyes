@@ -35,25 +35,20 @@ RSpec.describe EmailMessage do
 
       describe '<html> tags present in text' do
         let(:text_part) { '<h1>This is a text body part</h1>' }
-        it { expect(subject.call).to eq('This is a text body part') }
+        it { expect(subject.call).to eq("\nThis is a text body part\n") }
       end
     end
 
     describe '<html> tags present in text' do
       let(:text_part) { '<h1>This is a text body part</h1>' }
-      it { expect(subject.call).to eq('This is a text body part') }
+      it { expect(subject.call).to eq("\nThis is a text body part\n") }
     end
 
     describe '<br> tags present in text' do
       let(:text_part) { 'First paragraph<br>Second paragraph' }
 
       it 'converts <br> to line breaks' do
-        sanitized = <<~TEXT.strip
-          First paragraph
-          Second paragraph
-        TEXT
-
-        expect(subject.call).to eq(sanitized)
+        expect(subject.call).to eq("First paragraph\nSecond paragraph")
       end
     end
 
@@ -61,8 +56,10 @@ RSpec.describe EmailMessage do
       let(:text_part) { '<p>First paragraph</p><p>Second paragraph</p>' }
 
       it 'converts <p> to line breaks' do
-        sanitized = <<~TEXT.strip
+        sanitized = <<~TEXT
+
           First paragraph
+
           Second paragraph
         TEXT
 
@@ -83,6 +80,14 @@ RSpec.describe EmailMessage do
 
       it 'keeps link URLs' do
         expect(subject.call).to eq('Have a look at my website (https://example.org)!')
+      end
+    end
+
+    describe '<a> tags without href attributes present in text' do
+      let(:text_part) { 'Have a look at my <a>website</a>!' }
+
+      it 'does not crash' do
+        expect(subject.call).to eq('Have a look at my website!')
       end
     end
   end

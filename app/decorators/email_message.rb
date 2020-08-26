@@ -19,7 +19,22 @@ class EmailMessage
 
   def initialize_text(mail)
     text = mail.multipart? ? mail.text_part&.decoded : mail.decoded
-    ActionView::Base.full_sanitizer.sanitize(text)
+    fragment = Loofah.fragment(text)
+    plain_text_links = Loofah::Scrubber.new do |node|
+      if (node.name == 'a') && node['href']
+        href = " (#{node['href']})"
+        node.add_child(Nokogiri::XML::Text.new(href, node.document))
+      end
+    end
+    br2lines = Loofah::Scrubber.new do |node|
+      node.replace(Nokogiri::XML::Text.new("\n", node.document)) if node.name == 'br'
+    end
+    result = fragment
+             .scrub!(plain_text_links)
+             .scrub!(br2lines)
+             .scrub!(Loofah::Scrubbers::NewlineBlockElements.new)
+             .to_s
+    ActionController::Base.helpers.strip_tags(result)
   end
 
   def initialize_user(mail)
