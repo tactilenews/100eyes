@@ -29,10 +29,15 @@
       <%= I18n.t 'components.footer.license.heading' %>
     <% end %>
 
-    <%= c 'icon', icon: 'scale', style: :inline %>
-    <%= I18n.t 'components.footer.license.licensed_under' %><br>
+    <a href="https://raw.githubusercontent.com/tactilenews/100eyes/master/LICENSE">
+      <%= c 'icon', icon: 'scale', style: :inline %>
+      <%= I18n.t 'components.footer.license.licensed_under' %>
+    </a>
+    <br>
 
-    <%= c 'icon', icon: 'logo-github', style: :inline %>
-    <a href="https://github.com/tactilenews/100eyes" target="_blank">GitHub</a>
+    <a href="https://github.com/tactilenews/100eyes" target="_blank">
+      <%= c 'icon', icon: 'logo-github', style: :inline %>
+      GitHub
+    </a>
 
 </footer>
