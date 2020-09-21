@@ -69,7 +69,7 @@ gem 'telegram-bot'
 
 gem 'pg_search', '~> 2.3'
 
-gem 'valid_email2', '~> 3.3'
+gem 'valid_email2', '~> 3.4'
 
 gem 'counter_culture', '~> 2.6'
 
