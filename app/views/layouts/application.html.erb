@@ -9,15 +9,15 @@
   </head>
 
   <body>
-    <%= c 'nav_bar' %>
 
-    <%= flash.notice %>
-
-    <% flash.each do |type, message| %>
-      <%= c 'notification', styles: [type] do %>
-        <%= message %>
+    <div class="sticky">
+      <%= c 'nav_bar' %>
+      <% flash.each do |type, message| %>
+        <%= c 'notification', styles: [type] do %>
+          <%= message %>
+        <% end %>
       <% end %>
-    <% end %>
+    </div>
 
     <main>
       <%= yield %>
