@@ -78,3 +78,5 @@ gem 'activestorage-validator', '~> 0.1.3'
 gem 'rack-attack', '~> 6.3'
 
 gem 'mini_magick', '~> 4.10'
+
+gem "facebook-messenger", "~> 2.0"
