@@ -39,7 +39,7 @@ RSpec.describe '/users', type: :request do
         city: 'Musterstadt',
         note: '11 Jahre alt',
         email: 'zora@example.org',
-        tag_list: %w[programmer student]
+        tag_list: 'programmer, student'
       }
     end
 
