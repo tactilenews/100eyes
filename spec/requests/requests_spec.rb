@@ -67,4 +67,30 @@ RSpec.describe 'Requests', telegram_bot: :rails do
       it { should_not have_enqueued_job.on_queue('mailers') }
     end
   end
+
+  describe 'GET /notifications' do
+    let(:request) { create(:request) }
+    let!(:older_message) { create(:message, request_id: request.id, created_at: 2.minutes.ago) }
+    let(:params) { { last_updated_at: 1.minute.ago } }
+
+    subject { -> { get notifications_request_path(request), headers: auth_headers, params: params } }
+
+    context 'No messages in last 1 minute' do
+      it 'responds with message count 0' do
+        expected = { message_count: 0 }.to_json
+        subject.call
+        expect(response.body).to eq(expected)
+      end
+    end
+
+    context 'New messages in last 1 minute' do
+      let!(:new_message) { create(:message, request_id: request.id, created_at: 30.seconds.ago) }
+
+      it 'responds with message count' do
+        expected = { message_count: 1 }.to_json
+        subject.call
+        expect(response.body).to eq(expected)
+      end
+    end
+  end
 end

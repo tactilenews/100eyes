@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class RequestsController < ApplicationController
-  before_action :set_request, only: %i[show show_user_messages]
+  before_action :set_request, only: %i[show show_user_messages notifications]
   before_action :set_user, only: %i[show_user_messages]
+  before_action :notifications_params, only: :notifications
 
   def index
     @requests = Request.eager_load(:messages)
@@ -29,6 +30,12 @@ class RequestsController < ApplicationController
     @chat_messages = @user.conversation_about(@request)
   end
 
+  def notifications
+    last_updated_at = Time.zone.parse(params[:last_updated_at])
+    message_count = @request.replies.where('created_at >= ?', last_updated_at).count
+    render json: { message_count: message_count }
+  end
+
   private
 
   def set_user
@@ -41,5 +48,9 @@ class RequestsController < ApplicationController
 
   def request_params
     params.require(:request).permit(:title, :text, hints: [])
+  end
+
+  def notifications_params
+    params.require(:last_updated_at)
   end
 end
