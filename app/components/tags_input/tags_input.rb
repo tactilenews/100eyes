@@ -2,7 +2,7 @@
 
 module TagsInput
   class TagsInput < ApplicationComponent
-    def initialize(id: nil, value: nil, **)
+    def initialize(id: nil, value: [], **)
       super
 
       @id = id

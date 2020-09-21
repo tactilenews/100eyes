@@ -37,7 +37,7 @@
   padding: 0 var(--spacing-unit-xs);
 
   background-color: var(--color-pink);
-  border-color: rgba(0, 0, 0, .2);
+  border-color: rgba(0, 0, 0, 0.2);
   border-radius: var(--border-radius);
 }
 
