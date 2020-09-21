@@ -21,6 +21,11 @@
   opacity: 0.8;
 }
 
+.Button:focus {
+  outline: none;
+  box-shadow: var(--input-focus-shadow);
+}
+
 .Button--primary {
   color: #fff;
   background-color: var(--button-color);
