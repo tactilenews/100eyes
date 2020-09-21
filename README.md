@@ -5,7 +5,7 @@
 100eyes ist ein schlankes Tool, das die journalistische Routine verbessert: Redakteur\*innen können Fragen stellen und bekommen schneller Antworten von mehr Menschen. Die Benutzeroberfläche bietet Journalist\*innen zwei Kernfunktionen:
 
 1. **Community pflegen**
-   
+
 2. **Recherchen starten:** Mit einem Klick können Journalist\*innen Fragen an ihre Community senden, alle Antworten gesammelt auswerten und neue Informationen aus den Antworten ihrer Nutzer\*innen strukturiert speichern.
 
 ## Demo
@@ -34,13 +34,16 @@ Zu Entwicklungszwecken kannst du 100eyes mithilfe von Docker aufsetzen. Das Dock
 
 3. #### Konfiguration
    100eyes basiert auf einigen Diensten, z.B. zum Versand und Empfang von E-Mails und Telegram-Nachrichten. Sensible Informationen wie z.B. API-Keys oder Passwörter speichert 100eyes verschlüsselt. Du kannst sie mithilfe des Rails-CLIs bearbeiten:
-   
-   ```console
+
+   ```bash
    $ docker-compose run app bash
+   # Erstellt ein neue Datei config/credentials.yml.enc
    $ EDITOR=vi bin/rails credentials:edit
+   # Editiert existierende credentials
+   $ EDITOR=vi bin/rails credentials:edit -e development
    ```
-   
-   Für eine Übersicht über die verfügbaren Konfigurationsoptionen wirf einen Blick in die [Beispiel-Konfiguration](https://github.com/tactilenews/100eyes/tree/master/config/credentials/credentials.yml.enc).
+
+   Für eine Übersicht über die verfügbaren Konfigurationsoptionen wirf einen Blick in die [Beispiel-Konfiguration](https://github.com/tactilenews/100eyes/tree/master/config/credentials/template.yml). Um die existierenden, verschlüsselten Konfigurationen zu öffnen, kontaktiere uns auf [tactile.news](https://tactile.news/)!
 
 4. #### Container starten
     Du kannst alle Container mit einem einzigen Befehl starten. 100eyes kannst du dann in deinem Browser unter http://localhost:3000 aufrufen.
