@@ -3,10 +3,13 @@
 class User < ApplicationRecord
   include PgSearch::Model
   multisearchable against: %i[first_name last_name username note]
+
   has_many :replies, class_name: 'Message', inverse_of: :sender, foreign_key: 'sender_id', dependent: :destroy
   has_many :received_messages, class_name: 'Message', inverse_of: :recipient, foreign_key: 'recipient_id', dependent: :destroy
   has_many :replied_to_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :replies
   has_many :received_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :received_messages
+  acts_as_taggable_on :tags
+
   default_scope { order(:first_name, :last_name) }
   validates :email, uniqueness: { case_sensitive: false }, allow_nil: true, 'valid_email_2/email': true
 

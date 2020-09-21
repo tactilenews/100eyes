@@ -1,19 +1,19 @@
 <%= form_with(model: user, local: true, class: "UserForm", data: { controller: "user-form", action: "input->user-form#setDirty reset->user-form#resetDirty" } ) do %>
   <%= c 'stack' do %>
     <%= c 'field', object: user, id: :first_name, styles: [:horizontal] do |field| %>
-      <%= c 'input', field.input_defaults.merge(disabled: true) %>
+      <%= c 'input', field.input_defaults %>
     <% end %>
 
     <%= c 'field', object: user, id: :last_name, styles: [:horizontal] do |field| %>
-      <%= c 'input', field.input_defaults.merge(disabled: true) %>
+      <%= c 'input', field.input_defaults %>
     <% end %>
 
     <%= c 'field', object: user, id: :phone, styles: [:horizontal] do |field| %>
-      <%= c 'input', field.input_defaults.merge(type: :phone, disabled: true) %>
+      <%= c 'input', field.input_defaults.merge(type: :phone) %>
     <% end %>
 
     <%= c 'field', object: user, id: :email, styles: [:horizontal] do |field| %>
-      <%= c 'input', field.input_defaults.merge(disabled: true) %>
+      <%= c 'input', field.input_defaults %>
     <% end %>
 
     <%= c 'field', object: user, id: :username, styles: [:horizontal] do |field | %>
@@ -21,15 +21,15 @@
     <% end %>
 
     <%= c 'field', object: user, id: :street, styles: [:horizontal] do |field | %>
-      <%= c 'input', field.input_defaults.merge(disabled: true) %>
+      <%= c 'input', field.input_defaults %>
     <% end %>
 
     <%= c 'field', object: user, id: :zip_code, styles: [:horizontal] do |field | %>
-      <%= c 'input', field.input_defaults.merge(disabled: true) %>
+      <%= c 'input', field.input_defaults %>
     <% end %>
 
     <%= c 'field', object: user, id: :city, styles: [:horizontal] do |field | %>
-      <%= c 'input', field.input_defaults.merge(disabled: true) %>
+      <%= c 'input', field.input_defaults %>
     <% end %>
 
     <%= c 'field', object: user, id: :note, styles: [:horizontal] do |field| %>

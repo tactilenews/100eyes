@@ -77,4 +77,5 @@ gem 'activestorage-validator', '~> 0.1.3'
 
 gem 'rack-attack', '~> 6.3'
 
+gem 'acts-as-taggable-on'
 gem 'mini_magick', '~> 4.10'
