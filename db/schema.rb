@@ -88,7 +88,6 @@ ActiveRecord::Schema.define(version: 2020_09_24_103822) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "hints", default: [], array: true
     t.integer "replies_count"
-    t.string "tag_list"
   end
 
   create_table "taggings", id: :serial, force: :cascade do |t|

@@ -7,7 +7,9 @@ class Request < ApplicationRecord
   attribute :hints, :string, array: true, default: []
   default_scope { order(created_at: :desc) }
 
-  after_create { Request.broadcast!(self)  }
+  acts_as_taggable_on :tags
+
+  after_create { Request.broadcast!(self) }
 
   delegate :replies, to: :messages
 
