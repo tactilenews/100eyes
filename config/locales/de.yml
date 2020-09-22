@@ -183,6 +183,13 @@ de:
       Herzlich Willkommen bei #50survivors. Danke, dass Du an unserer Dialogrecherche teilnimmst. In den kommenden Wochen nutzen wir Telegram für den Austausch. Ein Bot arbeitet wie ein Postbote für uns und stellt Fragen und Antworten zu. Deine Nachrichten lesen und beantworten wir aber selbstverständlich persönlich. Wir freuen uns sehr auf den Dialog mit Dir!
       Isabelle Buckow, Astrid Csuraji, Jakob Vicari und Bertram Weiß
 
+  facebook:
+    unknown_content_message: |
+      Unsere Software kann derzeit Textnachrichten und Bilder verarbeiten, jedoch noch keine weiteren Inhalte wie z.B. Sprachnachrichten oder Dateianhänge. Für die Zwischenzeit bitten wir dich, Nachrichten mit solchen Inhalten an @FrauCsu (Astrid Csuraji) zu schicken. Vielen Dank!
+    welcome_message: |
+      Herzlich Willkommen bei #50survivors. Danke, dass Du an unserer Dialogrecherche teilnimmst. In den kommenden Wochen nutzen wir Facebook für den Austausch. Ein Bot arbeitet wie ein Postbote für uns und stellt Fragen und Antworten zu. Deine Nachrichten lesen und beantworten wir aber selbstverständlich persönlich. Wir freuen uns sehr auf den Dialog mit Dir!
+      Isabelle Buckow, Astrid Csuraji, Jakob Vicari und Bertram Weiß
+
   activerecord:
     errors:
       messages:
