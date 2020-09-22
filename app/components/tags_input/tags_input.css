@@ -1,46 +1,30 @@
-@import 'choices.js/public/assets/styles/choices.min.css';
+@import '@yaireo/tagify/dist/tagify.css';
 
 .TagsInput {
   width: 100%;
 }
 
-.TagsInput .choices__inner {
+.TagsInput tags {
+  --tag-text-color: #fff;
+  --tag-bg: var(--color-pink);
+  --tag-hover: var(--color-pink-dark);
+
+  --tag-remove-btn-color: #fff;
+  --tag-remove-btn-bg--hover: var(--color-pink);
+  --tag-remove-bg: var(--color-pink);
+
+  --tags-border-color: var(--color-border);
+  --tags-focus-border-color: var(--color-focus);
+
   border-radius: var(--border-radius);
-  border: var(--input-border-width) solid var(--color-border);
+
+  transition: none;
 }
 
-.TagsInput .choices__inner:focus-within {
-  border-color: var(--color-focus);
+.TagsInput tags:focus-within {
   box-shadow: var(--input-focus-shadow);
 }
 
-.TagsInput .choices,
-.TagsInput .choices__inner,
-.TagsInput .choices__input {
-  font-size: inherit;
-}
-
-.TagsInput .choices__inner,
-.TagsInput .choices__input {
-  margin: unset;
-  padding: unset;
-  background: unset;
-}
-
-.TagsInput .choices__inner {
-  padding: var(--input-padding-s);
-}
-
-.TagsInput .choices__list--multiple > .choices__item {
-  margin: unset;
-  margin-right: var(--spacing-unit-xs);
-  padding: 0 var(--spacing-unit-xs);
-
-  background-color: var(--color-pink);
-  border-color: rgba(0, 0, 0, 0.2);
-  border-radius: var(--border-radius);
-}
-
-.TagsInput .choices__list--multiple > .choices__item:first-child {
-  margin-left: calc(-1 * var(--spacing-unit-xs));
+.TagsInput tag {
+  margin-bottom: 0;
 }

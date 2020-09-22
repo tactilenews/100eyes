@@ -2,16 +2,16 @@
 
 module TagsInput
   class TagsInput < ApplicationComponent
-    def initialize(id: nil, value: [], **)
+    def initialize(value: [], **kwargs)
       super
 
-      @id = id
       @value = value
+      @props = kwargs
     end
 
     private
 
-    attr_reader :id
+    attr_reader :props
 
     def value
       @value.join(',')
