@@ -2,10 +2,11 @@
 
 module TagsInput
   class TagsInput < ApplicationComponent
-    def initialize(value: [], **kwargs)
+    def initialize(value: [], options: [], **kwargs)
       super
 
       @value = value
+      @options = options
       @props = kwargs
     end
 
@@ -15,6 +16,10 @@ module TagsInput
 
     def value
       @value.join(',')
+    end
+
+    def options
+      @options.to_json
     end
   end
 end

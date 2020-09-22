@@ -33,7 +33,7 @@
     <% end %>
 
     <%= c 'field', object: user, id: :tag_list, styles: [:horizontal] do |field| %>
-      <%= c 'tags_input', field.input_defaults %>
+      <%= c 'tags_input', field.input_defaults.merge(options: available_tags) %>
     <% end %>
 
     <%= c 'field', object: user, id: :note, styles: [:horizontal] do |field| %>

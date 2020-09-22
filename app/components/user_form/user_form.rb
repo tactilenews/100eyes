@@ -4,11 +4,11 @@ module UserForm
   class UserForm < ApplicationComponent
     def initialize(user:)
       @user = user
-      @tags = User.all_tags.map(&:name)
+      @available_tags = User.all_tags.map(&:name)
     end
 
     private
 
-    attr_reader :user, :tags
+    attr_reader :user, :available_tags
   end
 end

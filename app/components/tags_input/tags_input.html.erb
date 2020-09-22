@@ -1,3 +1,7 @@
-<div class="TagsInput" data-controller="tags-input">
+<div
+  class="TagsInput"
+  data-controller="tags-input"
+  data-tags-input-options="<%= options %>"
+>
   <%= c 'input', value: value, stimulus_target: 'tags-input.input', **props %>
 </div>
