@@ -27,6 +27,25 @@ RSpec.describe Request, type: :model do
     expect(described_class.last).to eq(oldest_request)
   end
 
+  describe 'request tag_list persists' do
+    let!(:user) { create(:user, tag_list: ['programmer']) }
+    let!(:request) { create(:request, tag_list: ['programmer']) }
+
+    before(:each) do
+      user.tag_list = ''
+      user.save
+      user.reload
+    end
+
+    it 'even with no users with tag' do
+      expect(user.tag_list).to eq([])
+      expect(User.all_tags.map(&:name)).to eq([])
+      request.reload
+      expect(request.tag_list).to eq(['programmer'])
+      expect(Request.all_tags.map(&:name)).to eq(['programmer'])
+    end
+  end
+
   describe '#hints' do
     subject { Request.new(title: 'Example').hints }
     it { should match_array([]) }
