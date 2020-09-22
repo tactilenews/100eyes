@@ -8,6 +8,7 @@ class User < ApplicationRecord
   has_many :received_messages, class_name: 'Message', inverse_of: :recipient, foreign_key: 'recipient_id', dependent: :destroy
   has_many :replied_to_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :replies
   has_many :received_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :received_messages
+
   acts_as_taggable_on :tags
 
   default_scope { order(:first_name, :last_name) }
