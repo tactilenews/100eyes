@@ -6,9 +6,9 @@ module RequestNotification
       @request = request
     end
 
-    attr_reader :request
-
     private
+
+    attr_reader :request
 
     def last_updated_at
       Time.zone.now.iso8601

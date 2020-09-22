@@ -20,21 +20,21 @@ export default class extends Controller {
       data: new URLSearchParams({
         last_updated_at: this.lastUpdatedAt,
       }).toString(),
-      success: response => {
-        if (response.message_count == 0) {
+      success: ({ message_count }) => {
+        if (message_count == 0) {
           return;
         }
 
         this.element.hidden = false;
 
-        if (response.message_count == 1) {
+        if (message_count == 1) {
           this.textTarget.innerHTML = this.messageTemplate.one;
           return;
         }
 
         this.textTarget.innerHTML = this.messageTemplate.other.replace(
           '{count}',
-          response.message_count
+          message_count
         );
       },
     });
