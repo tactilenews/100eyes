@@ -40,5 +40,8 @@ module App
     config.i18n.available_locales = [:de]
     config.i18n.default_locale = :de
     config.time_zone = 'Berlin'
+
+    config.paths.add File.join('app', 'facebook_bot'), glob: File.join('**', '*.rb')
+    config.autoload_paths += Dir[Rails.root.join('app/facebook_bot/*')]
   end
 end

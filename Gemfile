@@ -79,4 +79,4 @@ gem 'rack-attack', '~> 6.3'
 
 gem 'mini_magick', '~> 4.10'
 
-gem "facebook-messenger", "~> 2.0"
+gem 'facebook-messenger', '~> 2.0'
