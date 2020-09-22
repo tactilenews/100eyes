@@ -17,7 +17,10 @@ Facebook::Messenger.configure do |config|
   config.provider = CredentialsProvider.new
 end
 
-Facebook::Messenger::Subscriptions.subscribe(
-  access_token: Facebook::Messenger.config.provider.access_token_for,
-  subscribed_fields: %w[messages]
-)
+page_access_token = Facebook::Messenger.config.provider.access_token_for
+if page_access_token
+  Facebook::Messenger::Subscriptions.subscribe(
+    access_token: page_access_token,
+    subscribed_fields: %w[messages]
+  )
+end
