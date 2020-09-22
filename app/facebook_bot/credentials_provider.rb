@@ -18,7 +18,3 @@ class CredentialsProvider < Facebook::Messenger::Configuration::Providers::Base
     Rails.application.credentials.dig(:facebook, :access_token)
   end
 end
-
-Facebook::Messenger.configure do |config|
-  config.provider = CredentialsProvider.new
-end
