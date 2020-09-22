@@ -70,6 +70,7 @@ RSpec.describe '/users', type: :request do
         patch user_url(user), params: { user: updated_attrs }, headers: auth_headers
         user.reload
         expect(user.tag_list).to eq(['ops'])
+        expect(User.all_tags.count).to eq(1)
       end
     end
 
