@@ -44,7 +44,8 @@ class Request < ApplicationRecord
   end
 
   def self.broadcast!(request)
-    User.find_each do |user|
+    users = request.tag_list.present? ? User.tagged_with(request.tag_list.split(','), any: true) : User.all
+    users.each do |user|
       Message.create!(
         sender: nil,
         recipient: user,
