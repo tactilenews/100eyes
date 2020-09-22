@@ -19,6 +19,8 @@
 
 .Input > input:focus {
   border-color: var(--color-focus);
+  outline: none;
+  box-shadow: var(--input-focus-shadow);
 }
 
 .Input--small > input {

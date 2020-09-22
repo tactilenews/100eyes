@@ -1,7 +1,0 @@
-.UserForm-actions {
-  flex-direction: row-reverse;
-}
-
-.UserForm:not(.UserForm--dirty) .UserForm-actions {
-  display: none;
-}

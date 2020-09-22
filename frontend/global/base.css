@@ -34,13 +34,6 @@ textarea {
   box-sizing: border-box;
 }
 
-input:not([type='checkbox']):not([type='radio']):focus,
-textarea:focus,
-button:focus {
-  outline: none;
-  box-shadow: var(--input-focus-shadow);
-}
-
 a {
   color: inherit;
   text-decoration: none;
