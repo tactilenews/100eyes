@@ -8,6 +8,7 @@ export default class extends Controller {
     new Tagify(this.inputTarget, {
       originalInputValueFormat: tags => tags.map(tag => tag.value).join(','),
       whitelist: JSON.parse(this.data.get('options')),
+      enforceWhitelist: !JSON.parse(this.data.get('allow-new')),
       dropdown: {
         classname: 'TagsInput-dropdown',
         enabled: 0,

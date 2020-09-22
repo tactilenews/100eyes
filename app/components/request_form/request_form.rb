@@ -14,11 +14,15 @@ module RequestForm
       @request = request
     end
 
+    private
+
     def hints
       HINTS
     end
 
-    private
+    def tags
+      User.all_tags.map(&:name)
+    end
 
     attr_reader :request
   end
