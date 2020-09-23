@@ -21,9 +21,12 @@ class FacebookMessage
 
   def initialize_message(facebook_message)
     message_id = facebook_message.id
-    message = Message.find_by(facebook_message_id: message_id) if message_id
-    message ||= Message.new(text: text, sender: sender, facebook_message_id: message_id)
-    message.unknown_content = unknown_content
+    message = Message.new(text: text, sender: sender, facebook_message_id: message_id)
+    message.raw_data.attach(
+      io: StringIO.new(JSON.generate(facebook_message.messaging)),
+      filename: 'facebook_api.json',
+      content_type: 'application/json'
+    )
     message
   end
 
@@ -39,8 +42,8 @@ class FacebookMessage
       photo
     end
     unknown_content = photos.any?(&:invalid?)
+    message.unknown_content = unknown_content
     photos = photos.select(&:valid?) # this might not be an image
     [photos, unknown_content]
   end
 end
-
