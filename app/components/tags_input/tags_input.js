@@ -2,6 +2,10 @@ import { Controller } from 'stimulus';
 import Tagify from '@yaireo/tagify';
 
 function dropdownItemTemplate(tagData) {
+  const membersLabel = tagData.count === 1 ?
+    this.settings.labels.members.one :
+    this.settings.labels.members.other;
+
   return `
     <div ${this.getAttributes(tagData)}
       class="${this.settings.classNames.dropdownItem} TagsInput-dropdownItem"
@@ -9,7 +13,7 @@ function dropdownItemTemplate(tagData) {
       role="option"
     >
       <span class="TagsInput-name">${tagData.name}</span>
-      <span class="TagsInput-count">${tagData.count} Mitglieder<span>
+      <span class="TagsInput-count">${tagData.count} ${membersLabel}<span>
     </div>
   `;
 }
@@ -19,16 +23,25 @@ export default class extends Controller {
 
   connect() {
     new Tagify(this.inputTarget, {
-      originalInputValueFormat: tags => tags.map(tag => tag.value).join(','),
+      originalInputValueFormat: tags => {
+        tags.map(tag => tag.value).join(',')
+      },
+
       whitelist: JSON.parse(this.data.get('available-tags')),
       enforceWhitelist: !JSON.parse(this.data.get('allow-new')),
+
       dropdown: {
         classname: 'TagsInput-dropdown',
         enabled: 0,
         closeOnSelect: false,
       },
+
       templates: {
         dropdownItem: dropdownItemTemplate,
+      },
+
+      labels: {
+        members: JSON.parse(this.data.get('members-label')),
       },
     });
   }

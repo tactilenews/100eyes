@@ -3,6 +3,7 @@
   data-controller="tags-input"
   data-tags-input-available-tags="<%= available_tags %>"
   data-tags-input-allow-new="<%= allow_new %>"
+  data-tags-input-members-label="<%= I18n.t('user.user').to_json %>"
 >
   <%= c 'input', value: value, stimulus_target: 'tags-input.input', **props %>
 </div>
