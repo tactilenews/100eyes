@@ -56,7 +56,7 @@ class EmailMessage
     photos = mail.attachments.map do |attachment|
       photo = Photo.new
       photo.message = message
-      photo.image.attach(io: StringIO.new(attachment.decoded), filename: attachment.filename)
+      photo.attachment.attach(io: StringIO.new(attachment.decoded), filename: attachment.filename)
       photo
     end
     unknown_content = photos.any?(&:invalid?)

@@ -31,7 +31,7 @@ FactoryBot.define do
         create(
           :photo,
           message: message,
-          image: Rack::Test::UploadedFile.new(
+          attachment: Rack::Test::UploadedFile.new(
             Rails.root.join('example-image.png'),
             'image/png'
           )

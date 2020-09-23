@@ -79,7 +79,7 @@ class TelegramMessage
     response = JSON.parse(URI.open(uri).read)
     file_path = response.dig('result', 'file_path')
     remote_file_location = URI("https://api.telegram.org/file/#{bot_token}/#{file_path}")
-    photo.image.attach(io: URI.open(remote_file_location), filename: File.basename(remote_file_location.path))
+    photo.attachment.attach(io: URI.open(remote_file_location), filename: File.basename(remote_file_location.path))
     [photo]
   end
 end
