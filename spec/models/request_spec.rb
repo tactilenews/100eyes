@@ -188,25 +188,5 @@ RSpec.describe Request, type: :model do
       it { should change { Message.pluck(:sender_id) }.from([]).to([nil]) }
       it { should change { Message.pluck(:broadcasted) }.from([]).to([true]) }
     end
-
-    describe 'supports sending message to any of the tag_list values' do
-      let(:request) do
-        Request.new(
-          title: 'Hitchhiker’s Guide',
-          text: 'What is the answer to life, the universe, and everything?',
-          hints: %w[photo confidential],
-          tag_list: 'programmer,devops'
-        )
-      end
-      before(:each) do
-        create(:user, id: 1, email: 'somebody@example.org', tag_list: ['programmer'])
-        create(:user, id: 2, email: nil, telegram_id: 22, telegram_chat_id: 23, tag_list: ['devops'])
-      end
-
-      it { should change { Message.count }.from(0).to(2) }
-      it { should change { Message.pluck(:recipient_id) }.from([]).to([2, 1]) }
-      it { should change { Message.pluck(:sender_id) }.from([]).to([nil, nil]) }
-      it { should change { Message.pluck(:broadcasted) }.from([]).to([true, true]) }
-    end
   end
 end

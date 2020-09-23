@@ -278,4 +278,24 @@ RSpec.describe User, type: :model do
       it { should make_database_queries(count: 1) }
     end
   end
+
+  describe '.with_tags' do
+    let!(:users) { create_list(:user, 3).to_a }
+    let!(:teachers) { create_list(:user, 2, tag_list: 'teacher').to_a }
+    let!(:teaching_pig_farmer) { create(:user, tag_list: 'teacher,pig farmer') }
+
+    context 'returns count of' do
+      it 'all users if no tag_list present' do
+        expect(User.with_tags).to contain_exactly(*users, *teachers, teaching_pig_farmer)
+      end
+
+      it 'users with a specific tag' do
+        expect(User.with_tags(['teacher'])).to contain_exactly(*teachers, teaching_pig_farmer)
+      end
+
+      it 'aggregate users with a specific tag' do
+        expect(User.with_tags(['teacher', 'pig farmer'])).to contain_exactly(teaching_pig_farmer)
+      end
+    end
+  end
 end

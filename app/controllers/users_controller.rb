@@ -47,8 +47,7 @@ class UsersController < ApplicationController
   end
 
   def count
-    users_count = params[:tag_list] ? User.tagged_with(params[:tag_list], any: true).count : User.count
-    render json: { count: users_count }
+    render json: { count: User.with_tags(params[:tag_list]).count }
   end
 
   private

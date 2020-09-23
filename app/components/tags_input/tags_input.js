@@ -9,9 +9,10 @@ const tagColor = tagData => {
 };
 
 function dropdownItemTemplate(tagData) {
-  const membersLabel = tagData.count === 1 ?
-    this.settings.labels.members.one :
-    this.settings.labels.members.other;
+  const membersLabel =
+    tagData.count === 1
+      ? this.settings.labels.members.one
+      : this.settings.labels.members.other;
 
   const color = tagColor(tagData);
 
@@ -44,7 +45,7 @@ export default class extends Controller {
   connect() {
     new Tagify(this.inputTarget, {
       originalInputValueFormat: tags => {
-        tags.map(tag => tag.value).join(',')
+        tags.map(tag => tag.value).join(',');
       },
 
       whitelist: JSON.parse(this.data.get('available-tags')),
