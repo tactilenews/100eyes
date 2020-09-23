@@ -20,7 +20,14 @@ module TagsInput
     end
 
     def available_tags
-      @available_tags.map { |tag| { name: tag.name, value: tag.name, count: tag.taggings_count } }.to_json
+      @available_tags.map do |tag|
+        {
+          id: tag.id,
+          name: tag.name,
+          value: tag.name,
+          count: tag.taggings_count,
+        }
+      end.to_json
     end
   end
 end

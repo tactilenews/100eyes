@@ -6,8 +6,6 @@
 
 .TagsInput tags {
   --tag-text-color: #fff;
-  --tag-bg: var(--color-pink);
-  --tag-hover: var(--color-pink-dark);
 
   --tag-remove-btn-color: #fff;
   --tag-remove-btn-bg--hover: var(--color-pink);
