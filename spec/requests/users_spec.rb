@@ -38,7 +38,8 @@ RSpec.describe '/users', type: :request do
         zip_code: '12345',
         city: 'Musterstadt',
         note: '11 Jahre alt',
-        email: 'zora@example.org'
+        email: 'zora@example.org',
+        tag_list: 'programmer,student'
       }
     end
 
@@ -56,6 +57,21 @@ RSpec.describe '/users', type: :request do
       expect(user.city).to eq('Musterstadt')
       expect(user.note).to eq('11 Jahre alt')
       expect(user.email).to eq('zora@example.org')
+      expect(user.tag_list).to eq(%w[programmer student])
+    end
+
+    context 'removing tags' do
+      let(:updated_attrs) do
+        { tag_list: 'ops' }
+      end
+      let(:user) { create(:user, tag_list: %w[dev ops]) }
+
+      it 'is supported' do
+        patch user_url(user), params: { user: updated_attrs }, headers: auth_headers
+        user.reload
+        expect(user.tag_list).to eq(['ops'])
+        expect(User.all_tags.count).to eq(1)
+      end
     end
 
     it 'redirects to the user' do

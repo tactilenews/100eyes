@@ -1,0 +1,30 @@
+@import '@yaireo/tagify/dist/tagify.css';
+
+.TagsInput {
+  width: 100%;
+}
+
+.TagsInput tags {
+  --tag-text-color: #fff;
+  --tag-bg: var(--color-pink);
+  --tag-hover: var(--color-pink-dark);
+
+  --tag-remove-btn-color: #fff;
+  --tag-remove-btn-bg--hover: var(--color-pink);
+  --tag-remove-bg: var(--color-pink);
+
+  --tags-border-color: var(--color-border);
+  --tags-focus-border-color: var(--color-focus);
+
+  border-radius: var(--border-radius);
+
+  transition: none;
+}
+
+.TagsInput tags:focus-within {
+  box-shadow: var(--input-focus-shadow);
+}
+
+.TagsInput tag {
+  margin-bottom: 0;
+}

@@ -105,6 +105,8 @@ de:
         label: Postleitzahl
       city:
         label: Stadt
+      tag_list:
+        label: Tags
       note:
         label: Notiz
         placeholder: Klicke hier, um eine Notiz zu %{value} zu hinterlegen
