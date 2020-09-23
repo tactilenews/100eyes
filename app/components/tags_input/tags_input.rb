@@ -2,11 +2,11 @@
 
 module TagsInput
   class TagsInput < ApplicationComponent
-    def initialize(value: [], options: [], allow_new: true, **kwargs)
+    def initialize(value: [], available_tags: [], allow_new: true, **kwargs)
       super
 
       @value = value
-      @options = options
+      @available_tags = available_tags
       @allow_new = allow_new
       @props = kwargs
     end
@@ -19,8 +19,8 @@ module TagsInput
       @value.join(',')
     end
 
-    def options
-      @options.to_json
+    def available_tags
+      @available_tags.map { |tag| { name: tag.name, value: tag.name, count: tag.taggings_count } }.to_json
     end
   end
 end

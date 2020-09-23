@@ -14,7 +14,7 @@
       <% end %>
 
       <%= c 'field', object: @request, id: :tag_list, help: I18n.t('request.form.tag_list.help') do |field| %>
-        <%= c 'tags_input', field.input_defaults.merge(options: tags, allow_new: false) %>
+        <%= c 'tags_input', field.input_defaults.merge(available_tags: available_tags, allow_new: false) %>
       <% end %>
 
       <%= c 'button', type: 'submit', label: I18n.t('request.send') %>

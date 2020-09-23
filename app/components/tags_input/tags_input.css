@@ -28,3 +28,13 @@
 .TagsInput tag {
   margin-bottom: 0;
 }
+
+.TagsInput-dropdownItem {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.TagsInput-count {
+  font-size: var(--font-size-xs);
+}

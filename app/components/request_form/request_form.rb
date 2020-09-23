@@ -20,8 +20,8 @@ module RequestForm
       HINTS
     end
 
-    def tags
-      User.all_tags.map(&:name)
+    def available_tags
+      User.all_tags
     end
 
     attr_reader :request

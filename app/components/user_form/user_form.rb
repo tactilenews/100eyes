@@ -4,7 +4,7 @@ module UserForm
   class UserForm < ApplicationComponent
     def initialize(user:)
       @user = user
-      @available_tags = User.all_tags.map(&:name)
+      @available_tags = User.all_tags
     end
 
     private
