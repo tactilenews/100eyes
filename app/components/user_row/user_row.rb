@@ -16,8 +16,10 @@ module UserRow
       user_path(user)
     end
 
-    def username
-      user.name || user.facebook_id
+    def display_name
+      return user.name if user.name.present?
+
+      'Anonymer Facebook User'
     end
 
     def channel_icons

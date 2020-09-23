@@ -33,7 +33,7 @@ class User < ApplicationRecord
   end
 
   def name
-    "#{first_name} #{last_name}" if first_name || last_name
+    "#{first_name} #{last_name}"
   end
 
   def conversation_about(request)
