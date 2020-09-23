@@ -18,16 +18,16 @@ RSpec.describe TelegramMessage do
     end
   end
 
-  describe '#audio' do
-    subject { telegram_message.audio }
+  describe '#voice' do
+    subject { telegram_message.voice }
 
     describe 'given a text message' do
       let(:message) { { text: 'Ich bin eine normale Nachricht' } }
       it { should be_nil }
     end
 
-    describe 'given a voice message' do
-      let(:message) { message_with_audio }
+    describe 'given a voice message', vcr: { cassette_name: :voice_message } do
+      let(:message) { message_with_voice }
       it { should be_nil }
     end
   end
@@ -92,7 +92,7 @@ RSpec.describe TelegramMessage do
         end
 
         describe 'with a voice message' do
-          let(:message) { message_with_photo.merge({ audio: 'something' }) }
+          let(:message) { message_with_photo.merge({ voice: 'something' }) }
           it { should be(false) }
         end
 
@@ -125,7 +125,7 @@ RSpec.describe TelegramMessage do
     end
   end
 
-  let(:message_with_audio) do
+  let(:message_with_voice) do
     { 'message_id' => 429,
       'from' =>
     { 'id' => 146_338_764,

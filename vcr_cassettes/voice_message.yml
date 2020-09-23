@@ -1,0 +1,43 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.telegram.org/bot<TELEGRAM_BOT_API_KEY>/getFile?file_id=AwACAgIAAxkBAAIBrV9rgA6yx0OmgWjHN7kPjT8EstJ5AAMKAAINfWFLG7ifovFsufMbBA
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.16.1
+      Date:
+      - Wed, 23 Sep 2020 18:10:37 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '188'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Expose-Headers:
+      - Content-Length,Content-Type,Date,Server,Connection
+    body:
+      encoding: UTF-8
+      string: '{"ok":true,"result":{"file_id":"AwACAgIAAxkBAAIBrV9rgA6yx0OmgWjHN7kPjT8EstJ5AAMKAAINfWFLG7ifovFsufMbBA","file_unique_id":"AgAECgACDX1hSw","file_size":39368,"file_path":"voice/file_2.oga"}}'
+  recorded_at: Wed, 23 Sep 2020 18:10:53 GMT
+recorded_with: VCR 6.0.0

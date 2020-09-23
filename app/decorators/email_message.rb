@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class EmailMessage
-  attr_reader :sender, :text, :message, :photos, :unknown_content, :audio
+  attr_reader :sender, :text, :message, :photos, :unknown_content, :voice
 
   def self.from(raw_data)
     new(Mail.new(raw_data.download))
@@ -13,7 +13,7 @@ class EmailMessage
     @message = initialize_message(mail)
     @photos, @unknown_content = initialize_photos_and_unknown_content(mail)
     @message.unknown_content = unknown_content
-    @audio = nil
+    @voice = nil
   end
 
   private
