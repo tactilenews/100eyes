@@ -29,12 +29,12 @@ module Avatar
       return '?' unless user
 
       initials = if user.name
-        user.name.split(' ').map { |part| part&.first }.join('')
-      else
-        user.facebook_id.to_s.first(2)
-      end
+                   user.name.split(' ').map { |part| part&.first }.join('')
+                 else
+                   user.facebook_id.first(2)
+                 end
 
-      return initials.empty? ? '?' : initials
+      initials.empty? ? '?' : initials
     end
   end
 end

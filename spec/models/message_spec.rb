@@ -136,6 +136,41 @@ RSpec.describe Message, type: :model do
 
   describe '#before_create' do
     let(:message) { create(:message, sender: nil, recipient: recipient) }
+
+    describe '#send_facebook_message' do
+      before(:each) { allow(Facebook::Messenger::Bot).to receive(:deliver) }
+      subject { -> { message } }
+      describe 'given a recipient on facebook' do
+        let(:recipient) { create(:user, facebook_id: 'fa_4711') }
+        it {
+          subject.call
+          expect(Facebook::Messenger::Bot).not_to have_received(:deliver)
+        }
+
+        describe 'given a valid facebook page id' do
+          before(:each) do
+            allow(Rails.configuration).to receive(:facebook_page_id).and_return('12345')
+          end
+
+          it { should_not raise_error }
+          it {
+            subject.call
+            expect(Facebook::Messenger::Bot).to have_received(:deliver)
+          }
+
+          describe 'if anything goes wrong on facebook' do
+            before(:each) { allow(Facebook::Messenger::Bot).to receive(:deliver).and_raise(Facebook::Messenger::Bot::PermissionError, 'This message is sent outside of allowed window. You need ..') }
+            it { should_not raise_error }
+            it { should change { Message.count }.from(0).to(1) }
+            it {
+              subject.call
+              expect(Facebook::Messenger::Bot).to have_received(:deliver)
+            }
+          end
+        end
+      end
+    end
+
     describe 'given a recipient with telegram' do
       let(:recipient) { create(:user, telegram_chat_id: 47, telegram_id: 11) }
       describe '#blocked' do

@@ -14,6 +14,8 @@
 
 .Textarea:focus {
   border-color: var(--color-focus);
+  outline: none;
+  box-shadow: var(--input-focus-shadow);
 }
 
 .Textarea--small {

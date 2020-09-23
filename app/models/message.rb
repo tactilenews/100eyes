@@ -23,6 +23,7 @@ class Message < ApplicationRecord
   before_create do
     send_email
     send_telegram_message
+    send_facebook_message
   end
 
   def reply?
@@ -92,6 +93,28 @@ class Message < ApplicationRecord
       )
     rescue Telegram::Bot::Forbidden
       self.blocked = true
+    end
+  end
+
+  def send_facebook_message
+    return unless recipient&.facebook_id
+    return unless Rails.configuration.facebook_page_id
+
+    begin
+      Facebook::Messenger::Bot.deliver(
+        {
+          recipient: {
+            id: recipient.facebook_id
+          },
+          message: {
+            text: text
+          },
+          messaging_type: Facebook::Messenger::Bot::MessagingType::UPDATE
+        },
+        page_id: Rails.configuration.facebook_page_id
+      )
+    rescue Facebook::Messenger::Bot::SendError
+      # ignore
     end
   end
 end
