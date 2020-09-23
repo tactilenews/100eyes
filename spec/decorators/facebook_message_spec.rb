@@ -5,16 +5,41 @@ require 'rails_helper'
 RSpec.describe FacebookMessage do
   let(:facebook_message) { FacebookMessage.new message }
   let(:message) do
-    instance_double('FakeMessage', text: text, attachments: attachments)
+    Facebook::Messenger::Incoming::Message.new(hash)
   end
+  let(:hash) { { 'sender' => { 'id' => id }, 'message' => { 'text' => text, 'attachments' => attachments } } }
   let(:text) { nil }
   let(:attachments) { nil }
+  let(:id) { 1 }
 
   describe '#text' do
     subject { facebook_message.text }
     describe 'given a message with a `text` attribute' do
       let(:text) { 'It is a truth universally acknowledged.' }
       it { should eq('It is a truth universally acknowledged.') }
+    end
+  end
+
+  describe '#message' do
+    let(:request) { create(:request) }
+    subject { facebook_message.message }
+
+    describe 'assigning a request and calling #save! on the message' do
+      it do
+        expect do
+          subject.request = request
+          subject.save!
+        end.to(change { Message.count }.from(0).to(1))
+      end
+    end
+  end
+
+  describe '#sender' do
+    subject { facebook_message.sender }
+    let(:sender) { { 'id': 'catattack123' } }
+
+    describe 'calling #save! on the sender' do
+      it { expect { subject.save! }.to(change { User.count }.from(0).to(1)) }
     end
   end
 
