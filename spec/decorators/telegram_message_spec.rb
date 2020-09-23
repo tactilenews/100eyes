@@ -28,7 +28,7 @@ RSpec.describe TelegramMessage do
 
     describe 'given a voice message', vcr: { cassette_name: :voice_message } do
       let(:message) { message_with_voice }
-      it { should be_nil }
+      it { should_not be_nil }
     end
   end
 
@@ -91,8 +91,8 @@ RSpec.describe TelegramMessage do
           it { should be(false) }
         end
 
-        describe 'with a voice message' do
-          let(:message) { message_with_photo.merge({ voice: 'something' }) }
+        describe 'with a voice message', vcr: { cassette_name: :voice_message } do
+          let(:message) { message_with_voice }
           it { should be(false) }
         end
 
