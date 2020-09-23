@@ -25,7 +25,7 @@ module TagsInput
           id: tag.id,
           name: tag.name,
           value: tag.name,
-          count: tag.taggings_count,
+          count: tag.taggings_count
         }
       end.to_json
     end

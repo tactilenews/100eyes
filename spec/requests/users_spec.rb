@@ -28,6 +28,29 @@ RSpec.describe '/users', type: :request do
     end
   end
 
+  describe 'GET /count' do
+    let!(:users) { create_list(:user, 3) }
+    let!(:teachers) { create_list(:user, 2, tag_list: ['teacher']) }
+    let!(:pig_farmers) { create(:user, tag_list: ['pig farmer']) }
+
+    context 'returns count of' do
+      it 'all users if no tag_list present' do
+        get count_users_path(tag_list: []), headers: auth_headers
+        expect(response.body).to eq({ count: 6 }.to_json)
+      end
+
+      it 'users with a specific tag' do
+        get count_users_path(tag_list: ['teacher']), headers: auth_headers
+        expect(response.body).to eq({ count: 2 }.to_json)
+      end
+
+      it 'aggregate users with a specific tag' do
+        get count_users_path(tag_list: ['teacher,pig farmer']), headers: auth_headers
+        expect(response.body).to eq({ count: 3 }.to_json)
+      end
+    end
+  end
+
   describe 'PATCH /update' do
     let(:new_attrs) do
       {

@@ -18,6 +18,10 @@ Rails.application.routes.draw do
     member do
       post 'message'
     end
+
+    collection do
+      get 'count'
+    end
   end
 
   resources :messages do
