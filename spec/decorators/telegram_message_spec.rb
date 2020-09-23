@@ -93,6 +93,11 @@ RSpec.describe TelegramMessage do
 
         describe 'with a voice message' do
           let(:message) { message_with_photo.merge({ audio: 'something' }) }
+          it { should be(false) }
+        end
+
+        describe 'message with a document' do
+          let(:message) { message_with_photo.merge({ document: 'something' }) }
           it { should be(true) }
         end
       end

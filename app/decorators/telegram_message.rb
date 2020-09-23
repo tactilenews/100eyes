@@ -5,7 +5,7 @@
 # messages each containing a single photo.
 class TelegramMessage
   UNKNOWN_CONTENT_KEYS = %w[
-    animation audio document sticker video video_note
+    animation document sticker video video_note
     voice contact dice game poll venue location
     invoice successful_payment passport_data
   ].freeze
