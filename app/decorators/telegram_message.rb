@@ -9,7 +9,7 @@ class TelegramMessage
     voice contact dice game poll venue location
     invoice successful_payment passport_data
   ].freeze
-  attr_reader :sender, :text, :message, :photos, :unknown_content
+  attr_reader :sender, :text, :message, :photos, :unknown_content, :audio
 
   def self.from(raw_data)
     new(JSON.parse(raw_data.download))
@@ -22,6 +22,7 @@ class TelegramMessage
     @unknown_content = initialize_unknown_content(telegram_message)
     @message = initialize_message(telegram_message)
     @photos = initialize_photos(telegram_message)
+    @audio = nil
   end
 
   private

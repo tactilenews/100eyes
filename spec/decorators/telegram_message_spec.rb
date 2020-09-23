@@ -18,6 +18,20 @@ RSpec.describe TelegramMessage do
     end
   end
 
+  describe '#audio' do
+    subject { telegram_message.audio }
+
+    describe 'given a text message' do
+      let(:message) { { text: 'Ich bin eine normale Nachricht' } }
+      it { should be_nil }
+    end
+
+    describe 'given a voice message' do
+      let(:message) { message_with_audio }
+      it { should be_nil }
+    end
+  end
+
   describe '#photos' do
     subject { telegram_message.photos }
     describe 'given a message without photos' do
@@ -104,6 +118,31 @@ RSpec.describe TelegramMessage do
         it { expect { subject.save! }.to(change { User.first.username }.from('bob').to('alice')) }
       end
     end
+  end
+
+  let(:message_with_audio) do
+    { 'message_id' => 429,
+      'from' =>
+    { 'id' => 146_338_764,
+      'is_bot' => false,
+      'first_name' => 'Robert',
+      'last_name' => 'Schäfer',
+      'username' => 'roschaefer',
+      'language_code' => 'en' },
+      'chat' =>
+    { 'id' => 146_338_764,
+      'first_name' => 'Robert',
+      'last_name' => 'Schäfer',
+      'username' => 'roschaefer',
+      'type' => 'private' },
+      'date' => 1_600_880_655,
+      'voice' =>
+    { 'duration' => 5,
+      'mime_type' => 'audio/ogg',
+      'file_id' =>
+    'AwACAgIAAxkBAAIBrV9rgA6yx0OmgWjHN7kPjT8EstJ5AAMKAAINfWFLG7ifovFsufMbBA',
+      'file_unique_id' => 'AgAECgACDX1hSw',
+      'file_size' => 39_368 } }
   end
 
   let(:message_with_photo) do
