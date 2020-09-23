@@ -33,6 +33,20 @@
   justify-content: space-between;
 }
 
-.TagsInput-count {
+.tagify__dropdown__item--active,
+.tagify__dropdown__item:hover {
+  background-color: var(--color-gray-light);
+}
+
+.TagsInput-name {
+  padding: 0 var(--spacing-unit-xs);
+  border-radius: var(--border-radius);
+  background-color: var(--tag-bg) !important;
+  color: #fff;
+}
+
+.TagsInput-count,
+.tagify__dropdown__item--active .TagsInput-count {
   font-size: var(--font-size-xs);
+  color: var(--color-text-light);
 }

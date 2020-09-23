@@ -3,10 +3,17 @@ import Tagify from '@yaireo/tagify';
 
 const COLORS = ['#F4C317', '#0898FF', '#67D881', '#F4177A'];
 
+const tagColor = tagData => {
+  const COLORS = ['#F4C317', '#0898FF', '#67D881', '#F4177A'];
+  return COLORS[tagData.id % COLORS.length];
+};
+
 function dropdownItemTemplate(tagData) {
   const membersLabel = tagData.count === 1 ?
     this.settings.labels.members.one :
     this.settings.labels.members.other;
+
+  const color = tagColor(tagData);
 
   return `
     <div ${this.getAttributes(tagData)}
@@ -14,19 +21,20 @@ function dropdownItemTemplate(tagData) {
       tabindex="0"
       role="option"
     >
-      <span class="TagsInput-name">${tagData.name}</span>
+      <span class="TagsInput-name" style="--tag-bg: ${color}">
+        ${tagData.name}
+      </span>
       <span class="TagsInput-count">${tagData.count} ${membersLabel}<span>
     </div>
   `;
 }
 
 function transformTag(tagData) {
-  const COLORS = ['#F4C317', '#0898FF', '#67D881', '#F4177A'];
-  const tagColor = COLORS[tagData.id % COLORS.length];
+  const color = tagColor(tagData);
 
   tagData.style = `
-    --tag-bg: ${tagColor};
-    --tag-hover: ${tagColor};
+    --tag-bg: ${color};
+    --tag-hover: ${color};
   `;
 }
 
