@@ -99,6 +99,10 @@ de:
         label: Telegram
         placeholder: Kein Telegram-Nutzername hinterlegt
         title: Du kannst den Nutzernamen nicht selbst ändern. Sobald %{value} das erste Mal via Telegram interagiert, erscheint hier der Nutzername.
+      facebook_id:
+        label: Facebook ID
+        placeholder: Keine Facebook ID hinterlegt
+        title: Du kannst die Facebook ID nicht selbst ändern. Sobald %{value} das erste Mal via Facebook interagiert, erscheint hier die Facebook ID.
       street:
         label: Straße
       zip_code:
@@ -107,7 +111,7 @@ de:
         label: Stadt
       note:
         label: Notiz
-        placeholder: Klicke hier, um eine Notiz zu %{value} zu hinterlegen
+        placeholder: Klicke hier, um eine Notiz zu %{value} hinterlegen
 
   request:
     request:

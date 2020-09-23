@@ -20,6 +20,10 @@
       <%= c 'input', field.input_defaults.merge(disabled: true) %>
     <% end %>
 
+    <%= c 'field', object: user, id: :facebook_id, styles: [:horizontal] do |field | %>
+      <%= c 'input', field.input_defaults.merge(disabled: true) %>
+    <% end %>
+
     <%= c 'field', object: user, id: :street, styles: [:horizontal] do |field | %>
       <%= c 'input', field.input_defaults.merge(disabled: true) %>
     <% end %>

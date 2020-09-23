@@ -16,10 +16,15 @@ module UserRow
       user_path(user)
     end
 
+    def username
+      user.name || user.facebook_id
+    end
+
     def channel_icons
       channels = []
       channels << :mail if user.email?
       channels << :telegram if user.telegram?
+      channels << :messenger if user.facebook?
       channels
     end
   end

@@ -28,11 +28,13 @@ module Avatar
     def initials
       return '?' unless user
 
-      initials = user.name.split(' ').map { |part| part&.first }
+      initials = if user.name
+        user.name.split(' ').map { |part| part&.first }.join('')
+      else
+        user.facebook_id.to_s.first(2)
+      end
 
-      return '?' if initials.empty?
-
-      initials.join('')
+      return initials.empty? ? '?' : initials
     end
   end
 end

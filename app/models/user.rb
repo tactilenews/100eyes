@@ -29,7 +29,7 @@ class User < ApplicationRecord
   end
 
   def name
-    "#{first_name} #{last_name}"
+    "#{first_name} #{last_name}" if first_name || last_name
   end
 
   def conversation_about(request)
@@ -53,6 +53,10 @@ class User < ApplicationRecord
 
   def email?
     email.present?
+  end
+
+  def facebook?
+    facebook_id.present?
   end
 
   def recent_replies
