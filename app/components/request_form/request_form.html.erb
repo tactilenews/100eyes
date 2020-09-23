@@ -1,4 +1,13 @@
-<%= form_with(scope: :request, url: requests_path, local: true, class: "RequestForm", data: { controller: "request-form"}) do %>
+<%= form_with(
+  scope: :request,
+  url: requests_path,
+  local: true,
+  class: 'RequestForm',
+  data: {
+    controller: 'request-form',
+    request_form_members_count_message: I18n.t('request.form.members_count_message').to_json
+  }
+) do %>
   <div class="RequestForm-column" data-action="input->request-form#updatePreview">
     <%= c 'stack', space: :large do %>
 
@@ -14,7 +23,13 @@
       <% end %>
 
       <%= c 'field', object: @request, id: :tag_list, help: I18n.t('request.form.tag_list.help') do |field| %>
-        <%= c 'tags_input', field.input_defaults.merge(available_tags: available_tags, allow_new: false) %>
+        <%= c 'stack', space: :small do %>
+          <div class="Field-help" data-target="request-form.membersCount"></div>
+
+          <div data-action="changeTags->request-form#updateMembersCount">
+            <%= c 'tags_input',field.input_defaults.merge(available_tags: available_tags, allow_new: false) %>
+          </div>
+        <% end %>
       <% end %>
 
       <%= c 'button', type: 'submit', label: I18n.t('request.send') %>

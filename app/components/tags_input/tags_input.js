@@ -4,6 +4,10 @@ import Tagify from '@yaireo/tagify';
 const COLORS = ['#F4C317', '#0898FF', '#67D881', '#F4177A'];
 
 const tagColor = tagData => {
+  if (!tagData.id) {
+    return 'var(--color-text)';
+  }
+
   const COLORS = ['#F4C317', '#0898FF', '#67D881', '#F4177A'];
   return COLORS[tagData.id % COLORS.length];
 };
@@ -36,6 +40,8 @@ function transformTag(tagData) {
   tagData.style = `
     --tag-bg: ${color};
     --tag-hover: ${color};
+    --tag-remove-bg: ${color};
+    --tag-remove-btn-bg--hover: ${color};
   `;
 }
 
@@ -43,9 +49,9 @@ export default class extends Controller {
   static targets = ['input'];
 
   connect() {
-    new Tagify(this.inputTarget, {
+    this.tagify = new Tagify(this.inputTarget, {
       originalInputValueFormat: tags => {
-        tags.map(tag => tag.value).join(',');
+        return tags.map(tag => tag.value).join(',');
       },
 
       whitelist: JSON.parse(this.data.get('available-tags')),
@@ -67,5 +73,20 @@ export default class extends Controller {
         members: JSON.parse(this.data.get('members-label')),
       },
     });
+
+    this.tagify.on('add', () => this.fireInputEvent());
+    this.tagify.on('remove', () => this.fireInputEvent());
+  }
+
+  fireInputEvent() {
+    const event = new CustomEvent('changeTags', {
+      bubbles: true,
+      cancelable: true,
+      detail: {
+        tags: this.tagify.value.map(({ value }) => value),
+      },
+    });
+
+    this.element.dispatchEvent(event);
   }
 }
