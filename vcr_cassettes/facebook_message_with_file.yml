@@ -1,0 +1,55 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://cdn.fbsbx.com/v/t59.2708-21/11392517_10205418820163799_1440647182_n.txt/test.txt?_nc_cat=104&_nc_ht=cdn.fbsbx.com&_nc_ohc=J2O_NuF7Yy4AX8gAOhr&_nc_sid=0cab14&oe=5F6BE9EE&oh=e804f15b4a62fa49f676fbb3b86f9626
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Last-Modified:
+      - Fri, 12 Jun 2015 18:50:15 GMT
+      X-Authenticated-Common-Name:
+      - svc:proxygen
+      X-Authenticated-Identities:
+      - SERVICE_IDENTITY:proxygen-origin,MACHINE:twtraffic0153.04.odn1.facebook.com,MACHINE_TIER:twtraffic,SERVICE_IDENTITY:proxygen
+      Content-Type:
+      - text/plain
+      X-Haystack-Needlechecksum:
+      - '367466022'
+      X-Needle-Checksum:
+      - '92799403'
+      X-Fb-Config-Version-Olb-Prod:
+      - '913'
+      Content-Disposition:
+      - attachment; filename=test.txt
+      Cache-Control:
+      - max-age=1209600, no-transform
+      X-Fb-Trip-Id:
+      - '1679558926'
+      Date:
+      - Tue, 22 Sep 2020 19:10:38 GMT
+      Alt-Svc:
+      - h3-29=":443"; ma=3600,h3-27=":443"; ma=3600
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '5'
+    body:
+      encoding: UTF-8
+      string: 'Test
+
+        '
+  recorded_at: Tue, 22 Sep 2020 19:10:38 GMT
+recorded_with: VCR 6.0.0
