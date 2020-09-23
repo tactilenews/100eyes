@@ -64,6 +64,6 @@ Rails.application.configure do
   }
   config.project_name = ENV['HUNDRED_EYES_PROJECT_NAME'] || '100eyes'
 
-  config.hosts << '100eyes.loca.lt'
+  config.hosts << '100eyes2.loca.lt'
   config.web_console.whiny_requests = false
 end
