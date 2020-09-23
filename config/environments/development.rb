@@ -65,6 +65,6 @@ Rails.application.configure do
   config.project_name = ENV['HUNDRED_EYES_PROJECT_NAME'] || '100eyes'
   config.facebook_page_id = ENV['FACEBOOK_PAGE_ID'] || '112142777304762'
 
-  config.hosts << '100eyes3.loca.lt'
+  config.hosts << /100eyes\d*\.loca\.lt/
   config.web_console.whiny_requests = false
 end
