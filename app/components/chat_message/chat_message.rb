@@ -20,6 +20,10 @@ module ChatMessage
       "message-#{message.id}"
     end
 
+    def voice
+      message.voice
+    end
+
     def photos
       message.photos
     end
