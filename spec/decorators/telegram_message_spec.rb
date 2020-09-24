@@ -65,7 +65,7 @@ RSpec.describe TelegramMessage do
 
       it 'chooses the largest image' do
         photo = subject.first
-        expect(photo.attachment.blob.byte_size).to eq(90_449)
+        expect(photo.image.blob.byte_size).to eq(90_449)
       end
     end
   end
