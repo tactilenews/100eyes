@@ -106,8 +106,6 @@ de:
         label: Telegram
         placeholder: Kein Telegram-Nutzername hinterlegt
         title: Du kannst den Nutzernamen nicht selbst ändern. Sobald %{value} das erste Mal via Telegram interagiert, erscheint hier der Nutzername.
-      street:
-        label: Straße
       zip_code:
         label: Postleitzahl
       city:

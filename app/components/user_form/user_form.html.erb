@@ -20,10 +20,6 @@
       <%= c 'input', field.input_defaults.merge(disabled: true) %>
     <% end %>
 
-    <%= c 'field', object: user, id: :street, styles: [:horizontal] do |field| %>
-      <%= c 'input', field.input_defaults %>
-    <% end %>
-
     <%= c 'field', object: user, id: :zip_code, styles: [:horizontal] do |field| %>
       <%= c 'input', field.input_defaults %>
     <% end %>
@@ -40,7 +36,7 @@
       <%= c 'textarea', field.input_defaults
       %>
     <% end %>
-  
+
     <div class="UserForm-actions">
       <%= c 'button', type: 'submit', label: I18n.t('save'), styles: [:primary, :positive] %>
       <%= c 'button', type: 'reset', label: I18n.t('discard'), styles: [:plain, :danger] %>

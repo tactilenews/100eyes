@@ -34,7 +34,6 @@ RSpec.describe '/users', type: :request do
         first_name: 'Zora',
         last_name: 'Zimmermann',
         phone: '012345678',
-        street: 'Musterstraße 123',
         zip_code: '12345',
         city: 'Musterstadt',
         note: '11 Jahre alt',
@@ -52,7 +51,6 @@ RSpec.describe '/users', type: :request do
       expect(user.first_name).to eq('Zora')
       expect(user.last_name).to eq('Zimmermann')
       expect(user.phone).to eq('012345678')
-      expect(user.street).to eq('Musterstraße 123')
       expect(user.zip_code).to eq('12345')
       expect(user.city).to eq('Musterstadt')
       expect(user.note).to eq('11 Jahre alt')
