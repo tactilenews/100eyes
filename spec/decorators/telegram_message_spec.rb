@@ -46,7 +46,7 @@ RSpec.describe TelegramMessage do
             telegram_message.message.save!
           end
         end
-        it { should change { ActiveStorage::Attachment.where(name: 'attachment').count }.from(0).to(1) }
+        it { should change { ActiveStorage::Attachment.where(record_type: 'Voice').count }.from(0).to(1) }
       end
     end
   end
