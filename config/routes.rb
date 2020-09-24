@@ -6,7 +6,11 @@ Rails.application.routes.draw do
   get '/search', to: 'search#index'
   telegram_webhook Telegram::WebhookController, Rails.configuration.bot_id
 
-  resources :requests, only: %i[index show new create]
+  resources :requests, only: %i[index show new create] do
+    member do
+      get 'notifications', format: /json/
+    end
+  end
 
   resources :users, except: :edit do
     resources :requests, only: %i[show], to: 'requests#show_user_messages'

@@ -3,11 +3,13 @@
   data-controller="notification"
 >
   <%= @content %>
-  <button
-    data-action="notification#close"
-    class="Notification-close"
-    title="<%= I18n.t 'close' %>"
-  >
-    <%= c 'icon', icon: 'i-remove', styles: [:inline] %>
-  </button>
+  <% if show_close %>
+    <button
+      data-action="notification#close"
+      class="Notification-close"
+      title="<%= I18n.t 'close' %>"
+    >
+      <%= c 'icon', icon: 'i-remove', style: :inline %>
+    </button>
+  <% end %>
 </div>

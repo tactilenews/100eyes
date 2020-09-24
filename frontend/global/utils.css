@@ -77,3 +77,9 @@
 .mr-xl {
   margin-right: var(--spacing-unit-xl);
 }
+
+.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 99;
+}

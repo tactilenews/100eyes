@@ -1,3 +1,7 @@
+<% content_for :notifications do %>
+  <%= c 'request_notification', request: @request %>
+<% end %>
+
 <%= c 'box', styles: [:large, :gray] do %>
   <%= c 'wrapper' do %>
     <%= c 'stack', space: :small do %>

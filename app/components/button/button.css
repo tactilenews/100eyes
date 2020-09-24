@@ -60,3 +60,7 @@
 .Button--positive {
   --button-color: var(--color-green);
 }
+
+.Button--underline {
+  text-decoration: underline;
+}

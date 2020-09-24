@@ -1,0 +1,19 @@
+<div 
+  class="RequestNotification" 
+  data-controller="request-notification" 
+  data-request-notification-id="<%= request.id %>" 
+  data-request-notification-last-updated-at="<%= last_updated_at %>"
+  data-request-notification-message-template="<%= t('components.request_notification.message_template').to_json %>"
+  hidden
+>
+  <%= c 'notification', show_close: false do %>
+    <div>
+      <span data-target="request-notification.text"></span>
+      <%= c 'button',
+        label: t('components.request_notification.action'),
+        link: "",
+        styles: [:inline, :underline]
+      %>
+    </div>
+  <% end %> 
+</div>

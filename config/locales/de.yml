@@ -43,6 +43,11 @@ de:
       users: haben geantwortet
       replies: Nachrichten insgesamt
       photos: Fotos
+    request_notification:
+      action: Neu laden
+      message_template:
+        one: Du hast eine neue Antwort.
+        other: Du hast {count} neue Antworten.
     steps:
       steps:
         - icon: r-chat
