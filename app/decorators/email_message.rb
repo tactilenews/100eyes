@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 class EmailMessage
-  attr_reader :sender, :text, :message, :photos, :unknown_content
+  attr_reader :sender, :text, :message, :photos, :unknown_content, :voice
 
   def self.from(raw_data)
     new(Mail.new(raw_data.download))
   end
 
   def initialize(mail)
+    @voice = nil
     @text = initialize_text(mail)
     @sender = initialize_user(mail)
     @message = initialize_message(mail)

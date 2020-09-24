@@ -125,6 +125,16 @@ RSpec.describe EmailMessage do
     end
   end
 
+  describe '#voice' do
+    let(:mail) do
+      mail = Mail.new
+      mail.add_file Rails.root.join('README.md').to_s
+      mail
+    end
+    subject { email_message.voice }
+    it { should be_nil }
+  end
+
   describe '#photos' do
     subject { email_message.photos }
     describe 'given a file attachment' do

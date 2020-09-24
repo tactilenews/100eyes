@@ -6,10 +6,10 @@
 class TelegramMessage
   UNKNOWN_CONTENT_KEYS = %w[
     animation audio document sticker video video_note
-    voice contact dice game poll venue location
+    contact dice game poll venue location
     invoice successful_payment passport_data
   ].freeze
-  attr_reader :sender, :text, :message, :photos, :unknown_content
+  attr_reader :sender, :text, :message, :photos, :unknown_content, :voice
 
   def self.from(raw_data)
     new(JSON.parse(raw_data.download))
@@ -22,6 +22,8 @@ class TelegramMessage
     @unknown_content = initialize_unknown_content(telegram_message)
     @message = initialize_message(telegram_message)
     @photos = initialize_photos(telegram_message)
+    @voice = initialize_voice(telegram_message)
+    @message.voice = @voice
   end
 
   private
@@ -81,5 +83,21 @@ class TelegramMessage
     remote_file_location = URI("https://api.telegram.org/file/#{bot_token}/#{file_path}")
     photo.image.attach(io: URI.open(remote_file_location), filename: File.basename(remote_file_location.path))
     [photo]
+  end
+
+  def initialize_voice(telegram_message)
+    return nil unless telegram_message[:voice]
+
+    voice = Voice.new
+    bot_token = "bot#{Telegram.bots[Rails.configuration.bot_id].token}"
+    telegram_file = telegram_message[:voice]
+    file_id = telegram_file[:file_id]
+    uri = URI("https://api.telegram.org/#{bot_token}/getFile")
+    uri.query = URI.encode_www_form({ file_id: file_id })
+    response = JSON.parse(URI.open(uri).read)
+    file_path = response.dig('result', 'file_path')
+    remote_file_location = URI("https://api.telegram.org/file/#{bot_token}/#{file_path}")
+    voice.attachment.attach(io: URI.open(remote_file_location), filename: File.basename(remote_file_location.path))
+    voice
   end
 end
