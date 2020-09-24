@@ -72,15 +72,9 @@ class TelegramMessage
   def initialize_photos(telegram_message)
     return [] unless telegram_message[:photo]
 
-    photo = Photo.new
-    bot_token = "bot#{Telegram.bots[Rails.configuration.bot_id].token}"
     telegram_file = telegram_message[:photo].max { |a, b| a[:file_size] <=> b[:file_size] }
-    file_id = telegram_file[:file_id]
-    uri = URI("https://api.telegram.org/#{bot_token}/getFile")
-    uri.query = URI.encode_www_form({ file_id: file_id })
-    response = JSON.parse(URI.open(uri).read)
-    file_path = response.dig('result', 'file_path')
-    remote_file_location = URI("https://api.telegram.org/file/#{bot_token}/#{file_path}")
+    photo = Photo.new
+    remote_file_location = retrieve_message_type_and_attach(telegram_file)
     photo.image.attach(io: URI.open(remote_file_location), filename: File.basename(remote_file_location.path))
     [photo]
   end
@@ -89,15 +83,18 @@ class TelegramMessage
     return nil unless telegram_message[:voice]
 
     voice = Voice.new
+    remote_file_location = retrieve_message_type_and_attach(telegram_message[:voice])
+    voice.attachment.attach(io: URI.open(remote_file_location), filename: File.basename(remote_file_location.path))
+    voice
+  end
+
+  def retrieve_message_type_and_attach(telegram_file)
     bot_token = "bot#{Telegram.bots[Rails.configuration.bot_id].token}"
-    telegram_file = telegram_message[:voice]
     file_id = telegram_file[:file_id]
     uri = URI("https://api.telegram.org/#{bot_token}/getFile")
     uri.query = URI.encode_www_form({ file_id: file_id })
     response = JSON.parse(URI.open(uri).read)
     file_path = response.dig('result', 'file_path')
-    remote_file_location = URI("https://api.telegram.org/file/#{bot_token}/#{file_path}")
-    voice.attachment.attach(io: URI.open(remote_file_location), filename: File.basename(remote_file_location.path))
-    voice
+    URI("https://api.telegram.org/file/#{bot_token}/#{file_path}")
   end
 end
