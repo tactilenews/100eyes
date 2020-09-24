@@ -1,2 +1,3 @@
-.ChatMessageVoice {
+.ChatMessageVoice audio {
+  width: 100%;
 }
