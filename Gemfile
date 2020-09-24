@@ -67,7 +67,9 @@ gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 gem 'sucker_punch', '~> 2.1'
 gem 'telegram-bot'
 
-gem 'pg_search', '~> 2.3'
+# FIXME: version 2.3.3 introduced a bug, found https://github.com/Casecommons/pg_search/issues/446.
+# Add back pessimistic operator after resolved.
+gem 'pg_search', '2.3.2'
 
 gem 'valid_email2', '~> 3.4'
 
