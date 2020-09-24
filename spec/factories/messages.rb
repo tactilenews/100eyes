@@ -26,16 +26,15 @@ FactoryBot.define do
       association :recipient, factory: :user
     end
 
+    trait :with_voice do
+      after(:create) do |message|
+        create(:voice, message: message)
+      end
+    end
+
     trait :with_a_photo do
       after(:create) do |message|
-        create(
-          :photo,
-          message: message,
-          image: Rack::Test::UploadedFile.new(
-            Rails.root.join('example-image.png'),
-            'image/png'
-          )
-        )
+        create(:photo, message: message)
       end
     end
   end

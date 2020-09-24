@@ -18,6 +18,39 @@ RSpec.describe TelegramMessage do
     end
   end
 
+  describe '#voice' do
+    subject { telegram_message.voice }
+
+    describe 'given a text message' do
+      let(:message) { { text: 'Ich bin eine normale Nachricht' } }
+
+      it { should be_nil }
+      describe 'saving the message' do
+        subject { telegram_message.message.raw_data }
+        it { should be_attached }
+      end
+    end
+
+    describe 'given a voice message', vcr: { cassette_name: :voice_message } do
+      let(:message) { message_with_voice }
+
+      describe 'attachment' do
+        subject { telegram_message.voice.attachment }
+        it { should be_attached }
+      end
+
+      describe 'saving the message' do
+        subject do
+          lambda do
+            telegram_message.message.request = create(:request)
+            telegram_message.message.save!
+          end
+        end
+        it { should change { ActiveStorage::Attachment.where(record_type: 'Voice').count }.from(0).to(1) }
+      end
+    end
+  end
+
   describe '#photos' do
     subject { telegram_message.photos }
     describe 'given a message without photos' do
@@ -77,8 +110,13 @@ RSpec.describe TelegramMessage do
           it { should be(false) }
         end
 
-        describe 'with a voice message' do
-          let(:message) { message_with_photo.merge({ audio: 'something' }) }
+        describe 'with a voice message', vcr: { cassette_name: :voice_message } do
+          let(:message) { message_with_voice }
+          it { should be(false) }
+        end
+
+        describe 'message with a document' do
+          let(:message) { message_with_photo.merge({ document: 'something' }) }
           it { should be(true) }
         end
       end
@@ -104,6 +142,31 @@ RSpec.describe TelegramMessage do
         it { expect { subject.save! }.to(change { User.first.username }.from('bob').to('alice')) }
       end
     end
+  end
+
+  let(:message_with_voice) do
+    { 'message_id' => 429,
+      'from' =>
+    { 'id' => 146_338_764,
+      'is_bot' => false,
+      'first_name' => 'Robert',
+      'last_name' => 'Schäfer',
+      'username' => 'roschaefer',
+      'language_code' => 'en' },
+      'chat' =>
+    { 'id' => 146_338_764,
+      'first_name' => 'Robert',
+      'last_name' => 'Schäfer',
+      'username' => 'roschaefer',
+      'type' => 'private' },
+      'date' => 1_600_880_655,
+      'voice' =>
+    { 'duration' => 5,
+      'mime_type' => 'audio/ogg',
+      'file_id' =>
+    'AwACAgIAAxkBAAIBrV9rgA6yx0OmgWjHN7kPjT8EstJ5AAMKAAINfWFLG7ifovFsufMbBA',
+      'file_unique_id' => 'AgAECgACDX1hSw',
+      'file_size' => 39_368 } }
   end
 
   let(:message_with_photo) do

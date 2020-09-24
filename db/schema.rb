@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_21_150721) do
+ActiveRecord::Schema.define(version: 2020_09_23_174724) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -137,10 +137,18 @@ ActiveRecord::Schema.define(version: 2020_09_21_150721) do
     t.index ["telegram_id"], name: "index_users_on_telegram_id", unique: true
   end
 
+  create_table "voices", force: :cascade do |t|
+    t.bigint "message_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["message_id"], name: "index_voices_on_message_id"
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "messages", "requests"
   add_foreign_key "messages", "users", column: "recipient_id"
   add_foreign_key "messages", "users", column: "sender_id"
   add_foreign_key "photos", "messages"
   add_foreign_key "taggings", "tags"
+  add_foreign_key "voices", "messages"
 end

@@ -30,8 +30,8 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
       it { expect(User.first.telegram_id).to eq(47) }
     end
 
-    describe 'sending an audio message' do
-      subject { -> { dispatch_message 'Hello Bot!', { from: { id: 47, username: 'Joe' }, audio: 'something' } } }
+    describe 'sending a message with a document' do
+      subject { -> { dispatch_message 'Hello Bot!', { from: { id: 47, username: 'Joe' }, document: 'something' } } }
       it { should respond_with_message I18n.t('telegram.unknown_content_message') }
     end
   end
