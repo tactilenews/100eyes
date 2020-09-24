@@ -23,29 +23,30 @@ RSpec.describe TelegramMessage do
 
     describe 'given a text message' do
       let(:message) { { text: 'Ich bin eine normale Nachricht' } }
+
       it { should be_nil }
       describe 'saving the message' do
-        subject do
-          lambda {
-            telegram_message.message.request = create(:request)
-            telegram_message.message.save!
-          }
-        end
-        it { should change(ActiveStorage::Attachment, :count).from(0).to(1) }
+        subject { telegram_message.message.raw_data }
+        it { should be_attached }
       end
     end
 
     describe 'given a voice message', vcr: { cassette_name: :voice_message } do
       let(:message) { message_with_voice }
-      it { should_not be_nil }
+
+      describe 'attachment' do
+        subject { telegram_message.voice.attachment }
+        it { should be_attached }
+      end
+
       describe 'saving the message' do
         subject do
-          lambda {
+          lambda do
             telegram_message.message.request = create(:request)
             telegram_message.message.save!
-          }
+          end
         end
-        it { should change(ActiveStorage::Attachment, :count).from(0).to(2) }
+        it { should change { ActiveStorage::Attachment.where(name: 'attachment').count }.from(0).to(1) }
       end
     end
   end
