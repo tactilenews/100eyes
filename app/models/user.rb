@@ -27,9 +27,7 @@ class User < ApplicationRecord
     ActiveRecord::Base.transaction do
       message = message_decorator.message
       message.request = request
-      message.voice = message_decorator.voice
       message.save!
-      message.photos << message_decorator.photos
     end
   end
 

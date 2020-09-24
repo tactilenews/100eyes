@@ -8,12 +8,15 @@ class EmailMessage
   end
 
   def initialize(mail)
+    @voice = nil
     @text = initialize_text(mail)
     @sender = initialize_user(mail)
     @message = initialize_message(mail)
     @photos, @unknown_content = initialize_photos_and_unknown_content(mail)
     @message.unknown_content = unknown_content
-    @voice = nil
+    @photos.each do |photo|
+      @message.association(:photos).add_to_target(photo)
+    end
   end
 
   private

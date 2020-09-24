@@ -23,6 +23,10 @@ class TelegramMessage
     @message = initialize_message(telegram_message)
     @photos = initialize_photos(telegram_message)
     @voice = initialize_voice(telegram_message)
+    @message.voice = @voice
+    @photos.each do |photo|
+      @message.association(:photos).add_to_target(photo)
+    end
   end
 
   private
