@@ -1,6 +1,6 @@
 <div class="ChatMessagePhotos">
   <% photos.each do |photo| %>
-    <a class="ChatMessagePhotos-photo" href="<%= url_for(photo.image) %>" target="_blank">
+    <a class="ChatMessagePhotos-photo" href="<%= url_for(photo.attachment) %>" target="_blank">
       <img src="<%= url_for(photo.thumbnail) %>" alt="">
     </a>
   <% end %>

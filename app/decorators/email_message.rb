@@ -14,6 +14,9 @@ class EmailMessage
     @message = initialize_message(mail)
     @photos, @unknown_content = initialize_photos_and_unknown_content(mail)
     @message.unknown_content = unknown_content
+    @photos.each do |photo|
+      @message.association(:photos).add_to_target(photo)
+    end
   end
 
   private
@@ -57,7 +60,7 @@ class EmailMessage
     photos = mail.attachments.map do |attachment|
       photo = Photo.new
       photo.message = message
-      photo.image.attach(io: StringIO.new(attachment.decoded), filename: attachment.filename)
+      photo.attachment.attach(io: StringIO.new(attachment.decoded), filename: attachment.filename)
       photo
     end
     unknown_content = photos.any?(&:invalid?)
