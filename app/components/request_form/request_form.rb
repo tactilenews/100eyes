@@ -16,14 +16,14 @@ module RequestForm
 
     private
 
+    attr_reader :request
+
     def hints
       HINTS
     end
 
     def available_tags
-      User.all_tags
+      User.all_tags_with_count
     end
-
-    attr_reader :request
   end
 end

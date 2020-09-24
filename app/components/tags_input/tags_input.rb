@@ -6,7 +6,6 @@ module TagsInput
       super
 
       @value = value
-      @available_tags = available_tags
       @allow_new = allow_new
       @props = kwargs
     end
@@ -20,14 +19,7 @@ module TagsInput
     end
 
     def available_tags
-      @available_tags.map do |tag|
-        {
-          id: tag.id,
-          name: tag.name,
-          value: tag.name,
-          count: tag.taggings_count
-        }
-      end.to_json
+      User.all_tags_with_count
     end
   end
 end

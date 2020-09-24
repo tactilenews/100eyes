@@ -26,6 +26,17 @@ class User < ApplicationRecord
     find_by('lower(email) in (?)', Array.wrap(email).map(&:downcase))
   end
 
+  def self.all_tags_with_count
+    User.all_tags.map do |tag|
+      {
+        id: tag.id,
+        name: tag.name,
+        value: tag.name,
+        count: User.tagged_with([tag]).count
+      }
+    end.to_json
+  end
+
   def reply(message_decorator)
     request = active_request or return nil
     ActiveRecord::Base.transaction do
