@@ -20,6 +20,7 @@ module RequestMetrics
       [
         {
           value: request.stats[:counts][:users],
+          total: request.stats[:counts][:recipients],
           label: I18n.t('components.request_metrics.users'),
           icon: 'single-03'
         },

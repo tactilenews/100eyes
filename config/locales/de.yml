@@ -122,7 +122,9 @@ de:
       other: Fragen
     create: Neue Frage stellen
     send: Frage an die Community senden
-    success: Deine Frage wurde erfolgreich an die Community gesendet
+    success:
+      one: Deine Frage wurde erfolgreich an ein Mitglied in der Community gesendet
+      other: Deine Frage wurde erfolgreich an %{count} Mitglieder in der Community gesendet
     replies: Alle Antworten
     created_at: Frage gestellt %{created_at}
     hints:

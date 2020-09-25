@@ -16,7 +16,7 @@ class RequestsController < ApplicationController
   def create
     @request = Request.new(request_params)
     if @request.save
-      redirect_to @request, flash: { success: I18n.t('request.success') }
+      redirect_to @request, flash: { success: I18n.t('request.success', count: @request.stats[:counts][:recipients]) }
     else
       render :new
     end
