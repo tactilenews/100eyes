@@ -1,0 +1,5 @@
+---
+- name: Checkout Repository
+  git:
+    repo: 'https://github.com/tactilenews/100eyes.git'
+    dest: "{{ application_directory }}"

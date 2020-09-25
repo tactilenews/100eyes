@@ -1,0 +1,5 @@
+---
+- name: Set Ruby Version
+  command: uberspace tools version use ruby 2.7
+- name: Set NodeJS Version
+  command: uberspace tools version use node 14

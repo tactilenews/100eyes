@@ -1,0 +1,9 @@
+---
+- name: Install 100eyes
+  hosts: all
+  vars_files:
+    - ../variables.yml
+  tasks:
+    - include: ./languages.yml
+    - include: ./postgresql.yml
+    - include: ./repository.yml

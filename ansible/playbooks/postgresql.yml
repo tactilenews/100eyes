@@ -1,0 +1,26 @@
+---
+- name: Create temporary working directory
+  file:
+    path: /tmp/postgresql
+    state: directory
+- name: Download postgresql source code
+  unarchive:
+    src: https://download.postgresql.org/pub/source/v12.4/postgresql-12.4.tar.gz
+    dest: /tmp/postgresql
+    remote_src: yes
+- name: Compile source code
+  command: "{{item}}"
+  with_items:
+    - "./configure --prefix={{ home_directory }}/opt/postgresql/"
+    - make world
+    - make install-world
+  args:
+    chdir: /tmp/postgresql/postgresql-12.4
+- include_tasks: postgresql/set_environment_variables.yml
+  with_items:
+      - export PATH=$HOME/opt/postgresql/bin/:$PATH
+      - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/opt/postgresql/lib
+      - export PGPASSFILE=$HOME/.pgpass
+
+
+

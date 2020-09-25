@@ -1,0 +1,9 @@
+---
+- name: Check if line exists
+  shell: "grep -c -F '{{item}}' {{ home_directory }}/.bash_profile || true"
+  register: test_grep
+- name: Add line if not exists
+  lineinfile:
+    dest: "{{ home_directory }}/.bash_profile"
+    line: "{{item}}"
+  when: test_grep.stdout == "0"
