@@ -181,7 +181,7 @@ de:
         label: Empfänger*innen einschränken
         help: |
           Wähle Tags, um den Kreis der Empfänger*innen deiner Frage einzuschränken.
-          Die Tags summieren sich: „Lehrer” und „Biologie” verschickt die Frage an alle Biologie-Lehrer.
+          Die Tags summieren sich: „Lehrer” und „Biologie” verschickt die Frage an alle Biologie-Lehrer, aber z.B. nicht an Mathe-Lehrer.
       hints:
         label: Hinweise anhängen
         help: Erinnere die Community, welche Inhalte du benötigst und wofür du sie verwendest. Hierfür gibt es die folgenden Textbausteine.
