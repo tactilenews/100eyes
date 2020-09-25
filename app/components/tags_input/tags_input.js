@@ -13,10 +13,8 @@ const tagColor = tagData => {
 };
 
 function dropdownItemTemplate(tagData) {
-  const membersLabel =
-    tagData.count === 1
-      ? this.settings.labels.members.one
-      : this.settings.labels.members.other;
+  const { one, other } = this.settings.labels.members;
+  const membersLabel = tagData.count === 1 ? one : other;
 
   const color = tagColor(tagData);
 
