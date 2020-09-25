@@ -1,0 +1,19 @@
+.OnboardingFooter {
+  text-align: center;
+  font-size: var(--font-size-s);
+  opacity: 0.5;
+}
+
+.OnboardingFooter hr {
+  margin-bottom: var(--spacing-unit);
+  border: none;
+  border-top: 1px solid var(--color-border);
+}
+
+.OnboardingFooter img {
+  display: block;
+  margin: auto;
+  margin-bottom: var(--spacing-unit-s);
+  height: var(--spacing-unit-l);
+  filter: grayscale(1);
+}

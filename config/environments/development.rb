@@ -62,5 +62,7 @@ Rails.application.configure do
   config.mailer = {
     from: '100eyes <100eyes-development-account@example.org>'
   }
+
   config.project_name = ENV['HUNDRED_EYES_PROJECT_NAME'] || '100eyes'
+  config.telegram_bot_name = ENV['HUNDRED_EYES_TELEGRAM_BOT_NAME']
 end

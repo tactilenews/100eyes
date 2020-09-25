@@ -1,0 +1,27 @@
+<%= form_with(
+  model: @user,
+  hidden: true,
+  local: true,
+  url: onboarding_path,
+  class: class_attr,
+) do %>
+  <%= c 'stack' do %>
+    <%= c 'field', object: @user, id: :first_name do |field| %>
+      <%= c 'input', field.input_defaults %>
+    <% end %>
+
+    <%= c 'field', object: @user, id: :last_name do |field| %>
+      <%= c 'input', field.input_defaults %>
+    <% end %>
+
+    <%= c 'field', object: @user, id: :email do |field| %>
+      <%= c 'input', field.input_defaults.merge(placeholder: '') %>
+    <% end %>
+
+    <%= c 'button',
+      type: 'submit',
+      label: 'Anmeldung abschließen',
+      style: :primary
+    %>
+  <% end %>
+<% end %>

@@ -1,0 +1,20 @@
+<div class="<%= class_attr %> text-serif">
+  <%= c 'wrapper', style: :narrow do %>
+    <%= c 'box' do %>
+      <%= c 'stack' do %>
+        <div class="OnboardingSuccess-icon">
+          <%= c 'icon', icon: 'f-check' %>
+        </div>
+
+        <%= c 'heading', tag: :h1 do %>
+          <%= I18n.t 'components.onboarding_success.heading',
+            project_name: Rails.configuration.project_name
+          %>
+        <% end %>
+
+        <p><%= I18n.t('components.onboarding_success.text').html_safe %></p>
+      <% end %>
+    <% end %>
+  <% end %>
+
+</div>

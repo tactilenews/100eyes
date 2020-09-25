@@ -6,6 +6,7 @@ x-defaults: &x-defaults
     RAILS_ENV: "${RAILS_ENV:-development}"
     NODE_ENV: "${NODE_ENV:-development}"
     HUNDRED_EYES_PROJECT_NAME: "${HUNDRED_EYES_PROJECT_NAME:-100eyes}"
+    HUNDRED_EYES_TELEGRAM_BOT_NAME: "${HUNDRED_EYES_BOT_NAME:-HundredEyesBot}"
     BINDING: 0.0.0.0
     PORT: 3000
     APP_DATABASE_HOST: db
