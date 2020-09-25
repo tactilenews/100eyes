@@ -7,19 +7,16 @@ module TagsInput
 
       @value = value
       @allow_new = allow_new
+      @available_tags = available_tags
       @props = kwargs
     end
 
     private
 
-    attr_reader :props, :allow_new
+    attr_reader :props, :available_tags, :allow_new
 
     def value
       @value.join(',')
-    end
-
-    def available_tags
-      User.all_tags_with_count
     end
   end
 end
