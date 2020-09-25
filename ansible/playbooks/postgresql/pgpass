@@ -1,0 +1,2 @@
+#hostname:port:database:username:password (min 64 characters)
+*:*:*:{{ user_name }}:{{ lookup('password', '/dev/null length=64 chars=ascii_letters,digits,hexdigits') }}

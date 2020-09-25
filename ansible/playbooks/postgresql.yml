@@ -10,17 +10,17 @@
     remote_src: yes
 - name: Compile source code
   command: "{{item}}"
+  args:
+    chdir: /tmp/postgresql/postgresql-12.4
   with_items:
     - "./configure --prefix={{ home_directory }}/opt/postgresql/"
     - make world
     - make install-world
-  args:
-    chdir: /tmp/postgresql/postgresql-12.4
 - include_tasks: postgresql/set_environment_variables.yml
   with_items:
       - export PATH=$HOME/opt/postgresql/bin/:$PATH
       - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/opt/postgresql/lib
       - export PGPASSFILE=$HOME/.pgpass
-
+- include: postgresql/create_cluster.yml
 
 

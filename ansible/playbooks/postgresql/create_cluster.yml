@@ -1,0 +1,5 @@
+---
+- name: Create .pgpass
+  template:
+    src: pgpass
+    dest: "{{ home_directory }}/.pgpass"
