@@ -11,7 +11,7 @@ module UserForm
     attr_reader :user
 
     def available_tags
-      User.all_tags_with_count
+      User.all_tags_with_count.to_json
     end
   end
 end

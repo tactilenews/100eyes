@@ -34,7 +34,7 @@ class User < ApplicationRecord
         value: tag.name,
         count: User.tagged_with([tag]).count
       }
-    end.to_json
+    end
   end
 
   def reply(message_decorator)
