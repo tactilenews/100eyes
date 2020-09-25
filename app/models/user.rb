@@ -28,7 +28,6 @@ class User < ApplicationRecord
       message = message_decorator.message
       message.request = request
       message.save!
-      message.photos << message_decorator.photos
     end
   end
 

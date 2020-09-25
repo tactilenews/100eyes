@@ -24,6 +24,9 @@ class TelegramMessage
     @photos = initialize_photos(telegram_message)
     @voice = initialize_voice(telegram_message)
     @message.voice = @voice
+    @photos.each do |photo|
+      @message.association(:photos).add_to_target(photo)
+    end
   end
 
   private
@@ -75,7 +78,7 @@ class TelegramMessage
     telegram_file = telegram_message[:photo].max { |a, b| a[:file_size] <=> b[:file_size] }
     photo = Photo.new
     remote_file_location = retrieve_message_type_and_attach(telegram_file)
-    photo.image.attach(io: URI.open(remote_file_location), filename: File.basename(remote_file_location.path))
+    photo.attachment.attach(io: URI.open(remote_file_location), filename: File.basename(remote_file_location.path))
     [photo]
   end
 
