@@ -84,8 +84,13 @@ RSpec.describe Request, type: :model do
     describe 'given a number of requests, replies and photos' do
       before(:each) do
         create_list(:message, 2)
-        create_list(:message, 3, request: request, sender: user)
-        create_list(:message, 5, :with_a_photo, request: request)
+        delivered_messages = create_list(:message, 7, :with_recipient, request: request)
+        # _ is some unresponsive recipient
+        responsive_recipient, _, *other_recipients = delivered_messages.map(&:recipient)
+        create_list(:message, 3, request: request, sender: responsive_recipient)
+        other_recipients.each do |recipient|
+          create(:message, :with_a_photo, sender: recipient, request: request)
+        end
       end
 
       describe '[:counts][:replies]' do
@@ -116,6 +121,11 @@ RSpec.describe Request, type: :model do
             should eq(6)
           end
         end
+      end
+
+      describe '[:counts][:recipients]' do
+        subject { stats[:counts][:recipients] }
+        it { should eq(7) }
       end
 
       describe '[:counts][:photos]' do
