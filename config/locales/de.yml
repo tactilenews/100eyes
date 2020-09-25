@@ -168,7 +168,7 @@ de:
       preview: Diese Nachricht erhält die Community
       members_count_message:
         one: Es gibt <strong>ein Mitglied</strong> mit diesen Tags.
-        other: Es gibt <strong>{count} Mitglieder</strong> mit diesen Tags.
+        other: Es gibt <strong>%{count} Mitglieder</strong> mit diesen Tags.
       title:
         label: Interner Titel
         help: Damit du zwischen all deinen Fragen den Überblick behältst. Der Titel wird nicht an die Community gesandt.

@@ -44,7 +44,7 @@ export default class extends Controller {
           return;
         }
 
-        const message = messageTemplates.other.replace('{count}', count);
+        const message = messageTemplates.other.replace('%{count}', count);
         this.membersCountTarget.innerHTML = message;
       },
     });
