@@ -42,9 +42,15 @@ de:
         heading: Lizenz
         licensed_under: Lizenziert unter MIT‑Lizenz
     request_metrics:
-      users: haben geantwortet
-      replies: Nachrichten insgesamt
-      photos: Fotos
+      users:
+        one: hat geantwortet
+        other: haben geantwortet
+      replies:
+        one: Nachricht ingesamt
+        other: Nachrichten insgesamt
+      photos:
+        one: Foto
+        other: Fotos
     request_notification:
       action: Neu laden
       message_template:

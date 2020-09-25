@@ -17,21 +17,22 @@ module RequestMetrics
     attr_reader :request
 
     def metrics
+      stats = request.stats
       [
         {
-          value: request.stats[:counts][:users],
-          total: request.stats[:counts][:recipients],
-          label: I18n.t('components.request_metrics.users'),
+          value: stats[:counts][:users],
+          total: stats[:counts][:recipients],
+          label: I18n.t('components.request_metrics.users', count: stats[:counts][:users]),
           icon: 'single-03'
         },
         {
-          value: request.stats[:counts][:replies],
-          label: I18n.t('components.request_metrics.replies'),
+          value: stats[:counts][:replies],
+          label: I18n.t('components.request_metrics.replies', count: stats[:counts][:replies]),
           icon: 'a-chat'
         },
         {
-          value: request.stats[:counts][:photos],
-          label: I18n.t('components.request_metrics.photos'),
+          value: stats[:counts][:photos],
+          label: I18n.t('components.request_metrics.photos', count: stats[:counts][:photos]),
           icon: 'camera'
         }
       ]
