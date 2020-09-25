@@ -69,7 +69,7 @@ gem 'telegram-bot'
 
 # FIXME: version 2.3.3 introduced a bug, found https://github.com/Casecommons/pg_search/issues/446.
 # Add back pessimistic operator after resolved.
-gem 'pg_search', '2.3.2'
+gem 'pg_search', '2.3.3'
 
 gem 'valid_email2', '~> 3.4'
 
