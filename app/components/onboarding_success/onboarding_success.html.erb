@@ -6,15 +6,9 @@
           <%= c 'icon', icon: 'f-check' %>
         </div>
 
-        <%= c 'heading', tag: :h1 do %>
-          <%= I18n.t 'components.onboarding_success.heading',
-            project_name: Rails.configuration.project_name
-          %>
-        <% end %>
-
-        <p><%= I18n.t('components.onboarding_success.text').html_safe %></p>
+        <%= c('heading', tag: :h1) { heading } %>
+        <p><%= text %></p>
       <% end %>
     <% end %>
   <% end %>
-
 </div>
