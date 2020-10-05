@@ -12,14 +12,10 @@
   flex-basis: 100%;
 }
 
-.Footer-logos {
-  display: flex;
-  gap: var(--spacing-unit);
-}
-
 .Footer-logo {
-  height: calc(3 * var(--line-height));
-  padding: var(--spacing-unit-xs) 0;
+  height: calc(2 * var(--spacing-unit));
+  max-width: calc(8 * var(--spacing-unit));
+  margin-right: var(--spacing-unit);
 }
 
 .Footer-logo:hover {
