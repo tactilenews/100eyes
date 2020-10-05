@@ -2,7 +2,6 @@
   display: flex;
   width: 100%;
   flex-direction: column;
-  gap: var(--spacing-unit-s);
 }
 
 .Choices label {
@@ -17,6 +16,10 @@
   cursor: pointer;
   border: 1px solid var(--color-border);
   box-shadow: var(--soft-shadow);
+}
+
+.Choices label + label {
+  margin-top: var(--spacing-unit);
 }
 
 .Choices label:hover {
@@ -53,5 +56,10 @@
   .Choices {
     flex-direction: row;
     gap: var(--spacing-unit);
+  }
+
+  .Choices label + label {
+    margin-top: 0;
+    margin-left: var(--spacing-unit);
   }
 }
