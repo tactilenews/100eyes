@@ -37,5 +37,18 @@ RSpec.describe 'Onboarding', type: :request do
       subject.call
       expect(response).to redirect_to(onboarding_success_path)
     end
+
+    describe 'given an existing email address' do
+      let!(:user) { create(:user, **attrs) }
+
+      it 'redirects to success page' do
+        subject.call
+        expect(response).to redirect_to(onboarding_success_path)
+      end
+
+      it 'does not create new user' do
+        expect { subject.call }.not_to change(User, :count)
+      end
+    end
   end
 end

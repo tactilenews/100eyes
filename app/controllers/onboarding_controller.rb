@@ -2,6 +2,7 @@
 
 class OnboardingController < ApplicationController
   skip_before_action :authenticate
+
   layout 'onboarding'
 
   def index
@@ -9,12 +10,15 @@ class OnboardingController < ApplicationController
   end
 
   def create
+    # Ensure information on registered users is never
+    # disclosed during onboarding
+    @user = User.find_by(email: user_params[:email])
+    return redirect_to onboarding_success_path if @user
+
     @user = User.new(user_params)
-    if @user.save
-      redirect_to onboarding_success_path
-    else
-      render :index
-    end
+    return redirect_to onboarding_success_path if @user.save
+
+    render :index
   end
 
   def success; end
