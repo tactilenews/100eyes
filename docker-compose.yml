@@ -19,7 +19,6 @@ x-defaults: &x-defaults
     BOT: "${BOT:-default}"
   volumes:
     - .:/app
-    - packs:/app/public/packs
   stdin_open: true
   tty: true
   depends_on: [ db ]
@@ -56,4 +55,3 @@ services:
 
 volumes:
   postgres_data:
-  packs:
