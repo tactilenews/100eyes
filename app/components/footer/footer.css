@@ -13,11 +13,9 @@
 }
 
 .Footer-logo {
-  height: calc(2.5 * var(--spacing-unit));
+  height: calc(2 * var(--spacing-unit));
   max-width: calc(8 * var(--spacing-unit));
-
   margin-right: var(--spacing-unit);
-  padding: var(--spacing-unit-xs) 0;
 }
 
 .Footer-logo:hover {
