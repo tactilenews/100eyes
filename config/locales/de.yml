@@ -174,6 +174,9 @@ de:
     no_replies: Bisher hat noch niemand auf diese Frage geantwortet. Schau doch später noch einmal rein!
     form:
       preview: Diese Nachricht erhält die Community
+      members_count_message:
+        one: Es gibt <strong>ein Mitglied</strong> mit diesen Tags.
+        other: Es gibt <strong>%{count} Mitglieder</strong> mit diesen Tags.
       title:
         label: Interner Titel
         help: Damit du zwischen all deinen Fragen den Überblick behältst. Der Titel wird nicht an die Community gesandt.
@@ -182,6 +185,11 @@ de:
         label: Was möchtest du wissen?
         help: Wähle eine kurze, einfache Formulierung. Beschreibe genau, welche Informationen du benötigst.
         placeholder: Gib hier deine Frage ein…
+      tag_list:
+        label: Empfänger*innen einschränken
+        help: |
+          Wähle Tags, um den Kreis der Empfänger*innen deiner Frage einzuschränken.
+          Die Tags summieren sich: „Lehrer” und „Biologie” verschickt die Frage an alle Biologie-Lehrer, aber z.B. nicht an Mathe-Lehrer.
       hints:
         label: Hinweise anhängen
         help: Erinnere die Community, welche Inhalte du benötigst und wofür du sie verwendest. Hierfür gibt es die folgenden Textbausteine.

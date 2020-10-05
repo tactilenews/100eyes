@@ -2,6 +2,7 @@
 
 class UsersController < ApplicationController
   before_action :set_user, only: %i[update destroy show message]
+  before_action :count_params, only: :count
 
   def message
     request = user.active_request
@@ -45,6 +46,10 @@ class UsersController < ApplicationController
     redirect_to users_url, notice: 'User was successfully destroyed.'
   end
 
+  def count
+    render json: { count: User.with_tags(params[:tag_list]).count }
+  end
+
   private
 
   def set_user
@@ -57,6 +62,10 @@ class UsersController < ApplicationController
 
   def message_params
     params.require(:message).permit(:text)
+  end
+
+  def count_params
+    params.permit(tag_list: [])
   end
 
   attr_reader :user

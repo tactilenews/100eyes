@@ -14,12 +14,27 @@ class User < ApplicationRecord
   default_scope { order(:first_name, :last_name) }
   validates :email, uniqueness: { case_sensitive: false }, allow_nil: true, 'valid_email_2/email': true
 
+  scope :with_tags, lambda { |tag_list = []|
+    tag_list.blank? ? all : tagged_with(tag_list)
+  }
+
   before_validation do
     self.email = nil if email.blank?
   end
 
   def self.find_by_email(email)
     find_by('lower(email) in (?)', Array.wrap(email).map(&:downcase))
+  end
+
+  def self.all_tags_with_count
+    User.all_tags.map do |tag|
+      {
+        id: tag.id,
+        name: tag.name,
+        value: tag.name,
+        count: User.tagged_with([tag]).count
+      }
+    end
   end
 
   def reply(message_decorator)

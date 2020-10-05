@@ -6,8 +6,6 @@
 
 .TagsInput tags {
   --tag-text-color: #fff;
-  --tag-bg: var(--color-pink);
-  --tag-hover: var(--color-pink-dark);
 
   --tag-remove-btn-color: #fff;
   --tag-remove-btn-bg--hover: var(--color-pink);
@@ -27,4 +25,28 @@
 
 .TagsInput tag {
   margin-bottom: 0;
+}
+
+.TagsInput-dropdownItem {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.tagify__dropdown__item--active,
+.tagify__dropdown__item:hover {
+  background-color: var(--color-gray-light);
+}
+
+.TagsInput-name {
+  padding: 0 var(--spacing-unit-xs);
+  border-radius: var(--border-radius);
+  background-color: var(--tag-bg);
+  color: #fff;
+}
+
+.TagsInput-count,
+.tagify__dropdown__item--active .TagsInput-count {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-light);
 }

@@ -14,12 +14,16 @@ module RequestForm
       @request = request
     end
 
+    private
+
+    attr_reader :request
+
     def hints
       HINTS
     end
 
-    private
-
-    attr_reader :request
+    def available_tags
+      User.all_tags_with_count.to_json
+    end
   end
 end

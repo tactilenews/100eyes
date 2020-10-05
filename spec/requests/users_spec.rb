@@ -28,6 +28,15 @@ RSpec.describe '/users', type: :request do
     end
   end
 
+  describe 'GET /count' do
+    let!(:teachers) { create_list(:user, 2, tag_list: 'teacher') }
+
+    it 'returns count of users with a specific tag' do
+      get count_users_path(tag_list: ['teacher']), headers: auth_headers
+      expect(response.body).to eq({ count: 2 }.to_json)
+    end
+  end
+
   describe 'PATCH /update' do
     let(:new_attrs) do
       {

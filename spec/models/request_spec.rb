@@ -27,6 +27,25 @@ RSpec.describe Request, type: :model do
     expect(described_class.last).to eq(oldest_request)
   end
 
+  describe 'request tag_list persists' do
+    let!(:user) { create(:user, tag_list: ['programmer']) }
+    let!(:request) { create(:request, tag_list: ['programmer']) }
+
+    before(:each) do
+      user.tag_list = ''
+      user.save
+      user.reload
+    end
+
+    it 'even with no users with tag' do
+      expect(user.tag_list).to eq([])
+      expect(User.all_tags.map(&:name)).to eq([])
+      request.reload
+      expect(request.tag_list).to eq(['programmer'])
+      expect(Request.all_tags.map(&:name)).to eq(['programmer'])
+    end
+  end
+
   describe '#hints' do
     subject { Request.new(title: 'Example').hints }
     it { should match_array([]) }
@@ -158,6 +177,26 @@ RSpec.describe Request, type: :model do
       it { should change { Message.pluck(:recipient_id) }.from([]).to([2, 1]) }
       it { should change { Message.pluck(:sender_id) }.from([]).to([nil, nil]) }
       it { should change { Message.pluck(:broadcasted) }.from([]).to([true, true]) }
+    end
+
+    describe 'creates message only for users tagged with tag_list' do
+      let(:request) do
+        Request.new(
+          title: 'Hitchhiker’s Guide',
+          text: 'What is the answer to life, the universe, and everything?',
+          hints: %w[photo confidential],
+          tag_list: 'programmer'
+        )
+      end
+      before(:each) do
+        create(:user, id: 1, email: 'somebody@example.org', tag_list: ['programmer'])
+        create(:user, id: 2, email: nil, telegram_id: 22, telegram_chat_id: 23)
+      end
+
+      it { should change { Message.count }.from(0).to(1) }
+      it { should change { Message.pluck(:recipient_id) }.from([]).to([1]) }
+      it { should change { Message.pluck(:sender_id) }.from([]).to([nil]) }
+      it { should change { Message.pluck(:broadcasted) }.from([]).to([true]) }
     end
   end
 end
