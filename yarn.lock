@@ -1196,10 +1196,10 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
-"@yaireo/tagify@^3.19.5":
-  version "3.19.5"
-  resolved "https://registry.yarnpkg.com/@yaireo/tagify/-/tagify-3.19.5.tgz#4597abc9741a208a8402a1e6da83a58a5fe85e5c"
-  integrity sha512-UcYAxvYKor95ovARyPZqC00MhF2tIur1Iy6aHCm7rZIsi0zuHonoABOB63Qre2jl94Iixpnarj45zxVWd939GQ==
+"@yaireo/tagify@^3.19.7":
+  version "3.19.7"
+  resolved "https://registry.yarnpkg.com/@yaireo/tagify/-/tagify-3.19.7.tgz#ffeb5f8e53ca99158a0d1ced55ff3bd279699b43"
+  integrity sha512-RtJSu1WX+u4R/9mIz1BabbvgLAlYQ2wuH/69uwoT6n9TAEdsjMmrcw/vnzsa+RrTszhX44wBQriY89aff7mndQ==
 
 abbrev@1:
   version "1.1.1"
