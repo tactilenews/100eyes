@@ -1,6 +1,6 @@
 .ChatMessagePhotos {
   display: grid;
-  padding: var(--spacing-unit-s) 0;
+  padding: var(--spacing-unit-xs) 0;
   gap: var(--spacing-unit-xs);
 
   /*
