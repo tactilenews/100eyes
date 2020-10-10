@@ -33,17 +33,13 @@ Zu Entwicklungszwecken kannst du 100eyes mithilfe von Docker aufsetzen. Das Dock
     ```
 
 3. #### Konfiguration
-   100eyes basiert auf einigen Diensten, z.B. zum Versand und Empfang von E-Mails und Telegram-Nachrichten. Sensible Informationen wie z.B. API-Keys oder Passwörter speichert 100eyes verschlüsselt. Du kannst sie mithilfe des Rails-CLIs bearbeiten:
+   100eyes basiert auf einigen Diensten, z.B. zum Versand und Empfang von E-Mails und Telegram-Nachrichten. Sensible Informationen wie z.B. API-Keys oder Passwörter kannst du mithilfe von Umgebungsvariablen setzen. Dazu kopierst du dir am Besten die dazu vorgesehene Schablone:
 
    ```bash
-   $ docker-compose run app bash
-   # Erstellt ein neue Datei config/credentials.yml.enc
-   $ EDITOR=vi bin/rails credentials:edit
-   # Editiert existierende credentials
-   $ EDITOR=vi bin/rails credentials:edit -e development
+   $ cp .env.template .env
    ```
 
-   Für eine Übersicht über die verfügbaren Konfigurationsoptionen wirf einen Blick in die [Beispiel-Konfiguration](https://github.com/tactilenews/100eyes/tree/master/config/credentials/template.yml). Um die existierenden, verschlüsselten Konfigurationen zu öffnen, kontaktiere uns auf [tactile.news](https://tactile.news/)!
+   Und editierst die neue Datei `.env` und fügst dort API-Schlüssel und weitere Secrets hinzu. Diese Datei `.env` wird von `git` ignoriert.
 
 4. #### Container starten
     Du kannst alle Container mit einem einzigen Befehl starten. 100eyes kannst du dann in deinem Browser unter http://localhost:3000 aufrufen.
