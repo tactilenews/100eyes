@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   root to: redirect('/dashboard')
   get '/dashboard', to: 'dashboard#index'
   get '/search', to: 'search#index'
-  telegram_webhook Telegram::WebhookController, Rails.configuration.bot_id
+  telegram_webhook Telegram::WebhookController
 
   resources :requests, only: %i[index show new create] do
     member do

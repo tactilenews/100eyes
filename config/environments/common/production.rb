@@ -106,19 +106,20 @@ Rails.application.configure do
 
   # CUSTOM
   config.action_mailer.smtp_settings = {
-    user_name: Rails.application.credentials.sendgrid[:user],
-    password: Rails.application.credentials.sendgrid[:password],
-    domain: Rails.application.credentials.sendgrid[:domain],
+
+    user_name: ENV['SENDGRID_USERNAME'],
+    password: ENV['SENDGRID_PASSWORD'],
+    domain: ENV['SENDGRID_DOMAIN'],
     address: 'smtp.sendgrid.net',
     port: 587,
     authentication: :plain
   }
 
   config.mailer = {
-    from: Rails.application.credentials.sendgrid[:from]
+    from: ENV['SENDGRID_FROM']
   }
 
   config.action_mailbox.ingress = :sendgrid
 
-  config.project_name = ENV['HUNDRED_EYES_PROJECT_NAME'] || '100eyes'
+  config.project_name = ENV['HUNDRED_EYES_PROJECT_NAME']
 end

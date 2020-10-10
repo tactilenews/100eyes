@@ -87,7 +87,7 @@ class Message < ApplicationRecord
     return unless recipient&.telegram_chat_id
 
     begin
-      Telegram.bots[Rails.configuration.bot_id].send_message(
+      Telegram.bot.send_message(
         chat_id: recipient.telegram_chat_id,
         text: text
       )

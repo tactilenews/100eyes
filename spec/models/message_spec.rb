@@ -142,7 +142,7 @@ RSpec.describe Message, type: :model do
         subject { message.blocked }
         it { should be(false) }
         describe 'but if user blocked the telegram bot' do
-          before(:each) { allow(Telegram.bots[Rails.configuration.bot_id]).to receive(:send_message).and_raise(Telegram::Bot::Forbidden) }
+          before(:each) { allow(Telegram.bot).to receive(:send_message).and_raise(Telegram::Bot::Forbidden) }
           it { should be(true) }
         end
       end

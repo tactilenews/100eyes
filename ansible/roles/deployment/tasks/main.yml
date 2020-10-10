@@ -1,0 +1,32 @@
+---
+- name: Pull newer docker images and restart services
+  environment:
+    RAILS_ENV: "{{ rails.environment }}"
+    HUNDRED_EYES_PROJECT_NAME: "{{ rails.hundred_eyes_project_name }}"
+    TELEGRAM_BOT_API_KEY: "{{ rails.telegram_bot_api_key }}"
+    POSTGRES_PASSWORD: "{{ rails.postgres.password }}"
+    POSTGRES_USER: "{{ rails.postgres.user }}"
+    ACME_EMAIL_ADDRESS: "{{ traefik.acme_email_address }}"
+    TRAEFIK_HOSTNAME: "{{ dns.traefik_hostname }}"
+    APPLICATION_HOSTNAME: "{{ dns.application_hostname }}"
+    SENDGRID_USERNAME: "{{ rails.sendgrid.username }}"
+    SENDGRID_PASSWORD: "{{ rails.sendgrid.password }}"
+    SENDGRID_DOMAIN: "{{ rails.sendgrid.domain }}"
+    SENDGRID_FROM: "{{ rails.sendgrid.from }}"
+    SECRET_KEY_BASE: "{{ rails.secret_key_base }}"
+    RAILS_INBOUND_EMAIL_PASSWORD: "{{ rails.inbound_email_password }}"
+    BASIC_AUTH_LOGIN_USER: "{{ rails.login.user }}"
+    BASIC_AUTH_LOGIN_PASSWORD: "{{ rails.login.password }}"
+  community.general.docker_compose:
+    project_src: /home/ansible
+    build: no
+    pull: yes
+    restarted: yes
+    files:
+      - docker-compose.yml
+      - docker-compose.prod.yml
+      - docker-compose.traefik.yml
+- name: Migrate database
+  command:
+    cmd: docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec app bin/rails db:migrate
+    chdir: /home/ansible

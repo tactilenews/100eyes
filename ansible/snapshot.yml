@@ -1,0 +1,8 @@
+---
+- hosts: webservers
+  vars:
+    ansible_user: root
+    create_password: "{{ netcup.sudo_password }}"
+    copy_additional_keys: "{{ webservers.authorized_keys }}"
+  roles:
+    - role: initial_setup

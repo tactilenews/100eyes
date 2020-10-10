@@ -20,13 +20,13 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV["RAILS_MAX_THREADS"] { 5 } %>
-  host: <%= ENV["APP_DATABASE_HOST"] || 'localhost' %>
-  username: <%= ENV["APP_DATABASE_USERNAME"]  || 'postgres' %>
-  password: <%= ENV["APP_DATABASE_PASSWORD"]  || 'postgres' %>
+  host: <%= ENV["POSTGRES_HOST"] || 'localhost' %>
+  username: <%= ENV["POSTGRES_USER"]  || 'postgres' %>
+  password: <%= ENV["POSTGRES_PASSWORD"]  || 'postgres' %>
 
 development:
   <<: *default
-  database: <%= ENV["APP_DATABASE_NAME"] || 'app_development' %>
+  database: <%= ENV["POSTGRES_NAME"] || 'app_development' %>
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -81,14 +81,10 @@ test:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
 
-common_production: &common_production
-  <<: *default
-  database: <%= Rails.application.credentials.dig(:postgres, :database) %>
-  username: <%= Rails.application.credentials.dig(:postgres, :user) %>
-  password: <%= Rails.application.credentials.dig(:postgres, :password) %>
-
 production:
-  <<: *common_production
+  database: <%= ENV["POSTGRES_DB"] %>
+  <<: *default
 
 staging:
-  <<: *common_production
+  database: <%= ENV["POSTGRES_DB"] %>
+  <<: *default

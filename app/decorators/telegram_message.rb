@@ -92,7 +92,7 @@ class TelegramMessage
   end
 
   def retrieve_message_type_and_attach(telegram_file)
-    bot_token = "bot#{Telegram.bots[Rails.configuration.bot_id].token}"
+    bot_token = "bot#{Telegram.bot.token}"
     file_id = telegram_file[:file_id]
     uri = URI("https://api.telegram.org/#{bot_token}/getFile")
     uri.query = URI.encode_www_form({ file_id: file_id })

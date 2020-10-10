@@ -1,57 +1,30 @@
 version: '3.7'
 
 x-defaults: &x-defaults
-  build: .
   environment:
-    RAILS_ENV: "${RAILS_ENV:-development}"
-    NODE_ENV: "${NODE_ENV:-development}"
-    HUNDRED_EYES_PROJECT_NAME: "${HUNDRED_EYES_PROJECT_NAME:-100eyes}"
     BINDING: 0.0.0.0
     PORT: 3000
-    APP_DATABASE_HOST: db
-    APP_DATABASE_USERNAME: postgres
-    APP_DATABASE_PASSWORD: postgres
-    APP_DATABASE_NAME: "${APP_DATABASE_NAME:-app_development}"
-    MAILSERVER_HOST: mailserver
-    MAILSERVER_PORT: 25
-    WEBPACKER_DEV_SERVER_HOST: webpack
+    POSTGRES_HOST: db
+    POSTGRES_DB: app_production
     RUBYOPT: "-W:no-deprecated"
-    BOT: "${BOT:-default}"
-  volumes:
-    - .:/app
-  stdin_open: true
-  tty: true
   depends_on: [ db ]
 
 services:
   app:
     <<: *x-defaults
     command: bundle exec rails server
-    ports: ['3000:3000']
-    depends_on: [ webpack, db, mailserver ]
-
-  webpack:
-    <<: *x-defaults
-    command: ./bin/webpack-dev-server
-    environment: { WEBPACKER_DEV_SERVER_HOST: 0.0.0.0 }
-    ports: [ '3035:3035' ]
+    depends_on: [ db ]
 
   telegram:
     <<: *x-defaults
     command: rake telegram:bot:poller
 
   db:
-    image: postgres:12.2-alpine
     environment:
-      POSTGRES_DB: "${APP_DATABASE_NAME:-app_development}"
-      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_DB: app_production
+    image: postgres:12.2-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports: [ '5432:5432' ]
-
-  mailserver:
-    image: djfarrelly/maildev
-    ports: [ '1080:80', '1025:25' ]
 
 volumes:
   postgres_data:
