@@ -5,11 +5,27 @@ require 'telegram/bot/rspec/integration/rails'
 
 RSpec.describe 'Onboarding', type: :request do
   let(:user) { create(:user) }
+  let(:token) { 'TOKEN' }
+  let(:params) { { token: token } }
+
+  before(:each) do
+    allow(Rails.application.credentials).to receive(:onboarding_token).and_return('TOKEN')
+  end
 
   describe 'GET /index' do
+    subject { -> { get onboarding_path(**params) } }
+
     it 'should be successful' do
-      get onboarding_path
+      subject.call
       expect(response).to be_successful
+    end
+
+    describe 'with incorrect token' do
+      let(:token) { 'INCORRECT_TOKEN' }
+
+      it 'is not successful' do
+        expect { subject.call }.to raise_exception(ActionController::BadRequest)
+      end
     end
   end
 
@@ -22,7 +38,9 @@ RSpec.describe 'Onboarding', type: :request do
       }
     end
 
-    subject { -> { post onboarding_path, params: { user: attrs } } }
+    let(:params) { { token: token, user: attrs } }
+
+    subject { -> { post onboarding_path, params: params } }
 
     it 'creates user' do
       expect { subject.call }.to change(User, :count).by(1)
@@ -35,7 +53,7 @@ RSpec.describe 'Onboarding', type: :request do
 
     it 'redirects to success page' do
       subject.call
-      expect(response).to redirect_to(onboarding_success_path)
+      expect(response).to redirect_to onboarding_success_path(token: token)
     end
 
     describe 'given an existing email address' do
@@ -43,11 +61,19 @@ RSpec.describe 'Onboarding', type: :request do
 
       it 'redirects to success page' do
         subject.call
-        expect(response).to redirect_to(onboarding_success_path)
+        expect(response).to redirect_to onboarding_success_path(token: token)
       end
 
       it 'does not create new user' do
         expect { subject.call }.not_to change(User, :count)
+      end
+    end
+
+    describe 'with incorrect token' do
+      let(:token) { 'INCORRECT_TOKEN' }
+
+      it 'is not successful' do
+        expect { subject.call }.to raise_exception(ActionController::BadRequest)
       end
     end
   end

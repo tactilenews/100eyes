@@ -18,6 +18,8 @@
       <%= c 'input', field.input_defaults.merge(placeholder: '') %>
     <% end %>
 
+    <input type="hidden" id="token" name="token" value="<%= token %>" />
+
     <%= c 'button',
       type: 'submit',
       label: 'Anmeldung abschließen',
