@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   root to: redirect('/dashboard')
   get '/dashboard', to: 'dashboard#index'
   get '/search', to: 'search#index'
+  get '/health', to: 'health#index'
+
   telegram_webhook Telegram::WebhookController, Rails.configuration.bot_id
 
   resources :requests, only: %i[index show new create] do
