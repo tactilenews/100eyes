@@ -17,7 +17,7 @@ module PlaintextMessage
     attr_reader :message
 
     def content
-      message || @content
+      (message || @content || '').strip
     end
   end
 end
