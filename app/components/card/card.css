@@ -4,4 +4,10 @@
   width: 100%;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 2px 20px rgba(0, 0, 0, 0.1);
   border-radius: var(--border-radius);
+  transition: 0.15s all ease-in-out;
+}
+
+a .Card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 5px 20px rgba(0, 0, 0, 0.2);
 }
