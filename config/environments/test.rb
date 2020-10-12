@@ -59,5 +59,4 @@ Rails.application.configure do
     from: '100eyes <100eyes-test-account@example.org>'
   }
   config.project_name = '100-test-eyes'
-  config.telegram_bot_name = 'TestBot'
 end

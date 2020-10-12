@@ -79,8 +79,8 @@ de:
           Um per Telegram teilzunehmen, folgen Sie bitte diesen vier Schritten:
         steps:
           - Laden Sie die Telegram-App auf Ihr Smartphone, falls Sie sie noch nicht haben.
-          - Suchen Sie bei Telegram nach @%{telegram_bot_name}. Wenn Sie das hier gerade auf einem Smartphone lesen, können Sie auch einfach <a class="Link" href="https://t.me/%{telegram_bot_name}">auf diesen Link klicken</a>.
-          - Wenn Sie den @%{telegram_bot_name} bei Telegram gefunden haben, klicken Sie auf „Start”.
+          - Suchen Sie bei Telegram nach @%{username}. Wenn Sie das hier gerade auf einem Smartphone lesen, können Sie auch einfach <a class="Link" href="https://t.me/%{username}">auf diesen Link klicken</a>.
+          - Wenn Sie den @%{username} bei Telegram gefunden haben, klicken Sie auf „Start”.
           - Senden Sie uns eine erste Nachricht mit Ihrem vollen Namen.
     onboarding_success:
       heading: Danke für deine Anmeldung zu %{project_name}!
