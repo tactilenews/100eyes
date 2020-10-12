@@ -15,8 +15,7 @@ export default class extends Controller {
       channel => channel.checked
     );
 
-    const selectedChannelName = selectedChannel ? selectedChannel.value : null;
-
+    const { value: selectedChannelName } = selectedChannel || {};
     location.hash = selectedChannelName;
   }
 
