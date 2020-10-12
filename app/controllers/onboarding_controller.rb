@@ -14,8 +14,7 @@ class OnboardingController < ApplicationController
   def create
     # Ensure information on registered users is never
     # disclosed during onboarding
-    @user = User.find_by(email: user_params[:email])
-    return redirect_to_success if @user
+    return redirect_to_success if User.email_taken?(user_params[:email])
 
     @user = User.new(user_params)
     return redirect_to_success if @user.save
