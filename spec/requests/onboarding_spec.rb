@@ -5,11 +5,11 @@ require 'telegram/bot/rspec/integration/rails'
 
 RSpec.describe 'Onboarding', type: :request do
   let(:user) { create(:user) }
-  let(:token) { 'TOKEN' }
+  let(:token) { 'ONBOARDING_TOKEN' }
   let(:params) { { token: token } }
 
   before(:each) do
-    allow(Rails.application.credentials).to receive(:onboarding_token).and_return('TOKEN')
+    allow(Rails.application.credentials).to receive(:onboarding_token).and_return('ONBOARDING_TOKEN')
   end
 
   describe 'GET /index' do
@@ -32,9 +32,9 @@ RSpec.describe 'Onboarding', type: :request do
   describe 'POST /create' do
     let(:attrs) do
       {
-        first_name: 'Perry',
-        last_name: 'Schnabeltier',
-        email: 'enemy@doofenshmirgtz.org'
+        first_name: 'Zora',
+        last_name: 'Zimmermann',
+        email: 'zora@example.org'
       }
     end
 
@@ -46,9 +46,9 @@ RSpec.describe 'Onboarding', type: :request do
       expect { subject.call }.to change(User, :count).by(1)
 
       user = User.first
-      expect(user.first_name).to eq('Perry')
-      expect(user.last_name).to eq('Schnabeltier')
-      expect(user.email).to eq('enemy@doofenshmirgtz.org')
+      expect(user.first_name).to eq('Zora')
+      expect(user.last_name).to eq('Zimmermann')
+      expect(user.email).to eq('zora@example.org')
     end
 
     it 'redirects to success page' do
