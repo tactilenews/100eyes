@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html class="smooth-scrolling">
+<head>
+  <title><%= t 'application_name' %></title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <%= stylesheet_pack_tag 'application', media: 'all' %>
+</head>
+
+<body>
+
+<%= yield %>
+
+<%= javascript_pack_tag 'application' %>
+</body>
+</html>
