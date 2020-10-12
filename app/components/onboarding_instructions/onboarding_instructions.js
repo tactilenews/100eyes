@@ -9,14 +9,12 @@ export default class extends Controller {
   }
 
   switchChannelInstructions() {
-    location.hash = selectedChannelName;
-
     const selectedChannel = Array.from(this.channelTargets).find(
       channel => channel.checked
     );
 
     const { value: selectedChannelName } = selectedChannel || {};
-    location.hash = selectedChannelName;
+    location.hash = selectedChannelName || '';
   }
 
   handleHashChange() {
