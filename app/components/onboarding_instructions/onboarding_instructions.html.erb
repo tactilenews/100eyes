@@ -3,13 +3,14 @@
   <div
     class="OnboardingInstructions"
     data-controller="onboarding-instructions"
-    data-action="input->onboarding-instructions#switchChannelInstructions"
   >
     <%= c 'stack' do %>
-      <%= c 'choices',
-        stimulus_target: 'onboarding-instructions.channel',
-        choices: choices
-      %>
+      <div data-action="input->onboarding-instructions#switchChannelInstructions">
+        <%= c 'choices',
+          stimulus_target: 'onboarding-instructions.channel',
+          choices: choices
+        %>
+      </div>
 
       <div
         id="email-channel"
