@@ -1,0 +1,19 @@
+.OnboardingSuccess {
+  display: flex;
+  align-items: center;
+  text-align: center;
+
+  width: 100%;
+  min-height: 100vh;
+}
+
+.OnboardingSuccess-icon {
+  display: inline-block;
+  width: var(--spacing-unit-xl);
+  height: var(--spacing-unit-xl);
+  padding: var(--spacing-unit-s);
+
+  border-radius: 50%;
+  color: #fff;
+  background-color: var(--color-green);
+}

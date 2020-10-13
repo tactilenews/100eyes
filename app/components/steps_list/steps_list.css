@@ -1,0 +1,30 @@
+.StepsList {
+  list-style: none;
+}
+
+.StepsList > li + li {
+  margin-top: var(--spacing-unit-s);
+}
+
+.StepsList > li {
+  position: relative;
+  padding-left: var(--spacing-unit-l);
+  counter-increment: step;
+}
+
+.StepsList > li::before {
+  content: counter(step);
+
+  position: absolute;
+  left: 0;
+
+  display: block;
+  width: var(--spacing-unit);
+  height: var(--spacing-unit);
+  border-radius: 50%;
+  font-size: var(--font-size-small);
+  color: #fff;
+  font-weight: 700;
+  text-align: center;
+  background-color: var(--color-primary);
+}

@@ -66,6 +66,29 @@ de:
           text: 100eyes sammelt alle Antworten und stellt sie dir übersichtlich zur Auswertung dar.
         - icon: app-services
           text: Werte die Antworten mit Hilfe von 100eyes aus und komponiere deine Veröffentlichung.
+    onboarding_header:
+      byline: eine Dialogrecherche von <a class="Link" href="https://tactile.news" target="_blank">tactile.news</a>
+    onboarding_instructions:
+      email:
+        label: E-Mail
+        intro: |
+          Um per E-Mail teilzunehmen, teilen Sie uns bitte hier Ihre Kontaktdaten mit:
+      telegram:
+        label: Telegram
+        intro: |
+          Um per Telegram teilzunehmen, folgen Sie bitte diesen vier Schritten:
+        steps:
+          - Laden Sie die Telegram-App auf Ihr Smartphone, falls Sie sie noch nicht haben.
+          - Suchen Sie bei Telegram nach @%{username}. Wenn Sie das hier gerade auf einem Smartphone lesen, können Sie auch einfach <a class="Link" href="https://t.me/%{username}">auf diesen Link klicken</a>.
+          - Wenn Sie den @%{username} bei Telegram gefunden haben, klicken Sie auf „Start”.
+          - Senden Sie uns eine erste Nachricht mit Ihrem vollen Namen.
+    onboarding_success:
+      heading: Danke für deine Anmeldung zu %{project_name}!
+      text: |
+        Unsere Dialog-Recherche startet am <strong>am 21.12.2021</strong>.<br>
+        Wir melden uns dann wieder bei dir.
+    onboarding_footer:
+      imprint: Impressum
 
   message_mailer:
     new_message_email:
@@ -205,6 +228,25 @@ de:
     welcome_message: |
       Herzlich Willkommen bei #%{project_name}. Danke, dass Du an unserer Dialogrecherche teilnimmst. In den kommenden Wochen nutzen wir Telegram für den Austausch. Ein Bot arbeitet wie ein Postbote für uns und stellt Fragen und Antworten zu. Deine Nachrichten lesen und beantworten wir aber selbstverständlich persönlich. Wir freuen uns sehr auf den Dialog mit Dir!
       Isabelle Buckow, Astrid Csuraji, Jakob Vicari und Bertram Weiß
+
+  onboarding:
+    heading: "Hallo und willkommen beim #Schweinesystem!"
+    intro: |
+      <p>Wir freuen uns, dass Sie an unserer Dialog-Recherche zur Schweinehaltung in Deutschland teilnehmen. Denn dort zeigen sich überall schwerwiegende Probleme: Schlachthofskandale, menschenunwürdige Arbeitsbedingungen, Tierqualen, dazu ein rapider Preisverfall, der Schweinebauern ruiniert. So kann es nicht weitergehen. Das weiß jeder, der mit diesem Markt zu tun hat.</p>
+      <p>Lösungsvorschläge gibt es bisher keine. Deswegen starten wir diese Dialogrecherche mit Ihrer Hilfe. Statt mit ein bis drei Betroffenen oder Experten ein Interview zu führen und dann einen Beitrag zu veröffentlichen, wollen wir mit vielen verschiedenen Menschen das Gespräch suchen. Und das über einen Zeitraum von vier Wochen. Damit wir ein breiteres Bild bekommen und Dinge besser verstehen.</p>
+      <p>Es ist ein Experiment. Danke, dass Sie sich darauf einlassen.</p>
+    who:
+      heading: Wer?
+      text: |
+        Hinter dem #Schweinesystem stecken Menschen, keine Maschinen: Die Journalisten Katharina Jakob und Jens Eber, der Filmemacher Oliver Eberhardt sowie das Dialogrecherche-Team Isabelle Buckow, Astrid Csuraji und Dr. Jakob Vicari von tactile.news. <a class="Link" href=" https://tactile.news/ueber-uns/">Auf unserer Webseite</a> stellen wir unsere Idee vom Dialog-Journalismus ausführlicher vor.
+    how:
+      heading: Wie?
+      text: |
+        Wir stellen Ihnen in den nächsten vier, fünf Wochen immer mal wieder eine Frage. Am liebsten per Telegram Messenger. Wenn Sie den nicht nutzen und auch nicht installieren wollen (er ist sehr ähnlich wie Whatsapp), kommunizieren Sie mit uns per E-Mail. Es bleibt Ihnen überlassen, ob Sie jede Frage beantworten oder auch welche auslassen.
+    where:
+      heading: Wo?
+      text: |
+        Damit wir Sie künftig auf dem Kanal Ihrer Wahl erreichen, teilen Sie uns bitte mit, ob wir Sie per E-Mail oder Telegram anschreiben sollen.
 
   activerecord:
     errors:

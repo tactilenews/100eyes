@@ -1,0 +1,47 @@
+<%= c 'wrapper', style: :narrow do %>
+  <%= c 'box' do %>
+    <%= c 'onboarding_header', logo: '/onboarding/logo.png' %>
+  <% end %>
+<% end %>
+
+<main>
+  <%= c 'onboarding_hero',
+    photo: '/onboarding/hero.jpg',
+    heading: I18n.t('onboarding.heading')
+  %>
+
+  <%= c 'wrapper', style: :narrow do %>
+    <%= c 'box' do %>
+      <%= c 'stack' do %>
+        <div class="text-serif text-justify">
+          <%= c 'stack' do %>
+            <%= I18n.t('onboarding.intro').html_safe %>
+
+            <%= c 'stack', space: :xsmall do %>
+              <%= c('heading', tag: :h3) { I18n.t('onboarding.who.heading') } %>
+              <p><%= I18n.t('onboarding.who.text').html_safe %></p>
+            <% end %>
+
+            <%= c 'stack', space: :xsmall do %>
+              <%= c('heading', tag: :h3) { I18n.t('onboarding.how.heading') } %>
+              <p><%= I18n.t('onboarding.how.text').html_safe %></p>
+            <% end %>
+
+            <%= c 'stack', space: :xsmall do %>
+              <%= c('heading', tag: :h3) { I18n.t('onboarding.where.heading') } %>
+              <p><%= I18n.t('onboarding.where.text').html_safe %></p>
+            <% end %>
+          <% end %>
+        </div>
+
+        <%= c 'onboarding_instructions', user: @user, token: @token %>
+      <% end %>
+    <% end %>
+  <% end %>
+</main>
+
+<%= c 'wrapper', style: :narrow do %>
+  <%= c 'box' do %>
+    <%= c 'onboarding_footer', imprint_link: 'https://tactile.news/impressum/' %>
+  <% end %>
+<% end %>

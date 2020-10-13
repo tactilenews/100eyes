@@ -3,3 +3,7 @@
   max-width: var(--grid-max-width);
   margin: auto;
 }
+
+.Wrapper--narrow {
+  max-width: var(--grid-max-width-s);
+}
