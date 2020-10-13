@@ -1,0 +1,7 @@
+.OnboardingInstructions-instructions {
+  display: none;
+}
+
+.OnboardingInstructions-instructions:target {
+  display: block;
+}

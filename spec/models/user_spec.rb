@@ -298,4 +298,25 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe '.email_taken?' do
+    let!(:user) { create(:user, email: 'zora@example.org') }
+
+    subject { User.email_taken?(address) }
+
+    describe 'given the exact address' do
+      let(:address) { 'zora@example.org' }
+      it { should be(true) }
+    end
+
+    describe 'given a semantically equivalent address' do
+      let(:address) { 'ZORA@EXAMPLE.ORG' }
+      it { should be(true) }
+    end
+
+    describe 'given a different address' do
+      let(:address) { 'adam@example.org' }
+      it { should be(false) }
+    end
+  end
 end

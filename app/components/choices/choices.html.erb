@@ -1,0 +1,16 @@
+<div
+  class="<%= class_attr %>"
+  data-controller="choices"
+>
+  <% choices.each do |choice| %>
+    <label>
+      <input
+        name="channel"
+        value="<%= choice[:value] %>"
+        type="radio"
+        data-target="<%= stimulus_target %>"
+      />
+      <%= choice[:label] %>
+    </label>
+  <% end %>
+</div>

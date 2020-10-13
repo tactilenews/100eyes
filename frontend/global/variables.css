@@ -11,7 +11,7 @@
   --spacing-unit-xl: calc(2 * var(--spacing-unit));
 
   --grid-max-width: 44rem;
-  --grid-max-width-s: 32rem;
+  --grid-max-width-s: 38rem;
   --grid-max-width-l: 56rem;
 
   --border-radius: 3px;
@@ -57,6 +57,7 @@
   --color-focus-outline: var(--color-blue-light);
 
   --font-family: Inter, Helvetica Neue, Helvetica, sans-serif;
+  --font-family-serif: PT Serif;
 
   --input-border-width: 1px;
   --input-focus-shadow: 0 0 0 3px #007eff40;

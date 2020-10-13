@@ -33,3 +33,21 @@
   src: url('/fonts/Inter-Bold.subset.woff2?v=3.14') format('woff2'),
     url('/fonts/Inter-Bold.subset.woff?v=3.14') format('woff');
 }
+
+@font-face {
+  font-family: 'PT Serif';
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/PTSerif-Bold.subset.woff2') format('woff2'),
+    url('/fonts/PTSerif-Bold.subset.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'PT Serif';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/PTSerif-Regular.subset.woff2') format('woff2'),
+    url('/fonts/PTSerif-Regular.subset.woff') format('woff');
+}

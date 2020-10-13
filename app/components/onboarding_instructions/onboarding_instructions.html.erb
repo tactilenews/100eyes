@@ -1,0 +1,43 @@
+<%= c 'stack' do %>
+
+  <div
+    class="OnboardingInstructions"
+    data-controller="onboarding-instructions"
+  >
+    <%= c 'stack' do %>
+      <div data-action="input->onboarding-instructions#switchChannelInstructions">
+        <%= c 'choices',
+          stimulus_target: 'onboarding-instructions.channel',
+          choices: choices
+        %>
+      </div>
+
+      <div
+        id="email-channel"
+        class="OnboardingInstructions-instructions"
+        data-target="onboarding-instructions.instructions"
+      >
+        <%= c 'stack' do %>
+         <p class="text-serif">
+           <strong><%= t 'components.onboarding_instructions.email.intro' %></strong>
+         </p>
+
+          <%= c 'onboarding_email_form', user: user, token: token %>
+        <% end %>
+      </div>
+
+      <div
+        id="telegram-channel"
+        class="OnboardingInstructions-instructions text-serif"
+        data-target="onboarding-instructions.instructions"
+      >
+        <%= c 'stack' do %>
+          <p><strong><%= t 'components.onboarding_instructions.telegram.intro' %></strong></p>
+
+          <%= c 'steps_list', steps: telegram_steps %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+<% end %>

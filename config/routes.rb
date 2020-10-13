@@ -6,6 +6,10 @@ Rails.application.routes.draw do
   get '/search', to: 'search#index'
   get '/health', to: 'health#index'
 
+  get '/onboarding', to: 'onboarding#index'
+  post '/onboarding', to: 'onboarding#create'
+  get '/onboarding/success', to: 'onboarding#success'
+
   telegram_webhook Telegram::WebhookController, Rails.configuration.bot_id
 
   resources :requests, only: %i[index show new create] do
