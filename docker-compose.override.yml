@@ -4,8 +4,6 @@ x-defaults: &x-defaults
   build:
     context: .
   environment:
-    HUNDRED_EYES_PROJECT_NAME: "${HUNDRED_EYES_PROJECT_NAME:-100eyes}"
-    HUNDRED_EYES_TELEGRAM_BOT_NAME: "${HUNDRED_EYES_BOT_NAME:-HundredEyesBot}"
     RAILS_ENV: "${RAILS_ENV:-development}"
     NODE_ENV: development
     MAILSERVER_HOST: mailserver

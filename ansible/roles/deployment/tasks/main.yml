@@ -3,7 +3,8 @@
   environment:
     RAILS_ENV: "{{ rails.environment }}"
     HUNDRED_EYES_PROJECT_NAME: "{{ rails.hundred_eyes_project_name }}"
-    TELEGRAM_BOT_API_KEY: "{{ rails.telegram_bot_api_key }}"
+    TELEGRAM_BOT_API_KEY: "{{ rails.telegram_bot.api_key }}"
+    TELEGRAM_BOT_USERNAME: "{{ rails.telegram_bot.username }}"
     POSTGRES_PASSWORD: "{{ rails.postgres.password }}"
     POSTGRES_USER: "{{ rails.postgres.user }}"
     ACME_EMAIL_ADDRESS: "{{ traefik.acme_email_address }}"
@@ -17,6 +18,7 @@
     RAILS_INBOUND_EMAIL_PASSWORD: "{{ rails.inbound_email_password }}"
     BASIC_AUTH_LOGIN_USER: "{{ rails.login.user }}"
     BASIC_AUTH_LOGIN_PASSWORD: "{{ rails.login.password }}"
+    ONBOARDING_TOKEN: "{{ rails.onboarding_token }}"
   community.general.docker_compose:
     project_src: /home/ansible
     build: no
