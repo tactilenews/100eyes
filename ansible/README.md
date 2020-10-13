@@ -17,7 +17,7 @@ $ ./generate_config.sh
 You can repeat the above step for every server that you want to setup.
 
 
-Then create a file `inventories/hosts` with the following content:
+Then create a file `inventories/custom/hosts` with the following content:
 ```ini
 [webservers]
 nickname
@@ -43,7 +43,7 @@ jakob_id_rsa.pub  till.pub
 Run this playbook to create the ansible user with authorized keys in place and
 ensure basic security:
 ```
-$ ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i inventories/ --ask-pass --ask-vault-pass snapshot.yml
+$ ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i inventories/custom --ask-pass --ask-vault-pass snapshot.yml
 ```
 
 You need `sshpass` installed and you will be asked for:
@@ -61,7 +61,7 @@ restored a new server from the snapshot, then your authorized keys are in place
 and you can run the entire installation of the application with:
 
 ```bash
-ansible-playbook -i inventories/ --ask-vault-pass site.yml
+ansible-playbook -i inventories/custom --ask-vault-pass site.yml
 ```
 
 

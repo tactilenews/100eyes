@@ -33,9 +33,7 @@ vendor/bundle
 
 backups/
 
-/ansible/inventories/host_vars/*
-!/ansible/inventories/host_vars/netcup.yml.template
-/ansible/inventories/hosts
+/ansible/inventories/custom/
 /ansible/ssh
 
 .env
