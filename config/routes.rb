@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   post '/onboarding', to: 'onboarding#create'
   get '/onboarding/success', to: 'onboarding#success'
 
+  telegram_webhook Telegram::WebhookController
 
   resources :requests, only: %i[index show new create] do
     member do
