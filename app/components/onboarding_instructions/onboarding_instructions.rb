@@ -27,7 +27,7 @@ module OnboardingInstructions
     end
 
     def telegram_steps
-      username = Telegram.bots[Rails.configuration.bot_id].username
+      username = Telegram.bot.username
       steps = I18n.t('components.onboarding_instructions.telegram.steps', username: username)
 
       steps.map(&:html_safe)
