@@ -19,6 +19,7 @@ x-defaults: &x-defaults
     POSTGRES_USER: "${POSTGRES_USER}"
     TELEGRAM_BOT_API_KEY: "${TELEGRAM_BOT_API_KEY}"
     TELEGRAM_BOT_USERNAME: "${TELEGRAM_BOT_USERNAME}"
+    ONBOARDING_TOKEN: "${ONBOARDING_TOKEN}"
   volumes:
     - ./log:/app/log
     - ./storage:/app/storage

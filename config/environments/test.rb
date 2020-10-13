@@ -9,6 +9,7 @@ Telegram.reset_bots
 Telegram::Bot::ClientStub.stub_all!
 
 # some specs expect these
+ENV['ONBOARDING_TOKEN'] = 'ONBOARDING_TOKEN'
 ENV['BASIC_AUTH_LOGIN_USER'] = 'admin'
 ENV['BASIC_AUTH_LOGIN_PASSWORD'] = 'test1234'
 ENV['TELEGRAM_BOT_API_KEY'] = 'TOKEN'
