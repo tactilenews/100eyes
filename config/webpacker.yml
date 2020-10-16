@@ -97,3 +97,6 @@ production:
 
 staging:
   <<: *common_production
+
+docker:
+  <<: *common_production

@@ -1,0 +1,46 @@
+version: '3.7'
+
+services:
+  reverse-proxy:
+    # The official v2 Traefik docker image
+    image: traefik:v2.3
+    # Enables the web UI and tells Traefik to listen to docker
+    ports:
+      # The HTTP port
+      - "80:80"
+      - "443:443"
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./traefik/:/traefik/"
+    command:
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --providers.docker
+      - --api
+      - "--certificatesresolvers.le.acme.email=${ACME_EMAIL_ADDRESS}"
+      - --certificatesresolvers.le.acme.storage=/traefik/acme.json
+      - --certificatesresolvers.le.acme.tlschallenge=true
+      - --providers.docker.exposedbydefault=false
+    labels:
+      - traefik.enable=true
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.redirs.rule=hostregexp(`{host:.+}`)"
+      - "traefik.http.routers.redirs.entrypoints=web"
+      - "traefik.http.routers.redirs.middlewares=redirect-to-https"
+      - "traefik.http.routers.traefik.rule=Host(`${TRAEFIK_HOSTNAME}`)"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.routers.traefik.middlewares=admin"
+      - "traefik.http.routers.traefik.tls.certresolver=le"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.middlewares.admin.basicauth.usersfile=/traefik/passwords"
+
+  app:
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.app.rule=Host(`${APPLICATION_HOSTNAME}`)"
+      - traefik.http.services.app.loadbalancer.server.port=3000
+      - traefik.http.routers.app.tls.certresolver=le
+      - traefik.http.routers.app.entrypoints=websecure
+
+

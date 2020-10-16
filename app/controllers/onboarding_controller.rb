@@ -31,8 +31,7 @@ class OnboardingController < ApplicationController
   end
 
   def verify_token
-    token = Rails.application.credentials.onboarding_token
-    raise ActionController::BadRequest unless token_param == token
+    raise ActionController::BadRequest unless token_param == ENV['ONBOARDING_TOKEN']
   end
 
   def user_params

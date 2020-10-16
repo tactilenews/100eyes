@@ -8,10 +8,6 @@ RSpec.describe 'Onboarding', type: :request do
   let(:token) { 'ONBOARDING_TOKEN' }
   let(:params) { { token: token } }
 
-  before(:each) do
-    allow(Rails.application.credentials).to receive(:onboarding_token).and_return('ONBOARDING_TOKEN')
-  end
-
   describe 'GET /index' do
     subject { -> { get onboarding_path(**params) } }
 

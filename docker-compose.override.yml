@@ -1,0 +1,37 @@
+version: '3.7'
+
+x-defaults: &x-defaults
+  build:
+    context: .
+  environment:
+    RAILS_ENV: "${RAILS_ENV:-development}"
+    NODE_ENV: development
+    MAILSERVER_HOST: mailserver
+    MAILSERVER_PORT: 25
+  stdin_open: true
+  tty: true
+  volumes:
+    - .:/app
+
+services:
+  telegram:
+    <<: *x-defaults
+
+  app:
+    <<: *x-defaults
+    depends_on: [ webpack, db, mailserver ]
+    ports: ['3000:3000']
+
+  webpack:
+    <<: *x-defaults
+    command: ./bin/webpack-dev-server
+    ports: [ '3035:3035' ]
+
+  db:
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports: [ '5432:5432' ]
+
+  mailserver:
+    image: djfarrelly/maildev
+    ports: [ '1080:80', '1025:25' ]

@@ -8,6 +8,14 @@
 Telegram.reset_bots
 Telegram::Bot::ClientStub.stub_all!
 
+# some specs expect these
+ENV['ONBOARDING_TOKEN'] = 'ONBOARDING_TOKEN'
+ENV['BASIC_AUTH_LOGIN_USER'] = 'admin'
+ENV['BASIC_AUTH_LOGIN_PASSWORD'] = 'test1234'
+ENV['TELEGRAM_BOT_API_KEY'] = 'TOKEN'
+ENV['TELEGRAM_BOT_USERNAME'] = 'TestingBot'
+ENV['HUNDRED_EYES_PROJECT_NAME'] = '50survivors'
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -58,5 +66,5 @@ Rails.application.configure do
   config.mailer = {
     from: '100eyes <100eyes-test-account@example.org>'
   }
-  config.project_name = '100-test-eyes'
+  config.project_name = ENV['HUNDRED_EYES_PROJECT_NAME']
 end

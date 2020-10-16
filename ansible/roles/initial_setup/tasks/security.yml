@@ -1,0 +1,38 @@
+---
+- name: Disable obsolete authentication methods
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    state: present
+    regexp: "^#?{{ item }}"
+    line: "{{item}} no"
+  with_items:
+    - ChallengeResponseAuthentication
+    - PasswordAuthentication
+    - PermitRootLogin
+
+- name: Restart ssh services
+  command: "systemctl restart {{ item }}"
+  with_items:
+    - ssh
+    - sshd
+
+# UFW Setup
+- name: UFW - Allow SSH connections
+  ufw:
+    rule: allow
+    name: OpenSSH
+
+- name: UFW - Allow HTTP/HTTPS connections
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  with_items:
+    - '80'
+    - '443'
+
+- name: UFW - Deny all other incoming traffic by default
+  ufw:
+    state: enabled
+    policy: deny
+    direction: incoming
