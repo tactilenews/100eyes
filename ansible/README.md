@@ -1,7 +1,9 @@
 # Local setup
 
-Install ansible roles:
+Our setup uses a number of community-maintained Ansibles roles. Install them using the `ansible-galaxy` command:
+
 ```
+ansible-galaxy collection install community.general
 ansible-galaxy install geerlingguy.docker
 ansible-galaxy install geerlingguy.pip
 ```
