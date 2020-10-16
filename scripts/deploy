@@ -73,6 +73,6 @@ fi
 ssh $DEPLOY_USER@$DEPLOY_TARGET \
   "cd $deploy_path &&" \
   "BUNDLE_PATH=vendor/bundle bundle install --without development test &&" \
-  "RAILS_ENV=$RAILS_ENV SECRET_KEY_BASE=$SECRET_KEY_BASE bin/rake db:prepare &&" \
+  "RAILS_ENV=$RAILS_ENV bin/rails db:prepare &&" \
   "supervisorctl restart 100eyes &&" \
   "supervisorctl restart 100eyes-telegram-bot-poller"
