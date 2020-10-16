@@ -10,7 +10,7 @@ jobs:
     env:
       RUBYOPT: "-W:no-deprecated"
       RAILS_ENV: staging
-      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY_STAGING }}
+      SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
       DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
       DEPLOY_TARGET: ${{ secrets.DEPLOY_TARGET }}
       SSH_AUTH_SOCK: /tmp/ssh_agent.sock
