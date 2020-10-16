@@ -8,14 +8,14 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
     let(:welcome_message) do
       message = [
         'Herzlich Willkommen bei #50survivors.',
-        'Danke, dass Du an unserer Dialogrecherche teilnimmst.',
+        'Danke, dass Sie an unserer Dialog-Recherche teilnehmen.',
         'In den kommenden Wochen nutzen wir Telegram für den Austausch.',
         'Ein Bot arbeitet wie ein Postbote für uns und stellt Fragen und Antworten zu.',
-        'Deine Nachrichten lesen und beantworten wir aber selbstverständlich persönlich.',
-        'Wir freuen uns sehr auf den Dialog mit Dir!'
+        'Ihre Nachrichten lesen und beantworten wir aber selbstverständlich persönlich.',
+        'Wir freuen uns sehr auf den Dialog mit Ihnen!'
       ].join(' ')
 
-      message + "\nIsabelle Buckow, Astrid Csuraji, Jakob Vicari und Bertram Weiß"
+      message + "\nKatharina Jakob, Jens Eber, Oliver Eberhardt, Isabelle Buckow, Astrid Csuraji und Jakob Vicari"
     end
 
     subject { -> { dispatch_command :start, { from: { username: 'Joe' } } } }
