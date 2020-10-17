@@ -78,6 +78,7 @@ gem 'rack-attack', '~> 6.3'
 
 gem 'acts-as-taggable-on'
 gem 'mini_magick', '~> 4.10'
+gem 'jwt'
 
 # TODO: Move into group :development, :test once uberspace setup is removed
 gem 'dotenv-rails'
