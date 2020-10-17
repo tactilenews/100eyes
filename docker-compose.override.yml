@@ -19,13 +19,8 @@ services:
 
   app:
     <<: *x-defaults
-    depends_on: [ webpack, db, mailserver ]
+    depends_on: [ db, mailserver ]
     ports: ['3000:3000']
-
-  webpack:
-    <<: *x-defaults
-    command: ./bin/webpack-dev-server
-    ports: [ '3035:3035' ]
 
   db:
     environment:
