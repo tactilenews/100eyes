@@ -20,7 +20,7 @@ class OnboardingController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       JsonWebToken.create(invalidated_jti: params[:jwt])
-      return redirect_to_success 
+      return redirect_to_success
     end
 
     render :index
