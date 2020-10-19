@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class OnboardingController < ApplicationController
-  skip_before_action :authenticate
-  before_action :verify_token, except: %i[create_invite_url]
+  skip_before_action :authenticate, except: :create_invite_url
+  before_action :verify_token, except: :create_invite_url
 
   layout 'onboarding'
 

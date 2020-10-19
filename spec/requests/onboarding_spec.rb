@@ -101,12 +101,23 @@ RSpec.describe 'Onboarding', type: :request do
   end
 
   describe 'POST /onboarding/invite-url' do
-    subject { -> { post onboarding_invite_url_path } }
+    let(:headers) { nil }
 
-    it 'responds with a url with a jwt search query' do
+    subject { -> { post onboarding_invite_url_path, headers: headers } }
+
+    it 'is unsuccessful' do
       subject.call
-      url = JSON.parse(response.body)['url']
-      expect(url).to include('/onboarding?jwt=')
+      expect(response).not_to be_successful
+    end
+
+    describe 'as a logged-in user' do
+      let(:headers) { auth_headers }
+
+      it 'responds with a url with a jwt search query' do
+        subject.call
+        url = JSON.parse(response.body)['url']
+        expect(url).to include('/onboarding?jwt=')
+      end
     end
   end
 end
