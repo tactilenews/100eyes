@@ -8,7 +8,7 @@ class OnboardingController < ApplicationController
   layout 'onboarding'
 
   def index
-    @token = token_param
+    @jwt = jwt_param
     @user = User.new
   end
 
@@ -34,18 +34,23 @@ class OnboardingController < ApplicationController
   private
 
   def redirect_to_success
-    redirect_to onboarding_success_path(token: token_param)
+    redirect_to onboarding_success_path(jwt: jwt_param)
   end
 
   def verify_token
-    raise ActionController::BadRequest unless token_param == Setting.onboarding_token
+    raise ActionController::BadRequest unless JsonWebToken.valid?(jwt_param)
+
+    JsonWebToken.decode(jwt_param)
+
+    # rescue JWT::DecodeError => error
+    #   render json: { errors: error.message }, status: :unauthorized
   end
 
   def user_params
     params.require(:user).permit(:first_name, :last_name, :email)
   end
 
-  def token_param
-    params.require(:token)
+  def jwt_param
+    params.require(:jwt)
   end
 end

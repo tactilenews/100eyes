@@ -13,6 +13,6 @@ class JsonWebToken < ApplicationRecord
   end
 
   def self.valid?(token)
-    find_by(invalidated_jti: token).present?
+    find_by(invalidated_jti: token).blank?
   end
 end

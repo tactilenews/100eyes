@@ -22,7 +22,7 @@
            <strong><%= t 'components.onboarding_instructions.email.intro' %></strong>
          </p>
 
-          <%= c 'onboarding_email_form', user: user, token: token %>
+          <%= c 'onboarding_email_form', user: user, jwt: jwt %>
         <% end %>
       </div>
 
