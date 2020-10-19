@@ -44,7 +44,7 @@ class OnboardingController < ApplicationController
     raise ActionController::BadRequest if invalidated_jti.exists?
 
     JsonWebToken.decode(jwt_param)
-  rescue ActionController::BadRequest, JWT::DecodeError
+  rescue StandardError
     render :unauthorized, status: :unauthorized
   end
 
