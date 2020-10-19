@@ -2,7 +2,7 @@
 
 class OnboardingController < ApplicationController
   skip_before_action :authenticate
-  before_action :verify_token, except: :create_invite_url
+  before_action :verify_token, except: %i[create_invite_url unauthorized]
 
   layout 'onboarding'
 
