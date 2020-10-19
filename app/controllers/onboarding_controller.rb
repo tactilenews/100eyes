@@ -2,7 +2,7 @@
 
 class OnboardingController < ApplicationController
   skip_before_action :authenticate
-  before_action :verify_token, except: %i[create_invite_url unauthorized]
+  before_action :verify_token, except: %i[create_invite_url]
 
   layout 'onboarding'
 
@@ -27,8 +27,6 @@ class OnboardingController < ApplicationController
 
   def success; end
 
-  def unauthorized; end
-
   def create_invite_url
     payload = SecureRandom.base64(16)
     jwt = JsonWebToken.encode(payload)
@@ -46,10 +44,8 @@ class OnboardingController < ApplicationController
     raise ActionController::BadRequest if invalidated_jti.exists?
 
     JsonWebToken.decode(jwt_param)
-  rescue ActionController::BadRequest
-    redirect_to onboarding_unauthorized_path
-  rescue JWT::DecodeError
-    redirect_to onboarding_unauthorized_path
+  rescue ActionController::BadRequest, JWT::DecodeError
+    render :unauthorized, status: :unauthorized
   end
 
   def user_params

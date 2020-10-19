@@ -20,18 +20,20 @@ RSpec.describe 'Onboarding', type: :request do
       let!(:invalidated_jti) { create(:json_web_token, invalidated_jti: 'INVALID_JWT') }
       let(:jwt) { 'INVALID_JWT' }
 
-      it 'redirects to unauthorized page' do
+      it 'renders unauthorized page' do
         subject.call
-        expect(response).to redirect_to onboarding_unauthorized_path
+
+        expect(response).not_to be_successful
       end
     end
 
     describe 'with jwt unsigned' do
       let(:jwt) { 'UNSIGNED_JWT' }
 
-      it 'redirects to unauthorized page' do
+      it 'renders unauthorized page' do
         subject.call
-        expect(response).to redirect_to onboarding_unauthorized_path
+
+        expect(response).not_to be_successful
       end
     end
   end
@@ -86,9 +88,10 @@ RSpec.describe 'Onboarding', type: :request do
     describe 'with unsigned jwt' do
       let(:jwt) { 'INCORRECT_TOKEN' }
 
-      it 'redirects to unauthorized page' do
+      it 'renders unauthorized page' do
         subject.call
-        expect(response).to redirect_to onboarding_unauthorized_path
+
+        expect(response).not_to be_successful
       end
 
       it 'does not create new user' do
