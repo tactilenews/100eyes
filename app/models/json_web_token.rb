@@ -11,8 +11,4 @@ class JsonWebToken < ApplicationRecord
   def self.decode(token)
     JWT.decode(token, SECRET_KEY, true, { algorithm: 'HS256' })
   end
-
-  def self.valid?(token)
-    find_by(invalidated_jti: token).blank?
-  end
 end
