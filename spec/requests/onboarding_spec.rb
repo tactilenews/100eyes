@@ -73,4 +73,14 @@ RSpec.describe 'Onboarding', type: :request do
       end
     end
   end
+
+  describe 'POST /onboarding/invite-url' do
+    subject { -> { post onboarding_invite_url_path } }
+
+    it 'responds with a url with a jwt search query' do
+      subject.call
+      url = JSON.parse(response.body)["url"]
+      expect(url).to include("/onboarding?jwt=")
+    end
+  end
 end

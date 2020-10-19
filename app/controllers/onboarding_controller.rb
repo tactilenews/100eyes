@@ -3,6 +3,7 @@
 class OnboardingController < ApplicationController
   skip_before_action :authenticate
   before_action :verify_token
+  skip_before_action :verify_token, only: %i[create_invite_url]
 
   layout 'onboarding'
 
@@ -23,6 +24,12 @@ class OnboardingController < ApplicationController
   end
 
   def success; end
+
+  def create_invite_url
+    payload = SecureRandom.base64(16)
+    jwt = JsonWebToken.encode(payload)
+    render json: { url: URI::HTTPS.build(path: '/onboarding', query: "jwt=#{jwt}") }
+  end
 
   private
 
