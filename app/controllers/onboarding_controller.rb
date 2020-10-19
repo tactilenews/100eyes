@@ -38,8 +38,8 @@ class OnboardingController < ApplicationController
   end
 
   def verify_token
-    invalidated_jti = JsonWebToken.find_by(invalidated_jti: jwt_param)
-    raise ActionController::BadRequest if invalidated_jti.present?
+    invalidated_jti = JsonWebToken.where(invalidated_jti: jwt_param)
+    raise ActionController::BadRequest if invalidated_jti.exists?
 
     JsonWebToken.decode(jwt_param)
 
