@@ -7,7 +7,6 @@ RSpec.describe 'Onboarding', type: :request do
   let(:user) { create(:user) }
   let(:jwt) { JsonWebToken.encode('ONBOARDING_TOKEN') }
   let(:params) { { jwt: jwt } }
-  let!(:invalidated_jti) { create(:json_web_token, invalidated_jti: 'INVALID_JWT') }
 
   describe 'GET /index' do
     subject { -> { get onboarding_path(**params) } }
@@ -17,7 +16,8 @@ RSpec.describe 'Onboarding', type: :request do
       expect(response).to be_successful
     end
 
-    describe 'with invalid jwt' do
+    describe 'with invalidated jwt' do
+      let!(:invalidated_jti) { create(:json_web_token, invalidated_jti: 'INVALID_JWT') }
       let(:jwt) { 'INVALID_JWT' }
 
       it 'is not successful' do
