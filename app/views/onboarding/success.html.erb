@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 <%= c 'onboarding_success',
   title: Setting.onboarding_success_title,
   text: Setting.onboarding_success_text
+=======
+<%= c 'onboarding_response',
+  style: :success,
+  heading: I18n.t('components.onboarding_success.heading', project_name: Rails.configuration.project_name),
+  text: I18n.t('components.onboarding_success.text').html_safe
+>>>>>>> 10985a9... Add error style to OnboardingSuccess component
 %>

@@ -1,4 +1,4 @@
-.OnboardingSuccess {
+.OnboardingResponse {
   display: flex;
   align-items: center;
   text-align: center;
@@ -7,7 +7,7 @@
   min-height: 100vh;
 }
 
-.OnboardingSuccess-icon {
+.OnboardingResponse-icon {
   display: inline-block;
   width: var(--spacing-unit-xl);
   height: var(--spacing-unit-xl);
@@ -15,5 +15,13 @@
 
   border-radius: 50%;
   color: #fff;
+  background-color: var(--color-text);
+}
+
+.OnboardingResponse--success .OnboardingResponse-icon {
   background-color: var(--color-green);
+}
+
+.OnboardingResponse--error .OnboardingResponse-icon {
+  background-color: var(--color-red);
 }

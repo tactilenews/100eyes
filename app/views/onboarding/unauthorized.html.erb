@@ -1,4 +1,5 @@
-<%= c 'onboarding_success',
-  heading: I18n.t('components.onboarding_unauthorized.heading', project_name: Rails.configuration.project_name),
+<%= c 'onboarding_response',
+  style: :error,
+  heading: I18n.t('components.onboarding_unauthorized.heading'),
   text: I18n.t('components.onboarding_unauthorized.text').html_safe
 %>
