@@ -18,7 +18,10 @@ class OnboardingController < ApplicationController
     return redirect_to_success if User.email_taken?(user_params[:email])
 
     @user = User.new(user_params)
-    return redirect_to_success if @user.save
+    if @user.save
+      JsonWebToken.create(invalidated_jti: params[:jwt])
+      return redirect_to_success 
+    end
 
     render :index
   end

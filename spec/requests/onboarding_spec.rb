@@ -61,6 +61,13 @@ RSpec.describe 'Onboarding', type: :request do
       expect(response).to redirect_to onboarding_success_path(jwt: jwt)
     end
 
+    it 'invalidates the jwt' do
+      expect { subject.call }.to change(JsonWebToken, :count).by(1)
+
+      json_web_token = JsonWebToken.last
+      expect(json_web_token.invalidated_jti).to eq(jwt)
+    end
+
     describe 'given an existing email address' do
       let!(:user) { create(:user, **attrs) }
 
