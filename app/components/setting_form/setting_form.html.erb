@@ -1,0 +1,34 @@
+<%= form_with(url: admin_settings_path, local: true, class: "SettingForm" ) do |f|%>
+  <%= c 'box' do %>
+    <%= c 'stack' do %>
+
+      <%= c 'heading', styles: [:section] do %>
+        <%= t 'setting.form.groups.project_settings' %>
+      <% end %>
+
+      <%= c 'field', object: setting, value: Setting.project_name, id: :project_name, styles: [:horizontal] do |field| %>
+        <%= c 'input', field.input_defaults %>
+      <% end %>
+
+      <%= c 'field', object: setting, value: Setting.onboarding_token, id: :onboarding_token, styles: [:horizontal] do |field| %>
+        <%= c 'input', field.input_defaults %>
+      <% end %>
+
+      <%= c 'field', object: setting, value: Setting.onboarding_logo, id: :onboarding_logo, styles: [:horizontal] do |field| %>
+        <%= c 'input', field.input_defaults %>
+      <% end %>
+
+      <%= c 'field', object: setting, value: Setting.onboarding_hero, id: :onboarding_hero, styles: [:horizontal] do |field| %>
+        <%= c 'input', field.input_defaults %>
+      <% end %>
+
+      <%= c 'field', object: setting, value: Setting.onboarding_page, id: :onboarding_page, styles: [:horizontal] do |field| %>
+        <%= c 'textarea', field.input_defaults %>
+      <% end %>
+
+      <div class="SettingForm-actions">
+        <%= c 'button', type: 'submit', label: I18n.t('save'), styles: [:primary, :positive] %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

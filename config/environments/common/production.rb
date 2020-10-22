@@ -107,16 +107,16 @@ Rails.application.configure do
   # CUSTOM
   config.action_mailer.smtp_settings = {
 
-    user_name: ENV['SENDGRID_USERNAME'],
-    password: ENV['SENDGRID_PASSWORD'],
-    domain: ENV['SENDGRID_DOMAIN'],
+    user_name: Setting.sendgrid_username,
+    password: Setting.sendgrid_password,
+    domain: Setting.sendgrid_domain,
     address: 'smtp.sendgrid.net',
     port: 587,
     authentication: :plain
   }
 
   config.mailer = {
-    from: ENV['SENDGRID_FROM']
+    from: Setting.sendgrid_from
   }
 
   config.action_mailbox.ingress = :sendgrid
@@ -126,6 +126,6 @@ Rails.application.configure do
   # https://discuss.rubyonrails.org/t/define-host-so-absolute-urls-work-in-development-and-test/75085/
   # https://github.com/rails/rails/issues/39566
   routes.default_url_options = {
-    host: ENV['APPLICATION_HOSTNAME'], protocol: 'https'
+    host: Setting.application_host, protocol: 'https'
   }
 end

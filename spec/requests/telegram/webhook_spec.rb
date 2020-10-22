@@ -7,7 +7,7 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
   describe '#start!' do
     let(:welcome_message) do
       message = [
-        'Herzlich Willkommen bei 50survivors.',
+        'Herzlich Willkommen bei TestingProject.',
         'Danke, dass Sie an unserer Dialog-Recherche teilnehmen.',
         'In den kommenden Wochen nutzen wir Telegram für den Austausch.',
         'Ein Bot arbeitet wie ein Postbote für uns und stellt Fragen und Antworten zu.',

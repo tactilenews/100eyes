@@ -35,4 +35,8 @@ Rails.application.routes.draw do
       post 'highlight', format: /json/
     end
   end
+
+  namespace :admin do
+    resources :settings, only: %i[index create]
+  end
 end

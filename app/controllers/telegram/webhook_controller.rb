@@ -13,7 +13,7 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
     tm = TelegramMessage.new(from: from, chat: chat)
     user = tm.sender
     user.save!
-    project_name = Rails.configuration.project_name
+    project_name = Setting.project_name
     response = I18n.t 'telegram.welcome_message', project_name: project_name
     respond_with :message, text: response.strip
   end

@@ -7,3 +7,9 @@
 .Wrapper--narrow {
   max-width: var(--grid-max-width-s);
 }
+
+.Wrapper--onboarding_page {
+  position: relative;
+  margin-top: calc(-2.5 * var(--spacing-unit));
+  z-index: 1;
+}

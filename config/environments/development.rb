@@ -35,8 +35,8 @@ Rails.application.configure do
 
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.smtp_settings = {
-    address: ENV['MAILSERVER_HOST'] || 'localhost',
-    port: ENV['MAILSERVER_PORT'] || 1025,
+    address: Setting.mailserver_host,
+    port: Setting.mailserver_port,
     enable_starttls_auto: false
   }
 
@@ -62,6 +62,4 @@ Rails.application.configure do
   config.mailer = {
     from: '100eyes <100eyes-development-account@example.org>'
   }
-
-  config.project_name = ENV['HUNDRED_EYES_PROJECT_NAME'] || '100eyes'
 end

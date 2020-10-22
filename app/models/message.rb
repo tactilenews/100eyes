@@ -33,7 +33,7 @@ class Message < ApplicationRecord
   def sender_name
     return sender.name if sender
 
-    I18n.t('application_name')
+    Setting.project_name
   end
 
   def user

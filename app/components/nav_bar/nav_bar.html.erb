@@ -3,7 +3,7 @@
     <ul>
       <li class="NavBar-item">
         <%= link_to root_path, class: 'NavBar-logo' do %>
-          <%= Rails.configuration.project_name %>
+          <%= Setting.project_name %>
         <% end %>
       </li>
       <li class="NavBar-item">
@@ -14,6 +14,11 @@
       <li class="NavBar-item">
         <%= link_to requests_path do %>
           <%= I18n.t 'components.nav_bar.investigation', count: :many %>
+        <% end %>
+      </li>
+      <li class="NavBar-item">
+        <%= link_to admin_settings_path do %>
+          <%= I18n.t 'setting.setting', count: :many %>
         <% end %>
       </li>
     </ul>

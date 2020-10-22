@@ -2,11 +2,12 @@
 
 module Field
   class Field < ApplicationComponent
-    def initialize(object:, id:, help: nil, **)
+    def initialize(object:, id:, help: nil, value: nil, **)
       super
       @object = object
       @id = id
       @help = help
+      @value = value
     end
 
     def checkbox_defaults
@@ -44,7 +45,7 @@ module Field
     end
 
     def value
-      object.send(id)
+      @value ||= object.send(id)
     end
 
     attr_reader :object, :id, :content, :help

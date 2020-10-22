@@ -1,5 +1,4 @@
 de:
-  application_name: 100eyes
   components:
     chat:
       outdated_request: Du hast diesem Mitglied bereits eine neue Frage gestellt. Nachfragen zu dieser Frage sind deshalb nicht mehr möglich.
@@ -27,7 +26,7 @@ de:
         one: Recherche
         other: Recherchen
     hero:
-      title: Willkommen bei 100eyes. Nutze die Intelligenz der Community.
+      title: Willkommen bei %{project_name}. Nutze die Intelligenz der Community.
     footer:
       authors:
         heading: Ein Projekt von
@@ -101,8 +100,49 @@ de:
 
   save: Speichern
   discard: Änderungen verwerfen
+
   dashboard:
     how_it_works: So funktioniert 100eyes…
+
+  setting:
+    setting:
+      one: Einstellung
+      other: Einstellungen
+    form:
+      groups:
+        project_settings: Projekt
+        telegram: Telegram
+        sendgrid: Sendgrid
+      project_name:
+        label: Name
+      onboarding_token:
+        label: Onboarding Token
+      telegram_bot_api_key:
+        label: API Key
+      telegram_bot_username:
+        label: Username
+      sendgrid_username:
+        label: Name
+      sendgrid_password:
+        label: API key
+      sendgrid_domain:
+        label: Domain
+      sendgrid_from:
+        label: Absender
+      inbound_email_password:
+        label: Inbound Passwort
+        help: Bei Sendgrid "%{callback_url}" unter "Inbound Parse" eintragen
+      onboarding_page:
+        label: Willkommens-Seite
+      onboarding_logo:
+        label: Logo (URL)
+      onboarding_hero:
+        label: Teaser-Bild (URL)
+
+  settings:
+    header: Einstellungen
+    success: Einstellungen erfolgreich gespeichert!
+
   search:
     placeholder: Suchen
     result:
@@ -228,25 +268,6 @@ de:
     welcome_message: |
       Herzlich Willkommen bei %{project_name}. Danke, dass Sie an unserer Dialog-Recherche teilnehmen. In den kommenden Wochen nutzen wir Telegram für den Austausch. Ein Bot arbeitet wie ein Postbote für uns und stellt Fragen und Antworten zu. Ihre Nachrichten lesen und beantworten wir aber selbstverständlich persönlich. Wir freuen uns sehr auf den Dialog mit Ihnen!
       Katharina Jakob, Jens Eber, Oliver Eberhardt, Isabelle Buckow, Astrid Csuraji und Jakob Vicari
-
-  onboarding:
-    heading: "Hallo und willkommen beim #Schweinesystem!"
-    intro: |
-      <p>Wir freuen uns, dass Sie an unserer Dialog-Recherche zur Schweinehaltung in Deutschland teilnehmen. Denn dort zeigen sich überall schwerwiegende Probleme: Schlachthofskandale, menschenunwürdige Arbeitsbedingungen, Tierqualen, dazu ein rapider Preisverfall, der Schweinebauern ruiniert. So kann es nicht weitergehen. Das weiß jeder, der mit diesem Markt zu tun hat.</p>
-      <p>Lösungsvorschläge gibt es bisher keine. Deswegen starten wir diese Dialog-Recherche mit Ihrer Hilfe. Statt mit ein bis drei Betroffenen oder Experten ein Interview zu führen und dann einen Beitrag zu veröffentlichen, wollen wir mit vielen verschiedenen Menschen das Gespräch suchen. Und das über einen Zeitraum von vier Wochen. Damit wir ein breiteres Bild bekommen und Dinge besser verstehen.</p>
-      <p>Es ist ein Experiment. Danke, dass Sie sich darauf einlassen.</p>
-    who:
-      heading: Wer?
-      text: |
-        Hinter dem #Schweinesystem stecken Menschen, keine Maschinen: Die Journalisten Katharina Jakob und Jens Eber, der Filmemacher Oliver Eberhardt sowie das Dialog-Recherche-Team Isabelle Buckow, Astrid Csuraji und Dr. Jakob Vicari von tactile.news. <a class="Link" href=" https://tactile.news/ueber-uns/">Auf unserer Webseite</a> stellen wir unsere Idee vom Dialog-Journalismus ausführlicher vor.
-    how:
-      heading: Wie?
-      text: |
-        Wir stellen Ihnen in den nächsten vier, fünf Wochen immer mal wieder eine Frage. Am liebsten per Telegram Messenger. Wenn Sie den nicht nutzen und auch nicht installieren wollen (er ist sehr ähnlich wie WhatsApp), kommunizieren Sie mit uns per E-Mail. Es bleibt Ihnen überlassen, ob Sie jede Frage beantworten oder auch welche auslassen.
-    where:
-      heading: Wo?
-      text: |
-        Damit wir Sie künftig auf dem Kanal Ihrer Wahl erreichen, teilen Sie uns bitte mit, ob wir Sie per E-Mail oder Telegram anschreiben sollen.
 
   activerecord:
     errors:
