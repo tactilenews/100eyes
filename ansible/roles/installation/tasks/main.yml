@@ -50,6 +50,10 @@
       - docker-compose.traefik.yml
   register: output
 
+- name: Prune outdated images
+  community.general.docker_prune:
+    containers: yes
+
 - name: Create and migrate database
   command:
     cmd: docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec app bin/rails db:create db:migrate
