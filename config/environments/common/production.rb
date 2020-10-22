@@ -120,6 +120,12 @@ Rails.application.configure do
   }
 
   config.action_mailbox.ingress = :sendgrid
-
   config.project_name = ENV['HUNDRED_EYES_PROJECT_NAME']
+
+  # TODO: refactor this once these issues are resolved
+  # https://discuss.rubyonrails.org/t/define-host-so-absolute-urls-work-in-development-and-test/75085/
+  # https://github.com/rails/rails/issues/39566
+  routes.default_url_options = {
+    host: ENV['APPLICATION_HOSTNAME'], protocol: 'https'
+  }
 end

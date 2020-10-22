@@ -3,11 +3,13 @@
   file:
     path: /home/ansible/traefik/
     state: directory
+
 - name: Add traefik admin user with htpasswd file
   htpasswd:
     path: /home/ansible/traefik/passwords
     name: "{{ traefik.user }}"
     password: "{{ traefik.password }}"
+
 - name: Copy docker-compose.yml files
   copy:
     src: "{{ item }}"
@@ -16,6 +18,7 @@
     - ../docker-compose.yml
     - ../docker-compose.prod.yml
     - ../docker-compose.traefik.yml
+
 - name: Run `docker-compose up`
   environment:
     RAILS_ENV: "{{ rails.environment }}"
@@ -46,7 +49,13 @@
       - docker-compose.prod.yml
       - docker-compose.traefik.yml
   register: output
+
 - name: Create and migrate database
   command:
     cmd: docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec app bin/rails db:create db:migrate
+    chdir: /home/ansible
+
+- name: Set Telegram webhook
+  command:
+    cmd: docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec app bin/rails telegram:bot:set_webhook
     chdir: /home/ansible
