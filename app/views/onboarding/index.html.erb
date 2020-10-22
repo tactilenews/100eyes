@@ -6,7 +6,7 @@
 
 <main>
 
-  <%= c 'onboarding_hero', photo: Setting.onboarding_hero %>
+  <%= c 'onboarding_hero', photo: Setting.onboarding_hero, heading: Setting.onboarding_title %>
   <%= c 'wrapper', styles: [:onboarding_page, :narrow] do %>
     <%= c 'box', styles: [:white, :large]  do %>
       <%= c 'stack' do %>

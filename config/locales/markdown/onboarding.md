@@ -1,5 +1,3 @@
-# Hallo und willkommen beim #Schweinesystem!
-
 Wir freuen uns, dass Sie an unserer Dialog-Recherche zur Schweinehaltung in Deutschland teilnehmen. Denn dort zeigen sich überall schwerwiegende Probleme: Schlachthofskandale, menschenunwürdige Arbeitsbedingungen, Tierqualen, dazu ein rapider Preisverfall, der Schweinebauern ruiniert. So kann es nicht weitergehen. Das weiß jeder, der mit diesem Markt zu tun hat.
 
 Lösungsvorschläge gibt es bisher keine. Deswegen starten wir diese Dialog-Recherche mit Ihrer Hilfe. Statt mit ein bis drei Betroffenen oder Experten ein Interview zu führen und dann einen Beitrag zu veröffentlichen, wollen wir mit vielen verschiedenen Menschen das Gespräch suchen. Und das über einen Zeitraum von vier Wochen. Damit wir ein breiteres Bild bekommen und Dinge besser verstehen.

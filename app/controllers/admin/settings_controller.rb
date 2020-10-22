@@ -19,9 +19,12 @@ module Admin
       params.require(:setting).permit(
         :project_name,
         :onboarding_token,
-        :onboarding_page,
         :onboarding_logo,
-        :onboarding_hero
+        :onboarding_hero,
+        :onboarding_title,
+        :onboarding_page,
+        :telegram_welcome_message,
+        :telegram_unknown_content_message
       )
     end
   end

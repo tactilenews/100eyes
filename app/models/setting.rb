@@ -8,7 +8,10 @@ class Setting < RailsSettings::Base
   field :onboarding_token, default: ENV['ONBOARDING_TOKEN'] || 'abcd1234'
   field :onboarding_logo, default: '/onboarding/logo.png'
   field :onboarding_hero, default: '/onboarding/hero.jpg'
+  field :onboarding_title, default: 'Hallo und herzlich willkommen beim #Schweinesystem'
   field :onboarding_page, default: File.read(File.join('config', 'locales', 'markdown', 'onboarding.md'))
+  field :telegram_welcome_message, default: File.read(File.join('config', 'locales', 'telegram', 'welcome.txt'))
+  field :telegram_unknown_content_message, default: File.read(File.join('config', 'locales', 'telegram', 'unknown_content.txt'))
 
   field :application_host, readonly: true, default: ENV['APPLICATION_HOST'] || 'http://localhost:3000'
   field :telegram_bot_api_key, readonly: true, default: ENV['TELEGRAM_BOT_API_KEY']

@@ -10,6 +10,10 @@
         <%= c 'input', field.input_defaults %>
       <% end %>
 
+      <%= c 'heading', styles: [:section] do %>
+        <%= t 'setting.form.groups.onboarding' %>
+      <% end %>
+
       <%= c 'field', object: setting, value: Setting.onboarding_token, id: :onboarding_token, styles: [:horizontal] do |field| %>
         <%= c 'input', field.input_defaults %>
       <% end %>
@@ -22,7 +26,23 @@
         <%= c 'input', field.input_defaults %>
       <% end %>
 
+      <%= c 'field', object: setting, value: Setting.onboarding_title, id: :onboarding_title, styles: [:horizontal] do |field| %>
+        <%= c 'input', field.input_defaults %>
+      <% end %>
+
       <%= c 'field', object: setting, value: Setting.onboarding_page, id: :onboarding_page, styles: [:horizontal] do |field| %>
+        <%= c 'textarea', field.input_defaults %>
+      <% end %>
+
+      <%= c 'heading', styles: [:section] do %>
+        <%= t 'setting.form.groups.telegram' %>
+      <% end %>
+
+      <%= c 'field', object: setting, value: Setting.telegram_welcome_message, id: :telegram_welcome_message, styles: [:horizontal] do |field| %>
+        <%= c 'textarea', field.input_defaults %>
+      <% end %>
+
+      <%= c 'field', object: setting, value: Setting.telegram_unknown_content_message, id: :telegram_unknown_content_message, styles: [:horizontal] do |field| %>
         <%= c 'textarea', field.input_defaults %>
       <% end %>
 

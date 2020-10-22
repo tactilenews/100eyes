@@ -17,7 +17,3 @@
 .Box--gray {
   background-color: var(--color-gray-light);
 }
-
-.Box--white {
-  background-color: white;
-}
