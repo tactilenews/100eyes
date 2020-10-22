@@ -1,16 +1,14 @@
 version: '3.7'
 
-x-default-env: &x-default-env
-  RAILS_ENV: "${RAILS_ENV:-development}"
-  NODE_ENV: development
-  MAILSERVER_HOST: mailserver
-  MAILSERVER_PORT: 25
-
 x-defaults: &x-defaults
   build:
     context: .
   environment:
-    <<: *x-default-env
+    RAILS_ENV: "${RAILS_ENV:-development}"
+    NODE_ENV: development
+    MAILSERVER_HOST: mailserver
+    MAILSERVER_PORT: 25
+    WEBPACKER_DEV_SERVER_HOST: 0.0.0.0
   stdin_open: true
   tty: true
   volumes:
@@ -22,21 +20,10 @@ services:
 
   app:
     <<: *x-defaults
-    depends_on: [ webpack, db, mailserver ]
-    environment:
-      <<: *x-default-env
-      WEBPACKER_DEV_SERVER_HOST: webpack
-    ports: ['3000:3000']
-
-  webpack:
-    <<: *x-defaults
-    command: ./bin/webpack-dev-server
-    ports: [ '3035:3035' ]
-    environment:
-      <<: *x-default-env
-      WEBPACKER_DEV_SERVER_HOST: 0.0.0.0
-    volumes:
-      - .:/app
+    depends_on: [ db, mailserver ]
+    ports:
+      - 3000:3000
+      - 3035:3035
 
   db:
     environment:
