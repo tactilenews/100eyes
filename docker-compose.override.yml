@@ -8,6 +8,7 @@ x-defaults: &x-defaults
     NODE_ENV: development
     MAILSERVER_HOST: mailserver
     MAILSERVER_PORT: 25
+    WEBPACKER_DEV_SERVER_HOST: 0.0.0.0
   stdin_open: true
   tty: true
   volumes:
@@ -19,13 +20,10 @@ services:
 
   app:
     <<: *x-defaults
-    depends_on: [ webpack, db, mailserver ]
-    ports: ['3000:3000']
-
-  webpack:
-    <<: *x-defaults
-    command: ./bin/webpack-dev-server
-    ports: [ '3035:3035' ]
+    depends_on: [ db, mailserver ]
+    ports:
+      - 3000:3000
+      - 3035:3035
 
   db:
     environment:

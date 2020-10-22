@@ -48,6 +48,14 @@ Zu Entwicklungszwecken kannst du 100eyes mithilfe von Docker aufsetzen. Das Dock
     $ docker-compose up
     ```
 
+  ##### Webpack Development Server
+
+  Mit diesem Befehl kannst du zu Entwicklungszwecken das Kompilieren der Assets beschleunigen (z.B. bei vielen Änderungen an CSS Dateien):
+
+  ```console
+  $ docker-compose exec app bin/webpack-dev-server
+  ```
+
 ### Production
 100eyes ist eine relativ einfache Ruby-on-Rails-Anwendung und besteht aus dem Anwendungsserver sowie einem Background-Worker zum Empfangen von eingehenden Telegram-Nachrichten.
 
