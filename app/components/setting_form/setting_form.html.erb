@@ -23,7 +23,7 @@
       <% end %>
 
       <%= c 'field', object: setting, value: Setting.onboarding_hero, id: :onboarding_hero, styles: [:horizontal] do |field| %>
-        <%= c 'input', field.input_defaults %>
+        <%= c 'input', field.input_defaults.merge(type: :url) %>
       <% end %>
 
       <%= c 'field', object: setting, value: Setting.onboarding_title, id: :onboarding_title, styles: [:horizontal] do |field| %>
