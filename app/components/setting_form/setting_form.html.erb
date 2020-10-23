@@ -1,52 +1,58 @@
 <%= form_with(url: admin_settings_path, local: true, class: "SettingForm" ) do |f|%>
-  <%= c 'stack' do %>
+  <%= c 'stack', space: :xlarge do %>
 
-    <%= c 'heading', styles: [:section] do %>
-      <%= t 'setting.form.groups.project_settings' %>
+    <%= c 'stack' do %>
+      <%= c 'heading', tag: :h2 do %>
+        <%= t 'setting.form.groups.project_settings' %>
+      <% end %>
+
+      <%= c 'field', object: setting, value: Setting.project_name, id: :project_name do |field| %>
+        <%= c 'input', field.input_defaults %>
+      <% end %>
     <% end %>
 
-    <%= c 'field', object: setting, value: Setting.project_name, id: :project_name do |field| %>
-      <%= c 'input', field.input_defaults %>
+    <%= c 'stack' do %>
+      <%= c 'heading', tag: :h2 do %>
+        <%= t 'setting.form.groups.onboarding' %>
+      <% end %>
+
+      <%= c 'field', object: setting, value: Setting.onboarding_token, id: :onboarding_token do |field| %>
+        <%= c 'input', field.input_defaults %>
+      <% end %>
+
+      <%= c 'field', object: setting, value: Setting.onboarding_logo, id: :onboarding_logo do |field| %>
+        <%= c 'input', field.input_defaults.merge(type: :url) %>
+      <% end %>
+
+      <%= c 'field', object: setting, value: Setting.onboarding_hero, id: :onboarding_hero do |field| %>
+        <%= c 'input', field.input_defaults.merge(type: :url) %>
+      <% end %>
+
+      <%= c 'field', object: setting, value: Setting.onboarding_title, id: :onboarding_title do |field| %>
+        <%= c 'input', field.input_defaults %>
+      <% end %>
+
+      <%= c 'field', object: setting, value: Setting.onboarding_page, id: :onboarding_page do |field| %>
+        <%= c 'textarea', field.input_defaults %>
+      <% end %>
     <% end %>
 
-    <%= c 'heading', styles: [:section] do %>
-      <%= t 'setting.form.groups.onboarding' %>
-    <% end %>
+    <%= c 'stack' do %>
+      <%= c 'heading', tag: :h2 do %>
+        <%= t 'setting.form.groups.telegram' %>
+      <% end %>
 
-    <%= c 'field', object: setting, value: Setting.onboarding_token, id: :onboarding_token do |field| %>
-      <%= c 'input', field.input_defaults %>
-    <% end %>
+      <%= c 'field', object: setting, value: Setting.telegram_welcome_message, id: :telegram_welcome_message do |field| %>
+        <%= c 'textarea', field.input_defaults %>
+      <% end %>
 
-    <%= c 'field', object: setting, value: Setting.onboarding_logo, id: :onboarding_logo do |field| %>
-      <%= c 'input', field.input_defaults.merge(type: :url) %>
-    <% end %>
-
-    <%= c 'field', object: setting, value: Setting.onboarding_hero, id: :onboarding_hero do |field| %>
-      <%= c 'input', field.input_defaults.merge(type: :url) %>
-    <% end %>
-
-    <%= c 'field', object: setting, value: Setting.onboarding_title, id: :onboarding_title do |field| %>
-      <%= c 'input', field.input_defaults %>
-    <% end %>
-
-    <%= c 'field', object: setting, value: Setting.onboarding_page, id: :onboarding_page do |field| %>
-      <%= c 'textarea', field.input_defaults %>
-    <% end %>
-
-    <%= c 'heading', styles: [:section] do %>
-      <%= t 'setting.form.groups.telegram' %>
-    <% end %>
-
-    <%= c 'field', object: setting, value: Setting.telegram_welcome_message, id: :telegram_welcome_message do |field| %>
-      <%= c 'textarea', field.input_defaults %>
-    <% end %>
-
-    <%= c 'field', object: setting, value: Setting.telegram_unknown_content_message, id: :telegram_unknown_content_message do |field| %>
-      <%= c 'textarea', field.input_defaults %>
+      <%= c 'field', object: setting, value: Setting.telegram_unknown_content_message, id: :telegram_unknown_content_message do |field| %>
+        <%= c 'textarea', field.input_defaults %>
+      <% end %>
     <% end %>
 
     <div class="SettingForm-actions">
-      <%= c 'button', type: 'submit', label: I18n.t('save'), styles: [:primary, :positive] %>
+      <%= c 'button', type: 'submit', label: I18n.t('save') %>
     </div>
   <% end %>
 <% end %>
