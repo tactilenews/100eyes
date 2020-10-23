@@ -5,8 +5,8 @@ module Admin
     def index; end
 
     def create
-      setting_params.keys.each do |key|
-        Setting.send("#{key}=", setting_params[key].strip) unless setting_params[key].nil?
+      settings_params.keys.each do |key|
+        Setting.send("#{key}=", settings_params[key].strip) unless settings_params[key].nil?
       end
 
       flash[:success] = I18n.t('settings.success')
@@ -15,7 +15,7 @@ module Admin
 
     private
 
-    def setting_params
+    def settings_params
       params.require(:setting).permit(
         :project_name,
         :onboarding_token,
