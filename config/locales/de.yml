@@ -124,7 +124,13 @@ de:
       onboarding_page:
         label: Text
         help: |
-          Du kannst deinen Text mit <a href="https://de.wikipedia.org/wiki/Markdown">Markdown</a>-Befehlen formatieren. Du kannst z.B. <em>*kursiven Text*</em>, <strong>**fetten Text**</strong> oder <a class="Link" href="https://tactile.news">[Links](https://tactile.news)</a> einfügen.
+          Du kannst deinen Text mit <a class="Link" href="https://de.wikipedia.org/wiki/Markdown">Markdown</a>-Befehlen formatieren. Du kannst z.B. <em>*kursiven Text*</em>, <strong>**fetten Text**</strong> oder <a class="Link" href="https://tactile.news">[Links](https://tactile.news)</a> einfügen.
+      onboarding_success_title:
+        label: Titel nach erfolgreichem Onboarding
+        help: Wenn ein Mitglied sich erfolgreich registriert hat, wird dieser Titel angezeigt.
+      onboarding_success_text:
+        label: Text nach erfolgreichem Onboarding
+        help: Wenn ein Mitglied sich erfolgreich registriert hat, wird dieser Text angezeigt.
       onboarding_logo:
         label: Logo (URL)
         help: Das Logo sollte eine Bilddatei im SVG- oder JPEG-Format und ca. 90 Pixel hoch sein. Es wird während des Onboardings angezeigt.
