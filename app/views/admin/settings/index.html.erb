@@ -1,18 +1,13 @@
 <%= c 'box', styles: [:large, :gray] do %>
   <%= c 'wrapper' do %>
-    <%= c 'stack', space: :large do %>
-      <%= c 'heading', style: :alpha do %>
-        <%= I18n.t 'settings.header' %>
-      <% end %>
-
+    <%= c 'heading', style: :alpha do %>
+      <%= t 'settings.header' %>
     <% end %>
   <% end %>
 <% end %>
 
 <%= c 'box' do %>
   <%= c 'wrapper' do %>
-    <%= c 'stack', space: :xlarge do %>
-      <%= c 'setting_form' %>
-    <% end %>
+    <%= c 'setting_form' %>
   <% end %>
 <% end %>
