@@ -7,8 +7,8 @@
 <main>
 
   <%= c 'onboarding_hero', photo: Setting.onboarding_hero, heading: Setting.onboarding_title %>
-  <%= c 'wrapper', styles: [:onboarding_page, :narrow] do %>
-    <%= c 'box', styles: [:white, :large]  do %>
+  <%= c 'wrapper', style: :narrow do %>
+    <%= c 'box' do %>
       <%= c 'stack' do %>
         <div class="text-serif text-justify">
           <%= c 'stack' do %>
