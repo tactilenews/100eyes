@@ -111,25 +111,32 @@ de:
       other: Einstellungen
     form:
       groups:
-        project_settings: Projekt
+        project_settings: Allgemein
         telegram: Telegram
         onboarding: Onboarding
       project_name:
-        label: Name
+        label: Projekt-Name
+        help: Der Projekt-Name wird Community-Mitgliedern z.B. während des Onboardings angezeigt.
       onboarding_token:
         label: Geheimes Token
       onboarding_title:
         label: Titel
       onboarding_page:
         label: Text
+        help: |
+          Du kannst deinen Text mit <a href="https://de.wikipedia.org/wiki/Markdown">Markdown</a>-Befehlen formatieren. Du kannst z.B. <em>*kursiven Text*</em>, <strong>**fetten Text**</strong> oder <a class="Link" href="https://tactile.news">[Links](https://tactile.news)</a> einfügen.
       onboarding_logo:
         label: Logo (URL)
+        help: Das Logo sollte eine Bilddatei im SVG- oder JPEG-Format und ca. 90 Pixel hoch sein. Es wird während des Onboardings angezeigt.
       onboarding_hero:
         label: Teaser (URL)
+        help: Das Logo sollte eine Bilddatei im JPEG-Format. Es sollte mindestens 800x500 Pixel groß sein. Es wird während des Onboardings angezeigt.
       telegram_welcome_message:
         label: Willkommens-Nachricht
+        help: Wenn sich ein neues Mitglied via Telegram registriert, erhält es diese Nachricht.
       telegram_unknown_content_message:
-        label: Nachricht für unbekannte Inhalte
+        label: Fehler-Nachricht bei unbekannten Inhalten
+        help: Wenn ein Mitglied via Telegram Nachrichten versendet, die von 100eyes noch nicht unterstützt werden, erhält es diese Nachricht.
 
   settings:
     header: Einstellungen

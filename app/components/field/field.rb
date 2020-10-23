@@ -2,11 +2,10 @@
 
 module Field
   class Field < ApplicationComponent
-    def initialize(object:, id:, help: nil, value: nil, **)
+    def initialize(object:, id:, value: nil, **)
       super
       @object = object
       @id = id
-      @help = help
       @value = value
     end
 
@@ -25,12 +24,20 @@ module Field
 
     private
 
+    attr_reader :object, :id, :content
+
     def validation_errors
       object.errors[id]
     end
 
     def label
       I18n.t("#{type}.form.#{id}.label")
+    end
+
+    def help
+      # rubocop:disable Rails/OutputSafety
+      I18n.t("#{type}.form.#{id}.help", default: nil)&.html_safe
+      # rubocop:enable Rails/OutputSafety
     end
 
     def basic_defaults
@@ -47,7 +54,5 @@ module Field
     def value
       @value ||= object.send(id)
     end
-
-    attr_reader :object, :id, :content, :help
   end
 end
