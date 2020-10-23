@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module SettingForm
-  class SettingForm < ApplicationComponent
+module SettingsForm
+  class SettingsForm < ApplicationComponent
     def initialize
       @setting = Setting.new
     end
