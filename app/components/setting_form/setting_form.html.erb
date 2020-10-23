@@ -35,6 +35,14 @@
       <%= c 'field', object: setting, value: Setting.onboarding_page, id: :onboarding_page do |field| %>
         <%= c 'textarea', field.input_defaults %>
       <% end %>
+
+      <%= c 'field', object: setting, value: Setting.onboarding_success_title, id: :onboarding_success_title do |field| %>
+        <%= c 'input', field.input_defaults %>
+      <% end %>
+
+      <%= c 'field', object: setting, value: Setting.onboarding_success_text, id: :onboarding_success_text do |field| %>
+        <%= c 'textarea', field.input_defaults %>
+      <% end %>
     <% end %>
 
     <%= c 'stack' do %>

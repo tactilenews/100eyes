@@ -2,15 +2,15 @@
 
 module OnboardingSuccess
   class OnboardingSuccess < ApplicationComponent
-    def initialize(heading:, text:, **)
+    def initialize(title:, text:, **)
       super
 
-      @heading = heading
+      @title = title
       @text = text
     end
 
     private
 
-    attr_reader :heading, :text
+    attr_reader :title, :text
   end
 end

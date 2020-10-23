@@ -82,11 +82,6 @@ de:
           - Suchen Sie bei Telegram nach @%{username}. Wenn Sie das hier gerade auf einem Smartphone lesen, können Sie auch einfach <a class="Link" href="https://t.me/%{username}">auf diesen Link klicken</a>.
           - Wenn Sie den @%{username} bei Telegram gefunden haben, klicken Sie auf „Start”.
           - Senden Sie uns eine erste Nachricht mit Ihrem vollen Namen.
-    onboarding_success:
-      heading: Danke für Ihre Anmeldung zu %{project_name}!
-      text: |
-        Unsere Dialog-Recherche startet bald.<br>
-        Wir melden uns dann wieder bei Ihnen.
     onboarding_footer:
       imprint: Impressum
 
