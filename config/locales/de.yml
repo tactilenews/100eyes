@@ -68,6 +68,8 @@ de:
           text: Werte die Antworten mit Hilfe von 100eyes aus und komponiere deine Veröffentlichung.
     onboarding_header:
       byline: eine Dialog-Recherche von <a class="Link" href="https://tactile.news" target="_blank">tactile.news</a>
+    onboarding_email_form:
+      submit: Anmeldung abschließen
     onboarding_instructions:
       email:
         label: E-Mail

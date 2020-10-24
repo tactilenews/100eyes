@@ -1,0 +1,46 @@
+fi:
+  components:
+    onboarding_email_form:
+      submit: Vahvista rekisteröinti -painike
+    onboarding_instructions:
+      email:
+        label: Sähköposti
+        intro: |
+          Jos haluat osallistua sähköpostitse, anna meille yhteystietosi täällä:
+      telegram:
+        label: Telegram
+        intro: |
+          Voit osallistua Telegramin kautta noudattamalla näitä neljää vaihetta:
+        steps:
+          - Lataa älypuhelimeesi Telegram-sovellus , jos sinulla ei vielä ole sitä.
+          - Etsi Telegrammista @%{username}. Jos luet tätä älypuhelimella juuri nyt, <a class="Link" href="https://t.me/%{username}">voit klikata tätä linkkiä</a>.
+          - Kun olet löytänyt @%{username}, napsauta "Käynnistä".
+          - Lähetä meille ensimmäinen viesti koko nimesi kanssa.
+
+  onboarding:
+    heading: "Hei ja tervetuloa #sika-systeemiin"
+    intro: |
+      <p>Olemme iloisia, että olet mukana siankasvatusta koskevassa vuoropuhelututkimuksessamme. Koska ainakin Saksassa kaikkialla näkyy  vakavia ongelmia: teurastamoskandaalit, epäinhimilliset työolot, eläinten kidutus sekä siankasvattajia tuhoava nopea hintojen lasku. Tällä tavalla systeemi ei saa jatkua. Kaikki, jotka ovat jollakin tavoin mukana näillä markkinoilla, tietävät sen.</p>
+      <p>Toistaiseksi ratkaisuja ei ole näkyvissä. Siksi aloitamme tämän vuoropuhelututkimuksen avullasi. Emme halua vain haastatella kahta tai kolmea henkilöä sekä asiantuntijoita ja sitten julkaista juttua, haluamme puhua monille eri henkilöille neljän viikon aikana, jotta saisimme laajemman kuvan ja ymmärtäisimme koko systeemin paremmin.</p>
+      <p>Se on kokeilu. Kiitos osallistumisesta.</p>
+    who:
+      heading: Kuka?
+      text: |
+        #Sika-järjestelmän takana ovat ihmiset, eikä koneita: toimittajat Katharina Jakob ja Jens Eber, elokuvantekijä Oliver Eberhardt ja vuoropuhelun tutkimusryhmässä Isabelle Buckow, Astrid Csuraji ja Dr. Jakob Vicari palvelusta tactile.news. Esittelemme ajatustamme keskustelevasta journalismista <a class="Link" href="https://tactile.news/ueber-uns" target="_blank">verkkosivustollamme</a>.
+    how:
+      heading: Miten?
+      text: |
+        Esitämme sinulle jatkuvasti kysymyksiä seuraavien neljän tai viiden viikon aikana. Mieluiten Telegram Messengerin kautta. Jos et käytä sitä etkä halua asentaa sitä (se on hyvin samanlainen kuin Whatsapp), ota yhteyttä meihin sähköpostitse. Sinusta riippuu, vastaatko kaikkiin kysymyksiin vai jätätkö jotkut väliin.
+    where:
+      heading: Missä?
+      text: |
+        Jotta voimme tavoittaa sinut myöhemmin valitsemallasi kanavalla, ilmoita meille, haluatko meidän kirjoittavan sinulle sähköpostitse vai Telegramin kautta.
+
+  user:
+    form:
+      first_name:
+        label: Etunimi
+      last_name:
+        label: Sukunimi
+      email:
+        label: Sähköposti
