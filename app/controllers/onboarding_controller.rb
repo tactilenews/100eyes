@@ -50,14 +50,14 @@ class OnboardingController < ApplicationController
     hash = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), secret_key, check_string)
 
     raise ActionController::BadRequest if hash.casecmp(check_hash) != 0
-    raise ActionController::BadRequest if Time.now.to_i - telegram_auth_params[:auth_date].to_i > 86_400
+    raise ActionController::BadRequest if Time.now.to_i - telegram_auth_params[:auth_date].to_i > 24 * 60 * 60
 
     @user = User.find_or_create_by(
       telegram_id: telegram_auth_params[:id],
       first_name: telegram_auth_params[:first_name],
       last_name: telegram_auth_params[:last_name]
     )
-    if @user.save!
+    if @user.save
       render json: { message: 'Success' }, status: :ok
     else
       render json: { status: :error }

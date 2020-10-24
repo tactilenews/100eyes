@@ -38,6 +38,22 @@ RSpec.describe 'Onboarding', type: :request do
     end
   end
 
+  describe 'GET /onboarding/telegram-auth' do
+    params = {
+      id: 123,
+      first_name: 'Matthew',
+      last_name: 'Rider',
+      auth_date: Time.zone.now,
+      hash: 'TBxB8fx9AxF5x95sWCLx81x8F@1xF9x9AxDBxEDx1F%-lx8CxEDxB1x15xABXYxD3x9B'
+    }
+    subject { -> { get onboarding_telegram_auth_path(**params) } }
+
+    it 'responds with ok if the hash matches' do
+      subject.call
+      expect(response).to be_successful
+    end
+  end
+
   describe 'POST /create' do
     let(:attrs) do
       {
