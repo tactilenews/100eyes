@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   get '/onboarding', to: 'onboarding#index'
   post '/onboarding', to: 'onboarding#create'
   get '/onboarding/success', to: 'onboarding#success'
-  post '/onboarding/invite-url', to: 'onboarding#create_invite_url'
+  post '/onboarding/invite', to: 'onboarding#create_invite_url'
 
   get '/settings', to: 'settings#index'
   post '/settings', to: 'settings#update'

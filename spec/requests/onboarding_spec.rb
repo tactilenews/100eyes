@@ -100,10 +100,10 @@ RSpec.describe 'Onboarding', type: :request do
     end
   end
 
-  describe 'POST /onboarding/invite-url' do
+  describe 'POST /onboarding/invite' do
     let(:headers) { nil }
 
-    subject { -> { post onboarding_invite_url_path, headers: headers } }
+    subject { -> { post onboarding_invite_path, headers: headers } }
 
     it 'is unsuccessful' do
       subject.call
