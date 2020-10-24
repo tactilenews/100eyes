@@ -8,6 +8,14 @@ class OnboardingController < ApplicationController
 
   def index
     @token = token_param
+
+    # rubocop:disable Rails/OutputSafety
+    @text = Kramdown::Document
+            .new(Setting.onboarding_page, smart_quotes: %w[sbquo lsquo bdquo ldquo])
+            .to_html
+            .html_safe
+    # rubocop:enable Rails/OutputSafety
+
     @user = User.new
   end
 
