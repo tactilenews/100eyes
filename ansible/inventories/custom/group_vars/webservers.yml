@@ -1,0 +1,5 @@
+ansible_user: ansible
+ansible_host: "{{ netcup.hostname }}"
+ansible_become_pass: "{{ netcup.sudo_password }}"
+webservers:
+  authorized_keys: "{{lookup('fileglob', 'ssh/*.pub', wantlist=True)}}"
