@@ -15,3 +15,11 @@
   top: 0;
   z-index: 99;
 }
+
+.rich-content > h1,
+.rich-content > h2,
+.rich-content > p,
+.rich-content > ul,
+.rich-content > ol {
+  margin-bottom: var(--spacing-unit);
+}

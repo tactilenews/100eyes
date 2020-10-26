@@ -11,9 +11,7 @@
     <%= c 'box' do %>
       <%= c 'stack' do %>
         <div class="text-serif text-justify">
-          <%= c 'stack' do %>
-            <%= @text %>
-          <% end %>
+          <%= c 'markdown', raw: Setting.onboarding_page %>
         </div>
 
         <%= c 'onboarding_instructions', user: @user, token: @token %>

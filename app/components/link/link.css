@@ -1,3 +1,4 @@
-.Link {
+.Link,
+.rich-content a {
   text-decoration: underline;
 }
