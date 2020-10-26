@@ -1,5 +1,7 @@
 fi:
   components:
+    onboarding_header:
+      byline: <a class="Link" href="https://tactile.news" target="_blank">tactile.news</a>:n vuoropuhelututkimus
     onboarding_email_form:
       submit: Vahvista rekisteröinti -painike
     onboarding_instructions:
@@ -12,21 +14,28 @@ fi:
         intro: |
           Voit osallistua Telegramin kautta noudattamalla näitä neljää vaihetta:
         steps:
-          - Lataa älypuhelimeesi Telegram-sovellus , jos sinulla ei vielä ole sitä.
+          - Lataa älypuhelimeesi Telegram-sovellus, jos sinulla ei vielä ole sitä.
           - Etsi Telegrammista @%{username}. Jos luet tätä älypuhelimella juuri nyt, <a class="Link" href="https://t.me/%{username}">voit klikata tätä linkkiä</a>.
           - Kun olet löytänyt @%{username}, napsauta "Käynnistä".
           - Lähetä meille ensimmäinen viesti koko nimesi kanssa.
+    onboarding_success:
+      heading: "Kiitos rekisteröitymisestäsi #sikasysteemiin!"
+      text: |
+        Vuoropuhelututkimus alkaa pian.<br>
+        Otamme teihin pian yhteyttä!
+    onboarding_footer:
+      imprint: Tietosuojalauseke
 
   onboarding:
     heading: "Hei ja tervetuloa #sika-systeemiin"
     intro: |
       <p>Olemme iloisia, että olet mukana siankasvatusta koskevassa vuoropuhelututkimuksessamme. Koska ainakin Saksassa kaikkialla näkyy  vakavia ongelmia: teurastamoskandaalit, epäinhimilliset työolot, eläinten kidutus sekä siankasvattajia tuhoava nopea hintojen lasku. Tällä tavalla systeemi ei saa jatkua. Kaikki, jotka ovat jollakin tavoin mukana näillä markkinoilla, tietävät sen.</p>
-      <p>Toistaiseksi ratkaisuja ei ole näkyvissä. Siksi aloitamme tämän vuoropuhelututkimuksen avullasi. Emme halua vain haastatella kahta tai kolmea henkilöä sekä asiantuntijoita ja sitten julkaista juttua, haluamme puhua monille eri henkilöille neljän viikon aikana, jotta saisimme laajemman kuvan ja ymmärtäisimme koko systeemin paremmin.</p>
-      <p>Se on kokeilu. Kiitos osallistumisesta.</p>
+      <p>Toistaiseksi ratkaisuja ei ole näkyvissä. Siksi aloitamme tämän vuoropuhelututkimuksen avullasi. Emme halua vain haastatella muutamaa henkilöä, asiantuntijoita ja sitten julkaista, haluamme puhua monille eri henkilöille neljän viikon aikana, jotta saisimme laajemman kuvan ja ymmärtäisimme  paremmin koko systeemiä.</p>
+      <p>Tämä on kokeilu. Kiitos osallistumisesta.</p>
     who:
       heading: Kuka?
       text: |
-        #Sika-järjestelmän takana ovat ihmiset, eikä koneita: toimittajat Katharina Jakob ja Jens Eber, elokuvantekijä Oliver Eberhardt ja vuoropuhelun tutkimusryhmässä Isabelle Buckow, Astrid Csuraji ja Dr. Jakob Vicari palvelusta tactile.news. Esittelemme ajatustamme keskustelevasta journalismista <a class="Link" href="https://tactile.news/ueber-uns" target="_blank">verkkosivustollamme</a>.
+        #Sika-systeemin takana ovat ihmiset, eikä koneita: toimittajat Katharina Jakob ja Jens Eber, elokuvantekijä Oliver Eberhardt ja dialogisessa tutkimusryhmässä Isabelle Buckow, Astrid Csuraji ja Dr. Jakob Vicari palvelusta tactile.news. Esittelemme ajatustamme keskustelevasta journalismista <a class="Link" href="https://tactile.news/ueber-uns" target="_blank">verkkosivustollamme</a>.
     how:
       heading: Miten?
       text: |
