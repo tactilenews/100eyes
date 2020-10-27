@@ -5,21 +5,8 @@ require 'telegram/bot/rspec/integration/rails'
 
 RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
   describe '#start!' do
-    let(:welcome_message) do
-      message = [
-        'Herzlich Willkommen bei 50survivors.',
-        'Danke, dass Sie an unserer Dialog-Recherche teilnehmen.',
-        'In den kommenden Wochen nutzen wir Telegram für den Austausch.',
-        'Ein Bot arbeitet wie ein Postbote für uns und stellt Fragen und Antworten zu.',
-        'Ihre Nachrichten lesen und beantworten wir aber selbstverständlich persönlich.',
-        'Wir freuen uns sehr auf den Dialog mit Ihnen!'
-      ].join(' ')
-
-      message + "\nKatharina Jakob, Jens Eber, Oliver Eberhardt, Isabelle Buckow, Astrid Csuraji und Jakob Vicari"
-    end
-
     subject { -> { dispatch_command :start, { from: { username: 'Joe' } } } }
-    it { should respond_with_message welcome_message }
+    it { should respond_with_message I18n.t('telegram.welcome_message') }
   end
 
   describe '#message' do
