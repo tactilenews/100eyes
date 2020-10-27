@@ -7,3 +7,7 @@
 .Wrapper--narrow {
   max-width: var(--grid-max-width-s);
 }
+
+.Wrapper--xnarrow {
+  max-width: var(--grid-max-width-xs);
+}
