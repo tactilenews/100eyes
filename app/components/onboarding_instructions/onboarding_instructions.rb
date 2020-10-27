@@ -16,6 +16,10 @@ module OnboardingInstructions
     def choices
       [
         {
+          value: 'telegram-channel',
+          label: I18n.t('components.onboarding_instructions.telegram.label')
+        },
+        {
           value: 'email-channel',
           label: I18n.t('components.onboarding_instructions.email.label')
         }

@@ -80,6 +80,7 @@ de:
         intro: |
           Um per Telegram teilzunehmen, folgen Sie bitte diesen vier Schritten:
         steps:
+          - Wenn Sie bereits Telegramm haben, können Sie sich anmelden, indem Sie auf die Schaltfläche unten klicken, um uns zu autorisieren, Ihnen Nachrichten zu senden.
           - Laden Sie die Telegram-App auf Ihr Smartphone, falls Sie sie noch nicht haben.
           - Suchen Sie bei Telegram nach @%{username}. Wenn Sie das hier gerade auf einem Smartphone lesen, können Sie auch einfach <a class="Link" href="https://t.me/%{username}">auf diesen Link klicken</a>.
           - Wenn Sie den @%{username} bei Telegram gefunden haben, klicken Sie auf „Start”.
