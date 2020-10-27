@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  devise_for :users
   root to: redirect('/dashboard')
   get '/dashboard', to: 'dashboard#index'
   get '/search', to: 'search#index'
@@ -18,7 +19,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :users, except: :edit do
+  resources :users, except: [:edit] do
     resources :requests, only: %i[show], to: 'requests#show_user_messages'
 
     member do

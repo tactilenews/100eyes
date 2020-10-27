@@ -63,5 +63,8 @@ Rails.application.configure do
     from: '100eyes <100eyes-development-account@example.org>'
   }
 
+  # Devise setup
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+
   config.project_name = ENV['HUNDRED_EYES_PROJECT_NAME'] || '100eyes'
 end
