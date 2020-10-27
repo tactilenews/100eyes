@@ -39,18 +39,65 @@ RSpec.describe 'Onboarding', type: :request do
   end
 
   describe 'GET /onboarding/telegram-auth' do
-    params = {
-      id: 123,
-      first_name: 'Matthew',
-      last_name: 'Rider',
-      auth_date: Time.zone.now,
-      hash: 'TBxB8fx9AxF5x95sWCLx81x8F@1xF9x9AxDBxEDx1F%-lx8CxEDxB1x15xABXYxD3x9B'
-    }
+    let(:today) { Time.zone.now }
+    let(:hash_created_at) { Time.new(today.year, today.month, today.day).to_i }
+    let(:valid_hash) { '4b940746d22ba705e6205a05211111d778a1ec852cf1003a428b9e92274e0092' }
+    let(:params) do
+      {
+        auth_date: hash_created_at,
+        first_name: 'Matthew',
+        id: 123,
+        last_name: 'Rider',
+        photo_url: 'https://t.me/i/userpic/320/eV9Evr8bcuIEafRdet7x-MOBNs9cTcJU9mMBHIjWi64.jpg',
+        username: 'matthew_rider',
+        hash: valid_hash
+      }
+    end
+
     subject { -> { get onboarding_telegram_auth_path(**params) } }
 
-    it 'responds with ok if the hash matches' do
-      subject.call
-      expect(response).to be_successful
+    context 'invalid' do
+      it 'if the hash does not match' do
+        params[:hash] = 'I was not created with your api key'
+        expect { subject.call }.to raise_exception(ActionController::BadRequest)
+      end
+
+      it 'if the id is different' do
+        params[:id] = 345
+        expect { subject.call }.to raise_exception(ActionController::BadRequest)
+      end
+
+      it 'if the first name is different' do
+        params[:first_name] = 'different'
+        expect { subject.call }.to raise_exception(ActionController::BadRequest)
+      end
+
+      it 'if the last name is different' do
+        params[:last_name] = 'different'
+        expect { subject.call }.to raise_exception(ActionController::BadRequest)
+      end
+
+      it 'if the username is different' do
+        params[:username] = 'different'
+        expect { subject.call }.to raise_exception(ActionController::BadRequest)
+      end
+
+      it 'if the photo url is different' do
+        params[:photo_url] = 'https://different.jpg'
+        expect { subject.call }.to raise_exception(ActionController::BadRequest)
+      end
+
+      it 'if the auth_date is greater than one day' do
+        params[:auth_date] = (Time.zone.now - 1.day).to_i
+        expect { subject.call }.to raise_exception(ActionController::BadRequest)
+      end
+    end
+
+    context 'valid' do
+      it 'responds with ok if the hash matches' do
+        subject.call
+        expect(response).to be_successful
+      end
     end
   end
 

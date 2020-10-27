@@ -40,30 +40,15 @@ class OnboardingController < ApplicationController
     render json: { url: onboarding_url(jwt: jwt) }
   end
 
-  # rubocop:disable Metrics/AbcSize
   def telegram_auth
-    check_hash = telegram_auth_params[:hash]
-    auth_data = telegram_auth_params.slice(:auth_date, :first_name, :id, :last_name)
-    check_string = auth_data.to_unsafe_h.map { |k, v| "#{k}=#{v}" }.sort.join("\n")
-
-    secret_key = OpenSSL::Digest::SHA256.new.digest(ENV['TELEGRAM_BOT_API_KEY'])
-    hash = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), secret_key, check_string)
-
-    raise ActionController::BadRequest if hash.casecmp(check_hash) != 0
-    raise ActionController::BadRequest if Time.now.to_i - telegram_auth_params[:auth_date].to_i > 24 * 60 * 60
-
+    authenticate_telegram_params
     @user = User.find_or_create_by(
       telegram_id: telegram_auth_params[:id],
       first_name: telegram_auth_params[:first_name],
       last_name: telegram_auth_params[:last_name]
     )
-    if @user.save
-      render json: { message: 'Success' }, status: :ok
-    else
-      render json: { status: :error }
-    end
+    render json: { message: 'Success' }, status: :ok if @user.save
   end
-  # rubocop:enable Metrics/AbcSize
 
   private
 
@@ -93,6 +78,17 @@ class OnboardingController < ApplicationController
   end
 
   def telegram_auth_params
-    params.permit(:id, :first_name, :last_name, :auth_date, :hash)
+    params.permit(:id, :first_name, :last_name, :auth_date, :hash, :username, :photo_url)
+  end
+
+  def authenticate_telegram_params
+    auth_data = telegram_auth_params.slice(:auth_date, :first_name, :id, :last_name, :username, :photo_url)
+    check_string = auth_data.to_unsafe_h.map { |k, v| "#{k}=#{v}" }.sort.join("\n")
+
+    secret_key = OpenSSL::Digest::SHA256.new.digest(ENV['TELEGRAM_BOT_API_KEY'])
+    valid_hash = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), secret_key, check_string)
+    valid_time_window = Time.zone.now.to_i - telegram_auth_params[:auth_date].to_i < 24 * 60 * 60
+
+    raise ActionController::BadRequest unless valid_hash.casecmp(telegram_auth_params[:hash]).zero? && valid_time_window
   end
 end
