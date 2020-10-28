@@ -1,3 +1,7 @@
+.CreateInviteButton {
+  text-align: center;
+}
+
 .CreateInviteButton-success {
   color: var(--color-green-dark);
 }

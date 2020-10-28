@@ -5,10 +5,10 @@
 >
   <%= c 'button', style: :inline, stimulus_target: 'create-invite-button.button' do %>
     <span data-target="create-invite-button.label">
-      oder Einladungslink kopieren
+      <%= t 'components.create_invite_button.label' %>
     </span>
     <span data-target="create-invite-button.loading" hidden>
-      erstelle Link…
+      <%= t 'components.create_invite_button.loading' %>
     </span>
     <span
       class="CreateInviteButton-success"
@@ -16,7 +16,7 @@
       hidden
     >
       <%= c 'icon', icon: 'f-check', style: :inline %>
-      Link kopiert
+      <%= t 'components.create_invite_button.success' %>
     </span>
   <% end %>
 </div>

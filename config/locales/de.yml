@@ -96,6 +96,10 @@ de:
       text: Das ist aber nicht Ihre Schuld! Bitte kontaktieren Sie uns unter support@100ey.es, um einen neuen Link zu erhalten.
     onboarding_footer:
       imprint: Impressum
+    create_invite_button:
+      label: Einladungs-Link kopieren
+      loading: erstelle Link…
+      success: Link kopiert
 
   message_mailer:
     new_message_email:
