@@ -2,6 +2,7 @@
 
 class ApplicationController < ActionController::Base
   before_action :authenticate
+  around_action :use_locale
 
   private
 
@@ -12,5 +13,20 @@ class ApplicationController < ActionController::Base
       name: Setting.basic_auth_login_user,
       password: Setting.basic_auth_login_password
     )
+  end
+
+  def use_locale(&action)
+    locale = locale_params[:locale] || I18n.default_locale
+    I18n.with_locale(locale, &action)
+  end
+
+  def default_url_options(options = {})
+    return options.merge(locale: I18n.locale) unless I18n.locale == I18n.default_locale
+
+    options
+  end
+
+  def locale_params
+    params.permit(:locale)
   end
 end

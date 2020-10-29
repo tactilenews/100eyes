@@ -37,8 +37,9 @@ module App
 
     config.active_job.queue_adapter = :sucker_punch
 
-    config.i18n.available_locales = [:de]
+    config.i18n.available_locales = %i[de fi]
     config.i18n.default_locale = :de
     config.time_zone = 'Berlin'
+    config.i18n.fallbacks = true
   end
 end

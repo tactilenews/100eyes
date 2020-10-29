@@ -1,1 +1,3 @@
-Ihre Nachricht enthält Inhalte, die wir noch nicht empfangen können. Derzeit können wir Text- und Sprachnachrichten verarbeiten, jedoch noch keine weiteren Inhalte wie z.B. Dateianhänge. Für die Zwischenzeit bitten wir Sie, Nachrichten mit solchen Inhalten an @FrauCsu (Astrid Csuraji) zu schicken. Vielen Dank!
+Unsere Software kann derzeit Textnachrichten und Bilder verarbeiten, jedoch noch keine weiteren Inhalte wie z.B. Sprachnachrichten oder Dateianhänge. Für die Zwischenzeit bitten wir dich, Nachrichten mit solchen Inhalten an @FrauCsu (Astrid Csuraji) zu schicken. Vielen Dank!
+
+Ohjelmistomme pystyy tällä hetkellä käsittelemään teksti- ja ääniviestejä ja kuvia, mutta ei muita sisältöjä, kuten esim. tiedostoliitteitä. Voisitteko ystävällisesti lähettää viestit jossa on liite osoitteeseen @FrauCsu (Astrid Csuraji). Paljon kiitoksia!
