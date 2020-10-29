@@ -11,8 +11,7 @@ ansible-galaxy install geerlingguy.pip
 
 Generate configuration files:
 ```bash
-$ cd ansible
-$ ./generate_config.sh
+$ ./ansible/generate_config.sh
 # follow the instructions
 ```
 
@@ -36,16 +35,16 @@ To make the setup quicker and easier, we suggest to create a snapshot of a base
 image with a user `ansible` and all authorized keys of your friends in place.
 
 
-Add public keys of your friends in folder `./ssh/`. It should look like this:
+Add public keys of your friends in folder `./ansible/ssh/`. It should look like this:
 ```
-$ ls ./ssh
+$ ls .ansible/ssh
 jakob_id_rsa.pub  till.pub
 ```
 
 Run this playbook to create the ansible user with authorized keys in place and
 ensure basic security:
 ```
-$ ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook -i inventories/custom --ask-pass --ask-vault-pass snapshot.yml
+$ ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook ansible/snapshot.yml -i ansible/inventories/custom --ask-pass --ask-vault-pass
 ```
 
 You need `sshpass` installed and you will be asked for:
@@ -63,7 +62,7 @@ restored a new server from the snapshot, then your authorized keys are in place
 and you can run the entire installation of the application with:
 
 ```bash
-ansible-playbook -i inventories/custom --ask-vault-pass site.yml
+ansible-playbook ansible/site.yml -i ansible/inventories/custom --ask-vault-pass
 ```
 
 

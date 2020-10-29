@@ -36,7 +36,9 @@ vendor/bundle
 
 backups/
 
-/ansible/inventories/custom/
+/ansible/inventories/custom/host_vars/*
+!/ansible/inventories/custom/host_vars/.keep
+/ansible/inventories/custom/hosts
 /ansible/ssh
 
 .env

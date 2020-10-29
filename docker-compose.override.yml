@@ -8,6 +8,7 @@ x-defaults: &x-defaults
     NODE_ENV: development
     MAILSERVER_HOST: mailserver
     MAILSERVER_PORT: 25
+    POSTGRES_HOST: db
     WEBPACKER_DEV_SERVER_HOST: 0.0.0.0
   stdin_open: true
   tty: true
@@ -17,6 +18,7 @@ x-defaults: &x-defaults
 services:
   telegram:
     <<: *x-defaults
+    command: rake telegram:bot:poller
 
   app:
     <<: *x-defaults

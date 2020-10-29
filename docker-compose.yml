@@ -1,27 +1,15 @@
 version: '3.7'
 
-x-defaults: &x-defaults
-  environment:
-    BINDING: 0.0.0.0
-    PORT: 3000
-    POSTGRES_HOST: db
-    POSTGRES_DB: app_production
-    RUBYOPT: "-W:no-deprecated"
-  depends_on: [ db ]
-
 services:
   app:
-    <<: *x-defaults
+    environment:
+      BINDING: 0.0.0.0
+      PORT: 3000
+      POSTGRES_HOST: db
     command: bundle exec rails server
     depends_on: [ db ]
 
-  telegram:
-    <<: *x-defaults
-    command: rake telegram:bot:poller
-
   db:
-    environment:
-      POSTGRES_DB: app_production
     image: postgres:12.2-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data

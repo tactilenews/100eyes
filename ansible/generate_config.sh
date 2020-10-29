@@ -7,6 +7,7 @@ read nickname
 echo "What will be the new domain?"
 read domain
 
+script_directory=$(dirname "$0")
 
 traefik_domain="traefik.${domain}"
 traefik_password=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)
@@ -81,15 +82,16 @@ cat <<- INSTRUCTIONS
 
   4. Encrypt the configuration as host variable file:
 
-    $ ansible-vault encrypt ${CONFIG_FILE} --output inventories/host_vars/${nickname}.yml
+    $ ansible-vault encrypt ${CONFIG_FILE} --output ${script_directory}/inventories/custom/host_vars/${nickname}.yml
 
   5. Add missing configuration, e.g. Telegram API token:
 
-    $ ansible-vault edit inventories/host_vars/${nickname}.yml
+    $ ansible-vault edit ${script_directory}/inventories/custom/host_vars/${nickname}.yml
 
-  6. Add your server "${nickname}" in your inventory file:
+  6. Add your server "${nickname}" in your ${script_directory}/inventories/custom/hosts file:
 
-    inventories/production.yml
+    [webservers]
+    ${nickname}
 --------------------------------------------------------------------------------------------------------------------------
 INSTRUCTIONS
 
