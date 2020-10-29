@@ -21,6 +21,8 @@ class SettingsController < ApplicationController
       :onboarding_logo,
       :onboarding_hero,
       :onboarding_title,
+      :onboarding_success_title,
+      :onboarding_success_text,
       :onboarding_page,
       :telegram_welcome_message,
       :telegram_unknown_content_message
