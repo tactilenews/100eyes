@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_24_142215) do
+ActiveRecord::Schema.define(version: 2020_10_16_203534) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -88,6 +88,14 @@ ActiveRecord::Schema.define(version: 2020_09_24_142215) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "hints", default: [], array: true
     t.integer "replies_count"
+  end
+
+  create_table "settings", force: :cascade do |t|
+    t.string "var", null: false
+    t.text "value"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["var"], name: "index_settings_on_var", unique: true
   end
 
   create_table "taggings", id: :serial, force: :cascade do |t|

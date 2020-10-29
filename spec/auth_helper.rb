@@ -4,8 +4,8 @@ RSpec.configure do |config|
   config.before(:each) do
     def auth_headers
       header = ActionController::HttpAuthentication::Basic.encode_credentials(
-        ENV['BASIC_AUTH_LOGIN_USER'],
-        ENV['BASIC_AUTH_LOGIN_PASSWORD']
+        Setting.basic_auth_login_user,
+        Setting.basic_auth_login_password
       )
 
       { HTTP_AUTHORIZATION: header }

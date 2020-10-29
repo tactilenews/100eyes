@@ -84,11 +84,6 @@ de:
           - Suchen Sie bei Telegram nach @%{username}. Wenn Sie das hier gerade auf einem Smartphone lesen, können Sie auch einfach <a class="Link" href="https://t.me/%{username}">auf diesen Link klicken</a>.
           - Wenn Sie den @%{username} bei Telegram gefunden haben, klicken Sie auf „Start”.
           - Senden Sie uns eine erste Nachricht mit Ihrem vollen Namen.
-    onboarding_success:
-      heading: Danke für Ihre Anmeldung zu %{project_name}!
-      text: |
-        Unsere Dialog-Recherche startet bald.<br>
-        Wir melden uns dann wieder bei Ihnen.
     onboarding_footer:
       imprint: Impressum
 
@@ -103,8 +98,52 @@ de:
 
   save: Speichern
   discard: Änderungen verwerfen
+
   dashboard:
     how_it_works: So funktioniert 100eyes…
+
+  setting:
+    setting:
+      one: Einstellung
+      other: Einstellungen
+    form:
+      groups:
+        project_settings: Allgemein
+        telegram: Telegram
+        onboarding: Onboarding
+        onboarding_success: Nachricht nach erfolgreichem Onboarding
+      project_name:
+        label: Projekt-Name
+        help: Der Projekt-Name wird Community-Mitgliedern z.B. während des Onboardings angezeigt.
+      onboarding_token:
+        label: Geheimes Token
+      onboarding_title:
+        label: Titel
+      onboarding_page:
+        label: Text
+        help: |
+          Du kannst deinen Text mit <a class="Link" href="https://de.wikipedia.org/wiki/Markdown">Markdown</a>-Befehlen formatieren. Du kannst z.B. <em>*kursiven Text*</em>, <strong>**fetten Text**</strong> oder <a class="Link" href="https://tactile.news">[Links](https://tactile.news)</a> einfügen.
+      onboarding_success_title:
+        label: Titel
+      onboarding_success_text:
+        label: Text
+      onboarding_logo:
+        label: Logo (URL)
+        help: Das Logo sollte eine Bilddatei im SVG- oder JPEG-Format und ca. 90 Pixel hoch sein. Es wird während des Onboardings angezeigt.
+      onboarding_hero:
+        label: Teaser (URL)
+        help: Das Logo sollte eine Bilddatei im JPEG-Format. Es sollte mindestens 800x500 Pixel groß sein. Es wird während des Onboardings angezeigt.
+      telegram_welcome_message:
+        label: Willkommens-Nachricht
+        help: Wenn sich ein neues Mitglied via Telegram registriert, erhält es diese Nachricht.
+      telegram_unknown_content_message:
+        label: Fehler-Nachricht bei unbekannten Inhalten
+        help: Wenn ein Mitglied via Telegram Nachrichten versendet, die von 100eyes noch nicht unterstützt werden, erhält es diese Nachricht.
+
+  settings:
+    header: Einstellungen
+    success: Einstellungen erfolgreich gespeichert!
+
   search:
     placeholder: Suchen
     result:
@@ -223,36 +262,6 @@ de:
     conversation:
       one: Nachrichtenverlauf
       other: Nachrichtenverläufe
-
-  telegram:
-    unknown_content_message: |
-      Unsere Software kann derzeit Textnachrichten und Bilder verarbeiten, jedoch noch keine weiteren Inhalte wie z.B. Sprachnachrichten oder Dateianhänge. Für die Zwischenzeit bitten wir dich, Nachrichten mit solchen Inhalten an @FrauCsu (Astrid Csuraji) zu schicken. Vielen Dank!
-
-      Ohjelmistomme pystyy tällä hetkellä käsittelemään teksti- ja ääniviestejä ja kuvia, mutta ei muita sisältöjä, kuten esim. tiedostoliitteitä. Voisitteko ystävällisesti lähettää viestit jossa on liite osoitteeseen @FrauCsu (Astrid Csuraji). Paljon kiitoksia!
-    welcome_message: |
-      Herzlich Willkommen beim #Schweinesystem. Danke, dass Sie an unserer Dialog-Recherche teilnehmen. In den kommenden Wochen nutzen wir Telegram für den Austausch. Ein Bot arbeitet wie ein Postbote für uns und stellt Fragen und Antworten zu. Ihre Nachrichten lesen und beantworten wir aber selbstverständlich persönlich. Wir freuen uns sehr auf den Dialog mit Ihnen!
-      Katharina Jakob, Jens Eber, Oliver Eberhardt, Isabelle Buckow, Astrid Csuraji und Jakob Vicari
-
-      Tervetuloa #sikasysteemiin. Kiitos osallistumisestasi vuoropuhelututkimukseen. Tulevien viikkojen aikana käytämme kommunikaatioon Telegram-palvelua. Palvelun botti toimii kuin postimies, toimittaa kysymyksiä ja vastauksia. Luemme tietysti viestisi ja vastaamme niihin henkilökohtaisesti. Vuoropuheluamme odotellen,
-      Katharina Jakob, Jens Eber, Oliver Eberhardt, Isabelle Buckow, Astrid Csuraji ja Jakob Vicari
-  onboarding:
-    heading: "Hallo und willkommen beim #Schweinesystem!"
-    intro: |
-      <p>Wir freuen uns, dass Sie an unserer Dialog-Recherche zur Schweinehaltung in Deutschland teilnehmen. Denn dort zeigen sich überall schwerwiegende Probleme: Schlachthofskandale, menschenunwürdige Arbeitsbedingungen, Tierqualen, dazu ein rapider Preisverfall, der Schweinebauern ruiniert. So kann es nicht weitergehen. Das weiß jeder, der mit diesem Markt zu tun hat.</p>
-      <p>Lösungsvorschläge gibt es bisher keine. Deswegen starten wir diese Dialog-Recherche mit Ihrer Hilfe. Statt mit ein bis drei Betroffenen oder Experten ein Interview zu führen und dann einen Beitrag zu veröffentlichen, wollen wir mit vielen verschiedenen Menschen das Gespräch suchen. Und das über einen Zeitraum von vier Wochen. Damit wir ein breiteres Bild bekommen und Dinge besser verstehen.</p>
-      <p>Es ist ein Experiment. Danke, dass Sie sich darauf einlassen.</p>
-    who:
-      heading: Wer?
-      text: |
-        Hinter dem #Schweinesystem stecken Menschen, keine Maschinen: Die Journalisten Katharina Jakob und Jens Eber, der Filmemacher Oliver Eberhardt sowie das Dialog-Recherche-Team Isabelle Buckow, Astrid Csuraji und Dr. Jakob Vicari von tactile.news. <a class="Link" href=" https://tactile.news/ueber-uns/">Auf unserer Webseite</a> stellen wir unsere Idee vom Dialog-Journalismus ausführlicher vor.
-    how:
-      heading: Wie?
-      text: |
-        Wir stellen Ihnen in den nächsten vier, fünf Wochen immer mal wieder eine Frage. Am liebsten per Telegram Messenger. Wenn Sie den nicht nutzen und auch nicht installieren wollen (er ist sehr ähnlich wie WhatsApp), kommunizieren Sie mit uns per E-Mail. Es bleibt Ihnen überlassen, ob Sie jede Frage beantworten oder auch welche auslassen.
-    where:
-      heading: Wo?
-      text: |
-        Damit wir Sie künftig auf dem Kanal Ihrer Wahl erreichen, teilen Sie uns bitte mit, ob wir Sie per E-Mail oder Telegram anschreiben sollen.
 
   activerecord:
     errors:

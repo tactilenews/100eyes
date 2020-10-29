@@ -3,7 +3,7 @@
 class Telegram::WebhookController < Telegram::Bot::UpdatesController
   def message(message)
     tm = TelegramMessage.new(message)
-    respond_with :message, text: I18n.t('telegram.unknown_content_message') if tm.unknown_content
+    respond_with :message, text: Setting.telegram_unknown_content_message if tm.unknown_content
     user = tm.sender
     user.save!
     user.reply(tm)
@@ -13,8 +13,7 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
     tm = TelegramMessage.new(from: from, chat: chat)
     user = tm.sender
     user.save!
-    project_name = Rails.configuration.project_name
-    response = I18n.t 'telegram.welcome_message', project_name: project_name
-    respond_with :message, text: response
+    response = Setting.telegram_welcome_message
+    respond_with :message, text: response.strip
   end
 end

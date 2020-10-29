@@ -31,7 +31,7 @@ class OnboardingController < ApplicationController
   end
 
   def verify_token
-    raise ActionController::BadRequest unless token_param == ENV['ONBOARDING_TOKEN']
+    raise ActionController::BadRequest unless token_param == Setting.onboarding_token
   end
 
   def user_params

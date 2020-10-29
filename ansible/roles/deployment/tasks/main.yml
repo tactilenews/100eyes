@@ -28,6 +28,11 @@
       - docker-compose.yml
       - docker-compose.prod.yml
       - docker-compose.traefik.yml
+
+- name: Prune outdated images
+  community.general.docker_prune:
+    containers: yes
+
 - name: Migrate database
   command:
     cmd: docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec app bin/rails db:migrate

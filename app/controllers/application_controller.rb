@@ -10,8 +10,8 @@ class ApplicationController < ActionController::Base
     return if Rails.env.development?
 
     http_basic_authenticate_or_request_with(
-      name: ENV['BASIC_AUTH_LOGIN_USER'],
-      password: ENV['BASIC_AUTH_LOGIN_PASSWORD']
+      name: Setting.basic_auth_login_user,
+      password: Setting.basic_auth_login_password
     )
   end
 

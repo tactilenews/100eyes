@@ -11,18 +11,18 @@
   <div class="RequestForm-column" data-action="input->request-form#updatePreview">
     <%= c 'stack', space: :large do %>
 
-      <%= c 'field', object: @request, id: :title, help: I18n.t('request.form.title.help') do |field| %>
+      <%= c 'field', object: @request, id: :title do |field| %>
         <%= c 'input', field.input_defaults.merge(required: true) %>
       <% end %>
 
-      <%= c 'field', object: @request, id: :text, help: I18n.t('request.form.text.help') do |field| %>
+      <%= c 'field', object: @request, id: :text do |field| %>
         <%= c 'textarea', field.input_defaults.merge(
           required: true,
           stimulus_target: 'request-form.message'
         ) %>
       <% end %>
 
-      <%= c 'field', object: @request, id: :tag_list, help: I18n.t('request.form.tag_list.help') do |field| %>
+      <%= c 'field', object: @request, id: :tag_list do |field| %>
         <%= c 'stack', space: :small do %>
           <div class="Field-help" data-target="request-form.membersCount"></div>
 
