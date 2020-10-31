@@ -127,7 +127,7 @@ de:
         label: Text
         help: |
           Du kannst deinen Text mit <a class="Link" href="https://de.wikipedia.org/wiki/Markdown">Markdown</a>-Befehlen formatieren. Du kannst z.B. <em>*kursiven Text*</em>, <strong>**fetten Text**</strong> oder <a class="Link" href="https://tactile.news">[Links](https://tactile.news)</a> einfügen.
-      onboarding_success_title:
+      onboarding_success_heading:
         label: Titel
       onboarding_success_text:
         label: Text

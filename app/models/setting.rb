@@ -11,7 +11,7 @@ class Setting < RailsSettings::Base
   field :onboarding_hero, default: '/onboarding/hero.jpg'
   field :onboarding_title, default: 'Hallo und herzlich willkommen beim 100eyes!'
   field :onboarding_page, default: File.read(File.join('config', 'locales', 'onboarding', 'page.md'))
-  field :onboarding_success_title, default: File.read(File.join('config', 'locales', 'onboarding', 'success_title.txt'))
+  field :onboarding_success_heading, default: File.read(File.join('config', 'locales', 'onboarding', 'success_heading.txt'))
   field :onboarding_success_text, default: File.read(File.join('config', 'locales', 'onboarding', 'success_text.txt'))
   field :onboarding_unauthorized_title, default: File.read(File.join('config', 'locales', 'onboarding', 'unauthorized_title.txt'))
   field :onboarding_unauthorized_text, default: File.read(File.join('config', 'locales', 'onboarding', 'unauthorized_text.txt'))
