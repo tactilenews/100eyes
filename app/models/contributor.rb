@@ -22,7 +22,7 @@ class Contributor < ApplicationRecord
     self.email = nil if email.blank?
   end
 
-  def self.find_by_email(email)
+  def self.with_lowercased_email(email)
     find_by('lower(email) in (?)', Array.wrap(email).map(&:downcase))
   end
 

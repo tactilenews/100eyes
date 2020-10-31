@@ -22,7 +22,7 @@ RSpec.describe Contributor, type: :model do
   end
 
   describe '.find_by_email' do
-    subject { described_class.find_by(email: address) }
+    subject { described_class.with_lowercased_email(address) }
 
     describe 'with lowercase address' do
       let(:contributor) { create(:contributor, email: 'UPPER@EXAMPLE.ORG') }

@@ -42,7 +42,7 @@ class EmailMessage
   end
 
   def initialize_contributor(mail)
-    Contributor.find_by_email(mail.from)
+    Contributor.with_lowercased_email(mail.from)
   end
 
   def initialize_message(mail)

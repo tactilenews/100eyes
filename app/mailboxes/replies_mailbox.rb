@@ -14,6 +14,6 @@ class RepliesMailbox < ApplicationMailbox
   end
 
   def contributor
-    @contributor ||= Contributor.find_by_email(mail.from)
+    @contributor ||= Contributor.with_lowercased_email(mail.from)
   end
 end
