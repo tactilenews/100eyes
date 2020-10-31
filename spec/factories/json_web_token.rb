@@ -2,6 +2,6 @@
 
 FactoryBot.define do
   factory :json_web_token do
-    invalidated_jti { nil }
+    invalidated_jwt { nil }
   end
 end

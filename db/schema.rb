@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(version: 2020_10_17_105553) do
   end
 
   create_table "json_web_tokens", force: :cascade do |t|
-    t.string "invalidated_jti"
+    t.string "invalidated_jwt"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

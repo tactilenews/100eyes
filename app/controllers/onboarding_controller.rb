@@ -18,7 +18,7 @@ class OnboardingController < ApplicationController
 
     @user = User.new(user_params)
     if @user.save
-      JsonWebToken.create(invalidated_jti: params[:jwt])
+      JsonWebToken.create(invalidated_jwt: params[:jwt])
       return redirect_to_success
     end
 
@@ -40,8 +40,8 @@ class OnboardingController < ApplicationController
   end
 
   def verify_token
-    invalidated_jti = JsonWebToken.where(invalidated_jti: jwt_param)
-    raise ActionController::BadRequest if invalidated_jti.exists?
+    invalidated_jwt = JsonWebToken.where(invalidated_jwt: jwt_param)
+    raise ActionController::BadRequest if invalidated_jwt.exists?
 
     JsonWebToken.decode(jwt_param)
   rescue StandardError

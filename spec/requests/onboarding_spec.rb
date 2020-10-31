@@ -17,7 +17,7 @@ RSpec.describe 'Onboarding', type: :request do
     end
 
     describe 'with invalidated jwt' do
-      let!(:invalidated_jti) { create(:json_web_token, invalidated_jti: 'INVALID_JWT') }
+      let!(:invalidated_jwt) { create(:json_web_token, invalidated_jwt: 'INVALID_JWT') }
       let(:jwt) { 'INVALID_JWT' }
 
       it 'renders unauthorized page' do
@@ -68,7 +68,7 @@ RSpec.describe 'Onboarding', type: :request do
     it 'invalidates the jwt' do
       expect { subject.call }.to change(JsonWebToken, :count).by(1)
 
-      json_web_token = JsonWebToken.where(invalidated_jti: jwt)
+      json_web_token = JsonWebToken.where(invalidated_jwt: jwt)
       expect(json_web_token).to exist
     end
 

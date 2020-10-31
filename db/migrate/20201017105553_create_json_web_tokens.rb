@@ -3,7 +3,7 @@
 class CreateJsonWebTokens < ActiveRecord::Migration[6.0]
   def change
     create_table :json_web_tokens do |t|
-      t.string :invalidated_jti
+      t.string :invalidated_jwt
 
       t.timestamps
     end
