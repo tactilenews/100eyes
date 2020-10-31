@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
+require 'openssl'
+
 class OnboardingController < ApplicationController
   skip_before_action :authenticate, except: :create_invite_url
   before_action :verify_jwt, except: %i[create_invite_url success]
+  before_action :telegram_auth_params, only: :telegram_auth
 
   layout 'onboarding'
 
@@ -37,6 +40,31 @@ class OnboardingController < ApplicationController
     render json: { url: onboarding_url(jwt: jwt) }
   end
 
+  # rubocop:disable Metrics/AbcSize
+  def telegram_auth
+    check_hash = telegram_auth_params[:hash]
+    auth_data = telegram_auth_params.slice(:auth_date, :first_name, :id, :last_name)
+    check_string = auth_data.to_unsafe_h.map { |k, v| "#{k}=#{v}" }.sort.join("\n")
+
+    secret_key = OpenSSL::Digest::SHA256.new.digest(ENV['TELEGRAM_BOT_API_KEY'])
+    hash = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), secret_key, check_string)
+
+    raise ActionController::BadRequest if hash.casecmp(check_hash) != 0
+    raise ActionController::BadRequest if Time.now.to_i - telegram_auth_params[:auth_date].to_i > 86_400
+
+    @user = User.find_or_create_by(
+      telegram_id: telegram_auth_params[:id],
+      first_name: telegram_auth_params[:first_name],
+      last_name: telegram_auth_params[:last_name]
+    )
+    if @user.save!
+      render json: { message: 'Success' }, status: :ok
+    else
+      render json: { status: :error }
+    end
+  end
+  # rubocop:enable Metrics/AbcSize
+
   private
 
   def redirect_to_success
@@ -62,5 +90,9 @@ class OnboardingController < ApplicationController
 
   def jwt_param
     params.require(:jwt)
+  end
+
+  def telegram_auth_params
+    params.permit(:id, :first_name, :last_name, :auth_date, :hash)
   end
 end
