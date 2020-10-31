@@ -34,21 +34,11 @@ class TelegramMessage
   def initialize_contributor(telegram_message)
     telegram_chat_id = telegram_message.dig(:chat, :id)
     telegram_id = telegram_message.dig(:from, :id)
-    first_name = telegram_message.dig(:from, :first_name)
-    last_name = telegram_message.dig(:from, :last_name)
     username = telegram_message.dig(:from, :username)
     sender = Contributor.find_by(telegram_id: telegram_id)
     if sender
       sender.username = username
       sender.telegram_chat_id = telegram_chat_id
-    else
-      sender = Contributor.new(
-        telegram_id: telegram_id,
-        telegram_chat_id: telegram_chat_id,
-        username: username,
-        first_name: first_name,
-        last_name: last_name
-      )
     end
     sender
   end

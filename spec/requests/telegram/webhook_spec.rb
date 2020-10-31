@@ -19,8 +19,16 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
       "#{message}\nKatharina Jakob, Jens Eber, Oliver Eberhardt, Isabelle Buckow, Astrid Csuraji und Jakob Vicari"
     end
 
-    subject { -> { dispatch_command :start, { from: { username: 'Joe' } } } }
-    it { should respond_with_message welcome_message }
+    context 'has onboarded' do
+      let(:user) { create(:user, telegram_id: 12_345) }
+      subject { -> { dispatch_command :start, { from: { id: user.telegram_id } } } }
+      it { should respond_with_message welcome_message }
+    end
+
+    context 'user has not onboarded yet' do
+      subject { -> { dispatch_command :start, { from: { id: 'whoami' } } } }
+      it { should respond_with_message 'Who are you?' }
+    end
   end
 
   describe '#message' do
