@@ -22,7 +22,7 @@ RSpec.describe Contributor, type: :model do
   end
 
   describe '.find_by_email' do
-    subject { described_class.find_by_email(address) }
+    subject { described_class.find_by(email: address) }
 
     describe 'with lowercase address' do
       let(:contributor) { create(:contributor, email: 'UPPER@EXAMPLE.ORG') }
@@ -150,7 +150,7 @@ RSpec.describe Contributor, type: :model do
           create(:message, text: 'This is not included', sender: contributor, request: create(:request, text: 'Another request')),
           create(:message, text: 'This is included, too', sender: contributor, request: the_request),
           create(:message, text: 'This is not a message of the contributor', request: the_request),
-          create(:message, text: 'This is a message with the contributor as recipient', recipient: contributor, request: the_request)
+          create(:message, text: 'Message with the contributor as recipient', recipient: contributor, request: the_request)
         ]
       end
 

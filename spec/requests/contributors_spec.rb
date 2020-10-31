@@ -109,7 +109,8 @@ RSpec.describe '/contributors', type: :request do
   describe 'POST /message', telegram_bot: :rails do
     subject do
       lambda do
-        post message_contributor_url(contributor), params: { message: { text: 'Forgot to ask: How are you?' } }, headers: auth_headers
+        post message_contributor_url(contributor), params: { message: { text: 'Forgot to ask: How are you?' } },
+                                                   headers: auth_headers
       end
     end
 
