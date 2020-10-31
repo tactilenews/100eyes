@@ -80,6 +80,13 @@ RSpec.describe 'Onboarding', type: :request do
         expect(response).to redirect_to onboarding_success_path
       end
 
+      it 'invalidates the jwt' do
+        expect { subject.call }.to change(JsonWebToken, :count).by(1)
+
+        json_web_token = JsonWebToken.where(invalidated_jwt: jwt)
+        expect(json_web_token).to exist
+      end
+
       it 'does not create new user' do
         expect { subject.call }.not_to change(User, :count)
       end

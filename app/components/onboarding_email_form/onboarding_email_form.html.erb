@@ -2,7 +2,7 @@
   model: @user,
   hidden: true,
   local: true,
-  url: onboarding_path,
+  url: onboarding_path(jwt: jwt),
   class: class_attr,
 ) do %>
   <%= c 'stack' do %>
@@ -17,8 +17,6 @@
     <%= c 'field', object: @user, id: :email do |field| %>
       <%= c 'input', field.input_defaults.merge(placeholder: '') %>
     <% end %>
-
-    <input type="hidden" id="token" name="token" value="<%= jwt %>" />
 
     <%= c 'button',
       type: 'submit',

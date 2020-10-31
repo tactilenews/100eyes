@@ -2,7 +2,7 @@
 
 class OnboardingController < ApplicationController
   skip_before_action :authenticate, except: :create_invite_url
-  before_action :verify_jwt, except: :create_invite_url
+  before_action :verify_jwt, except: %i[create_invite_url success]
 
   layout 'onboarding'
 
@@ -14,10 +14,17 @@ class OnboardingController < ApplicationController
   def create
     # Ensure information on registered users is never
     # disclosed during onboarding
-    return redirect_to_success && invalidate_jwt if User.email_taken?(user_params[:email])
+    if User.email_taken?(user_params[:email])
+      invalidate_jwt
+      return redirect_to_success
+    end
 
     @user = User.new(user_params)
-    return redirect_to_success && invalidate_jwt if @user.save
+
+    if @user.save
+      invalidate_jwt
+      return redirect_to_success
+    end
 
     render :index
   end
