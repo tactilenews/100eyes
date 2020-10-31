@@ -1,5 +1,5 @@
 <%= c 'onboarding_response',
   style: :success,
-  heading: I18n.t('components.onboarding_success.heading', project_name: Setting.project_name),
-  text: I18n.t('components.onboarding_success.text').html_safe
+  heading: Setting.onboarding_success_title, project_name: Setting.project_name,
+  text: Setting.onboarding_success_title
 %>

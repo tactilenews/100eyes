@@ -13,6 +13,8 @@ class Setting < RailsSettings::Base
   field :onboarding_page, default: File.read(File.join('config', 'locales', 'onboarding', 'page.md'))
   field :onboarding_success_title, default: File.read(File.join('config', 'locales', 'onboarding', 'success_title.txt'))
   field :onboarding_success_text, default: File.read(File.join('config', 'locales', 'onboarding', 'success_text.txt'))
+  field :onboarding_unauthorized_title, default: File.read(File.join('config', 'locales', 'onboarding', 'unauthorized_title.txt'))
+  field :onboarding_unauthorized_text, default: File.read(File.join('config', 'locales', 'onboarding', 'unauthorized_text.txt'))
 
   field :telegram_welcome_message, default: File.read(File.join('config', 'locales', 'telegram', 'welcome.txt'))
   field :telegram_unknown_content_message, default: File.read(File.join('config', 'locales', 'telegram', 'unknown_content.txt'))

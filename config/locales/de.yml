@@ -84,16 +84,6 @@ de:
           - Suchen Sie bei Telegram nach @%{username}. Wenn Sie das hier gerade auf einem Smartphone lesen, können Sie auch einfach <a class="Link" href="https://t.me/%{username}">auf diesen Link klicken</a>.
           - Wenn Sie den @%{username} bei Telegram gefunden haben, klicken Sie auf „Start”.
           - Senden Sie uns eine erste Nachricht mit Ihrem vollen Namen.
-    onboarding_success:
-      heading: Danke für Ihre Anmeldung zu %{project_name}!
-      text: |
-        Unsere Dialog-Recherche startet bald.<br>
-        Wir melden uns dann wieder bei Ihnen.
-    onboarding_unauthorized:
-      heading: Something has gone horribly wrong
-      text: It's not your fault though. Please contact support support@100eyes.com
-      heading: Leider ist dieser Einladungs-Link nicht mehr gültig.
-      text: Das ist aber nicht Ihre Schuld! Bitte kontaktieren Sie uns unter support@100ey.es, um einen neuen Link zu erhalten.
     onboarding_footer:
       imprint: Impressum
     create_invite_button:
