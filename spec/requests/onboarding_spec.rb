@@ -62,7 +62,7 @@ RSpec.describe 'Onboarding', type: :request do
 
     it 'redirects to success page' do
       subject.call
-      expect(response).to redirect_to onboarding_success_path(jwt: jwt)
+      expect(response).to redirect_to onboarding_success_path
     end
 
     it 'invalidates the jwt' do
@@ -77,7 +77,7 @@ RSpec.describe 'Onboarding', type: :request do
 
       it 'redirects to success page' do
         subject.call
-        expect(response).to redirect_to onboarding_success_path(jwt: jwt)
+        expect(response).to redirect_to onboarding_success_path
       end
 
       it 'does not create new user' do
