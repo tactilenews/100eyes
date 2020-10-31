@@ -32,16 +32,19 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
   end
 
   describe '#message' do
-    subject { -> { dispatch_message 'Hello Bot!', { from: { id: 47, username: 'Joe' } } } }
-    it { should change { Contributor.count }.from(0).to(1) }
-    describe 'created contributor' do
-      before(:each) { subject.call }
-      it { expect(Contributor.first.telegram_id).to eq(47) }
+    subject { -> { dispatch_message 'Hello Bot!', { from: { id: 'whoami' } } } }
+
+    context 'user has not onboarded yet' do
+      it { should respond_with_message 'Who are you?' }
+      it { should_not change(User, :count) }
     end
 
-    describe 'sending a message with a document' do
+    context 'sending a message with a document' do
       before { Setting.telegram_unknown_content_message = "Cannot handle this, I'm sorry :(" }
-      subject { -> { dispatch_message 'Hello Bot!', { from: { id: 47, username: 'Joe' }, document: 'something' } } }
+      subject { -> { dispatch_message 'Hello Bot!', { from: { id: user.telegram_id }, document: 'something' } } }
+
+      let(:user) { create(:user, telegram_id: 12_345) }
+
       it { should respond_with_message "Cannot handle this, I'm sorry :(" }
     end
   end
