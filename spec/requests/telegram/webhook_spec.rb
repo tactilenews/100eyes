@@ -16,7 +16,7 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
         'Wir freuen uns sehr auf den Dialog mit Ihnen!'
       ].join(' ')
 
-      message + "\nKatharina Jakob, Jens Eber, Oliver Eberhardt, Isabelle Buckow, Astrid Csuraji und Jakob Vicari"
+      "#{message}\nKatharina Jakob, Jens Eber, Oliver Eberhardt, Isabelle Buckow, Astrid Csuraji und Jakob Vicari"
     end
 
     subject { -> { dispatch_command :start, { from: { username: 'Joe' } } } }

@@ -2,8 +2,5 @@
 
 module EmptyState
   class EmptyState < ApplicationComponent
-    def initialize(**)
-      super
-    end
   end
 end
