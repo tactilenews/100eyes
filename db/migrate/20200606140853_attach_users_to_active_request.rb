@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-class AttachContributorsToActiveRequest < ActiveRecord::Migration[6.0]
+class AttachUsersToActiveRequest < ActiveRecord::Migration[6.0]
   def up
     active_request = Request.reorder(created_at: :desc).first
     return unless active_request
 
-    users_without_active_request = Contributor.find_each.select do |user|
+    users_without_active_request = User.find_each.select do |user|
       user.active_request.nil?
     end
 

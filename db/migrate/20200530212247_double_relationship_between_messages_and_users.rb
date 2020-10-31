@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class DoubleRelationshipBetweenMessagesAndContributors < ActiveRecord::Migration[6.0]
+class DoubleRelationshipBetweenMessagesAndUsers < ActiveRecord::Migration[6.0]
   def change
     change_table :messages do |t|
       t.rename :user_id, :sender_id

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddNamesToContributors < ActiveRecord::Migration[6.0]
+class AddNamesToUsers < ActiveRecord::Migration[6.0]
   def change
     change_table(:users, bulk: true) do |t|
       t.column :username, :string
