@@ -3,6 +3,8 @@
 module ChatMessageVoice
   class ChatMessageVoice < ApplicationComponent
     def initialize(voice:, **)
+      super
+
       @voice = voice
     end
 

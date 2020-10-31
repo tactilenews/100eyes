@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
 module Footer
-  class Footer < ApplicationComponent
-    def initialize(**); end
-  end
+  class Footer < ApplicationComponent; end
 end

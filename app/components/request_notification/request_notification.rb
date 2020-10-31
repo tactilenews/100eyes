@@ -3,6 +3,8 @@
 module RequestNotification
   class RequestNotification < ApplicationComponent
     def initialize(request:, **)
+      super
+
       @request = request
     end
 

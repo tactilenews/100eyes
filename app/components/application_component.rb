@@ -6,6 +6,8 @@ class ApplicationComponent < ViewComponent::Base
   include SvgHelper
 
   def initialize(styles: [], style: nil, **)
+    super
+
     @styles = styles
     @styles << style if style
   end
