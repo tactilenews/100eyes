@@ -23,6 +23,8 @@ class SettingsController < ApplicationController
       :onboarding_title,
       :onboarding_success_heading,
       :onboarding_success_text,
+      :onboarding_unauthorized_heading,
+      :onboarding_unauthorized_text,
       :onboarding_page,
       :telegram_welcome_message,
       :telegram_unknown_content_message

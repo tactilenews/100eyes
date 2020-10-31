@@ -51,6 +51,20 @@
       <% end %>
     <% end %>
 
+     <%= c 'stack' do %>
+      <%= c 'heading', tag: :h2 do %>
+        <%= t 'setting.form.groups.onboarding_unauthorized' %>
+      <% end %>
+
+      <%= c 'field', object: setting, value: Setting.onboarding_unauthorized_heading, id: :onboarding_unauthorized_heading do |field| %>
+        <%= c 'input', field.input_defaults %>
+      <% end %>
+
+      <%= c 'field', object: setting, value: Setting.onboarding_unauthorized_text, id: :onboarding_unauthorized_text do |field| %>
+        <%= c 'textarea', field.input_defaults %>
+      <% end %>
+    <% end %>
+
     <%= c 'stack' do %>
       <%= c 'heading', tag: :h2 do %>
         <%= t 'setting.form.groups.telegram' %>

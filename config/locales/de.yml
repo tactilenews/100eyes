@@ -116,6 +116,7 @@ de:
         telegram: Telegram
         onboarding: Onboarding
         onboarding_success: Nachricht nach erfolgreichem Onboarding
+        onboarding_unauthorized: Meldung nach erfolglosem Onboarding
       project_name:
         label: Projekt-Name
         help: Der Projekt-Name wird Community-Mitgliedern z.B. während des Onboardings angezeigt.
@@ -130,6 +131,10 @@ de:
       onboarding_success_heading:
         label: Titel
       onboarding_success_text:
+        label: Text
+      onboarding_unauthorized_heading:
+        label: Titel
+      onboarding_unauthorized_text:
         label: Text
       onboarding_logo:
         label: Logo (URL)
