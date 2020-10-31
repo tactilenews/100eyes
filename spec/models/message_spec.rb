@@ -11,25 +11,25 @@ RSpec.describe Message, type: :model do
     expect(described_class.last).to eq(oldest_message)
   end
 
-  describe '#user' do
-    let(:user) { create(:user) }
-    subject { message.user }
+  describe '#contributor' do
+    let(:contributor) { create(:contributor) }
+    subject { message.contributor }
 
     describe 'with sender' do
-      let(:message) { create(:message, sender: user) }
-      it { should eql(user) }
+      let(:message) { create(:message, sender: contributor) }
+      it { should eql(contributor) }
     end
 
     context 'with recipient' do
-      let(:message) { create(:message, :with_recipient, recipient: user) }
-      it { should eql(user) }
+      let(:message) { create(:message, :with_recipient, recipient: contributor) }
+      it { should eql(contributor) }
     end
   end
 
   describe '#reply?' do
     subject { message.reply? }
     describe 'message has a sender' do
-      let(:message) { create(:message, sender: create(:user)) }
+      let(:message) { create(:message, sender: create(:contributor)) }
       it { should be(true) }
     end
 
@@ -40,7 +40,7 @@ RSpec.describe Message, type: :model do
   end
 
   describe 'deeplinks' do
-    let(:user) { create(:user, id: 7) }
+    let(:contributor) { create(:contributor, id: 7) }
     let(:request) { create(:request, id: 6) }
     let(:message) { create(:message, request: request, **params) }
 
@@ -48,20 +48,20 @@ RSpec.describe Message, type: :model do
       subject { message.conversation_link }
 
       describe 'given a recipient' do
-        let(:params) { { sender: nil, recipient: user } }
-        it { should eq('/users/7/requests/6') }
+        let(:params) { { sender: nil, recipient: contributor } }
+        it { should eq('/contributors/7/requests/6') }
       end
 
       describe 'given a sender' do
-        let(:params) { { recipient: nil, sender: user } }
-        it { should eq('/users/7/requests/6') }
+        let(:params) { { recipient: nil, sender: contributor } }
+        it { should eq('/contributors/7/requests/6') }
       end
     end
 
     describe '#chat_message_link' do
       subject { message.chat_message_link }
-      let(:params) { { id: 8, recipient: nil, sender: user } }
-      it { should eq('/users/7/requests/6#chat-row-8') }
+      let(:params) { { id: 8, recipient: nil, sender: contributor } }
+      it { should eq('/contributors/7/requests/6#chat-row-8') }
     end
   end
 
@@ -73,7 +73,7 @@ RSpec.describe Message, type: :model do
         before(:each) { message.raw_data = nil }
         it { should be_valid }
         describe 'but with a given sender' do
-          before(:each) { message.sender = build(:user) }
+          before(:each) { message.sender = build(:contributor) }
           it { should_not be_valid }
         end
       end
@@ -86,7 +86,7 @@ RSpec.describe Message, type: :model do
     describe 'given an old message with unparsed data of a encoded Email' do
       let(:mail) do
         mail = Mail.new do |m|
-          m.from 'user@example.org'
+          m.from 'contributor@example.org'
           m.to '100eyes@example.org'
           m.subject 'This is a test email'
         end
@@ -95,7 +95,7 @@ RSpec.describe Message, type: :model do
       end
 
       let(:message) do
-        message = build(:message, sender: create(:user))
+        message = build(:message, sender: create(:contributor))
         message.raw_data.attach(
           io: StringIO.new(mail.encoded),
           filename: 'unparsed.eml',
@@ -113,7 +113,7 @@ RSpec.describe Message, type: :model do
 
         describe 'even if there are multiple Telegram API calls with photos' do
           let(:message) do
-            message = build(:message, sender: create(:user))
+            message = build(:message, sender: create(:contributor))
             3.times do
               message.raw_data.attach(
                 io: StringIO.new(JSON.generate(telegram_message_with_photo)),
@@ -137,11 +137,11 @@ RSpec.describe Message, type: :model do
   describe '#before_create' do
     let(:message) { create(:message, sender: nil, recipient: recipient) }
     describe 'given a recipient with telegram' do
-      let(:recipient) { create(:user, telegram_chat_id: 47, telegram_id: 11) }
+      let(:recipient) { create(:contributor, telegram_chat_id: 47, telegram_id: 11) }
       describe '#blocked' do
         subject { message.blocked }
         it { should be(false) }
-        describe 'but if user blocked the telegram bot' do
+        describe 'but if contributor blocked the telegram bot' do
           before(:each) { allow(Telegram.bot).to receive(:send_message).and_raise(Telegram::Bot::Forbidden) }
           it { should be(true) }
         end

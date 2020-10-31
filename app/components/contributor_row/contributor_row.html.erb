@@ -1,0 +1,24 @@
+<a
+  class="<%= class_names.join(' ') %>"
+  href="<%= url %>"
+>
+  <div class="ContributorRow-avatar">
+    <%= c 'avatar', contributor: contributor %>
+  </div>
+
+  <div>
+    <strong>
+      <span class="ContributorRow-name"><%= contributor.name %></span>
+    </strong>
+
+    <span class="ContributorRow-channels">
+      <% channel_icons.each do |icon| %>
+        <%= c 'icon', icon: icon, styles: [:inline] %>
+      <% end %>
+    </span>
+
+    <p class="ContributorRow-note">
+      <%= contributor.note %>
+    </p>
+  </div>
+</a>

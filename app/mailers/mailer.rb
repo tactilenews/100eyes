@@ -16,8 +16,7 @@ class Mailer < ApplicationMailer
   end
 
   def user_not_found_email
-    @text = I18n.t('mailer.user_not_found_email.text')
-
+    @text = I18n.t('mailer.contributor_not_found_email.text')
     mail(
       to: params[:email],
       subject: default_i18n_subject,

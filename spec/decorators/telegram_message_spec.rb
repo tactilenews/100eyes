@@ -85,7 +85,7 @@ RSpec.describe TelegramMessage do
         end.to(change { Message.count }.from(0).to(1))
       }
 
-      describe 'given the user sends a series of images as album', vcr: { cassette_name: :photo_album } do
+      describe 'given the contributor sends a series of images as album', vcr: { cassette_name: :photo_album } do
         let(:telegram_message_with_media_group_id) { message_with_photo.merge(media_group_id: '42') }
         let(:save_message_and_photo) do
           lambda {
@@ -125,20 +125,20 @@ RSpec.describe TelegramMessage do
   describe '#sender' do
     subject { telegram_message.sender }
     let(:message) { { 'chat' => { 'id' => 42 }, 'from' => { 'id' => 47, 'username' => 'alice' } } }
-    it { should be_a(User) }
+    it { should be_a(Contributor) }
 
     describe 'calling #save! on the sender' do
-      it { expect { subject.save! }.to(change { User.count }.from(0).to(1)) }
+      it { expect { subject.save! }.to(change { Contributor.count }.from(0).to(1)) }
 
-      describe 'attributes of the created user' do
+      describe 'attributes of the created contributor' do
         before(:each) { subject.save! }
-        let(:user) { User.first }
-        it { expect(user).to have_attributes(telegram_chat_id: 42, telegram_id: 47, username: 'alice') }
+        let(:contributor) { Contributor.first }
+        it { expect(contributor).to have_attributes(telegram_chat_id: 42, telegram_id: 47, username: 'alice') }
       end
 
-      describe 'given an existing but outdated user record' do
-        before(:each) { create(:user, telegram_id: 47, username: 'bob') }
-        it { expect { subject.save! }.to(change { User.first.username }.from('bob').to('alice')) }
+      describe 'given an existing but outdated contributor record' do
+        before(:each) { create(:contributor, telegram_id: 47, username: 'bob') }
+        it { expect { subject.save! }.to(change { Contributor.first.username }.from('bob').to('alice')) }
       end
     end
   end

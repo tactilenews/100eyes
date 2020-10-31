@@ -1,13 +1,13 @@
 <div class="Chat">
   <%= c 'stack' do %>
-    <%= c 'user_row', user: user %>
+    <%= c 'contributor_row', contributor: contributor %>
 
     <%= c 'chat_messages', messages: messages %>
 
     <%= c 'stack' do %>
 
       <% if active_request? %>
-        <%= c 'chat_form', user: user %>
+        <%= c 'chat_form', contributor: contributor %>
       <% else %>
         <p>
           <%= t 'components.chat.outdated_request' %>

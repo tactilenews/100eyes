@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Request, type: :model do
-  let(:user) { create(:user) }
+  let(:contributor) { create(:contributor) }
 
   let(:request) do
     Request.new(
@@ -28,18 +28,18 @@ RSpec.describe Request, type: :model do
   end
 
   describe 'request tag_list persists' do
-    let!(:user) { create(:user, tag_list: ['programmer']) }
+    let!(:contributor) { create(:contributor, tag_list: ['programmer']) }
     let!(:request) { create(:request, tag_list: ['programmer']) }
 
     before(:each) do
-      user.tag_list = ''
-      user.save
-      user.reload
+      contributor.tag_list = ''
+      contributor.save
+      contributor.reload
     end
 
-    it 'even with no users with tag' do
-      expect(user.tag_list).to eq([])
-      expect(User.all_tags.map(&:name)).to eq([])
+    it 'even with no contributors with tag' do
+      expect(contributor.tag_list).to eq([])
+      expect(Contributor.all_tags.map(&:name)).to eq([])
       request.reload
       expect(request.tag_list).to eq(['programmer'])
       expect(Request.all_tags.map(&:name)).to eq(['programmer'])
@@ -72,15 +72,15 @@ RSpec.describe Request, type: :model do
     end
   end
 
-  describe '#messages_by_user' do
-    subject { request.messages_by_user }
+  describe '#messages_by_contributor' do
+    subject { request.messages_by_contributor }
     let(:request) { create(:request) }
 
-    describe 'with messages by multiple users' do
-      let(:request) { create(:request, :with_interlapping_messages_from_two_users) }
+    describe 'with messages by multiple contributors' do
+      let(:request) { create(:request, :with_interlapping_messages_from_two_contributors) }
 
-      it 'groups by user' do
-        expect(subject.keys).to all(be_a User)
+      it 'groups by contributor' do
+        expect(subject.keys).to all(be_a Contributor)
         expect(subject.length).to eq(2)
       end
 
@@ -114,7 +114,7 @@ RSpec.describe Request, type: :model do
 
       describe '[:counts][:replies]' do
         subject { stats[:counts][:replies] }
-        it { should eq(8) } # unique users
+        it { should eq(8) } # unique contributors
 
         describe 'messages from us' do
           before(:each) do
@@ -127,9 +127,9 @@ RSpec.describe Request, type: :model do
         end
       end
 
-      describe '[:counts][:users]' do
-        subject { stats[:counts][:users] }
-        it { should eq(6) } # unique users
+      describe '[:counts][:contributors]' do
+        subject { stats[:counts][:contributors] }
+        it { should eq(6) } # unique contributors
 
         describe 'messages from us' do
           before(:each) do
@@ -167,10 +167,10 @@ RSpec.describe Request, type: :model do
   describe '::after_create' do
     before(:each) { allow(Request).to receive(:broadcast!).and_call_original } # is stubbed for every other test
     subject { -> { request.save! } }
-    describe 'given some existing users in the moment of creation' do
+    describe 'given some existing contributors in the moment of creation' do
       before(:each) do
-        create(:user, id: 1, email: 'somebody@example.org')
-        create(:user, id: 2, email: nil, telegram_id: 22, telegram_chat_id: 23)
+        create(:contributor, id: 1, email: 'somebody@example.org')
+        create(:contributor, id: 2, email: nil, telegram_id: 22, telegram_chat_id: 23)
       end
 
       it { should change { Message.count }.from(0).to(2) }
@@ -179,7 +179,7 @@ RSpec.describe Request, type: :model do
       it { should change { Message.pluck(:broadcasted) }.from([]).to([true, true]) }
     end
 
-    describe 'creates message only for users tagged with tag_list' do
+    describe 'creates message only for contributors tagged with tag_list' do
       let(:request) do
         Request.new(
           title: 'Hitchhiker’s Guide',
@@ -189,8 +189,8 @@ RSpec.describe Request, type: :model do
         )
       end
       before(:each) do
-        create(:user, id: 1, email: 'somebody@example.org', tag_list: ['programmer'])
-        create(:user, id: 2, email: nil, telegram_id: 22, telegram_chat_id: 23)
+        create(:contributor, id: 1, email: 'somebody@example.org', tag_list: ['programmer'])
+        create(:contributor, id: 2, email: nil, telegram_id: 22, telegram_chat_id: 23)
       end
 
       it { should change { Message.count }.from(0).to(1) }

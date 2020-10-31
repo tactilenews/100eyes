@@ -8,20 +8,20 @@ class OnboardingController < ApplicationController
 
   def index
     @jwt = jwt_param
-    @user = User.new
+    @contributor = Contributor.new
   end
 
   def create
-    # Ensure information on registered users is never
+    # Ensure information on registered contributors is never
     # disclosed during onboarding
-    if User.email_taken?(user_params[:email])
+    if Contributor.email_taken?(contributor_params[:email])
       invalidate_jwt
       return redirect_to_success
     end
 
-    @user = User.new(user_params)
+    @contributor = Contributor.new(contributor_params)
 
-    if @user.save
+    if @contributor.save
       invalidate_jwt
       return redirect_to_success
     end
@@ -56,8 +56,8 @@ class OnboardingController < ApplicationController
     JsonWebToken.create(invalidated_jwt: params[:jwt])
   end
 
-  def user_params
-    params.require(:user).permit(:first_name, :last_name, :email)
+  def contributor_params
+    params.require(:contributor).permit(:first_name, :last_name, :email)
   end
 
   def jwt_param

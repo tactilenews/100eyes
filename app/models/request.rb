@@ -2,7 +2,7 @@
 
 class Request < ApplicationRecord
   has_many :messages, dependent: :destroy
-  has_many :users, through: :messages
+  has_many :contributors, through: :messages
   has_many :photos, through: :messages
   attribute :hints, :string, array: true, default: []
   default_scope { order(created_at: :desc) }
@@ -32,25 +32,25 @@ class Request < ApplicationRecord
     {
       counts: {
         recipients: messages.map(&:recipient_id).compact.uniq.size,
-        users: messages.map(&:sender_id).compact.uniq.size,
+        contributors: messages.map(&:sender_id).compact.uniq.size,
         photos: messages.map { |message| message.photos_count || 0 }.sum,
         replies: messages.count(&:reply?)
       }
     }
   end
 
-  def messages_by_user
+  def messages_by_contributor
     messages
       .where(broadcasted: false)
-      .group_by(&:user)
+      .group_by(&:contributor)
       .transform_values { |messages| messages.sort_by(&:created_at) }
   end
 
   def self.broadcast!(request)
-    User.with_tags(request.tag_list).each do |user|
+    Contributor.with_tags(request.tag_list).each do |contributor|
       Message.create!(
         sender: nil,
-        recipient: user,
+        recipient: contributor,
         text: request.plaintext,
         request: request,
         broadcasted: true

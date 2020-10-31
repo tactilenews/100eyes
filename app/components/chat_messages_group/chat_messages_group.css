@@ -8,11 +8,11 @@
   margin-right: var(--spacing-unit-s);
 }
 
-.ChatMessagesGroup-user {
+.ChatMessagesGroup-contributor {
   font-weight: 500;
 }
 
-.ChatMessagesGroup-user:hover {
+.ChatMessagesGroup-contributor:hover {
   text-decoration: underline;
 }
 

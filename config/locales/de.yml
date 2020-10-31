@@ -12,7 +12,7 @@ de:
       highlight: markieren
       unhighlight: Markierung entfernen
       contains_unknown_content: Enthält nicht unterstützte Inhalte
-      blocked_by_user: wurde von diesem Mitglied blockiert
+      blocked_by_contributor: wurde von diesem Mitglied blockiert
     chat_messages_group:
       reply: nachfragen
     chat_form:
@@ -42,7 +42,7 @@ de:
         heading: Lizenz
         licensed_under: Lizenziert unter MIT‑Lizenz
     request_metrics:
-      users:
+      contributors:
         one: hat geantwortet
         other: haben geantwortet
       replies:
@@ -97,7 +97,7 @@ de:
       html: "Sofern Sie keine E-Mails mehr von uns erhalten möchten, können Sie sie unter <a href=\"{{{ pm:unsubscribe }}}\">diesem Link abbestellen</a>."
     new_message_email:
       subject: Die Redaktion hat eine neue Frage
-    user_not_found_email:
+    contributor_not_found_email:
       subject: Wir können deine E-Mail Adresse nicht zuordnen
       text: Wir können deine E-Mail Adresse leider keinem unserer Benutzerprofile zuordnen.
 
@@ -158,8 +158,8 @@ de:
       one: Suchergebnis
       other: Suchergebnisse
 
-  user:
-    user:
+  contributor:
+    contributor:
       one: Mitglied
       other: Mitglieder
     create: Neues Mitglied erstellen

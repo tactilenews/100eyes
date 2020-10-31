@@ -10,7 +10,7 @@ RSpec.describe EmailMessage do
     subject { -> { email_message.text } }
     let(:mail) do
       mail = Mail.new do |m|
-        m.from 'user@example.org'
+        m.from 'contributor@example.org'
         m.to '100eyes@example.org'
         m.subject 'This is a test email'
       end
@@ -24,7 +24,7 @@ RSpec.describe EmailMessage do
     describe 'given no multipart' do
       let(:mail) do
         Mail.new do |m|
-          m.from 'user@example.org'
+          m.from 'contributor@example.org'
           m.to '100eyes@example.org'
           m.subject 'This is a test email'
           m.body text_part
@@ -99,7 +99,7 @@ RSpec.describe EmailMessage do
         describe 'with a .txt multipart' do
           let(:mail) do
             mail = Mail.new do |m|
-              m.from 'user@example.org'
+              m.from 'contributor@example.org'
               m.to '100eyes@example.org'
               m.subject 'This is a test email'
             end
@@ -112,7 +112,7 @@ RSpec.describe EmailMessage do
         describe 'with a .png multipart' do
           let(:mail) do
             mail = Mail.new do |m|
-              m.from 'user@example.org'
+              m.from 'contributor@example.org'
               m.to '100eyes@example.org'
               m.subject 'This is a test email'
             end

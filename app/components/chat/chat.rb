@@ -2,20 +2,20 @@
 
 module Chat
   class Chat < ApplicationComponent
-    def initialize(messages:, user:, request:)
+    def initialize(messages:, contributor:, request:)
       super
 
       @messages = messages
-      @user = user
+      @contributor = contributor
       @request = request
     end
 
     private
 
-    attr_reader :messages, :user, :request
+    attr_reader :messages, :contributor, :request
 
     def active_request
-      user.active_request
+      contributor.active_request
     end
 
     def active_request?
@@ -23,7 +23,7 @@ module Chat
     end
 
     def active_conversation_path
-      user_request_path(id: active_request.id, user_id: user.id)
+      contributor_request_path(id: active_request.id, contributor_id: contributor.id)
     end
   end
 end

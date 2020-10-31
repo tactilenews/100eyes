@@ -4,10 +4,10 @@ FactoryBot.define do
   factory :request do
     text { 'I am a request' }
 
-    trait :with_interlapping_messages_from_two_users do
+    trait :with_interlapping_messages_from_two_contributors do
       after(:create) do |request, _|
-        adam = create(:user, first_name: 'Adam', last_name: 'Ackermann')
-        zora = create(:user, first_name: 'Zora', last_name: 'Zimmermann')
+        adam = create(:contributor, first_name: 'Adam', last_name: 'Ackermann')
+        zora = create(:contributor, first_name: 'Zora', last_name: 'Zimmermann')
 
         create(:message, request: request, sender: adam, created_at: 3.hours.ago)
         create(:message, request: request, sender: zora, created_at: 2.hours.ago)

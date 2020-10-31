@@ -22,8 +22,8 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :users, except: :edit do
-    resources :requests, only: %i[show], to: 'requests#show_user_messages'
+  resources :contributors, except: :edit do
+    resources :requests, only: %i[show], to: 'requests#show_contributor_messages'
 
     member do
       post 'message'

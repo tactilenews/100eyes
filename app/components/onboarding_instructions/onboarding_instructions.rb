@@ -2,16 +2,16 @@
 
 module OnboardingInstructions
   class OnboardingInstructions < ApplicationComponent
-    def initialize(user:, jwt:, **)
+    def initialize(contributor:, jwt:, **)
       super
 
-      @user = user
+      @contributor = contributor
       @jwt = jwt
     end
 
     private
 
-    attr_reader :user, :jwt
+    attr_reader :contributor, :jwt
 
     def choices
       [

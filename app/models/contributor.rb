@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class User < ApplicationRecord
+class Contributor < ApplicationRecord
   include PgSearch::Model
   multisearchable against: %i[first_name last_name username note]
 
@@ -27,21 +27,21 @@ class User < ApplicationRecord
   end
 
   def self.email_taken?(email)
-    user = User.new(email: email)
-    user.valid?
+    contributor = Contributor.new(email: email)
+    contributor.valid?
 
-    error_types = user.errors.details[:email].pluck(:error)
+    error_types = contributor.errors.details[:email].pluck(:error)
 
     error_types.include?(:taken)
   end
 
   def self.all_tags_with_count
-    User.all_tags.map do |tag|
+    Contributor.all_tags.map do |tag|
       {
         id: tag.id,
         name: tag.name,
         value: tag.name,
-        count: User.tagged_with([tag]).count
+        count: Contributor.tagged_with([tag]).count
       }
     end
   end

@@ -1,25 +1,25 @@
-.UserRow {
+.ContributorRow {
   display: flex;
   align-items: center;
 }
 
-a.UserRow:hover .UserRow-name {
+a.ContributorRow:hover .ContributorRow-name {
   text-decoration: underline;
 }
 
-.UserRow-channels {
+.ContributorRow-channels {
   margin-left: 0.25em;
 }
 
-.UserRow-avatar {
+.ContributorRow-avatar {
   margin-right: var(--spacing-unit-s);
 }
 
-.UserRow-note {
+.ContributorRow-note {
   color: var(--color-text-light);
   font-size: var(--font-size-s);
 }
 
-.UserRow-channels {
+.ContributorRow-channels {
   color: var(--color-accent);
 }

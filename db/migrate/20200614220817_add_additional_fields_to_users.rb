@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddAdditionalFieldsToUsers < ActiveRecord::Migration[6.0]
+class AddAdditionalFieldsToContributors < ActiveRecord::Migration[6.0]
   def change
     change_table :users, bulk: true do |t|
       t.string :street
