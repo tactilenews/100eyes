@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_17_105553) do
+ActiveRecord::Schema.define(version: 2020_10_31_114456) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -50,6 +50,25 @@ ActiveRecord::Schema.define(version: 2020_10_17_105553) do
     t.string "invalidated_jwt"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "contributors", force: :cascade do |t|
+    t.string "email"
+    t.integer "telegram_chat_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "username"
+    t.string "first_name"
+    t.string "last_name"
+    t.integer "telegram_id"
+    t.string "avatar_url"
+    t.string "note"
+    t.string "zip_code"
+    t.string "city"
+    t.string "phone"
+    t.index ["email"], name: "index_contributors_on_email", unique: true
+    t.index ["telegram_chat_id"], name: "index_contributors_on_telegram_chat_id", unique: true
+    t.index ["telegram_id"], name: "index_contributors_on_telegram_id", unique: true
   end
 
   create_table "messages", force: :cascade do |t|
@@ -131,25 +150,6 @@ ActiveRecord::Schema.define(version: 2020_10_17_105553) do
     t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
-  create_table "users", force: :cascade do |t|
-    t.string "email"
-    t.integer "telegram_chat_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "username"
-    t.string "first_name"
-    t.string "last_name"
-    t.integer "telegram_id"
-    t.string "avatar_url"
-    t.string "note"
-    t.string "zip_code"
-    t.string "city"
-    t.string "phone"
-    t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["telegram_chat_id"], name: "index_users_on_telegram_chat_id", unique: true
-    t.index ["telegram_id"], name: "index_users_on_telegram_id", unique: true
-  end
-
   create_table "voices", force: :cascade do |t|
     t.bigint "message_id", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -158,9 +158,9 @@ ActiveRecord::Schema.define(version: 2020_10_17_105553) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "messages", "contributors", column: "recipient_id"
+  add_foreign_key "messages", "contributors", column: "sender_id"
   add_foreign_key "messages", "requests"
-  add_foreign_key "messages", "users", column: "recipient_id"
-  add_foreign_key "messages", "users", column: "sender_id"
   add_foreign_key "photos", "messages"
   add_foreign_key "taggings", "tags"
   add_foreign_key "voices", "messages"
