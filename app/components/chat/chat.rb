@@ -3,6 +3,8 @@
 module Chat
   class Chat < ApplicationComponent
     def initialize(messages:, user:, request:)
+      super
+
       @messages = messages
       @user = user
       @request = request

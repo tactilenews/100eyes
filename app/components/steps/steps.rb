@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
 module Steps
-  class Steps < ApplicationComponent
-    def initialize(**); end
-  end
+  class Steps < ApplicationComponent; end
 end

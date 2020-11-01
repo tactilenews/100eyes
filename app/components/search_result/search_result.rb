@@ -3,6 +3,8 @@
 module SearchResult
   class SearchResult < ApplicationComponent
     def initialize(result: nil)
+      super
+
       @result = result
     end
 

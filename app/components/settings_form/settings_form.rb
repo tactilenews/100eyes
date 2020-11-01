@@ -3,6 +3,8 @@
 module SettingsForm
   class SettingsForm < ApplicationComponent
     def initialize
+      super
+
       @setting = Setting.new
     end
 

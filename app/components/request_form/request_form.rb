@@ -11,6 +11,8 @@ module RequestForm
     }.freeze
 
     def initialize(request:)
+      super
+
       @request = request
     end
 

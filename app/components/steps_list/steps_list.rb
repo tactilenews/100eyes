@@ -3,6 +3,8 @@
 module StepsList
   class StepsList < ApplicationComponent
     def initialize(steps:, **)
+      super
+
       @steps = steps
     end
 

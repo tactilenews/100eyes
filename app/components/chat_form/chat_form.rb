@@ -3,6 +3,8 @@
 module ChatForm
   class ChatForm < ApplicationComponent
     def initialize(user:)
+      super
+
       @user = user
     end
 

@@ -3,6 +3,8 @@
 module ChatMessagePhotos
   class ChatMessagePhotos < ApplicationComponent
     def initialize(photos:, **)
+      super
+
       @photos = photos
     end
 

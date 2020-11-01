@@ -4,7 +4,7 @@ class SettingsController < ApplicationController
   def index; end
 
   def update
-    settings_params.keys.each do |key|
+    settings_params.each_key do |key|
       Setting.send("#{key}=", settings_params[key].strip) unless settings_params[key].nil?
     end
 

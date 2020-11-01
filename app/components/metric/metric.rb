@@ -2,7 +2,7 @@
 
 module Metric
   class Metric < ApplicationComponent
-    def initialize(value:, total: nil, label:, icon:, **)
+    def initialize(value:, label:, icon:, total: nil, **)
       super
 
       @value = value

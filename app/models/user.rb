@@ -30,7 +30,7 @@ class User < ApplicationRecord
     user = User.new(email: email)
     user.valid?
 
-    error_types = user.errors.details[:email].map { |error| error[:error] }
+    error_types = user.errors.details[:email].pluck(:error)
 
     error_types.include?(:taken)
   end

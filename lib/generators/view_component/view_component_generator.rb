@@ -44,7 +44,7 @@ class ViewComponentGenerator < Rails::Generators::NamedBase
   def create_spec_file
     return unless options[:spec]
 
-    template 'component_spec.rb', SPEC_PATH + file_name + '_spec.rb'
+    template 'component_spec.rb', "#{SPEC_PATH}#{file_name}_spec.rb"
   end
 
   private
