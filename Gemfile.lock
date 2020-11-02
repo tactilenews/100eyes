@@ -107,6 +107,7 @@ GEM
       concurrent-ruby (~> 1.0)
     jbuilder (2.10.1)
       activesupport (>= 5.0.0)
+    json (2.3.1)
     jwt (2.2.2)
     kramdown (2.3.0)
       rexml
@@ -137,6 +138,11 @@ GEM
     pg_search (2.3.4)
       activerecord (>= 5.2)
       activesupport (>= 5.2)
+    postmark (1.21.2)
+      json
+    postmark-rails (0.20.0)
+      actionmailer (>= 3.0.0)
+      postmark (~> 1.15)
     pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -307,6 +313,7 @@ DEPENDENCIES
   mini_magick (~> 4.10)
   pg (>= 0.18, < 2.0)
   pg_search
+  postmark-rails
   pry-rails
   puma (~> 5.0)
   rack-attack (~> 6.3)

@@ -59,7 +59,7 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   # CUSTOM
-  config.mailer = {
+  config.action_mailer.default_options = {
     from: '100eyes <100eyes-development-account@example.org>'
   }
 end
