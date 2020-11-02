@@ -66,4 +66,7 @@ Zu Entwicklungszwecken kannst du 100eyes mithilfe von Docker aufsetzen. Das Dock
 Unter [`/scripts`](https://github.com/tactilenews/100eyes/tree/master/scripts) findest du einige Skripte, die das Aufsetzen von 100eyes auf einem [Uberspace](https://uberspace.de) erleichtern.
 
 ## Förderung
-Die Entwicklung von 100eyes wurde im Rahmen des [Prototype Funds](https://prototypefund.de) aus Mitteln des [Bundesministeriums für Bildung und Forschung](https://bmbf.de) gefördert.
+Die Entwicklung von 100eyes wurde im Rahmen des [Prototype Funds](https://prototypefund.de) aus Mitteln des [Bundesministeriums für Bildung und Forschung](https://bmbf.de) gefördert. Das [Medieninnovationszentrum Babelsberg](http://miz-babelsberg.de) fördert die Entwicklung zusätzliche Module.
+
+## Lizenz
+100eyes wird von [tactile.news](https://tactile.news) entwickelt und ist unter der [MIT-Lizenz](https://github.com/tactilenews/100eyes/blob/master/LICENSE) lizenziert.
