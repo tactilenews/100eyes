@@ -78,7 +78,7 @@ class Message < ApplicationRecord
     return unless recipient&.email
 
     MessageMailer
-      .with(message: text, to: recipient.email)
+      .with(to: recipient.email, text: text, broadcasted: broadcasted?)
       .new_message_email
       .deliver_later
   end

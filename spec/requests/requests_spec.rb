@@ -40,11 +40,12 @@ RSpec.describe 'Requests', telegram_bot: :rails do
           'deliver_now',
           {
             params: {
-              message: [
+              text: [
                 'How do you do?',
                 I18n.t('request.hints.confidential.text')
               ].join("\n\n"),
-              to: 'user@example.org'
+              to: 'user@example.org',
+              broadcasted: true
             },
             args: []
           }

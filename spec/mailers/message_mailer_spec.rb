@@ -3,10 +3,18 @@
 require 'rails_helper'
 
 RSpec.describe MessageMailer, type: :mailer do
-  let(:question) { 'How do you do?' }
+  let(:text) { 'How do you do?' }
+  let(:address) { 'test@example.org' }
+  let(:broadcasted) { false }
 
-  describe 'new_question_email' do
-    let(:mail) { described_class.with(message: question, to: 'test@example.org').new_message_email }
+  describe 'new_message_email' do
+    let(:mail) do
+      described_class.with(
+        to: address,
+        text: text,
+        broadcasted: broadcasted
+      ).new_message_email
+    end
 
     describe 'subject' do
       subject { mail.subject }

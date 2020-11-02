@@ -158,8 +158,9 @@ RSpec.describe '/users', type: :request do
               'deliver_now',
               {
                 params: {
-                  message: 'Forgot to ask: How are you?',
-                  to: 'user@example.org'
+                  text: 'Forgot to ask: How are you?',
+                  to: 'user@example.org',
+                  broadcasted: false
                 },
                 args: []
               }
