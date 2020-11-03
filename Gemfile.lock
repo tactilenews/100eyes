@@ -255,7 +255,7 @@ GEM
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
     unicode-display_width (1.7.0)
-    valid_email2 (3.4.0)
+    valid_email2 (3.5.0)
       activemodel (>= 3.2)
       mail (~> 2.5)
     vcr (6.0.0)
@@ -284,7 +284,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.4.0)
+    zeitwerk (2.4.1)
 
 PLATFORMS
   ruby
@@ -319,7 +319,7 @@ DEPENDENCIES
   sucker_punch (~> 2.1)
   telegram-bot
   tzinfo-data
-  valid_email2 (~> 3.4)
+  valid_email2 (~> 3.5)
   vcr
   view_component (~> 2)
   web-console (>= 3.3.0)
