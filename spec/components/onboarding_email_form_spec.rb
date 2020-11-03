@@ -6,7 +6,7 @@ RSpec.describe OnboardingEmailForm::OnboardingEmailForm, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
   let(:contributor) { build(:contributor) }
-  let(:params) { { user: user, jwt: 'JWT' } }
+  let(:params) { { contributor: contributor, jwt: 'JWT' } }
 
   it { should have_css('.OnboardingEmailForm') }
 end

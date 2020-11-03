@@ -47,7 +47,7 @@ RSpec.describe 'Onboarding', type: :request do
       }
     end
 
-    let(:params) { { jwt: jwt, user: attrs } }
+    let(:params) { { jwt: jwt, contributor: attrs } }
 
     subject { -> { post onboarding_path, params: params } }
 
@@ -101,8 +101,8 @@ RSpec.describe 'Onboarding', type: :request do
         expect(response).not_to be_successful
       end
 
-      it 'does not create new user' do
-        expect { subject.call }.not_to change(User, :count)
+      it 'does not create new contributor' do
+        expect { subject.call }.not_to change(Contributor, :count)
       end
     end
   end

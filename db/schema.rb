@@ -46,12 +46,6 @@ ActiveRecord::Schema.define(version: 2020_10_31_114456) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "json_web_tokens", force: :cascade do |t|
-    t.string "invalidated_jwt"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "contributors", force: :cascade do |t|
     t.string "email"
     t.integer "telegram_chat_id"
@@ -66,9 +60,16 @@ ActiveRecord::Schema.define(version: 2020_10_31_114456) do
     t.string "zip_code"
     t.string "city"
     t.string "phone"
+    t.datetime "deactivated_at"
     t.index ["email"], name: "index_contributors_on_email", unique: true
     t.index ["telegram_chat_id"], name: "index_contributors_on_telegram_chat_id", unique: true
     t.index ["telegram_id"], name: "index_contributors_on_telegram_id", unique: true
+  end
+
+  create_table "json_web_tokens", force: :cascade do |t|
+    t.string "invalidated_jwt"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "messages", force: :cascade do |t|

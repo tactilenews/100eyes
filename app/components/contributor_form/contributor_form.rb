@@ -3,6 +3,8 @@
 module ContributorForm
   class ContributorForm < ApplicationComponent
     def initialize(contributor:)
+      super
+
       @contributor = contributor
     end
 
