@@ -17,7 +17,6 @@ class SettingsController < ApplicationController
   def settings_params
     params.require(:setting).permit(
       :project_name,
-      :onboarding_token,
       :onboarding_logo,
       :onboarding_hero,
       :onboarding_title,

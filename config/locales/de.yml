@@ -120,8 +120,6 @@ de:
       project_name:
         label: Projekt-Name
         help: Der Projekt-Name wird Community-Mitgliedern z.B. während des Onboardings angezeigt.
-      onboarding_token:
-        label: Geheimes Token
       onboarding_title:
         label: Titel
       onboarding_page:

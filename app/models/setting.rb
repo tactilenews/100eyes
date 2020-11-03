@@ -6,7 +6,6 @@ class Setting < RailsSettings::Base
 
   field :project_name, default: ENV['HUNDRED_EYES_PROJECT_NAME'] || '100eyes'
 
-  field :onboarding_token, default: ENV['ONBOARDING_TOKEN'] || 'abcd1234'
   field :onboarding_logo, default: '/onboarding/logo.png'
   field :onboarding_hero, default: '/onboarding/hero.jpg'
   field :onboarding_title, default: 'Hallo und herzlich willkommen beim 100eyes!'

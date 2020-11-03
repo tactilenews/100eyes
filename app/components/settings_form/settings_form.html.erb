@@ -16,10 +16,6 @@
         <%= t 'setting.form.groups.onboarding' %>
       <% end %>
 
-      <%= c 'field', object: setting, value: Setting.onboarding_token, id: :onboarding_token do |field| %>
-        <%= c 'input', field.input_defaults %>
-      <% end %>
-
       <%= c 'field', object: setting, value: Setting.onboarding_logo, id: :onboarding_logo do |field| %>
         <%= c 'input', field.input_defaults.merge(type: :url) %>
       <% end %>
