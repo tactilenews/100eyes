@@ -35,6 +35,16 @@ RSpec.describe Mailer, type: :mailer do
       subject { mail.text_part.body.decoded }
       it { should include I18n.t('mailer.unsubscribe.text') }
     end
+
+    describe 'message_stream' do
+      subject { mail.message_stream }
+      it { should eq(Setting.postmark_transactional_stream) }
+
+      describe 'with broadcasted=true' do
+        let(:broadcasted) { true }
+        it { should eq(Setting.postmark_broadcasts_stream) }
+      end
+    end
   end
 
   describe 'new_question_email' do
