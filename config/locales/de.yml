@@ -91,7 +91,10 @@ de:
       loading: erstelle Link…
       success: Link kopiert
 
-  message_mailer:
+  mailer:
+    unsubscribe:
+      text: "Sofern Sie keine E-Mails mehr von uns erhalten möchten, können Sie sie unter diesem Link abbestellen: {{{ pm:unsubscribe }}}"
+      html: "Sofern Sie keine E-Mails mehr von uns erhalten möchten, können Sie sie unter <a href=\"{{{ pm:unsubscribe }}}\">diesem Link abbestellen</a>."
     new_message_email:
       subject: Die Redaktion hat eine neue Frage
     user_not_found_email:

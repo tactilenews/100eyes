@@ -30,17 +30,22 @@ RSpec.describe Mailer, type: :mailer do
       subject { mail.from }
       it { should eq(['100eyes-test-account@example.org']) }
     end
+
+    describe 'body' do
+      subject { mail.text_part.body.decoded }
+      it { should include I18n.t('mailer.unsubscribe.text') }
+    end
   end
 
   describe 'new_question_email' do
     let(:mail) { described_class.with(email: 'user@example.org').user_not_found_email }
 
-    describe '#subject' do
+    describe 'subject' do
       subject { mail.subject }
       it { should eq('Wir können deine E-Mail Adresse nicht zuordnen') }
     end
 
-    describe '#body' do
+    describe 'body' do
       subject { mail.text_part.body.decoded }
       it { should include('Wir können deine E-Mail Adresse leider keinem unserer Benutzerprofile zuordnen.') }
     end
