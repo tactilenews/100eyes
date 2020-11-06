@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Mailer < ActionMailer::Base
+class Mailer < ApplicationMailer
   default template_name: :mailer
   default from: -> { default_from }
 
