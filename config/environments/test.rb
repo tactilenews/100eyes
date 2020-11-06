@@ -15,6 +15,7 @@ ENV['BASIC_AUTH_LOGIN_PASSWORD'] = 'test1234'
 ENV['TELEGRAM_BOT_API_KEY'] = 'TOKEN'
 ENV['TELEGRAM_BOT_USERNAME'] = 'TestingBot'
 ENV['HUNDRED_EYES_PROJECT_NAME'] = 'TestingProject'
+ENV['EMAIL_FROM_ADDRESS'] = '100eyes-test-account@example.org'
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -61,8 +62,4 @@ Rails.application.configure do
 
   # CUSTOM
   config.active_job.queue_adapter = :test
-
-  config.action_mailer.default_options = {
-    from: '100eyes <100eyes-test-account@example.org>'
-  }
 end

@@ -112,10 +112,6 @@ Rails.application.configure do
     api_token: Setting.postmark_api_token
   }
 
-  config.action_mailer.default_options = {
-    from: "#{Setting.project_name} <#{Setting.email_from_address}>"
-  }
-
   # TODO: refactor this once these issues are resolved
   # https://discuss.rubyonrails.org/t/define-host-so-absolute-urls-work-in-development-and-test/75085/
   # https://github.com/rails/rails/issues/39566

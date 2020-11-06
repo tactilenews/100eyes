@@ -120,7 +120,9 @@ de:
         onboarding_unauthorized: Meldung nach erfolglosem Onboarding
       project_name:
         label: Projekt-Name
-        help: Der Projekt-Name wird Community-Mitgliedern z.B. während des Onboardings angezeigt.
+        help: Der Projekt-Name wird Community-Mitgliedern z.B. während des Onboardings und als Absender von E-Mails angezeigt.
+      onboarding_token:
+        label: Geheimes Token
       onboarding_title:
         label: Titel
       onboarding_page:

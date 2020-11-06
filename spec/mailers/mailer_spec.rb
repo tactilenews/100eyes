@@ -27,8 +27,8 @@ RSpec.describe Mailer, type: :mailer do
     end
 
     describe 'from' do
-      subject { mail.from }
-      it { should eq(['100eyes-test-account@example.org']) }
+      subject { mail[:from].formatted }
+      it { should eq(['TestingProject <100eyes-test-account@example.org>']) }
     end
 
     describe 'body' do

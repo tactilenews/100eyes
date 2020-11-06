@@ -2,6 +2,7 @@
 
 class Mailer < ActionMailer::Base
   default template_name: :mailer
+  default from: -> { default_from }
 
   def new_message_email
     stream = params[:broadcasted] ? broadcasts_stream : transactional_stream
@@ -25,6 +26,10 @@ class Mailer < ActionMailer::Base
   end
 
   private
+
+  def default_from
+    "#{Setting.project_name} <#{Setting.email_from_address}>"
+  end
 
   def broadcasts_stream
     Setting.postmark_broadcasts_stream
