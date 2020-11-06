@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe MessageMailer, type: :mailer do
+RSpec.describe Mailer, type: :mailer do
   let(:text) { 'How do you do?' }
   let(:address) { 'test@example.org' }
   let(:broadcasted) { false }
@@ -18,7 +18,7 @@ RSpec.describe MessageMailer, type: :mailer do
 
     describe 'subject' do
       subject { mail.subject }
-      it { should eq('Die Redaktion hat eine neue Frage an dich') }
+      it { should eq('Die Redaktion hat eine neue Frage') }
     end
 
     describe 'to' do
@@ -29,6 +29,20 @@ RSpec.describe MessageMailer, type: :mailer do
     describe 'from' do
       subject { mail.from }
       it { should eq(['100eyes-test-account@example.org']) }
+    end
+  end
+
+  describe 'new_question_email' do
+    let(:mail) { described_class.with(email: 'user@example.org').user_not_found_email }
+
+    describe '#subject' do
+      subject { mail.subject }
+      it { should eq('Wir können deine E-Mail Adresse nicht zuordnen') }
+    end
+
+    describe '#body' do
+      subject { mail.text_part.body.decoded }
+      it { should include('Wir können deine E-Mail Adresse leider keinem unserer Benutzerprofile zuordnen.') }
     end
   end
 end

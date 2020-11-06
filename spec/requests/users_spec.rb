@@ -153,7 +153,7 @@ RSpec.describe '/users', type: :request do
           it { should_not respond_with_message }
           it {
             should have_enqueued_job.on_queue('mailers').with(
-              'MessageMailer',
+              'Mailer',
               'new_message_email',
               'deliver_now',
               {

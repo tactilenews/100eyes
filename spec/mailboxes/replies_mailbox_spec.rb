@@ -12,7 +12,7 @@ RSpec.describe RepliesMailbox, type: :mailbox do
 
   it {
     should have_enqueued_job.on_queue('mailers').with(
-      'ReplyMailer',
+      'Mailer',
       'user_not_found_email',
       'deliver_now',
       {

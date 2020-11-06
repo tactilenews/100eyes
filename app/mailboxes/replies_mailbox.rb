@@ -10,7 +10,7 @@ class RepliesMailbox < ApplicationMailbox
   private
 
   def ensure_sender_is_a_user
-    bounce_with ReplyMailer.with(email: mail.from.first).user_not_found_email unless user
+    bounce_with Mailer.with(email: mail.from.first).user_not_found_email unless user
   end
 
   def user

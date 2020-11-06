@@ -35,7 +35,7 @@ RSpec.describe 'Requests', telegram_bot: :rails do
       before(:each) { User.create!(email: 'user@example.org', telegram_chat_id: nil) }
       it {
         should have_enqueued_job.on_queue('mailers').with(
-          'MessageMailer',
+          'Mailer',
           'new_message_email',
           'deliver_now',
           {

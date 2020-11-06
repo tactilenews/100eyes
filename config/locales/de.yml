@@ -93,12 +93,10 @@ de:
 
   message_mailer:
     new_message_email:
-      subject: Die Redaktion hat eine neue Frage an dich
-
-  reply_mailer:
+      subject: Die Redaktion hat eine neue Frage
     user_not_found_email:
       subject: Wir können deine E-Mail Adresse nicht zuordnen
-      body: Wir können deine E-Mail Adresse %{email} leider keinem unserer Benutzerprofile zuordnen.
+      text: Wir können deine E-Mail Adresse leider keinem unserer Benutzerprofile zuordnen.
 
   save: Speichern
   discard: Änderungen verwerfen
