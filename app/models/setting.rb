@@ -5,7 +5,7 @@ class Setting < RailsSettings::Base
   cache_prefix { 'v1' }
 
   field :project_name, default: ENV['HUNDRED_EYES_PROJECT_NAME'] || '100eyes'
-  field :application_host, readonly: true, default: ENV['APPLICATION_HOST'] || 'http://localhost:3000'
+  field :application_host, readonly: true, default: ENV['APPLICATION_HOSTNAME'] || 'localhost:3000'
 
   field :onboarding_logo, default: '/onboarding/logo.png'
   field :onboarding_hero, default: '/onboarding/hero.jpg'
