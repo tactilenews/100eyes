@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class RequestsController < ApplicationController
-  before_action :set_request, only: %i[show show_user_messages notifications]
-  before_action :set_user, only: %i[show_user_messages]
+  before_action :set_request, only: %i[show show_contributor_messages notifications]
+  before_action :set_contributor, only: %i[show_contributor_messages]
   before_action :notifications_params, only: :notifications
 
   def index
@@ -10,7 +10,7 @@ class RequestsController < ApplicationController
   end
 
   def show
-    @message_groups = @request.messages_by_user
+    @message_groups = @request.messages_by_contributor
   end
 
   def create
@@ -26,8 +26,8 @@ class RequestsController < ApplicationController
     @request = Request.new
   end
 
-  def show_user_messages
-    @chat_messages = @user.conversation_about(@request)
+  def show_contributor_messages
+    @chat_messages = @contributor.conversation_about(@request)
   end
 
   def notifications
@@ -38,8 +38,8 @@ class RequestsController < ApplicationController
 
   private
 
-  def set_user
-    @user = User.find(params[:user_id])
+  def set_contributor
+    @contributor = Contributor.find(params[:contributor_id])
   end
 
   def set_request

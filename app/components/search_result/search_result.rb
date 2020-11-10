@@ -13,7 +13,7 @@ module SearchResult
     attr_reader :result
 
     def link
-      helpers.user_request_path(user_id: result.user_id, id: result.request_id)
+      helpers.contributor_request_path(contributor_id: result.contributor_id, id: result.request_id)
     end
 
     def type

@@ -13,7 +13,7 @@ RSpec.describe RepliesMailbox, type: :mailbox do
   it {
     should have_enqueued_job.on_queue('mailers').with(
       'Mailer',
-      'user_not_found_email',
+      'contributor_not_found_email',
       'deliver_now',
       {
         params: { email: 'zora@example.org' },
@@ -22,20 +22,20 @@ RSpec.describe RepliesMailbox, type: :mailbox do
     )
   }
 
-  describe 'given a user' do
-    let(:user) { create(:user, email: 'zora@example.org') }
-    before(:each) { user }
+  describe 'given a contributor' do
+    let(:contributor) { create(:contributor, email: 'zora@example.org') }
+    before(:each) { contributor }
 
     it { should_not(change { Message.count }) }
 
     describe 'given an active request' do
       let(:request) { create(:request, title: 'Wie geht es euren Haustieren in Corona-Zeiten?') }
-      before(:each) { create(:message, request: request, sender: nil, recipient: user) }
+      before(:each) { create(:message, request: request, sender: nil, recipient: contributor) }
 
       it { should(change { Message.count }.from(1).to(2)) }
 
       describe 'after email processing' do
-        let(:replies) { Message.where(sender: user).pluck(:text) }
+        let(:replies) { Message.where(sender: contributor).pluck(:text) }
 
         before(:each) { subject.call }
 

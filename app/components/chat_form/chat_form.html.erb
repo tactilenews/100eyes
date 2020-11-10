@@ -1,4 +1,4 @@
-<%= form_with(scope: :user, url: message_user_path(user), class: 'ChatForm', local: true) do %>
+<%= form_with(scope: :contributor, url: message_contributor_path(contributor), class: 'ChatForm', local: true) do %>
   <%= c 'textarea', id: 'message[text]', required: true, placeholder: t('components.chat_form.placeholder') %>
   <%= c 'button', label: t('components.chat_form.submit'), type: :submit %>
 <% end %>

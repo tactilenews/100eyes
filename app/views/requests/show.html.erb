@@ -38,8 +38,8 @@
             <%= I18n.t 'request.replies' %>
           <% end %>
 
-          <% @message_groups.each do |user, messages| %>
-            <%= c 'chat_messages_group', user: user, messages: messages %>
+          <% @message_groups.each do |contributor, messages| %>
+            <%= c 'chat_messages_group', contributor: contributor, messages: messages %>
           <% end %>
         <% end %>
 

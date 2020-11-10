@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :message do
     created_at { Time.zone.now }
     unknown_content { false }
-    association :sender, factory: :user
+    association :sender, factory: :contributor
     association :request
     with_sender
 
@@ -18,12 +18,12 @@ FactoryBot.define do
 
     trait :with_sender do
       recipient { nil }
-      association :sender, factory: :user
+      association :sender, factory: :contributor
     end
 
     trait :with_recipient do
       sender { nil }
-      association :recipient, factory: :user
+      association :recipient, factory: :contributor
     end
 
     trait :with_voice do

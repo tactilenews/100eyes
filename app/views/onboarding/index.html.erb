@@ -14,7 +14,7 @@
           <%= c 'markdown', raw: Setting.onboarding_page %>
         </div>
 
-        <%= c 'onboarding_instructions', user: @user, jwt: @jwt %>
+        <%= c 'onboarding_instructions', contributor: @contributor, jwt: @jwt %>
       <% end %>
     <% end %>
   <% end %>

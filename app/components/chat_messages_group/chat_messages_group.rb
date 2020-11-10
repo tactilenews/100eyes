@@ -2,10 +2,10 @@
 
 module ChatMessagesGroup
   class ChatMessagesGroup < ApplicationComponent
-    def initialize(user:, messages:, **)
+    def initialize(contributor:, messages:, **)
       super
 
-      @user = user
+      @contributor = contributor
       @messages = messages
     end
 
@@ -15,6 +15,6 @@ module ChatMessagesGroup
       messages.first.conversation_link
     end
 
-    attr_reader :user, :messages
+    attr_reader :contributor, :messages
   end
 end

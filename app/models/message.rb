@@ -7,8 +7,8 @@ class Message < ApplicationRecord
 
   multisearchable against: :text, if: :reply?
 
-  belongs_to :sender, class_name: 'User', optional: true
-  belongs_to :recipient, class_name: 'User', optional: true
+  belongs_to :sender, class_name: 'Contributor', optional: true
+  belongs_to :recipient, class_name: 'Contributor', optional: true
   belongs_to :request
   has_many :photos, dependent: :destroy
   has_one :voice, dependent: :destroy
@@ -36,17 +36,17 @@ class Message < ApplicationRecord
     Setting.project_name
   end
 
-  def user
+  def contributor
     sender || recipient
   end
 
   def conversation_link
-    Rails.application.routes.url_helpers.user_request_path(id: request.id, user_id: user.id)
+    Rails.application.routes.url_helpers.contributor_request_path(id: request.id, contributor_id: contributor.id)
   end
 
   def chat_message_link
-    Rails.application.routes.url_helpers.user_request_path(
-      user,
+    Rails.application.routes.url_helpers.contributor_request_path(
+      contributor,
       request,
       anchor: "chat-row-#{id}"
     )

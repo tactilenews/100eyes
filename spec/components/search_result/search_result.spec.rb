@@ -4,18 +4,18 @@ require 'rails_helper'
 
 RSpec.describe SearchResult::SearchResult, type: :component do
   subject { render_inline(described_class.new(result: result)) }
-  let(:user) { create(:user, id: 1) }
+  let(:contributor) { create(:contributor, id: 1) }
   let(:the_request) { create(:request, id: 1) }
 
   describe 'given a message' do
-    let(:result) { create(:message, sender: user, request: the_request, text: 'I am a message') }
+    let(:result) { create(:message, sender: contributor, request: the_request, text: 'I am a message') }
     it {
-      should have_link('I am a message', href: '/users/1/requests/1')
+      should have_link('I am a message', href: '/contributors/1/requests/1')
     }
   end
 
-  describe 'given a user' do
-    let(:result) { user }
-    it { should have_link('John Doe', href: '/users/1') }
+  describe 'given a contributor' do
+    let(:result) { contributor }
+    it { should have_link('John Doe', href: '/contributors/1') }
   end
 end

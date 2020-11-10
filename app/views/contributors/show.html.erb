@@ -1,7 +1,7 @@
 <%= c 'box', styles: [:large, :gray] do %>
   <%= c 'wrapper' do %>
     <%= c 'heading' do %>
-      <%= @user.name %>
+      <%= @contributor.name %>
     <% end %>
   <% end %>
 <% end %>
@@ -9,15 +9,15 @@
 <%= c 'box' do %>
   <%= c 'wrapper' do %>
     <%= c 'stack', space: :xlarge do %>
-      <%= c 'user_form', user: @user %>
+      <%= c 'contributor_form', contributor: @contributor %>
 
       <%= c 'stack' do %>
         <%= c 'heading', styles: [:section] do %>
-          <%= I18n.t 'user.activity' %>
+          <%= I18n.t 'contributor.activity' %>
         <% end %>
 
         <%= c 'requests_feed' do %>
-          <% @user. recent_replies.each do |reply| %>
+          <% @contributor. recent_replies.each do |reply| %>
             <%= c 'requests_feed_item', latest_reply: reply %>
           <% end %>
         <% end %>

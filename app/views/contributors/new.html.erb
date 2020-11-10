@@ -1,7 +1,7 @@
 <%= c 'box', styles: [:large, :gray] do %>
   <%= c 'wrapper' do %>
     <%= c 'heading' do %>
-      <%= t 'user.create' %>
+      <%= t 'contributor.create' %>
     <% end %>
   <% end %>
 <% end %>
@@ -9,7 +9,7 @@
 <%= c 'box' do %>
   <%= c 'wrapper' do %>
     <%= c 'stack', space: :xlarge do %>
-      <%= c 'user_form', user: @user %>
+      <%= c 'contributor_form', contributor: @contributor %>
     <% end %>
   <% end %>
 <% end %>

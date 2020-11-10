@@ -20,9 +20,9 @@ module RequestMetrics
       stats = request.stats
       [
         {
-          value: stats[:counts][:users],
+          value: stats[:counts][:contributors],
           total: stats[:counts][:recipients],
-          label: I18n.t('components.request_metrics.users', count: stats[:counts][:users]),
+          label: I18n.t('components.request_metrics.contributors', count: stats[:counts][:contributors]),
           icon: 'single-03'
         },
         {

@@ -1,6 +1,6 @@
   <% case type %>
-  <% when 'User' %>
-    <%= c 'user_row', user: result %>
+  <% when 'Contributor' %>
+    <%= c 'contributor_row', contributor: result %>
   <% when 'Message' %>
     <%= c 'excerpt', title: result.sender_name, text: result.text, link: result.chat_message_link, date: result.created_at %>
   <% else %>

@@ -48,7 +48,7 @@ RSpec.describe Mailer, type: :mailer do
   end
 
   describe 'new_question_email' do
-    let(:mail) { described_class.with(email: 'user@example.org').user_not_found_email }
+    let(:mail) { described_class.with(email: 'contributor@example.org').contributor_not_found_email }
 
     describe 'subject' do
       subject { mail.subject }

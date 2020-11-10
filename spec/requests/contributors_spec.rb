@@ -3,36 +3,36 @@
 require 'rails_helper'
 require 'telegram/bot/rspec/integration/rails'
 
-RSpec.describe '/users', type: :request do
-  let(:user) { create(:user) }
+RSpec.describe '/contributors', type: :request do
+  let(:contributor) { create(:contributor) }
   let(:the_request) { create(:request) }
 
   describe 'GET /index' do
     it 'should be successful' do
-      get users_url, headers: auth_headers
+      get contributors_url, headers: auth_headers
       expect(response).to be_successful
     end
   end
 
   describe 'GET /show' do
     it 'should be successful' do
-      get user_url(user), headers: auth_headers
+      get contributor_url(contributor), headers: auth_headers
       expect(response).to be_successful
     end
   end
 
   describe 'GET /requests/:id' do
     it 'should be successful' do
-      get user_request_path(id: the_request.id, user_id: user.id), headers: auth_headers
+      get contributor_request_path(id: the_request.id, contributor_id: contributor.id), headers: auth_headers
       expect(response).to be_successful
     end
   end
 
   describe 'GET /count' do
-    let!(:teachers) { create_list(:user, 2, tag_list: 'teacher') }
+    let!(:teachers) { create_list(:contributor, 2, tag_list: 'teacher') }
 
-    it 'returns count of users with a specific tag' do
-      get count_users_path(tag_list: ['teacher']), headers: auth_headers
+    it 'returns count of contributors with a specific tag' do
+      get count_contributors_path(tag_list: ['teacher']), headers: auth_headers
       expect(response.body).to eq({ count: 2 }.to_json)
     end
   end
@@ -51,39 +51,39 @@ RSpec.describe '/users', type: :request do
       }
     end
 
-    subject { -> { patch user_url(user), params: { user: new_attrs }, headers: auth_headers } }
+    subject { -> { patch contributor_url(contributor), params: { contributor: new_attrs }, headers: auth_headers } }
 
-    it 'updates the requested user' do
+    it 'updates the requested contributor' do
       subject.call
-      user.reload
+      contributor.reload
 
-      expect(user.first_name).to eq('Zora')
-      expect(user.last_name).to eq('Zimmermann')
-      expect(user.phone).to eq('012345678')
-      expect(user.zip_code).to eq('12345')
-      expect(user.city).to eq('Musterstadt')
-      expect(user.note).to eq('11 Jahre alt')
-      expect(user.email).to eq('zora@example.org')
-      expect(user.tag_list).to eq(%w[programmer student])
+      expect(contributor.first_name).to eq('Zora')
+      expect(contributor.last_name).to eq('Zimmermann')
+      expect(contributor.phone).to eq('012345678')
+      expect(contributor.zip_code).to eq('12345')
+      expect(contributor.city).to eq('Musterstadt')
+      expect(contributor.note).to eq('11 Jahre alt')
+      expect(contributor.email).to eq('zora@example.org')
+      expect(contributor.tag_list).to eq(%w[programmer student])
     end
 
     context 'removing tags' do
       let(:updated_attrs) do
         { tag_list: 'ops' }
       end
-      let(:user) { create(:user, tag_list: %w[dev ops]) }
+      let(:contributor) { create(:contributor, tag_list: %w[dev ops]) }
 
       it 'is supported' do
-        patch user_url(user), params: { user: updated_attrs }, headers: auth_headers
-        user.reload
-        expect(user.tag_list).to eq(['ops'])
-        expect(User.all_tags.count).to eq(1)
+        patch contributor_url(contributor), params: { contributor: updated_attrs }, headers: auth_headers
+        contributor.reload
+        expect(contributor.tag_list).to eq(['ops'])
+        expect(Contributor.all_tags.count).to eq(1)
       end
     end
 
-    it 'redirects to the user' do
+    it 'redirects to the contributor' do
       subject.call
-      expect(response).to redirect_to(user_url(user))
+      expect(response).to redirect_to(contributor_url(contributor))
     end
 
     it 'shows success message' do
@@ -93,29 +93,30 @@ RSpec.describe '/users', type: :request do
   end
 
   describe 'DELETE /destroy' do
-    subject { -> { delete user_url(user), headers: auth_headers } }
-    before(:each) { user }
+    subject { -> { delete contributor_url(contributor), headers: auth_headers } }
+    before(:each) { contributor }
 
-    it 'destroys the requested user' do
-      expect { subject.call }.to change(User, :count).by(-1)
+    it 'destroys the requested contributor' do
+      expect { subject.call }.to change(Contributor, :count).by(-1)
     end
 
-    it 'redirects to the users list' do
+    it 'redirects to the contributors list' do
       subject.call
-      expect(response).to redirect_to(users_url)
+      expect(response).to redirect_to(contributors_url)
     end
   end
 
   describe 'POST /message', telegram_bot: :rails do
     subject do
       lambda do
-        post message_user_url(user), params: { message: { text: 'Forgot to ask: How are you?' } }, headers: auth_headers
+        post message_contributor_url(contributor), params: { message: { text: 'Forgot to ask: How are you?' } },
+                                                   headers: auth_headers
       end
     end
 
-    describe 'given a user' do
+    describe 'given a contributor' do
       let(:params) { {} }
-      let(:user) { create(:user, **params) }
+      let(:contributor) { create(:contributor, **params) }
 
       describe 'response' do
         before(:each) { subject.call }
@@ -123,7 +124,7 @@ RSpec.describe '/users', type: :request do
       end
 
       describe 'given an active request' do
-        before(:each) { create(:message, request: the_request, recipient: user) }
+        before(:each) { create(:message, request: the_request, recipient: contributor) }
 
         describe 'response' do
           before(:each) { subject.call }
@@ -131,8 +132,8 @@ RSpec.describe '/users', type: :request do
           it do
             expect(response)
               .to redirect_to(
-                user_request_path(
-                  user_id: user.id,
+                contributor_request_path(
+                  contributor_id: contributor.id,
                   id: the_request.id,
                   anchor: "chat-row-#{newest_message.id}"
                 )
@@ -149,7 +150,7 @@ RSpec.describe '/users', type: :request do
         end
 
         describe 'with an `email`' do
-          let(:params) { { email: 'user@example.org' } }
+          let(:params) { { email: 'contributor@example.org' } }
           it { should_not respond_with_message }
           it {
             should have_enqueued_job.on_queue('mailers').with(
@@ -159,7 +160,7 @@ RSpec.describe '/users', type: :request do
               {
                 params: {
                   text: 'Forgot to ask: How are you?',
-                  to: 'user@example.org',
+                  to: 'contributor@example.org',
                   broadcasted: false
                 },
                 args: []

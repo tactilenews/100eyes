@@ -10,7 +10,7 @@ class EmailMessage
   def initialize(mail)
     @voice = nil
     @text = initialize_text(mail)
-    @sender = initialize_user(mail)
+    @sender = initialize_contributor(mail)
     @message = initialize_message(mail)
     @photos, @unknown_content = initialize_photos_and_unknown_content(mail)
     @message.unknown_content = unknown_content
@@ -41,8 +41,8 @@ class EmailMessage
     ActionController::Base.helpers.strip_tags(result)
   end
 
-  def initialize_user(mail)
-    User.find_by_email(mail.from)
+  def initialize_contributor(mail)
+    Contributor.with_lowercased_email(mail.from)
   end
 
   def initialize_message(mail)

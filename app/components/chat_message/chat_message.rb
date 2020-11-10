@@ -31,7 +31,7 @@ module ChatMessage
     def warnings
       warnings = []
       warnings << I18n.t('components.chat_message.contains_unknown_content') if message.unknown_content
-      warnings << I18n.t('components.chat_message.blocked_by_user') if message.blocked
+      warnings << I18n.t('components.chat_message.blocked_by_contributor') if message.blocked
       warnings
     end
 

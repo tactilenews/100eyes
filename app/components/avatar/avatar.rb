@@ -4,17 +4,17 @@ module Avatar
   class Avatar < ApplicationComponent
     COLORS = ['#F4C317', '#0898FF', '#67D881', '#F4177A'].freeze
 
-    def initialize(user: nil, **)
+    def initialize(contributor: nil, **)
       super
-      @user = user
+      @contributor = contributor
     end
 
     private
 
-    attr_reader :user
+    attr_reader :contributor
 
     def key
-      user&.id
+      contributor&.id
     end
 
     def color
@@ -22,13 +22,13 @@ module Avatar
     end
 
     def url
-      user&.avatar_url
+      contributor&.avatar_url
     end
 
     def initials
-      return '?' unless user
+      return '?' unless contributor
 
-      initials = user.name.split(' ').map { |part| part&.first }
+      initials = contributor.name.split(' ').map { |part| part&.first }
 
       return '?' if initials.empty?
 

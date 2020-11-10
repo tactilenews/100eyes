@@ -4,7 +4,7 @@
 # files that have changed since the last deployment.
 #
 # `DEPLOY_USER`
-#    User account used to connect via SSH to the web server
+#    Contributor account used to connect via SSH to the web server
 #
 # `DEPLOY_TARGET`
 #    Host of the production server

@@ -33,7 +33,7 @@ export default class extends Controller {
     const tags = event.detail.tags;
 
     Rails.ajax({
-      url: '/users/count',
+      url: '/contributors/count',
       type: 'GET',
       data: new URLSearchParams({ tag_list: tags }).toString(),
       success: ({ count }) => {
