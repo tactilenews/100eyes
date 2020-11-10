@@ -10,7 +10,7 @@ class RepliesMailbox < ApplicationMailbox
   private
 
   def ensure_sender_is_a_contributor
-    bounce_with Mailer.with(email: mail.from.first).contributor_not_found_email unless user
+    bounce_with Mailer.with(email: mail.from.first).contributor_not_found_email unless contributor
   end
 
   def contributor
