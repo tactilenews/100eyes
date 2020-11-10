@@ -5,7 +5,8 @@ services:
     environment:
       BINDING: 0.0.0.0
       PORT: 3000
-      POSTGRES_HOST: db
+      POSTGRES_HOST: "${POSTGRES_HOST:-db}"
+      POSTGRES_PORT: "${POSTGRES_PORT:-5432}"
     command: bundle exec rails server
     depends_on: [ db ]
 
