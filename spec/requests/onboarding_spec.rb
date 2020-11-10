@@ -41,7 +41,7 @@ RSpec.describe 'Onboarding', type: :request do
   describe 'GET /onboarding/telegram-auth' do
     let(:today) { Time.zone.now }
     let(:hash_created_at) { Time.new(today.year, today.month, today.day).to_i }
-    let(:valid_hash) { '4b940746d22ba705e6205a05211111d778a1ec852cf1003a428b9e92274e0092' }
+    let(:valid_hash) { '19dd7d293d77931c6996a572c74b3469478ad67ecc02167856d344c94a605739' }
     let(:params) do
       {
         auth_date: hash_created_at,
@@ -50,7 +50,8 @@ RSpec.describe 'Onboarding', type: :request do
         last_name: 'Rider',
         photo_url: 'https://t.me/i/userpic/320/eV9Evr8bcuIEafRdet7x-MOBNs9cTcJU9mMBHIjWi64.jpg',
         username: 'matthew_rider',
-        hash: valid_hash
+        hash: valid_hash,
+        jwt: jwt
       }
     end
 

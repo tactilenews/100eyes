@@ -2,6 +2,14 @@
 
 module TelegramWidget
   class TelegramWidget < ApplicationComponent
-    def initialize(**); end
+    def initialize(jwt:)
+      super
+
+      @jwt = jwt
+    end
+
+    private
+
+    attr_reader :jwt
   end
 end
