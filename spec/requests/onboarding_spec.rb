@@ -5,8 +5,8 @@ require 'telegram/bot/rspec/integration/rails'
 
 RSpec.describe 'Onboarding', type: :request do
   let(:user) { create(:user) }
-  let(:token) { 'ONBOARDING_TOKEN' }
-  let(:params) { { token: token } }
+  let(:jwt) { JsonWebToken.encode('ONBOARDING_TOKEN') }
+  let(:params) { { jwt: jwt } }
 
   describe 'GET /index' do
     subject { -> { get onboarding_path(**params) } }
@@ -16,11 +16,24 @@ RSpec.describe 'Onboarding', type: :request do
       expect(response).to be_successful
     end
 
-    describe 'with incorrect token' do
-      let(:token) { 'INCORRECT_TOKEN' }
+    describe 'with invalidated jwt' do
+      let!(:invalidated_jwt) { create(:json_web_token, invalidated_jwt: 'INVALID_JWT') }
+      let(:jwt) { 'INVALID_JWT' }
 
-      it 'is not successful' do
-        expect { subject.call }.to raise_exception(ActionController::BadRequest)
+      it 'renders unauthorized page' do
+        subject.call
+
+        expect(response).not_to be_successful
+      end
+    end
+
+    describe 'with jwt unsigned' do
+      let(:jwt) { 'UNSIGNED_JWT' }
+
+      it 'renders unauthorized page' do
+        subject.call
+
+        expect(response).not_to be_successful
       end
     end
   end
@@ -34,7 +47,7 @@ RSpec.describe 'Onboarding', type: :request do
       }
     end
 
-    let(:params) { { token: token, user: attrs } }
+    let(:params) { { jwt: jwt, user: attrs } }
 
     subject { -> { post onboarding_path, params: params } }
 
@@ -49,7 +62,14 @@ RSpec.describe 'Onboarding', type: :request do
 
     it 'redirects to success page' do
       subject.call
-      expect(response).to redirect_to onboarding_success_path(token: token)
+      expect(response).to redirect_to onboarding_success_path
+    end
+
+    it 'invalidates the jwt' do
+      expect { subject.call }.to change(JsonWebToken, :count).by(1)
+
+      json_web_token = JsonWebToken.where(invalidated_jwt: jwt)
+      expect(json_web_token).to exist
     end
 
     describe 'given an existing email address' do
@@ -57,7 +77,14 @@ RSpec.describe 'Onboarding', type: :request do
 
       it 'redirects to success page' do
         subject.call
-        expect(response).to redirect_to onboarding_success_path(token: token)
+        expect(response).to redirect_to onboarding_success_path
+      end
+
+      it 'invalidates the jwt' do
+        expect { subject.call }.to change(JsonWebToken, :count).by(1)
+
+        json_web_token = JsonWebToken.where(invalidated_jwt: jwt)
+        expect(json_web_token).to exist
       end
 
       it 'does not create new user' do
@@ -65,11 +92,38 @@ RSpec.describe 'Onboarding', type: :request do
       end
     end
 
-    describe 'with incorrect token' do
-      let(:token) { 'INCORRECT_TOKEN' }
+    describe 'with unsigned jwt' do
+      let(:jwt) { 'INCORRECT_TOKEN' }
 
-      it 'is not successful' do
-        expect { subject.call }.to raise_exception(ActionController::BadRequest)
+      it 'renders unauthorized page' do
+        subject.call
+
+        expect(response).not_to be_successful
+      end
+
+      it 'does not create new user' do
+        expect { subject.call }.not_to change(User, :count)
+      end
+    end
+  end
+
+  describe 'POST /onboarding/invite' do
+    let(:headers) { nil }
+
+    subject { -> { post onboarding_invite_path, headers: headers } }
+
+    it 'is unsuccessful' do
+      subject.call
+      expect(response).not_to be_successful
+    end
+
+    describe 'as a logged-in user' do
+      let(:headers) { auth_headers }
+
+      it 'responds with a url with a jwt search query' do
+        subject.call
+        url = JSON.parse(response.body)['url']
+        expect(url).to include('/onboarding?jwt=')
       end
     end
   end

@@ -5,10 +5,13 @@
         <%= User.count %> <%= I18n.t 'user.user', count: User.count %>
       <% end %>
 
-      <%= c 'button',
-        label: I18n.t('user.create'),
-        link: new_user_path
-      %>
+      <%= c 'stack', space: :small do %>
+        <%= c 'button',
+          label: I18n.t('user.create'),
+          link: new_user_path
+        %>
+        <%= c 'create_invite_button' %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>

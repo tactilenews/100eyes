@@ -107,6 +107,7 @@ GEM
       concurrent-ruby (~> 1.0)
     jbuilder (2.10.1)
       activesupport (>= 5.0.0)
+    jwt (2.2.2)
     kramdown (2.3.0)
       rexml
     listen (3.2.1)
@@ -300,6 +301,7 @@ DEPENDENCIES
   dotenv-rails
   factory_bot_rails
   jbuilder (~> 2.10)
+  jwt
   kramdown (~> 2.3)
   listen (>= 3.0.5, < 3.3)
   mini_magick (~> 4.10)

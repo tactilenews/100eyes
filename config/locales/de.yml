@@ -86,6 +86,10 @@ de:
           - Senden Sie uns eine erste Nachricht mit Ihrem vollen Namen.
     onboarding_footer:
       imprint: Impressum
+    create_invite_button:
+      label: Einladungs-Link kopieren
+      loading: erstelle Link…
+      success: Link kopiert
 
   message_mailer:
     new_message_email:
@@ -112,20 +116,23 @@ de:
         telegram: Telegram
         onboarding: Onboarding
         onboarding_success: Nachricht nach erfolgreichem Onboarding
+        onboarding_unauthorized: Meldung nach erfolglosem Onboarding
       project_name:
         label: Projekt-Name
         help: Der Projekt-Name wird Community-Mitgliedern z.B. während des Onboardings angezeigt.
-      onboarding_token:
-        label: Geheimes Token
       onboarding_title:
         label: Titel
       onboarding_page:
         label: Text
         help: |
           Du kannst deinen Text mit <a class="Link" href="https://de.wikipedia.org/wiki/Markdown">Markdown</a>-Befehlen formatieren. Du kannst z.B. <em>*kursiven Text*</em>, <strong>**fetten Text**</strong> oder <a class="Link" href="https://tactile.news">[Links](https://tactile.news)</a> einfügen.
-      onboarding_success_title:
+      onboarding_success_heading:
         label: Titel
       onboarding_success_text:
+        label: Text
+      onboarding_unauthorized_heading:
+        label: Titel
+      onboarding_unauthorized_text:
         label: Text
       onboarding_logo:
         label: Logo (URL)

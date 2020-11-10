@@ -10,6 +10,10 @@
   text-align: justify;
 }
 
+.text-center {
+  text-align: center;
+}
+
 .sticky {
   position: sticky;
   top: 0;

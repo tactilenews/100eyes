@@ -16,10 +16,6 @@
         <%= t 'setting.form.groups.onboarding' %>
       <% end %>
 
-      <%= c 'field', object: setting, value: Setting.onboarding_token, id: :onboarding_token do |field| %>
-        <%= c 'input', field.input_defaults %>
-      <% end %>
-
       <%= c 'field', object: setting, value: Setting.onboarding_logo, id: :onboarding_logo do |field| %>
         <%= c 'input', field.input_defaults.merge(type: :url) %>
       <% end %>
@@ -42,11 +38,25 @@
         <%= t 'setting.form.groups.onboarding_success' %>
       <% end %>
 
-      <%= c 'field', object: setting, value: Setting.onboarding_success_title, id: :onboarding_success_title do |field| %>
+      <%= c 'field', object: setting, value: Setting.onboarding_success_heading, id: :onboarding_success_heading do |field| %>
         <%= c 'input', field.input_defaults %>
       <% end %>
 
       <%= c 'field', object: setting, value: Setting.onboarding_success_text, id: :onboarding_success_text do |field| %>
+        <%= c 'textarea', field.input_defaults %>
+      <% end %>
+    <% end %>
+
+     <%= c 'stack' do %>
+      <%= c 'heading', tag: :h2 do %>
+        <%= t 'setting.form.groups.onboarding_unauthorized' %>
+      <% end %>
+
+      <%= c 'field', object: setting, value: Setting.onboarding_unauthorized_heading, id: :onboarding_unauthorized_heading do |field| %>
+        <%= c 'input', field.input_defaults %>
+      <% end %>
+
+      <%= c 'field', object: setting, value: Setting.onboarding_unauthorized_text, id: :onboarding_unauthorized_text do |field| %>
         <%= c 'textarea', field.input_defaults %>
       <% end %>
     <% end %>

@@ -18,7 +18,6 @@ postgres_password=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n
 secret_key_base=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
 postgres_password=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
 inbound_email_password=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
-onboarding_token=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
 
 CONFIG_FILE=$(mktemp /tmp/host.XXXXXXXXXX)
 
@@ -42,7 +41,6 @@ traefik:
 rails:
   environment: production
   hundred_eyes_project_name: 100eyes
-  onboarding_token: "${onboarding_token}"
   telegram_bot:
     api_key: # (REQUIRED) your telegram API token
     username: # (REQUIRED) your telegram bot name, e.g. 'HundredEyesBot'
