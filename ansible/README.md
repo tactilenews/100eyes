@@ -65,6 +65,9 @@ and you can run the entire installation of the application with:
 ansible-playbook ansible/site.yml -i ansible/inventories/custom --ask-vault-pass
 ```
 
+## Troubleshooting
+
+See our docs to debug issues with [Postmark](./Postmark.md).
 
 ## References
 
