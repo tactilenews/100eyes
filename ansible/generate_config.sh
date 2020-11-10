@@ -69,7 +69,7 @@ cat <<- INSTRUCTIONS
 
     A  ${domain} -> IP ADDRESS
     A  ${traefik_domain} -> IP ADDRESS
-    MX ${domain} -> inbound.postmark.com
+    MX ${domain} -> inbound.postmarkapp.com
 
   2. Configure Postmark:
 
