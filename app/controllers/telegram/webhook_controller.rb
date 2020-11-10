@@ -2,8 +2,8 @@
 
 class Telegram::WebhookController < Telegram::Bot::UpdatesController
   def message(message)
-    tm = TelegramMessage.new(message)
-    contributor = tm.sender
+    telegram_message = TelegramMessage.new(message)
+    contributor = telegram_message.sender
 
     return respond_with :message, text: 'Who are you?' unless contributor
 
