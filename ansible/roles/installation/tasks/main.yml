@@ -46,15 +46,16 @@
     build: no
     debug: yes
     pull: yes
+    restarted: yes
     files:
       - docker-compose.yml
       - docker-compose.prod.yml
       - docker-compose.traefik.yml
-  register: output
 
 - name: Prune outdated images
   community.general.docker_prune:
     containers: yes
+    images: yes
 
 - name: Create and migrate database
   command:

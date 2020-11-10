@@ -20,6 +20,3 @@
     - role: installation
       tags:
         - hundred-eyes
-    - role: deployment
-      tags:
-        - hundred-eyes
