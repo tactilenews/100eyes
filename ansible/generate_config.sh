@@ -50,11 +50,11 @@ rails:
     database: app_production
     password: "${postgres_password}"
   inbound_email_password: "${inbound_email_password}"
-  sendgrid:
-    username: apikey
-    password: # (REQUIRED) sendgrid API key
-    domain: "${domain}"
-    from: "redaktion@${domain}"
+  email_from_address: "redaktion@${domain}"
+  postmark:
+    api_token: # (REQUIRED) API token for your new Postmark server
+    transactional_stream: "outbound"
+    broadcasts_stream: "broadcasts"
   login:
     user: redaktion
     password: "${redaktion_password}"
@@ -67,26 +67,41 @@ cat <<- INSTRUCTIONS
 
   1. Configure your DNS-Server:
 
-    A ${domain} -> IP ADDRESS
-    A ${traefik_domain} -> IP ADDRESS
+    A  ${domain} -> IP ADDRESS
+    A  ${traefik_domain} -> IP ADDRESS
+    MX ${domain} -> inbound.postmark.com
 
-  2. Configure Sendgrid email delivery:
+  2. Configure Postmark:
 
-    Verify ${domain} as sender domain.
+     - Log in to your Postmark account.
 
-  3. Configure Sendgrid email inbound parse:
+     - Add "${domain}" as sender domain in the "Sender Signatures"
+       section. Follow the instructions displayed in the Postmark UI
+       to verify the domain.
 
-    https://actionmailbox:${inbound_email_password}@${domain}/rails/action_mailbox/sendgrid/inbound_emails
+     - In the "Servers" section, create a new server. This allows you
+       to keep separate email logs for every 100eyes instance.
 
-  4. Encrypt the configuration as host variable file:
+     - Switch to the new  server and create a new message stream. Select
+       "Broadcasts" as name *and* type of the new stream.
+
+     - Switch to the "Settings" tab for the "Inbound" message stream.
+
+     - Enter the following URL as the inbound webhook. Make sure to check the
+       "Include raw email content" checkbox.
+       https://actionmailbox:${inbound_email_password}@${domain}/rails/action_mailbox/postmark/inbound_emails
+
+     - Add "${domain}" as the inbound domain.
+
+  3. Encrypt the configuration as host variable file:
 
     $ ansible-vault encrypt ${CONFIG_FILE} --output ${script_directory}/inventories/custom/host_vars/${nickname}.yml
 
-  5. Add missing configuration, e.g. Telegram API token:
+  4. Add missing configuration, e.g. Telegram API token:
 
     $ ansible-vault edit ${script_directory}/inventories/custom/host_vars/${nickname}.yml
 
-  6. Add your server "${nickname}" in your ${script_directory}/inventories/custom/hosts file:
+  5. Add your server "${nickname}" in your ${script_directory}/inventories/custom/hosts file:
 
     [webservers]
     ${nickname}

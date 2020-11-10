@@ -153,13 +153,14 @@ RSpec.describe '/users', type: :request do
           it { should_not respond_with_message }
           it {
             should have_enqueued_job.on_queue('mailers').with(
-              'MessageMailer',
+              'Mailer',
               'new_message_email',
               'deliver_now',
               {
                 params: {
-                  message: 'Forgot to ask: How are you?',
-                  to: 'user@example.org'
+                  text: 'Forgot to ask: How are you?',
+                  to: 'user@example.org',
+                  broadcasted: false
                 },
                 args: []
               }

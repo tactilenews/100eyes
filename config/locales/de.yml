@@ -91,14 +91,15 @@ de:
       loading: erstelle Link…
       success: Link kopiert
 
-  message_mailer:
+  mailer:
+    unsubscribe:
+      text: "Sofern Sie keine E-Mails mehr von uns erhalten möchten, können Sie sie unter diesem Link abbestellen: {{{ pm:unsubscribe }}}"
+      html: "Sofern Sie keine E-Mails mehr von uns erhalten möchten, können Sie sie unter <a href=\"{{{ pm:unsubscribe }}}\">diesem Link abbestellen</a>."
     new_message_email:
-      subject: Die Redaktion hat eine neue Frage an dich
-
-  reply_mailer:
+      subject: Die Redaktion hat eine neue Frage
     user_not_found_email:
       subject: Wir können deine E-Mail Adresse nicht zuordnen
-      body: Wir können deine E-Mail Adresse %{email} leider keinem unserer Benutzerprofile zuordnen.
+      text: Wir können deine E-Mail Adresse leider keinem unserer Benutzerprofile zuordnen.
 
   save: Speichern
   discard: Änderungen verwerfen
@@ -119,7 +120,9 @@ de:
         onboarding_unauthorized: Meldung nach erfolglosem Onboarding
       project_name:
         label: Projekt-Name
-        help: Der Projekt-Name wird Community-Mitgliedern z.B. während des Onboardings angezeigt.
+        help: Der Projekt-Name wird Community-Mitgliedern z.B. während des Onboardings und als Absender von E-Mails angezeigt.
+      onboarding_token:
+        label: Geheimes Token
       onboarding_title:
         label: Titel
       onboarding_page:

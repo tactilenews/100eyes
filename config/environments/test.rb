@@ -15,6 +15,7 @@ ENV['BASIC_AUTH_LOGIN_PASSWORD'] = 'test1234'
 ENV['TELEGRAM_BOT_API_KEY'] = 'TOKEN'
 ENV['TELEGRAM_BOT_USERNAME'] = 'TestingBot'
 ENV['HUNDRED_EYES_PROJECT_NAME'] = 'TestingProject'
+ENV['EMAIL_FROM_ADDRESS'] = '100eyes-test-account@example.org'
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -59,11 +60,6 @@ Rails.application.configure do
   # Raises error for missing translations.
   # config.action_view.raise_on_missing_translations = true
 
-  # CUSTOM:
-  #
+  # CUSTOM
   config.active_job.queue_adapter = :test
-
-  config.mailer = {
-    from: '100eyes <100eyes-test-account@example.org>'
-  }
 end

@@ -104,23 +104,13 @@ Rails.application.configure do
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
 
-  # CUSTOM
-  config.action_mailer.smtp_settings = {
+  # Send and receive email with Postmark
+  config.action_mailer.delivery_method = :postmark
+  config.action_mailbox.ingress = :postmark
 
-    user_name: Setting.sendgrid_username,
-    password: Setting.sendgrid_password,
-    domain: Setting.sendgrid_domain,
-    address: 'smtp.sendgrid.net',
-    port: 587,
-    authentication: :plain
+  config.action_mailer.postmark_settings = {
+    api_token: Setting.postmark_api_token
   }
-
-  config.mailer = {
-    from: Setting.sendgrid_from
-  }
-
-  config.action_mailbox.ingress = :sendgrid
-  config.project_name = ENV['HUNDRED_EYES_PROJECT_NAME']
 
   # TODO: refactor this once these issues are resolved
   # https://discuss.rubyonrails.org/t/define-host-so-absolute-urls-work-in-development-and-test/75085/
