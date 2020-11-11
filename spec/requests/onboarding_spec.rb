@@ -41,7 +41,7 @@ RSpec.describe 'Onboarding', type: :request do
   describe 'GET /onboarding/telegram-auth' do
     let(:today) { Time.zone.now }
     let(:hash_created_at) { Time.new(today.year, today.month, today.day).to_i }
-    let(:valid_hash) { '19dd7d293d77931c6996a572c74b3469478ad67ecc02167856d344c94a605739' }
+    let(:valid_hash) { '8da45ffbfde3c3da90f47b61df2d0d3b1b4a3071abcb3e125510be50f143e461' }
     let(:params) do
       {
         auth_date: hash_created_at,

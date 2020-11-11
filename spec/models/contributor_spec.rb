@@ -195,6 +195,7 @@ RSpec.describe Contributor, type: :model do
     end
 
     describe 'given a TelegramMessage' do
+      let(:contributor) { create(:contributor, telegram_id: 4711) }
       let(:message_decorator) do
         TelegramMessage.new(
           'text' => 'The answer is 42.',

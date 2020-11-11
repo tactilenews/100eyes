@@ -20,12 +20,12 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
     end
 
     context 'has onboarded' do
-      let(:user) { create(:user, telegram_id: 12_345) }
-      subject { -> { dispatch_command :start, { from: { id: user.telegram_id } } } }
+      let(:contributor) { create(:contributor, telegram_id: 12_345) }
+      subject { -> { dispatch_command :start, { from: { id: contributor.telegram_id } } } }
       it { should respond_with_message welcome_message }
     end
 
-    context 'user has not onboarded yet' do
+    context 'contributor has not onboarded yet' do
       subject { -> { dispatch_command :start, { from: { id: 'whoami' } } } }
       it { should respond_with_message 'Who are you?' }
     end
@@ -34,16 +34,16 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
   describe '#message' do
     subject { -> { dispatch_message 'Hello Bot!', { from: { id: 'whoami' } } } }
 
-    context 'user has not onboarded yet' do
+    context 'contributor has not onboarded yet' do
       it { should respond_with_message 'Who are you?' }
-      it { should_not change(User, :count) }
+      it { should_not change(Contributor, :count) }
     end
 
     context 'sending a message with a document' do
       before { Setting.telegram_unknown_content_message = "Cannot handle this, I'm sorry :(" }
-      subject { -> { dispatch_message 'Hello Bot!', { from: { id: user.telegram_id }, document: 'something' } } }
+      subject { -> { dispatch_message 'Hello Bot!', { from: { id: contributor.telegram_id }, document: 'something' } } }
 
-      let(:user) { create(:user, telegram_id: 12_345) }
+      let(:contributor) { create(:contributor, telegram_id: 12_345) }
 
       it { should respond_with_message "Cannot handle this, I'm sorry :(" }
     end

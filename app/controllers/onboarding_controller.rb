@@ -42,12 +42,12 @@ class OnboardingController < ApplicationController
 
   def telegram_auth
     authenticate_telegram_params
-    @user = User.find_or_create_by(
+    @contributor = Contributor.find_or_create_by(
       telegram_id: telegram_auth_params[:id],
       first_name: telegram_auth_params[:first_name],
       last_name: telegram_auth_params[:last_name]
     )
-    render json: { message: 'Success' }, status: :ok if @user.save
+    render json: { message: 'Success' }, status: :ok if @contributor.save
   end
 
   private

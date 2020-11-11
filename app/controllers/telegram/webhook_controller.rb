@@ -7,13 +7,13 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
 
     return respond_with :message, text: 'Who are you?' unless contributor
 
-    respond_with :message, text: Setting.telegram_unknown_content_message if tm.unknown_content
-    contributor.reply(tm)
+    respond_with :message, text: Setting.telegram_unknown_content_message if telegram_message.unknown_content
+    contributor.reply(telegram_message)
   end
 
   def start!(_data = nil, *)
-    tm = TelegramMessage.new(from: from, chat: chat)
-    contributor = tm.sender
+    telegram_message = TelegramMessage.new(from: from, chat: chat)
+    contributor = telegram_message.sender
     if contributor
       response = Setting.telegram_welcome_message
       respond_with :message, text: response.strip
