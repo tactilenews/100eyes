@@ -47,8 +47,10 @@ rails:
   secret_key_base: "${secret_key_base}"
   postgres:
     user: app
-    database: app_production
+    db: app_production
     password: "${postgres_password}"
+    # host: optional (e.g. for managed databases)
+    # port: optional (e.g. for managed databases)
   inbound_email_password: "${inbound_email_password}"
   email_from_address: "redaktion@${domain}"
   postmark:

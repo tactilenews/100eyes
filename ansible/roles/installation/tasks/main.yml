@@ -25,8 +25,11 @@
     HUNDRED_EYES_PROJECT_NAME: "{{ rails.hundred_eyes_project_name }}"
     TELEGRAM_BOT_API_KEY: "{{ rails.telegram_bot.api_key }}"
     TELEGRAM_BOT_USERNAME: "{{ rails.telegram_bot.username }}"
-    POSTGRES_PASSWORD: "{{ rails.postgres.password }}"
+    POSTGRES_HOST: "{{ rails.postgres.host }}"
+    POSTGRES_PORT: "{{ rails.postgres.port }}"
     POSTGRES_USER: "{{ rails.postgres.user }}"
+    POSTGRES_PASSWORD: "{{ rails.postgres.password }}"
+    POSTGRES_DB: "{{ rails.postgres.db }}"
     ACME_EMAIL_ADDRESS: "{{ traefik.acme_email_address }}"
     TRAEFIK_HOSTNAME: "{{ dns.traefik_hostname }}"
     APPLICATION_HOSTNAME: "{{ dns.application_hostname }}"
@@ -43,19 +46,20 @@
     build: no
     debug: yes
     pull: yes
+    restarted: yes
     files:
       - docker-compose.yml
       - docker-compose.prod.yml
       - docker-compose.traefik.yml
-  register: output
 
 - name: Prune outdated images
   community.general.docker_prune:
     containers: yes
+    images: yes
 
 - name: Create and migrate database
   command:
-    cmd: docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec app bin/rails db:create db:migrate
+    cmd: docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec app bin/rails db:migrate
     chdir: /home/ansible
 
 - name: Set Telegram webhook

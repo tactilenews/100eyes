@@ -23,10 +23,11 @@ default: &default
   host: <%= ENV["POSTGRES_HOST"] || 'localhost' %>
   username: <%= ENV["POSTGRES_USER"]  || 'postgres' %>
   password: <%= ENV["POSTGRES_PASSWORD"]  || 'postgres' %>
+  port:  <%= ENV["POSTGRES_PORT"]  || 5432 %>
 
 development:
   <<: *default
-  database: <%= ENV["POSTGRES_NAME"] || 'app_development' %>
+  database: <%= ENV["POSTGRES_DB"] || 'app_development' %>
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
