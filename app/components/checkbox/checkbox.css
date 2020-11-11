@@ -14,3 +14,52 @@
   flex-grow: 1;
   flex-shrink: 1;
 }
+
+.Checkbox--switch {
+  display: inline-block;
+  height: 34px;
+  position: relative;
+  width: 60px;
+}
+
+.Checkbox--switch input {
+  display: none;
+}
+
+.Checkbox--switch .Checkbox-slider {
+  background-color: var(--color-gray);
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: 0.4s;
+}
+
+.Checkbox--switch .Checkbox-slider:before {
+  background-color: white;
+  bottom: 4px;
+  content: '';
+  height: 26px;
+  left: 4px;
+  position: absolute;
+  transition: 0.4s;
+  width: 26px;
+}
+
+.Checkbox--switch input:checked + .Checkbox-slider {
+  background-color: var(--color-green);
+}
+
+.Checkbox--switch input:checked + .Checkbox-slider:before {
+  transform: translateX(26px);
+}
+
+.Checkbox--switch .Checkbox-slider {
+  border-radius: 34px;
+}
+
+.Checkbox--switch .Checkbox-slider:before {
+  border-radius: 50%;
+}

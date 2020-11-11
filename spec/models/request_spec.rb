@@ -198,5 +198,18 @@ RSpec.describe Request, type: :model do
       it { should change { Message.pluck(:sender_id) }.from([]).to([nil]) }
       it { should change { Message.pluck(:broadcasted) }.from([]).to([true]) }
     end
+
+    describe 'given contributors who are deactivated' do
+      before(:each) do
+        create(:contributor, id: 3, email: 'deactivated@example.org', active: false)
+        create(:contributor, id: 4, email: 'activated@example.org', active: true)
+        create(:contributor, id: 5, telegram_id: 24, telegram_chat_id: 25, active: false)
+      end
+
+      it { should change { Message.count }.from(0).to(1) }
+      it { should change { Message.pluck(:recipient_id) }.from([]).to([4]) }
+      it { should change { Message.pluck(:sender_id) }.from([]).to([nil]) }
+      it { should change { Message.pluck(:broadcasted) }.from([]).to([true]) }
+    end
   end
 end

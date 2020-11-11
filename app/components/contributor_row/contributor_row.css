@@ -23,3 +23,7 @@ a.ContributorRow:hover .ContributorRow-name {
 .ContributorRow-channels {
   color: var(--color-accent);
 }
+
+.ContributorRow--inactive .ContributorRow-channels {
+  color: var(--color-gray);
+}

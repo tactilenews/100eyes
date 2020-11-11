@@ -6,7 +6,7 @@ AllCops:
   NewCops: enable
 
 Layout/LineLength:
-  Max: 130
+  Max: 140
   Exclude:
     - 'app/components/**/*.rb'
     - 'spec/models/message_spec.rb'

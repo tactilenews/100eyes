@@ -193,6 +193,8 @@ de:
       note:
         label: Notiz
         placeholder: Klicke hier, um eine Notiz zu %{value} zu hinterlegen
+      active:
+        label: Aktiv
 
   request:
     request:
