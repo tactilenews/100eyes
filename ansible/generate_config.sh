@@ -23,7 +23,7 @@ CONFIG_FILE=$(mktemp /tmp/host.XXXXXXXXXX)
 
 
 cat > $CONFIG_FILE <<- CONFIGURATION
-netcup:
+vps:
   nick: "${nickname}"  #
   root_password: # (optional) you can store your root password here
   sudo_password: "${sudo_password}"
