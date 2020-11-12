@@ -4,8 +4,16 @@
   vars:
     create_password: "{{ vps.sudo_password }}"
     copy_additional_keys: "{{ webservers.authorized_keys }}"
+    sysctl_overwrite:
+      # Enable IPv4 traffic forwarding.
+      # See: https://github.com/dev-sec/ansible-os-hardening/tree/master/roles/os_hardening#docker-support
+      net.ipv4.ip_forward: 1
+  collections:
+    - devsec.hardening
   roles:
     - role: initial_setup
+    - role: devsec.hardening.ssh_hardening
+    - role: devsec.hardening.os_hardening
     - role: geerlingguy.pip
       vars:
         pip_install_packages:
