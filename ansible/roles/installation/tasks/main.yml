@@ -21,6 +21,7 @@
 
 - name: Run `docker-compose up`
   environment:
+    DOCKER_IMAGE_TAG: "{{ vps.docker_image_tag | default('latest') }}"
     RAILS_ENV: "{{ rails.environment }}"
     HUNDRED_EYES_PROJECT_NAME: "{{ rails.hundred_eyes_project_name }}"
     TELEGRAM_BOT_API_KEY: "{{ rails.telegram_bot.api_key }}"
