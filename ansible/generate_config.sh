@@ -49,8 +49,8 @@ rails:
     user: app
     db: app_production
     password: "${postgres_password}"
-    # host: optional (e.g. for managed databases)
-    # port: optional (e.g. for managed databases)
+    host: # optional (e.g. for managed databases)
+    port: # optional (e.g. for managed databases)
   inbound_email_password: "${inbound_email_password}"
   email_from_address: "redaktion@${domain}"
   postmark:
