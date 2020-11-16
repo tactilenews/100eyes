@@ -41,18 +41,26 @@ RSpec.describe 'Onboarding', type: :request do
   describe 'GET /onboarding/telegram-auth' do
     let(:today) { Time.zone.now }
     let(:hash_created_at) { Time.new(today.year, today.month, today.day).to_i }
-    let(:valid_hash) { '8da45ffbfde3c3da90f47b61df2d0d3b1b4a3071abcb3e125510be50f143e461' }
-    let(:params) do
+    let(:valid_hash) do
+      check_string = auth_data.map { |k, v| "#{k}=#{v}" }.sort.join("\n")
+      secret_key = OpenSSL::Digest.new('SHA256').digest(Setting.telegram_bot_api_key)
+      OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), secret_key, check_string)
+    end
+    let(:auth_data) do
       {
+        id: 123,
         auth_date: hash_created_at,
         first_name: 'Matthew',
-        id: 123,
         last_name: 'Rider',
-        photo_url: 'https://t.me/i/userpic/320/eV9Evr8bcuIEafRdet7x-MOBNs9cTcJU9mMBHIjWi64.jpg',
         username: 'matthew_rider',
+        photo_url: 'https://t.me/i/userpic/320/eV9Evr8bcuIEafRdet7x-MOBNs9cTcJU9mMBHIjWi64.jpg'
+      }
+    end
+    let(:params) do
+      auth_data.merge(
         hash: valid_hash,
         jwt: jwt
-      }
+      )
     end
 
     subject { -> { get onboarding_telegram_auth_path(**params) } }
@@ -95,9 +103,11 @@ RSpec.describe 'Onboarding', type: :request do
     end
 
     context 'valid' do
-      it 'responds with ok if the hash matches' do
+      it do
         subject.call
-        expect(response).to be_successful
+        expect(response).to redirect_to(
+          onboarding_telegram_form_path(jwt: jwt, telegram_id: 123, first_name: 'Matthew', last_name: 'Rider')
+        )
       end
     end
   end

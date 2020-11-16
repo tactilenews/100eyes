@@ -95,7 +95,7 @@ class OnboardingController < ApplicationController
   end
 
   def authenticate_telegram_params
-    auth_data = telegram_auth_params.slice(:auth_date, :first_name, :id, :last_name, :username, :photo_url)
+    auth_data = telegram_auth_params.slice(:id, :auth_date, :first_name, :last_name, :username, :photo_url)
     check_string = auth_data.to_unsafe_h.map { |k, v| "#{k}=#{v}" }.sort.join("\n")
 
     secret_key = OpenSSL::Digest.new('SHA256').digest(Setting.telegram_bot_api_key)
