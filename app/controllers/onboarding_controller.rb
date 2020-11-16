@@ -17,7 +17,7 @@ class OnboardingController < ApplicationController
   def create
     # Ensure information on registered contributors is never
     # disclosed during onboarding
-    if Contributor.email_taken?(contributor_params[:email])
+    if Contributor.email_taken?(contributor_params[:email]) || Contributor.find_by(telegram_id: contributor_params[:telegram_id])
       invalidate_jwt
       return redirect_to_success
     end
@@ -42,12 +42,21 @@ class OnboardingController < ApplicationController
 
   def telegram_auth
     authenticate_telegram_params
-    @contributor = Contributor.find_or_create_by(
-      telegram_id: telegram_auth_params[:id],
-      first_name: telegram_auth_params[:first_name],
-      last_name: telegram_auth_params[:last_name]
-    )
-    render json: { message: 'Success' }, status: :ok if @contributor.save
+    telegram_id = telegram_auth_params[:id]
+    first_name = telegram_auth_params[:first_name]
+    last_name = telegram_auth_params[:last_name]
+    redirect_to onboarding_telegram_form_path(jwt: jwt_param,
+                                              telegram_id: telegram_id,
+                                              first_name: first_name,
+                                              last_name: last_name)
+  end
+
+  def telegram_form
+    @first_name = telegram_contributor_params[:first_name]
+    @last_name = telegram_contributor_params[:last_name]
+    @telegram_id = telegram_contributor_params[:telegram_id]
+    @contributor = Contributor.new
+    @jwt = jwt_param
   end
 
   private
@@ -70,7 +79,7 @@ class OnboardingController < ApplicationController
   end
 
   def contributor_params
-    params.require(:contributor).permit(:first_name, :last_name, :email)
+    params.require(:contributor).permit(:first_name, :last_name, :email, :telegram_id)
   end
 
   def jwt_param
@@ -78,7 +87,11 @@ class OnboardingController < ApplicationController
   end
 
   def telegram_auth_params
-    params.permit(:id, :first_name, :last_name, :auth_date, :hash, :username, :photo_url)
+    params.permit(:id, :first_name, :last_name, :auth_date, :hash, :username, :photo_url, :jwt)
+  end
+
+  def telegram_contributor_params
+    params.permit(:first_name, :last_name, :telegram_id)
   end
 
   def authenticate_telegram_params

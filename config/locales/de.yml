@@ -70,6 +70,8 @@ de:
       byline: eine Dialog-Recherche von <a class="Link" href="https://tactile.news" target="_blank">tactile.news</a>
     onboarding_email_form:
       submit: Anmeldung abschließen
+    onboarding_telegram_form:
+      submit: Anmeldung abschließen
     onboarding_instructions:
       email:
         label: E-Mail
