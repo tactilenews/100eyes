@@ -98,7 +98,7 @@ class OnboardingController < ApplicationController
     auth_data = telegram_auth_params.slice(:auth_date, :first_name, :id, :last_name, :username, :photo_url)
     check_string = auth_data.to_unsafe_h.map { |k, v| "#{k}=#{v}" }.sort.join("\n")
 
-    secret_key = OpenSSL::Digest.new('SHA256').digest(ENV['TELEGRAM_BOT_API_KEY'])
+    secret_key = OpenSSL::Digest.new('SHA256').digest(Setting.telegram_bot_api_key)
     valid_hash = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), secret_key, check_string)
     valid_time_window = Time.zone.now.to_i - telegram_auth_params[:auth_date].to_i < 24 * 60 * 60
 

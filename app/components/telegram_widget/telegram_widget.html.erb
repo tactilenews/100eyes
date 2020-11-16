@@ -2,9 +2,9 @@
   <script
     async
     src="https://telegram.org/js/telegram-widget.js?12"
-    data-telegram-login="<%= ENV['TELEGRAM_BOT_USERNAME'] %>"
+    data-telegram-login="<%= Setting.telegram_bot_username %>"
     data-size="large"
-    data-auth-url="https://<%= ENV['APPLICATION_HOSTNAME'] %>/onboarding/telegram-auth?jwt=<%= jwt %>"
+    data-auth-url="https://<%= Setting.application_host %>/onboarding/telegram-auth?jwt=<%= jwt %>"
     data-request-access="write">
   </script>
 </div>
