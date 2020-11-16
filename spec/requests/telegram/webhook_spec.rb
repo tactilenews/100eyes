@@ -5,7 +5,11 @@ require 'telegram/bot/rspec/integration/rails'
 
 RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
   describe '#start!' do
-    before { Setting.telegram_welcome_message = welcome_message }
+    before do
+      Setting.telegram_welcome_message = welcome_message
+      Setting.telegram_who_are_you_message = 'Who are you?'
+    end
+
     let(:welcome_message) do
       message = [
         'Herzlich Willkommen bei TestingProject.',
@@ -32,6 +36,7 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
   end
 
   describe '#message' do
+    before { Setting.telegram_who_are_you_message = 'Who are you?' }
     subject { -> { dispatch_message 'Hello Bot!', { from: { id: 'whoami' } } } }
 
     context 'contributor has not onboarded yet' do

@@ -26,7 +26,8 @@ class SettingsController < ApplicationController
       :onboarding_unauthorized_text,
       :onboarding_page,
       :telegram_welcome_message,
-      :telegram_unknown_content_message
+      :telegram_unknown_content_message,
+      :telegram_who_are_you_message
     )
   end
 end
