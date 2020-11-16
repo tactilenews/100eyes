@@ -6,6 +6,7 @@ module ContributorRow
       super
 
       @contributor = contributor
+      @styles << :inactive unless contributor.active?
     end
 
     private

@@ -2,9 +2,8 @@
 
 module Checkbox
   class Checkbox < ApplicationComponent
-    def initialize(id: nil, value: nil, group: false, label: nil, stimulus_target: nil)
+    def initialize(id: nil, value: nil, group: false, label: nil, stimulus_target: nil, **)
       super
-
       @id = id
       @value = value
       @group = group

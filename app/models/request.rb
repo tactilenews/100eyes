@@ -47,7 +47,7 @@ class Request < ApplicationRecord
   end
 
   def self.broadcast!(request)
-    Contributor.with_tags(request.tag_list).each do |contributor|
+    Contributor.active.with_tags(request.tag_list).each do |contributor|
       Message.create!(
         sender: nil,
         recipient: contributor,

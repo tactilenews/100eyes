@@ -1,11 +1,15 @@
-<label class="Checkbox">
-  <input
-    type="checkbox"
-    id="<%= id %>"
-    name="<%= name %>"
-    value="<%= value %>"
-    data-target="<%= stimulus_target %>"
-    class="Checkbox-input"
-  />
-  <span class="Checkbox-label"><%= label %></span>
-</label>
+  <label class="<%= class_attr %>" for="<%= id %>">
+    <input name="<%= name %>" type="hidden" value="0" />
+    <input
+      type="checkbox"
+      id="<%= id %>"
+      name="<%= name %>"
+      <%= value ? 'checked' : '' %>
+      data-target="<%= stimulus_target %>"
+      class="Checkbox-input"
+      />
+      <% if styles.include?(:switch) %>
+        <div class="Checkbox-slider"></div>
+      <% end %>
+      <span class="Checkbox-label"><%= label %></span>
+  </label>

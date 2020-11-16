@@ -12,6 +12,8 @@ class Contributor < ApplicationRecord
   acts_as_taggable_on :tags
 
   default_scope { order(:first_name, :last_name) }
+  scope :active, -> { where(deactivated_at: nil) }
+
   validates :email, uniqueness: { case_sensitive: false }, allow_nil: true, 'valid_email_2/email': true
 
   scope :with_tags, lambda { |tag_list = []|
@@ -87,5 +89,14 @@ class Contributor < ApplicationRecord
     result = result.group_by(&:request).values # array or groups
     result = result.map(&:first) # choose most recent message per group
     result.sort_by(&:created_at).reverse # ensure descending order
+  end
+
+  def active?
+    deactivated_at.nil?
+  end
+  alias active active?
+
+  def active=(value)
+    self.deactivated_at = ActiveModel::Type::Boolean.new.cast(value) ? nil : Time.current
   end
 end

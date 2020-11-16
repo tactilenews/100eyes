@@ -319,4 +319,50 @@ RSpec.describe Contributor, type: :model do
       it { should be(false) }
     end
   end
+
+  describe 'scope ::active' do
+    subject { Contributor.active }
+    context 'given some inactive and active contributors' do
+      let(:active_contributor) { create(:contributor, active: true) }
+      let(:inactive_contributor) { create(:contributor, active: false) }
+
+      before { active_contributor && inactive_contributor }
+
+      it 'returns only active contributors' do
+        should eq([active_contributor])
+      end
+    end
+  end
+
+  describe '.active' do
+    subject { contributor.active }
+    it { should be(true) }
+
+    describe 'given "deactivated_at" timestamp' do
+      let(:contributor) { create(:contributor, deactivated_at: 1.day.ago) }
+      it { should be(false) }
+    end
+  end
+
+  describe '.active=' do
+    describe 'given active contributor' do
+      let(:contributor) { create(:contributor, deactivated_at: nil) }
+      describe 'false' do
+        it { expect { contributor.active = false }.to change { contributor.deactivated_at.is_a?(ActiveSupport::TimeWithZone) }.to(true) }
+        it { expect { contributor.active = false }.to change { contributor.active? }.to(false) }
+        it { expect { contributor.active = '0' }.to change { contributor.active? }.to(false) }
+        it { expect { contributor.active = 'off' }.to change { contributor.active? }.to(false) }
+      end
+    end
+
+    describe 'given deactivated contributor' do
+      let(:contributor) { create(:contributor, deactivated_at: 1.day.ago) }
+      describe 'true' do
+        it { expect { contributor.active = true }.to change { contributor.deactivated_at.is_a?(ActiveSupport::TimeWithZone) }.to(false) }
+        it { expect { contributor.active = true }.to change { contributor.active? }.to(true) }
+        it { expect { contributor.active = '1' }.to change { contributor.active? }.to(true) }
+        it { expect { contributor.active = 'on' }.to change { contributor.active? }.to(true) }
+      end
+    end
+  end
 end

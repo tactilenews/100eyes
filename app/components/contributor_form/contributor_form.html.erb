@@ -37,6 +37,10 @@
       %>
     <% end %>
 
+    <%= c 'field', object: contributor, id: :active, styles: [:horizontal] do |field| %>
+      <%= c 'checkbox', field.input_defaults.merge(styles: [:switch]) %>
+    <% end %>
+
     <div class="ContributorForm-actions">
       <%= c 'button', type: 'submit', label: I18n.t('save'), styles: [:primary, :positive] %>
       <%= c 'button', type: 'reset', label: I18n.t('discard'), styles: [:plain, :danger] %>
