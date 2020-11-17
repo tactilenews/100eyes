@@ -106,7 +106,7 @@ RSpec.describe 'Onboarding', type: :request do
       it do
         subject.call
         expect(response).to redirect_to(
-          onboarding_telegram_form_path(jwt: jwt, telegram_id: 123, first_name: 'Matthew', last_name: 'Rider')
+          onboarding_telegram_path(jwt: jwt, id: 123, first_name: 'Matthew', last_name: 'Rider')
         )
       end
     end
