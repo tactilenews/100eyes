@@ -97,7 +97,7 @@ RSpec.describe Contributor, type: :model do
     subject { contributor.channels }
 
     describe 'given a contributor without telegram or email' do
-      let(:contributor) { create(:contributor, telegram_id: nil, telegram_chat_id: nil, email: nil) }
+      let(:contributor) { create(:contributor, telegram_id: nil, email: nil) }
       it { should be_empty }
     end
 
@@ -107,7 +107,7 @@ RSpec.describe Contributor, type: :model do
     end
 
     describe 'given a contributor with telegram and email' do
-      let(:contributor) { create(:contributor, telegram_id: '123', telegram_chat_id: '456', email: 'contributor@example.org') }
+      let(:contributor) { create(:contributor, telegram_id: '123', email: 'contributor@example.org') }
       it { should contain_exactly(:telegram, :email) }
     end
   end
@@ -115,13 +115,13 @@ RSpec.describe Contributor, type: :model do
   describe '#telegram?' do
     subject { contributor.telegram? }
 
-    describe 'given a contributor with a telegram_id and telegram_chat_id' do
-      let(:contributor) { create(:contributor, telegram_id: '123', telegram_chat_id: '456') }
+    describe 'given a contributor with a telegram_id and telegram_id' do
+      let(:contributor) { create(:contributor, telegram_id: '123') }
       it { should be(true) }
     end
 
-    describe 'given a contributor without telegram_id and telegram_chat_id' do
-      let(:contributor) { create(:contributor, telegram_id: nil, telegram_chat_id: nil) }
+    describe 'given a contributor without telegram_id and telegram_id' do
+      let(:contributor) { create(:contributor, telegram_id: nil) }
       it { should be(false) }
     end
   end

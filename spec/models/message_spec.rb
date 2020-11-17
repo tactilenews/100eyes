@@ -83,7 +83,7 @@ RSpec.describe Message, type: :model do
   describe '#before_create' do
     let(:message) { create(:message, sender: nil, recipient: recipient) }
     describe 'given a recipient with telegram' do
-      let(:recipient) { create(:contributor, telegram_chat_id: 47, telegram_id: 11) }
+      let(:recipient) { create(:contributor, telegram_id: 11) }
       describe '#blocked' do
         subject { message.blocked }
         it { should be(false) }

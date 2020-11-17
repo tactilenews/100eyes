@@ -34,14 +34,11 @@ class TelegramMessage
   private
 
   def initialize_known_contributor(telegram_message)
-    telegram_chat_id = telegram_message.dig(:chat, :id)
     telegram_id = telegram_message.dig(:from, :id)
     username = telegram_message.dig(:from, :username)
     sender = Contributor.find_by(telegram_id: telegram_id)
-    if sender
-      sender.username = username
-      sender.telegram_chat_id = telegram_chat_id
-    end
+    sender.username = username if sender
+
     sender
   end
 

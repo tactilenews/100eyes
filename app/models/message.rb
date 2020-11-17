@@ -64,11 +64,11 @@ class Message < ApplicationRecord
   end
 
   def send_telegram_message
-    return unless recipient&.telegram_chat_id
+    return unless recipient&.telegram_id
 
     begin
       Telegram.bot.send_message(
-        chat_id: recipient.telegram_chat_id,
+        chat_id: recipient.telegram_id,
         text: text
       )
     rescue Telegram::Bot::Forbidden

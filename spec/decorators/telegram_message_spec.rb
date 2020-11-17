@@ -139,10 +139,9 @@ RSpec.describe TelegramMessage do
 
     context 'known sender, but outdated contributor record' do
       let(:message) { { 'chat' => { 'id' => 42 }, 'from' => { 'id' => contributor.telegram_id, 'username' => 'alice' } } }
-      let(:contributor) { create(:contributor, telegram_id: 4702, username: 'bob', telegram_chat_id: 23) }
+      let(:contributor) { create(:contributor, telegram_id: 42, username: 'bob') }
 
       it { expect { subject.save! }.to(change { contributor.reload.username }.from('bob').to('alice')) }
-      it { expect { subject.save! }.to(change { contributor.reload.telegram_chat_id }.from(23).to(42)) }
     end
   end
 
