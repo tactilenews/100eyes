@@ -63,12 +63,12 @@ RSpec.describe 'Onboarding', type: :request do
       )
     end
 
-    subject { -> { get onboarding_telegram_auth_path(**params) } }
+    subject { -> { get onboarding_telegram_path(**params) } }
 
     context 'invalid' do
       it 'if the hash does not match' do
         params[:hash] = 'I was not created with your api key'
-        expect { subject.call }.to raise_exception(ActionController::BadRequest)
+        expect { subject.call }.to raise_exception(ActionController::BadRequest)s
       end
 
       it 'if the id is different' do
