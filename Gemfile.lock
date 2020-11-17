@@ -79,7 +79,7 @@ GEM
     childprocess (3.0.0)
     coderay (1.1.3)
     concurrent-ruby (1.1.7)
-    counter_culture (2.6.2)
+    counter_culture (2.7.0)
       activerecord (>= 4.2)
       activesupport (>= 4.2)
     crack (0.4.4)
@@ -302,7 +302,7 @@ DEPENDENCIES
   bootsnap (>= 1.4.2)
   byebug
   capybara (>= 2.15)
-  counter_culture (~> 2.6)
+  counter_culture (~> 2.7)
   db-query-matchers
   dotenv-rails
   factory_bot_rails
