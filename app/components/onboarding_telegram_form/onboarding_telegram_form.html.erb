@@ -1,5 +1,5 @@
 <%= form_with(
-  model: @contributor,
+  model: contributor,
   hidden: true,
   local: true,
   url: onboarding_path(jwt: jwt),
@@ -7,12 +7,12 @@
 ) do %>
   <h1 class="OnboardingTelegramForm-header"><%= t 'components.onboarding_instructions.telegram.confirm.header'%></h1>
   <p class="OnboardingTelegramForm-subheader"><%= t 'components.onboarding_instructions.telegram.confirm.subheader'%></p>
-  <%= c 'field', object: @contributor, id: :first_name do |field| %>
-    <%= c 'input', field.input_defaults.merge(value: first_name) %>
+  <%= c 'field', object: contributor, id: :first_name do |field| %>
+    <%= c 'input', field.input_defaults.merge(value: first_name, required: true) %>
   <% end %>
 
-  <%= c 'field', object: @contributor, id: :last_name do |field| %>
-    <%= c 'input', field.input_defaults.merge(value: last_name) %>
+  <%= c 'field', object: contributor, id: :last_name do |field| %>
+    <%= c 'input', field.input_defaults.merge(value: last_name, required: true) %>
   <% end %>
 
   <input type="hidden" id="contributor[telegram_id]" name="contributor[telegram_id]" value="<%= telegram_id %>" />
