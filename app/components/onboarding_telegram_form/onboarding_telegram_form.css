@@ -1,9 +1,9 @@
 .OnboardingTelegramForm {
-  margin: calc(var(--spacing-unit-l) *2) auto;
+  margin: calc(var(--spacing-unit-l) * 2) auto;
   max-width: 27rem;
 }
 
-.OnboardingTelegramForm .Field, 
+.OnboardingTelegramForm .Field,
 .OnboardingTelegramForm .Button {
   margin-top: var(--spacing-unit);
 }
