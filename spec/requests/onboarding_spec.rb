@@ -38,7 +38,7 @@ RSpec.describe 'Onboarding', type: :request do
     end
   end
 
-  describe 'GET /onboarding/telegram-auth' do
+  describe 'GET /onboarding/telegram' do
     let(:today) { Time.zone.now }
     let(:hash_created_at) { Time.new(today.year, today.month, today.day).to_i }
     let(:valid_hash) do
@@ -147,6 +147,33 @@ RSpec.describe 'Onboarding', type: :request do
     end
 
     describe 'given an existing email address' do
+      let!(:contributor) { create(:contributor, **attrs) }
+
+      it 'redirects to success page' do
+        subject.call
+        expect(response).to redirect_to onboarding_success_path
+      end
+
+      it 'invalidates the jwt' do
+        expect { subject.call }.to change(JsonWebToken, :count).by(1)
+
+        json_web_token = JsonWebToken.where(invalidated_jwt: jwt)
+        expect(json_web_token).to exist
+      end
+
+      it 'does not create new contributor' do
+        expect { subject.call }.not_to change(Contributor, :count)
+      end
+    end
+
+    describe 'given an existing telegram id' do
+      let(:attrs) do
+        {
+          first_name: 'Tom',
+          last_name: 'Jones',
+          telegram_id: 56
+        }
+      end
       let!(:contributor) { create(:contributor, **attrs) }
 
       it 'redirects to success page' do
