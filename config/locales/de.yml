@@ -144,9 +144,6 @@ de:
       onboarding_hero:
         label: Teaser (URL)
         help: Das Logo sollte eine Bilddatei im JPEG-Format. Es sollte mindestens 800x500 Pixel groß sein. Es wird während des Onboardings angezeigt.
-      telegram_welcome_message:
-        label: Willkommens-Nachricht
-        help: Wenn sich ein neues Mitglied via Telegram registriert, erhält es diese Nachricht.
       telegram_unknown_content_message:
         label: Fehler-Nachricht bei unbekannten Inhalten
         help: Wenn ein Mitglied via Telegram Nachrichten versendet, die von 100eyes noch nicht unterstützt werden, erhält es diese Nachricht.
