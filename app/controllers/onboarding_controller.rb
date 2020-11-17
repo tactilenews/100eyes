@@ -45,16 +45,13 @@ class OnboardingController < ApplicationController
     telegram_id = telegram_auth_params[:id]
     first_name = telegram_auth_params[:first_name]
     last_name = telegram_auth_params[:last_name]
-    redirect_to onboarding_telegram_form_path(jwt: jwt_param,
-                                              telegram_id: telegram_id,
-                                              first_name: first_name,
-                                              last_name: last_name)
+    redirect_to onboarding_telegram_path(jwt: jwt_param, id: telegram_id, first_name: first_name, last_name: last_name)
   end
 
-  def telegram_form
-    @first_name = telegram_contributor_params[:first_name]
-    @last_name = telegram_contributor_params[:last_name]
-    @telegram_id = telegram_contributor_params[:telegram_id]
+  def telegram
+    @first_name = telegram_auth_params[:first_name]
+    @last_name = telegram_auth_params[:last_name]
+    @telegram_id = telegram_auth_params[:id]
     @contributor = Contributor.new
     @jwt = jwt_param
   end
@@ -87,11 +84,7 @@ class OnboardingController < ApplicationController
   end
 
   def telegram_auth_params
-    params.permit(:id, :first_name, :last_name, :auth_date, :hash, :username, :photo_url, :jwt)
-  end
-
-  def telegram_contributor_params
-    params.permit(:first_name, :last_name, :telegram_id)
+    params.permit(:id, :first_name, :last_name, :auth_date, :hash, :username, :photo_url)
   end
 
   def authenticate_telegram_params
