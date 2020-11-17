@@ -5,6 +5,8 @@
   url: onboarding_path(jwt: jwt),
   class: class_attr,
 ) do %>
+  <h1 class="OnboardingTelegramForm-header"><%= t 'components.onboarding_instructions.telegram.confirm.headline'%></h1>
+  <p class="OnboardingTelegramForm-subheader"><%= t 'components.onboarding_instructions.telegram.confirm.subheadline'%></p>
   <%= c 'field', object: @contributor, id: :first_name do |field| %>
     <%= c 'input', field.input_defaults.merge(value: first_name) %>
   <% end %>
