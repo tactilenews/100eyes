@@ -303,7 +303,7 @@ RSpec.describe Contributor, type: :model do
   describe '.email_taken?' do
     let!(:contributor) { create(:contributor, email: 'zora@example.org') }
 
-    subject { Contributor.email_taken?(address) }
+    subject { Contributor.exists?(['lower(email) = ?', address.downcase]) }
 
     describe 'given the exact address' do
       let(:address) { 'zora@example.org' }
