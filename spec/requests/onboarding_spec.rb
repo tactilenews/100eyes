@@ -68,7 +68,7 @@ RSpec.describe 'Onboarding', type: :request do
     context 'invalid' do
       it 'if the hash does not match' do
         params[:hash] = 'I was not created with your api key'
-        expect { subject.call }.to raise_exception(ActionController::BadRequest)s
+        expect { subject.call }.to raise_exception(ActionController::BadRequest)
       end
 
       it 'if the id is different' do
@@ -103,11 +103,11 @@ RSpec.describe 'Onboarding', type: :request do
     end
 
     context 'valid' do
-      it do
+      it { is_expected.not_to raise_exception }
+
+      it 'is successful' do
         subject.call
-        expect(response).to redirect_to(
-          onboarding_telegram_path(jwt: jwt, id: 123, first_name: 'Matthew', last_name: 'Rider')
-        )
+        expect(response).to be_successful
       end
     end
   end
