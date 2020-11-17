@@ -1,0 +1,12 @@
+.OnboardingTelegramForm {
+  width: calc(var(--grid-max-width-s) / 2);
+  margin: var(--spacing-unit-l) auto;
+}
+
+.OnboardingTelegramForm .Input {
+  margin: 0 0 var(--spacing-unit);
+}
+
+.OnboardingTelegramForm .Field {
+  margin-top: var(--spacing-unit-l);
+}
