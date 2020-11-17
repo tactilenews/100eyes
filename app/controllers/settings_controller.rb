@@ -26,7 +26,7 @@ class SettingsController < ApplicationController
       :onboarding_unauthorized_text,
       :onboarding_page,
       :telegram_unknown_content_message,
-      :telegram_who_are_you_message
+      :telegram_contributor_not_found_message
     )
   end
 end
