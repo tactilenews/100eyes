@@ -17,7 +17,9 @@ class OnboardingController < ApplicationController
   def create
     # Ensure information on registered contributors is never
     # disclosed during onboarding
-    if Contributor.email_taken?(contributor_params[:email]) || Contributor.find_by(telegram_id: contributor_params[:telegram_id])
+    email_taken = Contributor.email_taken?(contributor_params[:email])
+    telegram_id_taken = Contributor.find_by(telegram_id: contributor_params[:telegram_id])
+    if email_taken || telegram_id_taken
       invalidate_jwt
       return redirect_to_success
     end
