@@ -5,7 +5,7 @@ require 'openssl'
 class OnboardingController < ApplicationController
   skip_before_action :authenticate, except: :create_invite_url
   before_action :verify_jwt, except: %i[create_invite_url success]
-  before_action :telegram_auth_params, only: :telegram_auth
+  before_action :authenticate_telegram_params, only: :telegram
 
   layout 'onboarding'
 
@@ -40,18 +40,10 @@ class OnboardingController < ApplicationController
     render json: { url: onboarding_url(jwt: jwt) }
   end
 
-  def telegram_auth
-    authenticate_telegram_params
-    telegram_id = telegram_auth_params[:id]
-    first_name = telegram_auth_params[:first_name]
-    last_name = telegram_auth_params[:last_name]
-    redirect_to onboarding_telegram_path(jwt: jwt_param, id: telegram_id, first_name: first_name, last_name: last_name)
-  end
-
   def telegram
+    @telegram_id = telegram_auth_params[:id]
     @first_name = telegram_auth_params[:first_name]
     @last_name = telegram_auth_params[:last_name]
-    @telegram_id = telegram_auth_params[:id]
     @contributor = Contributor.new
     @jwt = jwt_param
   end
