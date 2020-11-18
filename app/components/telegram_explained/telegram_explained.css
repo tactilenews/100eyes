@@ -8,7 +8,7 @@
 }
 
 .TelegramExplained > header {
-  margin: var(--spacing-unit-xl)
+  margin: var(--spacing-unit-xl);
 }
 
 .TelegramExplained h1 {
@@ -28,13 +28,12 @@
   align-items: center;
   color: var(--color-red-dark);
   margin-bottom: var(--spacing-unit-xl);
-  padding: var(--spacing-unit-xs);
   padding-left: var(--spacing-unit);
   border-radius: var(--border-radius);
 }
 
 .TelegramExplained-important-info-section > .Icon {
-  font-size: calc(2 * var(--spacing-unit-xl));
+  font-size: calc(3 * var(--spacing-unit-xl));
 }
 
 .TelegramExplained-important-info-header {

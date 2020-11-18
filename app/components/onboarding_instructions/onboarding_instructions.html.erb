@@ -31,11 +31,7 @@
         class="OnboardingInstructions-instructions OnboardingInstructions-telegram text-serif"
         data-target="onboarding-instructions.instructions"
       >
-        <%= c 'stack' do %>
-          <p><strong><%= t 'components.onboarding_instructions.telegram.intro' %></strong></p>
-
-          <%= c 'steps_list', steps: telegram_steps %>
-        <% end %>
+        <p><strong><%= t 'components.onboarding_instructions.telegram.intro' %></strong></p>
         <%= c 'button',
           label: t('components.onboarding_instructions.telegram_explained.link'),
           link: onboarding_telegram_explained_path(jwt: jwt) 

@@ -8,7 +8,7 @@
 <section class="TelegramExplained-important-info-section">
   <%= c 'icon', icon: 't-warning', style: :inline %>
   <h2 class="text-serif TelegramExplained-important-info-header">
-    <%= t 'components.onboarding_instructions.telegram_explained.important_info' %>
+    <%= t 'components.onboarding_instructions.telegram_explained.important_info', project_name: Setting.project_name %>
   </h2>
 </section>
 <%= c 'telegram_widget', jwt: jwt %>
