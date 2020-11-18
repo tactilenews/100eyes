@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get '/onboarding/success', to: 'onboarding#success'
   post '/onboarding/invite', to: 'onboarding#create_invite_url'
   get '/onboarding/telegram', to: 'onboarding#telegram'
+  patch '/onboarding/telegram-update-info', to: 'onboarding#telegram_update_info'
 
   get '/settings', to: 'settings#index'
   post '/settings', to: 'settings#update'
