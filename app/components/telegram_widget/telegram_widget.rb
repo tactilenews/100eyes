@@ -11,5 +11,9 @@ module TelegramWidget
     private
 
     attr_reader :jwt
+
+    def redirect_url
+      "https://#{Setting.application_host}/onboarding/telegram?jwt=#{jwt}"
+    end
   end
 end
