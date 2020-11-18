@@ -148,8 +148,8 @@ de:
         label: Fehler-Nachricht bei unbekannten Inhalten
         help: Wenn ein Mitglied via Telegram Nachrichten versendet, die von 100eyes noch nicht unterstützt werden, erhält es diese Nachricht.
       telegram_contributor_not_found_message:
-        label: '"Wer bist du?" Nachricht'
-        help: Wenn eine unbekannte Person via Telegram auf den Telegram-Bot stößt, erhält es diese Nachricht.
+        label: Fehler-Nachricht bei unbekanntem Telegram-Absender
+        help: Wenn eine unbekannte Person via Telegram auf den Telegram-Bot stößt, erhält sie diese Nachricht.
 
   settings:
     header: Einstellungen
