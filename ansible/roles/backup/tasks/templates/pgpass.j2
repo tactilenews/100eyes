@@ -1,0 +1,1 @@
+{{ rails.postgres.host | default('db') }}:{{ rails.postgres.port | default('5432') }}:{{ rails.postgres.db | default('app_production') }}:{{ rails.postgres.user }}:{{ rails.postgres.password  }}

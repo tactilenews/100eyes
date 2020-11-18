@@ -1,0 +1,39 @@
+---
+- name: Debug
+  debug:
+    msg: "Backing up to folder: {{ backup_folder }}"
+
+- name: Template .pgass file
+  template:
+    src: pgpass.j2
+    dest: /home/ansible/.pgpass
+    mode: '0600'
+  tags:
+  - work-in-progress
+
+- name: Copy .pgpass into container
+  command:
+    cmd: docker cp /home/ansible/.pgpass ansible_db_1:/root/
+
+- name: Run pg_dump inside the container
+  command:
+    cmd: "docker exec ansible_db_1 pg_dump {{ rails.postgres.db | default('app_production') }} --host {{ rails.postgres.host | default('db') }} --port {{ rails.postgres.port | default('5432') }} --username {{ rails.postgres.user }} -Fc --file /tmp/100eyes-db-dump"
+
+- name: Copy database dump from container to host
+  command:
+    cmd: "docker cp ansible_db_1:/tmp/100eyes-db-dump /tmp/100eyes-db-dump"
+
+- name: Archive storage folder into a single file
+  community.general.archive:
+    path: /home/ansible/storage
+    dest: /tmp/100eyes-storage.tgz
+
+- name: Download database dump
+  fetch:
+    src: /tmp/100eyes-db-dump
+    dest: "{{ backup_folder }}/100eyes-db-dump"
+
+- name: Download storage archive
+  fetch:
+    src: /tmp/100eyes-storage.tgz
+    dest: "{{ backup_folder }}/100eyes-storage"
