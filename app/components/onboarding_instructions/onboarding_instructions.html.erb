@@ -28,7 +28,7 @@
 
       <div
         id="telegram-channel"
-        class="OnboardingInstructions-instructions text-serif"
+        class="OnboardingInstructions-instructions OnboardingInstructions-telegram text-serif"
         data-target="onboarding-instructions.instructions"
       >
         <%= c 'stack' do %>
@@ -36,7 +36,10 @@
 
           <%= c 'steps_list', steps: telegram_steps %>
         <% end %>
-        <%= c 'telegram_widget', jwt: jwt %>
+        <%= c 'button',
+          label: t('components.onboarding_instructions.telegram_explained.link'),
+          link: onboarding_telegram_explained_path(jwt: jwt) 
+        %>
       </div>
     <% end %>
   </div>

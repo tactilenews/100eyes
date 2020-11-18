@@ -41,6 +41,10 @@ class OnboardingController < ApplicationController
     render json: { url: onboarding_url(jwt: jwt) }
   end
 
+  def telegram_explained
+    @jwt = jwt_param
+  end
+
   def telegram
     @telegram_id = telegram_auth_params[:id]
     @first_name = telegram_auth_params[:first_name]
