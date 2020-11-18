@@ -141,8 +141,8 @@ RSpec.describe '/contributors', type: :request do
           end
         end
 
-        describe 'with a `telegram_chat_id`' do
-          let(:params) { { email: nil, telegram_id: 3, telegram_chat_id: 4 } }
+        describe 'with a `telegram_id`' do
+          let(:params) { { email: nil, telegram_id: 4 } }
           let(:chat_id) { 4 }
           let(:expected_message) { 'Forgot to ask: How are you?' }
           it { should respond_with_message expected_message }

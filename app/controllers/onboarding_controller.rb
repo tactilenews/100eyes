@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
+require 'openssl'
+
 class OnboardingController < ApplicationController
   skip_before_action :authenticate, except: :create_invite_url
   before_action :verify_jwt, except: %i[create_invite_url success]
+  before_action :authenticate_telegram_params, only: :telegram
 
   layout 'onboarding'
 
@@ -14,7 +17,9 @@ class OnboardingController < ApplicationController
   def create
     # Ensure information on registered contributors is never
     # disclosed during onboarding
-    if Contributor.email_taken?(contributor_params[:email])
+    email_taken = Contributor.email_taken?(contributor_params[:email])
+    telegram_id_taken = Contributor.exists?(telegram_id: contributor_params[:telegram_id])
+    if email_taken || telegram_id_taken
       invalidate_jwt
       return redirect_to_success
     end
@@ -37,6 +42,14 @@ class OnboardingController < ApplicationController
     render json: { url: onboarding_url(jwt: jwt) }
   end
 
+  def telegram
+    @telegram_id = telegram_auth_params[:id]
+    @first_name = telegram_auth_params[:first_name]
+    @last_name = telegram_auth_params[:last_name]
+    @contributor = Contributor.new
+    @jwt = jwt_param
+  end
+
   private
 
   def redirect_to_success
@@ -57,10 +70,25 @@ class OnboardingController < ApplicationController
   end
 
   def contributor_params
-    params.require(:contributor).permit(:first_name, :last_name, :email)
+    params.require(:contributor).permit(:first_name, :last_name, :email, :telegram_id)
   end
 
   def jwt_param
     params.require(:jwt)
+  end
+
+  def telegram_auth_params
+    params.permit(:id, :first_name, :last_name, :auth_date, :hash, :username, :photo_url)
+  end
+
+  def authenticate_telegram_params
+    auth_data = telegram_auth_params.slice(:id, :auth_date, :first_name, :last_name, :username, :photo_url)
+    check_string = auth_data.to_unsafe_h.map { |k, v| "#{k}=#{v}" }.sort.join("\n")
+
+    secret_key = OpenSSL::Digest.new('SHA256').digest(Setting.telegram_bot_api_key)
+    valid_hash = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), secret_key, check_string)
+    valid_time_window = Time.zone.now.to_i - telegram_auth_params[:auth_date].to_i < 24 * 60 * 60
+
+    raise ActionController::BadRequest unless valid_hash.casecmp(telegram_auth_params[:hash]).zero? && valid_time_window
   end
 end

@@ -66,11 +66,11 @@
         <%= t 'setting.form.groups.telegram' %>
       <% end %>
 
-      <%= c 'field', object: setting, value: Setting.telegram_welcome_message, id: :telegram_welcome_message do |field| %>
+      <%= c 'field', object: setting, value: Setting.telegram_unknown_content_message, id: :telegram_unknown_content_message do |field| %>
         <%= c 'textarea', field.input_defaults %>
       <% end %>
 
-      <%= c 'field', object: setting, value: Setting.telegram_unknown_content_message, id: :telegram_unknown_content_message do |field| %>
+      <%= c 'field', object: setting, value: Setting.telegram_contributor_not_found_message, id: :telegram_contributor_not_found_message do |field| %>
         <%= c 'textarea', field.input_defaults %>
       <% end %>
     <% end %>

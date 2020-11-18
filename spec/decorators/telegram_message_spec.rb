@@ -4,16 +4,20 @@ require 'rails_helper'
 
 RSpec.describe TelegramMessage do
   let(:telegram_message) { TelegramMessage.new message }
+  before(:each) { create(:contributor, telegram_id: 47) }
+
+  let(:message) { { 'chat' => { 'id' => 42 }, 'from' => { 'id' => 47 } } }
+
   describe '#text' do
     subject { telegram_message.text }
 
     describe 'given a message with a `text` attribute' do
-      let(:message) { { text: 'Ich bin eine normale Nachricht' } }
+      before { message['text'] = 'Ich bin eine normale Nachricht' }
       it { should eq('Ich bin eine normale Nachricht') }
     end
 
     describe 'given a photo with a `caption`' do
-      let(:message) { { caption: 'Das hier ist die Überschrift eine Fotos' } }
+      before { message['caption'] = 'Das hier ist die Überschrift eine Fotos' }
       it { should eq('Das hier ist die Überschrift eine Fotos') }
     end
   end
@@ -22,7 +26,7 @@ RSpec.describe TelegramMessage do
     subject { telegram_message.voice }
 
     describe 'given a text message' do
-      let(:message) { { text: 'Ich bin eine normale Nachricht' } }
+      before { message['text'] = 'Ich bin eine normale Nachricht' }
 
       it { should be_nil }
       describe 'saving the message' do
@@ -32,6 +36,7 @@ RSpec.describe TelegramMessage do
     end
 
     describe 'given a voice message', vcr: { cassette_name: :voice_message } do
+      before { create(:contributor, telegram_id: 875_171_743) }
       let(:message) { message_with_voice }
 
       describe 'attachment' do
@@ -54,11 +59,12 @@ RSpec.describe TelegramMessage do
   describe '#photos' do
     subject { telegram_message.photos }
     describe 'given a message without photos' do
-      let(:message) { { text: 'Ich bin eine normale Nachricht' } }
+      before { message['text'] = 'Ich bin eine normale Nachricht' }
       it { should eq([]) }
     end
 
-    describe 'given a message with one photo', vcr: { cassette_name: :photo_with_image } do
+    describe 'given a message with multiple photos', vcr: { cassette_name: :photo_with_image } do
+      before { create(:contributor, telegram_id: 875_171_743) }
       let(:message) { message_with_photo }
 
       it { should_not be_empty }
@@ -66,12 +72,13 @@ RSpec.describe TelegramMessage do
 
       it 'chooses the largest image' do
         photo = subject.first
-        expect(photo.attachment.blob.byte_size).to eq(90_449)
+        expect(photo.attachment.blob.byte_size).to eq(134_866)
       end
     end
   end
 
   describe '#message', vcr: { cassette_name: :photo_with_image } do
+    before { create(:contributor, telegram_id: 875_171_743) }
     let(:request) { create(:request) }
     let(:message) { message_with_photo }
     subject { telegram_message.message }
@@ -124,85 +131,81 @@ RSpec.describe TelegramMessage do
 
   describe '#sender' do
     subject { telegram_message.sender }
-    let(:message) { { 'chat' => { 'id' => 42 }, 'from' => { 'id' => 47, 'username' => 'alice' } } }
-    it { should be_a(Contributor) }
 
-    describe 'calling #save! on the sender' do
-      it { expect { subject.save! }.to(change { Contributor.count }.from(0).to(1)) }
+    context 'unknown sender' do
+      before { message['from']['id'] = 'unknown_contributor' }
+      it { is_expected.to eq(nil) }
+    end
 
-      describe 'attributes of the created contributor' do
-        before(:each) { subject.save! }
-        let(:contributor) { Contributor.first }
-        it { expect(contributor).to have_attributes(telegram_chat_id: 42, telegram_id: 47, username: 'alice') }
-      end
+    context 'known sender, but outdated contributor record' do
+      let(:message) { { 'chat' => { 'id' => 42 }, 'from' => { 'id' => contributor.telegram_id, 'username' => 'alice' } } }
+      let(:contributor) { create(:contributor, telegram_id: 42, username: 'bob') }
 
-      describe 'given an existing but outdated contributor record' do
-        before(:each) { create(:contributor, telegram_id: 47, username: 'bob') }
-        it { expect { subject.save! }.to(change { Contributor.first.username }.from('bob').to('alice')) }
-      end
+      it { expect { subject.save! }.to(change { contributor.reload.username }.from('bob').to('alice')) }
     end
   end
 
   let(:message_with_voice) do
-    { 'message_id' => 429,
+    { 'message_id' => 44,
       'from' =>
-    { 'id' => 146_338_764,
+    { 'id' => 875_171_743,
       'is_bot' => false,
-      'first_name' => 'Robert',
-      'last_name' => 'Schäfer',
-      'username' => 'roschaefer',
+      'first_name' => 'Matthew',
+      'last_name' => 'Rider',
+      'username' => 'matthew_rider',
       'language_code' => 'en' },
       'chat' =>
-    { 'id' => 146_338_764,
-      'first_name' => 'Robert',
-      'last_name' => 'Schäfer',
-      'username' => 'roschaefer',
+    { 'id' => 875_171_743,
+      'first_name' => 'Matthew',
+      'last_name' => 'Rider',
+      'username' => 'matthew_rider',
       'type' => 'private' },
-      'date' => 1_600_880_655,
+      'date' => 1_605_027_501,
       'voice' =>
-    { 'duration' => 5,
+    { 'duration' => 4,
       'mime_type' => 'audio/ogg',
       'file_id' =>
-    'AwACAgIAAxkBAAIBrV9rgA6yx0OmgWjHN7kPjT8EstJ5AAMKAAINfWFLG7ifovFsufMbBA',
-      'file_unique_id' => 'AgAECgACDX1hSw',
-      'file_size' => 39_368 } }
+    'AwACAgIAAxkBAAMsX6rGrbnRVqtmAdt2vtmhT4_r1-MAAgYLAAIHD1hJ1hEoFDaF0TUeBA',
+      'file_unique_id' => 'AgADBgsAAgcPWEk',
+      'file_size' => 15_988 } }
   end
 
   let(:message_with_photo) do
-    { 'message_id' => 186,
+    { 'message_id' => 48,
       'from' =>
-    { 'id' => 4711,
+    { 'id' => 875_171_743,
       'is_bot' => false,
-      'first_name' => 'Robert',
-      'last_name' => 'Schäfer',
-      'username' => 'roschaefer',
+      'first_name' => 'Matthew',
+      'last_name' => 'Rider',
+      'username' => 'matthew_rider',
       'language_code' => 'en' },
       'chat' =>
-    { 'id' => 4711,
-      'first_name' => 'Robert',
-      'last_name' => 'Schäfer',
-      'username' => 'roschaefer',
+    { 'id' => 875_171_743,
+      'first_name' => 'Matthew',
+      'last_name' => 'Rider',
+      'username' => 'matthew_rider',
       'type' => 'private' },
-      'date' => 1_590_173_947,
+      'date' => 1_605_028_446,
+      'media_group_id' => '12840227575408058',
       'photo' =>
-    [{ 'file_id' =>
-       'AgACAgIAAxkBAAO6Xsgg-634JM6OTCBsZd9x6Iv5rbcAAtyuMRvWu0FK4BnZYCoEVwF2DQWSLgADAQADAgADbQAD8LoBAAEZBA',
-       'file_unique_id' => 'AQADdg0Fki4AA_C6AQAB',
-       'file_size' => 17_659,
-       'width' => 213,
-       'height' => 320 },
-     { 'file_id' =>
-       'AgACAgIAAxkBAAO6Xsgg-634JM6OTCBsZd9x6Iv5rbcAAtyuMRvWu0FK4BnZYCoEVwF2DQWSLgADAQADAgADeAAD8roBAAEZBA',
-       'file_unique_id' => 'AQADdg0Fki4AA_K6AQAB',
-       'file_size' => 68_574,
-       'width' => 533,
-       'height' => 800 },
-     { 'file_id' =>
-       'AgACAgIAAxkBAAO6Xsgg-634JM6OTCBsZd9x6Iv5rbcAAtyuMRvWu0FK4BnZYCoEVwF2DQWSLgADAQADAgADeQAD8boBAAEZBA',
-       'file_unique_id' => 'AQADdg0Fki4AA_G6AQAB',
-       'file_size' => 90_449,
-       'width' => 640,
-       'height' => 961 }],
-      'caption' => 'A cute kitten' }
+     [{ 'file_id' =>
+     'AgACAgIAAxkBAAMwX6rKXsVDydXIHrEryL-TGemMtlcAAiuxMRsHD1hJKApaFpocC4skq-uXLgADAQADAgADbQAD6dkCAAEeBA',
+        'file_unique_id' => 'AQADJKvrly4AA-nZAgAB',
+        'file_size' => 17_617,
+        'width' => 320,
+        'height' => 240 },
+      { 'file_id' =>
+      'AgACAgIAAxkBAAMwX6rKXsVDydXIHrEryL-TGemMtlcAAiuxMRsHD1hJKApaFpocC4skq-uXLgADAQADAgADeAAD6tkCAAEeBA',
+        'file_unique_id' => 'AQADJKvrly4AA-rZAgAB',
+        'file_size' => 80_847,
+        'width' => 800,
+        'height' => 600 },
+      { 'file_id' =>
+      'AgACAgIAAxkBAAMwX6rKXsVDydXIHrEryL-TGemMtlcAAiuxMRsHD1hJKApaFpocC4skq-uXLgADAQADAgADeQAD59kCAAEeBA',
+        'file_unique_id' =>
+      'AQADJKvrly4AA-fZAgAB',
+        'file_size' => 134_866,
+        'width' => 1280,
+        'height' => 960 }] }
   end
 end

@@ -77,7 +77,7 @@ class Contributor < ApplicationRecord
   end
 
   def telegram?
-    telegram_id.present? && telegram_chat_id.present?
+    telegram_id.present?
   end
 
   def email?

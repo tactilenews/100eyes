@@ -5,3 +5,7 @@
 .OnboardingInstructions-instructions:target {
   display: block;
 }
+
+.OnboardingInstructions .TelegramWidget {
+  margin-top: var(--spacing-unit);
+}

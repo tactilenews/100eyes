@@ -1,0 +1,23 @@
+.OnboardingTelegramForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  width: 100%;
+  min-height: 100vh;
+
+  margin: 0 auto;
+  max-width: 30rem;
+  padding: var(--spacing-unit-s);
+}
+
+.OnboardingTelegramForm .Field,
+.OnboardingTelegramForm .Button {
+  margin-top: var(--spacing-unit);
+}
+
+.OnboardingTelegramForm-header,
+.OnboardingTelegramForm-subheader {
+  text-align: center;
+  margin-bottom: var(--spacing-unit-l);
+}

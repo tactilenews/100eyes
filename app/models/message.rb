@@ -52,26 +52,6 @@ class Message < ApplicationRecord
     )
   end
 
-  def self.renew!(message)
-    ActiveRecord::Base.transaction do
-      message.photos.destroy_all
-      message.raw_data.each do |raw|
-        mapping = {
-          'application/json' => TelegramMessage,
-          'message/rfc822' => EmailMessage
-        }
-        decorator_class = mapping[raw.content_type]
-        break unless decorator_class
-
-        message_decorator = decorator_class.from(raw)
-
-        message.text = message_decorator.message.text
-        message.save!
-        message.photos << message_decorator.photos
-      end
-    end
-  end
-
   private
 
   def send_email
@@ -84,11 +64,11 @@ class Message < ApplicationRecord
   end
 
   def send_telegram_message
-    return unless recipient&.telegram_chat_id
+    return unless recipient&.telegram_id
 
     begin
       Telegram.bot.send_message(
-        chat_id: recipient.telegram_chat_id,
+        chat_id: recipient.telegram_id,
         text: text
       )
     rescue Telegram::Bot::Forbidden

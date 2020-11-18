@@ -17,8 +17,8 @@ class Setting < RailsSettings::Base
         default: File.read(File.join('config', 'locales', 'onboarding', 'unauthorized_heading.txt'))
   field :onboarding_unauthorized_text, default: File.read(File.join('config', 'locales', 'onboarding', 'unauthorized_text.txt'))
 
-  field :telegram_welcome_message, default: File.read(File.join('config', 'locales', 'telegram', 'welcome.txt'))
   field :telegram_unknown_content_message, default: File.read(File.join('config', 'locales', 'telegram', 'unknown_content.txt'))
+  field :telegram_contributor_not_found_message, default: File.read(File.join('config', 'locales', 'telegram', 'contributor_not_found.txt'))
 
   field :telegram_bot_api_key, readonly: true, default: ENV['TELEGRAM_BOT_API_KEY']
   field :telegram_bot_username, readonly: true, default: ENV['TELEGRAM_BOT_USERNAME']

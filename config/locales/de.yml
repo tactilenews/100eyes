@@ -70,6 +70,8 @@ de:
       byline: eine Dialog-Recherche von <a class="Link" href="https://tactile.news" target="_blank">tactile.news</a>
     onboarding_email_form:
       submit: Anmeldung abschließen
+    onboarding_telegram_form:
+      submit: Anmeldung abschließen
     onboarding_instructions:
       email:
         label: E-Mail
@@ -80,10 +82,11 @@ de:
         intro: |
           Um per Telegram teilzunehmen, folgen Sie bitte diesen vier Schritten:
         steps:
-          - Laden Sie die Telegram-App auf Ihr Smartphone, falls Sie sie noch nicht haben.
-          - Suchen Sie bei Telegram nach @%{username}. Wenn Sie das hier gerade auf einem Smartphone lesen, können Sie auch einfach <a class="Link" href="https://t.me/%{username}">auf diesen Link klicken</a>.
-          - Wenn Sie den @%{username} bei Telegram gefunden haben, klicken Sie auf „Start”.
-          - Senden Sie uns eine erste Nachricht mit Ihrem vollen Namen.
+          - Um per Telegram teilzunehmen, benötigen Sie die Telegram-App für iOS oder Android. Sie können die App im Apple App Store oder im Google Play Store herunterladen.
+          - Klicken Sie anschließend auf den unten stehenden Button, um die Anmeldung mit Telegram fortzusetzen.
+        confirm:
+          header: Noch ein Schritt...
+          subheader: Bitten nennen Sie uns Ihren Vor- und Nachnamen, und die Anmeldung abzuschließen.
     onboarding_footer:
       imprint: Impressum
     create_invite_button:
@@ -141,12 +144,12 @@ de:
       onboarding_hero:
         label: Teaser (URL)
         help: Das Logo sollte eine Bilddatei im JPEG-Format. Es sollte mindestens 800x500 Pixel groß sein. Es wird während des Onboardings angezeigt.
-      telegram_welcome_message:
-        label: Willkommens-Nachricht
-        help: Wenn sich ein neues Mitglied via Telegram registriert, erhält es diese Nachricht.
       telegram_unknown_content_message:
         label: Fehler-Nachricht bei unbekannten Inhalten
         help: Wenn ein Mitglied via Telegram Nachrichten versendet, die von 100eyes noch nicht unterstützt werden, erhält es diese Nachricht.
+      telegram_contributor_not_found_message:
+        label: Fehler-Nachricht bei unbekanntem Telegram-Absender
+        help: Wenn eine unbekannte Person via Telegram auf den Telegram-Bot stößt, erhält sie diese Nachricht.
 
   settings:
     header: Einstellungen

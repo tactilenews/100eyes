@@ -17,8 +17,10 @@ class TelegramMessage
 
   def initialize(telegram_message)
     telegram_message = telegram_message.with_indifferent_access
+    @sender = initialize_known_contributor(telegram_message)
+    return unless @sender
+
     @text = telegram_message[:text] || telegram_message[:caption]
-    @sender = initialize_contributor(telegram_message)
     @unknown_content = initialize_unknown_content(telegram_message)
     @message = initialize_message(telegram_message)
     @photos = initialize_photos(telegram_message)
@@ -31,25 +33,12 @@ class TelegramMessage
 
   private
 
-  def initialize_contributor(telegram_message)
-    telegram_chat_id = telegram_message.dig(:chat, :id)
+  def initialize_known_contributor(telegram_message)
     telegram_id = telegram_message.dig(:from, :id)
-    first_name = telegram_message.dig(:from, :first_name)
-    last_name = telegram_message.dig(:from, :last_name)
     username = telegram_message.dig(:from, :username)
     sender = Contributor.find_by(telegram_id: telegram_id)
-    if sender
-      sender.username = username
-      sender.telegram_chat_id = telegram_chat_id
-    else
-      sender = Contributor.new(
-        telegram_id: telegram_id,
-        telegram_chat_id: telegram_chat_id,
-        username: username,
-        first_name: first_name,
-        last_name: last_name
-      )
-    end
+    sender.username = username if sender
+
     sender
   end
 

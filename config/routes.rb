@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   post '/onboarding', to: 'onboarding#create'
   get '/onboarding/success', to: 'onboarding#success'
   post '/onboarding/invite', to: 'onboarding#create_invite_url'
+  get '/onboarding/telegram', to: 'onboarding#telegram'
 
   get '/settings', to: 'settings#index'
   post '/settings', to: 'settings#update'

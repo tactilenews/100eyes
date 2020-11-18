@@ -170,7 +170,7 @@ RSpec.describe Request, type: :model do
     describe 'given some existing contributors in the moment of creation' do
       before(:each) do
         create(:contributor, id: 1, email: 'somebody@example.org')
-        create(:contributor, id: 2, email: nil, telegram_id: 22, telegram_chat_id: 23)
+        create(:contributor, id: 2, email: nil, telegram_id: 22)
       end
 
       it { should change { Message.count }.from(0).to(2) }
@@ -190,7 +190,7 @@ RSpec.describe Request, type: :model do
       end
       before(:each) do
         create(:contributor, id: 1, email: 'somebody@example.org', tag_list: ['programmer'])
-        create(:contributor, id: 2, email: nil, telegram_id: 22, telegram_chat_id: 23)
+        create(:contributor, id: 2, email: nil, telegram_id: 22)
       end
 
       it { should change { Message.count }.from(0).to(1) }
@@ -203,7 +203,7 @@ RSpec.describe Request, type: :model do
       before(:each) do
         create(:contributor, id: 3, email: 'deactivated@example.org', active: false)
         create(:contributor, id: 4, email: 'activated@example.org', active: true)
-        create(:contributor, id: 5, telegram_id: 24, telegram_chat_id: 25, active: false)
+        create(:contributor, id: 5, telegram_id: 24, active: false)
       end
 
       it { should change { Message.count }.from(0).to(1) }
