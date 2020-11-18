@@ -86,7 +86,7 @@ de:
           - Klicken Sie anschließend auf den unten stehenden Button, um die Anmeldung mit Telegram fortzusetzen.
         confirm:
           header: Noch ein Schritt...
-          subheader: Bitten nennen Sie uns Ihren Vor- und Nachnamen, und ide Anmeldung abzuschließen.
+          subheader: Bitten nennen Sie uns Ihren Vor- und Nachnamen, und die Anmeldung abzuschließen.
     onboarding_footer:
       imprint: Impressum
     create_invite_button:
