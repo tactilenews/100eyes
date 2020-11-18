@@ -1,16 +1,14 @@
-<div class="<%= class_attr %>">
-  <div class="Field-header">
-    <div class="Field-label"><%= label %></div>
-    <% if help %>
-      <div class="Field-help"><%= help %></div>
-    <% end %>
+<label class="<%= class_attr %>" for="<%= basic_defaults[:id] %>">
+  <p class="Field-label"><%= label %></p>
+  <% if help %>
+    <small class="Field-help"><%= help %></small>
+  <% end %>
   <% if validation_errors.any? %>
     <% validation_errors.each do |error| %>
-      <div class="Field-error">
+      <strong class="Field-error">
         <%= error %>
-      </div>
+      </strong>
     <% end %>
   <% end %>
-  </div>
   <%= content %>
-</div>
+</label>

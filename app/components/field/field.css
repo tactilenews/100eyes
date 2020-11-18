@@ -1,5 +1,5 @@
-.Field-header {
-  margin-bottom: var(--spacing-unit-s);
+.Field {
+  display: block;
 }
 
 .Field-label {
@@ -10,6 +10,7 @@
   color: var(--color-text-light);
   font-size: 0.8rem;
   line-height: 1.5;
+  display: block;
 }
 
 .Field-error {
@@ -33,4 +34,9 @@
   padding: var(--input-padding-s);
   padding-left: 0;
   padding-right: 0;
+}
+
+.Field > .Input,
+.Field > .Textarea {
+  margin-top: var(--spacing-unit-s);
 }
