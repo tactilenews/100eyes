@@ -8,7 +8,7 @@
 
   margin: 0 auto;
   max-width: 30rem;
-  padding: 2rem;
+  padding: var(--spacing-unit-s);
 }
 
 .OnboardingTelegramForm .Field,
