@@ -4,8 +4,9 @@ require 'openssl'
 
 class OnboardingController < ApplicationController
   skip_before_action :authenticate, except: :create_invite_url
-  before_action :verify_jwt, except: %i[create_invite_url success]
-  before_action :authenticate_telegram_params, only: :telegram
+  before_action :verify_onboarding_jwt, except: %i[create_invite_url success telegram_update_info]
+  before_action :verify_telegram_authentication_and_integrity, only: :telegram
+  before_action :verify_update_jwt, only: :telegram_update_info
 
   layout 'onboarding'
 
@@ -17,9 +18,7 @@ class OnboardingController < ApplicationController
   def create
     # Ensure information on registered contributors is never
     # disclosed during onboarding
-    email_taken = Contributor.email_taken?(contributor_params[:email])
-    telegram_id_taken = Contributor.exists?(telegram_id: contributor_params[:telegram_id])
-    if email_taken || telegram_id_taken
+    if Contributor.email_taken?(contributor_params[:email])
       invalidate_jwt
       return redirect_to_success
     end
@@ -37,17 +36,43 @@ class OnboardingController < ApplicationController
   def success; end
 
   def create_invite_url
-    payload = SecureRandom.base64(16)
-    jwt = JsonWebToken.encode(payload)
+    payload = { invite_code: SecureRandom.base64(16), action: 'onboarding' }
+    jwt = create_jwt(payload)
     render json: { url: onboarding_url(jwt: jwt) }
+  end
+
+  def telegram_explained
+    @jwt = jwt_param
   end
 
   def telegram
     @telegram_id = telegram_auth_params[:id]
     @first_name = telegram_auth_params[:first_name]
     @last_name = telegram_auth_params[:last_name]
-    @contributor = Contributor.new
-    @jwt = jwt_param
+    if Contributor.exists?(telegram_id: @telegram_id)
+      invalidate_jwt
+      return redirect_to_success
+    end
+
+    @contributor = Contributor.new(
+      telegram_id: @telegram_id,
+      first_name: @first_name,
+      last_name: @last_name,
+      username: telegram_auth_params[:username],
+      avatar_url: telegram_auth_params[:avatar_url]
+    )
+    return unless @contributor.save
+
+    invalidate_jwt
+    payload = { telegram_id: @contributor.telegram_id, action: 'update' }
+    @jwt = create_jwt(payload, expires_in: 30.minutes)
+  end
+
+  def telegram_update_info
+    decoded_token = JsonWebToken.decode(jwt_param)
+    @contributor = Contributor.where(telegram_id: decoded_token.first['data']['telegram_id'])
+    @contributor.update(first_name: contributor_params[:first_name], last_name: contributor_params[:last_name])
+    redirect_to_success
   end
 
   private
@@ -56,11 +81,23 @@ class OnboardingController < ApplicationController
     redirect_to onboarding_success_path
   end
 
-  def verify_jwt
+  def verify_onboarding_jwt
     invalidated_jwt = JsonWebToken.where(invalidated_jwt: jwt_param)
     raise ActionController::BadRequest if invalidated_jwt.exists?
 
-    JsonWebToken.decode(jwt_param)
+    decoded_token = JsonWebToken.decode(jwt_param)
+
+    raise ActionController::BadRequest if decoded_token.first['data']['action'] != 'onboarding'
+  rescue StandardError
+    render :unauthorized, status: :unauthorized
+  end
+
+  def verify_update_jwt
+    decoded_token = JsonWebToken.decode(jwt_param)
+
+    if decoded_token.first['data']['action'] != 'update' || decoded_token.first['data']['telegram_id'].blank?
+      raise ActionController::BadRequest
+    end
   rescue StandardError
     render :unauthorized, status: :unauthorized
   end
@@ -70,7 +107,7 @@ class OnboardingController < ApplicationController
   end
 
   def contributor_params
-    params.require(:contributor).permit(:first_name, :last_name, :email, :telegram_id)
+    params.require(:contributor).permit(:first_name, :last_name, :email)
   end
 
   def jwt_param
@@ -81,7 +118,11 @@ class OnboardingController < ApplicationController
     params.permit(:id, :first_name, :last_name, :auth_date, :hash, :username, :photo_url)
   end
 
-  def authenticate_telegram_params
+  def create_jwt(payload, expires_in: nil)
+    JsonWebToken.encode(payload, expires_in: expires_in)
+  end
+
+  def verify_telegram_authentication_and_integrity
     auth_data = telegram_auth_params.slice(:id, :auth_date, :first_name, :last_name, :username, :photo_url)
     check_string = auth_data.to_unsafe_h.map { |k, v| "#{k}=#{v}" }.sort.join("\n")
 

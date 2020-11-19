@@ -80,20 +80,21 @@ de:
       telegram:
         label: Telegram
         intro: |
-          Um per Telegram teilzunehmen, folgen Sie bitte diesen vier Schritten:
-        steps:
-          - Um per Telegram teilzunehmen, benötigen Sie die Telegram-App für iOS oder Android. Sie können die App im Apple App Store oder im Google Play Store herunterladen.
-          - Klicken Sie anschließend auf den unten stehenden Button, um die Anmeldung mit Telegram fortzusetzen.
+          Um per Telegram teilzunehmen, benötigen Sie die Telegram-App für iOS oder Android. Sie können die App im Apple App Store oder im Google Play Store herunterladen.
         confirm:
           header: Noch ein Schritt...
           subheader: Bitten nennen Sie uns Ihren Vor- und Nachnamen, und die Anmeldung abzuschließen.
+      telegram_explained:
+        link: Mit Telegram teilnehmen
+        header: Mit Telegram teilnehmen
+        subheader: Melden Sie sich über den Button unten bei Telegram an, damit wir Ihnen Nachrichten senden können.
+        important_info: Kommen Sie zurück zu dieser Seite, nachdem Sie sich bei Telegram angemeldet haben. Nur dann können wir Ihre Registrierung für %{project_name} abschließen.
     onboarding_footer:
       imprint: Impressum
     create_invite_button:
       label: Einladungs-Link kopieren
       loading: erstelle Link…
       success: Link kopiert
-
   mailer:
     unsubscribe:
       text: "Sofern Sie keine E-Mails mehr von uns erhalten möchten, können Sie sie unter diesem Link abbestellen: {{{ pm:unsubscribe }}}"

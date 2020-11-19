@@ -5,7 +5,7 @@ require 'telegram/bot/rspec/integration/rails'
 
 RSpec.describe 'Onboarding', type: :request do
   let(:contributor) { create(:contributor) }
-  let(:jwt) { JsonWebToken.encode('ONBOARDING_TOKEN') }
+  let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
   let(:params) { { jwt: jwt } }
 
   describe 'GET /index' do
@@ -104,10 +104,111 @@ RSpec.describe 'Onboarding', type: :request do
 
     context 'valid' do
       it { is_expected.not_to raise_exception }
+      it { is_expected.to change(Contributor, :count).by(1) }
 
       it 'is successful' do
         subject.call
         expect(response).to be_successful
+      end
+
+      it 'invalidates the jwt' do
+        expect { subject.call }.to change(JsonWebToken, :count).by(1)
+
+        json_web_token = JsonWebToken.where(invalidated_jwt: jwt)
+        expect(json_web_token).to exist
+      end
+    end
+
+    describe 'given an existing telegram id' do
+      let(:attrs) do
+        {
+          first_name: 'Tom',
+          last_name: 'Jones',
+          telegram_id: 123
+        }
+      end
+      let!(:contributor) { create(:contributor, **attrs) }
+
+      it 'redirects to success page' do
+        subject.call
+        expect(response).to redirect_to onboarding_success_path
+      end
+
+      it 'invalidates the jwt' do
+        expect { subject.call }.to change(JsonWebToken, :count).by(1)
+
+        json_web_token = JsonWebToken.where(invalidated_jwt: jwt)
+        expect(json_web_token).to exist
+      end
+
+      it 'does not create new contributor' do
+        expect { subject.call }.not_to change(Contributor, :count)
+      end
+    end
+  end
+
+  describe 'PATCH /telegram-update-info' do
+    let!(:contributor) { create(:contributor, telegram_id: 789, first_name: nil, last_name: nil) }
+    let(:attrs) do
+      {
+        first_name: 'Update',
+        last_name: 'MyNames'
+      }
+    end
+    let(:params) { { jwt: jwt, contributor: attrs } }
+    subject { -> { patch onboarding_telegram_update_info_path, params: params } }
+
+    context 'invalid' do
+      context 'no telegram id' do
+        let(:jwt) { JsonWebToken.encode({ telegram_id: nil, action: 'update' }) }
+
+        it 'is not successful' do
+          subject.call
+          expect(response).not_to be_successful
+        end
+
+        it 'does not redirect to success' do
+          subject.call
+          expect(response).not_to redirect_to onboarding_success_path
+        end
+
+        it 'does not update the user' do
+          subject.call
+          contributor = Contributor.where(telegram_id: 789).first
+          expect(contributor.first_name).to be_nil
+          expect(contributor.last_name).to be_nil
+        end
+      end
+
+      context 'action not equal to update' do
+        let(:jwt) { JsonWebToken.encode({ telegram_id: 789, action: 'onboarding' }) }
+
+        it 'is not successful' do
+          subject.call
+          expect(response).not_to be_successful
+        end
+
+        it 'does not redirect to success' do
+          subject.call
+          expect(response).not_to redirect_to onboarding_success_path
+        end
+
+        it 'does not update the user' do
+          subject.call
+          contributor = Contributor.where(telegram_id: 789).first
+          expect(contributor.first_name).to be_nil
+          expect(contributor.last_name).to be_nil
+        end
+      end
+    end
+
+    context 'valid' do
+      let(:jwt) { JsonWebToken.encode({ telegram_id: 789, action: 'update' }) }
+      it 'updates the contributor' do
+        subject.call
+        contributor = Contributor.where(telegram_id: 789).first
+        expect(contributor.first_name).to eq('Update')
+        expect(contributor.last_name).to eq('MyNames')
       end
     end
   end
@@ -147,33 +248,6 @@ RSpec.describe 'Onboarding', type: :request do
     end
 
     describe 'given an existing email address' do
-      let!(:contributor) { create(:contributor, **attrs) }
-
-      it 'redirects to success page' do
-        subject.call
-        expect(response).to redirect_to onboarding_success_path
-      end
-
-      it 'invalidates the jwt' do
-        expect { subject.call }.to change(JsonWebToken, :count).by(1)
-
-        json_web_token = JsonWebToken.where(invalidated_jwt: jwt)
-        expect(json_web_token).to exist
-      end
-
-      it 'does not create new contributor' do
-        expect { subject.call }.not_to change(Contributor, :count)
-      end
-    end
-
-    describe 'given an existing telegram id' do
-      let(:attrs) do
-        {
-          first_name: 'Tom',
-          last_name: 'Jones',
-          telegram_id: 56
-        }
-      end
       let!(:contributor) { create(:contributor, **attrs) }
 
       it 'redirects to success page' do
