@@ -5,7 +5,7 @@ require 'openssl'
 class OnboardingController < ApplicationController
   skip_before_action :authenticate, except: :create_invite_url
   before_action :verify_onboarding_jwt, except: %i[create_invite_url success telegram_update_info]
-  before_action :authenticate_telegram_params, only: :telegram
+  before_action :verify_telegram_authentication_and_integrity, only: :telegram
   before_action :verify_update_jwt, only: :telegram_update_info
 
   layout 'onboarding'
@@ -37,7 +37,7 @@ class OnboardingController < ApplicationController
 
   def create_invite_url
     payload = { invite_code: SecureRandom.base64(16), action: 'onboarding' }
-    jwt = JsonWebToken.encode(payload)
+    jwt = create_jwt(payload)
     render json: { url: onboarding_url(jwt: jwt) }
   end
 
@@ -63,7 +63,9 @@ class OnboardingController < ApplicationController
     )
     return unless @contributor.save
 
-    @jwt = invalidate_and_create_update_jwt(@contributor)
+    invalidate_jwt
+    payload = { telegram_id: @contributor.telegram_id, action: 'update' }
+    @jwt = create_jwt(payload, expires_in: 30.minutes)
   end
 
   def telegram_update_info
@@ -85,7 +87,7 @@ class OnboardingController < ApplicationController
 
     decoded_token = JsonWebToken.decode(jwt_param)
 
-    raise StandardError if decoded_token.first['data']['action'] != 'onboarding'
+    raise ActionController::BadRequest if decoded_token.first['data']['action'] != 'onboarding'
   rescue StandardError
     render :unauthorized, status: :unauthorized
   end
@@ -93,7 +95,9 @@ class OnboardingController < ApplicationController
   def verify_update_jwt
     decoded_token = JsonWebToken.decode(jwt_param)
 
-    raise StandardError if decoded_token.first['data']['action'] != 'update' || decoded_token.first['data']['telegram_id'].blank?
+    if decoded_token.first['data']['action'] != 'update' || decoded_token.first['data']['telegram_id'].blank?
+      raise ActionController::BadRequest
+    end
   rescue StandardError
     render :unauthorized, status: :unauthorized
   end
@@ -103,7 +107,7 @@ class OnboardingController < ApplicationController
   end
 
   def contributor_params
-    params.require(:contributor).permit(:first_name, :last_name, :email, :telegram_id, :username, :avatar_url)
+    params.require(:contributor).permit(:first_name, :last_name, :email)
   end
 
   def jwt_param
@@ -114,13 +118,11 @@ class OnboardingController < ApplicationController
     params.permit(:id, :first_name, :last_name, :auth_date, :hash, :username, :photo_url)
   end
 
-  def invalidate_and_create_update_jwt(contributor)
-    invalidate_jwt
-    payload_with_telegram_id = { telegram_id: contributor.telegram_id, action: 'update' }
-    JsonWebToken.encode(payload_with_telegram_id, expires_in: 30.minutes)
+  def create_jwt(payload, expires_in: nil)
+    JsonWebToken.encode(payload, expires_in: expires_in)
   end
 
-  def authenticate_telegram_params
+  def verify_telegram_authentication_and_integrity
     auth_data = telegram_auth_params.slice(:id, :auth_date, :first_name, :last_name, :username, :photo_url)
     check_string = auth_data.to_unsafe_h.map { |k, v| "#{k}=#{v}" }.sort.join("\n")
 
