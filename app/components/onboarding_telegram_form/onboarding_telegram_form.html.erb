@@ -15,7 +15,6 @@
     <%= c 'input', field.input_defaults.merge(value: last_name, required: true) %>
   <% end %>
 
-  <input type="hidden" id="contributor[telegram_id]" name="contributor[telegram_id]" value="<%= telegram_id %>" />
   <%= c 'button',
     type: 'submit',
     label: I18n.t('components.onboarding_telegram_form.submit'),

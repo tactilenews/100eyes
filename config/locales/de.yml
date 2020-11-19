@@ -88,7 +88,7 @@ de:
         link: Mit Telegram teilnehmen
         header: Mit Telegram teilnehmen
         subheader: Melden Sie sich über den Button unten bei Telegram an, damit wir Ihnen Nachrichten senden können.
-        important_info: Kommen Sie zurück zu dieser Seite, nachdem Sie sich bei Telegram angemeldet haben. Nur dann können wir Ihre Registrierung für "#%{project_name}" abschließen.
+        important_info: Kommen Sie zurück zu dieser Seite, nachdem Sie sich bei Telegram angemeldet haben. Nur dann können wir Ihre Registrierung für %{project_name} abschließen.
     onboarding_footer:
       imprint: Impressum
     create_invite_button:

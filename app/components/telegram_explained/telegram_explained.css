@@ -1,43 +1,85 @@
 .TelegramExplained {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  max-width: var(--grid-max-width-s);
-  margin: auto;
 }
 
 .TelegramExplained > header {
-  margin: var(--spacing-unit-xl);
+  padding: 2rem 0.75rem;
 }
 
 .TelegramExplained h1 {
-  font-size: 2rem;
-  font-weight: 700;
-
-  margin-bottom: var(--spacing-unit);
-}
-.TelegramExplained-subheader {
   font-size: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.TelegramExplained-subheader {
+  font-size: 0.8rem;
   font-weight: 400;
 }
 
 .TelegramExplained-important-info-section {
-  background-color: var(--color-red-lightest);
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
+
+  background-color: var(--color-red-lightest);
   color: var(--color-red-dark);
-  margin-bottom: var(--spacing-unit-xl);
-  padding-left: var(--spacing-unit);
+
+  margin-bottom: 2rem;
+  padding: 1rem 0.75rem;
   border-radius: var(--border-radius);
 }
 
 .TelegramExplained-important-info-section > .Icon {
-  font-size: calc(3 * var(--spacing-unit-xl));
+  font-size: 3rem;
+  margin-bottom: 0.75rem;
 }
 
 .TelegramExplained-important-info-header {
-  margin-left: var(--spacing-unit);
-  font-size: 1.5rem;
-  line-height: 1.5rem;
+  font-size: 1rem;
+  line-height: 1rem;
+}
+
+.TelegramExplained .TelegramWidget {
+  align-self: center;
+}
+
+@media screen and (min-width: 48rem) {
+  .TelegramExplained {
+    align-items: center;
+    justify-content: center;
+
+    max-width: var(--grid-max-width-s);
+    margin: auto;
+  }
+
+  .TelegramExplained > header {
+    margin-bottom: 3rem;
+    padding: 0 2rem;
+  }
+
+  .TelegramExplained h1 {
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  .TelegramExplained-subheader {
+    font-size: 1.25rem;
+  }
+
+  .TelegramExplained-important-info-section {
+    align-items: center;
+    flex-wrap: nowrap;
+
+    margin-bottom: 3rem;
+  }
+
+  .TelegramExplained-important-info-section > .Icon {
+    align-self: flex-start;
+    flex-basis: 60%;
+  }
+
+  .TelegramExplained-important-info-header {
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+  }
 }
