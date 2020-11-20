@@ -105,6 +105,7 @@ RSpec.describe 'Onboarding', type: :request do
     context 'valid' do
       it { is_expected.not_to raise_exception }
       it { is_expected.to change(Contributor, :count).by(1) }
+      it { is_expected.to change(JsonWebToken, :count).by(1) }
 
       it 'is successful' do
         subject.call
@@ -112,10 +113,19 @@ RSpec.describe 'Onboarding', type: :request do
       end
 
       it 'invalidates the jwt' do
-        expect { subject.call }.to change(JsonWebToken, :count).by(1)
+        subject.call
 
         json_web_token = JsonWebToken.where(invalidated_jwt: jwt)
         expect(json_web_token).to exist
+      end
+
+      context 'creates a new update' do
+        before { allow(JsonWebToken).to receive(:encode) }
+
+        it 'jwt token' do
+          subject.call
+          expect(JsonWebToken).to have_received(:encode)
+        end
       end
     end
 
