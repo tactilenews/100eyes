@@ -4,6 +4,7 @@ class ApplicationComponent < ViewComponent::Base
   include ComponentHelper
   include DateTimeHelper
   include SvgHelper
+  include ColorHelper
 
   def initialize(styles: [], style: nil, **)
     super

@@ -17,8 +17,15 @@
       <% end %>
     </span>
 
-    <p class="ContributorRow-note">
-      <%= contributor.note %>
-    </p>
+    <% if contributor.tags? %>
+      <div class="ContributorRow-tag-display">
+
+        <% contributor.tags.each do |tag| %>
+          <div class="ContributorRow-tag" style="<%= "background:#{tag_color_from_id(tag.id)}" %>"> <%= tag %> </div>
+        <% end %>
+
+      </div>
+    <% end %>
+
   </div>
 </a>

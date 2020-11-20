@@ -43,9 +43,14 @@ class Contributor < ApplicationRecord
         id: tag.id,
         name: tag.name,
         value: tag.name,
-        count: Contributor.tagged_with([tag]).count
+        count: Contributor.tagged_with([tag]).count,
+        color: Contributor.tag_color_from_id(tag.id)
       }
     end
+  end
+
+  def self.tag_color_from_id(tag_id)
+    ApplicationController.helpers.tag_color_from_id(tag_id)
   end
 
   def reply(message_decorator)
@@ -82,6 +87,10 @@ class Contributor < ApplicationRecord
 
   def email?
     email.present?
+  end
+
+  def tags?
+    tag_list.any?
   end
 
   def recent_replies

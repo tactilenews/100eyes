@@ -15,15 +15,25 @@ a.ContributorRow:hover .ContributorRow-name {
   margin-right: var(--spacing-unit-s);
 }
 
-.ContributorRow-note {
-  color: var(--color-text-light);
-  font-size: var(--font-size-s);
-}
-
 .ContributorRow-channels {
   color: var(--color-accent);
 }
 
 .ContributorRow--inactive .ContributorRow-channels {
   color: var(--color-gray);
+}
+
+.ContributorRow-tag-display {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  line-height: 1.1;
+}
+
+.ContributorRow-tag {
+  border-radius: 3px;
+  vertical-align: top;
+  padding: 0.3em 0.5em;
+  margin: 5px 0 5px 5px;
+  color: #fff;
 }

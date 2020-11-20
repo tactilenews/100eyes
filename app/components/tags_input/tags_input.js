@@ -1,21 +1,13 @@
 import { Controller } from 'stimulus';
 import Tagify from '@yaireo/tagify';
 
-const COLORS = ['#F4C317', '#0898FF', '#67D881', '#F4177A'];
-
 const tagColor = tagData => {
-  if (!tagData.id) {
-    return 'var(--color-text)';
-  }
-
-  const COLORS = ['#F4C317', '#0898FF', '#67D881', '#F4177A'];
-  return COLORS[tagData.id % COLORS.length];
+  return tagData.color ? tagData.color : 'var(--color-text)';
 };
 
 function dropdownItemTemplate(tagData) {
   const { one, other } = this.settings.labels.members;
   const membersLabel = tagData.count === 1 ? one : other;
-
   const color = tagColor(tagData);
 
   return `
