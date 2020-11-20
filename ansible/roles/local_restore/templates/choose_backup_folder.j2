@@ -1,0 +1,10 @@
+#############################
+Available backups are:
+
+{% for folder in backup_folders.files %}
+{{ loop.index }}. {{ folder.path }}
+{% endfor %}
+
+#############################
+
+Type in index of backup

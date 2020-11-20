@@ -8,8 +8,6 @@
     src: pgpass.j2
     dest: /home/ansible/.pgpass
     mode: '0600'
-  tags:
-  - work-in-progress
 
 - name: Copy .pgpass into container
   command:
@@ -31,9 +29,9 @@
 - name: Download database dump
   fetch:
     src: /tmp/100eyes-db-dump
-    dest: "{{ backup_folder }}/100eyes-db-dump"
+    dest: "{{ backup_folder }}"
 
 - name: Download storage archive
   fetch:
     src: /tmp/100eyes-storage.tgz
-    dest: "{{ backup_folder }}/100eyes-storage"
+    dest: "{{ backup_folder }}"

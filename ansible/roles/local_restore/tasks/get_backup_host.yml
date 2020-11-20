@@ -1,0 +1,30 @@
+---
+- name: Find /backups
+  find:
+    paths: backups/
+    pattern: '*'
+    file_type: directory
+  register: backup_folders
+
+- pause:
+    prompt: "{{ lookup('template', './choose_backup_folder.j2') | trim }}"
+  register: backup_folder_index
+
+- name: Set backup folder
+  set_fact:
+    backup_folder: "{{ backup_folders.files[(backup_folder_index.user_input | int) - 1] }}"
+
+- name: Find /backups/host
+  find:
+    paths: "{{ backup_folder.path }}"
+    pattern: '*'
+    file_type: directory
+  register: backup_hosts
+
+- pause:
+    prompt: "{{ lookup('template', './choose_backup_host.j2') | trim }}"
+  register: backup_host_index
+
+- name: Set backup host folder
+  set_fact:
+    backup_host_folder: "{{ backup_hosts.files[(backup_host_index.user_input | int) - 1] }}"

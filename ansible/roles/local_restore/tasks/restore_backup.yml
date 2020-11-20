@@ -1,0 +1,56 @@
+---
+- name: Create tmp/db/ folder for sharing files between host and container
+  file:
+    dest: "{{ playbook_dir }}/../tmp/db"
+    state: directory
+
+- name: Copy database dump into shared volume of db container
+  copy:
+    src: "{{ backup_host_folder.path }}/tmp/100eyes-db-dump"
+    dest: "{{ playbook_dir }}/../tmp/db"
+
+- name: Wipe out local storage folder
+  file:
+    dest: "{{ playbook_dir }}/../storage"
+    state: absent
+
+- name: Unarchive compressed storage archive into storage folder
+  unarchive:
+    src: "{{ backup_host_folder.path }}/tmp/100eyes-storage.tgz"
+    dest: "{{ playbook_dir }}/.."
+
+- name: Run `docker-compose up`
+  community.general.docker_compose:
+    project_src: "{{ playbook_dir }}/.."
+    debug: yes
+    state: present
+    services:
+      - db
+    files:
+      - docker-compose.yml
+      - docker-compose.override.yml
+      - docker-compose.local-backup.yml
+
+- name: Wait for database to become available
+  wait_for:
+    port: 5432
+    delay: 1
+
+- name: Re-create empty databse and restore database backup
+  command:
+    cmd: "docker-compose exec -T db bash -c \"{{ item }}\""
+    chdir: "{{ playbook_dir }}/.."
+  loop:
+    - dropdb app_development -U postgres --if-exists
+    - createdb app_development -U postgres
+    - pg_restore -d app_development -U postgres --no-owner --role=postgres < /tmp/100eyes-db-dump
+
+- name: Run `docker-compose down`
+  community.general.docker_compose:
+    project_src: "{{ playbook_dir }}/.."
+    debug: yes
+    state: absent
+    files:
+      - docker-compose.yml
+      - docker-compose.override.yml
+      - docker-compose.local-backup.yml
