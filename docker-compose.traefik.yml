@@ -18,10 +18,13 @@ services:
       - --entrypoints.websecure.address=:443
       - --providers.docker
       - --api
-      - "--certificatesresolvers.le.acme.email=${ACME_EMAIL_ADDRESS}"
-      - --certificatesresolvers.le.acme.storage=/traefik/acme.json
-      - --certificatesresolvers.le.acme.tlschallenge=true
       - --providers.docker.exposedbydefault=false
+      - "--certificatesresolvers.cloudflare.acme.dnschallenge=true"
+      - "--certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare"
+      - "--certificatesresolvers.cloudflare.acme.email=${ACME_EMAIL_ADDRESS}"
+      - "--certificatesresolvers.cloudflare.acme.storage=/traefik/acme.json"
+      #- "--log.level=DEBUG"
+      #- "--certificatesresolvers.cloudflare.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
     labels:
       - traefik.enable=true
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
@@ -31,16 +34,16 @@ services:
       - "traefik.http.routers.traefik.rule=Host(`${TRAEFIK_HOSTNAME}`)"
       - "traefik.http.routers.traefik.service=api@internal"
       - "traefik.http.routers.traefik.middlewares=admin"
-      - "traefik.http.routers.traefik.tls.certresolver=le"
-      - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.middlewares.admin.basicauth.usersfile=/traefik/passwords"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.traefik.tls.certresolver=cloudflare"
+    environment:
+      - "CF_DNS_API_TOKEN=$CF_DNS_API_TOKEN"
 
   app:
     labels:
       - traefik.enable=true
       - "traefik.http.routers.app.rule=Host(`${APPLICATION_HOSTNAME}`)"
       - traefik.http.services.app.loadbalancer.server.port=3000
-      - traefik.http.routers.app.tls.certresolver=le
       - traefik.http.routers.app.entrypoints=websecure
-
-
+      - traefik.http.routers.app.tls.certresolver=cloudflare

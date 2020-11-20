@@ -42,6 +42,7 @@
     RAILS_INBOUND_EMAIL_PASSWORD: "{{ rails.inbound_email_password }}"
     BASIC_AUTH_LOGIN_USER: "{{ rails.login.user }}"
     BASIC_AUTH_LOGIN_PASSWORD: "{{ rails.login.password }}"
+    CF_DNS_API_TOKEN: "{{ traefik.cloudflare_dns_api_token }}"
   community.general.docker_compose:
     project_src: /home/ansible
     build: no

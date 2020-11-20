@@ -9,7 +9,9 @@ read domain
 
 script_directory=$(dirname "$0")
 
-traefik_domain="traefik.${domain}"
+domain_head="${domain%%.*}"
+domain_tail="${domain#*.}"
+traefik_domain="${domain_head}-traefik.${domain_tail}"
 traefik_password=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)
 redaktion_password=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)
 sudo_password=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)
@@ -27,7 +29,7 @@ vps:
   nick: "${nickname}"  #
   root_password: # (optional) you can store your root password here
   sudo_password: "${sudo_password}"
-  hostname: # (REQUIRED) e.g. v0000000000000000000.megasrv.de
+  hostname: # (REQUIRED) e.g. the IP address of your origin web server
 
 dns:
   application_hostname: "${domain}" # e.g. 'hundred.tactile.news'
@@ -37,6 +39,7 @@ traefik:
   acme_email_address: # (REQUIRED) an email address used for expiration warnings
   user: traefik
   password: "${traefik_password}"
+  cloudflare_dns_api_token: # (REQUIRED) a cloudflare API token with "edit" permissions on your zone
 
 rails:
   environment: production
@@ -109,4 +112,3 @@ cat <<- INSTRUCTIONS
     ${nickname}
 --------------------------------------------------------------------------------------------------------------------------
 INSTRUCTIONS
-
