@@ -22,13 +22,7 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
   end
 
   describe '#message' do
-    before { Setting.telegram_contributor_not_found_message = 'Who are you?' }
     subject { -> { dispatch_message 'Hello Bot!', { from: { id: 'whoami' } } } }
-
-    context 'contributor has not onboarded yet' do
-      it { should respond_with_message 'Who are you?' }
-      it { should_not change(Contributor, :count) }
-    end
 
     context 'sending a message with a document' do
       before { Setting.telegram_unknown_content_message = "Cannot handle this, I'm sorry :(" }
