@@ -2,8 +2,8 @@
   <%= c 'wrapper' do %>
     <%= c 'flex', styles: [:'big-gap'] do %>
 
-      <% if @contributor.avatar_image? %>
-        <a href="<%= @contributor.avatar_image_url %>" target="_blank">
+      <% if @contributor.avatar? %>
+        <a href="<%= url_for(@contributor.avatar) %>" target="_blank">
           <%= c 'avatar', contributor: @contributor, styles: [:big] %>
         </a>
       <% else %>

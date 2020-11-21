@@ -22,11 +22,11 @@ module Avatar
     end
 
     def avatar_image?
-      contributor&.avatar_image?
+      contributor&.avatar?
     end
 
-    def avatar_image_url
-      contributor&.avatar_image_url
+    def avatar_image
+      contributor&.avatar
     end
 
     def initials

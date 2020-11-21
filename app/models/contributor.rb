@@ -88,16 +88,8 @@ class Contributor < ApplicationRecord
     email.present?
   end
 
-  def avatar_image?
-    avatar.attached? || avatar_url
-  end
-
-  def avatar_image_url
-    if avatar.attached?
-      Rails.application.routes.url_helpers.rails_blob_path(avatar, only_path: true)
-    else
-      avatar_url
-    end
+  def avatar?
+    avatar.attached?
   end
 
   def recent_replies
