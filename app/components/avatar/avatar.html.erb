@@ -1,6 +1,6 @@
 <div class="<%= class_attr %>">
-  <% if url %>
-    <img src="<%= url %>" alt="" />
+  <% if avatar_image? %>
+      <img src="<%= avatar_image_url %>"/>
   <% else %>
     <svg
       class="Avatar-initials"

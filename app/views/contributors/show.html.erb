@@ -1,10 +1,19 @@
 <%= c 'box', styles: [:large, :gray] do %>
   <%= c 'wrapper' do %>
     <%= c 'flex', styles: [:'big-gap'] do %>
-      <%= c 'avatar', contributor: @contributor, styles: [:big] %>
+
+      <% if @contributor.avatar_image? %>
+        <a href="<%= @contributor.avatar_image_url %>" target="_blank">
+          <%= c 'avatar', contributor: @contributor, styles: [:big] %>
+        </a>
+      <% else %>
+        <%= c 'avatar', contributor: @contributor, styles: [:big] %>
+      <% end %>
+
       <%= c 'heading' do %>
         <%= @contributor.name %>
       <% end %>
+
     <% end %>
   <% end %>
 <% end %>

@@ -21,8 +21,12 @@ module Avatar
       COLORS[key % COLORS.length] if key
     end
 
-    def url
-      contributor&.avatar_url
+    def avatar_image?
+      contributor&.avatar_image?
+    end
+
+    def avatar_image_url
+      contributor&.avatar_image_url
     end
 
     def initials

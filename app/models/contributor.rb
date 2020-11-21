@@ -9,12 +9,16 @@ class Contributor < ApplicationRecord
   has_many :replied_to_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :replies
   has_many :received_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :received_messages
 
+  has_one_attached :avatar
+
   acts_as_taggable_on :tags
 
   default_scope { order(:first_name, :last_name) }
   scope :active, -> { where(deactivated_at: nil) }
 
   validates :email, uniqueness: { case_sensitive: false }, allow_nil: true, 'valid_email_2/email': true
+  validates :avatar, blob: { content_type: :image }
+
 
   scope :with_tags, lambda { |tag_list = []|
     tag_list.blank? ? all : tagged_with(tag_list)
@@ -82,6 +86,18 @@ class Contributor < ApplicationRecord
 
   def email?
     email.present?
+  end
+
+  def avatar_image?
+    avatar.attached? || avatar_url
+  end
+
+  def avatar_image_url
+    if avatar.attached?
+      Rails.application.routes.url_helpers.rails_blob_path(avatar, only_path: true)
+    else
+      avatar_url
+    end
   end
 
   def recent_replies
