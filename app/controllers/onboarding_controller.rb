@@ -3,7 +3,7 @@
 require 'openssl'
 
 class OnboardingController < ApplicationController
-  skip_before_action :authenticate, except: :create_invite_url
+  skip_before_action :authenticate_user!, except: :create_invite_url
   before_action :verify_onboarding_jwt, except: %i[create_invite_url success telegram_update_info]
   before_action :verify_telegram_authentication_and_integrity, only: :telegram
   before_action :verify_update_jwt, only: :telegram_update_info
