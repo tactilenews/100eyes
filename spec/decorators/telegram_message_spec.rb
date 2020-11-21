@@ -132,11 +132,6 @@ RSpec.describe TelegramMessage do
   describe '#sender' do
     subject { telegram_message.sender }
 
-    context 'unknown sender' do
-      before { message['from']['id'] = 'unknown_contributor' }
-      it { is_expected.to eq(nil) }
-    end
-
     context 'known sender, but outdated contributor record' do
       let(:message) { { 'chat' => { 'id' => 42 }, 'from' => { 'id' => contributor.telegram_id, 'username' => 'alice' } } }
       let(:contributor) { create(:contributor, telegram_id: 42, username: 'bob') }
