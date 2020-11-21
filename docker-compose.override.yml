@@ -10,6 +10,7 @@ x-defaults: &x-defaults
     MAILSERVER_HOST: mailserver
     MAILSERVER_PORT: 25
     POSTGRES_HOST: db
+    POSTGRES_DB: "${POSTGRES_DB:-app_development}"
     WEBPACKER_DEV_SERVER_HOST: 0.0.0.0
   stdin_open: true
   tty: true
