@@ -1,0 +1,25 @@
+<main class="SignInForm">
+  <%= c 'heading', tag: :h1 do %>
+    <%= t 'user.form.sign_in.text' %>
+  <% end %>
+
+  <%= form_with(url: user_session_path(resource), local: true) do |f| %>
+    <%= c 'field', object: resource, id: :email do |field| %>
+      <%= c 'input', field.input_defaults.merge(type: :email) %>
+    <% end %>
+
+    <%= c 'field', object: resource, id: :password do |field| %>
+      <%= c 'input', field.input_defaults.merge(type: :password) %>
+    <% end %>
+
+    <%= c 'button', type: 'submit', label: I18n.t('user.form.sign_in.text') %>
+  <% end %>
+  <footer>
+    <p>
+      <%= t 'user.form.password_reset.help' %>
+      <%= link_to new_user_password_path(resource), class: "Link SignInForm-password-reset-link" do %>
+        <%= t 'user.form.password_reset.text' %>
+      <% end %>
+    </p>
+  </footer>
+</main>

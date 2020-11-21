@@ -4,6 +4,7 @@ class ApplicationComponent < ViewComponent::Base
   include ComponentHelper
   include DateTimeHelper
   include SvgHelper
+  include Devise::Controllers::Helpers
 
   def initialize(styles: [], style: nil, **)
     super
