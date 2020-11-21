@@ -1,12 +1,12 @@
 # `100eyes` (German version below)
 
-`100eyes` is the first open source solution for dialog-driven journalism in Germany. In the editorial office, `100eyes` is the tool to reach as many different people as possible where they would most like to be reached - via Telegram messenger or e-mail.
+`100eyes` is the first open source solution for dialog-driven journalism in Germany. In the editorial office, `100eyes` enables newsrooms to reach as many people as possible where they would most like to be reached - via Telegram messenger or e-mail.
 
 `100eyes` is a lean tool that improves journalistic routine: editors can ask questions and get answers from more people faster. The user interface offers two core functions to journalists:
 
-1. maintain a **community**
+1. Maintain a **community**
 
-2 **Start research:** With just one click, journalists can send questions to their community, evaluate all answers collectively and store new information from the answers of their contributors in a structured way.
+2. **Start research:** With just one click, journalists can send questions to their community, evaluate all answers collectively and store new information from the answers of their contributors in a structured way.
 
 ## Demo
 Behind the `100eyes` project are Astrid Csuraji and Dr. Jakob Vicari, who are driving journalistic innovation. If you would like to learn more or are interested in using `100eyes` for a journalistic project, please contact us at https://tactile.news/.
@@ -56,14 +56,14 @@ For development purposes, you can set up `100eyes` using Docker. To perform the 
   ```
 
 ### Production
-`100eyes` is a relatively simple Ruby on Rails(RoR) application and consists of the application server and a background worker to receive incoming Telegram messages.
+`100eyes` is a relatively simple Ruby on Rails (RoR) application and consists of the application server and a background worker to receive incoming Telegram messages.
 
 * Ruby 2.7 (and the bundler gem)
 * PostgreSQL (Version 12+)
 * nginx or another reverse proxy
 
-## Promotion
-The development of `100eyes` was supported by the [Prototype Fund](https://prototypefund.de) with funds from the [Federal Ministry of Education and Research](https://bmbf.de). The [Medieninnovationszentrum Babelsberg](http://miz-babelsberg.de) supports the development of additional modules.
+## Funding
+The [Medieninnovationszentrum Babelsberg](http://miz-babelsberg.de) supports the development of additional modules.
 
 ## License
 `100eyes` is developed by [tactile.news](https://tactile.news) and is licensed under the [MIT license](https://github.com/tactilenews/100eyes/blob/master/LICENSE).
