@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  devise_for :users
-
   root to: redirect('/dashboard')
   get '/dashboard', to: 'dashboard#index'
   get '/search', to: 'search#index'

@@ -4,13 +4,13 @@ require 'rails_helper'
 
 RSpec.describe 'Messages', type: :request do
   describe 'POST /messages/:id/highlight' do
-    before { login_as(create(:user)) }
-
     let(:params) { {} }
 
     subject do
       lambda do
-        post(highlight_message_url(message, format: :json), params: params)
+        post(highlight_message_url(message, format: :json),
+             headers: auth_headers,
+             params: params)
       end
     end
 

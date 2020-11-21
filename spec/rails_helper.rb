@@ -2,6 +2,7 @@
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
+require 'auth_helper'
 require 'vcr_setup'
 
 ENV['RAILS_ENV'] ||= 'test'
@@ -79,5 +80,4 @@ RSpec.configure do |config|
   config.include ViewComponent::TestHelpers, type: :component
   config.include Capybara::RSpecMatchers, type: :component
   config.include FactoryBot::Syntax::Methods
-  config.include Warden::Test::Helpers, type: :request
 end

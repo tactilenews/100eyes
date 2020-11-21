@@ -302,7 +302,7 @@ RSpec.describe 'Onboarding', type: :request do
     end
 
     describe 'as a logged-in user' do
-      before { login_as(create(:user)) }
+      let(:headers) { auth_headers }
 
       it 'responds with a url with a jwt search query' do
         subject.call

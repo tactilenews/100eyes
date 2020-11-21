@@ -55,15 +55,6 @@ For development purposes, you can set up `100eyes` using Docker. To perform the 
   $ docker-compose exec app bin/webpack-dev-server
   ```
 
-5. Seed database
-
-   One user has been created to use in development, since registration is disabled. You can create your own user in the `rails console` if you want, or you can run:
-
-   ```bash
-   $ docker-compoes exec app rails db:seed
-   ```
-
-
 ### Production
 `100eyes` is a relatively simple Ruby on Rails (RoR) application and consists of the application server and a background worker to receive incoming Telegram messages.
 
