@@ -1,4 +1,4 @@
-# `100eyes` (German version below)
+# `100eyes`
 
 `100eyes` is the first open source solution for dialog-driven journalism in Germany. In the editorial office, `100eyes` enables newsrooms to reach as many people as possible where they would most like to be reached - via Telegram messenger or e-mail.
 
@@ -46,6 +46,14 @@ For development purposes, you can set up `100eyes` using Docker. To perform the 
     ```bash
     $ docker-compose up
     ```
+
+5. #### Seed database
+
+   One user has been created to use in development, since registration is disabled. You can create your own user in the `rails console` if you want, or you can run:
+
+   ```bash
+   $ docker-compoes exec app rails db:seed
+   ```
 
   ##### Webpack Development Server
 
