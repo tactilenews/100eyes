@@ -13,7 +13,7 @@ Behind the `100eyes` project are Astrid Csuraji and Dr. Jakob Vicari, who are dr
 
 ## Installation
 
-### Development
+## Development
 For development purposes, you can set up `100eyes` using Docker. To perform the following steps, Docker (including Docker Compose) must be installed on your computer. You can find installation instructions for this in the [Docker Documentation](https://docs.docker.com/get-docker/). You will also need [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) to clone this repository.
 
 1. #### Clone the repository
@@ -61,8 +61,6 @@ For development purposes, you can set up `100eyes` using Docker. To perform the 
 * Ruby 2.7 (and the bundler gem)
 * PostgreSQL (Version 12+)
 * nginx or another reverse proxy
-
-At [/scripts](https://github.com/tactilenews/100eyes/tree/master/scripts) you can find some scripts that make it easier to set up `100eyes` on an [Uberspace](https://uberspace.de).
 
 ## Promotion
 The development of `100eyes` was supported by the [Prototype Fund](https://prototypefund.de) with funds from the [Federal Ministry of Education and Research](https://bmbf.de). The [Medieninnovationszentrum Babelsberg](http://miz-babelsberg.de) supports the development of additional modules.
