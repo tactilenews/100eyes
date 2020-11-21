@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+include Rails.application.routes.url_helpers
 
 RSpec.describe Avatar::Avatar, type: :component do
   let(:params) { {} }
@@ -12,8 +13,9 @@ RSpec.describe Avatar::Avatar, type: :component do
       it { should be_empty }
     end
 
-    describe 'given contributor without `avatar_url`' do
-      let(:params) { { contributor: build(:contributor, avatar_url: nil) } }
+    describe 'given contributor without attached avatar' do
+      let(:contributor) { build(:contributor, avatar: nil) }
+      let(:params) { { contributor: contributor } }
       it { should be_empty }
     end
   end
@@ -21,9 +23,10 @@ RSpec.describe Avatar::Avatar, type: :component do
   describe 'img[src]' do
     subject { component.css('img').first['src'] }
 
-    describe 'given a a contributor with `avatar_url`' do
-      let(:params) { { contributor: build(:contributor, avatar_url: '/my-avatar.jpg') } }
-      it { should eq('/my-avatar.jpg') }
+    describe 'given a a contributor with attached avatar' do
+      let(:contributor) { build(:contributor, :with_an_avatar) }
+      let(:params) { {contributor: contributor} }
+      it { should eq( rails_blob_path(contributor.avatar, only_path: true)) }
     end
   end
 
