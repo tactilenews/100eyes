@@ -56,7 +56,6 @@
 
 - name: Prune outdated images
   community.general.docker_prune:
-    containers: yes
     images: yes
 
 - name: Create and migrate database
