@@ -47,6 +47,18 @@ ansible-playbook ansible/site.yml -i ansible/inventories/custom --ask-vault-pass
 
 See [Netcup](./Netcup.md).
 
+## Backup and Restore
+
+You can create a manual backup and download it by running:
+```bash
+ansible-playbook ansible/backup.yml -i ansible/inventories/production --ask-vault-pass
+```
+
+To restore the database (destructively!) into your local docker development setup:
+```bash
+ansible-playbook ansible/restore_locally.yml
+```
+
 ## Troubleshooting
 
 See our docs to debug issues with [Postmark](./Postmark.md).
