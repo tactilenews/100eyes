@@ -117,6 +117,15 @@ RSpec.describe 'Onboarding', type: :request do
         json_web_token = JsonWebToken.where(invalidated_jwt: jwt)
         expect(json_web_token).to exist
       end
+
+      context 'creates a new update' do
+        before { allow(JsonWebToken).to receive(:encode) }
+
+        it 'jwt token' do
+          subject.call
+          expect(JsonWebToken).to have_received(:encode)
+        end
+      end
     end
 
     describe 'given an existing telegram id' do
