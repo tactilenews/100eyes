@@ -21,11 +21,6 @@
           <%= t 'setting.setting', count: :many %>
         <% end %>
       </li>
-      <li class="NavBar-item">
-        <%= link_to destroy_user_session_path, method: :delete do %>
-          <%= t 'components.nav_bar.sign_out' %>
-        <% end %>
-      </li>
     </ul>
   </nav>
   <%= form_with url: search_path, local: true, method: :get, class: 'NavBar-search' do %>
@@ -37,5 +32,5 @@
       styles: [:inverted, :small],
       placeholder: t('search.placeholder')
     %>
-  <% end %>
+<% end %>
 </header>
