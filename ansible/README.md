@@ -4,12 +4,10 @@ Our setup uses a number of community-maintained Ansibles roles. Install them usi
 
 ```
 ansible-galaxy collection install community.general
+ansible-galaxy collection install devsec.hardening
 ansible-galaxy install geerlingguy.docker
 ansible-galaxy install geerlingguy.pip
-ansible-galaxy install dev-sec.os-hardening
-ansible-galaxy install dev-sec.ssh-hardening
 ```
-
 
 Generate configuration files:
 ```bash
