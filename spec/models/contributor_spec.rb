@@ -140,6 +140,20 @@ RSpec.describe Contributor, type: :model do
     end
   end
 
+  describe '#avatar?' do
+    subject { contributor.avatar? }
+
+    describe 'given a contributor with an avatar' do
+      let(:contributor) { create(:contributor, :with_an_avatar) }
+      it { should be(true) }
+    end
+
+    describe 'given a contributor without an avatar' do
+      let(:contributor) { create(:contributor) }
+      it { should be(false) }
+    end
+  end
+
   describe '#conversation_about' do
     subject { contributor.conversation_about(the_request) }
 

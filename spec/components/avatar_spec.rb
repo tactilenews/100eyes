@@ -25,8 +25,8 @@ RSpec.describe Avatar::Avatar, type: :component do
 
     describe 'given a a contributor with attached avatar' do
       let(:contributor) { build(:contributor, :with_an_avatar) }
-      let(:params) { {contributor: contributor} }
-      it { should eq( rails_blob_path(contributor.avatar, only_path: true)) }
+      let(:params) { { contributor: contributor } }
+      it { should eq(rails_blob_path(contributor.avatar, only_path: true)) }
     end
   end
 
