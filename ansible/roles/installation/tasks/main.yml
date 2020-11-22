@@ -21,16 +21,16 @@
 
 - name: Run `docker-compose up`
   environment:
-    DOCKER_IMAGE_TAG: "{{ vps.docker_image_tag | default('latest') }}"
+    DOCKER_IMAGE_TAG: "{{ docker_image_tag }}"
     RAILS_ENV: "{{ rails.environment }}"
     HUNDRED_EYES_PROJECT_NAME: "{{ rails.hundred_eyes_project_name }}"
     TELEGRAM_BOT_API_KEY: "{{ rails.telegram_bot.api_key }}"
     TELEGRAM_BOT_USERNAME: "{{ rails.telegram_bot.username }}"
-    POSTGRES_HOST: "{{ rails.postgres.host }}"
-    POSTGRES_PORT: "{{ rails.postgres.port }}"
-    POSTGRES_USER: "{{ rails.postgres.user }}"
-    POSTGRES_PASSWORD: "{{ rails.postgres.password }}"
-    POSTGRES_DB: "{{ rails.postgres.db }}"
+    POSTGRES_HOST: "{{ postgres_host }}"
+    POSTGRES_PORT: "{{ postgres_port }}"
+    POSTGRES_USER: "{{ postgres_user }}"
+    POSTGRES_PASSWORD: "{{ postgres_password }}"
+    POSTGRES_DB: "{{ postgres_db }}"
     ACME_EMAIL_ADDRESS: "{{ traefik.acme_email_address }}"
     TRAEFIK_HOSTNAME: "{{ dns.traefik_hostname }}"
     APPLICATION_HOSTNAME: "{{ dns.application_hostname }}"
