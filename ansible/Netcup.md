@@ -1,4 +1,9 @@
-# Netcup (Snapshot)
+# Netcup
+
+We keep provider-specific documentation for [Netcup](https://www.netcup.de/) in
+this document.
+
+## Snapshot
 
 As of winter 2020, you cannot upload your SSH public key for the initial user
 when you create or rebuild a new VPS through the server control panel.

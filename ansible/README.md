@@ -28,6 +28,10 @@ nickname
 
 # Installation
 
+Our setup is known to work for the following base images:
+
+* `Ubuntu 20.04 (LTS) x64`
+
 If your authorized SSH keys are in place you can run the entire installation of
 the application with:
 
