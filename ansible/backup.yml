@@ -1,9 +1,11 @@
 ---
 - hosts: webservers
+  become: yes
   tasks:
     - set_fact:
         backup_directory: "backups/{{ ansible_date_time.iso8601_basic_short }}"
       run_once: true
 - hosts: webservers
+  become: yes
   roles:
     - role: backup
