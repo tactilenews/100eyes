@@ -3,8 +3,6 @@
   overflow: hidden;
   width: var(--spacing-unit-xl);
   height: var(--spacing-unit-xl);
-
-  background-color: var(--color-gray-dark);
   border-radius: 50%;
 }
 
