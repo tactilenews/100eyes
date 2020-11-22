@@ -4,19 +4,19 @@
     paths: backups/
     pattern: '*'
     file_type: directory
-  register: backup_folders
+  register: backup_directories
 
 - pause:
-    prompt: "{{ lookup('template', './choose_backup_folder.j2') | trim }}"
-  register: backup_folder_index
+    prompt: "{{ lookup('template', './choose_backup_directory.j2') | trim }}"
+  register: backup_directory_index
 
-- name: Set backup folder
+- name: Set backup directory
   set_fact:
-    backup_folder: "{{ backup_folders.files[(backup_folder_index.user_input | int) - 1] }}"
+    backup_directory: "{{ backup_directories.files[(backup_directory_index.user_input | int) - 1] }}"
 
 - name: Find /backups/host
   find:
-    paths: "{{ backup_folder.path }}"
+    paths: "{{ backup_directory.path }}"
     pattern: '*'
     file_type: directory
   register: backup_hosts

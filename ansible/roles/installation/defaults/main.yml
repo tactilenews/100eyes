@@ -1,0 +1,6 @@
+docker_image_tag: "{{ vps.docker_image_tag | default('latest') }}"
+postgres_host: "{{ rails.postgres.host | default('db') }}"
+postgres_db: "{{ rails.postgres.db | default('app_production') }}"
+postgres_port: "{{ rails.postgres.port | default(5432) }}"
+postgres_user: "{{ rails.postgres.user }}"
+postgres_password: "{{ rails.postgres.password }}"
