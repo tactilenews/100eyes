@@ -23,17 +23,17 @@ a.ContributorRow:hover .ContributorRow-name {
   color: var(--color-gray);
 }
 
-.ContributorRow-tag-display {
-  display: flex;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  line-height: 1.1;
+.ContributorRow-tags {
+  list-style-type: none;
 }
 
 .ContributorRow-tag {
-  border-radius: 3px;
-  vertical-align: top;
-  padding: 0.3em 0.5em;
-  margin: 5px 0 5px 5px;
+  --tag-color: var(--color-gray-dark);
+  background-color: var(--tag-color);
+
+  display: inline-block;
+  border-radius: var(--border-radius);
+  padding: 0 var(--spacing-unit-xs);
   color: #fff;
+  font-size: var(--font-size-s);
 }

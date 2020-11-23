@@ -18,13 +18,13 @@
     </span>
 
     <% if contributor.tags? %>
-      <div class="ContributorRow-tag-display">
+      <ul class="ContributorRow-tags">
 
         <% contributor.tags.each do |tag| %>
-          <div class="ContributorRow-tag" style="<%= "background:#{tag_color_from_id(tag.id)}" %>"> <%= tag %> </div>
+          <li class="ContributorRow-tag" style="<%= "--tag-color: #{color_from_id(tag.id)}" %>"> <%= tag %> </li>
         <% end %>
 
-      </div>
+      </ul>
     <% end %>
 
   </div>

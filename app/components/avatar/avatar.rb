@@ -2,7 +2,6 @@
 
 module Avatar
   class Avatar < ApplicationComponent
-    COLORS = ['#F4C317', '#0898FF', '#67D881', '#F4177A'].freeze
 
     def initialize(contributor: nil, **)
       super
@@ -15,10 +14,6 @@ module Avatar
 
     def key
       contributor&.id
-    end
-
-    def color
-      COLORS[key % COLORS.length] if key
     end
 
     def url

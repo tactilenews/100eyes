@@ -50,7 +50,7 @@ class Contributor < ApplicationRecord
   end
 
   def self.tag_color_from_id(tag_id)
-    ApplicationController.helpers.tag_color_from_id(tag_id)
+    ApplicationController.helpers.color_from_id(tag_id)
   end
 
   def reply(message_decorator)

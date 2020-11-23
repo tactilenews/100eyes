@@ -3,14 +3,17 @@
   overflow: hidden;
   width: var(--spacing-unit-xl);
   height: var(--spacing-unit-xl);
-
-  background-color: var(--color-gray-dark);
   border-radius: 50%;
 }
 
 .Avatar--small {
   width: var(--spacing-unit-l);
   height: var(--spacing-unit-l);
+}
+
+.Avatar > svg {
+  --avatar-color: var(--color-gray-dark);
+  background-color: var(--avatar-color);
 }
 
 .Avatar > img,
