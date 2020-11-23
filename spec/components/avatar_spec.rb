@@ -38,7 +38,7 @@ RSpec.describe Avatar::Avatar, type: :component do
       let(:contributor) { build(:contributor, id: 0) }
       let(:params) { { contributor: contributor } }
 
-      it { should start_with('background-color: ') }
+      it { should start_with('--avatar-color: ') }
     end
   end
 

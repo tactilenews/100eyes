@@ -18,13 +18,7 @@
     </span>
 
     <% if contributor.tags? %>
-      <ul class="ContributorRow-tags">
-
-        <% contributor.tags.each do |tag| %>
-          <li class="ContributorRow-tag" style="<%= "--tag-color: #{color_from_id(tag.id)}" %>"> <%= tag %> </li>
-        <% end %>
-
-      </ul>
+      <%= c 'tags_list', tags: contributor.tags %>
     <% end %>
 
   </div>

@@ -2,7 +2,6 @@
 
 module Avatar
   class Avatar < ApplicationComponent
-
     def initialize(contributor: nil, **)
       super
       @contributor = contributor

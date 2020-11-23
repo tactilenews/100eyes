@@ -1,0 +1,5 @@
+<ul class="TagsList">
+  <% tags.each do |tag| %>
+    <li class="Tag" style="<%= "--tag-color: #{color_from_id(tag.id)}" %>"><%= tag %></li>
+  <% end %>
+</ul>
