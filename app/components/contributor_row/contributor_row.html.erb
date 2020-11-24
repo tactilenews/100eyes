@@ -17,8 +17,9 @@
       <% end %>
     </span>
 
-    <p class="ContributorRow-note">
-      <%= contributor.note %>
-    </p>
+    <% if contributor.tags? %>
+      <%= c 'tags_list', tags: contributor.tags %>
+    <% end %>
+
   </div>
 </a>

@@ -15,11 +15,6 @@ a.ContributorRow:hover .ContributorRow-name {
   margin-right: var(--spacing-unit-s);
 }
 
-.ContributorRow-note {
-  color: var(--color-text-light);
-  font-size: var(--font-size-s);
-}
-
 .ContributorRow-channels {
   color: var(--color-accent);
 }
