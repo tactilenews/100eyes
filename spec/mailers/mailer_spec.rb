@@ -47,17 +47,17 @@ RSpec.describe Mailer, type: :mailer do
     end
   end
 
-  describe 'new_question_email' do
+  describe 'contributor_not_found_email' do
     let(:mail) { described_class.with(email: 'contributor@example.org').contributor_not_found_email }
 
     describe 'subject' do
       subject { mail.subject }
-      it { should eq('Wir können deine E-Mail Adresse nicht zuordnen') }
+      it { should eq('Wir können Ihre E-Mail Adresse nicht zuordnen') }
     end
 
     describe 'body' do
       subject { mail.text_part.body.decoded }
-      it { should include('Wir können deine E-Mail Adresse leider keinem unserer Benutzerprofile zuordnen.') }
+      it { should include('Leider konnten wir Ihre E-Mail-Adresse nicht zuordnen.') }
     end
   end
 end
