@@ -62,4 +62,5 @@ Rails.application.configure do
 
   # CUSTOM
   config.active_job.queue_adapter = :test
+  config.middleware.use Clearance::BackDoor
 end

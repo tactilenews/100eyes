@@ -8,9 +8,7 @@ RSpec.describe 'Messages', type: :request do
 
     subject do
       lambda do
-        post(highlight_message_url(message, format: :json),
-             headers: auth_headers,
-             params: params)
+        post(highlight_message_url(message, format: :json), params: params)
       end
     end
 

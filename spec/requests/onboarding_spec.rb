@@ -302,8 +302,6 @@ RSpec.describe 'Onboarding', type: :request do
     end
 
     describe 'as a logged-in user' do
-      let(:headers) { auth_headers }
-
       it 'responds with a url with a jwt search query' do
         subject.call
         url = JSON.parse(response.body)['url']

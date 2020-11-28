@@ -6,7 +6,7 @@ require 'telegram/bot/rspec/integration/rails'
 RSpec.describe 'Requests', telegram_bot: :rails do
   describe 'POST /requests' do
     before(:each) { allow(Request).to receive(:broadcast!).and_call_original } # is stubbed for every other test
-    subject { -> { post requests_path, params: params, headers: auth_headers } }
+    subject { -> { post requests_path, params: params } }
     let(:params) { { request: { title: 'Example Question', text: 'How do you do?', hints: ['confidential'] } } }
 
     it { should change { Request.count }.from(0).to(1) }
@@ -74,7 +74,7 @@ RSpec.describe 'Requests', telegram_bot: :rails do
     let!(:older_message) { create(:message, request_id: request.id, created_at: 2.minutes.ago) }
     let(:params) { { last_updated_at: 1.minute.ago } }
 
-    subject { -> { get notifications_request_path(request), headers: auth_headers, params: params } }
+    subject { -> { get notifications_request_path(request), params: params } }
 
     context 'No messages in last 1 minute' do
       it 'responds with message count 0' do
