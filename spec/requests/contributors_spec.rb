@@ -6,24 +6,25 @@ require 'telegram/bot/rspec/integration/rails'
 RSpec.describe '/contributors', type: :request do
   let(:contributor) { create(:contributor) }
   let(:the_request) { create(:request) }
+  let(:user) { create(:user) }
 
   describe 'GET /index' do
     it 'should be successful' do
-      get contributors_url
+      get contributors_url(as: user)
       expect(response).to be_successful
     end
   end
 
   describe 'GET /show' do
     it 'should be successful' do
-      get contributor_url(contributor)
+      get contributor_url(contributor, as: user)
       expect(response).to be_successful
     end
   end
 
   describe 'GET /requests/:id' do
     it 'should be successful' do
-      get contributor_request_path(id: the_request.id, contributor_id: contributor.id)
+      get contributor_request_path(id: the_request.id, contributor_id: contributor.id, as: user)
       expect(response).to be_successful
     end
   end
@@ -32,7 +33,7 @@ RSpec.describe '/contributors', type: :request do
     let!(:teachers) { create_list(:contributor, 2, tag_list: 'teacher') }
 
     it 'returns count of contributors with a specific tag' do
-      get count_contributors_path(tag_list: ['teacher'])
+      get count_contributors_path(tag_list: ['teacher'], as: user)
       expect(response.body).to eq({ count: 2 }.to_json)
     end
   end
@@ -51,7 +52,7 @@ RSpec.describe '/contributors', type: :request do
       }
     end
 
-    subject { -> { patch contributor_url(contributor), params: { contributor: new_attrs } } }
+    subject { -> { patch contributor_url(contributor, as: user), params: { contributor: new_attrs } } }
 
     it 'updates the requested contributor' do
       subject.call
@@ -74,7 +75,7 @@ RSpec.describe '/contributors', type: :request do
       let(:contributor) { create(:contributor, tag_list: %w[dev ops]) }
 
       it 'is supported' do
-        patch contributor_url(contributor), params: { contributor: updated_attrs }
+        patch contributor_url(contributor, as: user), params: { contributor: updated_attrs }
         contributor.reload
         expect(contributor.tag_list).to eq(['ops'])
         expect(Contributor.all_tags.count).to eq(1)
@@ -93,7 +94,7 @@ RSpec.describe '/contributors', type: :request do
   end
 
   describe 'DELETE /destroy' do
-    subject { -> { delete contributor_url(contributor) } }
+    subject { -> { delete contributor_url(contributor, as: user) } }
     before(:each) { contributor }
 
     it 'destroys the requested contributor' do
@@ -109,7 +110,7 @@ RSpec.describe '/contributors', type: :request do
   describe 'POST /message', telegram_bot: :rails do
     subject do
       lambda do
-        post message_contributor_url(contributor), params: { message: { text: 'Forgot to ask: How are you?' } }
+        post message_contributor_url(contributor, as: user), params: { message: { text: 'Forgot to ask: How are you?' } }
       end
     end
 
