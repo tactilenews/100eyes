@@ -6,5 +6,6 @@ FactoryBot.define do
       "user#{n}@example.org"
     end
     password { 'UMyD1aJVWBIwoTsdl3Mb' }
+    confirmed_at { Time.zone.now }
   end
 end
