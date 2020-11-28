@@ -2,4 +2,6 @@
 
 class User < ApplicationRecord
   include Clearance::User
+
+  validates :password, length: { in: 20..128 }, unless: :skip_password_validation?
 end
