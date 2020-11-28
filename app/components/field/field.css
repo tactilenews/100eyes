@@ -21,11 +21,18 @@
   content: '*';
 }
 
-.Field--horizontal {
-  display: flex;
+.Field:not(.Field--horizontal) > .Input,
+.Field:not(.Field--horizontal) > .Textarea {
+  margin-top: var(--spacing-unit-s);
 }
 
-.Field--horizontal .Field-header {
+.Field--horizontal {
+  display: flex;
+  align-items: center;
+  margin-top: 0;
+}
+
+.Field--horizontal .Field-label {
   width: 20%;
   flex-shrink: 0;
   flex-grow: 0;
@@ -34,9 +41,4 @@
   padding: var(--input-padding-s);
   padding-left: 0;
   padding-right: 0;
-}
-
-.Field > .Input,
-.Field > .Textarea {
-  margin-top: var(--spacing-unit-s);
 }
