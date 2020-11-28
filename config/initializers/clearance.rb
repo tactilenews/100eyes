@@ -8,4 +8,9 @@ Clearance.configure do |config|
   # config.sign_in_guards = []
   config.mailer_sender = Setting.email_from_address
   config.rotate_csrf_on_sign_in = true
+
+  Rails.application.config.to_prepare do
+    Clearance::PasswordsController.layout "clearance"
+    Clearance::SessionsController.layout "clearance"
+  end
 end
