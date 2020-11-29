@@ -13,10 +13,10 @@
   gap: var(--spacing-unit-l);
 }
 
-.Flex--big-gap {
+.Flex--bigGap {
   gap: calc(2 * var(--spacing-unit-l));
 }
 
-.Flex--space-between {
+.Flex--spaceBetween {
   justify-content: space-between;
 }

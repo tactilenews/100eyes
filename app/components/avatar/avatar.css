@@ -16,7 +16,7 @@
   height: calc(2 * var(--spacing-unit-xl));
 }
 
-.Avatar > img,
+.Avatar img,
 .Avatar-initials {
   width: 100%;
   height: 100%;

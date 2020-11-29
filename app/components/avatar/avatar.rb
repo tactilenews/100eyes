@@ -2,11 +2,14 @@
 
 module Avatar
   class Avatar < ApplicationComponent
+    delegate :avatar, :avatar?, to: :contributor, prefix: true
+
     COLORS = ['#F4C317', '#0898FF', '#67D881', '#F4177A'].freeze
 
-    def initialize(contributor: nil, **)
+    def initialize(contributor: nil, expandable: false, **)
       super
       @contributor = contributor
+      @expandable = expandable
     end
 
     private
@@ -19,14 +22,6 @@ module Avatar
 
     def color
       COLORS[key % COLORS.length] if key
-    end
-
-    def avatar_image?
-      contributor&.avatar?
-    end
-
-    def avatar_image
-      contributor&.avatar
     end
 
     def initials
