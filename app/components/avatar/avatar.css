@@ -16,6 +16,11 @@
   height: calc(2 * var(--spacing-unit-xl));
 }
 
+.Avatar > svg {
+  --avatar-color: var(--color-gray-dark);
+  background-color: var(--avatar-color);
+}
+
 .Avatar img,
 .Avatar-initials {
   width: 100%;

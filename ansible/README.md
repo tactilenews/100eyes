@@ -4,12 +4,10 @@ Our setup uses a number of community-maintained Ansibles roles. Install them usi
 
 ```
 ansible-galaxy collection install community.general
+ansible-galaxy collection install devsec.hardening
 ansible-galaxy install geerlingguy.docker
 ansible-galaxy install geerlingguy.pip
-ansible-galaxy install dev-sec.os-hardening
-ansible-galaxy install dev-sec.ssh-hardening
 ```
-
 
 Generate configuration files:
 ```bash
@@ -28,43 +26,39 @@ nickname
 # add nicknames of more servers here
 ```
 
-# Snapshot
-
-If you already created a snapshot, you can continue with
-[Installation](#installation).
-
-To make the setup quicker and easier, we suggest to create a snapshot of a base
-image with a user `ansible` and all authorized keys of your friends in place.
-
-
-Add public keys of your friends in folder `./ansible/ssh/`. It should look like this:
-```
-$ ls .ansible/ssh
-jakob_id_rsa.pub  till.pub
-```
-
-Run this playbook to create the ansible user with authorized keys in place and
-ensure basic security:
-```
-$ ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook ansible/snapshot.yml -i ansible/inventories/custom --ask-pass --ask-vault-pass
-```
-
-You need `sshpass` installed and you will be asked for:
-```
-SSH password: # root user password
-Vault password: # vault password
-```
-
-Now go to your server control panel and create and download a snapshot.
-
 # Installation
 
-If you provisioned your server as in section [Snapshot](#snapshot) or you
-restored a new server from the snapshot, then your authorized keys are in place
-and you can run the entire installation of the application with:
+Our setup is known to work for the following base images:
+
+* `Ubuntu 20.04 (LTS) x64`
+
+If your authorized SSH keys are in place you can run the entire installation of
+the application with:
 
 ```bash
 ansible-playbook ansible/site.yml -i ansible/inventories/custom --ask-vault-pass
+```
+
+If you haven't setup the authorized SSH keys, set username to `root` on the
+first run:
+```bash
+ansible-playbook ansible/site.yml -i ansible/inventories/custom --ask-vault-pass --extra-vars "ansible_user=root"
+```
+
+## Provider specific instructions
+
+See [Netcup](./Netcup.md).
+
+## Backup and Restore
+
+You can create a manual backup and download it by running:
+```bash
+ansible-playbook ansible/backup.yml -i ansible/inventories/production --ask-vault-pass
+```
+
+To restore the database (destructively!) into your local docker development setup:
+```bash
+ansible-playbook ansible/restore_locally.yml
 ```
 
 ## Troubleshooting

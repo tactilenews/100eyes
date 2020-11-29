@@ -5,7 +5,7 @@
   <% else %>
     <svg
       class="Avatar-initials"
-      style="<%= "background-color: #{color}" if color %>"
+      style="<%= "--avatar-color: #{color_from_id(key)}" if key %>"
       viewBox="0 0 100 100"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"

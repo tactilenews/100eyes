@@ -154,6 +154,20 @@ RSpec.describe Contributor, type: :model do
     end
   end
 
+  describe '#tags?' do
+    subject { contributor.tags? }
+
+    describe 'given a contributor with tags' do
+      let(:contributor) { create(:contributor, tag_list: 'teacher') }
+      it { should be(true) }
+    end
+
+    describe 'given a contributor without tags' do
+      let(:contributor) { create(:contributor) }
+      it { should be(false) }
+    end
+  end
+
   describe '#conversation_about' do
     subject { contributor.conversation_about(the_request) }
 

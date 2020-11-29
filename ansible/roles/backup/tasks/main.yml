@@ -1,0 +1,56 @@
+---
+- name: Debug
+  debug:
+    msg: "Backing up to folder: {{ backup_directory }}"
+
+- name: Query id of database container
+  command:
+    cmd: docker-compose -f docker-compose.yml -f docker-compose.prod.yml ps -q db
+    chdir: /home/ansible
+  register: get_container_id
+  tags:
+    - work-in-progress
+
+- name: Save container id of database
+  set_fact:
+    db_container_id: "{{ get_container_id.stdout }}"
+  tags:
+    - work-in-progress
+
+- debug:
+    msg: "{{ db_container_id }}"
+  tags:
+    - work-in-progress
+
+- name: Template .pgass file
+  template:
+    src: pgpass.j2
+    dest: /home/ansible/.pgpass
+    mode: '0600'
+
+- name: Copy .pgpass into container
+  command:
+    cmd: "docker cp /home/ansible/.pgpass {{ db_container_id }}:/root/"
+
+- name: Run pg_dump inside the container
+  command:
+    cmd: "docker exec {{ db_container_id }} pg_dump {{ postgres_db }} --host {{ postgres_host }} --port {{ postgres_port }} --username {{ postgres_user }} -Fc --file /tmp/100eyes-db-dump"
+
+- name: Copy database dump from container to host
+  command:
+    cmd: "docker cp {{ db_container_id }}:/tmp/100eyes-db-dump /tmp/100eyes-db-dump"
+
+- name: Archive storage folder into a single file
+  community.general.archive:
+    path: /home/ansible/storage
+    dest: /tmp/100eyes-storage.tgz
+
+- name: Download database dump
+  fetch:
+    src: /tmp/100eyes-db-dump
+    dest: "{{ backup_directory }}"
+
+- name: Download storage archive
+  fetch:
+    src: /tmp/100eyes-storage.tgz
+    dest: "{{ backup_directory }}"

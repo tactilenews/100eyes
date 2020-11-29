@@ -40,6 +40,8 @@ backups/
 !/ansible/inventories/custom/host_vars/.keep
 /ansible/inventories/custom/hosts
 /ansible/ssh
+/ansible/backups/*
+!/ansible/backups/.keep
 
 .env
 traefik/

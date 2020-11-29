@@ -21,8 +21,8 @@
   display: flex;
   flex-wrap: wrap;
 
-  background-color: var(--color-red-lightest);
-  color: var(--color-red-dark);
+  background-color: var(--color-orange-lightest);
+  color: var(--color-orange-darkest);
 
   margin-bottom: 2rem;
   padding: 1rem 0.75rem;

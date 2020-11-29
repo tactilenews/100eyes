@@ -1,0 +1,14 @@
+.TagsList {
+  list-style: none;
+}
+
+.TagsList > li {
+  --tag-color: var(--color-gray-dark);
+  background-color: var(--tag-color);
+
+  display: inline-block;
+  border-radius: var(--border-radius);
+  padding: 0 var(--spacing-unit-xs);
+  color: #fff;
+  font-size: var(--font-size-s);
+}

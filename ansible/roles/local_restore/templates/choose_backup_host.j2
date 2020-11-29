@@ -1,0 +1,10 @@
+#############################
+Available hosts are:
+
+{% for folder in backup_hosts.files %}
+{{ loop.index }}. {{ folder.path }}
+{% endfor %}
+
+#############################
+
+Type in index of host

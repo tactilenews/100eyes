@@ -7,8 +7,8 @@ RUN apk --update add \
     git \
     nodejs=~12.15 \
     yarn \
-    postgresql-dev=~12.4 \
-    postgresql-client=~12.4 \
+    postgresql-dev=~12.5 \
+    postgresql-client=~12.5 \
     tzdata \
     libxslt-dev \
     libxml2-dev \

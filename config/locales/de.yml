@@ -80,7 +80,7 @@ de:
       telegram:
         label: Telegram
         intro: |
-          Um per Telegram teilzunehmen, benötigen Sie die Telegram-App für iOS oder Android. Sie können die App im Apple App Store oder im Google Play Store herunterladen.
+          Um per Telegram teilzunehmen, benötigen Sie den Telegram-Messenger. Sie können Telegram z.B. im App Store von Apple oder im Google Play Store herunterladen. Setzen Sie anschließend Ihre Registrierung fort, indem Sie hier auf “Mit Telegram teilnehmen” klicken.
         confirm:
           header: Noch ein Schritt...
           subheader: Bitten nennen Sie uns Ihren Vor- und Nachnamen, und die Anmeldung abzuschließen.
@@ -102,8 +102,8 @@ de:
     new_message_email:
       subject: Die Redaktion hat eine neue Frage
     contributor_not_found_email:
-      subject: Wir können deine E-Mail Adresse nicht zuordnen
-      text: Wir können deine E-Mail Adresse leider keinem unserer Benutzerprofile zuordnen.
+      subject: Wir können Ihre E-Mail Adresse nicht zuordnen
+      text: Vielen Dank für Ihre Nachricht. Leider konnten wir Ihre E-Mail-Adresse nicht zuordnen. Das könnte daran liegen, dass wir einen Fehler gemacht haben oder Sie uns von einer anderen E-Mail-Adresse schreiben. Melden Sie sich gern unter support@tactile.news, dann lösen wir das Problem schnell. Vielen Dank.
 
   save: Speichern
   discard: Änderungen verwerfen
