@@ -8,9 +8,9 @@ de:
     change_password:
       closing: Ignoriere diese E-Mail, falls du nichts unternommen hast. Dein Passwort wurde nicht geändert.
       link_text: Mein Passwort ändern
-      opening: "Jemand, hoffentlich du, hat einen Link zum Ändern des Passworts angefordert:"
+      opening: "Jemand, hoffentlich du selbst, hat einen Link zum Ändern des Passworts angefordert:"
   flashes:
-    failure_after_create: Schlechte E-Mail oder schlechtes Passwort.
+    failure_after_create: Ungültige E-Mail Adresse oder schwaches Passwort.
     failure_after_update: Das Feld für Passwort darf nicht leer sein.
     failure_when_forbidden: Bitte prüfe noch einmal die URL oder versuche, das Formular noch einmal zu senden.
     failure_when_not_signed_in: Bitte logge dich ein, um fortzufahren.
@@ -30,7 +30,7 @@ de:
       password:
         submit: Passwort zurücksetzen
       password_reset:
-        submit: Dieses E-Mail speichern
+        submit: Passwort zurücksetzen
       session:
         submit: Login
       user:
@@ -44,14 +44,14 @@ de:
       sign_out: Logout
   passwords:
     create:
-      description: Du bekommst in den nächsten Minuten eine E-Mail. Sie enthält Anleitung, wie das Passwort zu ändern ist.
+      description: Du bekommst in den nächsten Minuten eine E-Mail mit weiteren Anweisungen.
     edit:
       description: Dein Passwort wurde zurückgesetzt. Wähle unten ein neues Passwort aus.
       title: Ändere dein Passwort
       password_mismatch_helper: Passwörter stimmen nicht überein.
     new:
-      description:  Um einen Link zum Zurücksetzen deines Passworts zu erhalten, trage hier deine E-Mail-Adresse ein.
-      title: Setze dein Passwort zurück.
+      description:  Trage hier die E-Mail-Adresse deines Benutzerprofils ein.
+      title: Passwort zurücksetzen
   sessions:
     form:
       forgot_password: Hast du dein Passwort vergessen?
