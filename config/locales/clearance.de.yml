@@ -3,7 +3,7 @@ de:
   clearance:
     models:
       clearance_mailer:
-        change_password: Um deine Passwort zu ändern, trage hier deine E-Mail-Adresse ein.
+        change_password: Um dein Passwort zu ändern, trage hier deine E-Mail-Adresse ein.
   clearance_mailer:
     change_password:
       closing: Ignoriere diese E-Mail, falls du nichts unternommen hast. Dein Passwort wurde nicht geändert.
