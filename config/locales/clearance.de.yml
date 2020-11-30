@@ -3,62 +3,56 @@ de:
   clearance:
     models:
       clearance_mailer:
-        change_password: Change your password
+        change_password: Um deine Passwort zu ändern, trage hier deine E-Mail-Adresse ein.
   clearance_mailer:
     change_password:
-      closing: If you didn't request this, ignore this email. Your password has
-        not been changed.
-      link_text: Change my password
-      opening: "Someone, hopefully you, requested we send you a link to change
-        your password:"
+      closing: Ignoriere diese E-Mail, falls du nichts unternommen hast. Dein Passwort wurde nicht geändert.
+      link_text: Mein Passwort ändern
+      opening: "Jemand, hoffentlich du, hat einen Link zum Ändern des Passworts angefordert:"
   flashes:
-    failure_after_create: Bad email or password.
-    failure_after_update: Password can't be blank.
-    failure_when_forbidden: Please double check the URL or try submitting
-      the form again.
-    failure_when_not_signed_in: Please sign in to continue.
-    failure_when_missing_email: Email can't be blank.
+    failure_after_create: Schlechte E-Mail oder schlechtes Passwort.
+    failure_after_update: Das Feld für Passwort darf nicht leer sein.
+    failure_when_forbidden: Bitte prüfe noch einmal die URL oder versuche, das Formular noch einmal zu senden.
+    failure_when_not_signed_in: Bitte logge dich ein, um fortzufahren.
+    failure_when_missing_email: Das Feld für E-Mail darf nicht leer sein.
   helpers:
     label:
       password:
-        email: Email address
+        email: E-Mail-Adresse
       password_reset:
-        password: Choose password
+        password: Wähle ein Passwort.
       session:
-        password: Password
+        password: Passwort
       user:
-        password: Password
+        password: Passwort
     submit:
       password:
-        submit: Reset password
+        submit: Passwort zurücksetzen
       password_reset:
-        submit: Save this password
+        submit: Dieses Passwort speichern
       session:
-        submit: Sign in
+        submit: Login
       user:
-        create: Sign up
+        create: Login erstellen
   layouts:
     application:
-      sign_in: Sign in
-      sign_out: Sign out
+      sign_in: Login
+      sign_out: Logout
   passwords:
     create:
-      description: You will receive an email within the next few minutes. It
-        contains instructions for changing your password.
+      description: Du bekommst in den nächsten Minuten eine E-Mail. Sie enthält Anleitung, wie das Passwort zu ändern ist.
     edit:
-      description: Your password has been reset. Choose a new password below.
-      title: Change your password
+      description: Dein Passwort wurde zurückgesetzt. Wähle unten ein neues Passwort aus.
+      title: Ändere dein Passwort
     new:
-      description: To be emailed a link to reset your password, please enter
-        your email address.
-      title: Reset your password
+      description:  Um einen Link zum Zurücksetzen deines Passworts zu erhalten, trage hier deine E-Mail-Adresse ein.
+      title: Setze dein Passwort zurück.
   sessions:
     form:
-      forgot_password: Forgot password?
-      sign_up: Sign up
+      forgot_password: Hast du dein Passwort vergessen?
+      link_text: Passwort zurücksetzen
     new:
-      title: Sign in
+      title: Login
   users:
     new:
-      sign_in: Sign in
-      title: Sign up
+      sign_in: Login

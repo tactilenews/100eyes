@@ -1,20 +1,20 @@
 <main class="SignInForm">
   <%= c 'heading', tag: :h1 do %>
-    <%= t 'user.form.sign_in.text' %>
+    <%= t 'users.new.sign_in' %>
   <% end %>
 
   <%= form_with(url: session_path, local: true) do |f| %>
-    <label for='session[email]'><%= t 'user.form.email.label' %></label>
+    <label for='session[email]'><%= t 'helpers.label.password.email' %></label>
     <%= c 'input', type: :email, id: 'session[email]' %>
-    <label for='session[password]'><%= t 'user.form.password.label' %></label>
+    <label for='session[password]'><%= t 'helpers.label.session.password' %></label>
     <%= c 'input', type: :password, id: 'session[password]' %>
-    <%= c 'button', type: 'submit', label: I18n.t('user.form.sign_in.text') %>
+    <%= c 'button', type: 'submit', label: I18n.t('helpers.submit.session.submit') %>
   <% end %>
   <footer>
     <p>
-      <%= t 'user.form.password_reset.help' %>
+      <%= t 'sessions.form.forgot_password' %>
       <%= link_to new_password_path, class: "Link SignInForm-password-reset-link" do %>
-        <%= t 'user.form.password_reset.text' %>
+        <%= t 'sessions.form.link_text' %>
       <% end %>
     </p>
   </footer>
