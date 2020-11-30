@@ -2,12 +2,11 @@
 
 module Field
   class Field < ApplicationComponent
-    def initialize(object:, id:, value: nil, id_override: nil, **)
+    def initialize(object:, id:, value: nil, **)
       super
       @object = object
       @id = id
       @value = value
-      @id_override = id_override
     end
 
     def checkbox_defaults
@@ -25,7 +24,7 @@ module Field
 
     private
 
-    attr_reader :object, :id, :content, :id_override
+    attr_reader :object, :id, :content
 
     def validation_errors
       object.errors[id]
@@ -44,7 +43,7 @@ module Field
     def basic_defaults
       {
         value: value,
-        id: id_override || "#{type}[#{id}]"
+        id: "#{type}[#{id}]"
       }
     end
 

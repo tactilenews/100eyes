@@ -1,18 +1,26 @@
 .SignInForm {
-  margin: var(--spacing-unit-l) auto;
+  margin: 2rem auto;
   max-width: var(--grid-max-width-xs);
   width: 100%;
   padding: 1rem;
 }
 
+.SignInForm .Heading {
+  margin-bottom: 1.5rem;
+}
+
+.SignInForm label {
+  font-weight: 600;
+}
+
 .SignInForm .Input {
-  margin: 0 0 var(--spacing-unit);
+  margin: 0.75rem 0 1.5rem;
 }
 
 .SignInForm .Field {
-  margin-top: var(--spacing-unit);
+  margin-top: 1.5rem;
 }
 
 .SignInForm .Button {
-  margin-bottom: var(--spacing-unit-s);
+  margin-bottom: 0.75rem;
 }

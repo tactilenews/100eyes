@@ -4,14 +4,10 @@
   <% end %>
 
   <%= form_with(url: session_path, local: true) do |f| %>
-    <%= c 'field', object: resource, id_override: 'session[email]', id: :email do |field| %>
-      <%= c 'input', field.input_defaults.merge(type: :email) %>
-    <% end %>
-
-    <%= c 'field', object: resource, id_override: 'session[password]', id: :password do |field| %>
-      <%= c 'input', field.input_defaults.merge(type: :password) %>
-    <% end %>
-
+    <label for='session[email]'><%= t 'user.form.email.label' %></label>
+    <%= c 'input', type: :email, id: 'session[email]' %>
+    <label for='session[password]'><%= t 'user.form.password.label' %></label>
+    <%= c 'input', type: :password, id: 'session[password]' %>
     <%= c 'button', type: 'submit', label: I18n.t('user.form.sign_in.text') %>
   <% end %>
   <footer>
