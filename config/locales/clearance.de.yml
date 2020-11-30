@@ -21,6 +21,7 @@ de:
         email: E-Mail-Adresse
       password_reset:
         password: Wähle ein Passwort.
+        password_confirmation: Passwort bestätigen.
       session:
         password: Passwort
       user:
@@ -29,11 +30,14 @@ de:
       password:
         submit: Passwort zurücksetzen
       password_reset:
-        submit: Dieses Passwort speichern
+        submit: Dieses E-Mail speichern
       session:
         submit: Login
       user:
         create: Login erstellen
+    hint:
+      password_reset:
+        password: Das Passwort muss zwischen <strong>**20 und 128 Zeichen**</strong> lang sein. Bitte benutzen Sie einen Passwort-Manager, um ein sicheres Passwort zu generieren und zu speichern.
   layouts:
     application:
       sign_in: Login
@@ -44,6 +48,7 @@ de:
     edit:
       description: Dein Passwort wurde zurückgesetzt. Wähle unten ein neues Passwort aus.
       title: Ändere dein Passwort
+      password_mismatch_helper: Passwörter stimmen nicht überein.
     new:
       description:  Um einen Link zum Zurücksetzen deines Passworts zu erhalten, trage hier deine E-Mail-Adresse ein.
       title: Setze dein Passwort zurück.
