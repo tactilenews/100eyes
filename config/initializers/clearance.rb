@@ -7,6 +7,7 @@ Clearance.configure do |config|
   config.secure_cookie = true
   config.mailer_sender = Setting.email_from_address
   config.rotate_csrf_on_sign_in = true
+  config.same_site = :strict
 
   Rails.application.config.to_prepare do
     Clearance::PasswordsController.layout 'clearance'
