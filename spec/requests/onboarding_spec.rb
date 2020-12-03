@@ -292,9 +292,9 @@ RSpec.describe 'Onboarding', type: :request do
   end
 
   describe 'POST /onboarding/invite' do
-    let(:headers) { nil }
+    let(:user) { nil }
 
-    subject { -> { post onboarding_invite_path, headers: headers } }
+    subject { -> { post onboarding_invite_path(as: user) } }
 
     it 'is unsuccessful' do
       subject.call
@@ -302,7 +302,7 @@ RSpec.describe 'Onboarding', type: :request do
     end
 
     describe 'as a logged-in user' do
-      let(:headers) { auth_headers }
+      let(:user) { create(:user) }
 
       it 'responds with a url with a jwt search query' do
         subject.call

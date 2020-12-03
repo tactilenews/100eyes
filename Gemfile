@@ -89,3 +89,6 @@ gem 'rails-settings-cached', '~> 2.3'
 gem 'kramdown', '~> 2.3'
 
 gem 'postmark-rails'
+
+# User management
+gem 'clearance'
