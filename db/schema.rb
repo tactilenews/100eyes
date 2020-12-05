@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_26_192714) do
+ActiveRecord::Schema.define(version: 2020_12_05_182727) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -158,6 +158,7 @@ ActiveRecord::Schema.define(version: 2020_11_26_192714) do
     t.string "encrypted_password", limit: 128, null: false
     t.string "confirmation_token", limit: 128
     t.string "remember_token", limit: 128, null: false
+    t.string "otp_secret_key"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["remember_token"], name: "index_users_on_remember_token"
   end

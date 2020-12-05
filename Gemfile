@@ -91,3 +91,5 @@ gem 'postmark-rails'
 
 # User management
 gem 'clearance'
+gem 'active_model_otp'
+gem 'rqrcode'
