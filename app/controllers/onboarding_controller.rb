@@ -65,7 +65,7 @@ class OnboardingController < ApplicationController
 
     invalidate_jwt
     payload = { telegram_id: @contributor.telegram_id, action: 'update' }
-    @jwt = create_jwt(payload, expires_in: 30.minutes)
+    @jwt = create_jwt(payload, expires_in: 30.minutes.from_now.to_i)
   end
 
   def telegram_update_info

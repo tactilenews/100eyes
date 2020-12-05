@@ -126,6 +126,24 @@ RSpec.describe 'Onboarding', type: :request do
           expect(JsonWebToken).to have_received(:encode)
         end
       end
+
+      context 'expired signature' do
+        let(:passed_expiration_time) { 31.minutes.from_now }
+
+        it 'throws an error' do
+          subject.call
+
+          doc = Nokogiri::HTML(response.body)
+          relative_path = doc.css('form').first.attributes['action']
+          search_params = CGI.parse(URI.parse(relative_path).query)
+          jwt = search_params['jwt'].first
+
+          Timecop.travel(passed_expiration_time) do
+            patch onboarding_telegram_update_info_path, params: { jwt: jwt }
+            expect(response).to be_unauthorized
+          end
+        end
+      end
     end
 
     describe 'given an existing telegram id' do
@@ -207,6 +225,18 @@ RSpec.describe 'Onboarding', type: :request do
           contributor = Contributor.where(telegram_id: 789).first
           expect(contributor.first_name).to be_nil
           expect(contributor.last_name).to be_nil
+        end
+      end
+
+      context 'expired signature' do
+        let!(:jwt) { JsonWebToken.encode({ telegram_id: 789, action: 'update' }, expires_in: 30.minutes.from_now.to_i) }
+
+        it 'throws an error' do
+          passed_expiration_time = 31.minutes.from_now
+          Timecop.travel(passed_expiration_time) do
+            subject.call
+            expect(response).to be_unauthorized
+          end
         end
       end
     end
