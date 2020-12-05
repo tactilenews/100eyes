@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/BlockLength
+
 Rails.application.routes.draw do
   root to: redirect('/dashboard')
   get '/dashboard', to: 'dashboard#index'
@@ -42,4 +44,28 @@ Rails.application.routes.draw do
       post 'highlight', format: /json/
     end
   end
+
+  # Clearance routes
+
+  resources :passwords,
+            controller: 'clearance/passwords',
+            only: %i[create new]
+
+  resource :session, controller: 'sessions', only: [:create] do
+    member do
+      patch '/verify_user', to: 'sessions#verify_user'
+    end
+  end
+
+  resources :users,
+            controller: 'clearance/users',
+            only: Clearance.configuration.user_actions do
+    resource :password,
+             controller: 'clearance/passwords',
+             only: %i[edit update]
+  end
+
+  get '/sign_in' => 'clearance/sessions#new', as: 'sign_in'
+  delete '/sign_out' => 'clearance/sessions#destroy', as: 'sign_out'
 end
+# rubocop:enable Metrics/BlockLength
