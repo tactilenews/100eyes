@@ -118,7 +118,7 @@ class OnboardingController < ApplicationController
     params.permit(:id, :first_name, :last_name, :auth_date, :hash, :username, :photo_url)
   end
 
-  def create_jwt(payload, expires_in: nil)
+  def create_jwt(payload, expires_in: 48.hours.from_now.to_i)
     JsonWebToken.encode(payload, expires_in: expires_in)
   end
 
