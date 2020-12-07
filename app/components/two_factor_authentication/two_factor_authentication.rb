@@ -2,17 +2,16 @@
 
 module TwoFactorAuthentication
   class TwoFactorAuthentication < ApplicationComponent
-    def initialize(user: nil, jwt: nil, qr_code: nil)
+    def initialize(user: nil, qr_code: nil)
       super
 
       @user = user
-      @jwt = jwt
       @qr_code = qr_code
     end
 
     private
 
-    attr_reader :user, :jwt, :qr_code
+    attr_reader :user, :qr_code
 
     def qr_code_as_svg
       # rubocop:disable Rails/OutputSafety
