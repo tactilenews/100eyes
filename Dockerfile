@@ -13,10 +13,13 @@ RUN apk --update add \
     libxslt-dev \
     libxml2-dev \
     imagemagick \
-    less
+    less \
+    chromium \
+    chromium-chromedriver
 
 RUN mkdir -p /app
 WORKDIR /app
+ENV PATH="/usr/bin/chromedriver:${PATH}"
 CMD ["bundle", "exec", "rails", "server"]
 
 

@@ -3,15 +3,15 @@
 require 'rails_helper'
 require 'support/features/clearance_helpers'
 
-RSpec.feature 'Visitor updates password' do
-  scenario 'with valid password' do
+RSpec.feature 'Visitor updates password', driver: :selenium_chrome do
+  it 'with valid password' do
     user = user_with_reset_password
-    update_password user, 'newpassword'
+    update_password user, SecureRandom.hex(10)
 
     expect_user_to_be_signed_in
   end
 
-  scenario 'signs in with new password' do
+  it 'signs in with new password' do
     user = user_with_reset_password
     update_password user, 'newpassword'
     sign_out
@@ -20,7 +20,7 @@ RSpec.feature 'Visitor updates password' do
     expect_user_to_be_signed_in
   end
 
-  scenario 'tries with a blank password' do
+  it 'tries with a blank password' do
     user = user_with_reset_password
     visit_password_reset_page_for user
     change_password_to ''
@@ -44,7 +44,9 @@ RSpec.feature 'Visitor updates password' do
   end
 
   def change_password_to(password)
-    fill_in 'password_reset_password', with: password
+    fill_in I18n.t('helpers.label.password_reset.password'), with: password
+    fill_in I18n.t('helpers.label.password_reset.password_confirmation'), with: "#{password}\t"
+
     click_button I18n.t('helpers.submit.password_reset.submit')
   end
 end

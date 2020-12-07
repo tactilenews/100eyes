@@ -3,6 +3,7 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
 require 'vcr_setup'
+require 'selenium/webdriver'
 
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../config/environment', __dir__)
@@ -79,4 +80,20 @@ RSpec.configure do |config|
   config.include ViewComponent::TestHelpers, type: :component
   config.include Capybara::RSpecMatchers, type: :component
   config.include FactoryBot::Syntax::Methods
+  Selenium::WebDriver::Chrome.path = '/usr/bin/chromedriver'
+  selenium_host = 'http://0.0.0.0:4444/wd/hub'
+  Capybara.register_driver :selenium_chrome do |app|
+    options = Selenium::WebDriver::Chrome::Options.new(args: %w[
+                                                         headless no-sandbox disable-gpu window-size=1920x1080
+                                                       ])
+    Capybara::Selenium::Driver.new(
+      app,
+      browser: :remote,
+      desired_capabilities: :chrome,
+      options: options,
+      url: selenium_host
+    )
+  end
+
+  Capybara.javascript_driver = :selenium_chrome
 end

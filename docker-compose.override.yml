@@ -11,6 +11,8 @@ x-defaults: &x-defaults
     MAILSERVER_PORT: 25
     POSTGRES_HOST: db
     WEBPACKER_DEV_SERVER_HOST: 0.0.0.0
+    SELENIUM_HOST: selenium
+    SELENIUM_PORT: 4444
   stdin_open: true
   tty: true
   volumes:
@@ -36,3 +38,14 @@ services:
   mailserver:
     image: djfarrelly/maildev
     ports: [ '1080:80', '1025:25' ]
+  
+  selenium-hub:
+    image: selenium/hub:3.14.0
+    container_name: hub
+    ports:
+    - 4444:4444
+  node-chrome:
+    image: selenium/node-chrome-debug:3.14.0
+    links:
+    - selenium-hub
+

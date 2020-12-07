@@ -33,8 +33,8 @@ module Features
     end
 
     def expect_user_to_be_signed_in
-      visit root_path
-      expect(page).to have_button I18n.t('layouts.application.sign_out')
+      visit dashboard_path
+      expect(page).to have_button I18n.t('components.nav_bar.sign_out')
     end
 
     def expect_user_to_be_signed_out
