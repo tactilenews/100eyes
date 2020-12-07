@@ -18,6 +18,7 @@
   <symbol id="nc-icon-f-check-glyph-24" viewBox="0 0 24 24"><g transform="translate(0, 0)"><polygon points="9 21 1 13 4 10 9 15 21 3 24 6 9 21"></polygon></g></symbol>
   <symbol id="nc-icon-shape-star-glyph-24" viewBox="0 0 24 24"><g transform="translate(0, 0)"><path d="M23.144,8.541,16.063,7.512,12.9,1.1a1.041,1.041,0,0,0-1.794,0L7.937,7.512.856,8.541A1,1,0,0,0,.3,10.246L5.425,15.24,4.216,22.293a1,1,0,0,0,1.451,1.054L12,20.018l6.333,3.329a1,1,0,0,0,1.451-1.054L18.575,15.24,23.7,10.246a1,1,0,0,0-.554-1.705Z"></path></g></symbol>
   <symbol id="nc-icon-d-remove-glyph-24" viewBox="0 0 24 24"><g transform="translate(0, 0)"><path d="M22.7,4.3l-3-3c-0.4-0.4-1-0.4-1.4,0L12,7.6L5.7,1.3c-0.4-0.4-1-0.4-1.4,0l-3,3c-0.4,0.4-0.4,1,0,1.4L7.6,12 l-6.3,6.3c-0.4,0.4-0.4,1,0,1.4l3,3c0.4,0.4,1,0.4,1.4,0l6.3-6.3l6.3,6.3c0.2,0.2,0.5,0.3,0.7,0.3s0.5-0.1,0.7-0.3l3-3 c0.4-0.4,0.4-1,0-1.4L16.4,12l6.3-6.3C23.1,5.3,23.1,4.7,22.7,4.3z"></path></g></symbol>
+  <symbol id="nc-icon-direction-right-glyph-24" viewBox="0 0 24 24"><g transform="translate(0, 0)"><path d="M1,8C0.4,8,0,8.4,0,9v6c0,0.6,0.4,1,1,1s1-0.4,1-1V9C2,8.4,1.6,8,1,8z"></path> <path d="M23.6,12L11,1.9V8H5C4.4,8,4,8.4,4,9v6c0,0.6,0.4,1,1,1h6v6.1L23.6,12z"></path></g></symbol>
 
   <!-- Size: 32 -->
   <!-- These icons contain hard-coded duo-tone styles, as applying them
