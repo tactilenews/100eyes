@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'vcr'
+require 'webdrivers'
+
 driver_hosts = Webdrivers::Common.subclasses.map { |driver| URI(driver.base_url).host }
 
 VCR.configure do |c|
