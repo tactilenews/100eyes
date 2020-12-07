@@ -90,19 +90,6 @@ RSpec.describe Request, type: :model do
       end
     end
 
-    describe 'with `include_message` set' do
-      let!(:message) { create(:message, request_id: request.id) }
-
-      let!(:other_request) { create(:request) }
-      let!(:other_message) { create(:message, request_id: other_request.id) }
-
-      subject { request.messages_by_user(include_message: other_message.id) }
-
-      it 'includes message from other requests' do
-        expect(subject.values.flatten).to contain_exactly(message, other_message)
-      end
-    end
-
     it 'ignores broadcasted messages' do
       create(:message, request: request, broadcasted: true)
       expect(subject).to be_empty
