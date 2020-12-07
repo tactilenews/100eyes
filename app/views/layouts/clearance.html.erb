@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>" class="smooth-scrolling">
+<head>
+  <title><%= Setting.project_name %></title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <%= stylesheet_pack_tag 'application', media: 'all' %>
+</head>
+
+<body>
+  <% flash.each do |type, message| %>
+    <%= c 'notification', styles: [type] do %>
+      <%= message %>
+    <% end %>
+  <% end %>
+
+<%= yield %>
+
+<%= javascript_pack_tag 'application' %>
+</body>
+</html>

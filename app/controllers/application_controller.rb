@@ -1,19 +1,11 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
-  before_action :authenticate
+  include Clearance::Controller
+  before_action :require_login
   around_action :use_locale
 
   private
-
-  def authenticate
-    return if Rails.env.development?
-
-    http_basic_authenticate_or_request_with(
-      name: Setting.basic_auth_login_user,
-      password: Setting.basic_auth_login_password
-    )
-  end
 
   def use_locale(&action)
     locale = locale_params[:locale] || I18n.default_locale

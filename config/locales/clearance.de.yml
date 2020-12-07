@@ -1,0 +1,63 @@
+---
+de:
+  clearance:
+    models:
+      clearance_mailer:
+        change_password: Um dein Passwort zu ändern, trage hier deine E-Mail-Adresse ein.
+  clearance_mailer:
+    change_password:
+      closing: Ignoriere diese E-Mail, falls du nichts unternommen hast. Dein Passwort wurde nicht geändert.
+      link_text: Mein Passwort ändern
+      opening: "Jemand, hoffentlich du selbst, hat einen Link zum Ändern des Passworts angefordert:"
+  flashes:
+    failure_after_create: Ungültige E-Mail Adresse oder schwaches Passwort.
+    failure_after_update: Das Feld für Passwort darf nicht leer sein.
+    failure_when_forbidden: Bitte prüfe noch einmal die URL oder versuche, das Formular noch einmal zu senden.
+    failure_when_not_signed_in: Bitte logge dich ein, um fortzufahren.
+    failure_when_missing_email: Das Feld für E-Mail darf nicht leer sein.
+  helpers:
+    label:
+      password:
+        email: E-Mail-Adresse
+      password_reset:
+        password: Wähle ein Passwort.
+        password_confirmation: Passwort bestätigen.
+      session:
+        password: Passwort
+      user:
+        password: Passwort
+    submit:
+      password:
+        submit: Passwort zurücksetzen
+      password_reset:
+        submit: Passwort zurücksetzen
+      session:
+        submit: Login
+      user:
+        create: Login erstellen
+    hint:
+      password_reset:
+        password: Das Passwort muss zwischen <strong>**20 und 128 Zeichen**</strong> lang sein. Bitte benutzen Sie einen Passwort-Manager, um ein sicheres Passwort zu generieren und zu speichern.
+  layouts:
+    application:
+      sign_in: Login
+      sign_out: Logout
+  passwords:
+    create:
+      description: Du bekommst in den nächsten Minuten eine E-Mail mit weiteren Anweisungen.
+    edit:
+      description: Dein Passwort wurde zurückgesetzt. Wähle unten ein neues Passwort aus.
+      title: Ändere dein Passwort
+      password_mismatch_helper: Passwörter stimmen nicht überein.
+    new:
+      description:  Trage hier die E-Mail-Adresse deines Benutzerprofils ein.
+      title: Passwort zurücksetzen
+  sessions:
+    form:
+      forgot_password: Hast du dein Passwort vergessen?
+      link_text: Passwort zurücksetzen
+    new:
+      title: Login
+  users:
+    new:
+      sign_in: Login
