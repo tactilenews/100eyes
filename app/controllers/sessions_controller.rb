@@ -7,25 +7,31 @@ class SessionsController < Clearance::SessionsController
   def verify_user_email_and_password
     @user = authenticate(params)
 
-    return unless @user
-
-    payload = { user_id: @user.id, action: 'sign_in' }
-    @jwt = JsonWebToken.encode(payload, expires_in: 3.minutes.from_now.to_i)
-    @qr_code = RQRCode::QRCode.new(@user.provisioning_uri(Setting.project_name), size: 7, level: :h)
-    render 'sessions/two_factor_authentication'
+    if @user
+      payload = { user_id: @user.id, action: 'sign_in' }
+      @jwt = JsonWebToken.encode(payload, expires_in: 3.minutes.from_now.to_i)
+      @qr_code = RQRCode::QRCode.new(@user.provisioning_uri(Setting.project_name), size: 7, level: :h)
+      render 'sessions/two_factor_authentication'
+    else
+      redirect_to sign_in_path, flash: { alert: I18n.t('flashes.failure_after_create') }
+    end
   end
 
   def verify_user_otp
     decoded_token = JsonWebToken.decode(jwt_param)
     user_id = decoded_token.first['data']['user_id']
-    user = User.find(user_id)
-    return unless user
+    @user = User.find(user_id)
+    return unless @user
 
-    authenticate_otp = user.authenticate_otp(verify_user_params['otp_code_token'], drift: 60)
-    return unless authenticate_otp
-
-    user.otp_module_enabled! if user.otp_module_disabled?
-    create_session(user)
+    authenticate_otp = @user.authenticate_otp(verify_user_params['otp_code_token'], drift: 60)
+    if authenticate_otp
+      @user.otp_module_enabled! if @user.otp_module_disabled?
+      create_session(@user)
+    else
+      @jwt = jwt_param
+      flash.now.alert = I18n.t('user.sign_in.two_factor_authentication.failure_message')
+      render 'sessions/two_factor_authentication', status: :unauthorized
+    end
   end
 
   private
@@ -53,8 +59,7 @@ class SessionsController < Clearance::SessionsController
       if status.success?
         redirect_back_or url_after_create
       else
-        flash.now.alert = status.failure_message
-        render template: 'sessions/new', status: :unauthorized
+        redirect_to sign_in_path, flash: { alert: 'something went wrong, not sure what' }
       end
     end
   end
