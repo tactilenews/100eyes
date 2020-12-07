@@ -1,0 +1,28 @@
+.TwoFactorAuthentication {
+  margin: 2rem auto;
+  max-width: var(--grid-max-width-xs);
+  width: 100%;
+  padding: 1rem;
+}
+
+.TwoFactorAuthentication .Heading {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.TwoFactorAuthentication svg {
+  display: block;
+  margin: 1.5rem auto;
+}
+
+.TwoFactorAuthentication label {
+  font-weight: 600;
+}
+
+.TwoFactorAuthentication .Input {
+  margin: 0.75rem 0 1.5rem;
+}
+
+.TwoFactorAuthentication .Button {
+  margin-bottom: 0.75rem;
+}

@@ -202,7 +202,11 @@ de:
         placeholder: Klicke hier, um eine Notiz zu %{value} zu hinterlegen
       active:
         label: Aktiv
-
+  user:
+    sign_in:
+      two_factor_authentication:
+        header: Konto bestätigen
+        submit: Einmaliges Passwort einreichen
   request:
     request:
       one: Frage

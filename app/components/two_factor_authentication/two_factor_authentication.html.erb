@@ -1,6 +1,6 @@
-<main>
+<main class="TwoFactorAuthentication">
   <%= c 'heading' do %>
-    <%= t 'users.sign_in.two_factor_authentication.header' %>
+    <%= t 'user.sign_in.two_factor_authentication.header' %>
   <% end %>
   <%= form_with(model: user, url: verify_user_session_path(user_id: user.id), local: true) do |_form| %>
     <% unless user.otp_module_enabled? %>
@@ -9,6 +9,6 @@
 
     <label for='session[otp_code_token]'><%= t 'helpers.label.session.password' %></label>
     <%= c 'input', id: 'session[otp_code_token]' %>
-    <%= c 'button', type: 'submit', label: I18n.t('users.sign_in.two_factor_authentication.submit') %>
+    <%= c 'button', type: 'submit', label: I18n.t('user.sign_in.two_factor_authentication.submit') %>
   <% end %>
 </main>
