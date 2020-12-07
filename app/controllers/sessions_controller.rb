@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
 class SessionsController < Clearance::SessionsController
-  before_action :verify_user_params, only: :verify_user
-  before_action :verify_sign_in_jwt, only: :verify_user
-  skip_before_action :require_login, only: %i[create new destroy verify_user], raise: false
+  before_action :verify_sign_in_jwt, only: :verify_user_otp
+  skip_before_action :require_login, only: %i[new destroy verify_user_email_and_password verify_user_otp], raise: false
 
-  def create
+  def verify_user_email_and_password
     @user = authenticate(params)
 
     return unless @user
@@ -16,25 +15,17 @@ class SessionsController < Clearance::SessionsController
     render 'sessions/two_factor_authentication'
   end
 
-  def verify_user
+  def verify_user_otp
     decoded_token = JsonWebToken.decode(jwt_param)
     user_id = decoded_token.first['data']['user_id']
-    @user = User.find(user_id)
-    return unless @user
+    user = User.find(user_id)
+    return unless user
 
-    authenticate_otp = @user.authenticate_otp(verify_user_params['otp_code_token'], drift: 60)
+    authenticate_otp = user.authenticate_otp(verify_user_params['otp_code_token'], drift: 60)
     return unless authenticate_otp
 
-    @user.otp_module_enabled! if @user.otp_module_disabled?
-
-    sign_in(@user) do |status|
-      if status.success?
-        redirect_back_or url_after_create
-      else
-        flash.now.alert = status.failure_message
-        render template: 'sessions/new', status: :unauthorized
-      end
-    end
+    user.otp_module_enabled! if user.otp_module_disabled?
+    create_session(user)
   end
 
   private
@@ -55,5 +46,16 @@ class SessionsController < Clearance::SessionsController
 
   def verify_user_params
     params.require(:session).permit(:otp_code_token)
+  end
+
+  def create_session(user)
+    sign_in(user) do |status|
+      if status.success?
+        redirect_back_or url_after_create
+      else
+        flash.now.alert = status.failure_message
+        render template: 'sessions/new', status: :unauthorized
+      end
+    end
   end
 end

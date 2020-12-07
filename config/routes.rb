@@ -51,9 +51,10 @@ Rails.application.routes.draw do
             controller: 'clearance/passwords',
             only: %i[create new]
 
-  resource :session, controller: 'sessions', only: [:create] do
+  resource :session, controller: 'sessions' do
     member do
-      patch '/verify_user', to: 'sessions#verify_user'
+      post '/verify_user_email_and_password', to: 'sessions#verify_user_email_and_password'
+      patch '/verify_user_otp', to: 'sessions#verify_user_otp'
     end
   end
 
