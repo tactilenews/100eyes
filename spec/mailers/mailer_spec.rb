@@ -31,9 +31,22 @@ RSpec.describe Mailer, type: :mailer do
       it { should eq(['TestingProject <100eyes-test-account@example.org>']) }
     end
 
-    describe 'body' do
+    describe 'plaintext body' do
       subject { mail.text_part.body.decoded }
+
       it { should include I18n.t('mailer.unsubscribe.text') }
+    end
+
+    describe 'html body' do
+      let(:text) { "How do you do?\n\nHere’s another line!" }
+      subject { mail.html_part.body }
+
+      it { should include I18n.t('mailer.unsubscribe.html') }
+
+      it 'formats plain text' do
+        subject.should have_css('p', exact_text: 'How do you do?')
+        subject.should have_css('p', exact_text: 'Here’s another line!')
+      end
     end
 
     describe 'message_stream' do
