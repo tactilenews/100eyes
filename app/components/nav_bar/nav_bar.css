@@ -3,6 +3,10 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--spacing-unit-s) var(--spacing-unit-l);
+
+  font-size: var(--font-size-s);
+  background: var(--color-blue-dark);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .NavBar > ul {
@@ -32,12 +36,4 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-}
-
-.NavBar,
-.NavBar-item button {
-  background: var(--color-blue-dark);
-  border: 0;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: var(--font-size);
 }
