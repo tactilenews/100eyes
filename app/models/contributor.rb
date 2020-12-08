@@ -9,12 +9,15 @@ class Contributor < ApplicationRecord
   has_many :replied_to_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :replies
   has_many :received_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :received_messages
 
+  has_one_attached :avatar
+
   acts_as_taggable_on :tags
 
   default_scope { order(:first_name, :last_name) }
   scope :active, -> { where(deactivated_at: nil) }
 
   validates :email, uniqueness: { case_sensitive: false }, allow_nil: true, 'valid_email_2/email': true
+  validates :avatar, blob: { content_type: ['image/png', 'image/jpg', 'image/jpeg'], size_range: 0..5.megabytes }
 
   scope :with_tags, lambda { |tag_list = []|
     tag_list.blank? ? all : tagged_with(tag_list)
@@ -87,6 +90,10 @@ class Contributor < ApplicationRecord
 
   def email?
     email.present?
+  end
+
+  def avatar?
+    avatar.attached?
   end
 
   def tags?

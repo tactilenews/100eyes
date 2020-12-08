@@ -1,7 +1,11 @@
 <%= c 'box', styles: [:large, :gray] do %>
   <%= c 'wrapper' do %>
-    <%= c 'heading' do %>
-      <%= @contributor.name %>
+    <%= c 'flex', styles: [:bigGap] do %>
+      <%= c 'avatar', contributor: @contributor, expandable: true, styles: [:big] %>
+      <%= c 'heading' do %>
+        <%= @contributor.name %>
+      <% end %>
+
     <% end %>
   <% end %>
 <% end %>

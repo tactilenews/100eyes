@@ -180,6 +180,8 @@ de:
         label: Vorname
       last_name:
         label: Nachname
+      avatar:
+        label: Profilbild
       phone:
         label: Telefon
       email:

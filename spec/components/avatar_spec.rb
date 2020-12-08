@@ -3,17 +3,16 @@
 require 'rails_helper'
 
 RSpec.describe Avatar::Avatar, type: :component do
+  include Rails.application.routes.url_helpers
   let(:params) { {} }
   let(:component) { render_inline(described_class.new(**params)) }
 
   describe 'img' do
     subject { component.css('img') }
-    describe 'given no contributor' do
-      it { should be_empty }
-    end
 
-    describe 'given contributor without `avatar_url`' do
-      let(:params) { { contributor: build(:contributor, avatar_url: nil) } }
+    describe 'given contributor without attached avatar' do
+      let(:contributor) { build(:contributor, avatar: nil) }
+      let(:params) { { contributor: contributor } }
       it { should be_empty }
     end
   end
@@ -21,18 +20,16 @@ RSpec.describe Avatar::Avatar, type: :component do
   describe 'img[src]' do
     subject { component.css('img').first['src'] }
 
-    describe 'given a a contributor with `avatar_url`' do
-      let(:params) { { contributor: build(:contributor, avatar_url: '/my-avatar.jpg') } }
-      it { should eq('/my-avatar.jpg') }
+    describe 'given a contributor with attached avatar' do
+      let(:contributor) { build(:contributor, :with_an_avatar) }
+      let(:params) { { contributor: contributor } }
+
+      it { should eq(rails_blob_path(contributor.avatar, only_path: true)) }
     end
   end
 
   describe '.Avatar-initials[style]' do
     subject { component.css('.Avatar-initials')[0][:style] }
-
-    describe 'given no contributor' do
-      it { should be_empty }
-    end
 
     describe 'given a contributor' do
       let(:contributor) { build(:contributor, id: 0) }
@@ -44,10 +41,6 @@ RSpec.describe Avatar::Avatar, type: :component do
 
   describe '.Avatar-initials > text' do
     subject { component.css('.Avatar-initials > text').text }
-
-    describe 'given no contributor' do
-      it { should eq('?') }
-    end
 
     describe 'given a contributor without name' do
       let(:contributor) { build(:contributor, first_name: nil, last_name: nil) }

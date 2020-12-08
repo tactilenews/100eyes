@@ -1,6 +1,6 @@
 <%= c 'box', styles: [:large, :gray] do %>
   <%= c 'wrapper' do %>
-    <%= c 'flex' do %>
+    <%= c 'flex', styles: [:spaceBetween] do %>
       <%= c 'heading', style: :alpha do %>
         <%= I18n.t 'request.request', count: :many %>
       <% end %>
