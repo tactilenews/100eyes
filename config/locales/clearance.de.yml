@@ -3,7 +3,7 @@ de:
   clearance:
     models:
       clearance_mailer:
-        change_password: Klicke auf diesen Link um dein Passwort zurück zu setzen
+        change_password: Klicke auf diesen Link, um dein Passwort zurückzusetzen.
   clearance_mailer:
     change_password:
       closing: Ignoriere diese E-Mail, falls du nichts unternommen hast. Dein Passwort wurde nicht geändert.
