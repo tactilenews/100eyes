@@ -17,7 +17,7 @@ class Contributor < ApplicationRecord
   scope :active, -> { where(deactivated_at: nil) }
 
   validates :email, uniqueness: { case_sensitive: false }, allow_nil: true, 'valid_email_2/email': true
-  validates :avatar, blob: { content_type: :image }
+  validates :avatar, blob: { content_type: ['image/png', 'image/jpg', 'image/jpeg'], size_range: 0..5.megabytes }
 
   scope :with_tags, lambda { |tag_list = []|
     tag_list.blank? ? all : tagged_with(tag_list)
