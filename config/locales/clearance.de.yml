@@ -3,14 +3,14 @@ de:
   clearance:
     models:
       clearance_mailer:
-        change_password: Um dein Passwort zu ändern, trage hier deine E-Mail-Adresse ein.
+        change_password: Klicke auf diesen Link, um dein Passwort zurückzusetzen.
   clearance_mailer:
     change_password:
       closing: Ignoriere diese E-Mail, falls du nichts unternommen hast. Dein Passwort wurde nicht geändert.
       link_text: Mein Passwort ändern
       opening: "Jemand, hoffentlich du selbst, hat einen Link zum Ändern des Passworts angefordert:"
   flashes:
-    failure_after_create: Ungültige E-Mail Adresse oder schwaches Passwort.
+    failure_after_create: E-Mail-Adresse oder Passwort ungültig.
     failure_after_update: Das Feld für Passwort darf nicht leer sein.
     failure_when_forbidden: Bitte prüfe noch einmal die URL oder versuche, das Formular noch einmal zu senden.
     failure_when_not_signed_in: Bitte logge dich ein, um fortzufahren.
