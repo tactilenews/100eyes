@@ -11,8 +11,7 @@ x-defaults: &x-defaults
     MAILSERVER_PORT: 25
     POSTGRES_HOST: db
     WEBPACKER_DEV_SERVER_HOST: 0.0.0.0
-    SELENIUM_HOST: selenium
-    SELENIUM_PORT: 4444
+    HUB_URL: http://chrome:4444/wd/hub
   stdin_open: true
   tty: true
   volumes:
@@ -25,7 +24,7 @@ services:
 
   app:
     <<: *x-defaults
-    depends_on: [ db, mailserver ]
+    depends_on: [ db, mailserver, chrome ]
     ports:
       - 3000:3000
       - 3035:3035
@@ -39,13 +38,9 @@ services:
     image: djfarrelly/maildev
     ports: [ '1080:80', '1025:25' ]
   
-  selenium-hub:
-    image: selenium/hub:3.14.0
-    container_name: hub
-    ports:
-    - 4444:4444
-  node-chrome:
-    image: selenium/node-chrome-debug:3.14.0
-    links:
-    - selenium-hub
-
+  chrome:
+    image: selenium/standalone-chrome:87.0.4280.66-chromedriver-87.0.4280.20
+    environment:
+      JAVA_OPTS: -Dwebdriver.chrome.whitelistedIps=
+    volumes:
+      - /dev/shm:/dev/shm

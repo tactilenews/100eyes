@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require 'support/features/clearance_helpers'
+require 'support/system/clearance_helpers'
 
-RSpec.feature 'Visitor updates password', driver: :selenium_chrome do
+RSpec.describe 'Visitor updates password' do
   it 'with valid password' do
     user = user_with_reset_password
     update_password user, SecureRandom.hex(10)
@@ -46,7 +46,7 @@ RSpec.feature 'Visitor updates password', driver: :selenium_chrome do
   def change_password_to(password)
     fill_in I18n.t('helpers.label.password_reset.password'), with: password
     fill_in I18n.t('helpers.label.password_reset.password_confirmation'), with: "#{password}\t"
-
+    
     click_button I18n.t('helpers.submit.password_reset.submit')
   end
 end

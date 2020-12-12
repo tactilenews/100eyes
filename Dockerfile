@@ -13,15 +13,12 @@ RUN apk --update add \
     libxslt-dev \
     libxml2-dev \
     imagemagick \
-    less \
-    chromium \
-    chromium-chromedriver
+    less
+
 
 RUN mkdir -p /app
 WORKDIR /app
-ENV PATH="/usr/bin/chromedriver:${PATH}"
 CMD ["bundle", "exec", "rails", "server"]
-
 
 COPY Gemfile Gemfile.lock ./
 RUN gem install bundler

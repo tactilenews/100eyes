@@ -3,7 +3,7 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
 require 'vcr_setup'
-require 'selenium/webdriver'
+require 'selenium-webdriver'
 
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../config/environment', __dir__)
@@ -39,6 +39,10 @@ rescue ActiveRecord::PendingMigrationError => e
   puts e.to_s.strip
   exit 1
 end
+
+Dir[Rails.root.join("spec/support/*.rb")].sort.each { |f| require f }
+Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
+
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -71,7 +75,7 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
-  config.after { Telegram.bots.each_value(&:reset) }
+  # config.after { Telegram.bots.each_value(&:reset) }
   # or for multiple bots:
   config.include ActionMailbox::TestHelper, type: :mailbox
 
@@ -80,20 +84,21 @@ RSpec.configure do |config|
   config.include ViewComponent::TestHelpers, type: :component
   config.include Capybara::RSpecMatchers, type: :component
   config.include FactoryBot::Syntax::Methods
-  Selenium::WebDriver::Chrome.path = '/usr/bin/chromedriver'
-  selenium_host = 'http://0.0.0.0:4444/wd/hub'
-  Capybara.register_driver :selenium_chrome do |app|
-    options = Selenium::WebDriver::Chrome::Options.new(args: %w[
-                                                         headless no-sandbox disable-gpu window-size=1920x1080
-                                                       ])
+  Capybara.register_driver :chrome_headless do |app|
+    chrome_capabilities = ::Selenium::WebDriver::Remote::Capabilities.chrome('goog:chromeOptions' => { 'args': %w[no-sandbox headless disable-gpu window-size=1400,1400] })
     Capybara::Selenium::Driver.new(
       app,
       browser: :remote,
-      desired_capabilities: :chrome,
-      options: options,
-      url: selenium_host
+      url: ENV.fetch("HUB_URL"),
+      desired_capabilities: chrome_capabilities
     )
   end
 
-  Capybara.javascript_driver = :selenium_chrome
+  # config.before(:each, type: :system) do
+  #   driven_by :rack_test
+  # end
+
+  config.before(:each, type: :system) do
+    driven_by :chrome_headless
+  end
 end
