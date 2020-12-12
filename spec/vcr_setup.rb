@@ -9,5 +9,5 @@ VCR.configure do |c|
   c.filter_sensitive_data('<TELEGRAM_BOT_USERNAME>') { Telegram.bot.username }
   c.configure_rspec_metadata!
   c.ignore_localhost = true
-  c.ignore_hosts('chrome')
+  c.ignore_hosts('chrome', '172.19.4.6')
 end

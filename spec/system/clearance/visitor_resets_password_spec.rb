@@ -22,7 +22,6 @@ RSpec.describe 'Visitor resets password' do
 
   it 'with valid email' do
     user = user_with_reset_password
-
     expect_page_to_display_change_password_message
     expect_reset_notification_to_be_sent_to user
   end

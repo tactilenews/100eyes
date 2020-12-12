@@ -33,7 +33,6 @@ module Features
     end
 
     def expect_user_to_be_signed_in
-      binding.pry
       visit dashboard_path
       expect(page).to have_button I18n.t('components.nav_bar.sign_out')
     end
