@@ -40,8 +40,8 @@ rescue ActiveRecord::PendingMigrationError => e
   exit 1
 end
 
-Dir[Rails.root.join("spec/support/*.rb")].sort.each { |f| require f }
-Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
+Dir[Rails.root.join('spec/support/*.rb')].sort.each { |f| require f }
+Dir[Rails.root.join('spec/support/**/*.rb')].sort.each { |f| require f }
 
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
@@ -85,11 +85,16 @@ RSpec.configure do |config|
   config.include Capybara::RSpecMatchers, type: :component
   config.include FactoryBot::Syntax::Methods
   Capybara.register_driver :chrome_headless do |app|
-    chrome_capabilities = ::Selenium::WebDriver::Remote::Capabilities.chrome('goog:chromeOptions' => { 'args': %w[no-sandbox headless disable-gpu window-size=1400,1400] })
+    chrome_capabilities = ::Selenium::WebDriver::Remote::Capabilities.chrome('goog:chromeOptions' => {
+                                                                               'args': %w[no-sandbox
+                                                                                          headless
+                                                                                          disable-gpu
+                                                                                          window-size=1400,1400]
+                                                                             })
     Capybara::Selenium::Driver.new(
       app,
       browser: :remote,
-      url: ENV.fetch("HUB_URL"),
+      url: ENV.fetch('HUB_URL'),
       desired_capabilities: chrome_capabilities
     )
   end
