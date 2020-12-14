@@ -20,7 +20,7 @@ class SessionsController < Clearance::SessionsController
 
     if @user.authenticate_otp(verify_user_params['otp_code_token'], drift: 30)
       @user.otp_module_enabled! if @user.otp_module_disabled?
-      create_session(@user)
+      create_session
     else
       qr_code
       flash.now[:error] = I18n.t('user.sign_in.two_factor_authentication.failure_message')
@@ -34,8 +34,8 @@ class SessionsController < Clearance::SessionsController
     params.require(:session).permit(:otp_code_token)
   end
 
-  def create_session(user)
-    sign_in(user) do |status|
+  def create_session
+    sign_in(@user) do |status|
       if status.success?
         redirect_back_or url_after_create
       else
