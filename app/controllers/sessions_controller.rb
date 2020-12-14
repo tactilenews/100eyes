@@ -8,10 +8,10 @@ class SessionsController < Clearance::SessionsController
 
     if @user
       cookies.encrypted[:sessions_user_id] = { value: @user.id, expires: 3.minutes }
-      @qr_code = RQRCode::QRCode.new(@user.provisioning_uri(Setting.project_name), size: 7, level: :h)
+      @qr_code = RQRCode::QRCode.new(@user.provisioning_uri(Setting.project_name))
       render 'sessions/two_factor_authentication'
     else
-      redirect_to sign_in_path, flash: { alert: I18n.t('flashes.failure_after_create') }
+      redirect_to sign_in_path, flash: { error: I18n.t('flashes.failure_after_create') }
     end
   end
 
