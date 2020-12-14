@@ -52,7 +52,7 @@ For development purposes, you can set up `100eyes` using Docker. To perform the 
    One user has been created to use in development, since registration is disabled. You can create your own user in the `rails console` if you want, or you can run:
 
    ```bash
-   $ docker-compoes exec app rails db:seed
+   $ docker-compose exec app rails db:seed
    ```
 
   ##### Webpack Development Server
