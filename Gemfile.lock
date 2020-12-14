@@ -117,6 +117,8 @@ GEM
     factory_bot_rails (6.1.0)
       factory_bot (~> 6.1.0)
       railties (>= 5.0.0)
+    faker (2.15.1)
+      i18n (>= 1.6, < 2)
     ffi (1.14.2)
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
@@ -336,6 +338,7 @@ DEPENDENCIES
   db-query-matchers
   dotenv-rails
   factory_bot_rails
+  faker
   jbuilder (~> 2.11)
   jwt
   kramdown (~> 2.3)
