@@ -8,7 +8,7 @@ class SessionsController < Clearance::SessionsController
 
     if @user
       cookies.encrypted[:sessions_user_id] = { value: @user.id, expires: 3.minutes }
-      @qr_code = RQRCode::QRCode.new(@user.provisioning_uri(Setting.project_name))
+      qr_code
       render 'sessions/two_factor_authentication'
     else
       redirect_to sign_in_path, flash: { error: I18n.t('flashes.failure_after_create') }
@@ -17,14 +17,13 @@ class SessionsController < Clearance::SessionsController
 
   def verify_user_otp
     @user = User.find(cookies.encrypted[:sessions_user_id])
-    return unless @user
 
-    authenticate_otp = @user.authenticate_otp(verify_user_params['otp_code_token'], drift: 60)
-    if authenticate_otp
+    if @user.authenticate_otp(verify_user_params['otp_code_token'], drift: 30)
       @user.otp_module_enabled! if @user.otp_module_disabled?
       create_session(@user)
     else
-      flash.now.alert = I18n.t('user.sign_in.two_factor_authentication.failure_message')
+      qr_code
+      flash.now[:error] = I18n.t('user.sign_in.two_factor_authentication.failure_message')
       render 'sessions/two_factor_authentication', status: :unauthorized
     end
   end
@@ -43,5 +42,9 @@ class SessionsController < Clearance::SessionsController
         redirect_to sign_in_path, flash: { alert: 'something went wrong, not sure what' }
       end
     end
+  end
+
+  def qr_code
+    @qr_code ||= RQRCode::QRCode.new(@user.provisioning_uri(Setting.project_name))
   end
 end

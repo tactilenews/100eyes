@@ -87,4 +87,55 @@ RSpec.describe 'Sessions' do
       end
     end
   end
+
+  describe 'POST /session/verify_user_otp' do
+    subject { patch '/session/verify_user_otp', params: { session: { otp_code_token: otp_code_token } } }
+
+    let(:otp_code_token) { SecureRandom.hex(3) }
+
+    context 'No user' do
+      it 'raises error' do
+        expect { subject }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context 'User exists' do
+      let(:user) { create(:user) }
+
+      before do
+        my_cookies = ActionDispatch::Request.new(Rails.application.env_config.deep_dup).cookie_jar
+        my_cookies.encrypted[:sessions_user_id] = { value: user.id, expires: 3.minutes }
+        cookies[:sessions_user_id] = my_cookies[:sessions_user_id]
+      end
+
+      context 'Invalid otp_code' do
+        before { subject }
+        it 'Unauthorized' do
+          expect(response).to be_unauthorized
+        end
+
+        it 'displays error message' do
+          expect(response.request.flash[:error]).to eq(I18n.t('user.sign_in.two_factor_authentication.failure_message'))
+        end
+      end
+
+      context 'valid otp_code' do
+        let(:otp_code_token) { user.otp_code }
+
+        it 'is successful' do
+          subject
+          expect(response).to redirect_to('/dashboard')
+        end
+
+        it 'sets remember_token for user' do
+          subject
+          expect(response.cookies['remember_token']).to eq(user.remember_token)
+        end
+
+        it 'enables otp_module' do
+          expect { subject }.to change { user.reload.otp_module }.from('disabled').to('enabled')
+        end
+      end
+    end
+  end
 end

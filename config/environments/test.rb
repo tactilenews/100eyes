@@ -64,7 +64,7 @@ Rails.application.configure do
   config.active_job.queue_adapter = :test
   config.middleware.use Clearance::BackDoor
 
-  config.session_store :cookie_store, key: "cookie_store_key"
-  secrets.secret_token    = "secret_token"
-  secrets.secret_key_base = "secret_key_base"
+  config.session_store :cookie_store, key: 'cookie_store_key'
+  secrets.secret_token    = 'secret_token'
+  secrets.secret_key_base = 'secret_key_base'
 end
