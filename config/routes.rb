@@ -46,7 +46,7 @@ Rails.application.routes.draw do
   # Clearance routes
 
   resources :passwords,
-            controller: 'clearance/passwords',
+            controller: 'passwords',
             only: %i[create new]
 
   resource :session, controller: 'sessions' do
@@ -60,7 +60,7 @@ Rails.application.routes.draw do
             controller: 'clearance/users',
             only: Clearance.configuration.user_actions do
     resource :password,
-             controller: 'clearance/passwords',
+             controller: 'passwords',
              only: %i[edit update]
   end
 
