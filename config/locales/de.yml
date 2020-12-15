@@ -207,8 +207,8 @@ de:
       two_factor_authentication:
         header: Konto bestätigen
         label: Token
-        submit: Einmaliges Passwort einreichen
-        failure_message: Einmaliges Passwort ungültig
+        submit: Einmaliges Token einreichen
+        failure_message: Einmaliges Token ungültig
   request:
     request:
       one: Frage
