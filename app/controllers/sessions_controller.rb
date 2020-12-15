@@ -17,7 +17,6 @@ class SessionsController < Clearance::SessionsController
 
   def verify_user_otp
     @user = User.find(cookies.encrypted[:sessions_user_id])
-
     if @user.authenticate_otp(verify_user_params['otp_code_token'], drift: 30)
       @user.otp_module_enabled! if @user.otp_module_disabled?
       create_session

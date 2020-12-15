@@ -7,7 +7,7 @@
       <%= qr_code_as_svg %>
     <% end %>
 
-    <label for='session[otp_code_token]'><%= t 'helpers.label.session.password' %></label>
+    <label for='session[otp_code_token]'><%= t 'user.sign_in.two_factor_authentication.label' %></label>
     <%= c 'input', id: 'session[otp_code_token]' %>
     <%= c 'button', type: 'submit', label: I18n.t('user.sign_in.two_factor_authentication.submit') %>
   <% end %>
