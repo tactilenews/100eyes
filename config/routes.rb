@@ -57,7 +57,6 @@ Rails.application.routes.draw do
   end
 
   resources :users,
-            controller: 'clearance/users',
             only: Clearance.configuration.user_actions do
     resource :password,
              controller: 'passwords',
