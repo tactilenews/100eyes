@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/BlockLength
-
 Rails.application.routes.draw do
   root to: redirect('/dashboard')
   get '/dashboard', to: 'dashboard#index'
@@ -69,4 +67,3 @@ Rails.application.routes.draw do
   get '/sign_in' => 'clearance/sessions#new', as: 'sign_in'
   delete '/sign_out' => 'clearance/sessions#destroy', as: 'sign_out'
 end
-# rubocop:enable Metrics/BlockLength
