@@ -1,14 +1,16 @@
-<label class="<%= class_attr %>" for="<%= basic_defaults[:id] %>">
-  <p class="Field-label"><%= label %></p>
-  <% if help %>
-    <small class="Field-help"><%= help %></small>
-  <% end %>
-  <% if validation_errors.any? %>
-    <% validation_errors.each do |error| %>
-      <strong class="Field-error">
-        <%= error %>
-      </strong>
+<label class="<%= class_attr %>">
+  <span class="Field-phrasing-content">
+    <%= label %>
+    <% if help %>
+      <small class="Field-help"><%= help %></small>
     <% end %>
-  <% end %>
+    <% if validation_errors.any? %>
+      <% validation_errors.each do |error| %>
+        <strong class="Field-error">
+          <%= error %>
+        </strong>
+      <% end %>
+    <% end %>
+  </span>
   <%= content %>
 </label>
