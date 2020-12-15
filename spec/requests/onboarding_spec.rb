@@ -169,16 +169,22 @@ RSpec.describe 'Onboarding', type: :request do
 
     context 'invalid' do
       context 'no telegram id in cookie' do
-        it 'is not successful' do
-          subject.call
+        before { subject.call }
+
+        it 'is unauthorized' do
           expect(response).to be_unauthorized
+        end
+
+        it 'does not update the user' do
+          contributor = Contributor.find_by(telegram_id: 789)
+          expect(contributor).to have_attributes(first_name: nil, last_name: nil)
         end
       end
 
       context 'expired signature' do
         before { setup_telegram_id_cookie(contributor) }
 
-        it 'throws an error' do
+        it 'is unauthorized' do
           passed_expiration_time = 31.minutes.from_now
           Timecop.travel(passed_expiration_time) do
             subject.call
@@ -193,9 +199,8 @@ RSpec.describe 'Onboarding', type: :request do
 
       it 'updates the contributor' do
         subject.call
-        contributor = Contributor.where(telegram_id: 789).first
-        expect(contributor.first_name).to eq('Update')
-        expect(contributor.last_name).to eq('MyNames')
+        contributor = Contributor.find_by(telegram_id: 789)
+        expect(contributor).to have_attributes(first_name: 'Update', last_name: 'MyNames')
       end
     end
   end
