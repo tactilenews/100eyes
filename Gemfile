@@ -56,7 +56,7 @@ group :test do
   # Easy installation and use of web drivers to run system tests with browsers
   gem 'db-query-matchers'
   gem 'vcr'
-  gem 'webdrivers'
+  gem 'webdrivers', require: false
   gem 'webmock'
 end
 
