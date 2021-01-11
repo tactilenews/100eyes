@@ -83,7 +83,7 @@ gem 'mini_magick', '~> 4.11'
 # TODO: Move into group :development, :test once uberspace setup is removed
 gem 'dotenv-rails'
 # TODO: Move into group :development once uberspace setup is removed
-gem 'listen', '>= 3.0.5', '< 3.4'
+gem 'listen', '>= 3.0.5', '< 3.5'
 gem 'rails-settings-cached', '~> 2.4'
 
 gem 'kramdown', '~> 2.3'
