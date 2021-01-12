@@ -6,7 +6,6 @@ class OnboardingController < ApplicationController
   skip_before_action :require_login, except: :create_invite_url
   before_action :verify_onboarding_jwt, except: %i[create_invite_url success telegram_update_info]
   before_action :verify_telegram_authentication_and_integrity, only: :telegram
-  before_action :verify_update_jwt, only: :telegram_update_info
 
   layout 'onboarding'
 
@@ -64,15 +63,17 @@ class OnboardingController < ApplicationController
     return unless @contributor.save
 
     invalidate_jwt
-    payload = { telegram_id: @contributor.telegram_id, action: 'update' }
-    @jwt = create_jwt(payload, expires_in: 30.minutes)
+    cookies.encrypted[:telegram_id] = { value: @contributor.telegram_id, expires: 30.minutes }
   end
 
   def telegram_update_info
-    decoded_token = JsonWebToken.decode(jwt_param)
-    @contributor = Contributor.where(telegram_id: decoded_token.first['data']['telegram_id'])
-    @contributor.update(first_name: contributor_params[:first_name], last_name: contributor_params[:last_name])
-    redirect_to_success
+    @contributor = Contributor.find_by(telegram_id: cookies.encrypted[:telegram_id])
+
+    if @contributor&.update(first_name: contributor_params[:first_name], last_name: contributor_params[:last_name])
+      redirect_to_success
+    else
+      render :unauthorized, status: :unauthorized
+    end
   end
 
   private
@@ -88,16 +89,6 @@ class OnboardingController < ApplicationController
     decoded_token = JsonWebToken.decode(jwt_param)
 
     raise ActionController::BadRequest if decoded_token.first['data']['action'] != 'onboarding'
-  rescue StandardError
-    render :unauthorized, status: :unauthorized
-  end
-
-  def verify_update_jwt
-    decoded_token = JsonWebToken.decode(jwt_param)
-
-    if decoded_token.first['data']['action'] != 'update' || decoded_token.first['data']['telegram_id'].blank?
-      raise ActionController::BadRequest
-    end
   rescue StandardError
     render :unauthorized, status: :unauthorized
   end
@@ -118,7 +109,7 @@ class OnboardingController < ApplicationController
     params.permit(:id, :first_name, :last_name, :auth_date, :hash, :username, :photo_url)
   end
 
-  def create_jwt(payload, expires_in: nil)
+  def create_jwt(payload, expires_in: 48.hours.from_now.to_i)
     JsonWebToken.encode(payload, expires_in: expires_in)
   end
 

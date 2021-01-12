@@ -55,6 +55,7 @@ group :test do
   gem 'selenium-webdriver'
   # Easy installation and use of web drivers to run system tests with browsers
   gem 'db-query-matchers'
+  gem 'timecop'
   gem 'vcr'
   gem 'webdrivers', require: false
   gem 'webmock'

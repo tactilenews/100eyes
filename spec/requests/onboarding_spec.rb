@@ -118,12 +118,12 @@ RSpec.describe 'Onboarding', type: :request do
         expect(json_web_token).to exist
       end
 
-      context 'creates a new update' do
-        before { allow(JsonWebToken).to receive(:encode) }
+      context 'sets an encrypted cookie' do
+        let(:cookie_jar) { ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash) }
 
-        it 'jwt token' do
+        it 'with telegram_id for use in next step' do
           subject.call
-          expect(JsonWebToken).to have_received(:encode)
+          expect(cookie_jar.encrypted['telegram_id']).to eq(123)
         end
       end
     end
@@ -168,56 +168,39 @@ RSpec.describe 'Onboarding', type: :request do
     subject { -> { patch onboarding_telegram_update_info_path, params: params } }
 
     context 'invalid' do
-      context 'no telegram id' do
-        let(:jwt) { JsonWebToken.encode({ telegram_id: nil, action: 'update' }) }
+      context 'no telegram id in cookie' do
+        before { subject.call }
 
-        it 'is not successful' do
-          subject.call
-          expect(response).not_to be_successful
-        end
-
-        it 'does not redirect to success' do
-          subject.call
-          expect(response).not_to redirect_to onboarding_success_path
+        it 'is unauthorized' do
+          expect(response).to be_unauthorized
         end
 
         it 'does not update the user' do
-          subject.call
-          contributor = Contributor.where(telegram_id: 789).first
-          expect(contributor.first_name).to be_nil
-          expect(contributor.last_name).to be_nil
+          contributor = Contributor.find_by(telegram_id: 789)
+          expect(contributor).to have_attributes(first_name: nil, last_name: nil)
         end
       end
 
-      context 'action not equal to update' do
-        let(:jwt) { JsonWebToken.encode({ telegram_id: 789, action: 'onboarding' }) }
+      context 'expired signature' do
+        before { setup_telegram_id_cookie(contributor) }
 
-        it 'is not successful' do
-          subject.call
-          expect(response).not_to be_successful
-        end
-
-        it 'does not redirect to success' do
-          subject.call
-          expect(response).not_to redirect_to onboarding_success_path
-        end
-
-        it 'does not update the user' do
-          subject.call
-          contributor = Contributor.where(telegram_id: 789).first
-          expect(contributor.first_name).to be_nil
-          expect(contributor.last_name).to be_nil
+        it 'is unauthorized' do
+          passed_expiration_time = 31.minutes.from_now
+          Timecop.travel(passed_expiration_time) do
+            subject.call
+            expect(response).to be_unauthorized
+          end
         end
       end
     end
 
     context 'valid' do
-      let(:jwt) { JsonWebToken.encode({ telegram_id: 789, action: 'update' }) }
+      before { setup_telegram_id_cookie(contributor) }
+
       it 'updates the contributor' do
         subject.call
-        contributor = Contributor.where(telegram_id: 789).first
-        expect(contributor.first_name).to eq('Update')
-        expect(contributor.last_name).to eq('MyNames')
+        contributor = Contributor.find_by(telegram_id: 789)
+        expect(contributor).to have_attributes(first_name: 'Update', last_name: 'MyNames')
       end
     end
   end
@@ -311,4 +294,10 @@ RSpec.describe 'Onboarding', type: :request do
       end
     end
   end
+end
+
+def setup_telegram_id_cookie(contributor)
+  my_cookies = ActionDispatch::Request.new(Rails.application.env_config.deep_dup).cookie_jar
+  my_cookies.encrypted[:telegram_id] = { value: contributor.telegram_id, expires: 30.minutes }
+  cookies[:telegram_id] = my_cookies[:telegram_id]
 end
