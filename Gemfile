@@ -83,7 +83,7 @@ gem 'acts-as-taggable-on'
 gem 'jwt'
 gem 'mini_magick', '~> 4.11'
 
-gem 'rails-settings-cached', '~> 2.4'
+gem 'rails-settings-cached', '~> 2.5'
 
 gem 'kramdown', '~> 2.3'
 
