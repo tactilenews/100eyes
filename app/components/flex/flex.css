@@ -1,7 +1,6 @@
 .Flex {
   display: flex;
   width: 100%;
-  justify-content: space-between;
   align-items: center;
 }
 
@@ -12,4 +11,12 @@
 
 .Flex--gap {
   gap: var(--spacing-unit-l);
+}
+
+.Flex--bigGap {
+  gap: calc(2 * var(--spacing-unit-l));
+}
+
+.Flex--spaceBetween {
+  justify-content: space-between;
 }

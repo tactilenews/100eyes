@@ -7,5 +7,9 @@ FactoryBot.define do
     sequence :email do |n|
       "contributor#{n}@example.org"
     end
+
+    trait :with_an_avatar do
+      avatar { Rack::Test::UploadedFile.new(Rails.root.join('example-image.png'), 'image/png') }
+    end
   end
 end

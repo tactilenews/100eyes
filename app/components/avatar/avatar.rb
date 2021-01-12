@@ -2,9 +2,12 @@
 
 module Avatar
   class Avatar < ApplicationComponent
-    def initialize(contributor: nil, **)
+    delegate :avatar, :avatar?, to: :contributor, prefix: true
+
+    def initialize(contributor: nil, expandable: false, **)
       super
       @contributor = contributor
+      @expandable = expandable
     end
 
     private
@@ -13,10 +16,6 @@ module Avatar
 
     def key
       contributor&.id
-    end
-
-    def url
-      contributor&.avatar_url
     end
 
     def initials

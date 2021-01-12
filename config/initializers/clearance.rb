@@ -8,6 +8,7 @@ Clearance.configure do |config|
   config.mailer_sender = Setting.email_from_address
   config.rotate_csrf_on_sign_in = true
   config.same_site = :strict
+  config.redirect_url = '/dashboard'
 
   Rails.application.config.to_prepare do
     Clearance::PasswordsController.layout 'clearance'

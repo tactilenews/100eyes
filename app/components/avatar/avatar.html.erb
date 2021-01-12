@@ -1,6 +1,7 @@
 <div class="<%= class_attr %>">
-  <% if url %>
-    <img src="<%= url %>" alt="" />
+
+  <% if contributor_avatar? %>
+    <%= link_to_if @expandable, image_tag(url_for(contributor_avatar), alt: ""), contributor_avatar, target: "_blank" %>
   <% else %>
     <svg
       class="Avatar-initials"

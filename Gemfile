@@ -10,7 +10,7 @@ gem 'rails', '~> 6.0.3'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
-gem 'puma', '~> 5.0'
+gem 'puma', '~> 5.1'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.10'
 # Use Redis adapter to run Action Cable in production
@@ -57,7 +57,7 @@ group :test do
   gem 'db-query-matchers'
   gem 'timecop'
   gem 'vcr'
-  gem 'webdrivers'
+  gem 'webdrivers', require: false
   gem 'webmock'
 end
 
@@ -84,8 +84,8 @@ gem 'mini_magick', '~> 4.11'
 # TODO: Move into group :development, :test once uberspace setup is removed
 gem 'dotenv-rails'
 # TODO: Move into group :development once uberspace setup is removed
-gem 'listen', '>= 3.0.5', '< 3.4'
-gem 'rails-settings-cached', '~> 2.3'
+gem 'listen', '>= 3.0.5', '< 3.5'
+gem 'rails-settings-cached', '~> 2.4'
 
 gem 'kramdown', '~> 2.3'
 
