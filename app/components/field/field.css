@@ -2,27 +2,27 @@
   display: block;
 }
 
-.Field-phrasing-content {
+.Field-labelText {
   font-weight: 600;
 }
 
-.Field-help {
+.Field-helpText {
   color: var(--color-text-light);
   font-size: 0.8rem;
   line-height: 1.5;
   display: block;
 }
 
-.Field-error {
+.Field-errorText {
   color: var(--color-red);
   font-size: 0.8rem;
 }
 
-.Field-error:before {
+.Field-errorText:before {
   content: '*';
 }
 
-.Field:not(.Field--horizontal) .Field-phrasing-content {
+.Field:not(.Field--horizontal) .Field-textWrapper {
   margin-bottom: var(--spacing-unit-s);
 }
 
@@ -30,7 +30,7 @@
   display: flex;
 }
 
-.Field--horizontal .Field-phrasing-content {
+.Field--horizontal .Field-textWrapper {
   width: 20%;
   display: flex;
   flex-direction: column;

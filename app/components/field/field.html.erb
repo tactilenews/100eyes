@@ -1,12 +1,12 @@
 <label class="<%= class_attr %>">
-  <div class="Field-phrasing-content">
-    <%= label %>
+  <div class="Field-textWrapper">
+    <span class="Field-labelText"><%= label %></span>
     <% if help %>
-      <small class="Field-help"><%= help %></small>
+      <small class="Field-helpText"><%= help %></small>
     <% end %>
     <% if validation_errors.any? %>
       <% validation_errors.each do |error| %>
-        <strong class="Field-error">
+        <strong class="Field-errorText">
           <%= error %>
         </strong>
       <% end %>
