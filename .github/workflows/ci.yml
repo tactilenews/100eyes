@@ -27,6 +27,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Update file watchers because of rails settings cached
+        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+
       - name: Install ruby
         uses: actions/setup-ruby@v1
         with: { ruby-version: 2.7.2 }
