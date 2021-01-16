@@ -17,19 +17,17 @@
   color: var(--color-red);
   font-size: 0.8rem;
 }
+
 .Field-error:before {
   content: '*';
 }
 
-.Field:not(.Field--horizontal) > .Input,
-.Field:not(.Field--horizontal) > .Textarea {
-  margin-top: var(--spacing-unit-s);
+.Field:not(.Field--horizontal) .Field-phrasing-content {
+  margin-bottom: var(--spacing-unit-s);
 }
 
 .Field--horizontal {
   display: flex;
-  align-items: center;
-  margin-top: 0;
 }
 
 .Field--horizontal .Field-phrasing-content {
@@ -40,7 +38,4 @@
   flex-grow: 0;
   margin: 0;
   margin-right: var(--spacing-unit);
-  padding: var(--input-padding-s);
-  padding-left: 0;
-  padding-right: 0;
 }
