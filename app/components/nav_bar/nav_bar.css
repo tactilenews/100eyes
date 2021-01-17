@@ -31,9 +31,3 @@
   font-weight: 600;
   color: #fff;
 }
-
-.NavBar-search {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
