@@ -1,21 +1,13 @@
 .OnboardingHero {
   position: relative;
-  padding-top: 40vh;
+  padding-top: 50%;
 }
 
 .OnboardingHero > img {
   position: absolute;
   top: 0;
   left: 0;
-
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-.OnboardingHero-text {
-  position: relative;
-  padding: var(--spacing-unit);
-  padding-bottom: 0;
-  background-color: #fff;
 }

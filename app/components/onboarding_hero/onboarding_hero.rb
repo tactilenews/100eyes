@@ -2,15 +2,14 @@
 
 module OnboardingHero
   class OnboardingHero < ApplicationComponent
-    def initialize(photo:, heading:, **)
+    def initialize(image:, **)
       super
 
-      @photo = photo
-      @heading = heading
+      @image = image
     end
 
     private
 
-    attr_reader :photo, :heading
+    attr_reader :image
   end
 end
