@@ -10,8 +10,14 @@
           <%= @request.title %>
         <% end %>
 
-        <%= c 'text', styles: [:small, :light] do %>
-          <%= I18n.t('request.created_at', created_at: date_time(@request.created_at)) %>
+        <%= c 'flex' do %>
+          <% if @request.tags.any? %>
+            <%= c 'tags_list', tags: @request.tags %>
+          <% end %>
+
+          <%= c 'text', styles: [:small, :light] do %>
+            <%= I18n.t('request.created_at', created_at: date_time(@request.created_at)) %>
+          <% end %>
         <% end %>
       </div>
       <%= c 'plaintext_message', message: @request.text %>
