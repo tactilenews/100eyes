@@ -6,8 +6,10 @@
 
 <main>
 
-  <%= c 'wrapper' do %>
-    <%= c 'onboarding_hero', image: Setting.onboarding_hero %>
+  <% if Setting.onboarding_hero.present? %>
+    <%= c 'wrapper' do %>
+      <%= c 'onboarding_hero', image: Setting.onboarding_hero %>
+    <% end %>
   <% end %>
 
   <%= c 'wrapper', style: :narrow do %>

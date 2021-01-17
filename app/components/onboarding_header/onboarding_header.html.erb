@@ -1,5 +1,12 @@
 <header class="<%= class_attr %>">
-  <img src="<%= logo %>" alt="<%= Setting.project_name %>" />
+  <% if logo.present? %>
+    <img src="<%= logo %>" alt="<%= Setting.project_name %>" />
+  <% else %>
+    <div class="OnboardingHeader__logoText">
+      <%= Setting.project_name %>
+    </div>
+  <% end %>
+
   <span class="OnboardingHeader-byline">
     <%= I18n.t('components.onboarding_header.byline').html_safe %>
   </span>

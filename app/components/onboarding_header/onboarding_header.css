@@ -8,6 +8,13 @@
   margin: var(--spacing-unit-xs) auto;
 }
 
+.OnboardingHeader__logoText {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  font-size: .8rem;
+}
+
 .OnboardingHeader-byline {
   font-size: var(--font-size-xs);
   color: var(--color-text-light);
