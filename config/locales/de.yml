@@ -142,10 +142,10 @@ de:
         label: Text
       onboarding_logo:
         label: Logo (URL)
-        help: Das Logo sollte eine Bilddatei im SVG- oder JPEG-Format und ca. 90 Pixel hoch sein. Es wird während des Onboardings angezeigt.
+        help: Das Logo sollte eine Bilddatei im SVG-, PNG-Format sein und ca. 90 Pixel hoch sein. Es wird während des Onboardings angezeigt.
       onboarding_hero:
-        label: Teaser (URL)
-        help: Das Logo sollte eine Bilddatei im JPEG-Format. Es sollte mindestens 800x500 Pixel groß sein. Es wird während des Onboardings angezeigt.
+        label: Header-Bild (URL)
+        help: Das Header-Bild sollte eine Bilddatei im JPEG-Format sein. Es sollte ein Seitenverhältnis von 2:1 haben und ca. 900 Pixel breit sein. Es wird während des Onboardings angezeigt.
       telegram_unknown_content_message:
         label: Fehler-Nachricht bei unbekannten Inhalten
         help: Wenn ein Mitglied via Telegram Nachrichten versendet, die von 100eyes noch nicht unterstützt werden, erhält es diese Nachricht.
