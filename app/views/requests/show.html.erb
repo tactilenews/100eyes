@@ -10,7 +10,7 @@
           <%= @request.title %>
         <% end %>
 
-        <%= c 'flex' do %>
+        <%= c 'flex', style: :small_gap do %>
           <% if @request.tags.any? %>
             <%= c 'tags_list', tags: @request.tags %>
           <% end %>
