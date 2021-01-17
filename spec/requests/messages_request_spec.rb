@@ -18,9 +18,7 @@ RSpec.describe 'Messages', type: :request do
 
       describe 'given highlighted=true' do
         let(:params) { { highlighted: true } }
-        it do
-          should(change { message.reload.highlighted? }).from(false).to(true)
-        end
+        it { should(change { message.reload.highlighted? }).from(false).to(true) }
       end
 
       describe 'given highlighted=false' do
@@ -79,11 +77,8 @@ RSpec.describe 'Messages', type: :request do
       it 'redirects back to previous request' do
         subject.call
 
-        url = request_url(
-          request,
-          moved_message: message.id,
-          anchor: "contributor-#{message.contributor.id}"
-        )
+        anchor = "contributor-#{message.contributor.id}"
+        url = request_url(request, anchor: anchor)
 
         expect(flash[:success]).not_to be_empty
         expect(response).to redirect_to url

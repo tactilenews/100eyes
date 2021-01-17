@@ -14,22 +14,13 @@ class MessagesController < ApplicationController
     previous_request = @message.request
 
     if @message.update(move_params)
-      redirect_url = request_url(
-        previous_request,
-        moved_message: @message.id,
-        anchor: "contributor-#{@message.contributor.id}"
-      )
+      anchor = "contributor-#{@message.contributor.id}"
+      redirect_url = request_url(previous_request, anchor: anchor)
 
-      return redirect_to(
-        redirect_url,
-        flash: { success: I18n.t('message.moved') }
-      )
+      return redirect_to(redirect_url, flash: { success: I18n.t('message.moved') })
     end
 
-    redirect_to(
-      move_message_url,
-      flash: { error: I18n.t('message.move_failed') }
-    )
+    redirect_to(move_message_url, flash: { error: I18n.t('message.move_failed') })
   end
 
   private
