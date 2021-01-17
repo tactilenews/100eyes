@@ -21,12 +21,8 @@ class ApplicationComponent < ViewComponent::Base
     self.class.name.demodulize
   end
 
-  def modifiers
-    styles.map { |style| "Input--#{style}" }
-  end
-
   def class_names
-    [block_name] + styles.map { |style| "#{block_name}--#{style}" }
+    [block_name] + styles.map { |style| "#{block_name}--#{style.to_s.camelize(:lower)}" }
   end
 
   def class_attr

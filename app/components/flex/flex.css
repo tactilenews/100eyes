@@ -2,7 +2,7 @@
   display: flex;
   width: 100%;
   align-items: center;
-  gap: var(--spacing-unit-s);
+  gap: var(--spacing-unit);
 }
 
 .Flex--equal > * {
@@ -10,12 +10,12 @@
   flex-grow: 1;
 }
 
-.Flex--gap {
-  gap: var(--spacing-unit-l);
+.Flex--smallGap {
+  gap: var(--spacing-unit-s);
 }
 
-.Flex--bigGap {
-  gap: calc(2 * var(--spacing-unit-l));
+.Flex--largeGap {
+  gap: var(--spacing-unit-l);
 }
 
 .Flex--spaceBetween {

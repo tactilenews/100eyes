@@ -11,9 +11,9 @@
   height: var(--spacing-unit-l);
 }
 
-.Avatar--big {
-  width: calc(2 * var(--spacing-unit-xl));
-  height: calc(2 * var(--spacing-unit-xl));
+.Avatar--large {
+  width: calc(1.5 * var(--spacing-unit-xl));
+  height: calc(1.5 * var(--spacing-unit-xl));
 }
 
 .Avatar > svg {
