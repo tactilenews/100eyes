@@ -2,7 +2,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--spacing-unit-s) var(--spacing-unit-l);
+  padding: var(--spacing-unit-s) var(--spacing-unit);
+  padding-right: var(--spacing-unit-s);
 
   font-size: var(--font-size-s);
   background: var(--color-blue-dark);
