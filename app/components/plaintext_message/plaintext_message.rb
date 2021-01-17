@@ -17,7 +17,7 @@ module PlaintextMessage
     end
 
     def rendered
-      simple_format(content)
+      simple_format(h(content))
     end
 
     def content

@@ -20,7 +20,6 @@ RSpec.describe PlaintextMessage::PlaintextMessage, type: :component do
 
     it 'strips whitespace' do
       expect(subject).to have_css('p', count: 1, exact_text: 'Hello World!')
-      # expect(subject.find('p').first.inner_html).to eq('Hello World!')
     end
   end
 
@@ -36,6 +35,14 @@ RSpec.describe PlaintextMessage::PlaintextMessage, type: :component do
 
     it 'renders two p tags' do
       expect(subject).to have_css('p', count: 2)
+    end
+  end
+
+  describe 'given a message with HTML' do
+    let(:message) { '<h1>Hello!</h1>' }
+
+    it 'escapes HTML' do
+      expect(subject).to have_text('<h1>Hello!</h1>')
     end
   end
 
