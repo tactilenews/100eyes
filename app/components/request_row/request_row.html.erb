@@ -10,10 +10,15 @@
             <% end %>
 
             <div class="RequestRow-meta">
+              <% if request.tags.any? %>
+                <%= c 'tags_list', tags: request.tags %>
+              <% end %>
+
+              <%= c 'request_metrics', request: request, style: :inline %>
+
               <span>
                 <%= I18n.t('request.created_at', created_at: date_time(request.created_at)) %>
               </span>
-              <%= c 'request_metrics', request: request, style: :inline %>
             </div>
           <% end %>
 
