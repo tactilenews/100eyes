@@ -34,6 +34,10 @@
   letter-spacing: 0.1em;
 }
 
+.Heading--serif {
+  font-family: var(--font-family-serif);
+}
+
 .Heading--section {
   display: flex;
   align-items: center;

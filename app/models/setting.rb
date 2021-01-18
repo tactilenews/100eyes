@@ -7,9 +7,9 @@ class Setting < RailsSettings::Base
   field :project_name, default: ENV['HUNDRED_EYES_PROJECT_NAME'] || '100eyes'
   field :application_host, readonly: true, default: ENV['APPLICATION_HOSTNAME'] || 'localhost:3000'
 
-  field :onboarding_logo, default: '/onboarding/logo.png'
-  field :onboarding_hero, default: '/onboarding/hero.jpg'
-  field :onboarding_title, default: 'Hallo und herzlich willkommen beim 100eyes!'
+  field :onboarding_logo, default: ''
+  field :onboarding_hero, default: ''
+  field :onboarding_title, default: 'Hallo und herzlich willkommen!'
   field :onboarding_page, default: File.read(File.join('config', 'locales', 'onboarding', 'page.md'))
   field :onboarding_success_heading, default: File.read(File.join('config', 'locales', 'onboarding', 'success_heading.txt'))
   field :onboarding_success_text, default: File.read(File.join('config', 'locales', 'onboarding', 'success_text.txt'))
