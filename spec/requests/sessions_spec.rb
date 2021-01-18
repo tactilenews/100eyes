@@ -132,8 +132,8 @@ RSpec.describe 'Sessions' do
           expect(response.cookies['remember_token']).to eq(user.remember_token)
         end
 
-        it 'enables otp_module' do
-          expect { subject }.to change { user.reload.otp_module }.from('disabled').to('enabled')
+        it 'updates otp_enabled' do
+          expect { subject }.to change { user.reload.otp_enabled }.from(false).to(true)
         end
       end
     end

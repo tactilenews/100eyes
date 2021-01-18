@@ -3,7 +3,7 @@
     <%= t 'user.sign_in.two_factor_authentication.header' %>
   <% end %>
   <%= form_with(model: user, url: verify_user_otp_session_path, local: true) do |_form| %>
-    <% if user.otp_module_disabled? %>
+    <% unless user.otp_enabled? %>
       <%= qr_code_as_svg %>
     <% end %>
 

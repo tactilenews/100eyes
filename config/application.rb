@@ -41,6 +41,5 @@ module App
     config.i18n.default_locale = :de
     config.time_zone = 'Berlin'
     config.i18n.fallbacks = true
-    config.active_record.schema_format = :sql
   end
 end
