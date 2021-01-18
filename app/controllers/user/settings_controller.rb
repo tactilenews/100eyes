@@ -1,9 +1,15 @@
+# frozen_string_literal: true
+
+# rubocop:disable Style/ClassAndModuleChildren
 class User::SettingsController < ApplicationController
-  skip_before_action :ensure_2fa_setup, only: [:two_factor_auth_setup, :verify_user_otp]
+  skip_before_action :ensure_2fa_setup, only: %i[two_factor_auth_setup verify_user_otp]
 
   def two_factor_auth_setup
-    redirect_to dashboard_path if current_user.otp_enabled?
-  
+    if current_user.otp_enabled?
+      redirect_to dashboard_path
+      return
+    end
+
     @user = current_user
     qr_code
   end
@@ -15,7 +21,7 @@ class User::SettingsController < ApplicationController
     else
       qr_code
       flash.now[:error] = I18n.t('components.two_factor_authentication.failure_message')
-      render 'sessions/two_factor_authentication', status: :unauthorized
+      render 'user/settings/two_factor_auth_setup', status: :unauthorized
     end
   end
 
@@ -29,3 +35,4 @@ class User::SettingsController < ApplicationController
     @qr_code ||= RQRCode::QRCode.new(current_user.provisioning_uri(Setting.project_name))
   end
 end
+# rubocop:enable Style/ClassAndModuleChildren

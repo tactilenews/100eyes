@@ -43,7 +43,7 @@ Rails.application.routes.draw do
     end
   end
 
-  namespace :user, only: [:two_factor_auth_setup, :verify_user_otp] do
+  namespace :user, only: %i[two_factor_auth_setup verify_user_otp] do
     resources :settings do
       member do
         get '/two_factor_auth_setup', to: 'settings#two_factor_auth_setup'

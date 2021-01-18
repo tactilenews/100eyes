@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TwoFactorAuthSetup
   class TwoFactorAuthSetup < ApplicationComponent
     def initialize(user: nil, qr_code: nil)
