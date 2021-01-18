@@ -8,13 +8,17 @@ module PlaintextMessage
       @message = message
     end
 
-    def call
-      tag.div(content, class: class_names)
-    end
-
     private
 
     attr_reader :message
+
+    def empty?
+      content.empty?
+    end
+
+    def rendered
+      simple_format(h(content))
+    end
 
     def content
       (message || @content || '').strip

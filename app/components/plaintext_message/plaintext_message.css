@@ -1,4 +1,7 @@
 .PlaintextMessage {
-  white-space: pre-line;
   word-break: break-word;
+}
+
+.PlaintextMessage p + p {
+  margin-top: var(--spacing-unit-s);
 }
