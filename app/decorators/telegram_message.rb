@@ -67,7 +67,7 @@ class TelegramMessage
     telegram_file = telegram_message[:photo].max { |a, b| a[:file_size] <=> b[:file_size] }
     photo = Photo.new
     remote_file_location = retrieve_message_type_and_attach(telegram_file)
-    photo.attachment.attach(io: URI.open(remote_file_location), filename: File.basename(remote_file_location.path))
+    photo.attachment.attach(io: remote_file_location.open, filename: File.basename(remote_file_location.path))
     [photo]
   end
 
@@ -76,7 +76,7 @@ class TelegramMessage
 
     voice = Voice.new
     remote_file_location = retrieve_message_type_and_attach(telegram_message[:voice])
-    voice.attachment.attach(io: URI.open(remote_file_location), filename: File.basename(remote_file_location.path))
+    voice.attachment.attach(io: remote_file_location.open, filename: File.basename(remote_file_location.path))
     voice
   end
 
@@ -85,7 +85,7 @@ class TelegramMessage
     file_id = telegram_file[:file_id]
     uri = URI("https://api.telegram.org/#{bot_token}/getFile")
     uri.query = URI.encode_www_form({ file_id: file_id })
-    response = JSON.parse(URI.open(uri).read)
+    response = JSON.parse(uri.open.read)
     file_path = response.dig('result', 'file_path')
     URI("https://api.telegram.org/file/#{bot_token}/#{file_path}")
   end

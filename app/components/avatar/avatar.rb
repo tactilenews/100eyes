@@ -21,11 +21,11 @@ module Avatar
     def initials
       return '?' unless contributor
 
-      initials = contributor.name.split(' ').map { |part| part&.first }
+      initials = contributor.name.split.map { |part| part&.first }
 
       return '?' if initials.empty?
 
-      initials.join('')
+      initials.join
     end
   end
 end
