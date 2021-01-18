@@ -5,6 +5,7 @@ FactoryBot.define do
     sequence :email do |n|
       "user#{n}@example.org"
     end
-    password { 'UMyD1aJVWBIwoTsdl3Mb' }
+    password { Faker::Internet.password(min_length: 20, max_length: 128) }
+    otp_enabled { true }
   end
 end
