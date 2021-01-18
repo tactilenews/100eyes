@@ -39,7 +39,7 @@ class SessionsController < Clearance::SessionsController
       if status.success?
         redirect_back_or url_after_create
       else
-        redirect_to sign_in_path, flash: { alert: 'something went wrong, not sure what' }
+        redirect_to sign_in_path, flash: { alert: I18n.t('flashes.failure_when_not_signed_in')}
       end
     end
   end
