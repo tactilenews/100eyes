@@ -7,9 +7,12 @@ class SessionsController < Clearance::SessionsController
     @user = authenticate(params)
 
     if @user
-      cookies.encrypted[:sessions_user_id] = { value: @user.id, expires: 3.minutes }
-      qr_code
-      render 'sessions/two_factor_authentication'
+      if @user.otp_enabled?
+        cookies.encrypted[:sessions_user_id] = { value: @user.id, expires: 3.minutes }
+        render 'sessions/two_factor_auth_verify_otp_form'
+      else
+        create_session
+      end
     else
       redirect_to sign_in_path, flash: { error: I18n.t('flashes.failure_after_create') }
     end
@@ -19,7 +22,6 @@ class SessionsController < Clearance::SessionsController
     @user = User.where(id: cookies.encrypted[:sessions_user_id]).first
 
     if @user&.authenticate_otp(verify_user_params['otp_code_token'], drift: 30)
-      @user.update(otp_enabled: true) unless @user.otp_enabled?
       create_session
     else
       qr_code

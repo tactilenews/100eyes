@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
-module TwoFactorAuthentication
-  class TwoFactorAuthentication < ApplicationComponent
+module TwoFactorAuthSetup
+  class TwoFactorAuthSetup < ApplicationComponent
     def initialize(user: nil, qr_code: nil)
       super
 

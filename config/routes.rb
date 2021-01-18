@@ -43,6 +43,15 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :user, only: [:two_factor_auth_setup, :verify_user_otp] do
+    resources :settings do
+      member do
+        get '/two_factor_auth_setup', to: 'settings#two_factor_auth_setup'
+        patch '/verify_user_otp', to: 'settings#verify_user_otp'
+      end
+    end
+  end
+
   # Clearance routes
 
   resources :passwords,

@@ -2,7 +2,7 @@
 
 class ApplicationController < ActionController::Base
   include Clearance::Controller
-  before_action :require_login
+  before_action :require_login, :ensure_2fa_setup
   around_action :use_locale
 
   private
@@ -20,5 +20,12 @@ class ApplicationController < ActionController::Base
 
   def locale_params
     params.permit(:locale)
+  end
+
+  def ensure_2fa_setup
+    return unless current_user
+    return if current_user.otp_enabled?
+
+    redirect_to two_factor_auth_setup_user_setting_path(current_user)
   end
 end

@@ -1,0 +1,12 @@
+<main class="TwoFactorAuthSetup">
+  <%= c 'heading' do %>
+    <%= t 'components.two_factor_authentication.header' %>
+  <% end %>
+  <%= form_with(model: user, url: verify_user_otp_user_setting_path, local: true) do |_form| %>
+    <%= qr_code_as_svg %>
+
+    <label for='user[otp_code_token]'><%= t 'components.two_factor_authentication.label' %></label>
+    <%= c 'input', id: 'user[otp_code_token]' %>
+    <%= c 'button', type: 'submit', label: I18n.t('components.two_factor_authentication.submit') %>
+  <% end %>
+</main>

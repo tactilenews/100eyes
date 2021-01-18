@@ -1,0 +1,28 @@
+.TwoFactorAuthVerifyOtpForm {
+  margin: 2rem auto;
+  max-width: var(--grid-max-width-xs);
+  width: 100%;
+  padding: 1rem;
+}
+
+.TwoFactorAuthVerifyOtpForm .Heading {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.TwoFactorAuthVerifyOtpForm svg {
+  display: block;
+  margin: 1.5rem auto;
+}
+
+.TwoFactorAuthVerifyOtpForm label {
+  font-weight: 600;
+}
+
+.TwoFactorAuthVerifyOtpForm .Input {
+  margin: 0.75rem 0 1.5rem;
+}
+
+.TwoFactorAuthVerifyOtpForm .Button {
+  margin-bottom: 0.75rem;
+}
