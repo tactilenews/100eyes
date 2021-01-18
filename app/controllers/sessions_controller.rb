@@ -18,7 +18,7 @@ class SessionsController < Clearance::SessionsController
   def verify_user_otp
     @user = User.where(id: cookies.encrypted[:sessions_user_id]).first
 
-    if @user && @user.authenticate_otp(verify_user_params['otp_code_token'], drift: 30)
+    if @user&.authenticate_otp(verify_user_params['otp_code_token'], drift: 30)
       @user.update(otp_enabled: true) unless @user.otp_enabled?
       create_session
     else
@@ -39,7 +39,7 @@ class SessionsController < Clearance::SessionsController
       if status.success?
         redirect_back_or url_after_create
       else
-        redirect_to sign_in_path, flash: { alert: I18n.t('flashes.failure_when_not_signed_in')}
+        redirect_to sign_in_path, flash: { alert: I18n.t('flashes.failure_when_not_signed_in') }
       end
     end
   end
