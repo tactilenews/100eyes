@@ -79,7 +79,7 @@ RSpec.describe 'Sessions' do
           expect(cookie_jar.encrypted['sessions_user_id']).to eq(user.id)
         end
 
-        it 'creates a rqr code with the user provisioning_uri and project name' do
+        it 'creates a QR code with the user provisioning_uri and project name' do
           expect(RQRCode::QRCode).to receive(:new).with(user.provisioning_uri(Setting.project_name))
 
           subject
