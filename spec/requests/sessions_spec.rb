@@ -94,8 +94,9 @@ RSpec.describe 'Sessions' do
     let(:otp_code_token) { SecureRandom.hex(3) }
 
     context 'No user' do
-      it 'raises error' do
-        expect { subject }.to raise_error(ActiveRecord::RecordNotFound)
+      it 'returns status unauthorized, but does not reveal whether a user exists or not' do
+        subject
+        expect(response).to be_unauthorized
       end
     end
 

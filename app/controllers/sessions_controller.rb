@@ -16,8 +16,9 @@ class SessionsController < Clearance::SessionsController
   end
 
   def verify_user_otp
-    @user = User.find(cookies.encrypted[:sessions_user_id])
-    if @user.authenticate_otp(verify_user_params['otp_code_token'], drift: 30)
+    @user = User.where(id: cookies.encrypted[:sessions_user_id]).first
+
+    if @user && @user.authenticate_otp(verify_user_params['otp_code_token'], drift: 30)
       @user.update(otp_enabled: true) unless @user.otp_enabled?
       create_session
     else
@@ -44,6 +45,6 @@ class SessionsController < Clearance::SessionsController
   end
 
   def qr_code
-    @qr_code ||= RQRCode::QRCode.new(@user.provisioning_uri(Setting.project_name))
+    @qr_code ||= RQRCode::QRCode.new(@user&.provisioning_uri(Setting.project_name).to_s)
   end
 end
