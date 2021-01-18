@@ -65,30 +65,35 @@ RSpec.describe 'Sessions' do
         let(:email) { valid_email }
         let(:password) { valid_password }
 
-        before do
-          allow(RQRCode::QRCode).to receive(:new).and_return(rqr_code)
+        
+        context "otp_enabled? true" do
+          before { subject }
+
+          it 'Is successful' do
+            expect(response).to be_successful
+          end
+  
+          it 'Sets encrypted cookie to store user_id' do
+            expect(cookie_jar.encrypted['sessions_user_id']).to eq(user.id)
+          end
         end
 
-        it 'Is successful' do
-          subject
-          expect(response).to be_successful
-        end
+        context "otp_enabled? false" do
+          before { user.update(otp_enabled: false) }
 
-        it 'Sets encrypted cookie to store user_id' do
-          subject
-          expect(cookie_jar.encrypted['sessions_user_id']).to eq(user.id)
-        end
+          it "redirects to user settings to set up 2fa" do
+            subject
+            expect(response).to redirect_to(dashboard_path)
 
-        it 'creates a QR code with the user provisioning_uri and project name' do
-          expect(RQRCode::QRCode).to receive(:new).with(user.provisioning_uri(Setting.project_name))
-
-          subject
+            follow_redirect!
+            expect(response).to redirect_to(two_factor_auth_setup_user_setting_path(user))
+          end
         end
       end
     end
   end
 
-  describe 'POST /session/verify_user_otp' do
+  describe 'PATCH /session/verify_user_otp' do
     subject { patch '/session/verify_user_otp', params: { session: { otp_code_token: otp_code_token } } }
 
     let(:otp_code_token) { SecureRandom.hex(3) }
@@ -109,32 +114,29 @@ RSpec.describe 'Sessions' do
         cookies[:sessions_user_id] = my_cookies[:sessions_user_id]
       end
 
-      context 'Invalid otp_code' do
+      context 'Unauthorized' do
         before { subject }
-        it 'Unauthorized' do
+       
+        it 'Invalid otp_code' do
           expect(response).to be_unauthorized
         end
-
+    
         it 'displays error message' do
           expect(response.request.flash[:error]).to eq(I18n.t('components.two_factor_authentication.failure_message'))
         end
       end
-
-      context 'valid otp_code' do
+  
+      context 'Authorized' do
         let(:otp_code_token) { user.otp_code }
-
-        it 'is successful' do
+  
+        it 'valid otp_code' do
           subject
           expect(response).to redirect_to('/dashboard')
         end
-
+  
         it 'sets remember_token for user' do
           subject
           expect(response.cookies['remember_token']).to eq(user.remember_token)
-        end
-
-        it 'updates otp_enabled' do
-          expect { subject }.to change { user.reload.otp_enabled }.from(false).to(true)
         end
       end
     end

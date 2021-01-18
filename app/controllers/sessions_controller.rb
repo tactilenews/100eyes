@@ -26,7 +26,7 @@ class SessionsController < Clearance::SessionsController
     else
       qr_code
       flash.now[:error] = I18n.t('components.two_factor_authentication.failure_message')
-      render 'sessions/two_factor_authentication', status: :unauthorized
+      render 'sessions/two_factor_auth_verify_otp_form', status: :unauthorized
     end
   end
 

@@ -18,7 +18,6 @@ RSpec.describe 'Sign in' do
       click_button I18n.t('helpers.submit.session.submit')
 
       expect(page).to have_current_path('/session/verify_user_email_and_password')
-      expect(page).to have_css('svg')
 
       fill_in I18n.t('components.two_factor_authentication.label'), with: user.otp_code
       click_button I18n.t('components.two_factor_authentication.submit')

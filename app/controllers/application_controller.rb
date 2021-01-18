@@ -23,8 +23,7 @@ class ApplicationController < ActionController::Base
   end
 
   def ensure_2fa_setup
-    return unless current_user
-    return if current_user.otp_enabled?
+    return if signed_out? || current_user.otp_enabled?
 
     redirect_to two_factor_auth_setup_user_setting_path(current_user)
   end
