@@ -115,7 +115,7 @@ RSpec.describe 'Sessions' do
         end
 
         it 'displays error message' do
-          expect(response.request.flash[:error]).to eq(I18n.t('user.sign_in.two_factor_authentication.failure_message'))
+          expect(response.request.flash[:error]).to eq(I18n.t('components.two_factor_authentication.failure_message'))
         end
       end
 

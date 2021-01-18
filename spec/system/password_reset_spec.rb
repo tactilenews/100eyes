@@ -30,10 +30,10 @@ RSpec.describe 'Password Reset' do
       find('input[data-target="password-reset-form.passwordConfirmation"]').set(password)
       click_button I18n.t('helpers.submit.password_reset.submit')
 
-      expect(page).to have_content(I18n.t('user.sign_in.two_factor_authentication.header'))
+      expect(page).to have_content(I18n.t('components.two_factor_authentication.header'))
 
-      fill_in I18n.t('user.sign_in.two_factor_authentication.label'), with: user.otp_code
-      click_button I18n.t('user.sign_in.two_factor_authentication.submit')
+      fill_in I18n.t('components.two_factor_authentication.label'), with: user.otp_code
+      click_button I18n.t('components.two_factor_authentication.submit')
 
       expect(page).to have_current_path('/dashboard')
       expect(page).to have_button(I18n.t('components.nav_bar.sign_out'))
