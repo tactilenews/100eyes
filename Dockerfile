@@ -5,7 +5,7 @@ RUN apk --update add \
     build-base \
     bash \
     git \
-    nodejs=~12.20 \
+    nodejs \
     yarn \
     postgresql-dev=~12.5 \
     postgresql-client=~12.5 \
