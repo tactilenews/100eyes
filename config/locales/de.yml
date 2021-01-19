@@ -105,6 +105,13 @@ de:
       otp_code:
         label: 6-stelliger Bestätigungscode
         help_text: Öffnen Sie die App zur Zwei-Faktor-Authentifizierung auf Ihrem Gerät, um Ihren Authentifizierungscode anzuzeigen und Ihre Identität zu überprüfen.
+    two_factor_auth_setup:
+      header: Anmeldung in zwei Schritten einrichten
+      subheader: Mit der Anmeldung in zwei Schritten sicherst du dein Konto zusätzlich ab. Scanne den folgenden QR-Code mit einer App wie z.B. Google Authenticator oder 1Password. Gib anschließend den 6-stelligen Bestätigungscode ein.
+      otp_code:
+        label: 6-stelliger Bestätigungscode
+        help_text: Öffnen Sie die App zur Zwei-Faktor-Authentifizierung auf Ihrem Gerät, um Ihren Authentifizierungscode anzuzeigen und Ihre Identität zu überprüfen.
+        submit: Einmaliges Token einreichen
   mailer:
     unsubscribe:
       text: "Sofern Sie keine E-Mails mehr von uns erhalten möchten, können Sie sie unter diesem Link abbestellen: {{{ pm:unsubscribe }}}"

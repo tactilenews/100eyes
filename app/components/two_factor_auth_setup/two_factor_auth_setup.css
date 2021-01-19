@@ -1,13 +1,12 @@
 .TwoFactorAuthSetup {
   margin: 2rem auto;
-  max-width: var(--grid-max-width-xs);
+  max-width: var(--grid-max-width-s);
   width: 100%;
   padding: 1rem;
 }
 
-.TwoFactorAuthSetup .Heading {
-  margin-bottom: 1.5rem;
-  text-align: center;
+.TwoFactorAuthSetup-explained {
+  margin: 1rem 0 1.5rem;
 }
 
 .TwoFactorAuthSetup svg {
@@ -16,6 +15,7 @@
 }
 
 .TwoFactorAuthSetup label {
+  display: block;
   font-weight: 600;
 }
 
