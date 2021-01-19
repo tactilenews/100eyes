@@ -3,8 +3,8 @@
     <%= t 'components.two_factor_authentication.header' %>
   <% end %>
   <%= form_with(model: user, url: verify_user_otp_session_path, local: true) do |_form| %>
-    <label for='session[otp_code_token]'><%= t 'components.two_factor_authentication.label' %></label>
-    <%= c 'input', id: 'session[otp_code_token]' %>
+    <label for='session[otp_code]'><%= t 'components.two_factor_authentication.label' %></label>
+    <%= c 'input', id: 'session[otp_code]' %>
     <%= c 'button', type: 'submit', label: I18n.t('components.two_factor_authentication.submit') %>
   <% end %>
 </main>

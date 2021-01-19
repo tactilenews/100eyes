@@ -3,11 +3,17 @@
     <%= t 'users.new.sign_in' %>
   <% end %>
 
-  <%= form_with(url: verify_user_email_and_password_session_path, local: true) do |f| %>
+  <%= form_with(url: session_path, local: true) do |f| %>
     <label for='session[email]'><%= t 'helpers.label.password.email' %></label>
     <%= c 'input', type: :email, id: 'session[email]' %>
+
     <label for='session[password]'><%= t 'helpers.label.session.password' %></label>
     <%= c 'input', type: :password, id: 'session[password]' %>
+
+    <label for='session[otp_code]'><%= t 'components.sign_in_form.otp_code.label' %></label>
+    <small><%= t 'components.sign_in_form.otp_code.help_text' %></small>
+    <%= c 'input', id: 'session[otp_code]' %>
+
     <%= c 'button', type: 'submit', label: I18n.t('helpers.submit.session.submit') %>
   <% end %>
   <footer>

@@ -32,9 +32,9 @@ RSpec.describe 'User::Settings' do
   end
 
   describe 'PATCH /user/settings/:id/verify_user_otp' do
-    subject { patch verify_user_otp_user_setting_path(user, as: user), params: { user: { otp_code_token: otp_code_token } } }
+    subject { patch verify_user_otp_user_setting_path(user, as: user), params: { user: { otp_code: otp_code } } }
 
-    let(:otp_code_token) { SecureRandom.hex(3) }
+    let(:otp_code) { SecureRandom.hex(3) }
 
     before { subject }
 
@@ -47,7 +47,7 @@ RSpec.describe 'User::Settings' do
     end
 
     context 'Authorized' do
-      let(:otp_code_token) { user.otp_code }
+      let(:otp_code) { user.otp_code }
 
       it 'valid otp_code' do
         subject

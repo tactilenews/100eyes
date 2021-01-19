@@ -92,9 +92,9 @@ RSpec.describe 'Sessions' do
   end
 
   describe 'PATCH /session/verify_user_otp' do
-    subject { patch '/session/verify_user_otp', params: { session: { otp_code_token: otp_code_token } } }
+    subject { patch '/session/verify_user_otp', params: { session: { otp_code: otp_code } } }
 
-    let(:otp_code_token) { SecureRandom.hex(3) }
+    let(:otp_code) { SecureRandom.hex(3) }
 
     context 'No user' do
       it 'returns status unauthorized, but does not reveal whether a user exists or not' do
@@ -125,7 +125,7 @@ RSpec.describe 'Sessions' do
       end
 
       context 'Authorized' do
-        let(:otp_code_token) { user.otp_code }
+        let(:otp_code) { user.otp_code }
 
         it 'valid otp_code' do
           subject

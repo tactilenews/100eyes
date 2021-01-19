@@ -15,7 +15,7 @@ class User::SettingsController < ApplicationController
   end
 
   def enable_otp
-    if current_user.authenticate_otp(enable_otp_params['otp_code_token'], drift: 30)
+    if current_user.authenticate_otp(enable_otp_params['otp_code'], drift: 30)
       current_user.update(otp_enabled: true)
       redirect_to dashboard_path
     else
@@ -28,7 +28,7 @@ class User::SettingsController < ApplicationController
   private
 
   def enable_otp_params
-    params.require(:user).permit(:otp_code_token)
+    params.require(:user).permit(:otp_code)
   end
 
   def qr_code

@@ -58,12 +58,9 @@ Rails.application.routes.draw do
             controller: 'passwords',
             only: %i[create new]
 
-  resource :session, controller: 'sessions' do
-    member do
-      post '/verify_user_email_and_password', to: 'sessions#verify_user_email_and_password'
-      patch '/verify_user_otp', to: 'sessions#verify_user_otp'
-    end
-  end
+  resource :session,
+           controller: 'sessions',
+           only: [:create]
 
   resources :users,
             only: Clearance.configuration.user_actions do

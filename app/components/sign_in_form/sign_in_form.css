@@ -11,6 +11,7 @@
 
 .SignInForm label {
   font-weight: 600;
+  display: block;
 }
 
 .SignInForm .Input {

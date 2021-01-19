@@ -13,7 +13,7 @@ class PasswordsController < Clearance::PasswordsController
   # rubocop:enable Naming/MemoizedInstanceVariableName
 
   def verify_otp_code
-    return if @user&.authenticate_otp(verify_user_params['otp_code_token'], drift: 30)
+    return if @user&.authenticate_otp(verify_user_params['otp_code'], drift: 30)
 
     @qr_code = RQRCode::QRCode.new(@user.provisioning_uri(Setting.project_name))
     flash.now[:error] = I18n.t('components.two_factor_authentication.failure_message')
@@ -22,6 +22,6 @@ class PasswordsController < Clearance::PasswordsController
   end
 
   def verify_user_params
-    params.require(:password).permit(:otp_code_token)
+    params.require(:password).permit(:otp_code)
   end
 end
