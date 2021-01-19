@@ -36,16 +36,6 @@ class SessionsController < Clearance::SessionsController
     params.require(:session).permit(:otp_code_token)
   end
 
-  def create_session
-    sign_in(@user) do |status|
-      if status.success?
-        redirect_back_or url_after_create
-      else
-        redirect_to sign_in_path, flash: { alert: I18n.t('flashes.failure_when_not_signed_in') }
-      end
-    end
-  end
-
   def qr_code
     @qr_code ||= RQRCode::QRCode.new(@user&.provisioning_uri(Setting.project_name).to_s)
   end
