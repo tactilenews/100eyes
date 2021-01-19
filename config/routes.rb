@@ -47,7 +47,7 @@ Rails.application.routes.draw do
     resources :settings do
       member do
         get '/two_factor_auth_setup', to: 'settings#two_factor_auth_setup'
-        patch '/verify_user_otp', to: 'settings#verify_user_otp'
+        patch '/enable_otp', to: 'settings#enable_otp'
       end
     end
   end

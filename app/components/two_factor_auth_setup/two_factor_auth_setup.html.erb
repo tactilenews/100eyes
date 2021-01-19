@@ -2,7 +2,7 @@
   <%= c 'heading' do %>
     <%= t 'components.two_factor_authentication.header' %>
   <% end %>
-  <%= form_with(model: user, url: verify_user_otp_user_setting_path, local: true) do |_form| %>
+  <%= form_with(model: user, url: enable_otp_user_setting_path, local: true) do |_form| %>
     <%= qr_code_as_svg %>
 
     <label for='user[otp_code_token]'><%= t 'components.two_factor_authentication.label' %></label>

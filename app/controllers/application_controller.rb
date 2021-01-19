@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   include Clearance::Controller
   before_action :require_login, :ensure_2fa_setup
   around_action :use_locale
-  ENSURE_2FA_SETUP_EXCEPT_CONTROLLERS = ['clearance/sessions']
+  ENSURE_2FA_SETUP_EXCEPT_CONTROLLERS = ['clearance/sessions'].freeze
 
   private
 
@@ -25,16 +25,15 @@ class ApplicationController < ActionController::Base
 
   def ensure_2fa_setup
     return if signed_out? || current_user.otp_enabled?
+    return unless ENSURE_2FA_SETUP_EXCEPT_CONTROLLERS.include?(params[:controller])
 
-    unless ENSURE_2FA_SETUP_EXCEPT_CONTROLLERS.include?(params[:controller])
-      redirect_to two_factor_auth_setup_user_setting_path(current_user)
-    end
+    redirect_to two_factor_auth_setup_user_setting_path(current_user)
   end
 
   def create_session
     sign_in(@user) do |status|
       if status.success?
-        redirect_back_or url_after_create
+        redirect_back_or dashboard_path
       else
         redirect_to sign_in_path, flash: { alert: I18n.t('flashes.failure_when_not_signed_in') }
       end
