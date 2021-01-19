@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PasswordsController < Clearance::PasswordsController
-  before_action :load_user, only: :update
+  before_action :load_user
   before_action :verify_otp_code, only: :update, if: -> { @user.otp_enabled? }
 
   private
