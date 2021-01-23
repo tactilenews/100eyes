@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class SessionsController < Clearance::SessionsController
-  before_action :load_user
+  before_action :load_user, only: :create, raise: false
   before_action :verify_otp_code, only: :create, if: -> { @user&.otp_enabled? }
+  skip_before_action :ensure_2fa_setup
 
   private
 

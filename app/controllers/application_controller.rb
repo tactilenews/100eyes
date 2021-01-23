@@ -4,7 +4,6 @@ class ApplicationController < ActionController::Base
   include Clearance::Controller
   before_action :require_login, :ensure_2fa_setup
   around_action :use_locale
-  ENSURE_2FA_SETUP_EXCEPT_CONTROLLERS = ['clearance/sessions'].freeze
 
   private
 
@@ -25,7 +24,6 @@ class ApplicationController < ActionController::Base
 
   def ensure_2fa_setup
     return if signed_out? || current_user.otp_enabled?
-    return if ENSURE_2FA_SETUP_EXCEPT_CONTROLLERS.include?(params[:controller])
 
     redirect_to two_factor_auth_setup_user_setting_path(current_user)
   end
