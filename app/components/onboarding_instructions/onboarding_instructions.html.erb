@@ -7,7 +7,8 @@
     <%= c 'stack' do %>
       <div data-action="input->onboarding-instructions#switchChannelInstructions">
         <%= c 'choices',
-          stimulus_target: 'onboarding-instructions.channel',
+          stimulus_controller: 'onboarding-instructions',
+          stimulus_target: 'channel',
           choices: choices
         %>
       </div>
