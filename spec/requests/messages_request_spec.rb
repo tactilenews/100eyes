@@ -18,7 +18,7 @@ RSpec.describe 'Messages', type: :request do
 
       describe 'given highlighted=true' do
         let(:params) { { highlighted: true } }
-        it { should(change { message.reload.highlighted? }).from(false).to(true) }
+        it { should change { message.reload.highlighted? }.from(false).to(true) }
       end
 
       describe 'given highlighted=false' do
@@ -32,12 +32,12 @@ RSpec.describe 'Messages', type: :request do
 
       describe 'given highlighted=true' do
         let(:params) { { highlighted: true } }
-        it { should_not(change { message.reload.highlighted? }) }
+        it { should_not change { message.reload.highlighted? } }
       end
 
       describe 'given highlighted=false' do
         let(:params) { { highlighted: false } }
-        it { should(change { message.reload.highlighted? }).from(true).to(false) }
+        it { should change { message.reload.highlighted? }.from(true).to(false) }
       end
     end
   end
