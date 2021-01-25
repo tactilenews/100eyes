@@ -16,7 +16,7 @@ class SessionsController < Clearance::SessionsController
   def verify_otp_code
     return if @user&.authenticate_otp(verify_user_params['otp_code'], drift: 30)
 
-    flash.now[:error] = I18n.t('flashes.failure_after_create')
+    flash.now[:alert] = I18n.t('flashes.failure_after_create')
     # Filter chain halted as :verify_otp_code rendered or redirected
     render :new, status: :unauthorized
   end
