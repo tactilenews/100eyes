@@ -9,6 +9,7 @@ RSpec.describe 'User::Settings' do
     subject { get two_factor_auth_setup_user_setting_path(user, as: user) }
 
     let(:rqr_code) { instance_double(RQRCode::QRCode, as_svg: '<svg></svg>') }
+    let(:qr_code_params) { user.provisioning_uri(user.email, issuer: Setting.application_host) }
 
     it 'is successful' do
       subject
@@ -16,7 +17,7 @@ RSpec.describe 'User::Settings' do
     end
 
     it 'creates a QR code with the user provisioning_uri and project name' do
-      expect(RQRCode::QRCode).to receive(:new).with(user.provisioning_uri(Setting.project_name)).and_return(rqr_code)
+      expect(RQRCode::QRCode).to receive(:new).with(qr_code_params).and_return(rqr_code)
 
       subject
     end
