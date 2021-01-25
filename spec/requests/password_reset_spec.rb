@@ -89,7 +89,7 @@ RSpec.describe 'Passwords' do
       context 'Incorrect otp_code' do
         it 'renders error message' do
           subject
-          expect(flash.now[:error]).to eq(I18n.t('components.two_factor_authentication.failure_message'))
+          expect(flash.now[:error]).to eq(I18n.t('flashes.failure_after_update'))
         end
       end
 

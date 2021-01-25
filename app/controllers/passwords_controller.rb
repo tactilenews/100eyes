@@ -16,7 +16,7 @@ class PasswordsController < Clearance::PasswordsController
     return if @user&.authenticate_otp(verify_user_params['otp_code'], drift: 30)
 
     @qr_code = RQRCode::QRCode.new(@user.provisioning_uri(Setting.project_name))
-    flash.now[:error] = I18n.t('components.two_factor_authentication.failure_message')
+    flash.now[:error] = I18n.t('flashes.failure_after_update')
     # Filter chain halted as :verify_otp_code rendered or redirected
     render :edit, status: :unauthorized
   end

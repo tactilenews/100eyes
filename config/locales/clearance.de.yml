@@ -10,7 +10,7 @@ de:
       link_text: Mein Passwort ändern
       opening: "Jemand, hoffentlich du selbst, hat einen Link zum Ändern des Passworts angefordert:"
   flashes:
-    failure_after_create: E-Mail-Adresse oder Passwort ungültig.
+    failure_after_create: E-Mail-Adresse, Passwort, oder 6-stelliger Bestätigungscode ungültig.
     failure_after_update: Das Feld für Passwort darf nicht leer sein.
     failure_when_forbidden: Bitte prüfe noch einmal die URL oder versuche, das Formular noch einmal zu senden.
     failure_when_not_signed_in: Bitte logge dich ein, um fortzufahren.
