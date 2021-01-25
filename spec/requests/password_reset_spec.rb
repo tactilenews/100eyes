@@ -87,9 +87,9 @@ RSpec.describe 'Passwords' do
       let(:otp_code) { '123456' }
 
       context 'Incorrect otp_code' do
-        it 'renders error message' do
+        it 'renders alert message' do
           subject
-          expect(flash.now[:error]).to eq(I18n.t('flashes.failure_after_update'))
+          expect(flash.now[:alert]).to eq(I18n.t('flashes.failure_after_update'))
         end
       end
 
@@ -97,7 +97,7 @@ RSpec.describe 'Passwords' do
         let(:password) { Faker::Internet.password(max_length: 19) }
         let(:otp_code) { user.otp_code }
 
-        it 'renders error message' do
+        it 'renders alert message' do
           subject
           expect(flash.now[:alert]).to eq(I18n.t('flashes.failure_after_update'))
         end
@@ -107,7 +107,7 @@ RSpec.describe 'Passwords' do
         let(:password) { Faker::Internet.password(min_length: 129) }
         let(:otp_code) { user.otp_code }
 
-        it 'renders error message' do
+        it 'renders alert message' do
           subject
           expect(flash.now[:alert]).to eq(I18n.t('flashes.failure_after_update'))
         end
