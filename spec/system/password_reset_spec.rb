@@ -30,7 +30,7 @@ RSpec.describe 'Password Reset' do
         # Since this input does not have a id, we cannot use fill_in with the label, name, id
         find('input[data-target="password-reset-form.passwordConfirmation"]').set(password)
 
-        fill_in I18n.t('components.password_reset_form.otp_code.label'), with: user.otp_code
+        fill_in I18n.t('two_factor_authentication.otp_code.label'), with: user.otp_code
 
         click_button I18n.t('helpers.submit.password_reset.submit')
 

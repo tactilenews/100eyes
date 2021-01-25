@@ -43,7 +43,7 @@ RSpec.describe 'User::Settings' do
     end
 
     it 'displays error message' do
-      expect(response.request.flash[:error]).to eq(I18n.t('components.two_factor_authentication.failure_message'))
+      expect(response.request.flash[:error]).to eq(I18n.t('two_factor_authentication.failure_message'))
     end
 
     context 'Authorized' do

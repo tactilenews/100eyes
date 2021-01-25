@@ -29,8 +29,8 @@ RSpec.describe 'Sign in' do
         expect(page).to have_current_path(two_factor_auth_setup_user_setting_path(user))
         expect(page).to have_css('svg')
 
-        fill_in I18n.t('components.two_factor_auth_setup.otp_code.label'), with: user.otp_code
-        click_button I18n.t('components.two_factor_auth_setup.otp_code.submit')
+        fill_in I18n.t('two_factor_authentication.otp_code.label'), with: user.otp_code
+        click_button I18n.t('two_factor_authentication.otp_code.submit')
 
         expect(page).to have_current_path(dashboard_path)
         expect(page).to have_link(I18n.t('components.nav_bar.sign_out'))
@@ -47,7 +47,7 @@ RSpec.describe 'Sign in' do
 
         fill_in I18n.t('helpers.label.password.email'), with: user.email
         fill_in I18n.t('helpers.label.session.password'), with: user.password
-        fill_in I18n.t('components.sign_in_form.otp_code.label'), with: user.otp_code
+        fill_in I18n.t('two_factor_authentication.otp_code.label'), with: user.otp_code
 
         click_button I18n.t('helpers.submit.session.submit')
 
