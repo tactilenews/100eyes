@@ -98,7 +98,7 @@ de:
       success: Link kopiert
     two_factor_auth_setup:
       header: Anmeldung in zwei Schritten einrichten
-      subheader: Mit der Anmeldung in zwei Schritten sicherst du dein Konto zusätzlich ab. Scanne den folgenden QR-Code mit einer App wie z.B. Authy oder 1Password. Gib anschließend den 6-stelligen Bestätigungscode ein.
+      subheader: Mit der Anmeldung in zwei Schritten sicherst du dein Konto zusätzlich ab. Scanne den folgenden QR-Code mit einer App wie z.B. Authy oder FreeOTP. Gib anschließend den 6-stelligen Bestätigungscode ein.
 
   mailer:
     unsubscribe:
