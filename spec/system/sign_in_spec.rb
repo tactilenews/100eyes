@@ -34,6 +34,7 @@ RSpec.describe 'Sign in' do
 
         expect(page).to have_current_path(dashboard_path)
         expect(page).to have_link(I18n.t('components.nav_bar.sign_out'))
+        expect(page).to have_content(I18n.t('dashboard.how_it_works'))
       end
     end
 
@@ -53,6 +54,7 @@ RSpec.describe 'Sign in' do
 
         expect(page).to have_current_path(dashboard_path)
         expect(page).to have_link(I18n.t('components.nav_bar.sign_out'))
+        expect(page).to have_content(I18n.t('dashboard.how_it_works'))
       end
     end
   end
