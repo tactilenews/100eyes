@@ -42,4 +42,33 @@ Rails.application.routes.draw do
       post 'highlight', format: /json/
     end
   end
+
+  namespace :user, only: %i[two_factor_auth_setup verify_user_otp] do
+    resources :settings do
+      member do
+        get '/two_factor_auth_setup', to: 'settings#two_factor_auth_setup'
+        patch '/enable_otp', to: 'settings#enable_otp'
+      end
+    end
+  end
+
+  # Clearance routes
+
+  resources :passwords,
+            controller: 'passwords',
+            only: %i[create new]
+
+  resource :session,
+           controller: 'sessions',
+           only: :create
+
+  resources :users,
+            only: Clearance.configuration.user_actions do
+    resource :password,
+             controller: 'passwords',
+             only: %i[edit update]
+  end
+
+  get '/sign_in' => 'sessions#new', as: 'sign_in'
+  delete '/sign_out' => 'sessions#destroy', as: 'sign_out'
 end
