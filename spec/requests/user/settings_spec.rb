@@ -16,7 +16,7 @@ RSpec.describe 'User::Settings' do
     end
 
     it 'creates a QR code with the user provisioning_uri and project name' do
-      expect(RQRCode::QRCode).to receive(:new).with(user.provisioning_uri(Setting.project_name)).and_return(rqr_code)
+      expect(RQRCode::QRCode).to receive(:new).with(user.provisioning_uri(Setting.application_host)).and_return(rqr_code)
 
       subject
     end
