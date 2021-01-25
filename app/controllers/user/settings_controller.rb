@@ -16,7 +16,7 @@ class User::SettingsController < ApplicationController
       redirect_to dashboard_path
     else
       qr_code
-      flash.now[:error] = I18n.t('two_factor_authentication.failure_message')
+      flash.now[:error] = I18n.t('two_factor_authentication.otp_code.failure_message')
       render 'user/settings/two_factor_auth_setup', status: :unauthorized
     end
   end
