@@ -32,7 +32,7 @@ class User::SettingsController < ApplicationController
   end
 
   def qr_code
-    @qr_code ||= RQRCode::QRCode.new(current_user.provisioning_uri(Setting.application_host))
+    @qr_code ||= RQRCode::QRCode.new(current_user.provisioning_uri(nil, issuer: Setting.application_host))
   end
 end
 # rubocop:enable Style/ClassAndModuleChildren
