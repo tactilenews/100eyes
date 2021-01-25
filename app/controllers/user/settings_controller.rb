@@ -3,13 +3,9 @@
 # rubocop:disable Style/ClassAndModuleChildren
 class User::SettingsController < ApplicationController
   skip_before_action :ensure_2fa_setup, only: %i[two_factor_auth_setup enable_otp]
+  before_action :ensure_otp_not_enabled, only: :two_factor_auth_setup
 
   def two_factor_auth_setup
-    if current_user.otp_enabled?
-      redirect_to dashboard_path
-      return
-    end
-
     @user = current_user
     qr_code
   end
@@ -26,6 +22,10 @@ class User::SettingsController < ApplicationController
   end
 
   private
+
+  def ensure_otp_not_enabled
+    redirect_to dashboard_path if current_user.otp_enabled?
+  end
 
   def enable_otp_params
     params.require(:user).permit(:otp_code)
