@@ -11,6 +11,7 @@ module Input
                    required: false,
                    disabled: false,
                    type: 'text',
+                   stimulus_controller: nil,
                    stimulus_target: nil,
                    stimulus_action: nil,
                    icon: nil,
@@ -24,6 +25,7 @@ module Input
       @title = title
       @required = required
       @disabled = disabled
+      @stimulus_controller = stimulus_controller
       @stimulus_target = stimulus_target
       @stimulus_action = stimulus_action
       @icon = icon
@@ -42,7 +44,7 @@ module Input
         placeholder: placeholder,
         title: title,
         data: {
-          target: stimulus_target,
+          "#{stimulus_controller}-target": stimulus_target,
           action: stimulus_action
         }
       )
@@ -50,7 +52,7 @@ module Input
 
     private
 
-    attr_reader :id, :type, :value, :placeholder, :title, :required, :disabled, :stimulus_target, :stimulus_action, :icon
+    attr_reader :id, :type, :value, :placeholder, :title, :required, :disabled, :stimulus_controller, :stimulus_target, :stimulus_action, :icon
   end
 end
 # rubocop:enable Metrics/ParameterLists
