@@ -10,7 +10,7 @@ RSpec.describe 'Sign in' do
     context 'otp_enabled? false' do
       let(:user) { create(:user, email: email, password: password, otp_enabled: false) }
 
-      it 'Redirects to user setting page to enable 2fa' do
+      before do
         visit dashboard_path
 
         expect(page).to have_current_path('/sign_in')
@@ -20,21 +20,43 @@ RSpec.describe 'Sign in' do
         click_button I18n.t('helpers.submit.session.submit')
 
         expect(page).to have_current_path(two_factor_auth_setup_user_setting_path(user))
+      end
 
-        # Does not allow to use site without enabling otp
-        click_link I18n.t('setting.setting.other')
-        expect(page).to have_current_path(two_factor_auth_setup_user_setting_path(user))
+      describe 'following links to protected pages' do
+        it 'redirects to user setting page to enable 2fa' do
+          # Does not allow to use site without enabling otp
+          click_link I18n.t('setting.setting.other')
+          expect(page).to have_current_path(two_factor_auth_setup_user_setting_path(user))
 
-        click_link I18n.t('application_name')
-        expect(page).to have_current_path(two_factor_auth_setup_user_setting_path(user))
-        expect(page).to have_css('svg')
+          click_link I18n.t('application_name')
+          expect(page).to have_current_path(two_factor_auth_setup_user_setting_path(user))
+          expect(page).to have_css('svg')
+        end
+      end
 
-        fill_in I18n.t('two_factor_authentication.otp_code.label'), with: user.otp_code
-        click_button I18n.t('two_factor_authentication.otp_code.submit')
+      describe 'entering invalid 2FA token' do
+        it 'redirects to dashboard path' do
+          fill_in I18n.t('user.form.otp_code.label'), with: '123456'
+          click_button I18n.t('two_factor_authentication.otp_code.submit')
 
-        expect(page).to have_current_path(dashboard_path)
-        expect(page).to have_link(I18n.t('components.nav_bar.sign_out'))
-        expect(page).to have_content(I18n.t('dashboard.how_it_works'))
+          expect(page).to have_current_path(two_factor_auth_setup_user_setting_path(user))
+
+          fill_in I18n.t('user.form.otp_code.label'), with: '123456'
+          click_button I18n.t('two_factor_authentication.otp_code.submit')
+
+          expect(page).to have_current_path(two_factor_auth_setup_user_setting_path(user))
+        end
+      end
+
+      describe 'entering valid 2FA token' do
+        it 'redirects to dashboard path' do
+          fill_in I18n.t('user.form.otp_code.label'), with: user.otp_code
+          click_button I18n.t('two_factor_authentication.otp_code.submit')
+
+          expect(page).to have_current_path(dashboard_path)
+          expect(page).to have_link(I18n.t('components.nav_bar.sign_out'))
+          expect(page).to have_content(I18n.t('dashboard.how_it_works'))
+        end
       end
     end
 
@@ -48,7 +70,7 @@ RSpec.describe 'Sign in' do
 
         fill_in I18n.t('helpers.label.password.email'), with: user.email
         fill_in I18n.t('helpers.label.session.password'), with: user.password
-        fill_in I18n.t('two_factor_authentication.otp_code.label'), with: user.otp_code
+        fill_in I18n.t('user.form.otp_code.label'), with: user.otp_code
 
         click_button I18n.t('helpers.submit.session.submit')
 

@@ -1,15 +1,15 @@
-<main class="TwoFactorAuthSetup">
-  <%= c 'heading' do %>
-    <%= t 'components.two_factor_auth_setup.header' %>
-  <% end %>
-  <p class="TwoFactorAuthSetup-explained"><%= t 'components.two_factor_auth_setup.subheader' %></p>
-  <%= form_with(model: user, url: enable_otp_user_setting_path, local: true) do |_form| %>
+<%= form_with(url: two_factor_auth_setup_user_setting_path(user), method: :patch, local: true, class: 'TwoFactorAuthSetup') do %>
+  <%= c 'stack' do %>
+    <%= c 'heading' do %>
+      <%= t 'components.two_factor_auth_setup.header' %>
+    <% end %>
+    <p><%= t 'components.two_factor_auth_setup.subheader' %></p>
     <%= qr_code_as_svg %>
 
-    <label for='user[otp_code]'><%= t 'two_factor_authentication.otp_code.label' %></label>
-    <small><%= t 'two_factor_authentication.otp_code.help_text' %></small>
-    <%= c 'input', id: 'user[otp_code]' %>
+    <%= c 'field', object: user, id: :otp_code do |field| %>
+      <%= c 'input', field.input_defaults.merge(value: nil) %>
+    <% end %>
 
     <%= c 'button', type: 'submit', label: I18n.t('two_factor_authentication.otp_code.submit') %>
   <% end %>
-</main>
+<% end %>
