@@ -7,7 +7,8 @@
     <%= c 'stack' do %>
       <div data-action="input->onboarding-instructions#switchChannelInstructions">
         <%= c 'choices',
-          stimulus_target: 'onboarding-instructions.channel',
+          stimulus_controller: 'onboarding-instructions',
+          stimulus_target: 'channel',
           choices: choices
         %>
       </div>
@@ -15,7 +16,7 @@
       <div
         id="email-channel"
         class="OnboardingInstructions-instructions"
-        data-target="onboarding-instructions.instructions"
+        data-onboarding-instructions-target="instructions"
       >
         <%= c 'stack' do %>
          <p class="text-serif">
@@ -29,7 +30,7 @@
       <div
         id="telegram-channel"
         class="OnboardingInstructions-instructions OnboardingInstructions-telegram text-serif"
-        data-target="onboarding-instructions.instructions"
+        data-onboarding-instructions-target="instructions"
       >
         <p><strong><%= t 'components.onboarding_instructions.telegram.intro' %></strong></p>
         <%= c 'button',

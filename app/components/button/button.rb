@@ -2,7 +2,7 @@
 
 module Button
   class Button < ApplicationComponent
-    def initialize(label: nil, type: nil, link: nil, stimulus_target: nil, **)
+    def initialize(label: nil, type: nil, link: nil, stimulus_controller: nil, stimulus_target: nil, **)
       super
 
       @styles = [:primary] if @styles.empty?
@@ -10,6 +10,7 @@ module Button
       @label = label
       @type = type
       @link = link
+      @stimulus_controller = stimulus_controller
       @stimulus_target = stimulus_target
     end
 
@@ -20,15 +21,13 @@ module Button
         class: class_names,
         type: type,
         href: link,
-        data: {
-          target: stimulus_target
-        }
+        "data-#{stimulus_controller}-target": stimulus_target
       )
     end
 
     private
 
-    attr_reader :label, :type, :link, :stimulus_target
+    attr_reader :label, :type, :link, :stimulus_controller, :stimulus_target
 
     def tag
       return :a if link

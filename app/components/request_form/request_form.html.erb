@@ -18,13 +18,14 @@
       <%= c 'field', object: @request, id: :text do |field| %>
         <%= c 'textarea', field.input_defaults.merge(
           required: true,
-          stimulus_target: 'request-form.message'
+          stimulus_controller: 'request-form',
+          stimulus_target: 'message'
         ) %>
       <% end %>
 
       <%= c 'field', object: @request, id: :tag_list do |field| %>
         <%= c 'stack', space: :small do %>
-          <div class="Field-help" data-target="request-form.membersCount"></div>
+          <div class="Field-help" data-request-form-target="membersCount"></div>
 
           <div data-action="changeTags->request-form#updateMembersCount">
             <%= c 'tags_input',field.input_defaults.merge(available_tags: available_tags, allow_new: false) %>
@@ -41,7 +42,7 @@
     <%= c 'stack', space: :small do %>
       <strong><%= I18n.t('request.form.preview') %></strong>
       <%= c 'box', styles: [:small, :gray, :round] do %>
-        <div class="RequestForm-preview PlaintextMessage" data-target="request-form.preview"></div>
+        <div class="RequestForm-preview PlaintextMessage" data-request-form-target="preview"></div>
       <% end %>
     <% end %>
   </div>

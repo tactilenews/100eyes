@@ -2,13 +2,14 @@
 
 module Textarea
   class Textarea < ApplicationComponent
-    def initialize(id: nil, value: nil, placeholder: nil, required: false, stimulus_target: nil, **)
+    def initialize(id: nil, value: nil, placeholder: nil, required: false, stimulus_controller: nil, stimulus_target: nil, **)
       super
 
       @id = id
       @value = value
       @placeholder = placeholder
       @required = required
+      @stimulus_controller = stimulus_controller
       @stimulus_target = stimulus_target
     end
 
@@ -23,13 +24,13 @@ module Textarea
         data: {
           controller: 'textarea',
           action: 'input->textarea#resize',
-          target: stimulus_target
+          "#{stimulus_controller}-target": stimulus_target
         }
       )
     end
 
     private
 
-    attr_reader :id, :value, :placeholder, :required, :stimulus_target
+    attr_reader :id, :value, :placeholder, :required, :stimulus_controller, :stimulus_target
   end
 end

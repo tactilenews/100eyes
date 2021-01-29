@@ -5,12 +5,12 @@
   data-chat-message-sender-name="<%= message.sender&.name %>"
   id="<%= id %>"
 >
-    <div class="ChatMessage-text" data-target="chat-message.text">
+    <div class="ChatMessage-text" data-chat-message-target="text">
       <%= c 'plaintext_message', message: message.text %>
 
       <div
         class="ChatMessage-toggleExpanded"
-        data-target="chat-message.toggleExpanded"
+        data-chat-messsage-target="toggleExpanded"
         data-action="click->chat-message#toggleExpanded"
       >
         <%= c 'button', styles: [:inline] do %>
