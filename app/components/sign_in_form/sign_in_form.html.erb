@@ -11,7 +11,7 @@
     <%= c 'input', type: :password, id: 'session[password]' %>
 
     <label for='session[otp_code]'><%= t 'two_factor_authentication.otp_code.label' %></label>
-    <small><%= t 'two_factor_authentication.otp_code.help' %></small>
+    <small><%= t 'two_factor_authentication.otp_code.help_text' %></small>
     <%= c 'input', id: 'session[otp_code]' %>
 
     <%= c 'button', type: 'submit', label: I18n.t('helpers.submit.session.submit') %>
