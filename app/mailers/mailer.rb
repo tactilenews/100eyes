@@ -8,6 +8,7 @@ class Mailer < ApplicationMailer
     stream = params[:broadcasted] ? broadcasts_stream : transactional_stream
     @text = params[:text]
 
+    headers(params[:headers])
     mail(
       to: params[:to],
       subject: default_i18n_subject,

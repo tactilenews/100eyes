@@ -46,7 +46,8 @@ RSpec.describe 'Requests', telegram_bot: :rails do
                 I18n.t('request.hints.confidential.text')
               ].join("\n\n"),
               to: 'contributor@example.org',
-              broadcasted: true
+              broadcasted: true,
+              headers: { "message-id": anything }
             },
             args: []
           }

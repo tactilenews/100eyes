@@ -21,9 +21,11 @@ class Message < ApplicationRecord
   validates :raw_data, presence: true, if: -> { sender.present? }
   validates :unknown_content, inclusion: { in: [true, false] }
 
-  before_create do
-    send_email
-    send_telegram_message
+  after_create do
+    [EmailAdapter, TelegramAdapter].each do |klass|
+      adapter = klass.new(message: self)
+      adapter.send!
+    end
   end
 
   def reply?
@@ -50,29 +52,5 @@ class Message < ApplicationRecord
       request,
       anchor: "chat-row-#{id}"
     )
-  end
-
-  private
-
-  def send_email
-    return unless recipient&.email
-
-    Mailer
-      .with(to: recipient.email, text: text, broadcasted: broadcasted?)
-      .new_message_email
-      .deliver_later
-  end
-
-  def send_telegram_message
-    return unless recipient&.telegram_id
-
-    begin
-      Telegram.bot.send_message(
-        chat_id: recipient.telegram_id,
-        text: text
-      )
-    rescue Telegram::Bot::Forbidden
-      self.blocked = true
-    end
   end
 end

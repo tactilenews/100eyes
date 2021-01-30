@@ -161,7 +161,8 @@ RSpec.describe '/contributors', type: :request do
                 params: {
                   text: 'Forgot to ask: How are you?',
                   to: 'contributor@example.org',
-                  broadcasted: false
+                  broadcasted: false,
+                  headers: { "message-id": anything, references: /#{the_request.id}/ }
                 },
                 args: []
               }
