@@ -15,7 +15,9 @@ module TwoFactorAuthSetup
 
     def qr_code_as_svg
       # rubocop:disable Rails/OutputSafety
-      qr_code.as_svg.html_safe
+      qr_code.as_svg(
+        module_size: 6
+      ).html_safe
       # rubocop:enable Rails/OutputSafety
     end
   end
