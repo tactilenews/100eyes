@@ -42,7 +42,7 @@ RSpec.describe 'Password Reset' do
         expect(page).to have_current_path(two_factor_auth_setup_user_setting_path(user))
         expect(page).to have_css('svg')
 
-        fill_in I18n.t('user.form.otp_code.label'), with: user.otp_code
+        fill_in I18n.t('two_factor_authentication.otp_code.label'), with: user.otp_code
         click_button I18n.t('two_factor_authentication.otp_code.submit')
 
         expect(page).to have_current_path(dashboard_path)
@@ -75,7 +75,7 @@ RSpec.describe 'Password Reset' do
         # Since this input does not have a id, we cannot use fill_in with the label, name, id
         find('input[data-target="password-reset-form.passwordConfirmation"]').set(password)
 
-        fill_in I18n.t('user.form.otp_code.label'), with: user.otp_code
+        fill_in I18n.t('two_factor_authentication.otp_code.label'), with: user.otp_code
 
         click_button I18n.t('helpers.submit.password_reset.submit')
 

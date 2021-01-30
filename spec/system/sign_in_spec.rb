@@ -36,12 +36,12 @@ RSpec.describe 'Sign in' do
 
       describe 'entering invalid 2FA token' do
         it 'redirects to dashboard path' do
-          fill_in I18n.t('user.form.otp_code.label'), with: '123456'
+          fill_in I18n.t('two_factor_authentication.otp_code.label'), with: '123456'
           click_button I18n.t('two_factor_authentication.otp_code.submit')
 
           expect(page).to have_current_path(two_factor_auth_setup_user_setting_path(user))
 
-          fill_in I18n.t('user.form.otp_code.label'), with: '123456'
+          fill_in I18n.t('two_factor_authentication.otp_code.label'), with: '123456'
           click_button I18n.t('two_factor_authentication.otp_code.submit')
 
           expect(page).to have_current_path(two_factor_auth_setup_user_setting_path(user))
@@ -50,7 +50,7 @@ RSpec.describe 'Sign in' do
 
       describe 'entering valid 2FA token' do
         it 'redirects to dashboard path' do
-          fill_in I18n.t('user.form.otp_code.label'), with: user.otp_code
+          fill_in I18n.t('two_factor_authentication.otp_code.label'), with: user.otp_code
           click_button I18n.t('two_factor_authentication.otp_code.submit')
 
           expect(page).to have_current_path(dashboard_path)
@@ -70,7 +70,7 @@ RSpec.describe 'Sign in' do
 
         fill_in I18n.t('helpers.label.password.email'), with: user.email
         fill_in I18n.t('helpers.label.session.password'), with: user.password
-        fill_in I18n.t('user.form.otp_code.label'), with: user.otp_code
+        fill_in I18n.t('two_factor_authentication.otp_code.label'), with: user.otp_code
 
         click_button I18n.t('helpers.submit.session.submit')
 

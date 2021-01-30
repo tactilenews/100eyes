@@ -10,7 +10,7 @@ module TwoFactorAuthSetup
 
     private
 
-    attr_reader :user, :qr_code
+    attr_reader :qr_code
 
     def qr_code_as_svg
       # rubocop:disable Rails/OutputSafety

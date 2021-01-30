@@ -5,6 +5,10 @@
   padding: 1rem;
 }
 
+.TwoFactorAuthSetup-explained {
+  margin: 1rem 0 1.5rem;
+}
+
 .TwoFactorAuthSetup svg {
   display: block;
   margin: 1.5rem auto;
@@ -13,4 +17,12 @@
 .TwoFactorAuthSetup label {
   display: block;
   font-weight: 600;
+}
+
+.TwoFactorAuthSetup .Input {
+  margin: 0.75rem 0 1.5rem;
+}
+
+.TwoFactorAuthSetup .Button {
+  margin-bottom: 0.75rem;
 }

@@ -283,16 +283,12 @@ de:
       one: Nachrichtenverlauf
       other: Nachrichtenverläufe
 
-  user:
-    form:
-      otp_code:
-        label: 6-stelliger Bestätigungscode
-        help: Öffnen Sie die App zur Zwei-Faktor-Authentifizierung auf Ihrem Gerät, um Ihren Authentifizierungscode anzuzeigen und Ihre Identität zu überprüfen.
-
   two_factor_authentication:
     otp_code:
       submit: Einmaliges Token einreichen
-      failure_message: Einmaliges Token ungültig
+      failure_message: Einmaliges Token
+      label: 6-stelliger Bestätigungscode
+      help_text: Öffnen Sie die App zur Zwei-Faktor-Authentifizierung auf Ihrem Gerät, um Ihren Authentifizierungscode anzuzeigen und Ihre Identität zu überprüfen.
 
   activerecord:
     errors:
