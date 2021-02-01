@@ -2,16 +2,17 @@
 
 module Choices
   class Choices < ApplicationComponent
-    def initialize(choices: [], stimulus_controller: nil, stimulus_target: nil, **)
+    def initialize(choices: [], value: nil, stimulus_controller: nil, stimulus_target: nil, **)
       super
 
       @choices = choices
+      @value = value
       @stimulus_controller = stimulus_controller
       @stimulus_target = stimulus_target
     end
 
     private
 
-    attr_reader :choices, :stimulus_target, :stimulus_controller
+    attr_reader :choices, :value, :stimulus_target, :stimulus_controller
   end
 end
