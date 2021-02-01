@@ -7,6 +7,7 @@ ansible-galaxy collection install community.general
 ansible-galaxy collection install devsec.hardening
 ansible-galaxy install geerlingguy.docker
 ansible-galaxy install geerlingguy.pip
+ansible-galaxy install gantsign.inotify
 ```
 
 Generate configuration files:
