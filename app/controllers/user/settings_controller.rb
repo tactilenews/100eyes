@@ -4,18 +4,15 @@
 class User::SettingsController < ApplicationController
   skip_before_action :ensure_2fa_setup, only: %i[two_factor_auth_setup enable_otp]
   before_action :ensure_otp_not_enabled, only: :two_factor_auth_setup
+  before_action :qr_code, only: %i[two_factor_auth_setup enable_otp]
 
-  def two_factor_auth_setup
-    @user = current_user
-    qr_code
-  end
+  def two_factor_auth_setup; end
 
   def enable_otp
     if current_user.authenticate_otp(enable_otp_params['otp_code'], drift: 30)
       current_user.update(otp_enabled: true)
       redirect_to dashboard_path
     else
-      qr_code
       flash.now[:error] = I18n.t('two_factor_authentication.otp_code.failure_message')
       render 'user/settings/two_factor_auth_setup', status: :unauthorized
     end

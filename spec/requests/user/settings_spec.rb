@@ -32,8 +32,8 @@ RSpec.describe 'User::Settings' do
     end
   end
 
-  describe 'PATCH /user/settings/:id/enable_otp' do
-    subject { patch enable_otp_user_setting_path(user, as: user), params: { user: { otp_code: otp_code } } }
+  describe 'PATCH /user/settings/:id/two_factor_auth_setup' do
+    subject { patch two_factor_auth_setup_user_setting_path(user, as: user), params: { user: { otp_code: otp_code } } }
 
     let(:otp_code) { SecureRandom.hex(3) }
 
