@@ -7,12 +7,15 @@ Rails.application.routes.draw do
   get '/health', to: 'health#index'
 
   get '/onboarding', to: 'onboarding#index'
-  post '/onboarding', to: 'onboarding#create'
   get '/onboarding/success', to: 'onboarding#success'
   post '/onboarding/invite', to: 'onboarding#create_invite_url'
-  get '/onboarding/telegram', to: 'onboarding#telegram'
-  patch '/onboarding/telegram-update-info', to: 'onboarding#telegram_update_info'
-  get '/onboarding/telegram-explained', to: 'onboarding#telegram_explained'
+
+  namespace :onboarding do
+    post '/', to: 'email#create'
+    get '/telegram', to: 'telegram#telegram'
+    patch '/telegram-update-info', to: 'telegram#telegram_update_info'
+    get '/telegram-explained', to: 'telegram#telegram_explained'
+  end
 
   get '/settings', to: 'settings#index'
   post '/settings', to: 'settings#update'
