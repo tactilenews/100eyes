@@ -99,7 +99,9 @@ de:
       success: Link kopiert
     two_factor_auth_setup:
       header: Anmeldung in zwei Schritten einrichten
-      subheader: Mit der Anmeldung in zwei Schritten sicherst du dein Konto zusätzlich ab. Scanne den folgenden QR-Code mit einer App wie z.B. Authy oder FreeOTP. Gib anschließend den 6-stelligen Bestätigungscode ein.
+      subheader: "Sie können Ihr Konto weiter absichern, indem Sie sich in zwei Schritten anmelden:"
+      step_1: "1. Fügen Sie 100eyes zu einer App wie Authy oder FreeOTP hinzu, indem Sie entweder den folgenden QR-Code scannen oder den geheimen Schlüssel manuell kopieren."
+      step_2: "2. Geben Sie den 6-stelligen Bestätigungscode ein."
       copy_secret_key:
         label: Geheimen Schlüssel kopieren
         success: Schlüssel kopieren
