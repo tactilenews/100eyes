@@ -1,8 +1,8 @@
 <%= form_with(model: user, url: two_factor_auth_setup_user_setting_path, local: true, class: 'TwoFactorAuthSetup') do %>
   <header class="TwoFactorAuthSetup-explained">
-    <h1><%= t 'components.two_factor_auth_setup.header' %></h1>
-    <p><%= t 'components.two_factor_auth_setup.step_1' %></p>
-    <p><%= t 'components.two_factor_auth_setup.step_2' %></p>
+    <h1 class="TwoFactorAuthSetup-explained-header"><%= t 'components.two_factor_auth_setup.header' %></h1>
+    <p class="TwoFactorAuthSetup-explained-steps"><%= t 'components.two_factor_auth_setup.step_1' %></p>
+    <p class="TwoFactorAuthSetup-explained-steps"><%= t 'components.two_factor_auth_setup.step_2' %></p>
   </header>
   <section class="TwoFactorAuthSetup-device-setup">
     <%= qr_code_as_svg %>

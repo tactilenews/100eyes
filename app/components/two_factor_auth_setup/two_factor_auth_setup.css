@@ -1,5 +1,5 @@
 .TwoFactorAuthSetup {
-  margin: 1rem auto;
+  margin: 0 auto;
   max-width: var(--grid-max-width-s);
   width: 100%;
   padding: 1rem;
@@ -9,12 +9,12 @@
   margin: 1rem 0 1.5rem;
 }
 
-.TwoFactorAuthSetup-explained > h1 {
+.TwoFactorAuthSetup-explained-header {
   font-size: 1.75rem;
   margin-bottom: 1rem;
 }
 
-.TwoFactorAuthSetup-explained > * {
+.TwoFactorAuthSetup-explained-steps {
   margin-bottom: 0.5rem;
 }
 
