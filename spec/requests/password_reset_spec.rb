@@ -133,8 +133,7 @@ RSpec.describe 'Passwords' do
     message = ActionMailer::Base.deliveries.any? do |email|
       email.to == [recipient] &&
         email.subject =~ /#{subject}/i &&
-        email.html_part.body =~ /#{body}/ &&
-        email.text_part.body =~ /#{body}/
+        email.decoded =~ /#{body}/
     end
 
     expect(message).to be
