@@ -6,7 +6,7 @@ de:
         change_password: Klicke auf diesen Link, um dein Passwort zurückzusetzen.
   clearance_mailer:
     change_password:
-      closing: "Falls dieser Link nicht funktioniert, kopiere die folgenden Adresse und öffne sie in deinem Browser:"
+      closing: "Falls sich beim Klicken auf diesen Link kein Formular zum Zurücksetzen deines Passworts öffnet, kopiere die folgenden Adresse und öffne sie in deinem Browser:"
       link_text: Mein Passwort ändern
       opening: "Jemand, hoffentlich du selbst, hat einen Link zum Ändern des Passworts angefordert:"
   flashes:
