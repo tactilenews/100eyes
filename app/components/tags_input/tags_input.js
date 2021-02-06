@@ -37,6 +37,11 @@ function transformTag(tagData) {
 
 export default class extends Controller {
   static targets = ['input'];
+  static values = {
+    availableTags: String,
+    allowNew: Boolean,
+    membersLabel: String
+  }
 
   connect() {
     this.tagify = new Tagify(this.inputTarget, {
@@ -44,8 +49,8 @@ export default class extends Controller {
         return tags.map(tag => tag.value).join(',');
       },
 
-      whitelist: JSON.parse(this.data.get('available-tags')),
-      enforceWhitelist: !JSON.parse(this.data.get('allow-new')),
+      whitelist: JSON.parse(this.availableTagsValue),
+      enforceWhitelist: !this.allowNewValue,
 
       dropdown: {
         classname: 'TagsInput-dropdown',
@@ -58,9 +63,8 @@ export default class extends Controller {
       },
 
       transformTag,
-
       labels: {
-        members: JSON.parse(this.data.get('members-label')),
+        members: JSON.parse(this.membersLabelValue),
       },
     });
 
