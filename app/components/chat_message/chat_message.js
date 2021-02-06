@@ -5,14 +5,14 @@ const SUCCESS_NOTIFICATION_DURATION = 2000;
 
 export default class extends Controller {
   static targets = ['text', 'toggleExpanded'];
+  static classes = ['truncated', 'expanded', 'copied', 'highlighted'];
   static values = {
     senderName: String,
     id: String,
   };
-
   connect() {
     if (this.isTruncated()) {
-      this.element.classList.add('ChatMessage--truncated');
+      this.element.classList.add(this.truncatedClass);
       this.collapse();
     }
   }
@@ -22,7 +22,7 @@ export default class extends Controller {
   }
 
   isExpanded() {
-    return this.element.classList.contains('ChatMessage--expanded');
+    return this.element.classList.contains(this.expandedClass);
   }
 
   toggleExpanded() {
@@ -34,12 +34,12 @@ export default class extends Controller {
   }
 
   expand() {
-    this.element.classList.add('ChatMessage--expanded');
+    this.element.classList.add(this.expandedClass);
     this.toggleExpandedTarget.setAttribute('aria-expanded', 'true');
   }
 
   collapse() {
-    this.element.classList.remove('ChatMessage--expanded');
+    this.element.classList.remove(this.expandedClass);
     this.toggleExpandedTarget.setAttribute('aria-expanded', 'false');
   }
 
@@ -56,15 +56,15 @@ export default class extends Controller {
   }
 
   onCopy() {
-    this.element.classList.add('ChatMessage--copied');
+    this.element.classList.add(this.copiedClass);
 
     setTimeout(() => {
-      this.element.classList.remove('ChatMessage--copied');
+      this.element.classList.remove(this.copiedClass);
     }, SUCCESS_NOTIFICATION_DURATION);
   }
 
   isHighlighted() {
-    return this.element.classList.contains('ChatMessage--highlighted');
+    return this.element.classList.contains(this.highlightedClass);
   }
 
   toggleHighlighted() {
@@ -82,10 +82,10 @@ export default class extends Controller {
   }
 
   highlight() {
-    this.element.classList.add('ChatMessage--highlighted');
+    this.element.classList.add(this.highlightedClass);
   }
 
   unhighlight() {
-    this.element.classList.remove('ChatMessage--highlighted');
+    this.element.classList.remove(this.highlightedClass);
   }
 }
