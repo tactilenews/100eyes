@@ -3,16 +3,16 @@
 module Onboarding
   class TelegramController < ApplicationController
     skip_before_action :require_login
-    before_action :verify_onboarding_jwt, except: %i[telegram_update_info]
-    before_action :verify_telegram_authentication_and_integrity, only: :telegram
+    before_action :verify_onboarding_jwt, except: %i[update]
+    before_action :verify_telegram_authentication_and_integrity, only: :create
 
     layout 'onboarding'
 
-    def telegram_explained
+    def info
       @jwt = jwt_param
     end
 
-    def telegram
+    def create
       @telegram_id = telegram_auth_params[:id]
       @first_name = telegram_auth_params[:first_name]
       @last_name = telegram_auth_params[:last_name]
@@ -34,17 +34,17 @@ module Onboarding
       cookies.encrypted[:telegram_id] = { value: @contributor.telegram_id, expires: 30.minutes }
     end
 
-    def telegram_update_info
+    def update
       @contributor = Contributor.find_by(telegram_id: cookies.encrypted[:telegram_id])
 
       if @contributor&.update(first_name: contributor_params[:first_name], last_name: contributor_params[:last_name])
         redirect_to_success
       else
-        render "onboarding/unauthorized", status: :unauthorized
+        render 'onboarding/unauthorized', status: :unauthorized
       end
     end
 
-  private
+    private
 
     def verify_onboarding_jwt
       invalidated_jwt = JsonWebToken.where(invalidated_jwt: jwt_param)
@@ -54,7 +54,7 @@ module Onboarding
 
       raise ActionController::BadRequest if decoded_token.first['data']['action'] != 'onboarding'
     rescue StandardError
-      render "onboarding/unauthorized", status: :unauthorized
+      render 'onboarding/unauthorized', status: :unauthorized
     end
 
     def invalidate_jwt
@@ -87,6 +87,5 @@ module Onboarding
 
       raise ActionController::BadRequest unless valid_hash.casecmp(telegram_auth_params[:hash]).zero? && valid_time_window
     end
-
   end
 end

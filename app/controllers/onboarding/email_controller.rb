@@ -22,7 +22,7 @@ module Onboarding
         return redirect_to_success
       end
 
-      return redirect_to_failure
+      redirect_to_failure
     end
 
     private
@@ -35,7 +35,7 @@ module Onboarding
 
       raise ActionController::BadRequest if decoded_token.first['data']['action'] != 'onboarding'
     rescue StandardError
-      render "onboarding/unauthorized", status: :unauthorized
+      render 'onboarding/unauthorized', status: :unauthorized
     end
 
     def invalidate_jwt
@@ -57,6 +57,5 @@ module Onboarding
     def jwt_param
       params.require(:jwt)
     end
-
   end
 end

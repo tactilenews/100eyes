@@ -11,10 +11,10 @@ Rails.application.routes.draw do
   post '/onboarding/invite', to: 'onboarding#create_invite_url'
 
   namespace :onboarding do
-    post '/', to: 'email#create'
-    get '/telegram', to: 'telegram#telegram'
-    patch '/telegram-update-info', to: 'telegram#telegram_update_info'
-    get '/telegram-explained', to: 'telegram#telegram_explained'
+    post '/email', to: 'email#create'
+    get '/telegram', to: 'telegram#create'
+    patch '/telegram', to: 'telegram#update'
+    get '/telegram/info', to: 'telegram#info'
   end
 
   get '/settings', to: 'settings#index'

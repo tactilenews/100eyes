@@ -8,7 +8,7 @@ RSpec.describe 'Onboarding', type: :request do
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
   let(:params) { { jwt: jwt } }
 
-  describe 'GET /index' do
+  describe 'GET /onboarding/index' do
     subject { -> { get onboarding_path(**params) } }
 
     it 'should be successful' do
@@ -38,7 +38,7 @@ RSpec.describe 'Onboarding', type: :request do
     end
   end
 
-  describe 'GET /onboarding/telegram' do
+  describe 'GET /onboarding/telegram/create' do
     let(:today) { Time.zone.now }
     let(:hash_created_at) { Time.new(today.year, today.month, today.day).to_i }
     let(:valid_hash) do
@@ -156,7 +156,7 @@ RSpec.describe 'Onboarding', type: :request do
     end
   end
 
-  describe 'PATCH /telegram-update-info' do
+  describe 'PATCH /onboarding/telegram/update' do
     let!(:contributor) { create(:contributor, telegram_id: 789, first_name: nil, last_name: nil) }
     let(:attrs) do
       {
@@ -165,7 +165,7 @@ RSpec.describe 'Onboarding', type: :request do
       }
     end
     let(:params) { { jwt: jwt, contributor: attrs } }
-    subject { -> { patch onboarding_telegram_update_info_path, params: params } }
+    subject { -> { patch onboarding_telegram_path, params: params } }
 
     context 'invalid' do
       context 'no telegram id in cookie' do
@@ -205,7 +205,7 @@ RSpec.describe 'Onboarding', type: :request do
     end
   end
 
-  describe 'POST /create' do
+  describe 'POST /onboarding/email/create' do
     let(:attrs) do
       {
         first_name: 'Zora',
@@ -216,7 +216,7 @@ RSpec.describe 'Onboarding', type: :request do
 
     let(:params) { { jwt: jwt, contributor: attrs } }
 
-    subject { -> { post onboarding_path, params: params } }
+    subject { -> { post onboarding_email_path, params: params } }
 
     it 'creates contributor' do
       expect { subject.call }.to change(Contributor, :count).by(1)
