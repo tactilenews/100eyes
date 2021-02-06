@@ -1,8 +1,12 @@
 <div
   class="<%= class_attr %>"
   data-controller="chat-message"
-  data-chat-message-id="<%= message.id %>"
-  data-chat-message-sender-name="<%= message.sender&.name %>"
+  data-chat-message-id-value="<%= message.id %>"
+  data-chat-message-sender-name-value="<%= message.sender&.name %>"
+  data-chat-message-truncated-class="ChatMessage--truncated"
+  data-chat-message-expanded-class="ChatMessage--expanded"
+  data-chat-message-copied-class="ChatMessage--copied"
+  data-chat-message-highlighted-class="ChatMessage--highlighted"
   id="<%= id %>"
 >
     <div class="ChatMessage-text" data-chat-message-target="text">

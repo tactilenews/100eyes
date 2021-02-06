@@ -9,6 +9,9 @@ const template = ({ message, notes }) => {
 
 export default class extends Controller {
   static targets = ['preview', 'message', 'membersCount'];
+  static values = {
+    membersCountMessage: String,
+  };
 
   connect() {
     this.updatePreview();
@@ -29,7 +32,7 @@ export default class extends Controller {
       return;
     }
 
-    const messageTemplates = JSON.parse(this.data.get('members-count-message'));
+    const messageTemplates = JSON.parse(this.membersCountMessageValue);
     const tags = event.detail.tags;
 
     Rails.ajax({

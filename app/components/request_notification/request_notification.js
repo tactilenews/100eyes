@@ -5,20 +5,24 @@ const POLLING_INTERVAL = 1000 * 30;
 
 export default class extends Controller {
   static targets = ['text'];
+  static values = {
+    id: String,
+    lastUpdatedAt: String,
+    messageTemplate: String,
+  };
 
   connect() {
-    this.lastUpdatedAt = this.data.get('last-updated-at');
-    this.messageTemplate = JSON.parse(this.data.get('message-template'));
+    this.messageTemplate = JSON.parse(this.messageTemplateValue);
     this.fetchMessages();
     setInterval(() => this.fetchMessages(), POLLING_INTERVAL);
   }
 
   fetchMessages() {
     Rails.ajax({
-      url: `/requests/${this.data.get('id')}/notifications`,
+      url: `/requests/${this.idValue}/notifications`,
       type: 'GET',
       data: new URLSearchParams({
-        last_updated_at: this.lastUpdatedAt,
+        last_updated_at: this.lastUpdatedAtValue,
       }).toString(),
       success: ({ message_count }) => {
         if (message_count == 0) {
