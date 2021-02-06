@@ -10,8 +10,8 @@ const template = ({ message, notes }) => {
 export default class extends Controller {
   static targets = ['preview', 'message', 'membersCount'];
   static values = {
-    membersCountMessage: String
-  }
+    membersCountMessage: String,
+  };
 
   connect() {
     this.updatePreview();

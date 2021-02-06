@@ -8,8 +8,8 @@ export default class extends Controller {
   static values = {
     id: String,
     lastUpdatedAt: String,
-    messageTemplate: String
-  }
+    messageTemplate: String,
+  };
 
   connect() {
     this.messageTemplate = JSON.parse(this.messageTemplateValue);

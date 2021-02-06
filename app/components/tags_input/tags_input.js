@@ -40,8 +40,8 @@ export default class extends Controller {
   static values = {
     availableTags: String,
     allowNew: Boolean,
-    membersLabel: String
-  }
+    membersLabel: String,
+  };
 
   connect() {
     this.tagify = new Tagify(this.inputTarget, {

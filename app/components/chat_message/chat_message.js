@@ -7,8 +7,8 @@ export default class extends Controller {
   static targets = ['text', 'toggleExpanded'];
   static values = {
     senderName: String,
-    id: String
-  }
+    id: String,
+  };
 
   connect() {
     if (this.isTruncated()) {
