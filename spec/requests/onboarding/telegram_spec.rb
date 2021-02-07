@@ -35,6 +35,35 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
 
     subject { -> { get onboarding_telegram_path(**params) } }
 
+    describe 'with unsigned jwt' do
+      let(:jwt) { 'INCORRECT_TOKEN' }
+
+      it 'renders unauthorized page' do
+        subject.call
+
+        expect(response).not_to be_successful
+      end
+
+      it 'does not create new contributor' do
+        expect { subject.call }.not_to change(Contributor, :count)
+      end
+    end
+
+    describe 'with invalidated jwt' do
+      let!(:invalidated_jwt) { create(:json_web_token, invalidated_jwt: 'INVALID_JWT') }
+      let(:jwt) { 'INVALID_JWT' }
+
+      it 'renders unauthorized page' do
+        subject.call
+
+        expect(response).not_to be_successful
+      end
+
+      it 'does not create new contributor' do
+        expect { subject.call }.not_to change(Contributor, :count)
+      end
+    end
+
     context 'invalid' do
       it 'if the hash does not match' do
         params[:hash] = 'I was not created with your api key'
