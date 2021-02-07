@@ -181,4 +181,3 @@ def setup_telegram_id_cookie(contributor)
   my_cookies.encrypted[:telegram_id] = { value: contributor.telegram_id, expires: 30.minutes }
   cookies[:telegram_id] = my_cookies[:telegram_id]
 end
-

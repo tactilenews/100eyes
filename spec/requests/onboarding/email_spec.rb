@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Onboarding::Telegram', type: :request do
+RSpec.describe 'Onboarding::Email', type: :request do
   let(:contributor) { create(:contributor) }
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
   let(:params) { { jwt: jwt } }

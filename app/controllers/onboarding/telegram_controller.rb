@@ -2,8 +2,10 @@
 
 module Onboarding
   class TelegramController < ApplicationController
+    include JwtHelper
+
     skip_before_action :require_login
-    before_action :verify_onboarding_jwt, except: %i[update]
+    before_action -> { verify_onboarding_jwt(jwt_param) }, except: %i[update]
     before_action :verify_telegram_authentication_and_integrity, only: :create
 
     layout 'onboarding'
@@ -17,7 +19,7 @@ module Onboarding
       @first_name = telegram_auth_params[:first_name]
       @last_name = telegram_auth_params[:last_name]
       if Contributor.exists?(telegram_id: @telegram_id)
-        invalidate_jwt
+        invalidate_jwt(jwt_param)
         return redirect_to_success
       end
 
@@ -30,7 +32,7 @@ module Onboarding
       )
       return unless @contributor.save
 
-      invalidate_jwt
+      invalidate_jwt(jwt_param)
       cookies.encrypted[:telegram_id] = { value: @contributor.telegram_id, expires: 30.minutes }
     end
 
@@ -45,21 +47,6 @@ module Onboarding
     end
 
     private
-
-    def verify_onboarding_jwt
-      invalidated_jwt = JsonWebToken.where(invalidated_jwt: jwt_param)
-      raise ActionController::BadRequest if invalidated_jwt.exists?
-
-      decoded_token = JsonWebToken.decode(jwt_param)
-
-      raise ActionController::BadRequest if decoded_token.first['data']['action'] != 'onboarding'
-    rescue StandardError
-      render 'onboarding/unauthorized', status: :unauthorized
-    end
-
-    def invalidate_jwt
-      JsonWebToken.create(invalidated_jwt: params[:jwt])
-    end
 
     def redirect_to_success
       redirect_to onboarding_success_path
