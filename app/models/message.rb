@@ -22,7 +22,7 @@ class Message < ApplicationRecord
   validates :unknown_content, inclusion: { in: [true, false] }
 
   after_create do
-    [EmailAdapter, TelegramAdapter].each do |klass|
+    [EmailAdapter, TelegramAdapter, ThreemaAdapter].each do |klass|
       adapter = klass.new(message: self)
       adapter.send!
     end
