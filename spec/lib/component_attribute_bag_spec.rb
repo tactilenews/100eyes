@@ -10,6 +10,10 @@ RSpec.describe ComponentAttributeBag do
 
     it { should eq('type="button"') }
 
+    it 'returns html-safe string' do
+      expect(subject.html_safe?).to be(true)
+    end
+
     context 'with nested attributes' do
       let(:attrs) { { data: { controller: 'copy-button', text: 'Lorem Ipsum' } } }
 
