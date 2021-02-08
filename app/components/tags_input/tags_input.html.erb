@@ -5,5 +5,5 @@
   data-tags-input-allow-new-value="<%= allow_new %>"
   data-tags-input-members-label-value="<%= I18n.t('contributor.contributor').to_json %>"
 >
-  <%= c 'input', value: value, stimulus_controller: 'tags-input', stimulus_target: 'input', **props %>
+  <%= c 'input', value: value, data: { tags_input_target: 'input' }, **props %>
 </div>
