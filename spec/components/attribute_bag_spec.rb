@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe ComponentAttributeBag do
+RSpec.describe AttributeBag do
   let(:attrs) { {} }
   let(:bag) { described_class.new(attrs) }
 

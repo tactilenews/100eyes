@@ -20,7 +20,7 @@ class ApplicationComponent < ViewComponent::Base
   attr_reader :styles, :data
 
   def attrs
-    ComponentAttributeBag.new(class: class_attr).merge(@attrs)
+    AttributeBag.new(class: class_attr).merge(@attrs)
   end
 
   def block_name

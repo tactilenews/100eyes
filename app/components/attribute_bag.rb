@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ComponentAttributeBag
+class AttributeBag
   include ActionView::Helpers::TagHelper
 
   attr_reader :attrs
