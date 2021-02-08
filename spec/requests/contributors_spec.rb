@@ -159,9 +159,8 @@ RSpec.describe '/contributors', type: :request do
               'deliver_now',
               {
                 params: {
+                  mail: { to: 'contributor@example.org', message_stream: 'outbound' },
                   text: 'Forgot to ask: How are you?',
-                  to: 'contributor@example.org',
-                  broadcasted: false,
                   headers: { "message-id": anything, references: /#{the_request.id}/ }
                 },
                 args: []

@@ -41,12 +41,11 @@ RSpec.describe 'Requests', telegram_bot: :rails do
           'deliver_now',
           {
             params: {
+              mail: { to: 'contributor@example.org', message_stream: 'broadcasts' },
               text: [
                 'How do you do?',
                 I18n.t('request.hints.confidential.text')
               ].join("\n\n"),
-              to: 'contributor@example.org',
-              broadcasted: true,
               headers: { "message-id": anything }
             },
             args: []

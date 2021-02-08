@@ -2,9 +2,23 @@
 
 require 'rails_helper'
 
-RSpec.describe EmailAdapter do
-  let(:adapter) { EmailAdapter.new(message: message) }
+RSpec.describe PostmarkAdapter::Outbound do
+  let(:adapter) { described_class.new(message: message) }
+  let(:request) { create(:request) }
   before { allow(Setting).to receive(:application_host).and_return('example.org') }
+
+  describe 'message_stream' do
+    subject { adapter.message_stream }
+    let(:message) { create(:message, broadcasted: false, request: request) }
+
+    it { should eq(Setting.postmark_transactional_stream) }
+
+    context 'given message is broadcasted as part of a request' do
+      let(:broadcasted) { true }
+      let(:message) { create(:message, broadcasted: true, request: request) }
+      it { should eq(Setting.postmark_broadcasts_stream) }
+    end
+  end
 
   describe 'email headers' do
     subject { adapter.headers }

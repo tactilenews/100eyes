@@ -5,14 +5,14 @@ require 'rails_helper'
 RSpec.describe Mailer, type: :mailer do
   let(:text) { 'How do you do?' }
   let(:address) { 'test@example.org' }
-  let(:broadcasted) { false }
 
   describe 'new_message_email' do
     let(:mail) do
       described_class.with(
-        to: address,
-        text: text,
-        broadcasted: broadcasted
+        mail: {
+          to: address
+        },
+        text: text
       ).new_message_email
     end
 
@@ -48,20 +48,10 @@ RSpec.describe Mailer, type: :mailer do
         subject.should have_css('p', exact_text: 'Here’s another line!')
       end
     end
-
-    describe 'message_stream' do
-      subject { mail.message_stream }
-      it { should eq(Setting.postmark_transactional_stream) }
-
-      describe 'with broadcasted=true' do
-        let(:broadcasted) { true }
-        it { should eq(Setting.postmark_broadcasts_stream) }
-      end
-    end
   end
 
   describe 'contributor_not_found_email' do
-    let(:mail) { described_class.with(email: 'contributor@example.org').contributor_not_found_email }
+    let(:mail) { described_class.with(mail: { to: 'contributor@example.org' }, text: 'This is the @text').contributor_not_found_email }
 
     describe 'subject' do
       subject { mail.subject }
@@ -70,7 +60,7 @@ RSpec.describe Mailer, type: :mailer do
 
     describe 'body' do
       subject { mail.text_part.body.decoded }
-      it { should include('Leider konnten wir Ihre E-Mail-Adresse nicht zuordnen.') }
+      it { should include('This is the @text') }
     end
   end
 end
