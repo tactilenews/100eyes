@@ -5,7 +5,7 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
     telegram_message = TelegramMessage.new(message)
     contributor = telegram_message.sender
 
-    return unless contributor
+    TelegramAdapter::Inbound.bounce!(chat) and return unless contributor
 
     respond_with :message, text: Setting.telegram_unknown_content_message if telegram_message.unknown_content
     contributor.reply(telegram_message)

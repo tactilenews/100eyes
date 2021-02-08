@@ -2,8 +2,6 @@
 
 module PostmarkAdapter
   class Inbound
-    attr_reader :message
-
     def self.bounce!(mail)
       mailer_params = {
         text: I18n.t('mailer.contributor_not_found_email.text'),
