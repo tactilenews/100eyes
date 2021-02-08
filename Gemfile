@@ -78,7 +78,7 @@ gem 'counter_culture', '~> 2.7'
 
 gem 'activestorage-validator', '~> 0.1.3'
 
-gem 'rack-attack', '~> 6.4'
+gem 'rack-attack', '~> 6.5'
 
 gem 'acts-as-taggable-on'
 gem 'jwt'
