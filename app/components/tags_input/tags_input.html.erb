@@ -1,9 +1,11 @@
-<div
-  class="TagsInput"
-  data-controller="tags-input"
-  data-tags-input-available-tags-value="<%= available_tags %>"
-  data-tags-input-allow-new-value="<%= allow_new %>"
-  data-tags-input-members-label-value="<%= I18n.t('contributor.contributor').to_json %>"
->
-  <%= c 'input', value: value, data: { tags_input_target: 'input' }, **props %>
-</div>
+<%= c 'input',
+  value: value,
+  data: {
+    controller: 'tags-input',
+    tags_input_target: 'input',
+    tags_input_allow_new_value: allow_new,
+    tags_input_available_tags_value: available_tags,
+    tags_input_members_label_value: I18n.t('contributor.contributor').to_json,
+  },
+  **attrs
+%>
