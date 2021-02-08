@@ -1,22 +1,22 @@
-<div
-  class="CreateInviteButton"
-  data-controller="create-invite-button"
-  data-action="click->create-invite-button#copyLink"
->
-  <%= c 'button', style: :inline, stimulus_controller: 'create-invite-button', stimulus_target: 'button' do %>
-    <span data-create-invite-button-target="label">
-      <%= t 'components.create_invite_button.label' %>
-    </span>
-    <span data-create-invite-button-target="loading" hidden>
-      <%= t 'components.create_invite_button.loading' %>
-    </span>
-    <span
-      class="CreateInviteButton-success"
-      data-create-invite-button-target="success"
-      hidden
-    >
-      <%= c 'icon', icon: 'f-check', style: :inline %>
-      <%= t 'components.create_invite_button.success' %>
-    </span>
-  <% end %>
-</div>
+<%= c('button',
+  style: :inline,
+  data: {
+    controller: 'create-invite-button',
+    action: 'click->create-invite-button#copyLink'
+  }
+) do %>
+  <span data-create-invite-button-target="label">
+    <%= t 'components.create_invite_button.label' %>
+  </span>
+  <span data-create-invite-button-target="loading" hidden>
+    <%= t 'components.create_invite_button.loading' %>
+  </span>
+  <span
+    class="CreateInviteButton-success"
+    data-create-invite-button-target="success"
+    hidden
+  >
+    <%= c 'icon', icon: 'f-check', style: :inline %>
+    <%= t 'components.create_invite_button.success' %>
+  </span>
+<% end %>

@@ -2,13 +2,14 @@
 
 module Stack
   class Stack < ApplicationComponent
-    def initialize(space: nil)
+    def initialize(space: nil, **)
       super
+
       @styles = [space] if space
     end
 
     def call
-      tag.div(content, class: class_names)
+      tag.div(content, **attrs)
     end
 
     private

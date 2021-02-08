@@ -4,14 +4,14 @@ import Rails from '@rails/ujs';
 const SUCCESS_NOTIFICATION_DURATION = 2000;
 
 export default class extends Controller {
-  static targets = ['button', 'label', 'loading', 'success'];
+  static targets = ['element', 'label', 'loading', 'success'];
 
   copyLink() {
-    if (this.buttonTarget.disabled) {
+    if (this.element.disabled) {
       return;
     }
 
-    this.buttonTarget.disabled = true;
+    this.element.disabled = true;
     this.labelTarget.hidden = true;
     this.loadingTarget.hidden = false;
 
@@ -29,7 +29,7 @@ export default class extends Controller {
     this.successTarget.hidden = false;
 
     setTimeout(() => {
-      this.buttonTarget.disabled = false;
+      this.element.disabled = false;
       this.labelTarget.hidden = false;
       this.successTarget.hidden = true;
     }, SUCCESS_NOTIFICATION_DURATION);
