@@ -4,7 +4,7 @@ class RepliesMailbox < ApplicationMailbox
   before_processing :ensure_sender_is_a_contributor
 
   def process
-    contributor.reply(EmailMessage.new(mail))
+    contributor.reply(PostmarkAdapter::Inbound.new(mail))
   end
 
   private

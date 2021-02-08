@@ -200,7 +200,7 @@ RSpec.describe Contributor, type: :model do
 
   describe '#reply' do
     subject { -> { contributor.reply(message_decorator) } }
-    describe 'given an EmailMessage' do
+    describe 'given a PostmarkAdapter::Inbound' do
       let(:mail) do
         mail = Mail.new do |m|
           m.from 'contributor@example.org'
@@ -210,7 +210,7 @@ RSpec.describe Contributor, type: :model do
         mail.text_part = 'This is a text body part'
         mail
       end
-      let(:message_decorator) { EmailMessage.new(mail) }
+      let(:message_decorator) { PostmarkAdapter::Inbound.new(mail) }
 
       it { should_not raise_error }
       it { should_not(change { Message.count }) }
