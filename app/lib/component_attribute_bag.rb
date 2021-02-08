@@ -15,6 +15,10 @@ class ComponentAttributeBag
     # rubocop:enable Rails/OutputSafety
   end
 
+  def to_hash
+    attrs
+  end
+
   def merge(**additional_attrs)
     new_attrs = attrs.dup
 

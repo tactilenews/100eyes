@@ -21,6 +21,13 @@ RSpec.describe ComponentAttributeBag do
     end
   end
 
+  describe 'to_hash' do
+    subject { bag.to_hash }
+    let(:attrs) { { type: :button } }
+
+    it { should eq({ type: :button }) }
+  end
+
   describe 'merge' do
     subject { bag.merge(additional_attrs).attrs }
     let(:attrs) { { type: :button } }
