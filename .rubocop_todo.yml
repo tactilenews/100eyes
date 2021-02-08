@@ -54,6 +54,7 @@ Style/ClassAndModuleChildren:
   Exclude:
     - 'app/controllers/telegram/webhook_controller.rb'
     - 'test/test_helper.rb'
+    - 'app/controllers/threema/webhook_controller.rb'
 
 # Offense count: 89
 Style/Documentation:
