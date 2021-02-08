@@ -6,18 +6,22 @@ class ApplicationComponent < ViewComponent::Base
   include SvgHelper
   include ColorHelper
 
-  def initialize(styles: [], style: nil, data: {}, **)
+  def initialize(styles: [], style: nil, attrs: {}, **)
     super
 
     @styles = styles
     @styles << style if style
 
-    @data = data
+    @attrs = attrs
   end
 
   private
 
   attr_reader :styles, :data
+
+  def attrs
+    ComponentAttributeBag.new(class: class_attr).merge(@attrs)
+  end
 
   def block_name
     self.class.name.demodulize
@@ -29,9 +33,5 @@ class ApplicationComponent < ViewComponent::Base
 
   def class_attr
     class_names.join(' ')
-  end
-
-  def data_string
-    data.map { |k, v| "data-#{k}=\"#{v}\"" }.join(' ')
   end
 end

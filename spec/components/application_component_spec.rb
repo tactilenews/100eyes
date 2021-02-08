@@ -3,10 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe ApplicationComponent, type: :component do
+  let(:params) { {} }
+
   describe '#class_names' do
     subject { described_class.new(**params).send(:class_names) }
 
-    let(:params) { {} }
     it { should eq(['ApplicationComponent']) }
 
     describe 'given a list of styles' do
@@ -15,32 +16,13 @@ RSpec.describe ApplicationComponent, type: :component do
     end
   end
 
-  describe '#data_string' do
-    subject { described_class.new(**params).send(:data_string) }
+  describe '#attrs' do
+    subject { described_class.new(**params).send(:attrs).attrs }
+    it { should eq({ class: 'ApplicationComponent' }) }
 
-    let(:params) { {} }
-    it { should eq('') }
-
-    describe 'given data attributes as a hash' do
-      let(:params) do
-        {
-          data: {
-            controller: 'my-controller',
-            target: 'my-target',
-            action: 'click->my-controller#myAction'
-          }
-        }
-      end
-
-      let(:expected) do
-        [
-          'data-controller="my-controller"',
-          'data-target="my-target"',
-          'data-action="click->my-controller#myAction"'
-        ]
-      end
-
-      it { should eq(expected.join(' ')) }
+    context 'with attributes given explicitly' do
+      let(:params) { { attrs: { id: 'my-component' } } }
+      it { should eq({ class: 'ApplicationComponent', id: 'my-component' }) }
     end
   end
 end
