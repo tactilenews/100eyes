@@ -23,6 +23,7 @@ RSpec.describe ThreemaMessage do
 
   describe '#text' do
     subject { threema_message.message.text }
+
     before do
       allow(Threema).to receive(:new).and_return(threema)
       allow(threema).to receive(:receive).and_return(threema_mock)
