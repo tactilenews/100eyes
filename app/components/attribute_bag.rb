@@ -34,6 +34,14 @@ class AttributeBag
     self.class.new(**default_attrs).merge(attrs)
   end
 
+  def slice(*slice_attrs)
+    self.class.new(**attrs.slice(*slice_attrs))
+  end
+
+  def except(*except_attrs)
+    self.class.new(**attrs.except(*except_attrs))
+  end
+
   private
 
   def tag_builder

@@ -72,4 +72,30 @@ RSpec.describe AttributeBag do
       it { should eq({ type: :submit, id: 'form-action' }) }
     end
   end
+
+  describe 'slice' do
+    subject { bag.slice(*slice_attrs).attrs }
+    let(:attrs) { { type: :button, id: 'form-action' } }
+    let(:slice_attrs) { [] }
+
+    it { should be_empty }
+
+    context 'with slice attributes' do
+      let(:slice_attrs) { [:type] }
+      it { should eq({ type: :button }) }
+    end
+  end
+
+  describe 'except' do
+    subject { bag.except(*except_attrs).attrs }
+    let(:attrs) { { type: :button, id: 'form-action' } }
+    let(:except_attrs) { [] }
+
+    it { should eq(attrs) }
+
+    context 'with except attributes' do
+      let(:except_attrs) { [:type] }
+      it { should eq({ id: 'form-action' }) }
+    end
+  end
 end
