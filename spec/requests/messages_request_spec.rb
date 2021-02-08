@@ -60,7 +60,7 @@ RSpec.describe 'Messages', type: :request do
       it 'shows error message' do
         subject.call
 
-        expect(flash[:error]).not_to be_empty
+        expect(flash[:error]).to eq(I18n.t('message.move_failed'))
       end
     end
 
@@ -68,9 +68,7 @@ RSpec.describe 'Messages', type: :request do
       let(:request_id) { other_request.id }
 
       it 'updates request id' do
-        subject.call
-
-        expect(message.reload.request.id).to eq(other_request.id)
+        expect { subject.call }.to (change { message.reload.request.id }).from(request.id).to(other_request.id)
       end
 
       it 'redirects back to previous request' do
