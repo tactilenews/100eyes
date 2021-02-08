@@ -16,6 +16,9 @@ ENV['TELEGRAM_BOT_API_KEY'] = 'TOKEN'
 ENV['TELEGRAM_BOT_USERNAME'] = 'TestingBot'
 ENV['HUNDRED_EYES_PROJECT_NAME'] = 'TestingProject'
 ENV['EMAIL_FROM_ADDRESS'] = '100eyes-test-account@example.org'
+ENV['THREEMARB_API_IDENTITY'] = '*100EYES'
+ENV['THREEMARB_API_SECRET'] = 'ThreemaSecret'
+ENV['THREEMARB_PRIVATE'] = 'ThreemaPrivateKey'
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
