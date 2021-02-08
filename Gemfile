@@ -96,4 +96,4 @@ gem 'clearance'
 gem 'rqrcode'
 
 # gem 'threema', path: "./threema"
-gem 'threema', git: "https://github.com/thorsteneckel/threema.git"
+gem 'threema', git: 'https://github.com/thorsteneckel/threema.git'
