@@ -1,3 +1,13 @@
+PATH
+  remote: threema
+  specs:
+    threema (0.1.0)
+      case_transform
+      dotenv
+      mime-types
+      multipart-post
+      rbnacl
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -83,6 +93,8 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
+    case_transform (0.2)
+      activesupport
     childprocess (3.0.0)
     chunky_png (1.4.0)
     clearance (2.3.0)
@@ -146,12 +158,16 @@ GEM
     marcel (0.3.3)
       mimemagic (~> 0.3.2)
     method_source (1.0.0)
+    mime-types (3.3.1)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2020.1104)
     mimemagic (0.3.5)
     mini_magick (4.11.0)
     mini_mime (1.0.2)
     mini_portile2 (2.5.0)
     minitest (5.14.3)
     msgpack (1.4.2)
+    multipart-post (2.1.1)
     nio4r (2.5.5)
     nokogiri (1.11.1)
       mini_portile2 (~> 2.5.0)
@@ -217,6 +233,8 @@ GEM
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    rbnacl (7.1.1)
+      ffi
     regexp_parser (2.0.3)
     rexml (3.2.4)
     rotp (5.0.0)
@@ -361,6 +379,7 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
   sucker_punch (~> 2.1)
   telegram-bot
+  threema!
   timecop
   tzinfo-data
   valid_email2 (~> 3.6)
