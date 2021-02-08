@@ -35,7 +35,7 @@
         <p><strong><%= t 'components.onboarding_instructions.telegram.intro' %></strong></p>
         <%= c 'button',
           label: t('components.onboarding_instructions.telegram_explained.link'),
-          link: onboarding_telegram_explained_path(jwt: jwt) 
+          link: onboarding_telegram_info_path(jwt: jwt)
         %>
       </div>
     <% end %>
