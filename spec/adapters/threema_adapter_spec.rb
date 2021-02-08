@@ -4,7 +4,6 @@ require 'rails_helper'
 
 RSpec.describe ThreemaAdapter do
   let(:adapter) { described_class.new(message: message) }
-  let(:threema_mock) { double('Threema', send: 'I was sent successfully!') }
   let(:threema) { instance_double(Threema) }
   let(:contributor) { create(:contributor, threema_id: 'V5EA564T') }
   let(:message) { build(:message, recipient: contributor) }
