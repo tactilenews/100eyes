@@ -22,7 +22,7 @@ CMD ["bundle", "exec", "rails", "server"]
 RUN wget -c https://download.libsodium.org/libsodium/releases/LATEST.tar.gz -O - | tar -xz
 RUN ./libsodium-stable/configure && make && make check && make install
 
-COPY ./threema ./threema
+# COPY ./threema ./threema
 COPY Gemfile Gemfile.lock ./
 RUN gem install bundler
 RUN bundle install
