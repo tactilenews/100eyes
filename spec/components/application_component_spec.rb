@@ -14,4 +14,33 @@ RSpec.describe ApplicationComponent, type: :component do
       it { should eq(['ApplicationComponent', 'ApplicationComponent--large', 'ApplicationComponent--brandColor']) }
     end
   end
+
+  describe '#data_string' do
+    subject { described_class.new(**params).send(:data_string) }
+
+    let(:params) { {} }
+    it { should eq('') }
+
+    describe 'given data attributes as a hash' do
+      let(:params) do
+        {
+          data: {
+            controller: 'my-controller',
+            target: 'my-target',
+            action: 'click->my-controller#myAction'
+          }
+        }
+      end
+
+      let(:expected) do
+        [
+          'data-controller="my-controller"',
+          'data-target="my-target"',
+          'data-action="click->my-controller#myAction"'
+        ]
+      end
+
+      it { should eq(expected.join(' ')) }
+    end
+  end
 end
