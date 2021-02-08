@@ -6,13 +6,14 @@ class ApplicationComponent < ViewComponent::Base
   include SvgHelper
   include ColorHelper
 
-  def initialize(styles: [], style: nil, attrs: {}, **)
+  def initialize(styles: [], style: nil, **attrs)
     super
 
     @styles = styles
     @styles << style if style
 
-    @attrs = attrs
+    params = self.class.instance_method(:initialize).parameters.map(&:last)
+    @attrs = attrs.except(*params)
   end
 
   private

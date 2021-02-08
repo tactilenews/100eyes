@@ -21,7 +21,7 @@ RSpec.describe ApplicationComponent, type: :component do
     it { should eq({ class: 'ApplicationComponent' }) }
 
     context 'with attributes given explicitly' do
-      let(:params) { { attrs: { id: 'my-component' } } }
+      let(:params) { { id: 'my-component' } }
       it { should eq({ class: 'ApplicationComponent', id: 'my-component' }) }
     end
   end
