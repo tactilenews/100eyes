@@ -8,7 +8,6 @@ Rails.application.routes.draw do
 
   get '/onboarding', to: 'onboarding#index'
   get '/onboarding/success', to: 'onboarding#success'
-  post '/onboarding/invite', to: 'onboarding#create_invite_url'
 
   namespace :onboarding do
     post '/email', to: 'email#create'
@@ -16,6 +15,8 @@ Rails.application.routes.draw do
     patch '/telegram', to: 'telegram#update'
     get '/telegram/info', to: 'telegram#info'
   end
+
+  post '/invites', to: 'invites#create_url'
 
   get '/settings', to: 'settings#index'
   post '/settings', to: 'settings#update'

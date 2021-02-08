@@ -16,7 +16,7 @@ export default class extends Controller {
     this.loadingTarget.hidden = false;
 
     Rails.ajax({
-      url: `/onboarding/invite`,
+      url: `/invites`,
       type: 'POST',
       success: ({ url }) => {
         navigator.clipboard.writeText(url).then(() => this.onCopy());
