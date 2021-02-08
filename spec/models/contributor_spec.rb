@@ -222,10 +222,10 @@ RSpec.describe Contributor, type: :model do
       end
     end
 
-    describe 'given a TelegramMessage' do
+    describe 'given a TelegramAdapter::Inbound' do
       let(:contributor) { create(:contributor, telegram_id: 4711) }
       let(:message_decorator) do
-        TelegramMessage.new(
+        TelegramAdapter::Inbound.new(
           'text' => 'The answer is 42.',
           'from' => {
             'id' => 4711,

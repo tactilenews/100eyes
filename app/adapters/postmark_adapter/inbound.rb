@@ -16,7 +16,6 @@ module PostmarkAdapter
       Mailer.with(mailer_params).contributor_not_found_email
     end
 
-
     def self.from(raw_data)
       new(Mail.new(raw_data.download))
     end
@@ -48,10 +47,10 @@ module PostmarkAdapter
         node.replace(Nokogiri::XML::Text.new("\n", node.document)) if node.name == 'br'
       end
       result = fragment
-        .scrub!(plain_text_links)
-        .scrub!(br2lines)
-        .scrub!(Loofah::Scrubbers::NewlineBlockElements.new)
-        .to_s
+               .scrub!(plain_text_links)
+               .scrub!(br2lines)
+               .scrub!(Loofah::Scrubbers::NewlineBlockElements.new)
+               .to_s
       ActionController::Base.helpers.strip_tags(result)
     end
 
