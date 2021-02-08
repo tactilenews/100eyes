@@ -7,7 +7,7 @@ RSpec.describe PostmarkAdapter::Outbound do
   let(:request) { create(:request) }
   before { allow(Setting).to receive(:application_host).and_return('example.org') }
 
-  describe 'message_stream' do
+  describe '#message_stream' do
     subject { adapter.message_stream }
     let(:message) { create(:message, broadcasted: false, request: request) }
 
@@ -17,6 +17,20 @@ RSpec.describe PostmarkAdapter::Outbound do
       let(:broadcasted) { true }
       let(:message) { create(:message, broadcasted: true, request: request) }
       it { should eq(Setting.postmark_broadcasts_stream) }
+    end
+  end
+
+  describe '#subject' do
+    subject { adapter.subject }
+
+    context 'given message is broadcasted as part of a request' do
+      let(:message) { create(:message, broadcasted: true) }
+      it { should eq('Die Redaktion hat eine neue Frage') }
+    end
+
+    context 'given message is a follow up chat message' do
+      let(:message) { create(:message, broadcasted: false) }
+      it { should eq('Re: Die Redaktion hat eine neue Frage') }
     end
   end
 

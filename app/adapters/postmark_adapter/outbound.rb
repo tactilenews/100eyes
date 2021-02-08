@@ -12,6 +12,12 @@ module PostmarkAdapter
       @message = message
     end
 
+    def subject
+      subject = I18n.t('mailer.new_message_email.subject')
+      subject = "Re: #{subject}" unless broadcasted?
+      subject
+    end
+
     def message_stream
       return Setting.postmark_broadcasts_stream if broadcasted?
 
@@ -23,7 +29,7 @@ module PostmarkAdapter
 
       Mailer
         .with(
-          mail: { to: recipient.email, message_stream: message_stream },
+          mail: { to: recipient.email, subject: subject, message_stream: message_stream },
           text: message.text,
           headers: headers
         )

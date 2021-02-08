@@ -41,7 +41,7 @@ RSpec.describe 'Requests', telegram_bot: :rails do
           'deliver_now',
           {
             params: {
-              mail: { to: 'contributor@example.org', message_stream: 'broadcasts' },
+              mail: { to: 'contributor@example.org', subject: 'Die Redaktion hat eine neue Frage', message_stream: 'broadcasts' },
               text: [
                 'How do you do?',
                 I18n.t('request.hints.confidential.text')
