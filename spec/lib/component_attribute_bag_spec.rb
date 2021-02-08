@@ -47,4 +47,18 @@ RSpec.describe ComponentAttributeBag do
       end
     end
   end
+
+  describe 'defaults' do
+    subject { bag.defaults(**default_attrs).attrs }
+    let(:default_attrs) { { type: :button } }
+
+    it { should eq({ type: :button }) }
+
+    context 'with attributes given explicitly' do
+      let(:attrs) { { type: :submit } }
+      let(:default_attrs) { { type: :button, id: 'form-action' } }
+
+      it { should eq({ type: :submit, id: 'form-action' }) }
+    end
+  end
 end
