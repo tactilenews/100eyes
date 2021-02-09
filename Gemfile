@@ -95,4 +95,4 @@ gem 'active_model_otp'
 gem 'clearance'
 gem 'rqrcode'
 
-gem 'threema', git: 'https://github.com/thorsteneckel/threema.git'
+gem 'threema', git: 'https://github.com/tactilenews/threema.git', branch: 'master'
