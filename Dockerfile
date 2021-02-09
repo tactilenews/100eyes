@@ -13,12 +13,12 @@ RUN apk --update add \
     libxslt-dev \
     libxml2-dev \
     imagemagick \
-    less
+    less \
+    libsodium
 
 RUN mkdir -p /app
 WORKDIR /app
 CMD ["bundle", "exec", "rails", "server"]
-
 
 COPY Gemfile Gemfile.lock ./
 RUN gem install bundler

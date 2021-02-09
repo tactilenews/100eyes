@@ -43,6 +43,9 @@
     BASIC_AUTH_LOGIN_USER: "{{ rails.login.user }}"
     BASIC_AUTH_LOGIN_PASSWORD: "{{ rails.login.password }}"
     CF_DNS_API_TOKEN: "{{ traefik.cloudflare_dns_api_token }}"
+    THREEMARB_API_IDENTITY: "{{ rails.threema.api_identity }}"
+    THREEMARB_API_SECRET: "{{ rails.threema.api_secret }}"
+    THREEMARB_PRIVATE: "{{ rails.threema.private_key }}"
   community.general.docker_compose:
     project_src: /home/ansible
     build: no

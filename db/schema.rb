@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_05_191150) do
+ActiveRecord::Schema.define(version: 2021_02_08_135552) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -61,9 +61,11 @@ ActiveRecord::Schema.define(version: 2020_12_05_191150) do
     t.string "city"
     t.string "phone"
     t.datetime "deactivated_at"
+    t.string "threema_id"
     t.index ["email"], name: "index_contributors_on_email", unique: true
     t.index ["telegram_chat_id"], name: "index_contributors_on_telegram_chat_id", unique: true
     t.index ["telegram_id"], name: "index_contributors_on_telegram_id", unique: true
+    t.index ["threema_id"], name: "index_contributors_on_threema_id", unique: true
   end
 
   create_table "json_web_tokens", force: :cascade do |t|

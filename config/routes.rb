@@ -20,6 +20,10 @@ Rails.application.routes.draw do
   get '/settings', to: 'settings#index'
   post '/settings', to: 'settings#update'
 
+  namespace :threema do
+    post '/webhook', to: 'webhook#message'
+  end
+
   telegram_webhook Telegram::WebhookController
 
   resources :requests, only: %i[index show new create] do
