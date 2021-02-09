@@ -8,7 +8,6 @@ Rails.application.routes.draw do
 
   get '/onboarding', to: 'onboarding#index'
   get '/onboarding/success', to: 'onboarding#success'
-  post '/onboarding/invite', to: 'onboarding#create_invite_url'
 
   namespace :onboarding do
     post '/email', to: 'email#create'
@@ -43,6 +42,8 @@ Rails.application.routes.draw do
       get 'count'
     end
   end
+
+  resources :invites, only: :create
 
   resources :messages do
     member do
