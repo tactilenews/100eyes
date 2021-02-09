@@ -62,16 +62,6 @@
   color: var(--color-red);
 }
 
-.ChatMessage-copied,
-.ChatMessage--copied .ChatMessage-copy {
-  display: none;
-}
-
-.ChatMessage--copied .ChatMessage-copied {
-  display: initial;
-  color: var(--color-green-dark);
-}
-
 .ChatMessage--highlighted {
   --background: var(--color-yellow-lightest);
   color: var(--color-yellow-darkest);
