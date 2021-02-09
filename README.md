@@ -13,7 +13,7 @@ Behind the `100eyes` project are Astrid Csuraji and Dr. Jakob Vicari, who are dr
 
 ## Installation
 
-## Development
+### Development
 For development purposes, you can set up `100eyes` using Docker. To perform the following steps, Docker (including Docker Compose) must be installed on your computer. You can find installation instructions for this in the [Docker Documentation](https://docs.docker.com/get-docker/). You will also need [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) to clone this repository.
 
 1. #### Clone the repository
@@ -62,6 +62,18 @@ For development purposes, you can set up `100eyes` using Docker. To perform the 
   ```bash
   $ docker-compose exec app bin/webpack-dev-server
   ```
+
+#### Messengers
+
+To test out webhooks for Postmark, Telegram or Threema you could use [ngrok](https://ngrok.com/) or a similar tool like [localtunnel](https://www.npmjs.com/package/localtunnel). We recommend `localtunnel` as it is free and open-source software.
+
+We're using [our own fork](https://github.com/tactilenews/threema) of the `threema` gem. If you want to make changes to the gem locally, clone the repository and configure bundler like this:
+```
+# in the folder where you cloned `threema` repository
+bundle config local.threema .
+```
+
+See this [blog post](https://rossta.net/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html) for more information.
 
 ### Production
 `100eyes` is a relatively simple Ruby on Rails (RoR) application and consists of the application server and a background worker to receive incoming Telegram messages.
