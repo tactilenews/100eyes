@@ -19,8 +19,6 @@ class Threema::WebhookController < ApplicationController
     head :ok if contributor.reply(threema_message)
   rescue ActiveRecord::RecordInvalid
     head :service_unavailable
-  rescue NameError
-    respond_to_unknown_content_and_prevent_retries(contributor)
   end
 
   private

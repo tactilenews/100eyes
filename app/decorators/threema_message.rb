@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ThreemaMessage
-  UNKNOWN_CONTENT_CLASS = [Threema::Receive::File, Threema::Receive::Image].freeze
+  UNKNOWN_CONTENT_CLASS = [Threema::Receive::File, Threema::Receive::Image, Threema::Receive::DeliveryReceipt].freeze
 
   attr_reader :sender, :unknown_content, :message
 
