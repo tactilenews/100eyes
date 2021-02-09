@@ -42,12 +42,13 @@
     <div class="ChatMessage-meta">
       <a href="#<%= id %>"><%= date_time(message.created_at) %></a>
 
-      <%= c 'copy_button',
-        label: I18n.t('components.chat_message.copy'),
-        success: I18n.t('components.chat_message.copied'),
-        style: :inline,
-        data: { chat_message_target: 'copyButton' }
-      %>
+      <% unless hide_actions %>
+        <%= c 'copy_button',
+          label: I18n.t('components.chat_message.copy'),
+          success: I18n.t('components.chat_message.copied'),
+          style: :inline,
+          data: { chat_message_target: 'copyButton' }
+        %>
 
         <%= c 'button', style: :inline, data: { action: 'click->chat-message#toggleHighlighted' } do %>
           <span class="ChatMessage-highlight">
