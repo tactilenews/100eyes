@@ -100,6 +100,9 @@ de:
     two_factor_auth_setup:
       header: Anmeldung in zwei Schritten einrichten
       subheader: Mit der Anmeldung in zwei Schritten sicherst du dein Konto zusätzlich ab. Scanne den folgenden QR-Code mit einer App wie z.B. Authy oder FreeOTP. Gib anschließend den 6-stelligen Bestätigungscode ein.
+      copy_secret_key:
+        label: Geheimen Schlüssel kopieren
+        success: Schlüssel kopieren
     move_message_form:
       submit: Verschieben
       cancel: Abbrechen

@@ -9,9 +9,16 @@
   margin: 1rem 0 1.5rem;
 }
 
-.TwoFactorAuthSetup svg {
-  display: block;
+.TwoFactorAuthSetup-device-setup {
   margin: 1.5rem auto;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.TwoFactorAuthSetup-device-setup > svg {
+  margin-bottom: 1rem;
 }
 
 .TwoFactorAuthSetup label {
@@ -23,6 +30,10 @@
   margin: 0.75rem 0 1.5rem;
 }
 
-.TwoFactorAuthSetup .Button {
+.TwoFactorAuthSetup > .Button {
   margin-bottom: 0.75rem;
+}
+
+.TwoFactorAuthSetup-copy-button--success {
+  color: var(--color-green-dark);
 }

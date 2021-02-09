@@ -3,8 +3,26 @@
     <%= t 'components.two_factor_auth_setup.header' %>
   <% end %>
   <p class="TwoFactorAuthSetup-explained"><%= t 'components.two_factor_auth_setup.subheader' %></p>
-  <%= qr_code_as_svg %>
-
+  <section class="TwoFactorAuthSetup-device-setup">
+    <%= qr_code_as_svg %>
+    <%= c 'button', style: :inline, data: {
+          controller: "two-factor-auth-setup",
+          "two-factor-auth-setup-target": 'button',
+          action: "click->two-factor-auth-setup#copyText",
+          "two-factor-auth-setup-secret-key-value": user.otp_secret_key } do %>
+      <span data-two-factor-auth-setup-target="label">
+        <%= t 'components.two_factor_auth_setup.copy_secret_key.label' %>
+      </span>
+      <span
+        class="TwoFactorAuthSetup-copy-button--success"
+        data-two-factor-auth-setup-target="success"
+        hidden
+      >
+        <%= c 'icon', icon: 'f-check', style: :inline %>
+        <%= t 'components.two_factor_auth_setup.copy_secret_key.success' %>
+      </span>
+    <% end %>
+  </section>
   <label for='user[otp_code]'><%= t 'two_factor_authentication.otp_code.label' %></label>
   <small><%= t 'two_factor_authentication.otp_code.help_text' %></small>
   <%= c 'input', id: 'user[otp_code]' %>
