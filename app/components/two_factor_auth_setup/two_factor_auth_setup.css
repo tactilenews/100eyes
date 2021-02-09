@@ -42,7 +42,3 @@
 .TwoFactorAuthSetup > .Button {
   margin-bottom: 0.75rem;
 }
-
-.TwoFactorAuthSetup-copy-button--success {
-  color: var(--color-green-dark);
-}
