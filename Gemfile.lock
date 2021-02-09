@@ -1,5 +1,5 @@
 GIT
-  remote: https://github.com/thorsteneckel/threema.git
+  remote: https://github.com/tactilenews/threema.git
   revision: 0819d4099b751a8d0bbda6bb7e14e2ee54b73d85
   branch: master
   specs:
