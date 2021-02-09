@@ -2,27 +2,17 @@
 
 module Button
   class Button < ApplicationComponent
-    def initialize(label: nil, type: nil, link: nil, stimulus_controller: nil, stimulus_target: nil, **)
+    def initialize(label: nil, link: nil, **)
       super
 
       @styles = [:primary] if @styles.empty?
 
       @label = label
-      @type = type
       @link = link
-      @stimulus_controller = stimulus_controller
-      @stimulus_target = stimulus_target
     end
 
     def call
-      content_tag(
-        tag,
-        content,
-        class: class_names,
-        type: type,
-        href: link,
-        "data-#{stimulus_controller}-target": stimulus_target
-      )
+      content_tag(tag, content, href: link, **attrs)
     end
 
     private

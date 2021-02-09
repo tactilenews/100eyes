@@ -6,16 +6,23 @@ class ApplicationComponent < ViewComponent::Base
   include SvgHelper
   include ColorHelper
 
-  def initialize(styles: [], style: nil, **)
+  def initialize(styles: [], style: nil, **attrs)
     super
 
     @styles = styles
     @styles << style if style
+
+    params = self.class.instance_method(:initialize).parameters.map(&:last)
+    @attrs = attrs.except(*params)
   end
 
   private
 
-  attr_reader :styles
+  attr_reader :styles, :data
+
+  def attrs
+    AttributeBag.new(class: class_attr).merge(@attrs)
+  end
 
   def block_name
     self.class.name.demodulize

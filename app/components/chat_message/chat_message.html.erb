@@ -12,12 +12,14 @@
     <div class="ChatMessage-text" data-chat-message-target="text">
       <%= c 'plaintext_message', message: message.text %>
 
-      <div
-        class="ChatMessage-toggleExpanded"
-        data-chat-messsage-target="toggleExpanded"
-        data-action="click->chat-message#toggleExpanded"
-      >
-        <%= c 'button', styles: [:inline] do %>
+      <div class="ChatMessage-toggleExpanded">
+        <%= c('button',
+          styles: [:inline],
+          data: {
+            action: 'click->chat-message#toggleExpanded',
+            chat_message_target: 'toggleExpanded',
+          }
+        ) do %>
           <span class="ChatMessage-expand">
             <%= I18n.t('components.chat_message.expand') %>
             <%= c 'icon', icon: 'small-down', styles: [:inline] %>
@@ -41,33 +43,29 @@
     <div class="ChatMessage-meta">
       <a href="#<%= id %>"><%= date_time(message.created_at) %></a>
 
-      <span data-action="click->chat-message#copy">
-        <%= c 'button', style: :inline do %>
-          <span class="ChatMessage-copy">
-            <%= c 'icon', icon: 'ungroup', style: :inline %>
-            <%= I18n.t('components.chat_message.copy') %>
-          </span>
+      <%= c 'button', style: :inline, data: { action: 'click->chat-message#copy' } do %>
+        <span class="ChatMessage-copy">
+          <%= c 'icon', icon: 'ungroup', style: :inline %>
+          <%= I18n.t('components.chat_message.copy') %>
+        </span>
 
-          <span class="ChatMessage-copied">
-            <%= c 'icon', icon: 'f-check', style: :inline %>
-            <%= I18n.t('components.chat_message.copied') %>
-          </span>
-        <% end %>
-      </span>
+        <span class="ChatMessage-copied">
+          <%= c 'icon', icon: 'f-check', style: :inline %>
+          <%= I18n.t('components.chat_message.copied') %>
+        </span>
+      <% end %>
 
-      <span data-action="click->chat-message#toggleHighlighted">
-        <%= c 'button', style: :inline do %>
-          <span class="ChatMessage-highlight">
-            <%= c 'icon', icon: 'shape-star', style: :inline %>
-            <%= I18n.t('components.chat_message.highlight') %>
-          </span>
+      <%= c 'button', style: :inline, data: { action: 'click->chat-message#toggleHighlighted' } do %>
+        <span class="ChatMessage-highlight">
+          <%= c 'icon', icon: 'shape-star', style: :inline %>
+          <%= I18n.t('components.chat_message.highlight') %>
+        </span>
 
-          <span class="ChatMessage-unhighlight">
-            <%= c 'icon', icon: 'shape-star', style: :inline %>
-            <%= I18n.t('components.chat_message.unhighlight') %>
-          </span>
-        <% end %>
-      </span>
+        <span class="ChatMessage-unhighlight">
+          <%= c 'icon', icon: 'shape-star', style: :inline %>
+          <%= I18n.t('components.chat_message.unhighlight') %>
+        </span>
+      <% end %>
     </div>
 
     <% if warnings.any? %>

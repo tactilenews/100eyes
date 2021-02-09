@@ -18,8 +18,7 @@
       <%= c 'field', object: @request, id: :text do |field| %>
         <%= c 'textarea', field.input_defaults.merge(
           required: true,
-          stimulus_controller: 'request-form',
-          stimulus_target: 'message'
+          data: { request_form_target: 'message' }
         ) %>
       <% end %>
 
