@@ -12,11 +12,9 @@ class Threema::WebhookController < ApplicationController
 
     return unless contributor
 
-    if contributor.reply(threema_message)
-      head :ok
-    else
-      head :service_unavailable
-    end
+    head :ok if contributor.reply(threema_message)
+  rescue ActiveRecord::RecordInvalid
+    head :service_unavailable
   end
 
   private
