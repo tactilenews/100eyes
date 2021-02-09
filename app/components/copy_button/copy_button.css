@@ -1,0 +1,11 @@
+.CopyButton-success {
+  color: var(--color-green-dark);
+}
+
+.CopyButton:not(.CopyButton--success) .CopyButton-success {
+  display: none;
+}
+
+.CopyButton--success .CopyButton-label {
+  display: none;
+}
