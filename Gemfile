@@ -95,4 +95,4 @@ gem 'active_model_otp'
 gem 'clearance'
 gem 'rqrcode'
 
-gem 'threema', git: 'https://github.com/tactilenews/threema.git', branch: 'master'
+gem 'threema', git: 'https://github.com/tactilenews/threema.git', branch: 'update_bundler_remove_rbnacl_libsodium'
