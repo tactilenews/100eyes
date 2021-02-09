@@ -4,7 +4,7 @@ import Rails from '@rails/ujs';
 const SUCCESS_NOTIFICATION_DURATION = 2000;
 
 export default class extends Controller {
-  static targets = ['element', 'label', 'loading', 'success'];
+  static targets = ['label', 'loading', 'success'];
 
   copyLink() {
     if (this.element.disabled) {
