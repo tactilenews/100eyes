@@ -19,7 +19,7 @@ RSpec.describe 'Messages', type: :request do
       describe 'given highlighted=true' do
         let(:params) { { highlighted: true } }
         it do
-          should change { message.reload.highlighted? }.from(false).to(true)
+          should(change { message.reload.highlighted? }).from(false).to(true)
         end
       end
 
@@ -39,7 +39,54 @@ RSpec.describe 'Messages', type: :request do
 
       describe 'given highlighted=false' do
         let(:params) { { highlighted: false } }
-        it { should change { message.reload.highlighted? }.from(true).to(false) }
+        it { should(change { message.reload.highlighted? }).from(true).to(false) }
+      end
+    end
+  end
+
+  describe 'PATCH /move' do
+    let(:user) { create(:user) }
+    let(:request) { create(:request) }
+
+    subject { -> { patch(move_message_url(message, as: user), params: params) } }
+
+    let(:message) { create(:message, request: request) }
+    let(:other_request) { create(:request) }
+    let(:params) { { message: { request_id: request_id } } }
+
+    describe 'given an invalid request_id' do
+      let(:request_id) { 'NOT AN ID' }
+
+      it { should_not(change { message.request.id }) }
+
+      it 'redirects back and shows error message' do
+        subject.call
+
+        expect(response).to redirect_to move_message_url
+        expect(flash[:error]).not_to be_empty
+      end
+    end
+
+    describe 'given a valid request_id' do
+      let(:request_id) { other_request.id }
+
+      it 'updates request id' do
+        subject.call
+
+        expect(message.reload.request.id).to eq(other_request.id)
+      end
+
+      it 'redirects back to previous request' do
+        subject.call
+
+        url = request_url(
+          request,
+          moved_message: message.id,
+          anchor: "contributor-#{message.contributor.id}"
+        )
+
+        expect(flash[:success]).not_to be_empty
+        expect(response).to redirect_to url
       end
     end
   end

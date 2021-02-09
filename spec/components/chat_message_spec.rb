@@ -10,12 +10,12 @@ RSpec.describe ChatMessage::ChatMessage, type: :component do
     subject { component.css('.ChatMessage')[0][:class] }
 
     describe 'given a non-highlighted message' do
-      let(:message) { build(:message, highlighted: false) }
+      let(:message) { create(:message, highlighted: false) }
       it { should_not include('ChatMessage--highlighted') }
     end
 
     describe 'given a highlighted message' do
-      let(:message) { build(:message, highlighted: true) }
+      let(:message) { create(:message, highlighted: true) }
       it { should include('ChatMessage--highlighted') }
     end
   end
@@ -24,7 +24,7 @@ RSpec.describe ChatMessage::ChatMessage, type: :component do
     subject { component.css('.ChatMessage-text') }
 
     describe 'given HTML text' do
-      let(:message) { build(:message, text: '<h1>Hello!</h1>') }
+      let(:message) { create(:message, text: '<h1>Hello!</h1>') }
       it { should have_text('<h1>Hello!</h1>') }
     end
   end

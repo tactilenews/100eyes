@@ -48,6 +48,8 @@ Rails.application.routes.draw do
   resources :messages do
     member do
       post 'highlight', format: /json/
+      get 'move', to: 'messages#show_move_form'
+      patch 'move', to: 'messages#move'
     end
   end
 

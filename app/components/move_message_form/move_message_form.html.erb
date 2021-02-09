@@ -1,0 +1,23 @@
+<%= form_with(
+  model: message,
+  url: move_message_path(message),
+  local: true,
+) do %>
+  <%= c 'stack', space: :large do %>
+    <%= c 'choices',
+      choices: choices,
+      id: 'message[request_id]',
+      value: message.request.id
+    %>
+
+    <%= c 'flex', style: :reverse do %>
+      <%= c 'button', label: t('components.move_message_form.submit') %>
+
+      <%= c 'button',
+        style: :secondary,
+        label: t('components.move_message_form.cancel'),
+        link: cancel_link
+      %>
+    <% end %>
+  <% end %>
+<% end %>

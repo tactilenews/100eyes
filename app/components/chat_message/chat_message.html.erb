@@ -67,6 +67,11 @@
             <%= I18n.t('components.chat_message.unhighlight') %>
           </span>
         <% end %>
+
+        <%= c 'button', style: :inline, link: move_link do %>
+          <%= c 'icon', icon: 'direction-right', style: :inline %>
+          <%= I18n.t('components.chat_message.move') %>
+        <% end %>
       <% end %>
     </div>
 
