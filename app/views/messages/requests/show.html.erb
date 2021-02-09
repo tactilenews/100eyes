@@ -1,6 +1,7 @@
 <%= c 'box', style: :large do %>
   <%= c 'wrapper', style: :xnarrow do %>
     <%= c 'stack' do %>
+
       <%= c 'stack', space: :small do %>
         <%= c 'heading', tag: :h1 do %>
           <%= t('message.move.heading') %>
@@ -22,6 +23,7 @@
       %>
 
       <%= c 'move_message_form', message: @message %>
+
     <% end %>
   <% end %>
 <% end %>

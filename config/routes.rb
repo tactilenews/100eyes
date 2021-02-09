@@ -45,11 +45,12 @@ Rails.application.routes.draw do
 
   resources :invites, only: :create
 
-  resources :messages do
+  resources :messages, only: %() do
     member do
-      post 'highlight', format: /json/
-      get 'move', to: 'messages#show_move_form'
-      patch 'move', to: 'messages#move'
+      scope module: :messages, as: :message do
+        resource :highlight, only: :update, format: /json/
+        resource :request, only: %i[show update]
+      end
     end
   end
 

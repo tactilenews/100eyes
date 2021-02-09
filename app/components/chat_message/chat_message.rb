@@ -39,7 +39,7 @@ module ChatMessage
     end
 
     def move_link
-      move_message_path(message)
+      message_request_path(message)
     end
   end
 end

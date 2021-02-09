@@ -1,13 +1,13 @@
 <%= form_with(
   model: message,
-  url: move_message_path(message),
+  url: message_request_path(message),
   local: true,
 ) do %>
   <%= c 'stack', space: :large do %>
     <%= c 'choices',
       choices: choices,
       id: 'message[request_id]',
-      value: message.request.id
+      value: request.id
     %>
 
     <%= c 'flex', styles: [:space_between, :reverse] do %>

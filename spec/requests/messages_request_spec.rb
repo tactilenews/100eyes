@@ -3,13 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe 'Messages', type: :request do
-  describe 'POST /messages/:id/highlight' do
+  describe 'PATCH /messages/:id/highlight' do
     let(:params) { {} }
     let(:user) { create(:user) }
 
     subject do
       lambda do
-        post(highlight_message_url(message, format: :json, as: user), params: params)
+        patch(message_highlight_url(message, format: :json, as: user), params: params)
       end
     end
 
@@ -32,7 +32,7 @@ RSpec.describe 'Messages', type: :request do
 
       describe 'given highlighted=true' do
         let(:params) { { highlighted: true } }
-        it { should_not change { message.reload.highlighted? } }
+        it { should_not(change { message.reload.highlighted? }) }
       end
 
       describe 'given highlighted=false' do
@@ -42,11 +42,11 @@ RSpec.describe 'Messages', type: :request do
     end
   end
 
-  describe 'PATCH /move' do
+  describe 'POST /request' do
     let(:user) { create(:user) }
     let(:request) { create(:request) }
 
-    subject { -> { patch(move_message_url(message, as: user), params: params) } }
+    subject { -> { patch(message_request_url(message, as: user), params: params) } }
 
     let(:message) { create(:message, request: request) }
     let(:other_request) { create(:request) }
@@ -57,10 +57,9 @@ RSpec.describe 'Messages', type: :request do
 
       it { should_not(change { message.request.id }) }
 
-      it 'redirects back and shows error message' do
+      it 'shows error message' do
         subject.call
 
-        expect(response).to redirect_to move_message_url
         expect(flash[:error]).not_to be_empty
       end
     end
