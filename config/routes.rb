@@ -16,8 +16,6 @@ Rails.application.routes.draw do
     get '/telegram/info', to: 'telegram#info'
   end
 
-  post '/invites', to: 'invites#create_url'
-
   get '/settings', to: 'settings#index'
   post '/settings', to: 'settings#update'
 
@@ -40,6 +38,8 @@ Rails.application.routes.draw do
       get 'count'
     end
   end
+
+  resources :invites, only: :create
 
   resources :messages do
     member do
