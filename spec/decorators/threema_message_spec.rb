@@ -24,6 +24,7 @@ RSpec.describe ThreemaMessage do
   before do
     allow(Threema).to receive(:new).and_return(threema)
     allow(threema).to receive(:receive).with({ payload: message }).and_return(threema_mock)
+    allow(threema_mock).to receive(:is_a?).and_return(true)
   end
 
   describe '#text' do
@@ -39,6 +40,22 @@ RSpec.describe ThreemaMessage do
     describe 'saving the message' do
       subject { threema_message.message.raw_data }
       it { should be_attached }
+    end
+  end
+
+  describe 'DeliveryReceipt' do
+    subject { threema_message.delivery_receipt }
+
+    before do
+      allow(Threema).to receive(:new).and_return(threema)
+      allow(threema).to receive(:receive).with({ payload: message }).and_return(threema_mock)
+      allow(threema_mock).to receive(:is_a?).and_return(true)
+    end
+
+    context 'Threema::Receive::DeliveryReceipt' do
+      let(:threema_mock) { instance_double(Threema::Receive::DeliveryReceipt, content: 'x\00x\\0') }
+
+      it { is_expected.to be(true) }
     end
   end
 
@@ -59,12 +76,6 @@ RSpec.describe ThreemaMessage do
 
     context 'Threema::Receive::Image' do
       let(:threema_mock) { instance_double(Threema::Receive::Image, content: 'x\00x\\0') }
-
-      it { is_expected.to be(true) }
-    end
-
-    context 'Threema::Receive::DeliveryReceipt' do
-      let(:threema_mock) { instance_double(Threema::Receive::DeliveryReceipt, content: 'x\00x\\0') }
 
       it { is_expected.to be(true) }
     end
