@@ -7,8 +7,10 @@ class Threema::WebhookController < ApplicationController
 
   def message
     threema_message = ThreemaMessage.new(threema_webhook_params)
-    contributor = threema_message.sender
 
+    return head :ok if threema_message.delivery_receipt
+
+    contributor = threema_message.sender
     # Open question: How would this look?
     # Would we have this use case? Should we respond with
     # a message and 200 to avoid retries?

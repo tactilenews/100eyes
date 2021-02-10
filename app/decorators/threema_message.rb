@@ -1,15 +1,16 @@
 # frozen_string_literal: true
 
 class ThreemaMessage
-  UNKNOWN_CONTENT_CLASS = [Threema::Receive::File, Threema::Receive::Image, Threema::Receive::DeliveryReceipt].freeze
+  UNKNOWN_CONTENT_CLASS = [Threema::Receive::File, Threema::Receive::Image].freeze
 
-  attr_reader :sender, :unknown_content, :message
+  attr_reader :sender, :unknown_content, :message, :delivery_receipt
 
   def initialize(threema_message)
     decrypted_message = Threema.new.receive(payload: threema_message)
     @sender = Contributor.find_by(threema_id: threema_message[:from])
     return unless @sender
 
+    @delivery_receipt = decrypted_message.is_a? Threema::Receive::DeliveryReceipt
     @unknown_content = initialize_unknown_content(decrypted_message)
     @message = initialize_message(decrypted_message)
   end

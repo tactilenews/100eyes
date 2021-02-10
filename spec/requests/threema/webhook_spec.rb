@@ -43,6 +43,21 @@ RSpec.describe Threema::WebhookController do
         expect { subject }.to change(Message, :count).from(0).to(1)
       end
 
+      describe 'DeliveryReceipt' do
+        let(:threema_mock) { instance_double(Threema::Receive::DeliveryReceipt, content: 'x\00x\\0') }
+
+        before do
+          allow(Threema).to receive(:new).and_return(threema)
+          allow(threema).to receive(:receive).and_return(threema_mock)
+          allow(threema_mock).to receive(:is_a?).and_return(true)
+        end
+
+        it 'returns 200 to avoid retries' do
+          subject
+          expect(response).to have_http_status(200)
+        end
+      end
+
       describe 'Unknown content' do
         let(:threema_mock) { instance_double(Threema::Receive::Image, content: 'x\00x\\0') }
 
