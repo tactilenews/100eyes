@@ -37,6 +37,8 @@ RSpec.describe Threema::WebhookController do
       let!(:contributor) { create(:contributor, threema_id: 'V5EA564T') }
       let!(:request) { create(:request) }
 
+      it { is_expected.to eq(200) }
+
       it 'creates a message' do
         expect { subject }.to change(Message, :count).from(0).to(1)
       end

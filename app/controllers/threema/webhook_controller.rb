@@ -9,6 +9,9 @@ class Threema::WebhookController < ApplicationController
     threema_message = ThreemaMessage.new(threema_webhook_params)
     contributor = threema_message.sender
 
+    # Open question: How would this look?
+    # Would we have this use case? Should we respond with
+    # a message and 200 to avoid retries?
     return unless contributor
 
     if threema_message.unknown_content

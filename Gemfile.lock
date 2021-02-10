@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/tactilenews/threema.git
-  revision: e30de588b5f6e9c638502d72eaa2705b489ddfc5
+  revision: ecdc7b13f5e8c3c2669d5fcfbbfeddbab3c57a3b
   branch: master
   specs:
     threema (0.1.0)
