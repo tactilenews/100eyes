@@ -16,7 +16,7 @@ RSpec.describe Threema::WebhookController do
     }
   end
   let(:message) { build(:message) }
-  let(:threema_mock) { double('Threema', content: 'Hello World!') }
+  let(:threema_mock) { instance_double(Threema::Receive::Text, content: 'Hello World!') }
   let(:threema) { instance_double(Threema) }
 
   before do
@@ -41,6 +41,31 @@ RSpec.describe Threema::WebhookController do
 
       it 'creates a message' do
         expect { subject }.to change(Message, :count).from(0).to(1)
+      end
+
+      describe 'Unknown content' do
+        let(:threema_mock) { instance_double(Threema::Receive::Image, content: 'x\00x\\0') }
+
+        before do
+          allow(Threema).to receive(:new).and_return(threema)
+          allow(threema).to receive(:receive).and_return(threema_mock)
+          allow(threema_mock).to receive(:is_a?).and_return(true)
+        end
+
+        it 'returns 200 to avoid retries' do
+          allow(threema).to receive(:send).with(type: :text, threema_id: contributor.threema_id,
+                                                text: Setting.telegram_unknown_content_message)
+
+          subject
+          expect(response).to have_http_status(200)
+        end
+
+        it 'sends a automated message response' do
+          expect(threema).to receive(:send).with(type: :text, threema_id: contributor.threema_id,
+                                                 text: Setting.telegram_unknown_content_message)
+
+          subject
+        end
       end
     end
   end
