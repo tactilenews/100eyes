@@ -108,11 +108,14 @@ de:
     unsubscribe:
       text: "Sofern Sie keine E-Mails mehr von uns erhalten möchten, können Sie sie unter diesem Link abbestellen: {{{ pm:unsubscribe }}}"
       html: "Sofern Sie keine E-Mails mehr von uns erhalten möchten, können Sie sie unter <a href=\"{{{ pm:unsubscribe }}}\">diesem Link abbestellen</a>."
-    new_message_email:
-      subject: Die Redaktion hat eine neue Frage
-    contributor_not_found_email:
-      subject: Wir können Ihre E-Mail Adresse nicht zuordnen
-      text: Vielen Dank für Ihre Nachricht. Leider konnten wir Ihre E-Mail-Adresse nicht zuordnen. Das könnte daran liegen, dass wir einen Fehler gemacht haben oder Sie uns von einer anderen E-Mail-Adresse schreiben. Melden Sie sich gern unter support@tactile.news, dann lösen wir das Problem schnell. Vielen Dank.
+  
+  adapter:
+    postmark:
+      contributor_not_found_email:
+        subject: Wir können Ihre E-Mail Adresse nicht zuordnen
+        text: Vielen Dank für Ihre Nachricht. Leider konnten wir Ihre E-Mail-Adresse nicht zuordnen. Das könnte daran liegen, dass wir einen Fehler gemacht haben oder Sie uns von einer anderen E-Mail-Adresse schreiben. Melden Sie sich gern unter support@tactile.news, dann lösen wir das Problem schnell. Vielen Dank.
+      new_message_email:
+        subject: Die Redaktion hat eine neue Frage
 
   save: Speichern
   discard: Änderungen verwerfen

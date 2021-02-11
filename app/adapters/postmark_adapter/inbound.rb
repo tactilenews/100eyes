@@ -6,9 +6,9 @@ module PostmarkAdapter
 
     def self.bounce!(mail)
       mailer_params = {
-        text: I18n.t('mailer.contributor_not_found_email.text'),
+        text: I18n.t('adapter.postmark.contributor_not_found_email.text'),
         mail: {
-          subject: I18n.t('mailer.contributor_not_found_email.subject'),
+          subject: I18n.t('adapter.postmark.contributor_not_found_email.subject'),
           message_stream: Setting.postmark_transactional_stream,
           to: mail.from.first
         }

@@ -13,7 +13,7 @@ module PostmarkAdapter
     end
 
     def subject
-      subject = I18n.t('mailer.new_message_email.subject')
+      subject = I18n.t('adapter.postmark.new_message_email.subject')
       subject = "Re: #{subject}" unless broadcasted?
       subject
     end
