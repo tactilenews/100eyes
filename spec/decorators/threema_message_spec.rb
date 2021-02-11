@@ -18,22 +18,66 @@ RSpec.describe ThreemaMessage do
                                        'nickname' => 'matt.rider'
                                      })
   end
-  let(:threema_mock) { double('Threema', content: 'Hello World!') }
+  let(:threema_mock) { instance_double(Threema::Receive::Text, content: 'Hello World!') }
   let(:threema) { instance_double(Threema) }
 
-  describe '#text' do
-    subject { threema_message.message.text }
+  before do
+    allow(Threema).to receive(:new).and_return(threema)
+    allow(threema).to receive(:receive).with({ payload: message }).and_return(threema_mock)
+    allow(threema_mock).to receive(:instance_of?).and_return(true)
+  end
 
+  describe '#text' do
     before do
       allow(Threema).to receive(:new).and_return(threema)
-      allow(threema).to receive(:receive).and_return(threema_mock)
+      allow(threema).to receive(:receive).with({ payload: message }).and_return(threema_mock)
     end
+
+    subject { threema_message.message.text }
 
     it { is_expected.to eq('Hello World!') }
 
     describe 'saving the message' do
       subject { threema_message.message.raw_data }
       it { should be_attached }
+    end
+  end
+
+  describe 'DeliveryReceipt' do
+    subject { threema_message.delivery_receipt }
+
+    before do
+      allow(Threema).to receive(:new).and_return(threema)
+      allow(threema).to receive(:receive).with({ payload: message }).and_return(threema_mock)
+      allow(threema_mock).to receive(:instance_of?).and_return(true)
+    end
+
+    context 'Threema::Receive::DeliveryReceipt' do
+      let(:threema_mock) { instance_double(Threema::Receive::DeliveryReceipt, content: 'x\00x\\0') }
+
+      it { is_expected.to be(true) }
+    end
+  end
+
+  describe 'Unknown content' do
+    subject { threema_message.unknown_content }
+
+    before do
+      allow(Threema).to receive(:new).and_return(threema)
+      allow(threema).to receive(:receive).with({ payload: message }).and_return(threema_mock)
+      allow(threema_mock).to receive(:instance_of?).and_return(true)
+    end
+
+    context 'Threema::Receive::File' do
+      let(:threema_mock) { instance_double(Threema::Receive::File, name: 'my voice', content: 'x\00x\\0', mime_type: 'audio/acc') }
+
+      it { is_expected.to be(true) }
+    end
+
+    context 'Threema::Receive::Image' do
+      let(:threema_mock) { instance_double(Threema::Receive::Image, content: 'x\00x\\0') }
+
+      it { is_expected.to be(true) }
     end
   end
 end

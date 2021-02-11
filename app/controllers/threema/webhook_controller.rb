@@ -3,21 +3,29 @@
 require 'openssl'
 
 class Threema::WebhookController < ApplicationController
-  protect_from_forgery with: :null_session
-  skip_before_action :require_login
+  skip_before_action :require_login, :verify_authenticity_token
 
   def message
     threema_message = ThreemaMessage.new(threema_webhook_params)
+    return head :ok if threema_message.delivery_receipt
+
     contributor = threema_message.sender
+    return head :ok unless contributor
 
-    return unless contributor
+    respond_to_unknown_content(contributor) if threema_message.unknown_content
 
-    contributor.reply(threema_message)
+    head :ok if contributor.reply(threema_message)
+  rescue ActiveRecord::RecordInvalid
+    head :service_unavailable
   end
 
   private
 
   def threema_webhook_params
     params.permit(:from, :to, :messageId, :date, :nonce, :box, :mac, :nickname)
+  end
+
+  def respond_to_unknown_content(contributor)
+    ThreemaAdapter.new(message: Message.new(text: Setting.threema_unknown_content_message, recipient: contributor)).send!
   end
 end

@@ -71,6 +71,16 @@
       <% end %>
     <% end %>
 
+    <%= c 'stack' do %>
+      <%= c 'heading', tag: :h2 do %>
+        <%= t 'setting.form.groups.threema' %>
+      <% end %>
+
+      <%= c 'field', object: setting, value: Setting.threema_unknown_content_message, id: :threema_unknown_content_message do |field| %>
+        <%= c 'textarea', field.input_defaults %>
+      <% end %>
+    <% end %>
+
     <div class="SettingForm-actions">
       <%= c 'button', type: 'submit', label: I18n.t('save') %>
     </div>

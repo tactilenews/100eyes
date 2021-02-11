@@ -128,6 +128,7 @@ de:
       groups:
         project_settings: Allgemein
         telegram: Telegram
+        threema: Threema
         onboarding: Onboarding
         onboarding_success: Nachricht nach erfolgreichem Onboarding
         onboarding_unauthorized: Meldung nach erfolglosem Onboarding
@@ -160,7 +161,9 @@ de:
       telegram_contributor_not_found_message:
         label: Fehler-Nachricht bei unbekanntem Telegram-Absender
         help: Wenn eine unbekannte Person via Telegram auf den Telegram-Bot stößt, erhält sie diese Nachricht.
-
+      threema_unknown_content_message:
+        label: Fehler-Nachricht bei unbekannten Inhalten
+        help: Wenn ein Mitglied via Threema Nachrichten versendet, die von 100eyes noch nicht unterstützt werden, erhält es diese Nachricht.
   settings:
     header: Einstellungen
     success: Einstellungen erfolgreich gespeichert!
