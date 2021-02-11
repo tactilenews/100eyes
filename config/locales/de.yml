@@ -11,6 +11,7 @@ de:
       copied: Nachricht kopiert!
       highlight: markieren
       unhighlight: Markierung entfernen
+      move: verschieben
       contains_unknown_content: Enthält nicht unterstützte Inhalte
       blocked_by_contributor: wurde von diesem Mitglied blockiert
     chat_messages_group:
@@ -99,6 +100,9 @@ de:
     two_factor_auth_setup:
       header: Anmeldung in zwei Schritten einrichten
       subheader: Mit der Anmeldung in zwei Schritten sicherst du dein Konto zusätzlich ab. Scanne den folgenden QR-Code mit einer App wie z.B. Authy oder FreeOTP. Gib anschließend den 6-stelligen Bestätigungscode ein.
+    move_message_form:
+      submit: Verschieben
+      cancel: Abbrechen
 
   mailer:
     unsubscribe:
@@ -288,6 +292,13 @@ de:
       help_text: Öffnen Sie die App zur Zwei-Faktor-Authentifizierung auf Ihrem Gerät, um Ihren Authentifizierungscode anzuzeigen und Ihre Identität zu überprüfen.
       submit: Einmaliges Token einreichen
       failure_message: Einmaliges Token ungültig
+
+  message:
+    moved: Nachricht erfolgreich verschoben
+    move_failed: Die Nachricht konnte nicht verschoben werden
+    move:
+      heading: Nachricht verschieben
+      text: Gehört diese Nachricht von <strong>%{name}</strong> nicht zur Frage <strong>„%{title}”</strong>? Dann kannst du sie hier zu einer anderen Frage verschieben.
 
   activerecord:
     errors:

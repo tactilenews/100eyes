@@ -3,13 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe 'Messages', type: :request do
-  describe 'POST /messages/:id/highlight' do
+  describe 'PATCH /messages/:id/highlight' do
     let(:params) { {} }
     let(:user) { create(:user) }
 
     subject do
       lambda do
-        post(highlight_message_url(message, format: :json, as: user), params: params)
+        patch(message_highlight_url(message, format: :json, as: user), params: params)
       end
     end
 
@@ -18,9 +18,7 @@ RSpec.describe 'Messages', type: :request do
 
       describe 'given highlighted=true' do
         let(:params) { { highlighted: true } }
-        it do
-          should change { message.reload.highlighted? }.from(false).to(true)
-        end
+        it { should change { message.reload.highlighted? }.from(false).to(true) }
       end
 
       describe 'given highlighted=false' do
@@ -40,6 +38,47 @@ RSpec.describe 'Messages', type: :request do
       describe 'given highlighted=false' do
         let(:params) { { highlighted: false } }
         it { should change { message.reload.highlighted? }.from(true).to(false) }
+      end
+    end
+  end
+
+  describe 'POST /request' do
+    let(:user) { create(:user) }
+    let(:request) { create(:request) }
+
+    subject { -> { patch(message_request_url(message, as: user), params: params) } }
+
+    let(:message) { create(:message, request: request) }
+    let(:other_request) { create(:request) }
+    let(:params) { { message: { request_id: request_id } } }
+
+    describe 'given an invalid request_id' do
+      let(:request_id) { 'NOT AN ID' }
+
+      it { should_not(change { message.request.id }) }
+
+      it 'shows error message' do
+        subject.call
+
+        expect(flash[:error]).to eq(I18n.t('message.move_failed'))
+      end
+    end
+
+    describe 'given a valid request_id' do
+      let(:request_id) { other_request.id }
+
+      it 'updates request id' do
+        expect { subject.call }.to (change { message.reload.request.id }).from(request.id).to(other_request.id)
+      end
+
+      it 'redirects back to previous request' do
+        subject.call
+
+        anchor = "contributor-#{message.contributor.id}"
+        url = request_url(request, anchor: anchor)
+
+        expect(flash[:success]).not_to be_empty
+        expect(response).to redirect_to url
       end
     end
   end

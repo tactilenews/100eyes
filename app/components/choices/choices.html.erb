@@ -2,12 +2,18 @@
   <% choices.each do |choice| %>
     <label>
       <input
-        name="channel"
+        name="<%= id %>"
         value="<%= choice[:value] %>"
         type="radio"
         data-<%= stimulus_controller %>-target="<%= stimulus_target %>"
+        <%= 'checked' if choice[:value] == value %>
       />
-      <%= choice[:label] %>
+      <div>
+        <strong><%= choice[:label] %></strong>
+        <% if choice[:help] %>
+          <span class="Choices-help"><%= choice[:help] %></span>
+        <% end %>
+      </div>
     </label>
   <% end %>
 </div>

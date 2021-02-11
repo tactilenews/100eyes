@@ -2,13 +2,16 @@
 
 module ChatMessage
   class ChatMessage < ApplicationComponent
-    def initialize(message:, **)
+    def initialize(message:, hide_actions: false, **)
       super
 
       @message = message
+      @hide_actions = hide_actions
     end
 
     private
+
+    attr_reader :message, :hide_actions
 
     def styles
       return super unless @message.highlighted?
@@ -35,6 +38,8 @@ module ChatMessage
       warnings
     end
 
-    attr_reader :message
+    def move_link
+      message_request_path(message)
+    end
   end
 end

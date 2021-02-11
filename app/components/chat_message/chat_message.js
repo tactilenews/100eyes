@@ -70,7 +70,7 @@ export default class extends Controller {
   toggleHighlighted() {
     Rails.ajax({
       url: `/messages/${this.idValue}/highlight`,
-      type: 'POST',
+      type: 'PATCH',
       data: `highlighted=${!this.isHighlighted()}`,
     });
 

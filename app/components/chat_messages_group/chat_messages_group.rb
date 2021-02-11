@@ -11,6 +11,10 @@ module ChatMessagesGroup
 
     private
 
+    def id
+      "contributor-#{@contributor.id}"
+    end
+
     def conversation_link
       messages.first.conversation_link
     end
