@@ -80,10 +80,12 @@ RSpec.describe Message, type: :model do
     end
   end
 
-  describe '#before_create' do
+  describe '#after_create' do
     let(:message) { create(:message, sender: nil, recipient: recipient) }
+
     describe 'given a recipient with telegram' do
       let(:recipient) { create(:contributor, telegram_id: 11) }
+
       describe '#blocked' do
         subject { message.blocked }
         it { should be(false) }

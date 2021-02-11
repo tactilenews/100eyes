@@ -52,4 +52,26 @@ RSpec.describe PostmarkAdapter::Outbound do
       end
     end
   end
+
+  describe '#send!' do
+    subject { adapter.send! }
+    let(:message) { build(:message, text: 'How do you do?', broadcasted: true, recipient: contributor) }
+    let(:contributor) { create(:contributor, email: 'contributor@example.org') }
+
+    it 'enqueues a Mailer' do
+      expect { subject }.to have_enqueued_job.on_queue('mailers').with(
+        'Mailer',
+        'email',
+        'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
+        {
+          params: {
+            mail: { to: 'contributor@example.org', subject: 'Die Redaktion hat eine neue Frage', message_stream: 'broadcasts' },
+            text: 'How do you do?',
+            headers: { "message-id": anything }
+          },
+          args: []
+        }
+      )
+    end
+  end
 end
