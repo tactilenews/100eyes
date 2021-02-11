@@ -7,6 +7,7 @@ class ThreemaMessage
 
   def initialize(threema_message)
     decrypted_message = Threema.new.receive(payload: threema_message)
+
     @sender = Contributor.find_by(threema_id: threema_message[:from])
     return unless @sender
 
@@ -24,7 +25,7 @@ class ThreemaMessage
   def initialize_message(decrypted_message)
     message = Message.new(text: decrypted_message.content, sender: sender)
     message.raw_data.attach(
-      io: StringIO.new(JSON.generate(decrypted_message)),
+      io: StringIO.new(decrypted_message.content),
       filename: 'threema_api.json',
       content_type: 'application/json'
     )
