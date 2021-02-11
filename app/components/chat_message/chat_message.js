@@ -51,8 +51,6 @@ export default class extends Controller {
     const sender = this.senderNameValue;
     let copyValue = `${sender}: ${text}`;
 
-    debugger;
-
     if (!sender) {
       copyValue = text;
     }
