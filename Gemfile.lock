@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/tactilenews/threema.git
-  revision: 0819d4099b751a8d0bbda6bb7e14e2ee54b73d85
+  revision: e30de588b5f6e9c638502d72eaa2705b489ddfc5
   branch: master
   specs:
     threema (0.1.0)
@@ -9,7 +9,6 @@ GIT
       mime-types
       multipart-post
       rbnacl
-      rbnacl-libsodium
 
 GEM
   remote: https://rubygems.org/
@@ -238,8 +237,6 @@ GEM
       ffi (~> 1.0)
     rbnacl (7.1.1)
       ffi
-    rbnacl-libsodium (1.0.16)
-      rbnacl (>= 3.0.1)
     regexp_parser (2.0.3)
     rexml (3.2.4)
     rotp (5.0.0)
