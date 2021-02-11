@@ -19,7 +19,8 @@ module CopyButton
         data: {
           controller: 'copy-button',
           action: 'click->copy-button#copy',
-          copy_button_copy_value: copy
+          copy_button_copy_value: copy,
+          copy_button_success_class: 'CopyButton--success'
         }
       )
     end
