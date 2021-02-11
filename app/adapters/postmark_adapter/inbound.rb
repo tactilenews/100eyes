@@ -13,7 +13,7 @@ module PostmarkAdapter
           to: mail.from.first
         }
       }
-      Mailer.with(mailer_params).contributor_not_found_email
+      Mailer.with(mailer_params).email
     end
 
     def self.from(raw_data)

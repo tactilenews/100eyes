@@ -33,7 +33,7 @@ module PostmarkAdapter
           text: message.text,
           headers: headers
         )
-        .new_message_email
+        .email
         .deliver_later
     end
 

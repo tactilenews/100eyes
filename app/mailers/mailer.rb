@@ -10,9 +10,7 @@ class Mailer < ApplicationMailer
     mail(params[:mail])
   end
 
-  def new_message_email; end
-
-  def contributor_not_found_email; end
+  def email; end
 
   private
 

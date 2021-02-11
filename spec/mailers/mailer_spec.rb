@@ -5,15 +5,17 @@ require 'rails_helper'
 RSpec.describe Mailer, type: :mailer do
   let(:text) { 'How do you do?' }
   let(:address) { 'test@example.org' }
+  let(:email_subject) { I18n.t('adapter.postmark.new_message_email.subject') }
 
   describe 'new_message_email' do
     let(:mail) do
       described_class.with(
         mail: {
-          to: address
+          to: address,
+          subject: email_subject
         },
         text: text
-      ).new_message_email
+      ).email
     end
 
     describe 'subject' do
@@ -51,7 +53,15 @@ RSpec.describe Mailer, type: :mailer do
   end
 
   describe 'contributor_not_found_email' do
-    let(:mail) { described_class.with(mail: { to: 'contributor@example.org' }, text: 'This is the @text').contributor_not_found_email }
+    let(:mail) do
+      described_class.with(
+        mail: {
+          to: 'contributor@example.org',
+          subject: I18n.t('adapter.postmark.contributor_not_found_email.subject')
+        },
+        text: 'This is the @text'
+      ).email
+    end
 
     describe 'subject' do
       subject { mail.subject }
