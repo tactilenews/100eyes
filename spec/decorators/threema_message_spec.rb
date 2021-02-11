@@ -24,7 +24,7 @@ RSpec.describe ThreemaMessage do
   before do
     allow(Threema).to receive(:new).and_return(threema)
     allow(threema).to receive(:receive).with({ payload: message }).and_return(threema_mock)
-    allow(threema_mock).to receive(:is_a?).and_return(true)
+    allow(threema_mock).to receive(:instance_of?).and_return(true)
   end
 
   describe '#text' do
@@ -49,7 +49,7 @@ RSpec.describe ThreemaMessage do
     before do
       allow(Threema).to receive(:new).and_return(threema)
       allow(threema).to receive(:receive).with({ payload: message }).and_return(threema_mock)
-      allow(threema_mock).to receive(:is_a?).and_return(true)
+      allow(threema_mock).to receive(:instance_of?).and_return(true)
     end
 
     context 'Threema::Receive::DeliveryReceipt' do
@@ -65,7 +65,7 @@ RSpec.describe ThreemaMessage do
     before do
       allow(Threema).to receive(:new).and_return(threema)
       allow(threema).to receive(:receive).with({ payload: message }).and_return(threema_mock)
-      allow(threema_mock).to receive(:is_a?).and_return(true)
+      allow(threema_mock).to receive(:instance_of?).and_return(true)
     end
 
     context 'Threema::Receive::File' do

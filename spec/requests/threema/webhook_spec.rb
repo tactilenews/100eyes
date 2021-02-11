@@ -49,7 +49,7 @@ RSpec.describe Threema::WebhookController do
         before do
           allow(Threema).to receive(:new).and_return(threema)
           allow(threema).to receive(:receive).and_return(threema_mock)
-          allow(threema_mock).to receive(:is_a?).and_return(true)
+          allow(threema_mock).to receive(:instance_of?).and_return(true)
         end
 
         it 'returns 200 to avoid retries' do
@@ -64,9 +64,9 @@ RSpec.describe Threema::WebhookController do
         before do
           allow(Threema).to receive(:new).and_return(threema)
           allow(threema).to receive(:receive).and_return(threema_mock)
-          allow(threema_mock).to receive(:is_a?).with(Threema::Receive::DeliveryReceipt).and_return(false)
-          allow(threema_mock).to receive(:is_a?).with(Threema::Receive::File).and_return(false)
-          allow(threema_mock).to receive(:is_a?).with(Threema::Receive::Image).and_return(true)
+          allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::DeliveryReceipt).and_return(false)
+          allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::File).and_return(false)
+          allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::Image).and_return(true)
         end
 
         it 'returns 200 to avoid retries' do

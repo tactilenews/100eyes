@@ -10,7 +10,7 @@ class ThreemaMessage
     @sender = Contributor.find_by(threema_id: threema_message[:from])
     return unless @sender
 
-    @delivery_receipt = decrypted_message.is_a? Threema::Receive::DeliveryReceipt
+    @delivery_receipt = decrypted_message.instance_of? Threema::Receive::DeliveryReceipt
     @unknown_content = initialize_unknown_content(decrypted_message)
     @message = initialize_message(decrypted_message)
   end
@@ -18,7 +18,7 @@ class ThreemaMessage
   private
 
   def initialize_unknown_content(decrypted_message)
-    @unknown_content = UNKNOWN_CONTENT_CLASS.any? { |klass| decrypted_message.is_a? klass }
+    @unknown_content = UNKNOWN_CONTENT_CLASS.any? { |klass| decrypted_message.instance_of? klass }
   end
 
   def initialize_message(decrypted_message)
