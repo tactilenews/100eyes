@@ -2,6 +2,8 @@
 
 class Telegram::WebhookController < Telegram::Bot::UpdatesController
   def message(message)
+    return if contributor_onboarding?(message)
+
     telegram_message = TelegramAdapter::Inbound.new(message)
     contributor = telegram_message.sender
 
@@ -9,5 +11,11 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
 
     respond_with :message, text: Setting.telegram_unknown_content_message if telegram_message.unknown_content
     contributor.reply(telegram_message)
+  end
+
+  private
+
+  def contributor_onboarding?(message)
+    message['connected_website'] && message['connected_website'] == Setting.application_host
   end
 end
