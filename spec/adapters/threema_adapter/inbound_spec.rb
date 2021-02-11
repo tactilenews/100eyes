@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ThreemaMessage do
+RSpec.describe ThreemaAdapter::Inbound do
   before { create(:contributor, threema_id: 'V5EA564T') }
 
   let(:threema_message) { described_class.new(message) }
