@@ -30,6 +30,6 @@ class Threema::WebhookController < ApplicationController
   end
 
   def respond_to_unknown_content(contributor)
-    ThreemaAdapter.new(message: Message.new(text: Setting.telegram_unknown_content_message, recipient: contributor)).send!
+    ThreemaAdapter.new(message: Message.new(text: Setting.threema_unknown_content_message, recipient: contributor)).send!
   end
 end

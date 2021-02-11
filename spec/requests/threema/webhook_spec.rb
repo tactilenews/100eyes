@@ -71,7 +71,7 @@ RSpec.describe Threema::WebhookController do
 
         it 'returns 200 to avoid retries' do
           allow(threema).to receive(:send).with(type: :text, threema_id: contributor.threema_id,
-                                                text: Setting.telegram_unknown_content_message)
+                                                text: Setting.threema_unknown_content_message)
 
           subject
           expect(response).to have_http_status(200)
@@ -79,7 +79,7 @@ RSpec.describe Threema::WebhookController do
 
         it 'sends a automated message response' do
           expect(threema).to receive(:send).with(type: :text, threema_id: contributor.threema_id,
-                                                 text: Setting.telegram_unknown_content_message)
+                                                 text: Setting.threema_unknown_content_message)
 
           subject
         end
