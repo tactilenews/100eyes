@@ -27,8 +27,8 @@ module ThreemaAdapter
     end
 
     def initialize_text(decrypted_message)
-      return nil unless decrypted_message.is_a? Threema::Receive::Text
-  
+      return nil unless decrypted_message.instance_of? Threema::Receive::Text
+
       decrypted_message.content
     end
 
@@ -49,12 +49,12 @@ module ThreemaAdapter
 
     def initialize_voice(decrypted_message)
       return nil unless decrypted_message.respond_to? :mime_type
-  
+
       if decrypted_message.mime_type != 'audio/aac'
         message.unknown_content = true
         return
       end
-  
+
       voice = Voice.new
       voice.attachment.attach(
         io: StringIO.new(decrypted_message.content),
