@@ -13,10 +13,13 @@ RSpec.describe RepliesMailbox, type: :mailbox do
   it {
     should have_enqueued_job.on_queue('mailers').with(
       'Mailer',
-      'contributor_not_found_email',
+      'email',
       'deliver_now',
       {
-        params: { email: 'zora@example.org' },
+        params: {
+          text: /Vielen Dank für Ihre Nachricht. Leider konnten wir Ihre E-Mail-Adresse nicht zuordnen./,
+          mail: { subject: 'Wir können Ihre E-Mail Adresse nicht zuordnen', message_stream: 'outbound', to: 'zora@example.org' }
+        },
         args: []
       }
     )

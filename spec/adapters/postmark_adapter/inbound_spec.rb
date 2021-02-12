@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe EmailMessage do
-  let(:email_message) { EmailMessage.new mail }
+RSpec.describe PostmarkAdapter::Inbound do
+  let(:email_message) { described_class.new mail }
   let(:text_part) { 'This is a text body part' }
 
   describe '#text' do

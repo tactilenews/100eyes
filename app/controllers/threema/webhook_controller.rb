@@ -6,7 +6,7 @@ class Threema::WebhookController < ApplicationController
   skip_before_action :require_login, :verify_authenticity_token
 
   def message
-    threema_message = ThreemaMessage.new(threema_webhook_params)
+    threema_message = ThreemaAdapter::Inbound.new(threema_webhook_params)
     return head :ok if threema_message.delivery_receipt
 
     contributor = threema_message.sender
@@ -26,6 +26,6 @@ class Threema::WebhookController < ApplicationController
   end
 
   def respond_to_unknown_content(contributor)
-    ThreemaAdapter.new(message: Message.new(text: Setting.threema_unknown_content_message, recipient: contributor)).send!
+    ThreemaAdapter::Outbound.new(message: Message.new(text: Setting.threema_unknown_content_message, recipient: contributor)).send!
   end
 end

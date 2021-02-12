@@ -31,44 +31,6 @@ RSpec.describe 'Requests', telegram_bot: :rails do
     describe 'without contributors' do
       it { should_not raise_error }
     end
-
-    describe 'given a contributor with an email address' do
-      before(:each) { Contributor.create!(email: 'contributor@example.org', telegram_id: nil) }
-      it {
-        should have_enqueued_job.on_queue('mailers').with(
-          'Mailer',
-          'new_message_email',
-          'deliver_now',
-          {
-            params: {
-              text: [
-                'How do you do?',
-                I18n.t('request.hints.confidential.text')
-              ].join("\n\n"),
-              to: 'contributor@example.org',
-              broadcasted: true,
-              headers: { "message-id": anything }
-            },
-            args: []
-          }
-        )
-      }
-
-      it { should_not respond_with_message }
-    end
-
-    describe 'given a contributor with a telegram_id' do
-      let(:chat_id) { 4711 }
-      let(:expected_message) do
-        [
-          'How do you do?',
-          I18n.t('request.hints.confidential.text')
-        ].join("\n\n")
-      end
-      before(:each) { Contributor.create!(telegram_id: 4711, email: nil) }
-      it { should respond_with_message expected_message }
-      it { should_not have_enqueued_job.on_queue('mailers') }
-    end
   end
 
   describe 'GET /notifications' do
