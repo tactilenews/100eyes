@@ -126,6 +126,8 @@ RSpec.describe '/contributors', type: :request do
       describe 'given an active request' do
         before(:each) { create(:message, request: the_request, recipient: contributor) }
 
+        it { is_expected.to change(Message, :count).by(1) }
+
         describe 'response' do
           before(:each) { subject.call }
           let(:newest_message) { Message.reorder(created_at: :desc).first }
@@ -139,35 +141,6 @@ RSpec.describe '/contributors', type: :request do
                 )
               )
           end
-        end
-
-        describe 'with a `telegram_id`' do
-          let(:params) { { email: nil, telegram_id: 4 } }
-          let(:chat_id) { 4 }
-          let(:expected_message) { 'Forgot to ask: How are you?' }
-          it { should respond_with_message expected_message }
-          it { should_not have_enqueued_job.on_queue('mailers') }
-        end
-
-        describe 'with an `email`' do
-          let(:params) { { email: 'contributor@example.org' } }
-          it { should_not respond_with_message }
-          it {
-            should have_enqueued_job.on_queue('mailers').with(
-              'Mailer',
-              'new_message_email',
-              'deliver_now',
-              {
-                params: {
-                  text: 'Forgot to ask: How are you?',
-                  to: 'contributor@example.org',
-                  broadcasted: false,
-                  headers: { "message-id": anything, references: /#{the_request.id}/ }
-                },
-                args: []
-              }
-            )
-          }
         end
       end
     end

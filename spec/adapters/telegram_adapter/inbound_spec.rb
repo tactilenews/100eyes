@@ -1,12 +1,30 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'telegram/bot/rspec/integration/rails'
 
-RSpec.describe TelegramMessage do
-  let(:telegram_message) { TelegramMessage.new message }
+RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
+  describe 'bounce!' do
+    before { Setting.telegram_contributor_not_found_message = 'Who are you?' }
+    subject { -> { dispatch_message 'Hello Bot!', { from: { id: 'whoami' } } } }
+    it { should_not(change { Message.count }) }
+    it { should respond_with_message 'Who are you?' }
+  end
+
+  let(:telegram_message) { described_class.new message }
   before(:each) { create(:contributor, telegram_id: 47) }
 
   let(:message) { { 'chat' => { 'id' => 42 }, 'from' => { 'id' => 47 } } }
+
+  describe '.contributor_onboarding' do
+    subject { telegram_message.contributor_onboarding }
+
+    describe 'given a message with connected_website indicating user onboarding' do
+      before { message['connected_website'] = Setting.application_host }
+
+      it { is_expected.to eq(true) }
+    end
+  end
 
   describe '#text' do
     subject { telegram_message.text }
@@ -96,7 +114,7 @@ RSpec.describe TelegramMessage do
         let(:telegram_message_with_media_group_id) { message_with_photo.merge(media_group_id: '42') }
         let(:save_message_and_photo) do
           lambda {
-            tm = TelegramMessage.new telegram_message_with_media_group_id
+            tm = described_class.new telegram_message_with_media_group_id
             message = tm.message
             message.request = request
             message.save
