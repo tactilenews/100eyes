@@ -7,7 +7,7 @@ module TelegramAdapter
       contact dice game poll venue location
       invoice successful_payment passport_data
     ].freeze
-    attr_reader :sender, :text, :message, :photos, :unknown_content, :voice
+    attr_reader :sender, :text, :message, :photos, :unknown_content, :voice, :contributor_onboarding
 
     def self.bounce!(chat)
       chat_id = chat && chat['id'] or raise 'Can not respond_with when chat is not present'
@@ -23,6 +23,9 @@ module TelegramAdapter
 
     def initialize(telegram_message)
       telegram_message = telegram_message.with_indifferent_access
+      @contributor_onboarding = contributor_onboarding?(telegram_message)
+      return if @contributor_onboarding
+
       @sender = initialize_known_contributor(telegram_message)
       return unless @sender
 
@@ -38,6 +41,10 @@ module TelegramAdapter
     end
 
     private
+
+    def contributor_onboarding?(telegram_message)
+      telegram_message['connected_website'] && telegram_message['connected_website'] == Setting.application_host
+    end
 
     def initialize_known_contributor(telegram_message)
       telegram_id = telegram_message.dig(:from, :id)

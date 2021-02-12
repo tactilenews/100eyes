@@ -16,6 +16,16 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
 
   let(:message) { { 'chat' => { 'id' => 42 }, 'from' => { 'id' => 47 } } }
 
+  describe '.contributor_onboarding' do
+    subject { telegram_message.contributor_onboarding }
+
+    describe 'given a message with connected_website indicating user onboarding' do
+      before { message['connected_website'] = Setting.application_host }
+
+      it { is_expected.to eq(true) }
+    end
+  end
+
   describe '#text' do
     subject { telegram_message.text }
 

@@ -13,6 +13,11 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
       describe 'Message received confirming onboarding' do
         subject { -> { dispatch_message 'Hello Bot!', { from: { id: 'whoami' }, connected_website: Setting.application_host } } }
 
+        it 'is successful' do
+          subject.call
+          expect(response).to have_http_status(200)
+        end
+
         it { is_expected.not_to respond_with_message Setting.telegram_contributor_not_found_message }
       end
     end
