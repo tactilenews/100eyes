@@ -12,12 +12,16 @@ module ThreemaAdapter
       @sender = Contributor.find_by(threema_id: threema_message[:from])
       return unless @sender
 
-      @delivery_receipt = decrypted_message.instance_of? Threema::Receive::DeliveryReceipt
+      @delivery_receipt = delivery_receipt?(decrypted_message)
       @unknown_content = initialize_unknown_content(decrypted_message)
       @message = initialize_message(decrypted_message)
     end
 
     private
+
+    def delivery_receipt?(decrypted_message)
+      decrypted_message.instance_of? Threema::Receive::DeliveryReceipt
+    end
 
     def initialize_unknown_content(decrypted_message)
       @unknown_content = UNKNOWN_CONTENT_CLASS.any? { |klass| decrypted_message.instance_of? klass }
