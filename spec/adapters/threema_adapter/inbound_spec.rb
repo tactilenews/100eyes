@@ -56,11 +56,11 @@ RSpec.describe ThreemaAdapter::Inbound do
     let(:threema_mock) { instance_double(Threema::Receive::File, name: 'my voice', content: 'x\00x\\0', mime_type: 'audio/aac') }
     before { allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::File).and_return(true) }
 
-    describe '#voice' do
-      subject { threema_message.message.voice }
+    describe '#file' do
+      subject { threema_message.message.file }
 
       context 'attachment' do
-        subject { threema_message.message.voice.attachment }
+        subject { threema_message.message.file.attachment }
         it { should be_attached }
       end
     end
@@ -72,7 +72,7 @@ RSpec.describe ThreemaAdapter::Inbound do
           threema_message.message.save!
         end
       end
-      it { should change { ActiveStorage::Attachment.where(record_type: 'Voice').count }.from(0).to(1) }
+      it { should change { ActiveStorage::Attachment.where(record_type: 'Message::File').count }.from(0).to(1) }
     end
   end
 

@@ -19,7 +19,7 @@ de:
     chat_form:
       placeholder: Gib hier deine Nachfrage ein…
       submit: Absenden
-    chat_message_voice:
+    chat_message_audio:
       no_audio_support: Dein Browser unterstützt das Audio Element nicht
     nav_bar:
       community:

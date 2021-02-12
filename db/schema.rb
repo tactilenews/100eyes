@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_08_135552) do
+ActiveRecord::Schema.define(version: 2021_02_12_170213) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -72,6 +72,13 @@ ActiveRecord::Schema.define(version: 2021_02_08_135552) do
     t.string "invalidated_jwt"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "message_files", force: :cascade do |t|
+    t.bigint "message_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["message_id"], name: "index_message_files_on_message_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -166,18 +173,11 @@ ActiveRecord::Schema.define(version: 2021_02_08_135552) do
     t.index ["remember_token"], name: "index_users_on_remember_token"
   end
 
-  create_table "voices", force: :cascade do |t|
-    t.bigint "message_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["message_id"], name: "index_voices_on_message_id"
-  end
-
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "message_files", "messages"
   add_foreign_key "messages", "contributors", column: "recipient_id"
   add_foreign_key "messages", "contributors", column: "sender_id"
   add_foreign_key "messages", "requests"
   add_foreign_key "photos", "messages"
   add_foreign_key "taggings", "tags"
-  add_foreign_key "voices", "messages"
 end

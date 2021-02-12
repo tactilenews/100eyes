@@ -125,13 +125,13 @@ RSpec.describe PostmarkAdapter::Inbound do
     end
   end
 
-  describe '#voice' do
+  describe '#file' do
     let(:mail) do
       mail = Mail.new
       mail.add_file Rails.root.join('README.md').to_s
       mail
     end
-    subject { email_message.voice }
+    subject { email_message.file }
     it { should be_nil }
   end
 

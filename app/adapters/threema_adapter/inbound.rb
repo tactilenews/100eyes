@@ -16,8 +16,8 @@ module ThreemaAdapter
       @text = initialize_text(decrypted_message)
       @unknown_content = initialize_unknown_content(decrypted_message)
       @message = initialize_message(decrypted_message)
-      @voice = initialize_voice(decrypted_message)
-      @message.voice = @voice
+      @file = initialize_file(decrypted_message)
+      @message.file = @file
     end
 
     private
@@ -47,7 +47,7 @@ module ThreemaAdapter
       message
     end
 
-    def initialize_voice(decrypted_message)
+    def initialize_file(decrypted_message)
       return nil unless decrypted_message.respond_to? :mime_type
 
       if decrypted_message.mime_type != 'audio/aac'
@@ -55,14 +55,14 @@ module ThreemaAdapter
         return
       end
 
-      voice = Voice.new
-      voice.attachment.attach(
+      file = Message::File.new
+      file.attachment.attach(
         io: StringIO.new(decrypted_message.content),
         filename: decrypted_message.name,
         content_type: :audio,
         identify: false
       )
-      voice
+      file
     end
   end
 end

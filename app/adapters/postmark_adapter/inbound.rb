@@ -2,7 +2,7 @@
 
 module PostmarkAdapter
   class Inbound
-    attr_reader :sender, :text, :message, :photos, :unknown_content, :voice
+    attr_reader :sender, :text, :message, :photos, :unknown_content, :file
 
     def self.bounce!(mail)
       mailer_params = {
@@ -21,7 +21,7 @@ module PostmarkAdapter
     end
 
     def initialize(mail)
-      @voice = nil
+      @file = nil
       @text = initialize_text(mail)
       @sender = initialize_contributor(mail)
       @message = initialize_message(mail)

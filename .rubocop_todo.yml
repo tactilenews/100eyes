@@ -55,6 +55,7 @@ Style/ClassAndModuleChildren:
     - 'app/controllers/telegram/webhook_controller.rb'
     - 'test/test_helper.rb'
     - 'app/controllers/threema/webhook_controller.rb'
+    - 'app/models/message/file.rb'
 
 # Offense count: 89
 Style/Documentation:

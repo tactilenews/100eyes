@@ -7,7 +7,7 @@ module TelegramAdapter
       contact dice game poll venue location
       invoice successful_payment passport_data
     ].freeze
-    attr_reader :sender, :text, :message, :photos, :unknown_content, :voice, :contributor_onboarding
+    attr_reader :sender, :text, :message, :photos, :unknown_content, :file, :contributor_onboarding
 
     def self.bounce!(chat)
       chat_id = chat && chat['id'] or raise 'Can not respond_with when chat is not present'
@@ -33,8 +33,8 @@ module TelegramAdapter
       @unknown_content = initialize_unknown_content(telegram_message)
       @message = initialize_message(telegram_message)
       @photos = initialize_photos(telegram_message)
-      @voice = initialize_voice(telegram_message)
-      @message.voice = @voice
+      @file = initialize_file(telegram_message)
+      @message.file = @file
       @photos.each do |photo|
         @message.association(:photos).add_to_target(photo)
       end
@@ -84,13 +84,13 @@ module TelegramAdapter
       [photo]
     end
 
-    def initialize_voice(telegram_message)
+    def initialize_file(telegram_message)
       return nil unless telegram_message[:voice]
 
-      voice = Voice.new
+      file = Message::File.new
       remote_file_location = retrieve_message_type_and_attach(telegram_message[:voice])
-      voice.attachment.attach(io: remote_file_location.open, filename: File.basename(remote_file_location.path))
-      voice
+      file.attachment.attach(io: remote_file_location.open, filename: File.basename(remote_file_location.path))
+      file
     end
 
     def retrieve_message_type_and_attach(telegram_file)
