@@ -37,6 +37,12 @@ RSpec.describe Threema::WebhookController do
       let!(:contributor) { create(:contributor, threema_id: 'V5EA564T') }
       let!(:request) { create(:request) }
 
+      before do
+        allow(Threema).to receive(:new).and_return(threema)
+        allow(threema).to receive(:receive).and_return(threema_mock)
+        allow(threema_mock).to receive(:instance_of?) { false }
+      end
+
       it { is_expected.to eq(200) }
 
       it 'creates a message' do
@@ -45,12 +51,7 @@ RSpec.describe Threema::WebhookController do
 
       describe 'DeliveryReceipt' do
         let(:threema_mock) { instance_double(Threema::Receive::DeliveryReceipt, content: 'x\00x\\0') }
-
-        before do
-          allow(Threema).to receive(:new).and_return(threema)
-          allow(threema).to receive(:receive).and_return(threema_mock)
-          allow(threema_mock).to receive(:instance_of?).and_return(true)
-        end
+        before { allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::DeliveryReceipt).and_return(true) }
 
         it 'returns 200 to avoid retries' do
           subject
@@ -64,8 +65,6 @@ RSpec.describe Threema::WebhookController do
         before do
           allow(Threema).to receive(:new).and_return(threema)
           allow(threema).to receive(:receive).and_return(threema_mock)
-          allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::DeliveryReceipt).and_return(false)
-          allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::File).and_return(false)
           allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::Image).and_return(true)
         end
 
