@@ -2,8 +2,6 @@
 
 module ThreemaAdapter
   class Inbound
-    UNKNOWN_CONTENT_CLASS = [Threema::Receive::Image].freeze
-
     attr_reader :sender, :text, :unknown_content, :message, :delivery_receipt
 
     def initialize(threema_message)
@@ -33,7 +31,7 @@ module ThreemaAdapter
     end
 
     def initialize_unknown_content(decrypted_message)
-      @unknown_content = UNKNOWN_CONTENT_CLASS.any? { |klass| decrypted_message.instance_of? klass }
+      @unknown_content = decrypted_message.instance_of? Threema::Receive::Image
     end
 
     def initialize_message(decrypted_message)
