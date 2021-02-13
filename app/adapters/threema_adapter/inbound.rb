@@ -2,6 +2,7 @@
 
 module ThreemaAdapter
   class Inbound
+    UNSUPPORTED_CONTENT_TYPES = %w[video application text/x-vcard].freeze
     attr_reader :sender, :text, :unknown_content, :message, :delivery_receipt
 
     def initialize(threema_message)
@@ -31,7 +32,7 @@ module ThreemaAdapter
     end
 
     def initialize_unknown_content(decrypted_message)
-      @unknown_content = decrypted_message.instance_of? Threema::Receive::Image
+      @unknown_content = decrypted_message.instance_of?(Threema::Receive::Image) || file_type_not_supported?(decrypted_message)
     end
 
     def initialize_message(decrypted_message)
@@ -55,7 +56,14 @@ module ThreemaAdapter
         content_type: decrypted_message.mime_type,
         identify: false
       )
+      message.unknown_content = unknown_content
       file
+    end
+
+    def file_type_not_supported?(decrypted_message)
+      return false unless decrypted_message.respond_to? :mime_type
+
+      UNSUPPORTED_CONTENT_TYPES.any? { |type| decrypted_message.mime_type.include? type }
     end
   end
 end
