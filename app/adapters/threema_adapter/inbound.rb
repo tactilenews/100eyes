@@ -32,7 +32,7 @@ module ThreemaAdapter
     end
 
     def initialize_unknown_content(decrypted_message)
-      @unknown_content = decrypted_message.instance_of?(Threema::Receive::Image) || file_type_not_supported?(decrypted_message)
+      @unknown_content = decrypted_message.instance_of?(Threema::Receive::Image) || file_type_unsupported?(decrypted_message)
     end
 
     def initialize_message(decrypted_message)
@@ -60,7 +60,7 @@ module ThreemaAdapter
       file
     end
 
-    def file_type_not_supported?(decrypted_message)
+    def file_type_unsupported?(decrypted_message)
       return false unless decrypted_message.respond_to? :mime_type
 
       UNSUPPORTED_CONTENT_TYPES.any? { |type| decrypted_message.mime_type.include? type }
