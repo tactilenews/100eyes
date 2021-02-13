@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'mimemagic'
-
 module ThreemaAdapter
   class Inbound
     attr_reader :sender, :text, :unknown_content, :message, :delivery_receipt
@@ -50,13 +48,11 @@ module ThreemaAdapter
     def initialize_file(decrypted_message)
       return nil unless decrypted_message.instance_of? Threema::Receive::File
 
-      content_type = MimeMagic.new(decrypted_message.mime_type).type
-
       file = Message::File.new
       file.attachment.attach(
         io: StringIO.new(decrypted_message.content),
         filename: decrypted_message.name,
-        content_type: content_type.to_s,
+        content_type: decrypted_message.mime_type,
         identify: false
       )
       file
