@@ -50,7 +50,7 @@ module ThreemaAdapter
     def initialize_file(decrypted_message)
       return nil unless decrypted_message.instance_of? Threema::Receive::File
 
-      content_type = MimeMagic.new(decrypted_message.mime_type).mediatype
+      content_type = MimeMagic.new(decrypted_message.mime_type).type
 
       file = Message::File.new
       file.attachment.attach(
