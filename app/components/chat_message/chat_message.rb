@@ -27,6 +27,10 @@ module ChatMessage
       message.file && message.file.attachment.blob.audio?
     end
 
+    def image?
+      message.file && message.file.attachment.blob.image?
+    end
+
     def photos
       message.photos
     end

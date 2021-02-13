@@ -3,5 +3,9 @@
 class Message::File < ApplicationRecord
   belongs_to :message
   has_one_attached :attachment
-  validates :attachment, presence: true, blob: { content_type: :audio }
+  validates :attachment, presence: true
+
+  def thumbnail
+    attachment
+  end
 end

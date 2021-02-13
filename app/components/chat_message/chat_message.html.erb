@@ -36,6 +36,10 @@
       <%= c 'chat_message_photos', photos: photos %>
     <% end %>
 
+    <% if image? %>
+      <%= c 'chat_message_photos', photos: [message.file] %>
+    <% end %>
+
     <% if audio? %>
       <%= c 'chat_message_audio', audio: message.file %>
     <% end %>
