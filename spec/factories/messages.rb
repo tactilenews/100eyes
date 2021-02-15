@@ -26,9 +26,9 @@ FactoryBot.define do
       association :recipient, factory: :contributor
     end
 
-    trait :with_voice do
+    trait :with_file do
       after(:create) do |message|
-        create(:voice, message: message)
+        create(:file, message: message)
       end
     end
 

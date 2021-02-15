@@ -11,7 +11,7 @@ class Message < ApplicationRecord
   belongs_to :recipient, class_name: 'Contributor', optional: true
   belongs_to :request
   has_many :photos, dependent: :destroy
-  has_one :voice, dependent: :destroy
+  has_one :file, dependent: :destroy, class_name: 'Message::File'
 
   counter_culture :request, column_name: proc { |model| model.reply? ? 'replies_count' : nil }
 

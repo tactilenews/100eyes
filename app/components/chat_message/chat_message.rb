@@ -23,8 +23,12 @@ module ChatMessage
       "message-#{message.id}"
     end
 
-    def voice
-      message.voice
+    def audio?
+      message.file && message.file.attachment.blob.audio?
+    end
+
+    def image?
+      message.file && message.file.attachment.blob.image?
     end
 
     def photos

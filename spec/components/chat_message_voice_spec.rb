@@ -2,10 +2,10 @@
 
 require 'rails_helper'
 
-RSpec.describe ChatMessageVoice::ChatMessageVoice, type: :component do
+RSpec.describe ChatMessageAudio::ChatMessageAudio, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
-  let(:voice) { create(:voice) }
-  let(:params) { { voice: voice } }
-  it { should have_css('.ChatMessageVoice') }
+  let(:audio) { create(:file) }
+  let(:params) { { audio: audio } }
+  it { should have_css('.ChatMessageAudio') }
 end

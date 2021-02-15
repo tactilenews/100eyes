@@ -40,8 +40,8 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
     end
   end
 
-  describe '#voice' do
-    subject { telegram_message.voice }
+  describe '#file' do
+    subject { telegram_message.file }
 
     describe 'given a text message' do
       before { message['text'] = 'Ich bin eine normale Nachricht' }
@@ -58,7 +58,7 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
       let(:message) { message_with_voice }
 
       describe 'attachment' do
-        subject { telegram_message.voice.attachment }
+        subject { telegram_message.file.attachment }
         it { should be_attached }
       end
 
@@ -69,7 +69,7 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
             telegram_message.message.save!
           end
         end
-        it { should change { ActiveStorage::Attachment.where(record_type: 'Voice').count }.from(0).to(1) }
+        it { should change { ActiveStorage::Attachment.where(record_type: 'Message::File').count }.from(0).to(1) }
       end
     end
   end

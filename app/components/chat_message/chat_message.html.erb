@@ -36,8 +36,12 @@
       <%= c 'chat_message_photos', photos: photos %>
     <% end %>
 
-    <% if voice %>
-      <%= c 'chat_message_voice', voice: voice %>
+    <% if image? %>
+      <%= c 'chat_message_photos', photos: [message.file] %>
+    <% end %>
+
+    <% if audio? %>
+      <%= c 'chat_message_audio', audio: message.file %>
     <% end %>
 
     <div class="ChatMessage-meta">
