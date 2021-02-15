@@ -44,6 +44,10 @@ traefik:
 rails:
   environment: production
   hundred_eyes_project_name: 100eyes
+  threema:
+    api_identity: # (REQUIRED) your threema ID
+    api_secret: # (REQUIRED) your threema Secret
+    private_key: # (REQUIRED) your threema private key *without* `private:` prefix
   telegram_bot:
     api_key: # (REQUIRED) your telegram API token
     username: # (REQUIRED) your telegram bot name, e.g. 'HundredEyesBot'
