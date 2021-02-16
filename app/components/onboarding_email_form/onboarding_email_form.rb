@@ -2,15 +2,14 @@
 
 module OnboardingEmailForm
   class OnboardingEmailForm < ApplicationComponent
-    def initialize(contributor:, jwt:, **)
+    def initialize(contributor:, **)
       super
 
       @contributor = contributor
-      @jwt = jwt
     end
 
     private
 
-    attr_reader :contributor, :jwt
+    attr_reader :contributor
   end
 end

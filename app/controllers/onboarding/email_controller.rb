@@ -29,8 +29,12 @@ module Onboarding
 
     private
 
+    def default_url_options
+      super.merge(jwt: jwt_param)
+    end
+
     def redirect_to_success
-      redirect_to onboarding_success_path
+      redirect_to onboarding_success_path(jwt: nil)
     end
 
     def redirect_to_failure

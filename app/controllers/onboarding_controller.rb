@@ -17,6 +17,10 @@ class OnboardingController < ApplicationController
 
   private
 
+  def default_url_options
+    super.merge(jwt: @jwt)
+  end
+
   def jwt_param
     params.require(:jwt)
   end
