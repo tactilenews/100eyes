@@ -5,7 +5,6 @@
         name="<%= id %>"
         value="<%= choice[:value] %>"
         type="radio"
-        data-<%= stimulus_controller %>-target="<%= stimulus_target %>"
         <%= 'checked' if choice[:value] == value %>
       />
       <div>
