@@ -51,6 +51,10 @@
   --color-pink: #f4177a;
   --color-pink-dark: #c11361;
 
+  --color-telegram: #179cde;
+  --color-threema: #05a63f;
+  --color-email: var(--color-gray-dark);
+
   --color-bg: #fff;
   --color-text: #333;
   --color-text-light: #444;
