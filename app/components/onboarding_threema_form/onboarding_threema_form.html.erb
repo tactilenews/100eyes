@@ -2,10 +2,10 @@
 
   <%= c 'stack', class: 'text-serif', space: :xsmall do %>
     <%= c 'heading', tag: :h1 do %>
-      <%= I18n.t('components.onboarding_threema_form.heading') %>
+      <%= t 'heading' %>
     <% end %>
 
-    <p><%= I18n.t('components.onboarding_threema_form.text') %></p>
+    <p><%= t 'text' %></p>
   <% end %>
 
   <%= form_with(model: @contributor, local: true, url: onboarding_threema_path) do %>
@@ -22,11 +22,7 @@
         <%= c 'input', field.input_defaults.merge(required: true) %>
       <% end %>
 
-      <%= c 'button',
-        type: 'submit',
-        label: I18n.t('components.onboarding_threema_form.submit'),
-        style: :primary
-      %>
+      <%= c 'button', type: 'submit', label: t('submit'), style: :primary %>
     <% end %>
   <% end %>
 
