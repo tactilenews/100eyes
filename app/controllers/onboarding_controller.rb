@@ -10,7 +10,6 @@ class OnboardingController < ApplicationController
 
   def index
     @jwt = jwt_param
-    @contributor = Contributor.new
   end
 
   def success; end

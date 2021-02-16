@@ -10,7 +10,7 @@ module Onboarding
 
     layout 'onboarding'
 
-    def info
+    def show
       @jwt = jwt_param
     end
 

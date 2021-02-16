@@ -9,6 +9,10 @@ module Onboarding
 
     layout 'onboarding'
 
+    def show
+      @contributor = Contributor.new
+    end
+
     def create
       # Ensure information on registered contributors is never
       # disclosed during onboarding
