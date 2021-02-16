@@ -7,7 +7,7 @@ RSpec.describe 'Onboarding::Email', type: :request do
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
   let(:params) { { jwt: jwt } }
 
-  describe 'POST /onboarding/email/create' do
+  describe 'POST /onboarding/email' do
     let(:attrs) do
       {
         first_name: 'Zora',
