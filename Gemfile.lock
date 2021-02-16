@@ -300,7 +300,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    sucker_punch (2.1.2)
+    sucker_punch (3.0.0)
       concurrent-ruby (~> 1.0)
     telegram-bot (0.15.2)
       actionpack (>= 4.0, < 6.2)
@@ -379,7 +379,7 @@ DEPENDENCIES
   spring
   spring-commands-rspec
   spring-watcher-listen (~> 2.0.0)
-  sucker_punch (~> 2.1)
+  sucker_punch (~> 3.0)
   telegram-bot
   threema!
   timecop
