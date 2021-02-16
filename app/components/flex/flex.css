@@ -1,13 +1,8 @@
 .Flex {
   display: flex;
   width: 100%;
-  align-items: center;
-  gap: var(--spacing-unit);
-}
-
-.Flex--equal > * {
-  flex-basis: 100%;
-  flex-grow: 1;
+  gap: var(--spacing-unit-s);
+  flex-direction: column;
 }
 
 .Flex--smallGap {
@@ -18,10 +13,27 @@
   gap: var(--spacing-unit-l);
 }
 
-.Flex--spaceBetween {
-  justify-content: space-between;
+.Flex--reverse {
+  flex-direction: column-reverse;
 }
 
-.Flex--reverse {
-  flex-direction: row-reverse;
+@media screen and (min-width: 540px) {
+  .Flex {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--spacing-unit);
+  }
+
+  .Flex--equal > * {
+    flex-basis: 100%;
+    flex-grow: 1;
+  }
+
+  .Flex--spaceBetween {
+    justify-content: space-between;
+  }
+
+  .Flex--reverse {
+    flex-direction: row-reverse;
+  }
 }
