@@ -3,7 +3,7 @@
 module Wrapper
   class Wrapper < ApplicationComponent
     def call
-      tag.div(@content, class: class_attr)
+      tag.div(@content, **attrs)
     end
   end
 end
