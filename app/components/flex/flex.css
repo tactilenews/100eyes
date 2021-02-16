@@ -1,39 +1,60 @@
 .Flex {
+  --gap: var(--spacing-unit-s);
+
   display: flex;
   width: 100%;
-  gap: var(--spacing-unit-s);
   flex-direction: column;
 }
 
-.Flex--smallGap {
-  gap: var(--spacing-unit-s);
+.Flex > * + * {
+  margin-top: var(--gap);
 }
 
-.Flex--largeGap {
-  gap: var(--spacing-unit-l);
+.Flex--spaceBetween {
+  justify-content: space-between;
 }
 
 .Flex--reverse {
   flex-direction: column-reverse;
 }
 
+.Flex--reverse > * + * {
+  margin: 0;
+  margin-bottom: var(--gap);
+}
+
+.Flex--equal > * {
+  flex-basis: 100%;
+  flex-grow: 1;
+}
+
 @media screen and (min-width: 540px) {
   .Flex {
+    --gap: var(--spacing-unit);
+
     flex-direction: row;
     align-items: center;
-    gap: var(--spacing-unit);
   }
 
-  .Flex--equal > * {
-    flex-basis: 100%;
-    flex-grow: 1;
-  }
-
-  .Flex--spaceBetween {
-    justify-content: space-between;
+  .Flex > * + * {
+    margin: 0;
+    margin-left: var(--gap);
   }
 
   .Flex--reverse {
     flex-direction: row-reverse;
   }
+
+  .Flex--reverse > * + * {
+    margin: 0;
+    margin-right: var(--gap);
+  }
+}
+
+.Flex--smallGap {
+  --gap: var(--spacing-unit-s);
+}
+
+.Flex--largeGap {
+  --gap: var(--spacing-unit-l);
 }
