@@ -349,6 +349,27 @@ RSpec.describe Contributor, type: :model do
     end
   end
 
+  describe '.threema_id_taken?' do
+    let!(:contributor) { create(:contributor, threema_id: 'ABCD1234') }
+
+    subject { Contributor.threema_id_taken?(threema_id) }
+
+    describe 'given the exact threema ID' do
+      let(:threema_id) { 'ABCD1234' }
+      it { should be(true) }
+    end
+
+    describe 'with different casing' do
+      let(:threema_id) { 'abcd1234' }
+      it { should be(true) }
+    end
+
+    describe 'given a different ID' do
+      let(:threema_id) { 'EFGH5678' }
+      it { should be(false) }
+    end
+  end
+
   describe 'scope ::active' do
     subject { Contributor.active }
     context 'given some inactive and active contributors' do

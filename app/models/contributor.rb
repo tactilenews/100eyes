@@ -40,6 +40,10 @@ class Contributor < ApplicationRecord
     error_types.include?(:taken)
   end
 
+  def self.threema_id_taken?(threema_id)
+    Contributor.exists?(['lower(threema_id) = ?', threema_id.downcase])
+  end
+
   def self.all_tags_with_count
     Contributor.all_tags.map do |tag|
       {

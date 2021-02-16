@@ -71,6 +71,12 @@ de:
     onboarding_header:
       byline: eine Dialog-Recherche von <a class="Link" href="https://tactile.news" target="_blank">tactile.news</a>
     onboarding_email_form:
+      heading: Per E-Mail teilnehmen
+      text: Geben Sie bitte unten Ihre Kontaktdaten ein, um Ihre Anmeldung abzuschließen.
+      submit: Anmeldung abschließen
+    onboarding_threema_form:
+      heading: Mit Threema teilnehmen
+      text: Geben Sie bitte unten Ihren Namen sowie Ihre Threema ID ein. Die Threema ID finden Sie in der Threema-App im Bereich „Mein Profil”.
       submit: Anmeldung abschließen
     onboarding_telegram_form:
       submit: Anmeldung abschließen
@@ -96,7 +102,7 @@ de:
     unsubscribe:
       text: "Sofern Sie keine E-Mails mehr von uns erhalten möchten, können Sie sie unter diesem Link abbestellen: {{{ pm:unsubscribe }}}"
       html: "Sofern Sie keine E-Mails mehr von uns erhalten möchten, können Sie sie unter <a href=\"{{{ pm:unsubscribe }}}\">diesem Link abbestellen</a>."
-  
+
   adapter:
     postmark:
       contributor_not_found_email:
@@ -189,6 +195,9 @@ de:
       email:
         label: E-Mail-Adresse
         placeholder: Keine E-Mail-Adresse hinterlegt
+      threema_id:
+        label: Threema ID
+        placeholder: z.B. A12BC345
       username:
         label: Telegram
         placeholder: Kein Telegram-Nutzername hinterlegt

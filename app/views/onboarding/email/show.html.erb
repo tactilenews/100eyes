@@ -1,15 +1,3 @@
 <%= c 'interstitial' do %>
-  <%= c 'stack' do %>
-
-    <%= c 'stack', class: 'text-serif', space: :xsmall do %>
-      <%= c 'heading', tag: :h1 do %>
-        Per E-Mail teilnehmen
-      <% end %>
-
-      <p>Geben Sie bitte unten Ihre Kontaktdaten ein, um Ihre Anmeldung abzuschließen.</p>
-    <% end %>
-
-    <%= c 'onboarding_email_form', contributor: @contributor %>
-
-  <% end %>
+  <%= c 'onboarding_email_form', contributor: @contributor %>
 <% end %>
