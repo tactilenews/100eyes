@@ -80,14 +80,19 @@ RSpec.describe Message, type: :model do
     end
   end
 
-  describe '#after_create' do
+  describe '#after_commit(on: :commit)' do
     let(:message) { create(:message, sender: nil, recipient: recipient) }
 
     describe 'given a recipient with telegram' do
       let(:recipient) { create(:contributor, telegram_id: 11) }
 
       describe '#blocked' do
-        subject { message.blocked }
+        subject do
+          perform_enqueued_jobs { message }
+          message.reload
+          message.blocked
+        end
+
         it { should be(false) }
         describe 'but if contributor blocked the telegram bot' do
           before(:each) { allow(Telegram.bot).to receive(:send_message).and_raise(Telegram::Bot::Forbidden) }

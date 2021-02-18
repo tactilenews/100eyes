@@ -1,16 +1,15 @@
 # frozen_string_literal: true
 
 module ThreemaAdapter
-  class Outbound
-    attr_reader :message
+  class Outbound < ApplicationJob
+    queue_as :default
 
-    delegate :recipient, to: :message
-
-    def initialize(message:)
-      @message = message
+    def self.send!(message)
+      perform_later(message)
     end
 
-    def send!
+    def perform(message)
+      recipient = message.recipient
       return unless recipient&.threema_id
 
       Threema.new.send(type: :text, threema_id: recipient.threema_id, text: message.text)

@@ -1,49 +1,54 @@
 # frozen_string_literal: true
 
 module PostmarkAdapter
-  class Outbound
-    attr_reader :message
+  class Outbound < ApplicationMailer
+    default template_name: :mailer
+    default from: -> { default_from }
 
-    delegate :request, to: :message
-    delegate :recipient, to: :message
-    delegate :broadcasted?, to: :message
+    attr_reader :msg
 
-    def initialize(message:)
-      @message = message
+    def self.send!(message)
+      return unless message.recipient&.email
+
+      with(message: message).message_email.deliver_later
     end
 
-    def subject
-      subject = I18n.t('adapter.postmark.new_message_email.subject')
-      subject = "Re: #{subject}" unless broadcasted?
-      subject
+    def bounce_email
+      @text = params[:text]
+      mail(params[:mail])
     end
 
-    def message_stream
-      return Setting.postmark_broadcasts_stream if broadcasted?
-
-      Setting.postmark_transactional_stream
+    def message_email
+      @msg = params[:message]
+      @text = msg.text
+      if @msg.broadcasted?
+        broadcasted_message_email
+      else
+        reply_message_email
+      end
     end
 
-    def send!
-      return unless recipient&.email
+    private
 
-      Mailer
-        .with(
-          mail: { to: recipient.email, subject: subject, message_stream: message_stream },
-          text: message.text,
-          headers: headers
-        )
-        .email
-        .deliver_later
+    def broadcasted_message_email
+      headers({ 'message-id': "request/#{msg.request.id}@#{Setting.application_host}" })
+      email_subject = I18n.t('adapter.postmark.new_message_email.subject')
+      message_stream = Setting.postmark_broadcasts_stream
+      mail(to: msg.recipient.email, subject: email_subject, message_stream: message_stream)
     end
 
-    def headers
-      return { 'message-id': "request/#{request.id}@#{Setting.application_host}" } if broadcasted?
+    def reply_message_email
+      headers({
+                'message-id': "request/#{msg.request.id}/message/#{msg.id}@#{Setting.application_host}",
+                references: "request/#{msg.request.id}@#{Setting.application_host}"
+              })
+      email_subject = "Re: #{I18n.t('adapter.postmark.new_message_email.subject')}"
+      message_stream = Setting.postmark_transactional_stream
+      mail(to: msg.recipient.email, subject: email_subject, message_stream: message_stream)
+    end
 
-      {
-        'message-id': "request/#{request.id}/message/#{message.id}@#{Setting.application_host}",
-        references: "request/#{request.id}@#{Setting.application_host}"
-      }
+    def default_from
+      "#{Setting.project_name} <#{Setting.email_from_address}>"
     end
   end
 end

@@ -1,26 +1,25 @@
 # frozen_string_literal: true
 
 module TelegramAdapter
-  class Outbound
-    attr_reader :message
-
-    delegate :recipient, to: :message
-
-    def initialize(message:)
-      @message = message
+  class Outbound < ApplicationJob
+    queue_as :default
+    discard_on Telegram::Bot::Forbidden do |job|
+      message = job.arguments.first
+      message.update(blocked: true)
     end
 
-    def send!
+    def self.send!(message)
+      perform_later(message)
+    end
+
+    def perform(message)
+      recipient = message.recipient
       return unless recipient&.telegram_id
 
-      begin
-        Telegram.bot.send_message(
-          chat_id: recipient.telegram_id,
-          text: message.text
-        )
-      rescue Telegram::Bot::Forbidden
-        message.update(blocked: true)
-      end
+      Telegram.bot.send_message(
+        chat_id: message.recipient.telegram_id,
+        text: message.text
+      )
     end
   end
 end
