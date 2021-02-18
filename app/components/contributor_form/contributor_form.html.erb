@@ -24,6 +24,10 @@
       <%= c 'input', field.input_defaults.merge(disabled: true) %>
     <% end %>
 
+    <%= c 'field', object: contributor, id: :threema_id, styles: [:horizontal] do |field| %>
+      <%= c 'input', field.input_defaults.merge(disabled: true) %>
+    <% end %>
+
     <%= c 'field', object: contributor, id: :zip_code, styles: [:horizontal] do |field| %>
       <%= c 'input', field.input_defaults %>
     <% end %>

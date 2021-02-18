@@ -108,7 +108,7 @@ de:
     unsubscribe:
       text: "Sofern Sie keine E-Mails mehr von uns erhalten möchten, können Sie sie unter diesem Link abbestellen: {{{ pm:unsubscribe }}}"
       html: "Sofern Sie keine E-Mails mehr von uns erhalten möchten, können Sie sie unter <a href=\"{{{ pm:unsubscribe }}}\">diesem Link abbestellen</a>."
-  
+
   adapter:
     postmark:
       contributor_not_found_email:
@@ -205,6 +205,10 @@ de:
         label: Telegram
         placeholder: Kein Telegram-Nutzername hinterlegt
         title: Du kannst den Nutzernamen nicht selbst ändern. Sobald %{value} das erste Mal via Telegram interagiert, erscheint hier der Nutzername.
+      threema_id:
+        label: Threema ID
+        placeholder: Keine Threema-ID hinterlegt
+        title: Du kannst die Threema-ID nicht selbst ändern. Bei Bedarf, z.B. bei fehlerhaften Threema-IDs, kann ein Administrator weiterhelfen.
       zip_code:
         label: Postleitzahl
       city:
