@@ -6,6 +6,7 @@ module Onboarding
 
     skip_before_action :require_login
     before_action -> { verify_onboarding_jwt(jwt_param) }
+    before_action :redirect_if_contributor_exists, only: :create
 
     layout 'onboarding'
 
@@ -14,15 +15,6 @@ module Onboarding
     end
 
     def create
-      # We handle an onbaording request for a contributor that
-      # already exists in the exact same way as a successful
-      # onboarding so that we don't disclose wether someone
-      # is a contributor.
-      if contributor_exists?
-        invalidate_jwt(jwt_param)
-        return redirect_to_success
-      end
-
       @contributor = Contributor.new(contributor_params)
 
       if @contributor.save
@@ -34,6 +26,18 @@ module Onboarding
     end
 
     private
+
+    def redirect_if_contributor_exists
+      # We handle an onbaording request for a contributor that
+      # already exists in the exact same way as a successful
+      # onboarding so that we don't disclose wether someone
+      # is a contributor.
+
+      return unless contributor_exists?
+
+      invalidate_jwt(jwt_param)
+      redirect_to_success
+    end
 
     def contributor_exists?
       # Instead of checking just for uniqueness
