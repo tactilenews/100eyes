@@ -33,19 +33,6 @@ class Contributor < ApplicationRecord
     find_by('lower(email) in (?)', Array.wrap(email).map(&:downcase))
   end
 
-  def self.email_taken?(email)
-    contributor = Contributor.new(email: email)
-    contributor.valid?
-
-    error_types = contributor.errors.details[:email].pluck(:error)
-
-    error_types.include?(:taken)
-  end
-
-  def self.threema_id_taken?(threema_id)
-    Contributor.exists?(['lower(threema_id) = ?', threema_id.downcase])
-  end
-
   def self.all_tags_with_count
     Contributor.all_tags.map do |tag|
       {

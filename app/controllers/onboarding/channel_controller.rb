@@ -35,6 +35,26 @@ module Onboarding
 
     private
 
+    def contributor_exists?
+      # Instead of checking just for uniqueness
+      # we do a full record validation and check
+      # for the presence of the `taken` error. This
+      # is necessary as custom validators may perform
+      # additional normalization.
+      contributor = Contributor.new(attr_name => attr_value)
+      contributor.valid?
+
+      contributor.errors.details[attr_name].pluck(:error).include?(:taken)
+    end
+
+    def attr_value
+      contributor_params[attr_name]
+    end
+
+    def contributor_params
+      params.require(:contributor).permit(:first_name, :last_name, attr_name)
+    end
+
     def default_url_options
       super.merge(jwt: jwt_param)
     end
