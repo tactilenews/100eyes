@@ -2,10 +2,10 @@
 
   <%= c 'stack', class: 'text-serif', space: :xsmall do %>
     <%= c 'heading', tag: :h1 do %>
-      <%= t 'heading' %>
+      <%= I18n.t('components.onboarding_email_form.heading') %>
     <% end %>
 
-    <p><%= t 'text' %></p>
+    <p><%= I18n.t('components.onboarding_email_form.text') %></p>
   <% end %>
 
   <%= form_with(model: @contributor, local: true, url: onboarding_email_path) do %>
@@ -22,7 +22,11 @@
         <%= c 'input', field.input_defaults.merge(placeholder: '', required: true) %>
       <% end %>
 
-      <%= c 'button', type: 'submit', label: t('submit'), styles: [:primary, :block] %>
+      <%= c 'button',
+        type: 'submit',
+        label: I18n.t('components.onboarding_email_form.submit'),
+        styles: [:primary, :block]
+      %>
     <% end %>
   <% end %>
 

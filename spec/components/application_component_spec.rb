@@ -25,29 +25,4 @@ RSpec.describe ApplicationComponent, type: :component do
       it { should eq({ class: 'ApplicationComponent', id: 'my-component' }) }
     end
   end
-
-  describe '#t' do
-    subject { described_class.new(**params).send(:t, key) }
-
-    let(:key) { 'key' }
-    let(:scoped_key) { "components.application_component.#{key}" }
-
-    context 'if component-specific translation exists' do
-      before do
-        allow(I18n).to receive(:exists?).with(scoped_key).and_return(true)
-        allow(I18n).to receive(:t).with(scoped_key, {}).and_return('Component translation')
-      end
-
-      it { should eq('Component translation') }
-    end
-
-    context 'if component-specific translation does not exist' do
-      before do
-        allow(I18n).to receive(:exists?).with(scoped_key).and_return(false)
-        allow(I18n).to receive(:t).with(key, {}).and_return('Global translation')
-      end
-
-      it { should eq('Global translation') }
-    end
-  end
 end

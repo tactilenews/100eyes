@@ -20,15 +20,6 @@ class ApplicationComponent < ViewComponent::Base
 
   attr_reader :styles, :data
 
-  def t(key, options = {})
-    scope = self.class.name.demodulize.underscore
-    scoped_key = "components.#{scope}.#{key}"
-
-    return I18n.t(scoped_key, options) if I18n.exists?(scoped_key)
-
-    I18n.t(key, options)
-  end
-
   def attrs
     AttributeBag.new(class: class_attr).merge(@attrs)
   end
@@ -43,5 +34,9 @@ class ApplicationComponent < ViewComponent::Base
 
   def class_attr
     class_names.join(' ')
+  end
+
+  def virtual_path
+    self.class.name.demodulize.underscore
   end
 end
