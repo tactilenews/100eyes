@@ -1,20 +1,22 @@
 import { Controller } from 'stimulus';
 import Rails from '@rails/ujs';
 
-const SUCCESS_NOTIFICATION_DURATION = 2000;
-
 export default class extends Controller {
-  static targets = ['text', 'toggleExpanded'];
-  static classes = ['truncated', 'expanded', 'copied', 'highlighted'];
+  static targets = ['copyButton', 'text', 'toggleExpanded'];
+  static classes = ['truncated', 'expanded', 'highlighted'];
+
   static values = {
     senderName: String,
     id: String,
   };
+
   connect() {
     if (this.isTruncated()) {
       this.element.classList.add(this.truncatedClass);
       this.collapse();
     }
+
+    this.setCopyValue();
   }
 
   isTruncated() {
@@ -43,24 +45,17 @@ export default class extends Controller {
     this.toggleExpandedTarget.setAttribute('aria-expanded', 'false');
   }
 
-  copy() {
+  setCopyValue() {
     const text = this.textTarget.innerText;
+
     const sender = this.senderNameValue;
-    let clipboardText = `${sender}: ${text}`;
+    let copyValue = `${sender}: ${text}`;
 
     if (!sender) {
-      clipboardText = text;
+      copyValue = text;
     }
 
-    navigator.clipboard.writeText(clipboardText).then(() => this.onCopy());
-  }
-
-  onCopy() {
-    this.element.classList.add(this.copiedClass);
-
-    setTimeout(() => {
-      this.element.classList.remove(this.copiedClass);
-    }, SUCCESS_NOTIFICATION_DURATION);
+    this.copyButtonTarget.dataset.copyButtonCopyValue = copyValue;
   }
 
   isHighlighted() {

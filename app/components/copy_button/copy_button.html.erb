@@ -1,0 +1,10 @@
+<%= c 'button', styles: styles, **attrs do %>
+  <span class="CopyButton-label">
+    <%= c 'icon', icon: :ungroup, style: :inline %>
+    <%= label %>
+  </span>
+  <span class="CopyButton-success">
+    <%= c 'icon', icon: 'f-check', style: :inline %>
+    <%= success %>
+  </span>
+<% end %>

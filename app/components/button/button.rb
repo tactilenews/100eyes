@@ -17,7 +17,7 @@ module Button
 
     private
 
-    attr_reader :label, :type, :link, :stimulus_controller, :stimulus_target
+    attr_reader :label, :type, :link
 
     def tag
       return :a if link

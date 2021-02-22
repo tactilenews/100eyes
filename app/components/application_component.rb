@@ -18,7 +18,7 @@ class ApplicationComponent < ViewComponent::Base
 
   private
 
-  attr_reader :styles, :data
+  attr_reader :styles
 
   def attrs
     AttributeBag.new(class: class_attr).merge(@attrs)

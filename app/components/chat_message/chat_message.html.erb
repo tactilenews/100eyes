@@ -5,7 +5,6 @@
   data-chat-message-sender-name-value="<%= message.sender&.name %>"
   data-chat-message-truncated-class="ChatMessage--truncated"
   data-chat-message-expanded-class="ChatMessage--expanded"
-  data-chat-message-copied-class="ChatMessage--copied"
   data-chat-message-highlighted-class="ChatMessage--highlighted"
   id="<%= id %>"
 >
@@ -48,17 +47,12 @@
       <a href="#<%= id %>"><%= date_time(message.created_at) %></a>
 
       <% unless hide_actions %>
-        <%= c 'button', style: :inline, data: { action: 'click->chat-message#copy' } do %>
-          <span class="ChatMessage-copy">
-            <%= c 'icon', icon: 'ungroup', style: :inline %>
-            <%= I18n.t('components.chat_message.copy') %>
-          </span>
-
-          <span class="ChatMessage-copied">
-            <%= c 'icon', icon: 'f-check', style: :inline %>
-            <%= I18n.t('components.chat_message.copied') %>
-          </span>
-        <% end %>
+        <%= c 'copy_button',
+          label: I18n.t('components.chat_message.copy'),
+          success: I18n.t('components.chat_message.copied'),
+          style: :inline,
+          data: { chat_message_target: 'copyButton' }
+        %>
 
         <%= c 'button', style: :inline, data: { action: 'click->chat-message#toggleHighlighted' } do %>
           <span class="ChatMessage-highlight">
