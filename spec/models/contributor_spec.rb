@@ -84,6 +84,40 @@ RSpec.describe Contributor, type: :model do
     end
   end
 
+  describe '#threema_id' do
+    it 'can be empty' do
+      contributor = build(:contributor, threema_id: nil)
+      expect(contributor.valid?).to be true
+    end
+
+    it 'must be unique' do
+      create(:contributor, threema_id: 'ABCD1234')
+      contributor = build(:contributor, threema_id: 'ABCD1234')
+      expect(contributor.valid?).to be false
+    end
+
+    it 'must be unique, ignoring case' do
+      create(:contributor, threema_id: 'abcd1234')
+      contributor = build(:contributor, threema_id: 'ABCD1234')
+      expect(contributor.valid?).to be false
+    end
+
+    it 'must contain alphanumeric chars only' do
+      contributor = build(:contributor, threema_id: 'ABCD@!?#')
+      expect(contributor.valid?).to be false
+    end
+
+    it 'must not be longer than 8 chars' do
+      contributor = build(:contributor, threema_id: '123456789')
+      expect(contributor.valid?).to be false
+    end
+
+    it 'must not be shorter than 8 chars' do
+      contributor = build(:contributor, threema_id: '1234567')
+      expect(contributor.valid?).to be false
+    end
+  end
+
   describe '#replied_to_requests' do
     it 'omits duplicates' do
       create(:message, request: the_request, sender: contributor)

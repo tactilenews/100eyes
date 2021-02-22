@@ -197,6 +197,7 @@ de:
         placeholder: Keine E-Mail-Adresse hinterlegt
       threema_id:
         label: Threema ID
+        help: 6 Zeichen lang, besteht nur aus Zahlen und Buchstaben
         placeholder: z.B. A12BC345
       username:
         label: Telegram
