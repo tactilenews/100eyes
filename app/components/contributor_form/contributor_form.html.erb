@@ -25,7 +25,7 @@
     <% end %>
 
     <%= c 'field', object: contributor, id: :threema_id, styles: [:horizontal] do |field| %>
-      <%= c 'input', field.input_defaults.merge(disabled: true) %>
+      <%= c 'input', field.input_defaults %>
     <% end %>
 
     <%= c 'field', object: contributor, id: :zip_code, styles: [:horizontal] do |field| %>

@@ -208,7 +208,6 @@ de:
       threema_id:
         label: Threema ID
         placeholder: Keine Threema-ID hinterlegt
-        title: Du kannst die Threema-ID nicht selbst ändern. Bei Bedarf, z.B. bei fehlerhaften Threema-IDs, kann ein Administrator weiterhelfen.
       zip_code:
         label: Postleitzahl
       city:
