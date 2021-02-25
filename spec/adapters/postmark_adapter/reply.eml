@@ -1,0 +1,67 @@
+Return-Path: <mail@roschaefer.de>
+Delivered-To: rschafer-mail@roschaefer.de
+Received: (qmail 27522 invoked by uid 1033); 26 Feb 2021 16:08:40 -0000
+Delivered-To: rschafer-100eyes-test@roschaefer.de
+Received: (qmail 27515 invoked from network); 26 Feb 2021 16:08:39 -0000
+Received: from localhost (HELO localhost) (127.0.0.1)
+  by eirene.uberspace.de with SMTP; 26 Feb 2021 16:08:39 -0000
+Subject: Re: Die Redaktion hat eine neue Frage
+To: 100eyes-test@roschaefer.de
+References:
+From: =?UTF-8?Q?Robert_Sch=c3=a4fer?= <mail@roschaefer.de>
+Message-ID: <4c5c51a5-4b77-bd50-4d81-bd5e4272a2a0@roschaefer.de>
+Date: Fri, 26 Feb 2021 17:08:17 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="------------00DEBB359476CC0D8DA4FBCF"
+Content-Language: en-US
+
+This is a multi-part message in MIME format.
+--------------00DEBB359476CC0D8DA4FBCF
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+
+Und hier würde die Antwort stehen.
+
+On 2/26/21 5:05 PM, 100eyes wrote:
+>
+> Hier könnte Ihre Frage stehen.
+>
+>
+>
+> -- 
+> Sofern Sie keine E-Mails mehr von uns erhalten möchten, können Sie sie
+> unter diesem Link abbestellen <{{{ pm:unsubscribe }}}>.
+
+--------------00DEBB359476CC0D8DA4FBCF
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: 8bit
+
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Re: Die Redaktion hat eine neue Frage</title>
+  </head>
+  <body>
+    <p>Und hier würde die Antwort stehen.<br>
+    </p>
+    <div class="moz-cite-prefix">On 2/26/21 5:05 PM, 100eyes wrote:<br>
+    </div>
+    <blockquote type="cite"
+      cite="mid:request%2F4@development-104eyes.loca.lt">
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+      <div class="hundred-eyes-message">
+        <p>Hier könnte Ihre Frage stehen.</p>
+        <br>
+        <br>
+        -- <br>
+        Sofern Sie keine E-Mails mehr von uns erhalten möchten, können
+        Sie sie unter <a href="{{{ pm:unsubscribe }}}"
+          moz-do-not-send="true">diesem Link abbestellen</a>. </div>
+    </blockquote>
+  </body>
+</html>
+
+--------------00DEBB359476CC0D8DA4FBCF--

@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe PostmarkAdapter::Inbound do
   let(:email_message) { described_class.new mail }
-  let(:text_part) { 'This is a text body part' }
+  let(:html_part) { 'This is a text body part' }
 
   describe '#text' do
     subject { -> { email_message.text } }
@@ -14,7 +14,7 @@ RSpec.describe PostmarkAdapter::Inbound do
         m.to '100eyes@example.org'
         m.subject 'This is a test email'
       end
-      mail.text_part = text_part
+      mail.html_part = html_part
       mail
     end
 
@@ -27,25 +27,25 @@ RSpec.describe PostmarkAdapter::Inbound do
           m.from 'contributor@example.org'
           m.to '100eyes@example.org'
           m.subject 'This is a test email'
-          m.body text_part
+          m.body html_part
         end
       end
       it { should_not raise_error }
       it { expect(subject.call).to eq('This is a text body part') }
 
       describe '<html> tags present in text' do
-        let(:text_part) { '<h1>This is a text body part</h1>' }
+        let(:html_part) { '<h1>This is a text body part</h1>' }
         it { expect(subject.call).to eq("\nThis is a text body part\n") }
       end
     end
 
     describe '<html> tags present in text' do
-      let(:text_part) { '<h1>This is a text body part</h1>' }
+      let(:html_part) { '<h1>This is a text body part</h1>' }
       it { expect(subject.call).to eq("\nThis is a text body part\n") }
     end
 
     describe '<br> tags present in text' do
-      let(:text_part) { 'First paragraph<br>Second paragraph' }
+      let(:html_part) { 'First paragraph<br>Second paragraph' }
 
       it 'converts <br> to line breaks' do
         expect(subject.call).to eq("First paragraph\nSecond paragraph")
@@ -53,7 +53,7 @@ RSpec.describe PostmarkAdapter::Inbound do
     end
 
     describe '<p> tags present in text' do
-      let(:text_part) { '<p>First paragraph</p><p>Second paragraph</p>' }
+      let(:html_part) { '<p>First paragraph</p><p>Second paragraph</p>' }
 
       it 'converts <p> to line breaks' do
         sanitized = <<~TEXT
@@ -68,7 +68,7 @@ RSpec.describe PostmarkAdapter::Inbound do
     end
 
     describe 'encoded special chars in text' do
-      let(:text_part) { '&auml;&ouml;&uuml;' }
+      let(:html_part) { '&auml;&ouml;&uuml;' }
 
       it 'decodes encoded special chars' do
         expect(subject.call).to eq('äöü')
@@ -76,7 +76,7 @@ RSpec.describe PostmarkAdapter::Inbound do
     end
 
     describe '<a> tags present in text' do
-      let(:text_part) { 'Have a look at my <a href="https://example.org">website</a>!' }
+      let(:html_part) { 'Have a look at my <a href="https://example.org">website</a>!' }
 
       it 'keeps link URLs' do
         expect(subject.call).to eq('Have a look at my website (https://example.org)!')
@@ -84,10 +84,19 @@ RSpec.describe PostmarkAdapter::Inbound do
     end
 
     describe '<a> tags without href attributes present in text' do
-      let(:text_part) { 'Have a look at my <a>website</a>!' }
+      let(:html_part) { 'Have a look at my <a>website</a>!' }
 
       it 'does not crash' do
         expect(subject.call).to eq('Have a look at my website!')
+      end
+    end
+
+    describe 'handling of replies to our mails' do
+      let(:mail) { Mail.read(Rails.root.join / 'spec/adapters/postmark_adapter/reply.eml') }
+      it 'removes previous messages' do
+        previous_message = 'Hier könnte Ihre Frage stehen'
+        expect(mail.html_part.decoded).to include(previous_message) # sanity check
+        expect(subject.call).not_to include(previous_message)
       end
     end
   end
