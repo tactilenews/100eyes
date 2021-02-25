@@ -35,4 +35,8 @@ class ApplicationComponent < ViewComponent::Base
   def class_attr
     class_names.join(' ')
   end
+
+  def virtual_path
+    self.class.name.demodulize.underscore
+  end
 end

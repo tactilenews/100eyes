@@ -10,12 +10,15 @@ class OnboardingController < ApplicationController
 
   def index
     @jwt = jwt_param
-    @contributor = Contributor.new
   end
 
   def success; end
 
   private
+
+  def default_url_options
+    super.merge(jwt: @jwt)
+  end
 
   def jwt_param
     params.require(:jwt)

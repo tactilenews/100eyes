@@ -1,21 +1,13 @@
 .Flex {
+  --gap: var(--spacing-unit-s);
+
   display: flex;
   width: 100%;
-  align-items: center;
-  gap: var(--spacing-unit);
+  flex-direction: column;
 }
 
-.Flex--equal > * {
-  flex-basis: 100%;
-  flex-grow: 1;
-}
-
-.Flex--smallGap {
-  gap: var(--spacing-unit-s);
-}
-
-.Flex--largeGap {
-  gap: var(--spacing-unit-l);
+.Flex > * + * {
+  margin-top: var(--gap);
 }
 
 .Flex--spaceBetween {
@@ -23,5 +15,46 @@
 }
 
 .Flex--reverse {
-  flex-direction: row-reverse;
+  flex-direction: column-reverse;
+}
+
+.Flex--reverse > * + * {
+  margin: 0;
+  margin-bottom: var(--gap);
+}
+
+.Flex--equal > * {
+  flex-basis: 100%;
+  flex-grow: 1;
+}
+
+@media screen and (min-width: 540px) {
+  .Flex {
+    --gap: var(--spacing-unit);
+
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .Flex > * + * {
+    margin: 0;
+    margin-left: var(--gap);
+  }
+
+  .Flex--reverse {
+    flex-direction: row-reverse;
+  }
+
+  .Flex--reverse > * + * {
+    margin: 0;
+    margin-right: var(--gap);
+  }
+}
+
+.Flex--smallGap {
+  --gap: var(--spacing-unit-s);
+}
+
+.Flex--largeGap {
+  --gap: var(--spacing-unit-l);
 }

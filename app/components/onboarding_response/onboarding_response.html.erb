@@ -1,14 +1,7 @@
-<div class="<%= class_attr %> text-serif">
-  <%= c 'wrapper', style: :narrow do %>
-    <%= c 'box' do %>
-      <%= c 'stack' do %>
-        <div class="OnboardingResponse-icon">
-          <%= c 'icon', icon: icon %>
-        </div>
-
-        <%= c('heading', tag: :h1) { heading } %>
-        <p><%= text %></p>
-      <% end %>
-    <% end %>
+<%= c 'interstitial', **attrs do %>
+  <%= c 'stack', space: :small, class: 'text-serif text-center' do %>
+    <%= c 'icon', icon: icon, class: 'OnboardingResponse-icon' %>
+    <%= c('heading', tag: :h1) { heading } %>
+    <p><%= text %></p>
   <% end %>
-</div>
+<% end %>

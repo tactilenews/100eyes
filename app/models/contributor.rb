@@ -17,6 +17,8 @@ class Contributor < ApplicationRecord
   scope :active, -> { where(deactivated_at: nil) }
 
   validates :email, uniqueness: { case_sensitive: false }, allow_nil: true, 'valid_email_2/email': true
+  validates :threema_id, uniqueness: { case_sensitive: false }, allow_nil: true, format: { with: /\A[A-Za-z0-9]+\z/ }, length: { is: 8 }
+
   validates :avatar, blob: { content_type: ['image/png', 'image/jpg', 'image/jpeg'], size_range: 0..5.megabytes }
 
   scope :with_tags, lambda { |tag_list = []|
@@ -29,15 +31,6 @@ class Contributor < ApplicationRecord
 
   def self.with_lowercased_email(email)
     find_by('lower(email) in (?)', Array.wrap(email).map(&:downcase))
-  end
-
-  def self.email_taken?(email)
-    contributor = Contributor.new(email: email)
-    contributor.valid?
-
-    error_types = contributor.errors.details[:email].pluck(:error)
-
-    error_types.include?(:taken)
   end
 
   def self.all_tags_with_count

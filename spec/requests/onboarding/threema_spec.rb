@@ -2,23 +2,23 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Onboarding::Email', type: :request do
+RSpec.describe 'Onboarding::Threema', type: :request do
   let(:contributor) { create(:contributor) }
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
   let(:params) { { jwt: jwt } }
 
-  describe 'POST /onboarding/email' do
+  describe 'POST /onboarding/threema' do
     let(:attrs) do
       {
         first_name: 'Zora',
         last_name: 'Zimmermann',
-        email: 'zora@example.org'
+        threema_id: 'ABCD1234'
       }
     end
 
     let(:params) { { jwt: jwt, contributor: attrs } }
 
-    subject { -> { post onboarding_email_path, params: params } }
+    subject { -> { post onboarding_threema_path, params: params } }
 
     it 'creates contributor' do
       expect { subject.call }.to change(Contributor, :count).by(1)
@@ -27,7 +27,7 @@ RSpec.describe 'Onboarding::Email', type: :request do
       expect(contributor).to have_attributes(
         first_name: 'Zora',
         last_name: 'Zimmermann',
-        email: 'zora@example.org'
+        threema_id: 'ABCD1234'
       )
     end
 
@@ -43,7 +43,7 @@ RSpec.describe 'Onboarding::Email', type: :request do
       expect(json_web_token).to exist
     end
 
-    describe 'given an existing email address' do
+    describe 'given an existing threema ID' do
       let!(:contributor) { create(:contributor, **attrs) }
 
       it 'redirects to success page' do

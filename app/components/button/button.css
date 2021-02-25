@@ -64,3 +64,21 @@
 .Button--underline {
   text-decoration: underline;
 }
+
+.Button--block {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.Button--threema {
+  --button-color: var(--color-threema);
+}
+
+.Button--telegram {
+  --button-color: var(--color-telegram);
+}
+
+.Button--email {
+  --button-color: var(--color-email);
+}

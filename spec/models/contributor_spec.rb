@@ -84,6 +84,40 @@ RSpec.describe Contributor, type: :model do
     end
   end
 
+  describe '#threema_id' do
+    it 'can be empty' do
+      contributor = build(:contributor, threema_id: nil)
+      expect(contributor).to be_valid
+    end
+
+    it 'must be unique' do
+      create(:contributor, threema_id: 'ABCD1234')
+      contributor = build(:contributor, threema_id: 'ABCD1234')
+      expect(contributor).not_to be_valid
+    end
+
+    it 'must be unique, ignoring case' do
+      create(:contributor, threema_id: 'abcd1234')
+      contributor = build(:contributor, threema_id: 'ABCD1234')
+      expect(contributor).not_to be_valid
+    end
+
+    it 'must contain alphanumeric chars only' do
+      contributor = build(:contributor, threema_id: 'ABCD@!?#')
+      expect(contributor).not_to be_valid
+    end
+
+    it 'must not be longer than 8 chars' do
+      contributor = build(:contributor, threema_id: '123456789')
+      expect(contributor).not_to be_valid
+    end
+
+    it 'must not be shorter than 8 chars' do
+      contributor = build(:contributor, threema_id: '1234567')
+      expect(contributor).not_to be_valid
+    end
+  end
+
   describe '#replied_to_requests' do
     it 'omits duplicates' do
       create(:message, request: the_request, sender: contributor)
@@ -325,27 +359,6 @@ RSpec.describe Contributor, type: :model do
       it 'aggregate contributors with a specific tag' do
         expect(Contributor.with_tags(['teacher', 'pig farmer'])).to contain_exactly(teaching_pig_farmer)
       end
-    end
-  end
-
-  describe '.email_taken?' do
-    let!(:contributor) { create(:contributor, email: 'zora@example.org') }
-
-    subject { Contributor.email_taken?(address) }
-
-    describe 'given the exact address' do
-      let(:address) { 'zora@example.org' }
-      it { should be(true) }
-    end
-
-    describe 'given a semantically equivalent address' do
-      let(:address) { 'ZORA@EXAMPLE.ORG' }
-      it { should be(true) }
-    end
-
-    describe 'given a different address' do
-      let(:address) { 'adam@example.org' }
-      it { should be(false) }
     end
   end
 

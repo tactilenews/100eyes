@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 module Onboarding
-  class EmailController < ChannelController
+  class ThreemaController < ChannelController
     private
 
     def attr_name
-      :email
+      :threema_id
     end
   end
 end

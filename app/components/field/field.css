@@ -23,7 +23,7 @@
 }
 
 .Field:not(.Field--horizontal) .Field-textWrapper {
-  margin-bottom: var(--spacing-unit-s);
+  margin-bottom: var(--spacing-unit-xs);
 }
 
 .Field--horizontal {

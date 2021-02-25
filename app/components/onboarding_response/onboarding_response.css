@@ -1,12 +1,3 @@
-.OnboardingResponse {
-  display: flex;
-  align-items: center;
-  text-align: center;
-
-  width: 100%;
-  min-height: 100vh;
-}
-
 .OnboardingResponse-icon {
   display: inline-block;
   width: var(--spacing-unit-xl);

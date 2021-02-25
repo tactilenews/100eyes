@@ -10,7 +10,7 @@ module Onboarding
 
     layout 'onboarding'
 
-    def info
+    def show
       @jwt = jwt_param
     end
 
@@ -49,7 +49,7 @@ module Onboarding
     private
 
     def redirect_to_success
-      redirect_to onboarding_success_path
+      redirect_to onboarding_success_path(jwt: nil)
     end
 
     def contributor_params

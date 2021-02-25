@@ -6,14 +6,21 @@ Rails.application.routes.draw do
   get '/search', to: 'search#index'
   get '/health', to: 'health#index'
 
-  get '/onboarding', to: 'onboarding#index'
-  get '/onboarding/success', to: 'onboarding#success'
+  namespace :onboarding, module: nil do
+    get '/', to: 'onboarding#index'
+    get '/success', to: 'onboarding#success'
 
-  namespace :onboarding do
-    post '/email', to: 'email#create'
-    get '/telegram', to: 'telegram#create'
-    patch '/telegram', to: 'telegram#update'
-    get '/telegram/info', to: 'telegram#info'
+    scope module: :onboarding do
+      get '/email', to: 'email#show'
+      post '/email', to: 'email#create'
+
+      get '/threema/', to: 'threema#show'
+      post '/threema/', to: 'threema#create'
+
+      get '/telegram/', to: 'telegram#show'
+      get '/telegram/callback', to: 'telegram#create'
+      patch '/telegram', to: 'telegram#update'
+    end
   end
 
   get '/settings', to: 'settings#index'

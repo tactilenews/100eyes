@@ -8,7 +8,7 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
   let(:params) { { jwt: jwt } }
 
-  describe 'GET /onboarding/telegram/create' do
+  describe 'GET /onboarding/telegram/callback' do
     let(:today) { Time.zone.now }
     let(:hash_created_at) { Time.new(today.year, today.month, today.day).to_i }
     let(:valid_hash) do
@@ -33,7 +33,7 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
       )
     end
 
-    subject { -> { get onboarding_telegram_path(**params) } }
+    subject { -> { get onboarding_telegram_callback_path(**params) } }
 
     describe 'with unsigned jwt' do
       let(:jwt) { 'INCORRECT_TOKEN' }
@@ -155,7 +155,7 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
     end
   end
 
-  describe 'PATCH /onboarding/telegram/update' do
+  describe 'PATCH /onboarding/telegram' do
     let!(:contributor) { create(:contributor, telegram_id: 789, first_name: nil, last_name: nil) }
     let(:attrs) do
       {

@@ -5,7 +5,6 @@
 <% end %>
 
 <main>
-
   <% if Setting.onboarding_hero.present? %>
     <%= c 'wrapper' do %>
       <%= c 'onboarding_hero', image: Setting.onboarding_hero %>
@@ -24,7 +23,25 @@
           <%= c 'markdown', raw: Setting.onboarding_page %>
         </div>
 
-        <%= c 'onboarding_instructions', contributor: @contributor, jwt: @jwt %>
+        <%= c 'flex', style: :equal do %>
+          <%= c 'button',
+            link: onboarding_threema_path,
+            label: 'Threema',
+            styles: [:block, :primary, :threema]
+          %>
+
+          <%= c 'button',
+            link: onboarding_telegram_path,
+            label: 'Telegram',
+            styles: [:block, :primary, :telegram]
+          %>
+
+          <%= c 'button',
+            link: onboarding_email_path,
+            label: 'E-Mail',
+            styles: [:block, :primary, :email]
+          %>
+        <% end %>
 
       <% end %>
     <% end %>
