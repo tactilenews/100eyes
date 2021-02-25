@@ -24,9 +24,11 @@ RSpec.describe 'Onboarding::Threema', type: :request do
       expect { subject.call }.to change(Contributor, :count).by(1)
 
       contributor = Contributor.first
-      expect(contributor.first_name).to eq('Zora')
-      expect(contributor.last_name).to eq('Zimmermann')
-      expect(contributor.threema_id).to eq('ABCD1234')
+      expect(contributor).to have_attributes(
+        first_name: 'Zora',
+        last_name: 'Zimmermann',
+        threema_id: 'ABCD1234'
+      )
     end
 
     it 'redirects to success page' do

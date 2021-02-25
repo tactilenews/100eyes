@@ -24,9 +24,11 @@ RSpec.describe 'Onboarding::Email', type: :request do
       expect { subject.call }.to change(Contributor, :count).by(1)
 
       contributor = Contributor.first
-      expect(contributor.first_name).to eq('Zora')
-      expect(contributor.last_name).to eq('Zimmermann')
-      expect(contributor.email).to eq('zora@example.org')
+      expect(contributor).to have_attributes(
+        first_name: 'Zora',
+        last_name: 'Zimmermann',
+        email: 'zora@example.org'
+      )
     end
 
     it 'redirects to success page' do
