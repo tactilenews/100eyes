@@ -19,10 +19,10 @@ module Onboarding
 
       if @contributor.save
         invalidate_jwt(jwt_param)
-        return redirect_to_success
+        redirect_to_success
+      else
+        redirect_to_failure
       end
-
-      redirect_to_failure
     end
 
     private
