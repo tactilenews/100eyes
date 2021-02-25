@@ -12,8 +12,8 @@ RSpec.describe RepliesMailbox, type: :mailbox do
 
   it {
     should have_enqueued_job.on_queue('mailers').with(
-      'Mailer',
-      'email',
+      'PostmarkAdapter::Outbound',
+      'bounce_email',
       'deliver_now',
       {
         params: {

@@ -5,6 +5,10 @@ module ThreemaAdapter
     UNSUPPORTED_CONTENT_TYPES = %w[video application text/x-vcard].freeze
     attr_reader :sender, :text, :unknown_content, :message, :delivery_receipt
 
+    def self.bounce!(recipient:, text:)
+      Threema.new.send(type: :text, threema_id: recipient.threema_id, text: text)
+    end
+
     def initialize(threema_message)
       decrypted_message = Threema.new.receive(payload: threema_message)
 

@@ -13,7 +13,7 @@ module PostmarkAdapter
           to: mail.from.first
         }
       }
-      Mailer.with(mailer_params).email
+      PostmarkAdapter::Outbound.with(mailer_params).bounce_email
     end
 
     def self.from(raw_data)

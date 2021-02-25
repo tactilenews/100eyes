@@ -74,6 +74,7 @@ RSpec.configure do |config|
   config.after { Telegram.bots.each_value(&:reset) }
   # or for multiple bots:
   config.include ActionMailbox::TestHelper, type: :mailbox
+  config.include ActiveJob::TestHelper
 
   # Support view_component test helpers and Capybara matchers
   # in component specs

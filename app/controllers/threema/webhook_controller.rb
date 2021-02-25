@@ -12,7 +12,10 @@ class Threema::WebhookController < ApplicationController
     contributor = threema_message.sender
     return head :ok unless contributor
 
-    respond_to_unknown_content(contributor) if threema_message.unknown_content
+    if threema_message.unknown_content
+      ThreemaAdapter::Inbound.bounce!(recipient: contributor,
+                                      text: Setting.threema_unknown_content_message)
+    end
 
     head :ok if contributor.reply(threema_message)
   rescue ActiveRecord::RecordInvalid
@@ -23,9 +26,5 @@ class Threema::WebhookController < ApplicationController
 
   def threema_webhook_params
     params.permit(:from, :to, :messageId, :date, :nonce, :box, :mac, :nickname)
-  end
-
-  def respond_to_unknown_content(contributor)
-    ThreemaAdapter::Outbound.new(message: Message.new(text: Setting.threema_unknown_content_message, recipient: contributor)).send!
   end
 end

@@ -15,7 +15,7 @@ RSpec.describe Threema::WebhookController do
       'nickname' => 'matt.rider'
     }
   end
-  let(:message) { build(:message) }
+  let(:message) { create(:message) }
   let(:threema_mock) { instance_double(Threema::Receive::Text, content: 'Hello World!') }
   let(:threema) { instance_double(Threema) }
 

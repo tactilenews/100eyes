@@ -233,7 +233,7 @@ RSpec.describe Contributor, type: :model do
   end
 
   describe '#reply' do
-    subject { -> { contributor.reply(message_decorator) } }
+    subject { -> { contributor.reply(message_inbound_adapter) } }
     describe 'given a PostmarkAdapter::Inbound' do
       let(:mail) do
         mail = Mail.new do |m|
@@ -244,7 +244,7 @@ RSpec.describe Contributor, type: :model do
         mail.text_part = 'This is a text body part'
         mail
       end
-      let(:message_decorator) { PostmarkAdapter::Inbound.new(mail) }
+      let(:message_inbound_adapter) { PostmarkAdapter::Inbound.new(mail) }
 
       it { should_not raise_error }
       it { should_not(change { Message.count }) }
@@ -258,7 +258,7 @@ RSpec.describe Contributor, type: :model do
 
     describe 'given a TelegramAdapter::Inbound' do
       let(:contributor) { create(:contributor, telegram_id: 4711) }
-      let(:message_decorator) do
+      let(:message_inbound_adapter) do
         TelegramAdapter::Inbound.new(
           'text' => 'The answer is 42.',
           'from' => {
