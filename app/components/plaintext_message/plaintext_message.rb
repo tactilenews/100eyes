@@ -13,15 +13,15 @@ module PlaintextMessage
     attr_reader :message
 
     def empty?
-      content.empty?
+      message_content.empty?
     end
 
     def rendered
-      simple_format(h(content))
+      simple_format(h(message_content))
     end
 
-    def content
-      (message || @content || '').strip
+    def message_content
+      (message || content || '').strip
     end
   end
 end

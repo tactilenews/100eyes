@@ -12,7 +12,7 @@ module Button
     end
 
     def call
-      content_tag(tag, content, href: link, **attrs)
+      content_tag(tag, button_content, href: link, **attrs)
     end
 
     private
@@ -25,8 +25,8 @@ module Button
       :button
     end
 
-    def content
-      label || @content
+    def button_content
+      label || content
     end
   end
 end
