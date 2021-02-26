@@ -24,7 +24,7 @@ module Field
 
     private
 
-    attr_reader :object, :id, :content
+    attr_reader :object, :id
 
     def validation_errors
       object.errors[id]
