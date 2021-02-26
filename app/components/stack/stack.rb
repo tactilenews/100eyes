@@ -11,9 +11,5 @@ module Stack
     def call
       tag.div(content, **attrs)
     end
-
-    private
-
-    attr_reader :content
   end
 end
