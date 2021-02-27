@@ -79,6 +79,8 @@ de:
       text: Geben Sie bitte unten Ihren Namen sowie Ihre Threema ID ein. Die Threema ID finden Sie in der Threema-App im Bereich „Mein Profil”.
       submit: Anmeldung abschließen
     onboarding_telegram_form:
+      heading: Mit Telegram teilnehmen
+      text: Geben Sie bitte unten Ihren Namen ein, um die Anmeldung abzuschließen.
       submit: Anmeldung abschließen
     telegram_explained:
       link: Mit Telegram teilnehmen
