@@ -27,6 +27,7 @@ class Contributor < ApplicationRecord
 
   before_validation do
     self.email = nil if email.blank?
+    self.threema_id = nil if threema_id.blank?
   end
 
   def self.with_lowercased_email(email)
