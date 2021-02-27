@@ -25,6 +25,12 @@ module Onboarding
       end
     end
 
+    protected
+
+    def redirect_to_failure
+      redirect_to onboarding_path
+    end
+
     private
 
     def redirect_if_contributor_exists
@@ -65,10 +71,6 @@ module Onboarding
 
     def redirect_to_success
       redirect_to onboarding_success_path(jwt: nil)
-    end
-
-    def redirect_to_failure
-      redirect_to onboarding_path
     end
 
     def jwt_param
