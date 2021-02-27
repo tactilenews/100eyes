@@ -17,7 +17,7 @@ class Contributor < ApplicationRecord
   scope :active, -> { where(deactivated_at: nil) }
 
   validates :email, uniqueness: { case_sensitive: false }, allow_nil: true, 'valid_email_2/email': true
-  validates :threema_id, uniqueness: { case_sensitive: false }, allow_nil: true, format: { with: /\A[A-Za-z0-9]+\z/ }, length: { is: 8 }
+  validates :threema_id, uniqueness: { case_sensitive: false }, allow_blank: true, format: { with: /\A[A-Za-z0-9]+\z/ }, length: { is: 8 }
 
   validates :avatar, blob: { content_type: ['image/png', 'image/jpg', 'image/jpeg'], size_range: 0..5.megabytes }
 

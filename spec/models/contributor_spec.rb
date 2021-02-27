@@ -85,8 +85,13 @@ RSpec.describe Contributor, type: :model do
   end
 
   describe '#threema_id' do
-    it 'can be empty' do
+    it 'can be nil' do
       contributor = build(:contributor, threema_id: nil)
+      expect(contributor).to be_valid
+    end
+
+    it 'can be empty string' do
+      contributor = build(:contributor, threema_id: '')
       expect(contributor).to be_valid
     end
 
