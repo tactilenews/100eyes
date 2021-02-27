@@ -19,7 +19,7 @@
       <% end %>
 
       <%= c 'field', object: @contributor, id: :email do |field| %>
-        <%= c 'input', field.input_defaults.merge(placeholder: '', required: true) %>
+        <%= c 'input', field.input_defaults.merge(placeholder: '', required: true, type: :email) %>
       <% end %>
 
       <%= c 'button',
