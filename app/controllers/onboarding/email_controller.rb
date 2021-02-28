@@ -2,14 +2,12 @@
 
 module Onboarding
   class EmailController < ChannelController
-    protected
+    private
 
     def redirect_to_failure
       # show validation errors
       render :show
     end
-
-    private
 
     def attr_name
       :email

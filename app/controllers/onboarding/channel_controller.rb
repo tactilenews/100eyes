@@ -25,13 +25,11 @@ module Onboarding
       end
     end
 
-    protected
+    private
 
     def redirect_to_failure
       redirect_to onboarding_path
     end
-
-    private
 
     def redirect_if_contributor_exists
       # We handle an onbaording request for a contributor that
