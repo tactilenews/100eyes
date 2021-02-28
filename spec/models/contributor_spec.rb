@@ -68,7 +68,7 @@ RSpec.describe Contributor, type: :model do
 
       describe 'given an existing invalid contributor with empty string as email address' do
         before(:each) do
-          build(:contributor, id: 1).save!(validate: false)
+          build(:contributor, email: '').save!(validate: false)
         end
 
         it { should_not raise_error }
@@ -93,6 +93,23 @@ RSpec.describe Contributor, type: :model do
     it 'can be empty string' do
       contributor = build(:contributor, threema_id: '')
       expect(contributor).to be_valid
+    end
+
+    describe 'given a blank threema_id' do
+      subject { -> { build(:contributor, threema_id: '').save! } }
+
+      it { should_not raise_error }
+      it { should change { Contributor.count }.from(0).to(1) }
+      it { should change { Contributor.pluck(:threema_id) }.from([]).to([nil]) }
+
+      describe 'given an existing invalid contributor with empty string as threema_id' do
+        before(:each) do
+          build(:contributor, threema_id: '').save!(validate: false)
+        end
+
+        it { should_not raise_error }
+        it { should change { Contributor.count }.from(1).to(2) }
+      end
     end
 
     it 'must be unique' do
