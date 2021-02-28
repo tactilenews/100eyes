@@ -3,6 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Onboarding::Email', type: :request do
+  let(:email) { 'zora@example.org' }
   let(:contributor) { create(:contributor) }
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
   let(:params) { { jwt: jwt } }
@@ -12,7 +13,7 @@ RSpec.describe 'Onboarding::Email', type: :request do
       {
         first_name: 'Zora',
         last_name: 'Zimmermann',
-        email: 'zora@example.org'
+        email: email
       }
     end
 
@@ -27,7 +28,7 @@ RSpec.describe 'Onboarding::Email', type: :request do
       expect(contributor).to have_attributes(
         first_name: 'Zora',
         last_name: 'Zimmermann',
-        email: 'zora@example.org'
+        email: email
       )
     end
 
@@ -41,6 +42,18 @@ RSpec.describe 'Onboarding::Email', type: :request do
 
       json_web_token = JsonWebToken.where(invalidated_jwt: jwt)
       expect(json_web_token).to exist
+    end
+
+    context 'given invalid email address' do
+      let(:email) { 'invalid-email' }
+
+      it 'displays validation errors' do
+        subject.call
+        parsed = Capybara::Node::Simple.new(response.body)
+        fields = parsed.all('.Field')
+        email_field = fields.find { |f| f.has_text? 'E-Mail' }
+        expect(email_field).to have_text('ist nicht gültig')
+      end
     end
 
     describe 'given an existing email address' do

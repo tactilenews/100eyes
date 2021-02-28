@@ -27,6 +27,10 @@ module Onboarding
 
     private
 
+    def redirect_to_failure
+      redirect_to onboarding_path
+    end
+
     def redirect_if_contributor_exists
       # We handle an onbaording request for a contributor that
       # already exists in the exact same way as a successful
@@ -65,10 +69,6 @@ module Onboarding
 
     def redirect_to_success
       redirect_to onboarding_success_path(jwt: nil)
-    end
-
-    def redirect_to_failure
-      redirect_to onboarding_path
     end
 
     def jwt_param
