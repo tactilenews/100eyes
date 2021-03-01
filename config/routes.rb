@@ -52,7 +52,7 @@ Rails.application.routes.draw do
 
   resources :invites, only: :create
 
-  resources :messages, only: %() do
+  resources :messages, only: %i[new create] do
     member do
       scope module: :messages, as: :message do
         resource :highlight, only: :update, format: /json/

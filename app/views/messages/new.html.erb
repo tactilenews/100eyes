@@ -1,0 +1,23 @@
+<%= c 'box', style: :large do %>
+    <%= c 'wrapper', style: :xnarrow do %>
+      <%= c 'stack' do %>
+  
+        <%= c 'stack', space: :small do %>
+          <%= c 'heading', tag: :h1 do %>
+            <%= t('contributor.request.manually_add_message.title') %>
+          <% end %>
+  
+          <p>
+            <%= t(
+              'contributor.request.manually_add_message.text',
+              name: @contributor.name,
+              title: @request.title
+            ).html_safe %>
+          </p>
+        <% end %>
+
+        <%= c 'message_form', contributor: @contributor, request: @request %>
+  
+      <% end %>
+    <% end %>
+  <% end %>

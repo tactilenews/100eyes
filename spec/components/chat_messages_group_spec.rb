@@ -6,7 +6,8 @@ RSpec.describe ChatMessagesGroup::ChatMessagesGroup, type: :component do
   subject { render_inline(described_class.new(**params)) }
   let(:contributor) { create(:contributor) }
   let(:message) { create(:message) }
-  let(:params) { { messages: [message], contributor: contributor } }
+  let(:contributor_request) { create(:request, id: 1) }
+  let(:params) { { messages: [message], contributor: contributor, request: contributor_request } }
 
   it { should have_css('.ChatMessagesGroup') }
 end

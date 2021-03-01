@@ -16,9 +16,13 @@ de:
       blocked_by_contributor: wurde von diesem Mitglied blockiert
     chat_messages_group:
       reply: nachfragen
+      add_message: Antwort manuell hinzufügen
     chat_form:
       placeholder: Gib hier deine Nachfrage ein…
       submit: Absenden
+    message_form:
+      placeholder: Füge hier den Text der Antwort ein…
+      submit: Hinzufügen
     chat_message_audio:
       no_audio_support: Dein Browser unterstützt das Audio Element nicht
     contributor_row:
@@ -227,6 +231,13 @@ de:
         placeholder: Klicke hier, um eine Notiz zu %{value} zu hinterlegen
       active:
         label: Aktiv
+    request:
+      manually_add_message:
+          title: Antwort manuell hinzufügen
+          text: Hier kannst du manuell Antworten von <strong>%{name}</strong> zur Frage <strong>„%{title}”</strong> hinzufügen.
+
+
+
   request:
     request:
       one: Frage
@@ -316,6 +327,7 @@ de:
     move:
       heading: Nachricht verschieben
       text: Gehört diese Nachricht von <strong>%{name}</strong> nicht zur Frage <strong>„%{title}”</strong>? Dann kannst du sie hier zu einer anderen Frage verschieben.
+    success: Antwort wurde hinzugefügt  
 
   activerecord:
     errors:
