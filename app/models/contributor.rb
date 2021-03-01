@@ -71,11 +71,15 @@ class Contributor < ApplicationRecord
   end
 
   def channels
-    { email: email?, telegram: telegram? }.select { |_k, v| v }.keys
+    { email: email?, telegram: telegram?, threema: threema? }.select { |_k, v| v }.keys
   end
 
   def active_request
     received_requests.reorder(created_at: :desc).first || Request.reorder(created_at: :desc).first
+  end
+
+  def threema?
+    threema_id.present?
   end
 
   def telegram?

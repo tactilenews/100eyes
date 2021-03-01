@@ -18,10 +18,7 @@ module ContributorRow
     end
 
     def channel_icons
-      channels = []
-      channels << :mail if contributor.email?
-      channels << :telegram if contributor.telegram?
-      channels
+      contributor.channels
     end
   end
 end
