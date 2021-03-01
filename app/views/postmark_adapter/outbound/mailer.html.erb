@@ -5,11 +5,13 @@
   </head>
 
   <body>
-    <%= simple_format(@text) %>
-    <br>
-    <br>
-    --
-    <br>
-    <%= t 'mailer.unsubscribe.html'.html_safe %>
+    <div class="hundred-eyes-message">
+      <%= simple_format(@text) %>
+      <br>
+      <br>
+      --
+      <br>
+      <%= t 'mailer.unsubscribe.html'.html_safe %>
+    </div>
   </body>
 </html>

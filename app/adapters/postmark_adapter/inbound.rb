@@ -35,23 +35,10 @@ module PostmarkAdapter
     private
 
     def initialize_text(mail)
-      text = mail.multipart? ? mail.text_part&.decoded : mail.decoded
+      text = mail.multipart? ? mail.html_part&.decoded : mail.decoded
       fragment = Loofah.fragment(text)
-      plain_text_links = Loofah::Scrubber.new do |node|
-        if (node.name == 'a') && node['href']
-          href = " (#{node['href']})"
-          node.add_child(Nokogiri::XML::Text.new(href, node.document))
-        end
-      end
-      br2lines = Loofah::Scrubber.new do |node|
-        node.replace(Nokogiri::XML::Text.new("\n", node.document)) if node.name == 'br'
-      end
-      result = fragment
-               .scrub!(plain_text_links)
-               .scrub!(br2lines)
-               .scrub!(Loofah::Scrubbers::NewlineBlockElements.new)
-               .to_s
-      ActionController::Base.helpers.strip_tags(result)
+      scrubbed = scrubbers.reduce(fragment) { |result, scrubber| result.scrub!(scrubber) }
+      ActionController::Base.helpers.strip_tags(scrubbed.to_s)
     end
 
     def initialize_contributor(mail)
@@ -79,6 +66,22 @@ module PostmarkAdapter
       unknown_content = photos.any?(&:invalid?)
       photos = photos.select(&:valid?) # this might not be an image
       [photos, unknown_content]
+    end
+
+    def scrubbers
+      plain_text_links = Loofah::Scrubber.new do |node|
+        if (node.name == 'a') && node['href']
+          href = " (#{node['href']})"
+          node.add_child(Nokogiri::XML::Text.new(href, node.document))
+        end
+      end
+      br2lines = Loofah::Scrubber.new do |node|
+        node.replace(Nokogiri::XML::Text.new("\n", node.document)) if node.name == 'br'
+      end
+      rm_previous_message = Loofah::Scrubber.new do |node|
+        node.remove if node.attributes['class']&.value == 'hundred-eyes-message'
+      end
+      [rm_previous_message, plain_text_links, br2lines, Loofah::Scrubbers::NewlineBlockElements.new]
     end
   end
 end
