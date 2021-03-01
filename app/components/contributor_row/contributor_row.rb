@@ -17,11 +17,8 @@ module ContributorRow
       contributor_path(contributor)
     end
 
-    def channel_icons
-      channels = []
-      channels << :mail if contributor.email?
-      channels << :telegram if contributor.telegram?
-      channels
+    def channels
+      contributor.channels.map(&:capitalize).join(', ')
     end
   end
 end
