@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/tactilenews/threema.git
-  revision: 438e537352fd240291a659e32e26fc9222ae5782
+  revision: 6930788de13c329343d0286585968490dbbe7e24
   branch: master
   specs:
     threema (0.1.0)
@@ -162,7 +162,7 @@ GEM
     method_source (1.0.0)
     mime-types (3.3.1)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2020.1104)
+    mime-types-data (3.2021.0225)
     mimemagic (0.3.5)
     mini_magick (4.11.0)
     mini_mime (1.0.2)
