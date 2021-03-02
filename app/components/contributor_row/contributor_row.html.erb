@@ -11,10 +11,8 @@
       <span class="ContributorRow-name"><%= contributor.name %></span>
     </strong>
 
-    <span class="ContributorRow-channels">
-      <% channel_icons.each do |icon| %>
-        <%= c 'icon', icon: icon, styles: [:inline] %>
-      <% end %>
+    <span class="ContributorRow-channels"> 
+        via <%= channels %>
     </span>
 
     <% if contributor.tags? %>

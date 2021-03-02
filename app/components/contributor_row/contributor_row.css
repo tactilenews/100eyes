@@ -7,18 +7,12 @@ a.ContributorRow:hover .ContributorRow-name {
   text-decoration: underline;
 }
 
-.ContributorRow-channels {
-  margin-left: 0.25em;
-}
-
 .ContributorRow-avatar {
   margin-right: var(--spacing-unit-s);
 }
 
 .ContributorRow-channels {
-  color: var(--color-accent);
-}
-
-.ContributorRow--inactive .ContributorRow-channels {
+  margin-left: 0.25em;
   color: var(--color-gray);
+  font-size: calc(0.9 * var(--font-size));
 }
