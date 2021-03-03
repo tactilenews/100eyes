@@ -79,7 +79,7 @@ module PostmarkAdapter
         node.replace(Nokogiri::XML::Text.new("\n", node.document)) if node.name == 'br'
       end
       rm_previous_message = Loofah::Scrubber.new do |node|
-        node.remove if node.attributes['class']&.value == 'hundred-eyes-message'
+        node.remove if [node['class'], node['id']].map(&:to_s).any? { |v| v.include? 'hundred-eyes-message' }
       end
       [rm_previous_message, plain_text_links, br2lines, Loofah::Scrubbers::NewlineBlockElements.new]
     end

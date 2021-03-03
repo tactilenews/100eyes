@@ -91,12 +91,32 @@ RSpec.describe PostmarkAdapter::Inbound do
       end
     end
 
-    describe 'handling of replies to our mails' do
-      let(:mail) { Mail.read(Rails.root.join / 'spec/adapters/postmark_adapter/reply.eml') }
-      it 'removes previous messages' do
-        previous_message = 'Hier könnte Ihre Frage stehen'
-        expect(mail.html_part.decoded).to include(previous_message) # sanity check
-        expect(subject.call).not_to include(previous_message)
+    describe 'previous messages present in reply' do
+      context 'given unchanged class and id attributes' do
+        let(:mail) { Mail.read(Rails.root.join / 'spec/adapters/postmark_adapter/reply.eml') }
+        it 'removes previous messages' do
+          previous_message = 'Hier könnte Ihre Frage stehen'
+          expect(mail.html_part.decoded).to include(previous_message) # sanity check
+          expect(subject.call).not_to include(previous_message)
+        end
+      end
+
+      context 'given only an unchanged id attribute' do
+        let(:mail) { Mail.read(Rails.root.join / 'spec/adapters/postmark_adapter/reply_only_id_attribute.eml') }
+        it 'removes previous messages' do
+          previous_message = 'Hier könnte Ihre Frage stehen'
+          expect(mail.html_part.decoded).to include(previous_message) # sanity check
+          expect(subject.call).not_to include(previous_message)
+        end
+      end
+
+      context 'given only a changed class attribute' do
+        let(:mail) { Mail.read(Rails.root.join / 'spec/adapters/postmark_adapter/reply_changed_class_attribute.eml') }
+        it 'removes previous messages' do
+          previous_message = 'Hier könnte Ihre Frage stehen'
+          expect(mail.html_part.decoded).to include(previous_message) # sanity check
+          expect(subject.call).not_to include(previous_message)
+        end
       end
     end
   end
