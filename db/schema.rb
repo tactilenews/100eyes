@@ -101,6 +101,8 @@ ActiveRecord::Schema.define(version: 2021_03_08_141759) do
     t.boolean "unknown_content", default: false
     t.boolean "blocked", default: false
     t.boolean "highlighted", default: false
+    t.bigint "creator_id"
+    t.index ["creator_id"], name: "index_messages_on_creator_id"
     t.index ["recipient_id"], name: "index_messages_on_recipient_id"
     t.index ["request_id"], name: "index_messages_on_request_id"
     t.index ["sender_id"], name: "index_messages_on_sender_id"
@@ -176,6 +178,8 @@ ActiveRecord::Schema.define(version: 2021_03_08_141759) do
     t.string "remember_token", limit: 128, null: false
     t.string "otp_secret_key"
     t.boolean "otp_enabled", default: false
+    t.string "first_name"
+    t.string "last_name"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["remember_token"], name: "index_users_on_remember_token"
   end

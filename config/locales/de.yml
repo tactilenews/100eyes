@@ -14,6 +14,8 @@ de:
       move: verschieben
       contains_unknown_content: Enthält nicht unterstützte Inhalte
       blocked_by_contributor: wurde von diesem Mitglied blockiert
+      created_by: Manuell hinzugefügt von %{name}
+      anonymous_creator: anonymer User
     chat_messages_group:
       reply: nachfragen
       add_message: Antwort manuell hinzufügen

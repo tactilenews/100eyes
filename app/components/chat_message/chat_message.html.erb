@@ -75,6 +75,12 @@
       <% end %>
     </div>
 
+    <div class="ChatMessage-meta">
+      <% if message.manually_created? %>
+        <%= I18n.t('components.chat_message.created_by', name: creator_name) %>
+      <% end %>
+    </div>
+
     <% if warnings.any? %>
       <div class="ChatMessage-meta ChatMessage-warnings">
         <% warnings.each do |warning| %>

@@ -6,7 +6,7 @@ class MessagesController < ApplicationController
   def new; end
 
   def create
-    @message = Message.new(text: params[:message][:text], sender: @contributor, request: @request)
+    @message = Message.new(text: params[:message][:text], sender: @contributor, request: @request, creator: current_user)
     @message.raw_data.attach(
       io: StringIO.new(params[:message][:text]),
       filename: 'manually_added.txt',

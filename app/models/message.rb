@@ -9,6 +9,7 @@ class Message < ApplicationRecord
 
   belongs_to :sender, class_name: 'Contributor', optional: true
   belongs_to :recipient, class_name: 'Contributor', optional: true
+  belongs_to :creator, class_name: 'User', optional: true
   belongs_to :request
   has_many :photos, dependent: :destroy
   has_one :file, dependent: :destroy, class_name: 'Message::File'
@@ -29,10 +30,18 @@ class Message < ApplicationRecord
     sender_id.present?
   end
 
+  def manually_created?
+    creator_id.present?
+  end
+
   def sender_name
     return sender.name if sender
 
     Setting.project_name
+  end
+
+  def creator_name
+    creator&.name
   end
 
   def contributor
