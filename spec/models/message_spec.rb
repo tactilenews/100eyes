@@ -39,6 +39,19 @@ RSpec.describe Message, type: :model do
     end
   end
 
+  describe '#manually_created?' do
+    subject { message.manually_created? }
+    context 'message has a creator' do
+      let(:message) { create(:message, creator: create(:user)) }
+      it { should be(true) }
+    end
+
+    context 'message has no creator' do
+      let(:message) { create(:message, creator: nil) }
+      it { should be(false) }
+    end
+  end
+
   describe 'deeplinks' do
     let(:contributor) { create(:contributor, id: 7) }
     let(:request) { create(:request, id: 6) }
