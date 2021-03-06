@@ -22,7 +22,7 @@ class Message < ApplicationRecord
   validates :raw_data, presence: true, if: -> { sender.present? }
   validates :unknown_content, inclusion: { in: [true, false] }
 
-  after_commit(on: :create) do
+  after_commit(on: :create, unless: :manually_created?) do
     [PostmarkAdapter::Outbound, TelegramAdapter::Outbound, ThreemaAdapter::Outbound].each { |adapter| adapter.send!(self) }
   end
 

@@ -4,12 +4,12 @@
   
         <%= c 'stack', space: :small do %>
           <%= c 'heading', tag: :h1 do %>
-            <%= t('contributor.request.manually_add_message.title') %>
+            <%= t('message.create.heading') %>
           <% end %>
   
           <p>
             <%= t(
-              'contributor.request.manually_add_message.text',
+              'message.create.text',
               name: @contributor.name,
               title: @request.title
             ).html_safe %>

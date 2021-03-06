@@ -16,11 +16,7 @@ RSpec.describe '/messages', type: :request do
 
   describe 'POST /messages' do
     let(:msg_attrs) { { text: 'Triangles are my favorite shape.' } }
-    subject do
-      lambda {
-        post messages_url(as: user), params: { message: msg_attrs, request_id: request.id, contributor_id: contributor.id }
-      }
-    end
+    subject { -> { post messages_url(as: user), params: { message: msg_attrs, request_id: request.id, contributor_id: contributor.id } } }
 
     it { should change { Message.count }.from(0).to(1) }
 

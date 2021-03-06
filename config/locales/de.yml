@@ -233,12 +233,6 @@ de:
         placeholder: Klicke hier, um eine Notiz zu %{value} zu hinterlegen
       active:
         label: Aktiv
-    request:
-      manually_add_message:
-          title: Antwort manuell hinzufügen
-          text: Hier kannst du manuell Antworten von <strong>%{name}</strong> zur Frage <strong>„%{title}”</strong> hinzufügen.
-
-
 
   request:
     request:
@@ -324,12 +318,16 @@ de:
       failure_message: Einmaliges Token ungültig
 
   message:
-    moved: Nachricht erfolgreich verschoben
-    move_failed: Die Nachricht konnte nicht verschoben werden
     move:
       heading: Nachricht verschieben
       text: Gehört diese Nachricht von <strong>%{name}</strong> nicht zur Frage <strong>„%{title}”</strong>? Dann kannst du sie hier zu einer anderen Frage verschieben.
-    success: Antwort wurde hinzugefügt  
+      success: Die Nachricht wurde erfolgreich verschoben
+      error: Die Nachricht konnte nicht verschoben werden
+    create:
+      heading: Antwort manuell hinzufügen
+      text: Hier kannst du manuell Antworten von <strong>%{name}</strong> zur Frage <strong>„%{title}”</strong> hinzufügen.
+      success: Die Antwort wurde hinzugefügt
+      error: Die Antwort konnte nicht hinzugefügt werden
 
   activerecord:
     errors:

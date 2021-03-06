@@ -13,10 +13,10 @@ module Messages
         anchor = "contributor-#{@message.contributor.id}"
         redirect_url = request_url(previous_request, anchor: anchor)
 
-        flash[:success] = I18n.t('message.moved')
+        flash[:success] = I18n.t('message.move.success')
         redirect_to redirect_url
       else
-        flash.now[:error] = I18n.t('message.move_failed')
+        flash.now[:error] = I18n.t('message.move.error')
         @message.restore_request_id!
         render :show
       end

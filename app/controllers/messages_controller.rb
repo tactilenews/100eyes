@@ -13,9 +13,9 @@ class MessagesController < ApplicationController
       content_type: 'text/plain'
     )
     if @message.save!
-      redirect_to contributor_request_path(contributor_id: @contributor, id: @request), flash: { success: I18n.t('message.success') }
+      redirect_to contributor_request_path(contributor_id: @contributor, id: @request), flash: { success: I18n.t('message.create.success') }
     else
-      render :new_message
+      render :new_message, flash: { error: I18n.t('message.create.error') }
     end
   end
 

@@ -85,7 +85,7 @@ RSpec.describe 'Messages', type: :request do
       it 'shows error message' do
         subject.call
 
-        expect(flash[:error]).to eq(I18n.t('message.move_failed'))
+        expect(flash[:error]).to eq(I18n.t('message.move.error'))
       end
     end
 
