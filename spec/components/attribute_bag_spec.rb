@@ -2,7 +2,7 @@
 
 RSpec.describe AttributeBag do
   let(:attrs) { {} }
-  let(:bag) { described_class.new(attrs) }
+  let(:bag) { described_class.new(**attrs) }
 
   describe 'to_s' do
     subject { bag.to_s }
@@ -29,14 +29,14 @@ RSpec.describe AttributeBag do
   end
 
   describe 'merge' do
-    subject { bag.merge(additional_attrs).attrs }
+    subject { bag.merge(**additional_attrs).attrs }
     let(:attrs) { { type: :button } }
     let(:additional_attrs) { { id: 'form-action' } }
 
     it { should eq({ type: :button, id: 'form-action' }) }
 
     it 'does not manipulate original bag' do
-      bag.merge(additional_attrs)
+      bag.merge(**additional_attrs)
       expect(bag.attrs).to eq({ type: :button })
     end
 

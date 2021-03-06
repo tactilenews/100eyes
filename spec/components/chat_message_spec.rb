@@ -52,17 +52,17 @@ RSpec.describe ChatMessage::ChatMessage, type: :component do
 
     context 'given a manually created message' do
       let(:message) { create(:message, creator: create(:user, first_name: 'Princess', last_name: 'Mononoke')) }
-      it { should have_text(I18n.t('components.chat_message.created_by', name: 'Princess Mononoke'))}
+      it { should have_text(I18n.t('components.chat_message.created_by', name: 'Princess Mononoke')) }
 
       context 'with a creator with no name' do
         let(:message) { create(:message, creator: create(:user)) }
-        it { should have_text(I18n.t('components.chat_message.created_by', name: I18n.t('components.chat_message.anonymous_creator')))}
+        it { should have_text(I18n.t('components.chat_message.created_by', name: I18n.t('components.chat_message.anonymous_creator'))) }
       end
     end
 
     context 'given a non-manually created message' do
       let(:message) { create(:message) }
-      it { should_not have_text(I18n.t('components.chat_message.created_by', name: ''))}
+      it { should_not have_text(I18n.t('components.chat_message.created_by', name: '')) }
     end
   end
 end

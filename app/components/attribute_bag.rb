@@ -31,7 +31,7 @@ class AttributeBag
   end
 
   def defaults(**default_attrs)
-    self.class.new(**default_attrs).merge(attrs)
+    self.class.new(**default_attrs).merge(**attrs)
   end
 
   def slice(*slice_attrs)
