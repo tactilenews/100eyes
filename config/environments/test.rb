@@ -20,6 +20,8 @@ ENV['THREEMARB_API_IDENTITY'] = '*100EYES'
 ENV['THREEMARB_API_SECRET'] = 'ThreemaSecret'
 ENV['THREEMARB_PRIVATE'] = 'ThreemaPrivateKey'
 
+require_relative "../../app/models/setting"
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
