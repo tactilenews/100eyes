@@ -49,9 +49,9 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
-    active_model_otp (2.1.0)
+    active_model_otp (2.1.1)
       activemodel
-      rotp (~> 5.0.0)
+      rotp (~> 6.2.0)
     activejob (6.0.3.4)
       activesupport (= 6.0.3.4)
       globalid (>= 0.3.6)
@@ -239,8 +239,7 @@ GEM
       ffi
     regexp_parser (2.0.3)
     rexml (3.2.4)
-    rotp (5.0.0)
-      addressable (~> 2.5)
+    rotp (6.2.0)
     rqrcode (1.2.0)
       chunky_png (~> 1.0)
       rqrcode_core (~> 0.2)
