@@ -1,0 +1,13 @@
+.ThreemaCredits {
+  padding: var(--spacing-unit-s) var(--spacing-unit);
+}
+
+.ThreemaCredits[data-threema-credits-low-value] {
+  background: var(--color-red-lightest);
+  color: var(--color-red);
+}
+
+.ThreemaCredits > .Flex {
+  /* This component knows the loading-spinner has height: var(--spacing-unit-xl) */
+  min-height: var(--spacing-unit-xl);
+}

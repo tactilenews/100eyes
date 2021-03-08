@@ -1,0 +1,10 @@
+<div data-controller="threema-credits" class="ThreemaCredits">
+  <%= c 'flex' do %>
+    <div>
+    Threema Credits:
+    </div>
+    <strong data-threema-credits-target="creditsField">
+      <%= c 'loading_indicator', styles: ['lds-ellipsis']%>
+    </strong>
+  <% end %>
+</div>
