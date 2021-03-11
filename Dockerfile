@@ -1,4 +1,4 @@
-FROM ruby:2.7.2-alpine3.11
+FROM ruby:3.0.0-alpine
 
 # Install dependencies
 RUN apk --update add \
@@ -7,8 +7,8 @@ RUN apk --update add \
     git \
     nodejs \
     yarn \
-    postgresql-dev=~12.6 \
-    postgresql-client=~12.6 \
+    postgresql-dev=~13.2 \
+    postgresql-client=~13.2 \
     tzdata \
     libxslt-dev \
     libxml2-dev \
