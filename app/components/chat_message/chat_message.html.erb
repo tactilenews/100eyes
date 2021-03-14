@@ -78,6 +78,10 @@
     <div class="ChatMessage-meta">
       <% if message.manually_created? %>
         <%= I18n.t('components.chat_message.created_by', name: creator_name) %>
+        ·
+        <span class="ChatMessage-edit">
+          <%= link_to I18n.t('components.chat_message.edit'), edit_message_path(message) %>
+        </span>
       <% end %>
     </div>
 

@@ -1,0 +1,4 @@
+<%= form_with(model: message, class: 'EditMessageForm', local: true) do %>
+  <%= c 'textarea', id: 'message[text]', required: true, value: message.text %>
+  <%= c 'button', label: t('components.edit_message_form.submit'), type: :submit %>
+<% end %>

@@ -9,6 +9,7 @@ de:
       collapse: weniger
       copy: kopieren
       copied: Nachricht kopiert!
+      edit: Nachricht bearbeiten
       highlight: markieren
       unhighlight: Markierung entfernen
       move: verschieben
@@ -25,6 +26,8 @@ de:
     message_form:
       placeholder: Füge hier den Text der Antwort ein…
       submit: Hinzufügen
+    edit_message_form:
+      submit: Speichern
     chat_message_audio:
       no_audio_support: Dein Browser unterstützt das Audio Element nicht
     contributor_row:
@@ -328,6 +331,12 @@ de:
       text: Hier kannst du manuell Antworten von <strong>%{name}</strong> zur Frage <strong>„%{title}”</strong> hinzufügen.
       success: Die Antwort wurde hinzugefügt
       error: Die Antwort konnte nicht hinzugefügt werden
+    edit:
+      heading: Manuell hinzugefügte Antwort bearbeiten
+      text: Hier kannst du diese manuell hinzugefügte Antwort von <strong>%{name}</strong> zur Frage <strong>„%{title}”</strong> bearbeiten.
+      success: Die bearbeitete Antwort wurde gespeichert
+      error: Die bearbeitete Antwort konnte nicht gespeichet werden
+    only_manually_created: Diese Aktion kann nur auf manuell erstellten Nachrichten ausgeführt werden.
 
   activerecord:
     errors:
