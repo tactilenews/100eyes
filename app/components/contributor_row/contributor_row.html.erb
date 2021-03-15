@@ -12,7 +12,7 @@
     </strong>
 
     <span class="ContributorRow-channels"> 
-        via <%= channels %>
+        <%= I18n.t('components.contributor_row.via_channels', channels: channels) %>
     </span>
 
     <% if contributor.tags? %>
