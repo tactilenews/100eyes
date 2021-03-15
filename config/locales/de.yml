@@ -21,6 +21,8 @@ de:
       submit: Absenden
     chat_message_audio:
       no_audio_support: Dein Browser unterstützt das Audio Element nicht
+    contributor_row:
+      via_channels: via %{channels}
     nav_bar:
       community:
         other: Community
