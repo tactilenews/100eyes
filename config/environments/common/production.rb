@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative '../../../app/models/setting'
+
 Rails.application.configure do
   # Prepare the ingress controller used to receive mail
   # config.action_mailbox.ingress = :relay

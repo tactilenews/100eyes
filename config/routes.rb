@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   post '/settings', to: 'settings#update'
 
   namespace :threema do
+    get '/credits', to: 'account#credits'
     post '/webhook', to: 'webhook#message'
   end
 
