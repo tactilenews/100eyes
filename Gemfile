@@ -74,7 +74,7 @@ gem 'pg_search'
 
 gem 'valid_email2', '~> 3.6'
 
-gem 'counter_culture', '~> 2.7'
+gem 'counter_culture', '~> 2.8'
 
 gem 'activestorage-validator', '~> 0.1.3'
 
