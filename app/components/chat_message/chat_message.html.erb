@@ -66,9 +66,11 @@
           </span>
         <% end %>
 
-        <%= c 'button', style: :inline, link: move_link do %>
-          <%= c 'icon', icon: 'direction-right', style: :inline %>
-          <%= I18n.t('components.chat_message.move') %>
+        <% if message.reply? %>
+          <%= c 'button', style: :inline, link: move_link do %>
+            <%= c 'icon', icon: 'direction-right', style: :inline %>
+            <%= I18n.t('components.chat_message.move') %>
+          <% end %>
         <% end %>
       <% end %>
     </div>

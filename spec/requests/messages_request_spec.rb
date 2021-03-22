@@ -42,6 +42,31 @@ RSpec.describe 'Messages', type: :request do
     end
   end
 
+  describe 'GET /request' do
+    let(:user) { create(:user) }
+    let(:contributor) { create(:contributor, first_name: 'Zora', last_name: 'Zimmermann') }
+
+    before(:each) { get(message_request_url(message, as: user)) }
+
+    context 'given an inbound message' do
+      let(:message) { create(:message, sender: contributor, recipient: nil) }
+
+      it 'renders successfully' do
+        expect(response).to be_successful
+        expect(response.body).to include('Zora Zimmermann')
+      end
+    end
+
+    context 'given an outbound message' do
+      let(:message) { create(:message, sender: nil, recipient: contributor) }
+
+      it 'renders successfully' do
+        expect(response).to be_successful
+        expect(response.body).to include('Zora Zimmermann')
+      end
+    end
+  end
+
   describe 'POST /request' do
     let(:user) { create(:user) }
     let(:request) { create(:request) }
