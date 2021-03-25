@@ -11,7 +11,7 @@ RSpec.describe RepliesMailbox, type: :mailbox do
   it { should_not(change { Message.count }) }
 
   it {
-    should have_enqueued_job.on_queue('mailers').with(
+    should have_enqueued_job.on_queue('default').with(
       'PostmarkAdapter::Outbound',
       'bounce_email',
       'deliver_now',

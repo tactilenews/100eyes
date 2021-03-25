@@ -121,7 +121,7 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
       let(:contributor) { create(:contributor, email: 'contributor@example.org') }
 
       it 'enqueues a Mailer' do
-        expect { subject }.to have_enqueued_job.on_queue('mailers').with(
+        expect { subject }.to have_enqueued_job.on_queue('default').with(
           'PostmarkAdapter::Outbound',
           'message_email',
           'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
