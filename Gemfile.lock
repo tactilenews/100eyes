@@ -191,9 +191,9 @@ GEM
       activesupport (>= 5.2)
     postmark (1.21.3)
       json
-    postmark-rails (0.20.0)
+    postmark-rails (0.21.0)
       actionmailer (>= 3.0.0)
-      postmark (~> 1.15)
+      postmark (>= 1.21.3, < 2.0)
     pry (0.14.0)
       coderay (~> 1.1)
       method_source (~> 1.0)
