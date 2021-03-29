@@ -13,7 +13,6 @@ domain_head="${domain%%.*}"
 domain_tail="${domain#*.}"
 traefik_domain="${domain_head}-traefik.${domain_tail}"
 traefik_password=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)
-redaktion_password=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)
 sudo_password=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)
 
 postgres_password=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
@@ -64,6 +63,8 @@ rails:
     api_token: # (REQUIRED) API token for your new Postmark server
     transactional_stream: "outbound"
     broadcasts_stream: "broadcasts"
+  sentry:
+    dsn: # (REQUIRED) Sentry DSN to enable error tracking
 CONFIGURATION
 
 cat <<- INSTRUCTIONS
