@@ -30,9 +30,6 @@ class Setting < RailsSettings::Base
   field :postmark_broadcasts_stream, readonly: true, default: ENV['POSTMARK_BROADCASTS_STREAM'] || 'broadcasts'
   field :postmark_transactional_stream, readonly: true, default: ENV['POSTMARK_TRANSACTIONAL_STREAM'] || 'outbound'
 
-  field :basic_auth_login_user, readonly: true, default: ENV['BASIC_AUTH_LOGIN_USER']
-  field :basic_auth_login_password, readonly: true, default: ENV['BASIC_AUTH_LOGIN_PASSWORD']
-
   field :mailserver_host, readonly: true, default: ENV['MAILSERVER_HOST'] || 'localhost'
   field :mailserver_port, readonly: true, default: ENV['MAILSERVER_PORT'] || 1025
 end

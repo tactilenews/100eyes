@@ -20,16 +20,4 @@ $ ls .ansible/ssh
 jakob_id_rsa.pub  till.pub
 ```
 
-Run this playbook to create the ansible user with authorized keys in place and
-ensure basic security:
-```
-$ ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook ansible/only_initial_setup.yml -i ansible/inventories/custom --ask-pass --ask-vault-pass
-```
-
-You need `sshpass` installed and you will be asked for:
-```
-SSH password: # root user password
-Vault password: # vault password
-```
-
 Now go to your server control panel and create and download a snapshot.

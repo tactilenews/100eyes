@@ -64,9 +64,6 @@ rails:
     api_token: # (REQUIRED) API token for your new Postmark server
     transactional_stream: "outbound"
     broadcasts_stream: "broadcasts"
-  login:
-    user: redaktion
-    password: "${redaktion_password}"
 CONFIGURATION
 
 cat <<- INSTRUCTIONS
