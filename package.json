@@ -6,7 +6,7 @@
   "dependencies": {
     "@rails/ujs": "^6.1.3",
     "@rails/webpacker": "5.2.1",
-    "@yaireo/tagify": "^3.23.1",
+    "@yaireo/tagify": "^4.0.0",
     "stimulus": "^2.0.0"
   },
   "devDependencies": {
