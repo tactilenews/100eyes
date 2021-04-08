@@ -44,7 +44,7 @@
     <% end %>
 
     <div class="ChatMessage-meta">
-      <a href="#<%= id %>"><%= date_time(message.created_at) %></a>
+      <a href="#<%= id %>"><%= date_time(message.updated_at) %></a>
 
       <% unless hide_actions %>
         <%= c 'copy_button',

@@ -37,16 +37,12 @@ RSpec.describe '/messages', type: :request do
   end
 
   describe 'PATCH /message/:id' do
-    let(:message) { create(:message, creator_id: user.id) }
+    let(:previous_text) { 'Previous text' }
+    let(:message) { create(:message, creator_id: user.id, text: previous_text) }
     let(:new_attrs) { { text: 'Grab your coat and get your hat' } }
     subject { -> { patch message_url(message, as: user), params: { message: new_attrs } } }
 
-    it 'updates the requested message' do
-      subject.call
-      message.reload
-
-      expect(message.text).to eq('Grab your coat and get your hat')
-    end
+    it { should change { message.reload && message.text }.from(previous_text).to('Grab your coat and get your hat') }
 
     it 'shows success notification' do
       subject.call

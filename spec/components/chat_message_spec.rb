@@ -62,6 +62,7 @@ RSpec.describe ChatMessage::ChatMessage, type: :component do
 
     context 'given a non-manually created message' do
       let(:message) { create(:message) }
+      it { should have_text(I18n.t('components.chat_message.copy')) }
       it { should_not have_text(I18n.t('components.chat_message.created_by', name: '')) }
     end
   end

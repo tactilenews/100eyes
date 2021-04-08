@@ -18,6 +18,8 @@ class Message < ApplicationRecord
 
   scope :replies, -> { where.not(sender_id: nil) }
 
+  delegate :name, to: :creator, allow_nil: true, prefix: true
+
   has_many_attached :raw_data
   validates :raw_data, presence: true, if: -> { sender.present? }
   validates :unknown_content, inclusion: { in: [true, false] }
@@ -38,10 +40,6 @@ class Message < ApplicationRecord
     return sender.name if sender
 
     Setting.project_name
-  end
-
-  def creator_name
-    creator&.name
   end
 
   def contributor

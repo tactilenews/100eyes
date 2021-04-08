@@ -23,7 +23,7 @@ class MessagesController < ApplicationController
   def edit; end
 
   def update
-    if @message.update(text: params[:message][:text], creator: current_user, created_at: DateTime.now)
+    if @message.update(text: params[:message][:text], creator: current_user)
       redirect_to contributor_request_path(contributor_id: @contributor, id: @request), flash: { success: I18n.t('message.edit.success') }
     else
       flash[:error] = I18n.t('message.edit.error')
