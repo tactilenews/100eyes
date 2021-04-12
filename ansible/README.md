@@ -32,29 +32,16 @@ Our setup is known to work for the following base images:
 
 * `Ubuntu 20.04 (LTS) x64`
 
-Run this playbook to create the ansible user with authorized keys in place and
-ensure basic security:
-```
-$ ANSIBLE_HOST_KEY_CHECKING=false ansible-playbook ansible/only_initial_setup.yml -i ansible/inventories/custom --ask-pass --ask-vault-pass
+On the first deploy, the playbook must be run as the root user with:
+
+```bash
+ansible-playbook ansible/site.yml -i ansible/inventories/custom --ask-vault-pass --extra-vars "ansible_user=root"
 ```
 
-You need `sshpass` installed and you will be asked for:
-```
-SSH password: # root user password
-Vault password: # vault password
-```
-
-Once the authorized SSH keys are in place, you can run the entire installation of
-the application, or deploy the latest with:
+Once the authorized SSH keys are in place, you can run deploy the latest with:
 
 ```bash
 ansible-playbook ansible/site.yml -i ansible/inventories/custom --ask-vault-pass
-```
-
-If you haven't setup the authorized SSH keys, set username to `root` on the
-first run:
-```bash
-ansible-playbook ansible/site.yml -i ansible/inventories/custom --ask-vault-pass --extra-vars "ansible_user=root"
 ```
 
 ## Provider specific instructions
