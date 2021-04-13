@@ -1,0 +1,34 @@
+<figure class="ChatPreview">
+
+  <figcaption class="visually-hidden">
+    <%= t 'components.chat_preview.alt' %>
+    Auf einem Smartphone ist eine Chat-App geöffnet.
+    Sichtbar ist ein angedeuteter Chatverlauf mit "Landeszeitung" und eine Vorschau der Frage.
+  </figcaption>
+
+  <div class="ChatPreview-header" aria-hidden="true">
+    <div><strong><%= Setting.project_name %></strong></div>
+    <div class="ChatPreview-status">jetzt online</div>
+  </div>
+
+  <div class="ChatPreview-messages">
+
+    <div class="ChatPreview-bubble" aria-hidden="true">
+      <span class="ChatPreview-skeleton">
+        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+      </span>
+    </div>
+
+    <div class="ChatPreview-bubble" aria-hidden="true">
+      <span class="ChatPreview-skeleton">
+        Lorem ipsum dolor sit amet.
+      </span>
+    </div>
+
+    <div class="ChatPreview-bubble ChatPreview-bubble--preview">
+      <%= content %>
+    </div>
+
+  </div>
+
+</figure>
