@@ -121,6 +121,12 @@ de:
       members_count_message:
         one: Es gibt <strong>ein Mitglied</strong> mit diesen Tags.
         other: Es gibt <strong>%{count} Mitglieder</strong> mit diesen Tags.
+    chat_preview:
+      status: jetzt online
+      alt: >
+        Auf einem Smartphone ist eine Chat-App geöffnet.
+        Sichtbar ist ein angedeuteter Chatverlauf aus der Sicht eines Community-Mitglieds.
+        Als neueste Nachricht ist eine Vorschau der Frage zu sehen.
 
   mailer:
     unsubscribe:
