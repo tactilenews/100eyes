@@ -1,25 +1,11 @@
 .RequestForm {
-  display: flex;
-  gap: var(--spacing-unit-l);
-}
-
-.RequestForm-column {
-  width: 50%;
-}
-
-.RequestForm-column {
-  display: flex;
-  flex-direction: column;
-}
-
-.RequestForm-column > * {
-  /* Ensure direct children take the full column height,
-   * allowing the preview to stick to the top
-   */
-  flex-grow: 1;
+  display: grid;
+  gap: var(--spacing-unit-xl);
+  grid-template-columns: 6fr 4fr;
 }
 
 .RequestForm-preview {
   position: sticky;
-  top: var(--spacing-unit);
+  /* Accounts for the fixed navigation bar */
+  top: calc(3.5 * var(--spacing-unit));
 }
