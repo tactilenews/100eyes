@@ -45,7 +45,7 @@
           <% end %>
 
           <% @message_groups.each do |contributor, messages| %>
-            <%= c 'chat_messages_group', contributor: contributor, messages: messages %>
+            <%= c 'chat_messages_group', contributor: contributor, messages: messages, request: @request %>
           <% end %>
         <% end %>
 

@@ -35,6 +35,10 @@ module ChatMessage
       message.photos
     end
 
+    def creator_name
+      message.creator_name.presence || I18n.t('components.chat_message.anonymous_creator')
+    end
+
     def warnings
       warnings = []
       warnings << I18n.t('components.chat_message.contains_unknown_content') if message.unknown_content

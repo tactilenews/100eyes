@@ -44,7 +44,7 @@
     <% end %>
 
     <div class="ChatMessage-meta">
-      <a href="#<%= id %>"><%= date_time(message.created_at) %></a>
+      <a href="#<%= id %>"><%= date_time(message.updated_at) %></a>
 
       <% unless hide_actions %>
         <%= c 'copy_button',
@@ -72,6 +72,16 @@
             <%= I18n.t('components.chat_message.move') %>
           <% end %>
         <% end %>
+      <% end %>
+    </div>
+
+    <div class="ChatMessage-meta">
+      <% if message.manually_created? %>
+        <%= I18n.t('components.chat_message.created_by', name: creator_name) %>
+        ·
+        <span class="ChatMessage-edit">
+          <%= link_to I18n.t('components.chat_message.edit'), edit_message_path(message) %>
+        </span>
       <% end %>
     </div>
 

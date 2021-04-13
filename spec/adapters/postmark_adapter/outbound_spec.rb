@@ -63,8 +63,8 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
         it { should include I18n.t('mailer.unsubscribe.html') }
 
         it 'formats plain text' do
-          subject.should have_css('p', exact_text: 'How do you do?')
-          subject.should have_css('p', exact_text: 'Here’s another line!')
+          expect(subject).to have_css('p', exact_text: 'How do you do?')
+          expect(subject).to have_css('p', exact_text: 'Here’s another line!')
         end
       end
 

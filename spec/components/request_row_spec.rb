@@ -3,11 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe RequestRow::RequestRow, type: :component do
-  subject { render_inline(described_class.new(**params), host: 'http://localhost:3000') }
+  subject { render_inline(described_class.new(**params)) }
 
-  let(:request) { build(:request) }
-  let(:params) { { request: request } }
-  pending 'why do we get undefined method `host` on Request?' do
-    should have_css('.RequestRow')
-  end
+  let(:the_request) { create(:request) }
+  let(:params) { { request: the_request } }
+
+  it { should have_css('.RequestRow') }
 end

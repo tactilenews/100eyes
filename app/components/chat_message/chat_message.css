@@ -58,6 +58,10 @@
   margin-left: var(--spacing-unit-s);
 }
 
+.ChatMessage-meta .ChatMessage-edit:hover {
+  text-decoration: underline;
+}
+
 .ChatMessage-warnings {
   color: var(--color-red);
 }

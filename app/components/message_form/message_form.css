@@ -1,0 +1,9 @@
+.MessageForm {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.MessageForm > button {
+  margin-top: var(--spacing-unit);
+}

@@ -9,6 +9,7 @@ class Message < ApplicationRecord
 
   belongs_to :sender, class_name: 'Contributor', optional: true
   belongs_to :recipient, class_name: 'Contributor', optional: true
+  belongs_to :creator, class_name: 'User', optional: true
   belongs_to :request
   has_many :photos, dependent: :destroy
   has_one :file, dependent: :destroy, class_name: 'Message::File'
@@ -17,16 +18,22 @@ class Message < ApplicationRecord
 
   scope :replies, -> { where.not(sender_id: nil) }
 
+  delegate :name, to: :creator, allow_nil: true, prefix: true
+
   has_many_attached :raw_data
   validates :raw_data, presence: true, if: -> { sender.present? }
   validates :unknown_content, inclusion: { in: [true, false] }
 
-  after_commit(on: :create) do
+  after_commit(on: :create, unless: :manually_created?) do
     [PostmarkAdapter::Outbound, TelegramAdapter::Outbound, ThreemaAdapter::Outbound].each { |adapter| adapter.send!(self) }
   end
 
   def reply?
     sender_id.present?
+  end
+
+  def manually_created?
+    creator_id.present?
   end
 
   def sender_name

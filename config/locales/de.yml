@@ -9,16 +9,25 @@ de:
       collapse: weniger
       copy: kopieren
       copied: Nachricht kopiert!
+      edit: Nachricht bearbeiten
       highlight: markieren
       unhighlight: Markierung entfernen
       move: verschieben
       contains_unknown_content: Enthält nicht unterstützte Inhalte
       blocked_by_contributor: wurde von diesem Mitglied blockiert
+      created_by: Manuell hinzugefügt von %{name}
+      anonymous_creator: anonymer User
     chat_messages_group:
       reply: nachfragen
+      add_message: Antwort manuell hinzufügen
     chat_form:
       placeholder: Gib hier deine Nachfrage ein…
       submit: Absenden
+    message_form:
+      placeholder: Füge hier den Text der Antwort ein…
+      submit: Hinzufügen
+    edit_message_form:
+      submit: Speichern
     chat_message_audio:
       no_audio_support: Dein Browser unterstützt das Audio Element nicht
     contributor_row:
@@ -227,6 +236,7 @@ de:
         placeholder: Klicke hier, um eine Notiz zu %{value} zu hinterlegen
       active:
         label: Aktiv
+
   request:
     request:
       one: Frage
@@ -311,11 +321,22 @@ de:
       failure_message: Einmaliges Token ungültig
 
   message:
-    moved: Nachricht erfolgreich verschoben
-    move_failed: Die Nachricht konnte nicht verschoben werden
     move:
       heading: Nachricht verschieben
       text: Gehört diese Nachricht von <strong>%{name}</strong> nicht zur Frage <strong>„%{title}”</strong>? Dann kannst du sie hier zu einer anderen Frage verschieben.
+      success: Die Nachricht wurde erfolgreich verschoben
+      error: Die Nachricht konnte nicht verschoben werden
+    create:
+      heading: Antwort manuell hinzufügen
+      text: Hier kannst du manuell Antworten von <strong>%{name}</strong> zur Frage <strong>„%{title}”</strong> hinzufügen.
+      success: Die Antwort wurde hinzugefügt
+      error: Die Antwort konnte nicht hinzugefügt werden
+    edit:
+      heading: Manuell hinzugefügte Antwort bearbeiten
+      text: Hier kannst du diese manuell hinzugefügte Antwort von <strong>%{name}</strong> zur Frage <strong>„%{title}”</strong> bearbeiten.
+      success: Die bearbeitete Antwort wurde gespeichert
+      error: Die bearbeitete Antwort konnte nicht gespeichet werden
+    only_manually_created: Diese Aktion kann nur auf manuell erstellten Nachrichten ausgeführt werden.
 
   activerecord:
     errors:
