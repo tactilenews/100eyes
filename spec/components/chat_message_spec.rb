@@ -28,4 +28,22 @@ RSpec.describe ChatMessage::ChatMessage, type: :component do
       it { should have_text('<h1>Hello!</h1>') }
     end
   end
+
+  describe 'move action' do
+    context 'given an inbound message' do
+      let(:message) { create(:message) }
+
+      it 'is present' do
+        expect(subject).to have_css('a', text: I18n.t('components.chat_message.move'))
+      end
+    end
+
+    context 'given an outbound message' do
+      let(:message) { create(:message, sender: nil) }
+
+      it 'is hidden' do
+        expect(subject).to_not have_css('a', text: I18n.t('components.chat_message.move'))
+      end
+    end
+  end
 end
