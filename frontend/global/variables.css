@@ -10,7 +10,7 @@
   --spacing-unit-l: calc(1.5 * var(--spacing-unit));
   --spacing-unit-xl: calc(2 * var(--spacing-unit));
 
-  --grid-max-width: 44rem;
+  --grid-max-width: 48rem;
   --grid-max-width-s: 38rem;
   --grid-max-width-xs: 30rem;
   --grid-max-width-l: 56rem;
@@ -57,7 +57,7 @@
 
   --color-bg: #fff;
   --color-text: #333;
-  --color-text-light: #444;
+  --color-text-light: #656565;
   --color-primary: var(--color-pink);
   --color-accent: var(--color-blue);
   --color-border: #ccc;

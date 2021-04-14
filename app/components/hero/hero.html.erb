@@ -1,17 +1,13 @@
-<div class="<%= class_attr %>">
-    <%= c 'wrapper' do %>
-      <div class="Hero-peacock">
-        <%= svg('logo/peacock') %>
-      </div>
-
-      <div class="Hero-text">
-        <%= c 'stack' do %>
-          <%= c 'heading', style: :hero do %>
-            <%= I18n.t 'components.hero.title' %>
-          <% end %>
-
-          <%= c 'button', label: I18n.t('request.create'), link: new_request_path %>
+<div <%= attrs %>>
+  <%= c 'wrapper' do %>
+    <div class="Hero-text">
+      <%= c 'stack' do %>
+        <%= c 'heading', style: :hero do %>
+          <%= I18n.t 'components.hero.title' %>
         <% end %>
-      </div>
+
+        <%= c 'button', label: I18n.t('request.create'), link: new_request_path %>
+      <% end %>
     </div>
-<% end %>
+  <% end %>
+</div>

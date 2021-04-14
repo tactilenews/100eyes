@@ -1,13 +1,15 @@
 <%= c 'hero' %>
 
-<%= c 'box', style: :large do %>
-  <%= c 'wrapper' do %>
-    <%= c 'stack', space: :large do %>
-      <%= c 'heading', tag: :h2 do %>
-        <%= I18n.t 'dashboard.how_it_works' %>
-      <% end %>
+<section>
+  <%= c 'box', style: :large do %>
+    <%= c 'wrapper' do %>
+      <%= c 'stack', space: :large do %>
+        <%= c 'heading', tag: :h2 do %>
+          <%= I18n.t 'dashboard.how_it_works' %>
+        <% end %>
 
-      <%= c 'steps' %>
+        <%= c 'steps' %>
+      <% end %>
     <% end %>
   <% end %>
-<% end %>
+</section>
