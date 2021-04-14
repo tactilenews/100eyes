@@ -9,7 +9,3 @@
   /* Accounts for the fixed navigation bar */
   top: calc(3.5 * var(--spacing-unit));
 }
-
-[data-request-form-target='preview'] {
-  white-space: pre-wrap;
-}

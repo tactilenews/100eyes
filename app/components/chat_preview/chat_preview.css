@@ -44,4 +44,5 @@
   background-color: var(--color-blue);
   color: #fff;
   word-break: break-word;
+  white-space: pre-wrap;
 }
