@@ -43,4 +43,5 @@
   align-self: flex-start;
   background-color: var(--color-blue);
   color: #fff;
+  word-break: break-word;
 }
