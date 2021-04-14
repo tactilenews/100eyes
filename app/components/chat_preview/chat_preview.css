@@ -1,0 +1,48 @@
+.ChatPreview {
+  font-size: var(--font-size-xs);
+  line-height: 1.5;
+}
+
+.ChatPreview-header {
+  padding-top: var(--spacing-unit-l);
+  padding-bottom: var(--spacing-unit-s);
+  background-color: var(--color-gray-light);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.ChatPreview-status {
+  font-size: var(--font-size-s);
+}
+
+.ChatPreview-messages {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-unit-s);
+  padding: 0.75rem 1rem;
+}
+
+.ChatPreview-bubble {
+  display: inline-block;
+  align-self: flex-end;
+  max-width: 80%;
+  padding: var(--spacing-unit-xs);
+  border-radius: var(--border-radius-l);
+  background-color: var(--color-gray-light);
+  font-size: var(--font-size-s);
+}
+
+.ChatPreview-skeleton {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: transparent;
+  font-size: 0.75em;
+  line-height: 2em;
+}
+
+.ChatPreview-bubble--preview {
+  align-self: flex-start;
+  background-color: var(--color-blue);
+  color: #fff;
+  word-break: break-word;
+  white-space: pre-wrap;
+}

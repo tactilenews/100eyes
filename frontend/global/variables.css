@@ -1,6 +1,6 @@
 :root {
-  --font-size: 20px;
-  --line-height: 30px;
+  --font-size: 18px;
+  --line-height: 26px;
   --font-size-s: 0.85em;
   --font-size-xs: 0.75em;
 
@@ -15,7 +15,7 @@
   --grid-max-width-xs: 30rem;
   --grid-max-width-l: 56rem;
 
-  --border-radius: 3px;
+  --border-radius: 5px;
   --border-radius-l: 9px;
 
   --color-blue: #007eff;
@@ -44,7 +44,7 @@
   --color-orange-lightest: #fdebcf;
   --color-orange-darkest: #884600;
 
-  --color-gray: #888;
+  --color-gray: #868e92;
   --color-gray-light: #e9edf0;
   --color-gray-dark: #333;
 

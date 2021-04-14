@@ -2,8 +2,8 @@ import { Controller } from 'stimulus';
 import Rails from '@rails/ujs';
 import sanitize from '../../../frontend/helpers/sanitize.js';
 
-const template = ({ message, notes }) => {
-  message = sanitize(message) || '<span class="Placeholder">Frage</span>';
+const template = ({ message, fallback }) => {
+  message = sanitize(message) || fallback;
   return message;
 };
 
@@ -11,6 +11,7 @@ export default class extends Controller {
   static targets = ['preview', 'message', 'membersCount'];
   static values = {
     membersCountMessage: String,
+    previewFallback: String,
   };
 
   connect() {
@@ -19,11 +20,10 @@ export default class extends Controller {
   }
 
   updatePreview() {
-    const data = {
+    this.previewTarget.innerHTML = template({
       message: this.messageTarget.value,
-    };
-
-    this.previewTarget.innerHTML = template(data);
+      fallback: this.previewFallbackValue,
+    });
   }
 
   updateMembersCount(event) {

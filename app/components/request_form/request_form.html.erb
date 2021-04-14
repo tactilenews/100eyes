@@ -1,48 +1,54 @@
-<%= form_with(
-  scope: :request,
-  url: requests_path,
-  local: true,
-  class: 'RequestForm',
-  data: {
-    controller: 'request-form',
-    request_form_members_count_message_value: I18n.t('request.form.members_count_message').to_json
-  }
-) do %>
+<div
+  class="RequestForm"
+  data-controller="request-form"
+  data-request-form-members-count-message-value="<%= t('components.request_form.members_count_message').to_json %>"
+  data-request-form-preview-fallback-value="<%= t('components.request_form.preview_fallback') %>"
+>
+
   <div class="RequestForm-column" data-action="input->request-form#updatePreview">
-    <%= c 'stack', space: :large do %>
+    <%= form_with(scope: :request, url: requests_path, local: true) do %>
+      <%= c 'stack', space: :large do %>
 
-      <%= c 'field', object: @request, id: :title do |field| %>
-        <%= c 'input', field.input_defaults.merge(required: true) %>
-      <% end %>
-
-      <%= c 'field', object: @request, id: :text do |field| %>
-        <%= c 'textarea', field.input_defaults.merge(
-          required: true,
-          data: { request_form_target: 'message' }
-        ) %>
-      <% end %>
-
-      <%= c 'field', object: @request, id: :tag_list do |field| %>
-        <%= c 'stack', space: :small do %>
-          <div class="Field-help" data-request-form-target="membersCount"></div>
-
-          <div data-action="changeTags->request-form#updateMembersCount">
-            <%= c 'tags_input',field.input_defaults.merge(available_tags: available_tags, allow_new: false) %>
-          </div>
+        <%= c 'field', object: @request, id: :title do |field| %>
+          <%= c 'input', field.input_defaults.merge(required: true) %>
         <% end %>
+
+        <%= c 'field', object: @request, id: :text do |field| %>
+          <%= c 'textarea', field.input_defaults.merge(
+            required: true,
+            data: { request_form_target: 'message' }
+          ) %>
+        <% end %>
+
+        <%= c 'field', object: @request, id: :tag_list do |field| %>
+          <%= c 'stack', space: :small do %>
+            <div class="Field-help" data-request-form-target="membersCount"></div>
+
+            <div data-action="changeTags->request-form#updateMembersCount">
+              <%= c 'tags_input', field.input_defaults.merge(
+                available_tags: available_tags,
+                allow_new: false
+              ) %>
+            </div>
+          <% end %>
+        <% end %>
+
+        <%= c 'button',
+          type: 'submit',
+          styles: [:block, :primary],
+          label: I18n.t('request.send')
+        %>
+
       <% end %>
-
-      <%= c 'button', type: 'submit', label: I18n.t('request.send') %>
-
     <% end %>
   </div>
 
   <div class="RequestForm-column">
-    <%= c 'stack', space: :small do %>
-      <strong><%= I18n.t('request.form.preview') %></strong>
-      <%= c 'box', styles: [:small, :gray, :round] do %>
-        <div class="RequestForm-preview PlaintextMessage" data-request-form-target="preview"></div>
+    <%= c 'device_frame', class: 'RequestForm-preview' do %>
+      <%= c 'chat_preview' do %>
+        <span data-request-form-target="preview"></span>
       <% end %>
     <% end %>
   </div>
-<% end %>
+
+</div>

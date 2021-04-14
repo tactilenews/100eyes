@@ -116,6 +116,17 @@ de:
       cancel: Abbrechen
     copy_button:
       success: kopiert
+    request_form:
+      preview_fallback: "Sobald du eine Frage eingegeben hast, siehst du hier eine Vorschau deiner Nachricht."
+      members_count_message:
+        one: Es gibt <strong>ein Mitglied</strong> mit diesen Tags.
+        other: Es gibt <strong>%{count} Mitglieder</strong> mit diesen Tags.
+    chat_preview:
+      status: jetzt online
+      alt: >
+        Auf einem Smartphone ist eine Chat-App geöffnet.
+        Sichtbar ist ein angedeuteter Chatverlauf aus der Sicht eines Community-Mitglieds.
+        Als neueste Nachricht ist eine Vorschau der Frage zu sehen.
 
   mailer:
     unsubscribe:
@@ -288,10 +299,6 @@ de:
           auswerten, aber nicht ungefragt veröffentlichen.
     no_replies: Bisher hat noch niemand auf diese Frage geantwortet. Schau doch später noch einmal rein!
     form:
-      preview: Diese Nachricht erhält die Community
-      members_count_message:
-        one: Es gibt <strong>ein Mitglied</strong> mit diesen Tags.
-        other: Es gibt <strong>%{count} Mitglieder</strong> mit diesen Tags.
       title:
         label: Interner Titel
         help: Damit du zwischen all deinen Fragen den Überblick behältst. Der Titel wird nicht an die Community gesandt.
