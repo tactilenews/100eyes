@@ -24,6 +24,7 @@ services:
       THREEMARB_API_IDENTITY: "${THREEMARB_API_IDENTITY}"
       THREEMARB_API_SECRET: "${THREEMARB_API_SECRET}"
       THREEMARB_PRIVATE: "${THREEMARB_PRIVATE}"
+      SENTRY_DSN: "${SENTRY_DSN}"
     volumes:
       - ./log:/app/log
       - ./storage:/app/storage
