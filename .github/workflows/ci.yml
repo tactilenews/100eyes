@@ -32,20 +32,10 @@ jobs:
 
       - name: Install ruby
         uses: actions/setup-ruby@v1
-        with: { ruby-version: 2.7.2 }
-
-      - name: Cache Ruby dependencies
-        uses: actions/cache@v1
+        uses: ruby/setup-ruby@v1
         with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('Gemfile.lock') }}
-          restore-keys: ${{ runner.os }}-gems-
-
-      - name: Install Ruby dependencies
-        run: |
-          gem install bundler
-          bundle config set path 'vendor/bundle'
-          bundle install
+          ruby-version: 2.7.2
+          bundler-cache: true
 
       - name: Cache NPM dependencies
         uses: actions/cache@v1

@@ -1,5 +1,5 @@
 de:
-  application_name: Crowdlupe
+  application_name: 100eyes
   components:
     chat:
       outdated_request: Du hast diesem Mitglied bereits eine neue Frage gestellt. Nachfragen zu dieser Frage sind deshalb nicht mehr möglich.
@@ -40,7 +40,7 @@ de:
         other: Recherchen
       sign_out: Abmelden
     hero:
-      title: Willkommen bei der Crowdlupe. Nutze die Intelligenz der Community.
+      title: Willkommen bei 100eyes. Nutze die Intelligenz der Community.
     footer:
       authors:
         heading: Ein Projekt von
@@ -72,13 +72,13 @@ de:
     steps:
       steps:
         - icon: r-chat
-          text: Stelle mit der Crowdlupe eine Frage und sende sie mit einem Klick an 50 Menschen.
+          text: Stelle mit 100eyes eine Frage und sende sie mit einem Klick an 50 Menschen.
         - icon: mobile-chat
           text: Deine Frage erreicht die Empfänger per Telegram-Messenger oder eMail, je nachdem wie sie es wünschen.
         - icon: bullet-list-68
-          text: Die Crowdlupe sammelt alle Antworten und stellt sie dir übersichtlich zur Auswertung dar.
+          text: 100eyes sammelt alle Antworten und stellt sie dir übersichtlich zur Auswertung dar.
         - icon: app-services
-          text: Werte die Antworten mit Hilfe der Crowdlupe aus und komponiere deine Veröffentlichung.
+          text: Werte die Antworten mit Hilfe von 100eyes aus und komponiere deine Veröffentlichung.
     onboarding_header:
       byline: eine Dialog-Recherche von <a class="Link" href="https://tactile.news" target="_blank">tactile.news</a>
     onboarding_email_form:
@@ -145,7 +145,7 @@ de:
   discard: Änderungen verwerfen
 
   dashboard:
-    how_it_works: So funktioniert die Crowdlupe…
+    how_it_works: So funktioniert 100eyes…
 
   setting:
     setting:
