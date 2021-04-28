@@ -429,4 +429,43 @@ RSpec.describe Contributor, type: :model do
       end
     end
   end
+
+  describe '.data_processing_consent' do
+    subject { contributor.data_processing_consent }
+
+    describe 'given a contributor who has given consent' do
+      let(:contributor) { create(:contributor, data_processing_consented_at: 1.day.ago) }
+      it { should be(true) }
+    end
+
+    describe 'given a contributor who has not given consent' do
+      let(:contributor) { create(:contributor, data_processing_consented_at: nil) }
+      it { should be(false) }
+    end
+  end
+
+  describe '.data_processing_consent=' do
+    describe 'given contributor who has given consent' do
+      let(:contributor) { create(:contributor, data_processing_consent: 1.day.ago) }
+      describe 'false' do
+        it { expect { contributor.data_processing_consent = false }.to change { contributor.data_processing_consented_at }.to(nil) }
+        it { expect { contributor.data_processing_consent = false }.to change { contributor.data_processing_consented_at? }.to(false) }
+        it { expect { contributor.data_processing_consent = '0' }.to change { contributor.data_processing_consent? }.to(false) }
+        it { expect { contributor.data_processing_consent = 'off' }.to change { contributor.data_processing_consent? }.to(false) }
+      end
+    end
+
+    describe 'given contributor who has not given content' do
+      let(:contributor) { create(:contributor, data_processing_consented_at: nil) }
+      describe 'true' do
+        it {
+          expect { contributor.data_processing_consent = true }
+            .to change { contributor.data_processing_consented_at.is_a?(ActiveSupport::TimeWithZone) }.to(true)
+        }
+        it { expect { contributor.data_processing_consent = true }.to change { contributor.data_processing_consent? }.to(true) }
+        it { expect { contributor.data_processing_consent = '1' }.to change { contributor.data_processing_consent? }.to(true) }
+        it { expect { contributor.data_processing_consent = 'on' }.to change { contributor.data_processing_consent? }.to(true) }
+      end
+    end
+  end
 end

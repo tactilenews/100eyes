@@ -119,7 +119,7 @@ class Contributor < ApplicationRecord
   end
 
   def data_processing_consent?
-    data_processing_consented_at.nil?
+    data_processing_consented_at.present?
   end
   alias data_processing_consent data_processing_consent?
 end
