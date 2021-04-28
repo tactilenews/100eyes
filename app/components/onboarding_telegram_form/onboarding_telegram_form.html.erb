@@ -15,6 +15,10 @@
     <%= c 'input', field.input_defaults.merge(value: last_name, required: true) %>
   <% end %>
 
+  <%= c 'field', object: @contributor, id: :data_processing_consent, styles: [:horizontal, :leftAligned] do |field| %>
+    <%= c 'checkbox', field.input_defaults.merge(required: true, value: nil) %>
+  <% end %>
+
   <%= c 'button',
     type: 'submit',
     label: I18n.t('components.onboarding_telegram_form.submit'),

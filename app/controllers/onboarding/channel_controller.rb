@@ -60,7 +60,7 @@ module Onboarding
     end
 
     def contributor_params
-      params.require(:contributor).permit(:first_name, :last_name, attr_name)
+      params.require(:contributor).permit(:first_name, :last_name, :data_processing_consent, attr_name)
     end
 
     def default_url_options

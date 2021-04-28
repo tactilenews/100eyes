@@ -247,6 +247,9 @@ de:
         placeholder: Klicke hier, um eine Notiz zu %{value} zu hinterlegen
       active:
         label: Aktiv
+      data_processing_consent:
+        label: Einwilligung zur Datenverarbeitung
+        help: Ich habe die <a class="Link" href="https://tactile.news/100-eyesdatenschutz-verbraucherinnen/" target="_blank">Allgemeine Nutzungsbedingungen 100eyes</a> und die <a class="Link" href="https://tactile.news/100eyes-agb-verbraucherinnen/" target="_blank">Datenschutzerklärung</a> zur Kenntnis genommen und bin mit deren Geltung einverstanden. In unserer Datenschutzerklärung ist erklärt, welche Tools wir nutzen und mit welchen Firmen wir zusammenarbeiten. Diese Partner speichern und übertragen je nach Nutzung auch Daten in Länder außerhalb der Europäischen Union.
 
   request:
     request:
