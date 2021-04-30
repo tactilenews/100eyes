@@ -39,6 +39,7 @@ services:
       - "traefik.http.routers.traefik.tls.certresolver=cloudflare"
     environment:
       - "CF_DNS_API_TOKEN=$CF_DNS_API_TOKEN"
+    restart: always
 
   app:
     labels:
