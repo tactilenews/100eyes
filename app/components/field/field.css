@@ -39,3 +39,8 @@
   margin: 0;
   margin-right: var(--spacing-unit);
 }
+
+.Field--horizontal.Field--leftAligned .Field-textWrapper {
+  width: 85%;
+  order: 2;
+}

@@ -113,4 +113,13 @@ class Contributor < ApplicationRecord
   def active=(value)
     self.deactivated_at = ActiveModel::Type::Boolean.new.cast(value) ? nil : Time.current
   end
+
+  def data_processing_consent=(value)
+    self.data_processing_consented_at = ActiveModel::Type::Boolean.new.cast(value) ? Time.current : nil
+  end
+
+  def data_processing_consent?
+    data_processing_consented_at.present?
+  end
+  alias data_processing_consent data_processing_consent?
 end

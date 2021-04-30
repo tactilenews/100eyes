@@ -22,6 +22,10 @@
         <%= c 'input', field.input_defaults.merge(required: true, pattern: '[A-Za-z0-9]{8}') %>
       <% end %>
 
+      <%= c 'field', object: @contributor, id: :data_processing_consent, styles: [:horizontal, :leftAligned] do |field| %>
+        <%= c 'checkbox', field.input_defaults.merge(required: true, value: nil) %>
+      <% end %>
+
       <%= c 'button',
         type: 'submit',
         label: t('components.onboarding_threema.submit'),
