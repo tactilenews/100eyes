@@ -37,7 +37,7 @@ class ContributorsController < ApplicationController
       redirect_to contributor_url, flash: { success: I18n.t('contributor.saved', name: @contributor.name) }
     else
       flash[:error] = I18n.t('contributor.invalid', name: @contributor.name)
-      render :show
+      render :show, status: :bad_request
     end
   end
 

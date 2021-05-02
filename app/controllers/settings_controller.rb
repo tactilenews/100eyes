@@ -9,7 +9,7 @@ class SettingsController < ApplicationController
     end
 
     flash[:success] = I18n.t('settings.success')
-    render :index
+    redirect_to settings_url
   end
 
   private
