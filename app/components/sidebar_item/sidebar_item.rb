@@ -6,11 +6,24 @@ module SidebarItem
       super
 
       @active = active
-      @styles << :active if active
     end
 
     private
 
-    attr_reader :active
+    def styles
+      return super << :active if active?
+
+      super
+    end
+
+    def attrs
+      return super.merge(data: { two_column_layout_target: 'activeItem' }) if active?
+
+      super
+    end
+
+    def active?
+      @active
+    end
   end
 end
