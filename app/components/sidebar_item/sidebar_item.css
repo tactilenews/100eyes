@@ -1,0 +1,19 @@
+.SidebarItem {
+  position: relative;
+  padding: var(--spacing-unit-s);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.SidebarItem--active {
+  background-color: #fff;
+}
+
+.SidebarItem--active::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  left: 0;
+  width: 3px;
+  background-color: var(--color-blue);
+}

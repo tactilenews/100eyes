@@ -1,30 +1,42 @@
-<%= c 'box', styles: [:large, :gray] do %>
-  <%= c 'wrapper' do %>
-    <%= c 'flex' do %>
-      <%= c 'avatar', contributor: @contributor, expandable: true, style: :large %>
-      <%= c 'heading' do %>
-        <%= @contributor.name %>
+<%= c 'two_column_layout' do |layout| %>
+
+  <% layout.sidebar do %>
+    <% @contributors.each do |contributor| %>
+
+      <%= c 'sidebar_item', active: contributor == @contributor do %>
+        <%= c 'contributor_row', contributor: contributor, style: :compact %>
       <% end %>
+
     <% end %>
   <% end %>
-<% end %>
 
-<%= c 'box' do %>
-  <%= c 'wrapper' do %>
-    <%= c 'stack', space: :xlarge do %>
-      <%= c 'contributor_form', contributor: @contributor %>
+  <%= c 'box', style: :large do %>
+    <%= c 'wrapper' do %>
+      <%= c 'stack', space: :xlarge do %>
 
-      <%= c 'stack' do %>
-        <%= c 'heading', styles: [:section] do %>
-          <%= I18n.t 'contributor.activity' %>
-        <% end %>
-
-        <%= c 'requests_feed' do %>
-          <% @contributor. recent_replies.each do |reply| %>
-            <%= c 'requests_feed_item', latest_reply: reply %>
+        <%= c 'flex' do %>
+          <%= c 'avatar', contributor: @contributor, expandable: true, style: :large %>
+          <%= c 'heading' do %>
+            <%= @contributor.name %>
           <% end %>
         <% end %>
+
+        <%= c 'contributor_form', contributor: @contributor %>
+
+        <%= c 'stack' do %>
+          <%= c 'heading', styles: [:section] do %>
+            <%= I18n.t 'contributor.activity' %>
+          <% end %>
+
+          <%= c 'requests_feed' do %>
+            <% @contributor. recent_replies.each do |reply| %>
+              <%= c 'requests_feed_item', latest_reply: reply %>
+            <% end %>
+          <% end %>
+        <% end %>
+
       <% end %>
     <% end %>
   <% end %>
+
 <% end %>

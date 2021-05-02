@@ -17,7 +17,9 @@ class ContributorsController < ApplicationController
     @contributors = Contributor.all
   end
 
-  def show; end
+  def show
+    @contributors = Contributor.all
+  end
 
   def new
     @contributor = Contributor.new
