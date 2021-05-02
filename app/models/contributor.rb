@@ -95,7 +95,7 @@ class Contributor < ApplicationRecord
   end
 
   def tags?
-    tag_list.any?
+    tags.any?
   end
 
   def recent_replies

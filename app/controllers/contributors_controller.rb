@@ -14,7 +14,7 @@ class ContributorsController < ApplicationController
   end
 
   def index
-    @contributors = Contributor.with_attached_avatar
+    @contributors = Contributor.with_attached_avatar.includes(:tags)
   end
 
   def show
