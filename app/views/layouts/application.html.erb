@@ -11,6 +11,10 @@
 
   <body>
 
+    <a class="skip-link" href="#main" data-turbo="false">
+      <%= t 'skip_to_content' %>
+    </a>
+
     <div class="sticky">
       <%= c 'nav_bar' %>
       <% flash.each do |type, message| %>
@@ -22,7 +26,7 @@
       <%= yield :notifications %>
     </div>
 
-    <main>
+    <main id="main" name="main">
       <%= yield %>
     </main>
 

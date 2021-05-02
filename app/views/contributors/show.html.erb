@@ -1,6 +1,10 @@
 <%= c 'two_column_layout', id: :contributors do |layout| %>
 
   <% layout.sidebar do %>
+    <a class="skip-link" href="#profile" data-turbo="false">
+      <%= t 'contributor.skip_to_profile' %>
+    </a>
+
     <% @contributors.each do |contributor| %>
 
       <%= c 'sidebar_item', active: contributor == @contributor do %>
@@ -10,7 +14,7 @@
     <% end %>
   <% end %>
 
-  <%= c 'box', style: :large do %>
+  <%= c 'box', style: :large, id: 'profile', name: 'profile' do %>
     <%= c 'wrapper' do %>
       <%= c 'stack', space: :xlarge do %>
 

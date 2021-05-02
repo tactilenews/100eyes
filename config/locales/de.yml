@@ -143,6 +143,7 @@ de:
 
   save: Speichern
   discard: Änderungen verwerfen
+  skip_to_content: Zum Hauptinhalt springen
 
   dashboard:
     how_it_works: So funktioniert 100eyes
@@ -213,6 +214,7 @@ de:
     saved: Informationen zu %{name} gespeichert
     invalid: Informationen zu %{name} sind ungültig
     message-send: Nachricht an %{name} wurde verschickt
+    skip_to_profile: Zum Profil springen
     form:
       first_name:
         label: Vorname
