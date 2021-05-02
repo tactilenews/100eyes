@@ -360,7 +360,7 @@ RSpec.describe Contributor, type: :model do
 
     describe 'number of database calls' do
       subject { -> { contributor.recent_replies.first.request } }
-      it { should make_database_queries(count: 1) }
+      it { should make_database_queries(count: 2) }
     end
   end
 
