@@ -53,14 +53,6 @@
   padding: var(--input-padding-s);
 }
 
-.Button--danger {
-  --button-color: var(--color-red);
-}
-
-.Button--positive {
-  --button-color: var(--color-green);
-}
-
 .Button--underline {
   text-decoration: underline;
 }
