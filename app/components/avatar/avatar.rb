@@ -18,6 +18,11 @@ module Avatar
       contributor&.id
     end
 
+    def url
+      thumbnail = contributor_avatar.variant(resize_to_fit: [200, 200]).processed
+      url_for(thumbnail)
+    end
+
     def initials
       return '?' unless contributor
 
@@ -26,6 +31,10 @@ module Avatar
       return '?' if initials.empty?
 
       initials.join
+    end
+
+    def expandable?
+      @expandable
     end
   end
 end
