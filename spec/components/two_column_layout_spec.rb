@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe TwoColumnLayout::TwoColumnLayout, type: :component do
   subject do
-    render_inline(described_class.new) do |component|
+    render_inline(described_class.new(id: 'layout')) do |component|
       component.sidebar { 'Sidebar' }
       'Content'
     end
