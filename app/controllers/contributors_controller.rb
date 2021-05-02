@@ -14,11 +14,11 @@ class ContributorsController < ApplicationController
   end
 
   def index
-    @contributors = Contributor.all
+    @contributors = Contributor.with_attached_avatar
   end
 
   def show
-    @contributors = Contributor.all
+    @contributors = Contributor.with_attached_avatar
   end
 
   def new
