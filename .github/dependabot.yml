@@ -4,46 +4,13 @@ updates:
   directory: "/"
   schedule:
     interval: daily
-  open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: view_component
-    versions:
-    - 2.26.0
-    - 2.31.0
-  - dependency-name: rails
-    versions:
-    - 6.1.1
-    - 6.1.2
-    - 6.1.2.1
-    - 6.1.3
-  - dependency-name: sucker_punch
-    versions:
-    - 3.0.0
-  - dependency-name: bootsnap
-    versions:
-    - 1.7.0
+
 - package-ecosystem: npm
   directory: "/"
   schedule:
     interval: daily
-  open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: "@yaireo/tagify"
-    versions:
-    - 3.25.0
-    - 4.0.0
-    - 4.0.2
-    - 4.0.3
-    - 4.0.5
-  - dependency-name: y18n
-    versions:
-    - 4.0.1
-    - 4.0.2
-  - dependency-name: "@rails/ujs"
-    versions:
-    - 6.1.2
+
 - package-ecosystem: docker
   directory: "/"
   schedule:
     interval: daily
-  open-pull-requests-limit: 10
