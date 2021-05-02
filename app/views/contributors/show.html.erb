@@ -29,7 +29,7 @@
           <% end %>
 
           <%= c 'requests_feed' do %>
-            <% @contributor. recent_replies.each do |reply| %>
+            <% @contributor.recent_replies.each do |reply| %>
               <%= c 'requests_feed_item', latest_reply: reply %>
             <% end %>
           <% end %>
