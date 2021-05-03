@@ -14,5 +14,5 @@ a.ContributorRow:hover .ContributorRow-name {
 .ContributorRow-channels {
   margin-left: 0.25em;
   color: var(--color-gray);
-  font-size: calc(0.9 * var(--font-size));
+  font-size: var(--font-size-s);
 }

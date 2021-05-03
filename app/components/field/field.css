@@ -6,20 +6,18 @@
   font-weight: 600;
 }
 
+.Field-helpText,
+.Field-errorText {
+  font-size: var(--font-size-s);
+  display: block;
+}
+
 .Field-helpText {
   color: var(--color-text-light);
-  font-size: 0.8rem;
-  line-height: 1.5;
-  display: block;
 }
 
 .Field-errorText {
   color: var(--color-red);
-  font-size: 0.8rem;
-}
-
-.Field-errorText:before {
-  content: '*';
 }
 
 .Field:not(.Field--horizontal) .Field-textWrapper {
