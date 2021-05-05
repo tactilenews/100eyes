@@ -21,10 +21,15 @@ RSpec.describe Avatar::Avatar, type: :component do
     subject { component.css('img').first['src'] }
 
     describe 'given a contributor with attached avatar' do
-      let(:contributor) { build(:contributor, :with_an_avatar) }
+      let(:contributor) { create(:contributor, :with_an_avatar) }
       let(:params) { { contributor: contributor } }
 
-      it { should eq(rails_blob_path(contributor.avatar, only_path: true)) }
+      it 'displays avatar thumbnail' do
+        thumbnail = contributor.avatar.variant(resize_to_fit: [200, 200])
+        url = rails_representation_url(thumbnail, only_path: true)
+
+        expect(subject).to eq(url)
+      end
     end
   end
 
