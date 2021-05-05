@@ -19,7 +19,7 @@ module Avatar
     end
 
     def url
-      thumbnail = contributor_avatar.variant(resize_to_fit: [200, 200]).processed
+      thumbnail = contributor_avatar.variant(resize_to_fit: [200, 200])
       url_for(thumbnail)
     end
 
