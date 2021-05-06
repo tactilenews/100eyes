@@ -67,3 +67,7 @@ Style/IfUnlessModifier:
   Exclude:
     - 'app/helpers/component_helper.rb'
     - 'spec/rails_helper.rb'
+
+Rails/EnvironmentVariableAccess:
+  Exclude:
+    - 'app/models/setting.rb'
