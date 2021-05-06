@@ -2,5 +2,6 @@
 - include: set_hostname.yml
 - include: packages.yml
 - include: ansible_user.yml
+- include: upload_public_keys.yml
 - include: security.yml
 
