@@ -1,4 +1,5 @@
 ---
+- include: set_hostname.yml
 - include: packages.yml
 - include: ansible_user.yml
 - include: security.yml
