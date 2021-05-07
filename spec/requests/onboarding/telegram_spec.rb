@@ -104,11 +104,23 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
 
     context 'valid' do
       it { is_expected.not_to raise_exception }
-      it { is_expected.to change(Contributor, :count).by(1) }
 
       it 'is successful' do
         subject.call
         expect(response).to be_successful
+      end
+
+      it 'creates contributor' do
+        expect { subject.call }.to change(Contributor, :count).by(1)
+
+        contributor = Contributor.first
+        expect(contributor).to have_attributes(
+          first_name: 'Matthew',
+          last_name: 'Rider',
+          telegram_id: 123,
+          username: 'matthew_rider',
+          jwt: jwt
+        )
       end
 
       it 'invalidates the jwt' do

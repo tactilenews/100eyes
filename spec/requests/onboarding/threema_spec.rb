@@ -14,7 +14,8 @@ RSpec.describe 'Onboarding::Threema', type: :request do
         first_name: 'Zora',
         last_name: 'Zimmermann',
         threema_id: 'ABCD1234',
-        data_processing_consent: data_processing_consent
+        data_processing_consent: data_processing_consent,
+        jwt: jwt
       }
     end
 
@@ -30,7 +31,8 @@ RSpec.describe 'Onboarding::Threema', type: :request do
         first_name: 'Zora',
         last_name: 'Zimmermann',
         threema_id: 'ABCD1234',
-        data_processing_consent: data_processing_consent
+        data_processing_consent: data_processing_consent,
+        jwt: jwt
       )
     end
 
