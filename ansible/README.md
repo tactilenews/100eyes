@@ -3,11 +3,7 @@
 Our setup uses a number of community-maintained Ansibles roles. Install them using the `ansible-galaxy` command:
 
 ```
-ansible-galaxy collection install community.general
-ansible-galaxy collection install devsec.hardening
-ansible-galaxy install geerlingguy.docker
-ansible-galaxy install geerlingguy.pip
-ansible-galaxy install gantsign.inotify
+$ ansible-galaxy install -r ansible/requirements.yml
 ```
 
 Generate configuration files:

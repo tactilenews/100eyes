@@ -1,3 +1,4 @@
+---
 - name: Make sure we have a 'wheel' group
   group:
     name: wheel
@@ -20,16 +21,3 @@
     append: true
     create_home: true
     shell: /bin/bash
-
-- name: Set authorized key for remote user
-  authorized_key:
-    user: "{{ create_user }}"
-    state: present
-    key: "{{ copy_local_key }}"
-
-- name: Set additional authorized keys
-  authorized_key:
-    user: "{{ create_user }}"
-    state: present
-    key: "{{ lookup('file', item) }}"
-  with_items: "{{ copy_additional_keys }}"
