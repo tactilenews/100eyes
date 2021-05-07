@@ -158,6 +158,8 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
 
   describe 'PATCH /onboarding/telegram' do
     let!(:contributor) { create(:contributor, telegram_id: 789, first_name: nil, last_name: nil) }
+    let!(:other_contributor) { create(:contributor, email: 'the@other.de', telegram_id: nil) }
+
     let(:attrs) do
       {
         first_name: 'Update',
@@ -180,6 +182,11 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
           contributor = Contributor.find_by(telegram_id: 789)
           expect(contributor).to have_attributes(first_name: nil, last_name: nil)
         end
+
+        it 'does not update other users' do
+          other_contributor = Contributor.find_by(email: 'the@other.de')
+          expect(other_contributor).to have_attributes(first_name: 'John', last_name: 'Doe')
+        end
       end
 
       context 'expired signature' do
@@ -197,7 +204,6 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
       context 'without data processing consent' do
         before { setup_telegram_id_cookie(contributor) }
         let(:data_processing_consent) { false }
-  
         it 'displays validation errors' do
           subject.call
           parsed = Capybara::Node::Simple.new(response.body)
@@ -205,7 +211,6 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
           data_processing_consent_field = fields.find { |f| f.has_text? 'Allgemeine Nutzungsbedingungen' }
           expect(data_processing_consent_field).to have_text('muss akzeptiert werden')
         end
-  
       end
     end
 
