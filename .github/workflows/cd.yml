@@ -2,7 +2,7 @@ name: Continuous Deployment
 
 on:
   push:
-    branches: [ master, 834_automated_deployment ]
+    branches: [ master ]
 
 jobs:
   docker_push:
