@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Onboarding::Email', type: :request do
   let(:email) { 'zora@example.org' }
+  let(:data_processing_consent) { true }
   let(:contributor) { create(:contributor) }
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
   let(:params) { { jwt: jwt } }
@@ -13,11 +14,12 @@ RSpec.describe 'Onboarding::Email', type: :request do
       {
         first_name: 'Zora',
         last_name: 'Zimmermann',
-        email: email
+        email: email,
+        data_processing_consent: data_processing_consent
       }
     end
 
-    let(:params) { { jwt: jwt, contributor: attrs } }
+    let(:params) { { jwt: jwt, contributor: attrs, context: :contributor_signup } }
 
     subject { -> { post onboarding_email_path, params: params } }
 
@@ -28,7 +30,8 @@ RSpec.describe 'Onboarding::Email', type: :request do
       expect(contributor).to have_attributes(
         first_name: 'Zora',
         last_name: 'Zimmermann',
-        email: email
+        email: email,
+        data_processing_consent: data_processing_consent
       )
     end
 
@@ -53,6 +56,22 @@ RSpec.describe 'Onboarding::Email', type: :request do
         fields = parsed.all('.Field')
         email_field = fields.find { |f| f.has_text? 'E-Mail' }
         expect(email_field).to have_text('ist nicht gültig')
+      end
+    end
+
+    context 'without data processing consent' do
+      let(:data_processing_consent) { false }
+
+      it 'displays validation errors' do
+        subject.call
+        parsed = Capybara::Node::Simple.new(response.body)
+        fields = parsed.all('.Field')
+        data_processing_consent_field = fields.find { |f| f.has_text? 'Allgemeine Nutzungsbedingungen' }
+        expect(data_processing_consent_field).to have_text('muss akzeptiert werden')
+      end
+
+      it 'does not create new contributor' do
+        expect { subject.call }.not_to change(Contributor, :count)
       end
     end
 

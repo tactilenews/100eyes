@@ -3,6 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Onboarding::Threema', type: :request do
+  let(:data_processing_consent) { true }
   let(:contributor) { create(:contributor) }
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
   let(:params) { { jwt: jwt } }
@@ -12,11 +13,12 @@ RSpec.describe 'Onboarding::Threema', type: :request do
       {
         first_name: 'Zora',
         last_name: 'Zimmermann',
-        threema_id: 'ABCD1234'
+        threema_id: 'ABCD1234',
+        data_processing_consent: data_processing_consent
       }
     end
 
-    let(:params) { { jwt: jwt, contributor: attrs } }
+    let(:params) { { jwt: jwt, contributor: attrs, context: :contributor_signup } }
 
     subject { -> { post onboarding_threema_path, params: params } }
 
@@ -27,7 +29,8 @@ RSpec.describe 'Onboarding::Threema', type: :request do
       expect(contributor).to have_attributes(
         first_name: 'Zora',
         last_name: 'Zimmermann',
-        threema_id: 'ABCD1234'
+        threema_id: 'ABCD1234',
+        data_processing_consent: data_processing_consent
       )
     end
 
@@ -56,6 +59,22 @@ RSpec.describe 'Onboarding::Threema', type: :request do
 
         json_web_token = JsonWebToken.where(invalidated_jwt: jwt)
         expect(json_web_token).to exist
+      end
+
+      it 'does not create new contributor' do
+        expect { subject.call }.not_to change(Contributor, :count)
+      end
+    end
+
+    context 'without data processing consent' do
+      let(:data_processing_consent) { false }
+
+      it 'displays validation errors' do
+        subject.call
+        parsed = Capybara::Node::Simple.new(response.body)
+        fields = parsed.all('.Field')
+        data_processing_consent_field = fields.find { |f| f.has_text? 'Allgemeine Nutzungsbedingungen' }
+        expect(data_processing_consent_field).to have_text('muss akzeptiert werden')
       end
 
       it 'does not create new contributor' do

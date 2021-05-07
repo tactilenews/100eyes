@@ -39,10 +39,14 @@ module Onboarding
     def update
       @contributor = Contributor.find_by(telegram_id: cookies.encrypted[:telegram_id])
 
+      unless @contributor
+        return redirect_to 'onboarding/unauthorized', status: :unauthorized
+      end
+
       if @contributor&.update(first_name: contributor_params[:first_name], last_name: contributor_params[:last_name])
         redirect_to_success
       else
-        render 'onboarding/unauthorized', status: :unauthorized
+        render :create
       end
     end
 

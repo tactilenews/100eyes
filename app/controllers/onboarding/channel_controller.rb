@@ -17,7 +17,7 @@ module Onboarding
     def create
       @contributor = Contributor.new(contributor_params)
 
-      if @contributor.save
+      if @contributor.save(context: :contributor_signup)
         invalidate_jwt(jwt_param)
         redirect_to_success
       else
@@ -28,7 +28,8 @@ module Onboarding
     private
 
     def redirect_to_failure
-      redirect_to onboarding_path
+      # show validation errors
+      render :show
     end
 
     def redirect_if_contributor_exists

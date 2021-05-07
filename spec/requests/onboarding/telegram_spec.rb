@@ -4,6 +4,7 @@ require 'rails_helper'
 require 'telegram/bot/rspec/integration/rails'
 
 RSpec.describe 'Onboarding::Telegram', type: :request do
+  let(:data_processing_consent) { true }
   let(:contributor) { create(:contributor) }
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
   let(:params) { { jwt: jwt } }
@@ -160,7 +161,8 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
     let(:attrs) do
       {
         first_name: 'Update',
-        last_name: 'MyNames'
+        last_name: 'MyNames',
+        data_processing_consent: data_processing_consent
       }
     end
     let(:params) { { jwt: jwt, contributor: attrs } }
@@ -190,6 +192,20 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
             expect(response).to be_unauthorized
           end
         end
+      end
+
+      context 'without data processing consent' do
+        before { setup_telegram_id_cookie(contributor) }
+        let(:data_processing_consent) { false }
+  
+        it 'displays validation errors' do
+          subject.call
+          parsed = Capybara::Node::Simple.new(response.body)
+          fields = parsed.all('.Field')
+          data_processing_consent_field = fields.find { |f| f.has_text? 'Allgemeine Nutzungsbedingungen' }
+          expect(data_processing_consent_field).to have_text('muss akzeptiert werden')
+        end
+  
       end
     end
 
