@@ -43,7 +43,7 @@ module Onboarding
         return redirect_to 'onboarding/unauthorized', status: :unauthorized
       end
 
-      if @contributor&.update(first_name: contributor_params[:first_name], last_name: contributor_params[:last_name])
+      if @contributor&.update(first_name: contributor_params[:first_name], last_name: contributor_params[:last_name], data_processing_consent: contributor_params[:data_processing_consent])
         redirect_to_success
       else
         render :create
@@ -57,7 +57,7 @@ module Onboarding
     end
 
     def contributor_params
-      params.require(:contributor).permit(:first_name, :last_name, :email)
+      params.require(:contributor).permit(:first_name, :last_name, :email, :data_processing_consent)
     end
 
     def jwt_param
