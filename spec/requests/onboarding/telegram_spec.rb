@@ -4,6 +4,7 @@ require 'rails_helper'
 require 'telegram/bot/rspec/integration/rails'
 
 RSpec.describe 'Onboarding::Telegram', type: :request do
+  let(:data_processing_consent) { true }
   let(:contributor) { create(:contributor) }
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
   let(:params) { { jwt: jwt } }
@@ -103,11 +104,23 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
 
     context 'valid' do
       it { is_expected.not_to raise_exception }
-      it { is_expected.to change(Contributor, :count).by(1) }
 
       it 'is successful' do
         subject.call
         expect(response).to be_successful
+      end
+
+      it 'creates contributor' do
+        expect { subject.call }.to change(Contributor, :count).by(1)
+
+        contributor = Contributor.first
+        expect(contributor).to have_attributes(
+          first_name: 'Matthew',
+          last_name: 'Rider',
+          telegram_id: 123,
+          username: 'matthew_rider',
+          jwt: jwt
+        )
       end
 
       it 'invalidates the jwt' do
@@ -157,10 +170,13 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
 
   describe 'PATCH /onboarding/telegram' do
     let!(:contributor) { create(:contributor, telegram_id: 789, first_name: nil, last_name: nil) }
+    let!(:other_contributor) { create(:contributor, email: 'the@other.de', telegram_id: nil) }
+
     let(:attrs) do
       {
         first_name: 'Update',
-        last_name: 'MyNames'
+        last_name: 'MyNames',
+        data_processing_consent: data_processing_consent
       }
     end
     let(:params) { { jwt: jwt, contributor: attrs } }
@@ -178,6 +194,11 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
           contributor = Contributor.find_by(telegram_id: 789)
           expect(contributor).to have_attributes(first_name: nil, last_name: nil)
         end
+
+        it 'does not update other users' do
+          other_contributor = Contributor.find_by(email: 'the@other.de')
+          expect(other_contributor).to have_attributes(first_name: 'John', last_name: 'Doe')
+        end
       end
 
       context 'expired signature' do
@@ -189,6 +210,18 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
             subject.call
             expect(response).to be_unauthorized
           end
+        end
+      end
+
+      context 'without data processing consent' do
+        before { setup_telegram_id_cookie(contributor) }
+        let(:data_processing_consent) { false }
+        it 'displays validation errors' do
+          subject.call
+          parsed = Capybara::Node::Simple.new(response.body)
+          fields = parsed.all('.Field')
+          data_processing_consent_field = fields.find { |f| f.has_text? 'Allgemeine Nutzungsbedingungen' }
+          expect(data_processing_consent_field).to have_text('muss akzeptiert werden')
         end
       end
     end

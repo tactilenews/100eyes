@@ -4,6 +4,7 @@ FactoryBot.define do
   factory :contributor do
     first_name { 'John' }
     last_name { 'Doe' }
+    data_processing_consent { true }
     sequence :email do |n|
       "contributor#{n}@example.org"
     end

@@ -16,6 +16,8 @@ class Contributor < ApplicationRecord
   default_scope { order(:first_name, :last_name) }
   scope :active, -> { where(deactivated_at: nil) }
 
+  validates :data_processing_consent, acceptance: true, on: %i[contributor_signup update]
+
   validates :email, uniqueness: { case_sensitive: false }, allow_nil: true, 'valid_email_2/email': true
   validates :threema_id, uniqueness: { case_sensitive: false }, allow_blank: true, format: { with: /\A[A-Za-z0-9]+\z/ }, length: { is: 8 }
 
