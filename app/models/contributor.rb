@@ -112,6 +112,17 @@ class Contributor < ApplicationRecord
   end
   alias active active?
 
+  def avatar_url=(url)
+    return unless url
+
+    begin
+      remote_file_location = URI(url)
+    rescue URI::InvalidURIError
+      return
+    end
+    avatar.attach(io: remote_file_location.open, filename: File.basename(remote_file_location.path))
+  end
+
   def active=(value)
     self.deactivated_at = ActiveModel::Type::Boolean.new.cast(value) ? nil : Time.current
   end
