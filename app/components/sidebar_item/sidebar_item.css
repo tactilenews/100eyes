@@ -6,14 +6,8 @@
 
 .SidebarItem--active {
   background-color: #fff;
-}
 
-.SidebarItem--active::before {
-  content: '';
-  position: absolute;
-  top: -1px;
-  bottom: -1px;
-  left: 0;
-  width: 3px;
-  background-color: var(--color-blue);
+  /* Display a 3px border on the left, preventing
+     the default slanted effect in border edges */
+  box-shadow: inset 3px 0 var(--color-blue);
 }
