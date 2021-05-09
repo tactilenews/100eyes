@@ -18,6 +18,9 @@
   background-color: var(--color-gray-lightest);
 }
 
+/* Add a soft fade-out effect at the bottom of
+   the sidebar to indicate there's more content
+   below the fold. */
 .TwoColumnLayout-sidebar::after {
   content: '';
 
