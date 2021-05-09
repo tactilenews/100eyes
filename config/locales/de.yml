@@ -70,15 +70,30 @@ de:
         one: Du hast eine neue Antwort.
         other: Du hast {count} neue Antworten.
     steps:
-      steps:
+      how_it_works:
         - icon: r-chat
-          text: Stelle mit 100eyes eine Frage und sende sie mit einem Klick an 50 Menschen.
+          text: Bauen Sie Ihre Community auf. Finden Sie ihr “Mini Public” von 50-100 spannenden Menschen – treue Leser*innen, junge Menschen oder als Hörer*innenredaktion.
         - icon: mobile-chat
-          text: Deine Frage erreicht die Empfänger per Telegram-Messenger oder eMail, je nachdem wie sie es wünschen.
+          text: Stellen Sie alle Fragen und senden diese mit einem Klick an viele Menschen gleichzeitig – direkt auf den Lieblingsmessenger.
         - icon: bullet-list-68
-          text: 100eyes sammelt alle Antworten und stellt sie dir übersichtlich zur Auswertung dar.
+          text: 100eyes sammelt alle Antworten und stellt sie übersichtlich als Chatverlauf zur Verfügung.
         - icon: app-services
-          text: Werte die Antworten mit Hilfe von 100eyes aus und komponiere deine Veröffentlichung.
+          text: Werten Sie die Antworten aus und machen Sie Programm am Puls der Nutzer:innen.
+        - icon: app-services
+          text: Entwickeln Sie neue Formate dialog-getrieben, maßgeschneidert für neue Zielgruppen.
+      hundred_eyes_selling_points:
+        - icon: r-chat
+          text: DSGVO konform
+        - icon: mobile-chat
+          text: Deutscher Datenschutz
+        - icon: bullet-list-68
+          text: Faires modulares Preissystem
+        - icon: app-services
+          text: Kontakte & Inhalte  gehören Ihnen
+        - icon: app-services
+          text: Fixer persönlicher Support
+        - icon: app-services
+          text: Neue Features als Erste testen
     onboarding_header:
       byline: eine Dialog-Recherche von <a class="Link" href="https://tactile.news" target="_blank">tactile.news</a>
     onboarding_email_form:
@@ -146,6 +161,8 @@ de:
 
   dashboard:
     how_it_works: So funktioniert 100eyes
+    become_a_pioneer: Werden Sie zur Dialog-Pionier*in.  
+    provided_technology: Wir stellen die Technologie.
 
   setting:
     setting:

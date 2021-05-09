@@ -8,7 +8,14 @@
           <%= I18n.t 'dashboard.how_it_works' %>
         <% end %>
 
-        <%= c 'steps' %>
+        <%= c 'steps', list: :how_it_works %>
+
+        <%= c 'heading', tag: :h2 do %>
+          <%= I18n.t 'dashboard.become_a_pioneer' %> 
+          <%= I18n.t 'dashboard.provided_technology' %>
+        <% end %>
+
+        <%= c 'steps', list: :hundred_eyes_selling_points %>
       <% end %>
     <% end %>
   <% end %>

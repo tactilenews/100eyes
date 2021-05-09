@@ -1,5 +1,5 @@
 <ul class="Steps">
-  <% I18n.t('components.steps.steps').each do |step| %>
+  <% I18n.t('components.steps.'.concat(list)).each do |step| %>
     <li class="Steps-step">
       <div class="Steps-icon">
         <%= c 'icon', icon: step[:icon], size: 32 %>
