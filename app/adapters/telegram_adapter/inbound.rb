@@ -1,56 +1,75 @@
 # frozen_string_literal: true
 
 module TelegramAdapter
+  UNKNOWN_CONTRIBUTOR = :unknown_contributor
+  UNKNOWN_CONTENT = :unknown_content
+  CONNECT = :connect
+
   class Inbound
     UNKNOWN_CONTENT_KEYS = %w[
       animation audio document sticker video video_note
       contact dice game poll venue location
       invoice successful_payment passport_data
     ].freeze
-    attr_reader :sender, :text, :message, :photos, :unknown_content, :file
 
-    def self.bounce!(chat)
-      chat_id = chat && chat['id'] or raise 'Can not respond_with when chat is not present'
-      Telegram.bot.send_message(
-        chat_id: chat_id,
-        text: Setting.telegram_contributor_not_found_message
-      )
-    end
+    attr_reader :sender, :text, :message, :photos, :file
 
     def self.from(raw_data)
       new(JSON.parse(raw_data.download))
     end
 
-    def initialize(telegram_message)
+    def initialize
+      @callbacks = {}
+      [UNKNOWN_CONTENT, UNKNOWN_CONTRIBUTOR, CONNECT].each { |c| @callbacks[c] = (proc {}) } # rubocop:disable Lint/EmptyBlock
+    end
+
+    def on(callback, &block)
+      @callbacks[callback] = block
+    end
+
+    def consume(telegram_message)
       telegram_message = telegram_message.with_indifferent_access
 
-      @sender = initialize_known_contributor(telegram_message)
+      @text = telegram_message[:text] || telegram_message[:caption] || ''
+      @sender = initialize_sender(telegram_message)
       return unless @sender
 
-      @text = telegram_message[:text] || telegram_message[:caption]
-      @unknown_content = initialize_unknown_content(telegram_message)
       @message = initialize_message(telegram_message)
+      if telegram_message.keys.any? { |key| UNKNOWN_CONTENT_KEYS.include?(key) }
+        @message.unknown_content = true
+        @callbacks[UNKNOWN_CONTENT].call
+      end
       @photos = initialize_photos(telegram_message)
       @file = initialize_file(telegram_message)
       @message.file = @file
       @photos.each do |photo|
         @message.association(:photos).add_to_target(photo)
       end
+
+      yield(@message) if block_given?
     end
 
     private
 
-    def initialize_known_contributor(telegram_message)
+    def initialize_sender(telegram_message)
       telegram_id = telegram_message.dig(:from, :id)
       username = telegram_message.dig(:from, :username)
       sender = Contributor.find_by(telegram_id: telegram_id)
-      sender.username = username if sender
+      if sender
+        sender.username = username
+      else
+        telegram_onboarding_token = text.delete_prefix('/start').strip
+        sender = Contributor.find_by(telegram_id: nil, telegram_onboarding_token: telegram_onboarding_token)
+        if sender
+          sender.username = username
+          sender.telegram_id = telegram_id
+          @callbacks[CONNECT].call(sender)
+        else
+          @callbacks[UNKNOWN_CONTRIBUTOR].call
+        end
+      end
 
       sender
-    end
-
-    def initialize_unknown_content(telegram_message)
-      @unknown_content = telegram_message.keys.any? { |key| UNKNOWN_CONTENT_KEYS.include?(key) }
     end
 
     def initialize_message(telegram_message)
@@ -62,7 +81,6 @@ module TelegramAdapter
         filename: 'telegram_api.json',
         content_type: 'application/json'
       )
-      message.unknown_content = unknown_content
       message
     end
 
