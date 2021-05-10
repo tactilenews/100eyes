@@ -91,6 +91,18 @@ RSpec.describe '/contributors', type: :request do
       subject.call
       expect(flash[:success]).to eq('Informationen zu Zora Zimmermann gespeichert')
     end
+
+    context 'given a manually created contributor' do
+      let(:contributor) { create(:contributor, :manually_created) }
+
+      it 'updates contributor' do
+        expect { subject.call }.to(change { contributor.reload.first_name }.from('John').to('Zora'))
+      end
+
+      it 'does not change data processing consent' do
+        expect { subject.call }.to_not(change { contributor.data_processing_consent })
+      end
+    end
   end
 
   describe 'DELETE /destroy' do

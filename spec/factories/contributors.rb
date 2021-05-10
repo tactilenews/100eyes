@@ -12,5 +12,9 @@ FactoryBot.define do
     trait :with_an_avatar do
       avatar { Rack::Test::UploadedFile.new(Rails.root.join('example-image.png'), 'image/png') }
     end
+
+    trait :manually_created do
+      data_processing_consent { false }
+    end
   end
 end
