@@ -42,11 +42,13 @@ module Onboarding
 
       return render 'onboarding/unauthorized', status: :unauthorized unless @contributor
 
-      if @contributor&.update(
+      @contributor.assign_attributes(
         first_name: contributor_params[:first_name],
         last_name: contributor_params[:last_name],
-        data_processing_consent: contributor_params[:data_processing_consent])
+        data_processing_consent: contributor_params[:data_processing_consent]
+      )
 
+      if @contributor.save(context: :contributor_signup)
         redirect_to_success
       else
         render :create
