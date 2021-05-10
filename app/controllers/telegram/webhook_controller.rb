@@ -6,8 +6,6 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
   def message(message)
     telegram_message = TelegramAdapter::Inbound.new(message)
 
-    return if telegram_message.contributor_onboarding
-
     contributor = telegram_message.sender
     TelegramAdapter::Inbound.bounce!(chat) and return unless contributor
 
