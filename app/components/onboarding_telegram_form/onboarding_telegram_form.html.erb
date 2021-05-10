@@ -1,27 +1,35 @@
-<%= form_with(
-  model: contributor,
-  hidden: true,
-  local: true,
-  url: onboarding_telegram_path,
-  class: class_attr,
-) do %>
-  <h1 class="OnboardingTelegramForm-header"><%= t 'components.onboarding_telegram_form.heading'%></h1>
-  <p class="OnboardingTelegramForm-subheader"><%= t 'components.onboarding_telegram_form.text'%></p>
-  <%= c 'field', object: contributor, id: :first_name do |field| %>
-    <%= c 'input', field.input_defaults.merge(value: first_name, required: true) %>
+<%= c 'stack', **attrs do %>
+
+  <%= c 'stack', class: 'text-serif', space: :xsmall do %>
+    <%= c 'heading', tag: :h1 do %>
+      <%= t 'components.onboarding_telegram_form.heading' %>
+    <% end %>
+
+    <p><%= t 'components.onboarding_telegram_form.text' %></p>
   <% end %>
 
-  <%= c 'field', object: contributor, id: :last_name do |field| %>
-    <%= c 'input', field.input_defaults.merge(value: last_name, required: true) %>
+  <%= form_with(model: contributor, local: true, url: onboarding_telegram_path) do %>
+    <%= c 'stack' do %>
+      <%= c 'field', object: contributor, id: :first_name do |field| %>
+        <%= c 'input', field.input_defaults.merge(required: true) %>
+      <% end %>
+
+      <%= c 'field', object: contributor, id: :last_name do |field| %>
+        <%= c 'input', field.input_defaults.merge(required: true) %>
+      <% end %>
+
+      <%= c 'input', id: 'contributor[telegram_onboarding_token]', type: 'hidden', value: contributor.telegram_onboarding_token %>
+
+      <%= c 'field', object: contributor, id: :data_processing_consent, styles: [:horizontal, :leftAligned] do |field| %>
+        <%= c 'checkbox', field.input_defaults.merge(required: true, value: nil) %>
+      <% end %>
+
+      <%= c 'button',
+        type: 'submit',
+        label: t('components.onboarding_telegram.submit'),
+        styles: [:primary, :block]
+      %>
+    <% end %>
   <% end %>
 
-  <%= c 'field', object: @contributor, id: :data_processing_consent, styles: [:horizontal, :leftAligned] do |field| %>
-    <%= c 'checkbox', field.input_defaults.merge(required: true, value: nil) %>
-  <% end %>
-
-  <%= c 'button',
-    type: 'submit',
-    label: I18n.t('components.onboarding_telegram_form.submit'),
-    style: :primary
-  %>
 <% end %>

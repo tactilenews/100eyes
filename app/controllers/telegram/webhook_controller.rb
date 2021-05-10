@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Telegram::WebhookController < Telegram::Bot::UpdatesController
+  def start!(telegram_onboarding_token = nil); end
+
   def message(message)
     telegram_message = TelegramAdapter::Inbound.new(message)
 

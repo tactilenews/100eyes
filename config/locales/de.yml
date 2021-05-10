@@ -91,11 +91,10 @@ de:
       heading: Mit Telegram teilnehmen
       text: Geben Sie bitte unten Ihren Namen ein, um die Anmeldung abzuschließen.
       submit: Anmeldung abschließen
-    telegram_explained:
+    onboarding_telegram_link:
       link: Mit Telegram teilnehmen
-      header: Mit Telegram teilnehmen
-      subheader: Melden Sie sich über den Button unten bei Telegram an, damit wir Ihnen Nachrichten senden können.
-      important_info: Kommen Sie zurück zu dieser Seite, nachdem Sie sich bei Telegram angemeldet haben. Nur dann können wir Ihre Registrierung für %{project_name} abschließen.
+      copy: Telegram Link kopieren
+      copied: Telegram Link kopiert
     onboarding_footer:
       imprint: Impressum
     create_invite_button:

@@ -1,0 +1,9 @@
+<%= c 'stack', space: :small, class: 'text-center' do %>
+  <%= c 'button', label: I18n.t('components.onboarding_telegram_link.link'), link: telegram_link  %><br>
+  <%= c 'copy_button',
+    label: I18n.t('components.onboarding_telegram_link.copy'),
+    success: I18n.t('components.onboarding_telegram_link.copied'),
+    copy: telegram_link,
+    style: :inline
+  %>
+<% end %>

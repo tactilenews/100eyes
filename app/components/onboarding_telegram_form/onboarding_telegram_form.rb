@@ -2,17 +2,14 @@
 
 module OnboardingTelegramForm
   class OnboardingTelegramForm < ApplicationComponent
-    def initialize(contributor:, telegram_id:, first_name: nil, last_name: nil, **)
+    def initialize(contributor:, **)
       super
 
       @contributor = contributor
-      @telegram_id = telegram_id
-      @first_name = first_name
-      @last_name = last_name
     end
 
     private
 
-    attr_reader :contributor, :first_name, :last_name, :telegram_id
+    attr_reader :contributor
   end
 end

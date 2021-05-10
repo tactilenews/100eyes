@@ -5,7 +5,7 @@ module Onboarding
     include JwtHelper
 
     skip_before_action :require_login
-    before_action -> { verify_onboarding_jwt(jwt_param) }
+    before_action :verify_jwt
     before_action :redirect_if_contributor_exists, only: :create
 
     layout 'onboarding'
@@ -74,6 +74,10 @@ module Onboarding
 
     def jwt_param
       params.require(:jwt)
+    end
+
+    def verify_jwt
+      verify_onboarding_jwt(jwt_param)
     end
   end
 end
