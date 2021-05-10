@@ -213,6 +213,11 @@ de:
     saved: Informationen zu %{name} gespeichert
     invalid: Informationen zu %{name} sind ungültig
     message-send: Nachricht an %{name} wurde verschickt
+    data_processing_callout:
+      heading: Datenschutz
+      text:
+        - Wenn du ein Mitglied manuell hinzufügst, musst du sicherstellen, dass das Mitglied zuvor die Allgemeinen Nutzungsbedingungen und die Datenschutzerklärung von 100eyes zur Kenntnis genommen und seine Einwilligung erklärt hat, Nachrichten zu erhalten. Die Verantwortung für die Dokumentation der Einwilligung liegt in diesem Fall bei dir.
+        - Fragen? <a class="Link" href="mailto:support@tactile.news">support@tactile.news</a>
     form:
       first_name:
         label: Vorname
