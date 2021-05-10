@@ -17,7 +17,7 @@ module Onboarding
     def create
       @contributor = Contributor.new(contributor_params.merge(jwt: jwt_param))
 
-      if @contributor.save(context: :contributor_signup)
+      if @contributor.save
         invalidate_jwt(jwt_param)
         redirect_to_success
       else

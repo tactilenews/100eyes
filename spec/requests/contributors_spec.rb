@@ -93,7 +93,7 @@ RSpec.describe '/contributors', type: :request do
     end
 
     context 'given a manually created contributor' do
-      let(:contributor) { create(:contributor, :manually_created) }
+      let(:contributor) { build(:contributor, data_processing_consent: false).tap { |c| c.save(validate: false) } }
 
       it 'updates contributor' do
         expect { subject.call }.to(change { contributor.reload.first_name }.from('John').to('Zora'))

@@ -279,20 +279,27 @@ RSpec.describe Contributor, type: :model do
     end
 
     describe 'given a TelegramAdapter::Inbound' do
-      let(:contributor) { create(:contributor, telegram_id: 4711) }
-      let(:message_inbound_adapter) do
-        TelegramAdapter::Inbound.new(
-          'text' => 'The answer is 42.',
-          'from' => {
-            'id' => 4711,
-            'is_bot' => false,
-            'first_name' => 'Robert',
-            'last_name' => 'Schäfer',
-            'language_code' => 'en'
-          },
-          'chat' => { 'id' => 146_338_764 }
-        )
+      subject do
+        lambda do
+          telegram_message = {
+            'text' => 'The answer is 42.',
+            'from' => {
+              'id' => 4711,
+              'is_bot' => false,
+              'first_name' => 'Robert',
+              'last_name' => 'Schäfer',
+              'language_code' => 'en'
+            },
+            'chat' => { 'id' => 146_338_764 }
+          }
+          message_inbound_adapter = TelegramAdapter::Inbound.new
+          message_inbound_adapter.consume(telegram_message) do |message|
+            message.contributor.reply(message_inbound_adapter)
+          end
+        end
       end
+
+      let(:contributor) { create(:contributor, telegram_id: 4711) }
 
       it { should_not raise_error }
       it { should_not(change { Message.count }) }
@@ -434,12 +441,12 @@ RSpec.describe Contributor, type: :model do
     subject { contributor.data_processing_consent }
 
     describe 'given a contributor who has given consent' do
-      let(:contributor) { create(:contributor, data_processing_consented_at: 1.day.ago) }
+      let(:contributor) { build(:contributor, data_processing_consented_at: 1.day.ago) }
       it { should be(true) }
     end
 
     describe 'given a contributor who has not given consent' do
-      let(:contributor) { create(:contributor, data_processing_consented_at: nil) }
+      let(:contributor) { build(:contributor, data_processing_consented_at: nil) }
       it { should be(false) }
     end
   end
@@ -456,7 +463,7 @@ RSpec.describe Contributor, type: :model do
     end
 
     describe 'given contributor who has not given content' do
-      let(:contributor) { create(:contributor, data_processing_consented_at: nil) }
+      let(:contributor) { build(:contributor, data_processing_consented_at: nil) }
       describe 'true' do
         it {
           expect { contributor.data_processing_consent = true }
