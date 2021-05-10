@@ -1,3 +1,5 @@
-<main class="TelegramExplained">
-  <%= c 'telegram_explained', jwt: @jwt %>
+<main>
+  <%= c 'interstitial' do %>
+  <%= c 'onboarding_telegram_form', contributor: @contributor %>
+  <% end %>
 </main>

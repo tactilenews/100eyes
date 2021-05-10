@@ -18,8 +18,8 @@ Rails.application.routes.draw do
       post '/threema/', to: 'threema#create'
 
       get '/telegram/', to: 'telegram#show'
-      get '/telegram/callback', to: 'telegram#create'
-      patch '/telegram', to: 'telegram#update'
+      post '/telegram/', to: 'telegram#create'
+      get '/telegram/link/:telegram_onboarding_token', to: 'telegram#link', as: 'telegram_link'
     end
   end
 

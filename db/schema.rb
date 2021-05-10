@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_08_183827) do
+ActiveRecord::Schema.define(version: 2021_05_10_092738) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(version: 2021_05_08_183827) do
     t.string "threema_id"
     t.datetime "data_processing_consented_at"
     t.string "jwt"
+    t.string "telegram_onboarding_token"
     t.index ["email"], name: "index_contributors_on_email", unique: true
     t.index ["telegram_chat_id"], name: "index_contributors_on_telegram_chat_id", unique: true
     t.index ["telegram_id"], name: "index_contributors_on_telegram_id", unique: true
