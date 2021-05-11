@@ -92,6 +92,8 @@ de:
       text: Geben Sie bitte unten Ihren Namen ein, um die Anmeldung abzuschließen.
       submit: Anmeldung abschließen
     onboarding_telegram_link:
+      heading: Fast geschafft!
+      text: Bitte schicken Sie uns auf Telegram eine Nachricht. Sie können den Telegram Link auch kopieren und auf einem anderen Gerät öffnen.
       link: Mit Telegram teilnehmen
       copy: Telegram Link kopieren
       copied: Telegram Link kopiert

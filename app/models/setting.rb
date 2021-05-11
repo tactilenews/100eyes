@@ -20,7 +20,6 @@ class Setting < RailsSettings::Base
 
   field :telegram_unknown_content_message, default: File.read(File.join('config', 'locales', 'telegram', 'unknown_content.txt'))
   field :telegram_contributor_not_found_message, default: File.read(File.join('config', 'locales', 'telegram', 'unknown_contributor.txt'))
-  field :telegram_welcome_message, default: File.read(File.join('config', 'locales', 'telegram', 'welcome_message.txt'))
   field :threema_unknown_content_message, default: File.read(File.join('config', 'locales', 'threema', 'unknown_content.txt'))
 
   field :telegram_bot_api_key, readonly: true, default: ENV['TELEGRAM_BOT_API_KEY']
