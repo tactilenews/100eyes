@@ -12,8 +12,12 @@ module Onboarding
     end
 
     def link
-      contributor = Contributor.find_by!(telegram_id: nil, telegram_onboarding_token: params[:telegram_onboarding_token])
-      @telegram_onboarding_token = contributor.telegram_onboarding_token
+      begin
+        contributor = Contributor.find_by!(telegram_id: nil, telegram_onboarding_token: params[:telegram_onboarding_token])
+        @telegram_onboarding_token = contributor.telegram_onboarding_token
+      rescue ActiveRecord::RecordNotFound
+        render 'onboarding/unauthorized', status: :unauthorized
+      end
     end
 
     private

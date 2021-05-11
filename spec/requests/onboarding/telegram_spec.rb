@@ -122,13 +122,10 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
     describe 'http status' do
       subject { super().call && response }
       it { is_expected.to have_http_status(:ok) }
-    end
 
-    describe 'contributor already connected via Telegram' do
-      let(:contributor) { create(:contributor, telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN', telegram_id: 4711) }
-
-      it 'renders 404' do
-        is_expected.to raise_error(ActiveRecord::RecordNotFound)
+      describe 'contributor already connected via Telegram' do
+        let(:contributor) { create(:contributor, telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN', telegram_id: 4711) }
+        it { is_expected.to have_http_status(:unauthorized) }
       end
     end
   end
