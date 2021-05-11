@@ -28,7 +28,7 @@ module Onboarding
         first_name: @first_name,
         last_name: @last_name,
         username: telegram_auth_params[:username],
-        avatar_url: telegram_auth_params[:avatar_url],
+        avatar_url: telegram_auth_params[:photo_url],
         jwt: jwt_param
       )
       return unless @contributor.save
