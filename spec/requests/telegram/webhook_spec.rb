@@ -6,8 +6,9 @@ require 'telegram/bot/rspec/integration/rails'
 RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
   before do
     Setting.telegram_contributor_not_found_message = 'Who are you?'
-    Setting.telegram_welcome_message = 'Welcome new contributor!'
     Setting.telegram_unknown_content_message = "Cannot handle this, I'm sorry :("
+    Setting.onboarding_success_heading = 'Welcome new contributor!'
+    Setting.onboarding_success_text = ''
   end
 
   describe '#start!' do
@@ -26,7 +27,7 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
         it { should_not(change { Message.count }) }
         context 'and sends the right telegram_onboarding_token' do
           let(:message) { '/start ABCDEF' }
-          it { should respond_with_message 'Welcome new contributor!' }
+          it { should respond_with_message "Welcome new contributor!\n" }
           it { should(change { Contributor.first.telegram_id }.from(nil).to(9876)) }
         end
       end
@@ -40,7 +41,7 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
 
       context 'with a matching `telegram_id`' do
         let(:contributor) { create(:contributor, telegram_id: 9876) }
-        it { should respond_with_message 'Welcome new contributor!' }
+        it { should respond_with_message "Welcome new contributor!\n" }
         it { should_not(change(Contributor, :count)) }
 
         context 'given a recent request' do
@@ -82,7 +83,7 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
 
         context 'and sends telegram_onboarding_token' do
           let(:message) { " \n  GHIJKL  \t " }
-          it { should respond_with_message 'Welcome new contributor!' }
+          it { should respond_with_message "Welcome new contributor!\n" }
           it { should(change { contributor.reload.telegram_id }.from(nil).to(12_345)) }
 
           context 'even if other contributors are not connected yet' do
