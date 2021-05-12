@@ -17,7 +17,6 @@
   display: block;
   order: 1;
   font-size: calc(1.125 * var(--spacing-unit));
-  line-height: calc(1.5 * var(--spacing-unit));
   font-weight: 700;
 }
 
