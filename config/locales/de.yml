@@ -79,8 +79,6 @@ de:
           text: 100eyes sammelt alle Antworten und stellt sie dir übersichtlich zur Auswertung dar.
         - icon: app-services
           text: Werte die Antworten mit Hilfe von 100eyes aus und komponiere deine Veröffentlichung.
-    onboarding_header:
-      byline: eine Dialog-Recherche von <a class="Link" href="https://tactile.news" target="_blank">tactile.news</a>
     onboarding_email_form:
       heading: Per E-Mail teilnehmen
       text: Geben Sie bitte unten Ihre Kontaktdaten ein, um Ihre Anmeldung abzuschließen.
@@ -179,6 +177,9 @@ de:
       onboarding_logo:
         label: Logo (URL)
         help: Das Logo sollte eine Bilddatei im SVG-, PNG-Format sein und ca. 90 Pixel hoch sein. Es wird während des Onboardings angezeigt.
+      onboarding_byline:
+        label: Unterzeile
+        help: Wird unter dem Projekttitel bzw. Logo angezeigt.
       onboarding_hero:
         label: Header-Bild (URL)
         help: Das Header-Bild sollte eine Bilddatei im JPEG-Format sein. Es sollte ein Seitenverhältnis von 2:1 haben und ca. 900 Pixel breit sein. Es wird während des Onboardings angezeigt.

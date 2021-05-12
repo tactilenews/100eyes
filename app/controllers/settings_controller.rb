@@ -20,6 +20,7 @@ class SettingsController < ApplicationController
       :onboarding_logo,
       :onboarding_hero,
       :onboarding_title,
+      :onboarding_byline,
       :onboarding_success_heading,
       :onboarding_success_text,
       :onboarding_unauthorized_heading,

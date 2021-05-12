@@ -11,5 +11,13 @@ module OnboardingHeader
     private
 
     attr_reader :logo
+
+    def project_name
+      Setting.project_name
+    end
+
+    def byline
+      Setting.onboarding_byline
+    end
   end
 end
