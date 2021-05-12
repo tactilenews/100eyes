@@ -3,6 +3,10 @@
   align-items: center;
 }
 
+.ContributorRow--compact {
+  font-size: var(--font-size-s);
+}
+
 a.ContributorRow:hover .ContributorRow-name {
   text-decoration: underline;
 }

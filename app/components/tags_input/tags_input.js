@@ -72,6 +72,10 @@ export default class extends Controller {
     this.tagify.on('remove', () => this.fireInputEvent());
   }
 
+  disconnect() {
+    this.tagify.destroy();
+  }
+
   fireInputEvent() {
     const event = new CustomEvent('changeTags', {
       bubbles: true,

@@ -42,7 +42,7 @@ class Contributor < ApplicationRecord
         id: tag.id,
         name: tag.name,
         value: tag.name,
-        count: Contributor.tagged_with([tag]).count,
+        count: tag.taggings_count,
         color: Contributor.tag_color_from_id(tag.id)
       }
     end
@@ -97,11 +97,11 @@ class Contributor < ApplicationRecord
   end
 
   def tags?
-    tag_list.any?
+    tags.any?
   end
 
   def recent_replies
-    result = replies.eager_load(:request, :sender).reorder(created_at: :desc)
+    result = replies.includes(:request, :sender).reorder(created_at: :desc)
     result = result.group_by(&:request).values # array or groups
     result = result.map(&:first) # choose most recent message per group
     result.sort_by(&:created_at).reverse # ensure descending order

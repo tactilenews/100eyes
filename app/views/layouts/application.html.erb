@@ -6,9 +6,14 @@
     <%= csp_meta_tag %>
 
     <%= stylesheet_pack_tag 'application', media: 'all' %>
+    <%= javascript_pack_tag 'application' %>
   </head>
 
   <body>
+
+    <a class="skip-link" href="#main" data-turbo="false">
+      <%= t 'skip_to_content' %>
+    </a>
 
     <div class="sticky">
       <%= c 'nav_bar' %>
@@ -21,7 +26,7 @@
       <%= yield :notifications %>
     </div>
 
-    <main>
+    <main id="main" name="main">
       <%= yield %>
     </main>
 
@@ -30,7 +35,5 @@
         <%= c 'footer' %>
       <% end %>
     <% end %>
-
-    <%= javascript_pack_tag 'application' %>
   </body>
 </html>

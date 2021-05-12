@@ -20,5 +20,9 @@ module ContributorRow
     def channels
       contributor.channels.map(&:capitalize).join(', ')
     end
+
+    def compact?
+      styles.include?(:compact)
+    end
   end
 end

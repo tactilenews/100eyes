@@ -2,6 +2,7 @@ import { Application } from '@stimulus/core';
 import { identifierForContextKey } from 'stimulus/webpack-helpers';
 
 import '../global/index.js';
+import './turbo.js';
 
 // Rails helpers
 import Rails from '@rails/ujs';

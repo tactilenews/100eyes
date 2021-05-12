@@ -1,0 +1,45 @@
+.TwoColumnLayout {
+  display: flex;
+}
+
+.TwoColumnLayout-sidebar {
+  position: sticky;
+  top: var(--nav-bar-height);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  width: 20rem;
+  height: calc(100vh - var(--nav-bar-height));
+
+  flex-grow: 0;
+  flex-shrink: 0;
+
+  border-right: 1px solid var(--color-border);
+  background-color: var(--color-gray-lightest);
+}
+
+/* Add a soft fade-out effect at the bottom of
+   the sidebar to indicate there's more content
+   below the fold. */
+.TwoColumnLayout-sidebar::after {
+  content: '';
+
+  position: sticky;
+  bottom: 0;
+  left: 0;
+
+  display: block;
+  width: 100%;
+  height: var(--spacing-unit-l);
+
+  background-image: linear-gradient(
+    to bottom,
+    transparent,
+    var(--color-gray-lightest) 90%
+  );
+}
+
+.TwoColumnLayout-content {
+  flex-grow: 1;
+  flex-shrink: 1;
+}

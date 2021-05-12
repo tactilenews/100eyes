@@ -42,3 +42,9 @@ a {
 strong {
   font-weight: 600;
 }
+
+.turbo-progress-bar {
+  height: 2px;
+  background-color: var(--color-blue);
+  box-shadow: 0 0 2px var(--color-blue-lightest);
+}

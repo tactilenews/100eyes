@@ -3,7 +3,7 @@
   href="<%= url %>"
 >
   <div class="ContributorRow-avatar">
-    <%= c 'avatar', contributor: contributor %>
+    <%= c 'avatar', contributor: contributor, style: compact? ? :small : nil %>
   </div>
 
   <div>
@@ -11,11 +11,11 @@
       <span class="ContributorRow-name"><%= contributor.name %></span>
     </strong>
 
-    <span class="ContributorRow-channels"> 
+    <span class="ContributorRow-channels">
         <%= I18n.t('components.contributor_row.via_channels', channels: channels) %>
     </span>
 
-    <% if contributor.tags? %>
+    <% if !compact? && contributor.tags? %>
       <%= c 'tags_list', tags: contributor.tags %>
     <% end %>
 

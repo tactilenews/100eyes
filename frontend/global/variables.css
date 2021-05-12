@@ -47,6 +47,7 @@
 
   --color-gray: #868e92;
   --color-gray-light: #e9edf0;
+  --color-gray-lightest: #f5f6f9;
   --color-gray-dark: #333;
 
   --color-pink: #f4177a;
@@ -62,6 +63,7 @@
   --color-primary: var(--color-pink);
   --color-accent: var(--color-blue);
   --color-border: #ccc;
+  --color-border-light: #dedede;
   --color-focus: var(--color-blue);
   --color-focus-outline: var(--color-blue-light);
 
@@ -75,4 +77,6 @@
   --input-margin: var(--spacing-unit-xs) 0;
 
   --soft-shadow: 0 0 3px -3px rgba(0, 0, 0, 0.1), 0 3px 15px rgba(0, 0, 0, 0.1);
+
+  --nav-bar-height: calc(2.5 * var(--spacing-unit));
 }
