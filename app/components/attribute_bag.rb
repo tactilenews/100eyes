@@ -5,7 +5,7 @@ class AttributeBag
 
   attr_reader :attrs
 
-  def initialize(**attrs)
+  def initialize(attrs = {})
     @attrs = attrs
   end
 
@@ -19,7 +19,7 @@ class AttributeBag
     attrs
   end
 
-  def merge(**additional_attrs)
+  def merge(additional_attrs = {})
     new_attrs = attrs.dup
 
     if attrs.key?(:class) && additional_attrs.key?(:class)

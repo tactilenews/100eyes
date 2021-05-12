@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe RepliesMailbox, type: :mailbox do
-  subject { -> { receive_inbound_email_from_mail params } }
+  subject { -> { receive_inbound_email_from_mail(**params) } }
 
   let(:from_address) { 'zora@example.org' }
   let(:params) { { from: from_address, body: 'Meiner Katze geht es gut!' } }
