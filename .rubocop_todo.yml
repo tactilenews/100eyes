@@ -11,6 +11,9 @@
 Metrics/AbcSize:
   Max: 29
 
+Metrics/ClassLength:
+  Max: 105
+
 # Offense count: 4
 # Configuration parameters: CountComments, CountAsOne, ExcludedMethods.
 # ExcludedMethods: refine
@@ -67,3 +70,7 @@ Style/IfUnlessModifier:
   Exclude:
     - 'app/helpers/component_helper.rb'
     - 'spec/rails_helper.rb'
+
+Rails/EnvironmentVariableAccess:
+  Exclude:
+    - 'app/models/setting.rb'

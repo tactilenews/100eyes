@@ -28,7 +28,8 @@ module Onboarding
         first_name: @first_name,
         last_name: @last_name,
         username: telegram_auth_params[:username],
-        avatar_url: telegram_auth_params[:avatar_url]
+        avatar_url: telegram_auth_params[:photo_url],
+        jwt: jwt_param
       )
       return unless @contributor.save
 
@@ -37,12 +38,20 @@ module Onboarding
     end
 
     def update
-      @contributor = Contributor.find_by(telegram_id: cookies.encrypted[:telegram_id])
+      @contributor = cookies.encrypted[:telegram_id] ? Contributor.find_by(telegram_id: cookies.encrypted[:telegram_id]) : nil
 
-      if @contributor&.update(first_name: contributor_params[:first_name], last_name: contributor_params[:last_name])
+      return render 'onboarding/unauthorized', status: :unauthorized unless @contributor
+
+      @contributor.assign_attributes(
+        first_name: contributor_params[:first_name],
+        last_name: contributor_params[:last_name],
+        data_processing_consent: contributor_params[:data_processing_consent]
+      )
+
+      if @contributor.save(context: :contributor_signup)
         redirect_to_success
       else
-        render 'onboarding/unauthorized', status: :unauthorized
+        render :create
       end
     end
 
@@ -53,7 +62,7 @@ module Onboarding
     end
 
     def contributor_params
-      params.require(:contributor).permit(:first_name, :last_name, :email)
+      params.require(:contributor).permit(:first_name, :last_name, :email, :data_processing_consent)
     end
 
     def jwt_param

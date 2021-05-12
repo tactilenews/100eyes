@@ -1,11 +1,11 @@
-name: Docker push
+name: Continuous Deployment
 
 on:
   push:
     branches: [ master ]
 
 jobs:
-  deploy:
+  docker_push:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,3 +27,23 @@ jobs:
           tags: tactilenews/hundred-eyes:latest
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
+
+  deploy:
+    needs: [docker_push]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Run playbook
+        uses: dawidd6/action-ansible-playbook@f0b38f33e95224ff47ca6bc91239b3ea670f86b2
+        with:
+          playbook: ansible/site.yml
+          requirements: ansible/requirements.yml
+          key: ${{secrets.SSH_PRIVATE_KEY}}
+          vault_password: ${{secrets.VAULT_PASSWORD}}
+          options: |
+            --inventory ansible/inventories/staging
+            --skip-tags skip_ci
+            --verbose

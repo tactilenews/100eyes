@@ -2,10 +2,14 @@
 
 module OnboardingThreemaForm
   class OnboardingThreemaForm < ApplicationComponent
-    def initialize(**)
+    def initialize(contributor:, **)
       super
 
-      @contributor = Contributor.new
+      @contributor = contributor
     end
+
+    private
+
+    attr_reader :contributor
   end
 end
