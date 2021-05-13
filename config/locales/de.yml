@@ -216,7 +216,7 @@ de:
     contributor:
       one: Mitglied
       other: Mitglieder
-    create: Neues Mitglied erstellen
+    create: Mitglied manuell anlegen
     success: Mitglied wurde erstellt
     activity: Aktivität
     show_replies: Antworten anzeigen

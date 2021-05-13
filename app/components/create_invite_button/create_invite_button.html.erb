@@ -1,9 +1,10 @@
 <%= c('button',
-  style: :inline,
   data: {
     controller: 'create-invite-button',
     action: 'click->create-invite-button#copyLink'
-  }
+  },
+  styles: styles,
+  **attrs
 ) do %>
   <span data-create-invite-button-target="label">
     <%= t 'components.create_invite_button.label' %>

@@ -7,8 +7,12 @@
       <% end %>
 
       <%= c 'stack', space: :small, class: 'text-center' do %>
-        <%= c 'button', label: I18n.t('contributor.create'), link: new_contributor_path %><br>
-        <%= c 'create_invite_button' %>
+        <%= c 'create_invite_button', style: :primary %><br>
+        <%= c 'button',
+          style: :inline,
+          label: I18n.t('contributor.create'),
+          link: new_contributor_path
+        %>
       <% end %>
 
     <% end %>
