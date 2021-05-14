@@ -15,10 +15,9 @@ module Onboarding
     end
 
     def create
-      @contributor = Contributor.new(contributor_params.merge(jwt: jwt_param))
+      @contributor = Contributor.new(contributor_params.merge(json_web_token_attributes: { invalidated_jwt: jwt_param }))
 
       if @contributor.save
-        invalidate_jwt(jwt_param)
         redirect_to_success
       else
         redirect_to_failure

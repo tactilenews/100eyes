@@ -16,7 +16,6 @@ RSpec.describe 'Onboarding::Email', type: :request do
         last_name: 'Zimmermann',
         email: email,
         data_processing_consent: data_processing_consent,
-        jwt: jwt
       }
     end
 
@@ -33,7 +32,9 @@ RSpec.describe 'Onboarding::Email', type: :request do
         last_name: 'Zimmermann',
         email: email,
         data_processing_consent: data_processing_consent,
-        jwt: jwt
+      )
+      expect(contributor.json_web_token).to have_attributes(
+        invalidated_jwt: jwt
       )
     end
 
@@ -78,7 +79,7 @@ RSpec.describe 'Onboarding::Email', type: :request do
     end
 
     describe 'given an existing email address' do
-      let!(:contributor) { create(:contributor, **attrs) }
+      let!(:contributor) { create(:contributor, **attrs.merge(json_web_token: create(:json_web_token, invalidated_jwt: :jwt ))) }
 
       it 'redirects to success page' do
         subject.call

@@ -15,7 +15,6 @@ RSpec.describe 'Onboarding::Threema', type: :request do
         last_name: 'Zimmermann',
         threema_id: 'ABCD1234',
         data_processing_consent: data_processing_consent,
-        jwt: jwt
       }
     end
 
@@ -32,7 +31,9 @@ RSpec.describe 'Onboarding::Threema', type: :request do
         last_name: 'Zimmermann',
         threema_id: 'ABCD1234',
         data_processing_consent: data_processing_consent,
-        jwt: jwt
+      )
+      expect(contributor.json_web_token).to have_attributes(
+        invalidated_jwt: jwt
       )
     end
 
