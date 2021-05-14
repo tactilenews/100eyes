@@ -4,7 +4,8 @@ require 'securerandom'
 
 module Onboarding
   class TelegramController < ChannelController
-    skip_before_action :verify_jwt, only: :link
+    skip_before_action :verify_jwt, only: %i[link fallback]
+    before_action :ensure_contributor_exists, only: %i[link fallback]
 
     def show
       super
@@ -12,16 +13,25 @@ module Onboarding
     end
 
     def link
-      contributor = Contributor.find_by!(telegram_onboarding_params)
       @telegram_onboarding_token = contributor.telegram_onboarding_token
-    rescue ActiveRecord::RecordNotFound
-      render 'onboarding/unauthorized', status: :unauthorized
+    end
+
+    def fallback
+      @telegram_onboarding_token = contributor.telegram_onboarding_token
     end
 
     private
 
+    def contributor
+      @contributor ||= Contributor.find_by(telegram_onboarding_params)
+    end
+
+    def ensure_contributor_exists
+      render 'onboarding/unauthorized', status: :unauthorized unless contributor
+    end
+
     def redirect_to_success
-      telegram_onboarding_token = @contributor.telegram_onboarding_token
+      telegram_onboarding_token = contributor.telegram_onboarding_token
       redirect_to onboarding_telegram_link_path(jwt: nil, telegram_onboarding_token: telegram_onboarding_token)
     end
 
