@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_10_092738) do
+ActiveRecord::Schema.define(version: 2021_05_14_135331) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -69,7 +69,6 @@ ActiveRecord::Schema.define(version: 2021_05_10_092738) do
     t.datetime "deactivated_at"
     t.string "threema_id"
     t.datetime "data_processing_consented_at"
-    t.string "jwt"
     t.string "telegram_onboarding_token"
     t.index ["email"], name: "index_contributors_on_email", unique: true
     t.index ["telegram_chat_id"], name: "index_contributors_on_telegram_chat_id", unique: true
@@ -81,6 +80,8 @@ ActiveRecord::Schema.define(version: 2021_05_10_092738) do
     t.string "invalidated_jwt"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "contributor_id"
+    t.index ["contributor_id"], name: "index_json_web_tokens_on_contributor_id"
   end
 
   create_table "message_files", force: :cascade do |t|
@@ -188,6 +189,7 @@ ActiveRecord::Schema.define(version: 2021_05_10_092738) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "json_web_tokens", "contributors"
   add_foreign_key "message_files", "messages"
   add_foreign_key "messages", "contributors", column: "recipient_id"
   add_foreign_key "messages", "contributors", column: "sender_id"

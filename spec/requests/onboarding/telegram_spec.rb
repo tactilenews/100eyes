@@ -35,7 +35,6 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
         last_name: 'Zimmermann',
         data_processing_consent: data_processing_consent,
         telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN',
-        jwt: jwt
       }
     end
 
@@ -52,13 +51,15 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
         last_name: 'Zimmermann',
         data_processing_consent: data_processing_consent,
         telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN',
-        jwt: jwt
+      )
+      expect(contributor.json_web_token).to have_attributes(
+        invalidated_jwt: jwt
       )
     end
 
     it 'redirects to telegram link page' do
       subject.call
-      expect(response).to redirect_to onboarding_telegram_link_path(jwt: nil, telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN')
+      expect(response).to redirect_to onboarding_telegram_link_path(jwt: jwt, telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN')
     end
 
     it 'invalidates the jwt' do
@@ -114,7 +115,8 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
   end
 
   describe 'GET /onboarding/telegram/link' do
-    let(:params) { { telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN', jwt: nil } }
+    let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
+    let(:params) { { telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN', jwt: jwt } }
     subject { -> { get onboarding_telegram_link_path(params) } }
     before { contributor }
     let(:contributor) { create(:contributor, telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN', telegram_id: nil) }
