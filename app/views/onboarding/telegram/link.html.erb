@@ -1,3 +1,5 @@
 <main>
-  <%= c 'onboarding_telegram_link', telegram_onboarding_token: @telegram_onboarding_token %>
+  <%= c 'interstitial' do %>
+    <%= c 'onboarding_telegram_link', telegram_onboarding_token: @telegram_onboarding_token %>
+  <% end %>
 </main>

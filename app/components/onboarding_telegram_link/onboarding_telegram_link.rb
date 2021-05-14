@@ -13,7 +13,7 @@ module OnboardingTelegramLink
     attr_reader :telegram_onboarding_token
 
     def telegram_link
-      "tg://resolve?domain=#{Telegram.bot.username}&start=#{telegram_onboarding_token}"
+      "https://t.me/#{Telegram.bot.username}?start=#{telegram_onboarding_token}"
     end
   end
 end
