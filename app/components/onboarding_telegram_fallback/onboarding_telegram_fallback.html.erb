@@ -1,0 +1,17 @@
+<%= c 'stack', **attrs do %>
+
+  <%= c 'stack', class: 'text-serif text-center', space: :xsmall do %>
+    <%= c 'heading', tag: :h1 do %>
+      <%= t 'components.onboarding_telegram_fallback.heading' %>
+    <% end %>
+
+    <p><%= t 'components.onboarding_telegram_fallback.text' %></p>
+  <% end %>
+
+  <%= c 'steps_list',
+    class: 'text-serif',
+    steps: fallback_steps.map(&:html_safe)
+  %>
+
+<% end %>
+

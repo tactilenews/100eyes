@@ -98,6 +98,13 @@ de:
       copy: Link kopieren
       help: Über den Button gelangen Sie direkt zum Telegram-Profil von „%{project_name}”. Alternativ können Sie einen Link kopieren und auf Ihrem Smartphone öffnen.
       didnt_work: Hat das nicht funktioniert? Oder werden Sie nach einem Code gefragt?
+    onboarding_telegram_fallback:
+      heading: Fast geschafft!
+      text: Verbinden Sie Ihr Telegram-Konto in der Telegram-App, um die Anmeldung abzuschließen.
+      steps:
+        - "Finden Sie uns auf Telegram. Suchen Sie dazu nach <strong>%{telegram_handle}</strong>."
+        - "Wenn Sie unser Telegram-Konto gefunden haben, klicken Sie auf <strong>Start</strong>."
+        - "Geben Sie diesen Code ein, sobald sie danach gefragt werden: <strong>%{token}</strong>"
     onboarding_footer:
       imprint: Impressum
     create_invite_button:

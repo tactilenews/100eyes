@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       get '/telegram/', to: 'telegram#show'
       post '/telegram/', to: 'telegram#create'
       get '/telegram/link/:telegram_onboarding_token', to: 'telegram#link', as: 'telegram_link'
+      get '/telegram/fallback/:telegram_onboarding_token', to: 'telegram#fallback', as: 'telegram_fallback'
     end
   end
 
