@@ -3,7 +3,7 @@
     <%= t 'users.new.sign_in' %>
   <% end %>
 
-  <%= form_with(url: session_path, local: true) do |f| %>
+  <%= form_with(url: session_path, local: true, data: { turbo: false }) do |f| %>
     <label for='session[email]'><%= t 'helpers.label.password.email' %></label>
     <%= c 'input', type: :email, id: 'session[email]' %>
 
