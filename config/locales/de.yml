@@ -71,7 +71,7 @@ de:
         other: Du hast {count} neue Antworten.
     steps:
       how_it_works:
-        - icon: r-chat
+        - icon: community
           text: Bauen Sie Ihre Community auf. Finden Sie ihr “Mini Public” von 50-100 spannenden Menschen – treue Leser*innen, junge Menschen oder als Hörer*innenredaktion.
         - icon: mobile-chat
           text: Stellen Sie alle Fragen und senden diese mit einem Klick an viele Menschen gleichzeitig – direkt auf den Lieblingsmessenger.

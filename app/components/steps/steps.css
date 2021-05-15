@@ -17,8 +17,8 @@
 
 .Steps-icon {
   position: relative;
-  width: var(--spacing-unit-l);
-  height: var(--spacing-unit-l);
+  width: calc(4 * var(--spacing-unit));
+  height: calc(4 * var(--spacing-unit));
   padding: 0.2em;
 }
 
