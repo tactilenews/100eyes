@@ -3,37 +3,41 @@
 require 'rails_helper'
 
 RSpec.describe 'Onboarding', type: :request do
-  let(:contributor) { create(:contributor) }
-  let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
-  let(:params) { { jwt: jwt } }
-
   describe 'GET /onboarding/index' do
-    subject { -> { get onboarding_path(**params) } }
+    let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
+    let(:params) { { jwt: jwt } }
+    let(:action) { -> { get onboarding_path(**params) } }
 
-    it 'should be successful' do
-      subject.call
-      expect(response).to be_successful
-    end
+    describe 'HTTP status' do
+      subject { action.call && response }
+      it { is_expected.to have_http_status(:ok) }
 
-    describe 'with invalidated jwt' do
-      let!(:invalidated_jwt) { create(:json_web_token, invalidated_jwt: 'INVALID_JWT') }
-      let(:jwt) { 'INVALID_JWT' }
+      describe 'with invalidated jwt' do
+        let!(:json_web_token) { create(:json_web_token, invalidated_jwt: jwt) }
+        it { is_expected.to have_http_status(:unauthorized) }
 
-      it 'renders unauthorized page' do
-        subject.call
+        describe 'with corresponding contributor who needs to connect to Telegram' do
+          subject { action.call }
+          let!(:contributor) do
+            create(:contributor, telegram_onboarding_token: 'SOMETHING', telegram_id: nil, json_web_token: json_web_token)
+          end
+          it { is_expected.to redirect_to onboarding_telegram_link_path(telegram_onboarding_token: 'SOMETHING') }
+        end
+      end
 
-        expect(response).not_to be_successful
+      describe 'with jwt unsigned' do
+        let(:jwt) { 'UNSIGNED_JWT' }
+        it { is_expected.to have_http_status(:unauthorized) }
       end
     end
+  end
 
-    describe 'with jwt unsigned' do
-      let(:jwt) { 'UNSIGNED_JWT' }
-
-      it 'renders unauthorized page' do
-        subject.call
-
-        expect(response).not_to be_successful
-      end
+  describe 'GET /onboarding/success' do
+    let(:action) { -> { get onboarding_success_path(**params) } }
+    let(:params) { {} }
+    describe 'HTTP status' do
+      subject { action.call && response }
+      it { is_expected.to have_http_status(:ok) }
     end
   end
 end

@@ -3,9 +3,8 @@
 require 'securerandom'
 
 module Onboarding
-  class TelegramController < ChannelController
-    skip_before_action :verify_jwt, only: %i[link fallback]
-    before_action :ensure_contributor_exists, only: %i[link fallback]
+  class TelegramController < OnboardingController
+    rescue_from ActiveRecord::RecordNotFound, with: :render_unauthorized
 
     def show
       super
@@ -23,11 +22,11 @@ module Onboarding
     private
 
     def contributor
-      @contributor ||= Contributor.find_by(telegram_onboarding_params)
+      @contributor ||= Contributor.find_by!(telegram_onboarding_params)
     end
 
-    def ensure_contributor_exists
-      render 'onboarding/unauthorized', status: :unauthorized unless contributor
+    def render_unauthorized
+      render 'onboarding/unauthorized', status: :unauthorized
     end
 
     def redirect_to_success

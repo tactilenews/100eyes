@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Onboarding
-  class ThreemaController < ChannelController
+  class ThreemaController < OnboardingController
     private
 
     def attr_name
