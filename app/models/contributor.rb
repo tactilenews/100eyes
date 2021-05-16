@@ -10,7 +10,7 @@ class Contributor < ApplicationRecord
   has_many :received_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :received_messages
 
   has_one_attached :avatar
-  has_one :json_web_token
+  has_one :json_web_token, dependent: :destroy
   accepts_nested_attributes_for :json_web_token
 
   acts_as_taggable_on :tags
