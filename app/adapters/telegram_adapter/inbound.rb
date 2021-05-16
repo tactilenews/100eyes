@@ -20,7 +20,6 @@ module TelegramAdapter
 
     def initialize
       @callbacks = {}
-      [UNKNOWN_CONTENT, UNKNOWN_CONTRIBUTOR, CONNECT].each { |c| @callbacks[c] = (proc {}) } # rubocop:disable Lint/EmptyBlock
     end
 
     def on(callback, &block)
@@ -37,7 +36,7 @@ module TelegramAdapter
       @message = initialize_message(telegram_message)
       if telegram_message.keys.any? { |key| UNKNOWN_CONTENT_KEYS.include?(key) }
         @message.unknown_content = true
-        @callbacks[UNKNOWN_CONTENT].call
+        trigger(UNKNOWN_CONTENT)
       end
       @photos = initialize_photos(telegram_message)
       @file = initialize_file(telegram_message)
@@ -51,25 +50,31 @@ module TelegramAdapter
 
     private
 
+    def trigger(event, *args)
+      return unless @callbacks.key?(event)
+
+      @callbacks[event].call(*args)
+    end
+
     def initialize_sender(telegram_message)
       telegram_id = telegram_message.dig(:from, :id)
       username = telegram_message.dig(:from, :username)
       sender = Contributor.find_by(telegram_id: telegram_id)
       if sender
         sender.username = username
-      else
-        telegram_onboarding_token = text.delete_prefix('/start').strip
-        sender = Contributor.find_by(telegram_id: nil, telegram_onboarding_token: telegram_onboarding_token)
-        if sender
-          sender.username = username
-          sender.telegram_id = telegram_id
-          @callbacks[CONNECT].call(sender)
-        else
-          @callbacks[UNKNOWN_CONTRIBUTOR].call
-        end
+        return sender
       end
 
-      sender
+      telegram_onboarding_token = text.delete_prefix('/start').strip.upcase
+      sender = Contributor.find_by(telegram_id: nil, telegram_onboarding_token: telegram_onboarding_token)
+      if sender
+        sender.username = username
+        sender.telegram_id = telegram_id
+        trigger(CONNECT, sender)
+        return sender
+      end
+
+      trigger(UNKNOWN_CONTRIBUTOR) and return nil
     end
 
     def initialize_message(telegram_message)

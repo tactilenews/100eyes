@@ -8,7 +8,7 @@ module Onboarding
 
     def show
       super
-      @contributor.telegram_onboarding_token = SecureRandom.alphanumeric(8)
+      @contributor.telegram_onboarding_token = SecureRandom.alphanumeric(8).upcase
     end
 
     def link
