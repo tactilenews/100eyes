@@ -4,14 +4,16 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
   def start!(_telegram_onboarding_token = nil)
     adapter = TelegramAdapter::Inbound.new
 
-    adapter.on(TelegramAdapter::CONNECT, &:save!)
+    adapter.on(TelegramAdapter::CONNECT) do |contributor| # rubocop:disable Style/SymbolProc
+      contributor.save!
+    end
 
     adapter.on(TelegramAdapter::UNKNOWN_CONTRIBUTOR) do
       respond_with :message, text: Setting.telegram_contributor_not_found_message
     end
 
     adapter.consume(payload) do
-      respond_with :message, text: telegram_welcome_message
+      respond_with(*telegram_welcome_message)
     end
   end
 
@@ -23,7 +25,7 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
     adapter.on(TelegramAdapter::CONNECT) do |contributor|
       contributor.save!
       contributor_connected = true
-      respond_with :message, text: telegram_welcome_message
+      respond_with(*telegram_welcome_message)
     end
 
     adapter.on(TelegramAdapter::UNKNOWN_CONTENT) do
@@ -45,9 +47,7 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
   private
 
   def telegram_welcome_message
-    [
-      Setting.onboarding_success_heading,
-      Setting.onboarding_success_text
-    ].join("\n")
+    text = ["<b>#{Setting.onboarding_success_heading}</b>", Setting.onboarding_success_text].join("\n")
+    [:message, { text: text, parse_mode: :HTML }]
   end
 end
