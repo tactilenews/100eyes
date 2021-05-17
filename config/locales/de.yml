@@ -107,10 +107,6 @@ de:
         - "Geben Sie diesen Code ein, sobald sie danach gefragt werden: <strong>%{token}</strong>"
     onboarding_footer:
       imprint: Impressum
-    create_invite_button:
-      label: Einladungs-Link kopieren
-      loading: erstelle Link…
-      success: Link kopiert
     two_factor_auth_setup:
       header: Anmeldung in zwei Schritten einrichten
       step_1: "1. Fügen Sie 100eyes zu einer App wie Authy oder FreeOTP hinzu, indem Sie entweder den folgenden QR-Code scannen oder den geheimen Schlüssel manuell kopieren."
@@ -122,6 +118,7 @@ de:
       submit: Verschieben
       cancel: Abbrechen
     copy_button:
+      loading: lade…
       success: kopiert
     request_form:
       preview_fallback: "Sobald du eine Frage eingegeben hast, siehst du hier eine Vorschau deiner Nachricht."
@@ -217,6 +214,7 @@ de:
       one: Mitglied
       other: Mitglieder
     create: Mitglied manuell anlegen
+    copy_invite: Einladungs-Link kopieren
     success: Mitglied wurde erstellt
     activity: Aktivität
     show_replies: Antworten anzeigen

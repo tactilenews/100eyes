@@ -1,3 +1,0 @@
-.CreateInviteButton:not(.CreateInviteButton--primary) .CreateInviteButton-success {
-  color: var(--color-green-dark);
-}
