@@ -2,6 +2,9 @@
 
 class Contributor < ApplicationRecord
   include PgSearch::Model
+
+  attr_accessor :editor_guarantees_data_consent
+
   multisearchable against: %i[first_name last_name username note]
 
   has_many :replies, class_name: 'Message', inverse_of: :sender, foreign_key: 'sender_id', dependent: :destroy
@@ -18,7 +21,7 @@ class Contributor < ApplicationRecord
   default_scope { order(:first_name, :last_name) }
   scope :active, -> { where(deactivated_at: nil) }
 
-  validates :data_processing_consent, acceptance: true, on: :create
+  validates :data_processing_consent, acceptance: true, unless: proc { |c| c.editor_guarantees_data_consent }
 
   validates :email, uniqueness: { case_sensitive: false }, allow_nil: true, 'valid_email_2/email': true
   validates :threema_id, uniqueness: { case_sensitive: false }, allow_blank: true, format: { with: /\A[A-Za-z0-9]+\z/ }, length: { is: 8 }

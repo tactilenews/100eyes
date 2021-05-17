@@ -443,11 +443,17 @@ RSpec.describe Contributor, type: :model do
     describe 'given a contributor who has given consent' do
       let(:contributor) { build(:contributor, data_processing_consented_at: 1.day.ago) }
       it { should be(true) }
+      specify { expect(contributor).to be_valid }
     end
 
     describe 'given a contributor who has not given consent' do
       let(:contributor) { build(:contributor, data_processing_consented_at: nil) }
       it { should be(false) }
+      specify { expect(contributor).not_to be_valid }
+      context 'but the editor guarantees the consent' do
+        before { contributor.editor_guarantees_data_consent = true }
+        specify { expect(contributor).to be_valid }
+      end
     end
   end
 
