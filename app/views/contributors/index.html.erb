@@ -6,19 +6,18 @@
         <%= Contributor.count %> <%= I18n.t 'contributor.contributor', count: Contributor.count %>
       <% end %>
 
-      <%= c 'stack', space: :small, class: 'text-center' do %>
+      <div class="text-small">
+        <%= c 'button',
+          style: :secondary,
+          label: I18n.t('contributor.actions.create'),
+          link: new_contributor_path
+        %>
         <%= c 'copy_button',
-          label: I18n.t('contributor.copy_invite'),
+          label: I18n.t('contributor.actions.copy_invite'),
           url: invites_url,
           key: 'url'
         %>
-        <br>
-        <%= c 'button',
-          style: :inline,
-          label: I18n.t('contributor.create'),
-          link: new_contributor_path
-        %>
-      <% end %>
+      </div>
 
     <% end %>
   <% end %>

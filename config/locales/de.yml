@@ -212,8 +212,10 @@ de:
     contributor:
       one: Mitglied
       other: Mitglieder
-    create: Mitglied manuell anlegen
-    copy_invite: Einladungs-Link kopieren
+    actions:
+      create: Manuell hinzufügen
+      copy_invite: Einladung kopieren
+    create: Mitglied manuell hinzufügen
     success: Mitglied wurde erstellt
     activity: Aktivität
     show_replies: Antworten anzeigen
