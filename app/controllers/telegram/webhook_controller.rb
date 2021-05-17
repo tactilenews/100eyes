@@ -1,15 +1,53 @@
 # frozen_string_literal: true
 
 class Telegram::WebhookController < Telegram::Bot::UpdatesController
-  def message(message)
-    telegram_message = TelegramAdapter::Inbound.new(message)
+  def start!(_telegram_onboarding_token = nil)
+    adapter = TelegramAdapter::Inbound.new
 
-    return if telegram_message.contributor_onboarding
+    adapter.on(TelegramAdapter::CONNECT) do |contributor| # rubocop:disable Style/SymbolProc
+      contributor.save!
+    end
 
-    contributor = telegram_message.sender
-    TelegramAdapter::Inbound.bounce!(chat) and return unless contributor
+    adapter.on(TelegramAdapter::UNKNOWN_CONTRIBUTOR) do
+      respond_with :message, text: Setting.telegram_contributor_not_found_message
+    end
 
-    respond_with :message, text: Setting.telegram_unknown_content_message if telegram_message.unknown_content
-    contributor.reply(telegram_message)
+    adapter.consume(payload) do
+      respond_with(*telegram_welcome_message)
+    end
+  end
+
+  def message(msg)
+    adapter = TelegramAdapter::Inbound.new
+
+    contributor_connected = false
+
+    adapter.on(TelegramAdapter::CONNECT) do |contributor|
+      contributor.save!
+      contributor_connected = true
+      respond_with(*telegram_welcome_message)
+    end
+
+    adapter.on(TelegramAdapter::UNKNOWN_CONTENT) do
+      respond_with :message, text: Setting.telegram_unknown_content_message
+    end
+
+    adapter.on(TelegramAdapter::UNKNOWN_CONTRIBUTOR) do
+      respond_with :message, text: Setting.telegram_contributor_not_found_message
+    end
+
+    adapter.consume(msg) do |m|
+      unless contributor_connected
+        m.contributor.save!
+        m.contributor.reply(adapter)
+      end
+    end
+  end
+
+  private
+
+  def telegram_welcome_message
+    text = ["<b>#{Setting.onboarding_success_heading}</b>", Setting.onboarding_success_text].join("\n")
+    [:message, { text: text, parse_mode: :HTML }]
   end
 end

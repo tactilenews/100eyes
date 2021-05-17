@@ -27,19 +27,22 @@ class ContributorsController < ApplicationController
 
   def create
     @contributor = Contributor.new(contributor_params)
+    @contributor.editor_guarantees_data_consent = true
     if @contributor.save
       redirect_to @contributor, flash: { success: I18n.t('contributor.success') }
     else
+      flash[:error] = I18n.t('contributor.invalid', name: @contributor.name)
       render :new
     end
   end
 
   def update
+    @contributor.editor_guarantees_data_consent = true
     if @contributor.update(contributor_params)
       redirect_to contributor_url, flash: { success: I18n.t('contributor.saved', name: @contributor.name) }
     else
       flash[:error] = I18n.t('contributor.invalid', name: @contributor.name)
-      render :show, status: :bad_request
+      render :show
     end
   end
 

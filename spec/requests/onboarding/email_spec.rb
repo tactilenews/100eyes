@@ -15,8 +15,7 @@ RSpec.describe 'Onboarding::Email', type: :request do
         first_name: 'Zora',
         last_name: 'Zimmermann',
         email: email,
-        data_processing_consent: data_processing_consent,
-        jwt: jwt
+        data_processing_consent: data_processing_consent
       }
     end
 
@@ -32,8 +31,10 @@ RSpec.describe 'Onboarding::Email', type: :request do
         first_name: 'Zora',
         last_name: 'Zimmermann',
         email: email,
-        data_processing_consent: data_processing_consent,
-        jwt: jwt
+        data_processing_consent: data_processing_consent
+      )
+      expect(contributor.json_web_token).to have_attributes(
+        invalidated_jwt: jwt
       )
     end
 
@@ -78,7 +79,7 @@ RSpec.describe 'Onboarding::Email', type: :request do
     end
 
     describe 'given an existing email address' do
-      let!(:contributor) { create(:contributor, **attrs) }
+      let!(:contributor) { create(:contributor, **attrs.merge(json_web_token: create(:json_web_token, invalidated_jwt: :jwt))) }
 
       it 'redirects to success page' do
         subject.call
@@ -103,7 +104,7 @@ RSpec.describe 'Onboarding::Email', type: :request do
       it 'renders unauthorized page' do
         subject.call
 
-        expect(response).not_to be_successful
+        expect(response).to have_http_status(:unauthorized)
       end
 
       it 'does not create new contributor' do
@@ -118,7 +119,7 @@ RSpec.describe 'Onboarding::Email', type: :request do
       it 'renders unauthorized page' do
         subject.call
 
-        expect(response).not_to be_successful
+        expect(response).to have_http_status(:unauthorized)
       end
 
       it 'does not create new contributor' do

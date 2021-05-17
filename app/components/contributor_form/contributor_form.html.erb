@@ -1,4 +1,4 @@
-<%= form_with(model: contributor, local: true, class: "ContributorForm", multipart: true) do %>
+<%= form_with(model: contributor, local: true, class: "ContributorForm", multipart: true, data: { turbo: false }) do %>
   <%= c 'stack' do %>
     <%= c 'field', object: contributor, id: :first_name, styles: [:horizontal] do |field| %>
       <%= c 'input', field.input_defaults %>
