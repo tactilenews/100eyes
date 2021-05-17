@@ -2,8 +2,13 @@
 
 class OnboardingController < ApplicationController
   skip_before_action :require_login
-  before_action :verify_onboarding_params, except: :success
+  before_action :verify_jwt, except: :success
+  before_action :resume_telegram_onboarding, only: %i[index show]
   before_action :redirect_if_contributor_exists, only: :create
+
+  rescue_from ActionController::BadRequest, with: :render_unauthorized
+  rescue_from JWT::DecodeError, with: :render_unauthorized
+
   layout 'onboarding'
 
   def index
@@ -22,15 +27,18 @@ class OnboardingController < ApplicationController
     if @contributor.save
       redirect_to_success
     else
-      redirect_to_failure
+      render :show
     end
   end
 
   private
 
-  def redirect_to_failure
-    # show validation errors
-    render :show
+  def attr_value
+    contributor_params[attr_name]
+  end
+
+  def contributor_params
+    params.require(:contributor).permit(:first_name, :last_name, :data_processing_consent, attr_name)
   end
 
   def redirect_if_contributor_exists
@@ -57,14 +65,6 @@ class OnboardingController < ApplicationController
     contributor.errors.details[attr_name].pluck(:error).include?(:taken)
   end
 
-  def attr_value
-    contributor_params[attr_name]
-  end
-
-  def contributor_params
-    params.require(:contributor).permit(:first_name, :last_name, :data_processing_consent, attr_name)
-  end
-
   def default_url_options
     super.merge(jwt: jwt_param)
   end
@@ -73,25 +73,37 @@ class OnboardingController < ApplicationController
     redirect_to onboarding_success_path(jwt: nil)
   end
 
-  def jwt_param
-    params.require(:jwt)
+  def render_unauthorized
+    render 'onboarding/unauthorized', status: :unauthorized
   end
 
-  def verify_onboarding_params
+  def verify_jwt
+    return unless jwt
+    raise ActionController::BadRequest unless resume_telegram_onboarding?
+  end
+
+  def resume_telegram_onboarding
+    return unless resume_telegram_onboarding?
+
+    token = jwt.contributor.telegram_onboarding_token
+    redirect_to onboarding_telegram_link_path(telegram_onboarding_token: token)
+  end
+
+  def resume_telegram_onboarding?
+    contributor = jwt&.contributor
+    contributor&.telegram_id.blank? && contributor&.telegram_onboarding_token.present?
+  end
+
+  def jwt
     decoded_token = JsonWebToken.decode(jwt_param)
-    raise ActionController::BadRequest if decoded_token.first['data']['action'] != 'onboarding'
+    action = decoded_token.first['data']['action']
 
-    json_web_token = JsonWebToken.includes(:contributor).find_by(invalidated_jwt: jwt_param)
-    return unless json_web_token
+    raise ActionController::BadRequest if action != 'onboarding'
 
-    contributor = json_web_token.contributor
-    if contributor && contributor.telegram_id.blank? && contributor.telegram_onboarding_token.present?
-      return if %w[link fallback].include? action_name
+    JsonWebToken.includes(:contributor).find_by(invalidated_jwt: jwt_param)
+  end
 
-      redirect_to onboarding_telegram_link_path(telegram_onboarding_token: contributor.telegram_onboarding_token) and return
-    end
-    raise ActionController::BadRequest
-  rescue ActionController::BadRequest, JWT::DecodeError
-    render 'onboarding/unauthorized', status: :unauthorized
+  def jwt_param
+    params.require(:jwt)
   end
 end

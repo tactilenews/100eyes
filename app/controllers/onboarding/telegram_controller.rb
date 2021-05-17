@@ -25,10 +25,6 @@ module Onboarding
       @contributor ||= Contributor.find_by!(telegram_onboarding_params)
     end
 
-    def render_unauthorized
-      render 'onboarding/unauthorized', status: :unauthorized
-    end
-
     def redirect_to_success
       telegram_onboarding_token = contributor.telegram_onboarding_token
       redirect_to onboarding_telegram_link_path(telegram_onboarding_token: telegram_onboarding_token)
