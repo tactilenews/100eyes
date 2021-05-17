@@ -1,11 +1,22 @@
+.CopyButton {
+  position: relative;
+}
+
 .CopyButton-loading,
 .CopyButton-success {
   display: none;
+
+  position: absolute;
+  left: 0;
+  right: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .CopyButton[data-state='loading'] .CopyButton-label,
 .CopyButton[data-state='success'] .CopyButton-label {
-  display: none;
+  visibility: hidden;
 }
 
 .CopyButton[data-state='loading'] .CopyButton-loading {
