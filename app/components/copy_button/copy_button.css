@@ -1,11 +1,34 @@
+.CopyButton {
+  position: relative;
+}
+
+.CopyButton-loading,
 .CopyButton-success {
+  display: none;
+
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.CopyButton[data-state='loading'] .CopyButton-label,
+.CopyButton[data-state='success'] .CopyButton-label {
+  visibility: hidden;
+}
+
+.CopyButton[data-state='loading'] .CopyButton-loading {
+  display: initial;
+}
+
+.CopyButton[data-state='success'] .CopyButton-success {
+  display: initial;
+}
+
+.Button:not(.Button--primary) .CopyButton-success {
   color: var(--color-green-dark);
-}
-
-.CopyButton:not(.CopyButton--success) .CopyButton-success {
-  display: none;
-}
-
-.CopyButton--success .CopyButton-label {
-  display: none;
 }

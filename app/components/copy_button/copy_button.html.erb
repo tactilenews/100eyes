@@ -1,9 +1,23 @@
 <%= c 'button', styles: styles, **attrs do %>
-  <span class="CopyButton-label">
+  <span
+    class="CopyButton-label"
+    data-copy-button-target="label"
+  >
     <%= c 'icon', icon: :ungroup, style: :inline %>
     <%= label %>
   </span>
-  <span class="CopyButton-success">
+  <span
+    class="CopyButton-loading"
+    data-copy-button-target="loading"
+    hidden
+  >
+    <%= loading %>
+  </span>
+  <span
+    class="CopyButton-success"
+    data-copy-button-target="success"
+    hidden
+  >
     <%= c 'icon', icon: 'f-check', style: :inline %>
     <%= success %>
   </span>
