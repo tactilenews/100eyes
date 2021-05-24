@@ -13,4 +13,3 @@ module IconList
     attr_reader :list
   end
 end
-  
