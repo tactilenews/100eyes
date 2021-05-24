@@ -25,6 +25,7 @@
 
 .TagsInput tag {
   margin-bottom: 0;
+  font-size: var(--font-size-s);
 }
 
 .TagsInput-dropdownItem {

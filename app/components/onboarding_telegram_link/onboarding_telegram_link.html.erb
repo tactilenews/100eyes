@@ -1,0 +1,39 @@
+<%= c 'stack', **attrs do %>
+
+  <%= c 'stack', class: 'text-serif text-center', space: :xsmall do %>
+    <%= c 'heading', tag: :h1 do %>
+      <%= t 'components.onboarding_telegram_link.heading' %>
+    <% end %>
+
+    <p><%= t 'components.onboarding_telegram_link.text' %></p>
+  <% end %>
+
+  <%= c 'stack', space: :small, class: 'text-center' do %>
+    <%= c 'button',
+      styles: [:primary, :block],
+      label: I18n.t('components.onboarding_telegram_link.link'),
+      link: telegram_link,
+      target: '_blank'
+    %>
+
+    <%= c 'copy_button',
+      styles: [:secondary, :block],
+      label: I18n.t('components.onboarding_telegram_link.copy'),
+      copy: telegram_link
+    %>
+
+    <%= c 'stack', space: :xsmall, class: 'text-small text-light' do %>
+      <p>
+        <%= I18n.t('components.onboarding_telegram_link.help', project_name: Setting.project_name) %>
+      </p>
+
+      <p>
+      <%= link_to onboarding_telegram_fallback_path(telegram_onboarding_token: telegram_onboarding_token), class: 'Link' do %>
+        <%= I18n.t('components.onboarding_telegram_link.didnt_work') %>
+      <% end %>
+      </p>
+    <% end %>
+  <% end %>
+
+<% end %>
+

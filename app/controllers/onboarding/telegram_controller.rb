@@ -1,87 +1,41 @@
 # frozen_string_literal: true
 
+require 'securerandom'
+
 module Onboarding
-  class TelegramController < ApplicationController
-    include JwtHelper
-
-    skip_before_action :require_login
-    before_action -> { verify_onboarding_jwt(jwt_param) }, except: %i[update]
-    before_action :verify_telegram_authentication_and_integrity, only: :create
-
-    layout 'onboarding'
+  class TelegramController < OnboardingController
+    rescue_from ActiveRecord::RecordNotFound, with: :render_unauthorized
 
     def show
-      @jwt = jwt_param
+      super
+      @contributor.telegram_onboarding_token = SecureRandom.alphanumeric(8).upcase
     end
 
-    def create
-      @telegram_id = telegram_auth_params[:id]
-      @first_name = telegram_auth_params[:first_name]
-      @last_name = telegram_auth_params[:last_name]
-      if Contributor.exists?(telegram_id: @telegram_id)
-        invalidate_jwt(jwt_param)
-        return redirect_to_success
-      end
-
-      @contributor = Contributor.new(
-        telegram_id: @telegram_id,
-        first_name: @first_name,
-        last_name: @last_name,
-        username: telegram_auth_params[:username],
-        avatar_url: telegram_auth_params[:photo_url],
-        jwt: jwt_param
-      )
-      return unless @contributor.save
-
-      invalidate_jwt(jwt_param)
-      cookies.encrypted[:telegram_id] = { value: @contributor.telegram_id, expires: 30.minutes }
+    def link
+      @telegram_onboarding_token = contributor.telegram_onboarding_token
     end
 
-    def update
-      @contributor = cookies.encrypted[:telegram_id] ? Contributor.find_by(telegram_id: cookies.encrypted[:telegram_id]) : nil
-
-      return render 'onboarding/unauthorized', status: :unauthorized unless @contributor
-
-      @contributor.assign_attributes(
-        first_name: contributor_params[:first_name],
-        last_name: contributor_params[:last_name],
-        data_processing_consent: contributor_params[:data_processing_consent]
-      )
-
-      if @contributor.save(context: :contributor_signup)
-        redirect_to_success
-      else
-        render :create
-      end
+    def fallback
+      @telegram_onboarding_token = contributor.telegram_onboarding_token
     end
 
     private
 
+    def contributor
+      @contributor ||= Contributor.find_by!(telegram_onboarding_params)
+    end
+
     def redirect_to_success
-      redirect_to onboarding_success_path(jwt: nil)
+      telegram_onboarding_token = contributor.telegram_onboarding_token
+      redirect_to onboarding_telegram_link_path(telegram_onboarding_token: telegram_onboarding_token)
     end
 
-    def contributor_params
-      params.require(:contributor).permit(:first_name, :last_name, :email, :data_processing_consent)
+    def attr_name
+      :telegram_onboarding_token
     end
 
-    def jwt_param
-      params.require(:jwt)
-    end
-
-    def telegram_auth_params
-      params.permit(:id, :first_name, :last_name, :auth_date, :hash, :username, :photo_url)
-    end
-
-    def verify_telegram_authentication_and_integrity
-      auth_data = telegram_auth_params.slice(:id, :auth_date, :first_name, :last_name, :username, :photo_url)
-      check_string = auth_data.to_unsafe_h.map { |k, v| "#{k}=#{v}" }.sort.join("\n")
-
-      secret_key = OpenSSL::Digest.new('SHA256').digest(Setting.telegram_bot_api_key)
-      valid_hash = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), secret_key, check_string)
-      valid_time_window = Time.zone.now.to_i - telegram_auth_params[:auth_date].to_i < 24 * 60 * 60
-
-      raise ActionController::BadRequest unless valid_hash.casecmp(telegram_auth_params[:hash]).zero? && valid_time_window
+    def telegram_onboarding_params
+      params.permit(:telegram_onboarding_token).merge(telegram_id: nil)
     end
   end
 end

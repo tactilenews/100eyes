@@ -12,7 +12,7 @@ Metrics/AbcSize:
   Max: 29
 
 Metrics/ClassLength:
-  Max: 105
+  Max: 108
 
 # Offense count: 4
 # Configuration parameters: CountComments, CountAsOne, ExcludedMethods.
@@ -29,6 +29,14 @@ Metrics/MethodLength:
 # Configuration parameters: CountKeywordArgs.
 Metrics/ParameterLists:
   Max: 10
+
+# Offense count: 1
+# Configuration parameters: IgnoredMethods.
+Metrics/CyclomaticComplexity:
+  Max: 9
+
+Metrics/PerceivedComplexity:
+  Max: 9
 
 # Offense count: 3
 # Cop supports --auto-correct.
