@@ -1,0 +1,47 @@
+.Steps {
+  display: flex;
+  list-style: none;
+  gap: var(--spacing-unit);
+}
+
+.Steps-step {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-unit-s);
+  flex-basis: 100%;
+
+  color: var(--color-text-light);
+  font-size: var(--font-size-xs);
+  line-height: 1.6;
+}
+
+.Steps-icon {
+  position: relative;
+  width: calc(4 * var(--spacing-unit));
+  height: calc(4 * var(--spacing-unit));
+  padding: 0.2em;
+}
+
+.Steps-icon::before {
+  content: '';
+
+  position: absolute;
+  top: calc(-1 * var(--spacing-unit-xs));
+  left: calc(-1 * var(--spacing-unit-xs));
+
+  display: block;
+  width: 100%;
+  height: 100%;
+
+  border-radius: 50%;
+  background-color: var(--color-gray-light);
+}
+
+.Steps-icon > svg {
+  position: relative;
+  fill: var(--color-blue-gray-dark);
+}
+
+.Steps-icon > svg [data-color='color-2'] {
+  fill: var(--color-blue-gray);
+}
