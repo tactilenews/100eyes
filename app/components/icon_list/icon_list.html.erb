@@ -1,0 +1,13 @@
+<ul <%= attrs %>>
+  <% I18n.t('components.lists.'.concat(list)).each do |elem| %>
+    <li class="IconList-element">
+      <div class="IconList-icon">
+        <%= c 'icon', icon: elem[:icon], size: 36 %>
+      </div>
+      <% if elem[:title] %>
+        <div class="IconList-title"> <%= elem[:title] %> </div>
+      <% end %>
+      <%= elem[:text] %>
+    </li>
+  <% end %>
+</ul>

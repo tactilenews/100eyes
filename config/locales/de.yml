@@ -69,30 +69,35 @@ de:
       message_template:
         one: Du hast eine neue Antwort.
         other: Du hast {count} neue Antworten.
-    steps:
+    lists:
       how_it_works:
         - icon: community
+          title: Community aufbauen
           text: Bauen Sie Ihre Community auf. Finden Sie ihr “Mini Public” von 50-100 spannenden Menschen – treue Leser*innen, junge Menschen oder als Hörer*innenredaktion.
-        - icon: mobile-chat
+        - icon: mail
+          title: Nachrichten versenden
           text: Stellen Sie alle Fragen und senden diese mit einem Klick an viele Menschen gleichzeitig – direkt auf den Lieblingsmessenger.
-        - icon: bullet-list-68
+        - icon: chat-history
+          title: Antworten werden zusammengestellt
           text: 100eyes sammelt alle Antworten und stellt sie übersichtlich als Chatverlauf zur Verfügung.
-        - icon: app-services
+        - icon: user-connection
+          title: Antworten auswerten
           text: Werten Sie die Antworten aus und machen Sie Programm am Puls der Nutzer:innen.
-        - icon: app-services
+        - icon: new-formats
+          title: Neue Formate entwicklen
           text: Entwickeln Sie neue Formate dialog-getrieben, maßgeschneidert für neue Zielgruppen.
       hundred_eyes_selling_points:
-        - icon: r-chat
+        - icon: dsgvo
           text: DSGVO konform
-        - icon: mobile-chat
+        - icon: data-protection
           text: Deutscher Datenschutz
-        - icon: bullet-list-68
+        - icon: billing
           text: Faires modulares Preissystem
-        - icon: app-services
+        - icon: community
           text: Kontakte & Inhalte  gehören Ihnen
-        - icon: app-services
+        - icon: support
           text: Fixer persönlicher Support
-        - icon: app-services
+        - icon: download
           text: Neue Features als Erste testen
     onboarding_header:
       byline: eine Dialog-Recherche von <a class="Link" href="https://tactile.news" target="_blank">tactile.news</a>

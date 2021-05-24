@@ -1,0 +1,59 @@
+.IconList {
+    display: flex;
+    list-style: none;
+    gap: var(--spacing-unit);
+}
+
+.IconList-element {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-unit-xs);
+    flex-basis: 100%;
+
+    color: var(--color-text-light);
+    font-size: var(--font-size-xs);
+    line-height: 1.6;
+}
+
+.IconList-icon {
+    position: relative;
+    width: var(--spacing-unit-xl);
+    height: var(--spacing-unit-xl); 
+    left: calc(-0.1 * var(--spacing-unit-xl));
+}
+
+.IconList-title {
+    color: var(--color-text);
+    font-size: var(--font-size-m);
+    font-weight: 600;
+}
+
+.IconList-icon > svg {
+    position: relative;
+}
+
+.IconList--centered .IconList-element {
+    text-align: center;
+    gap: var(--spacing-unit-s);
+}
+
+.IconList--centered .IconList-icon {
+    width: calc(2.5 * var(--spacing-unit));
+    height: calc(2.5 * var(--spacing-unit)); 
+    
+    margin-left: auto;
+    margin-right: auto;
+    left: auto;
+}
+
+.IconList--centered .IconList-icon::before {
+    content: '';
+
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    border-radius: 50%;
+    box-shadow: inset 0px 0px 0px 1px var(--color-pink);
+}
