@@ -28,7 +28,7 @@ module Onboarding
         first_name: @first_name,
         last_name: @last_name,
         username: telegram_auth_params[:username],
-        avatar_url: telegram_auth_params[:avatar_url],
+        avatar_url: telegram_auth_params[:photo_url],
         jwt: jwt_param
       )
       return unless @contributor.save
@@ -42,11 +42,13 @@ module Onboarding
 
       return render 'onboarding/unauthorized', status: :unauthorized unless @contributor
 
-      if @contributor&.update(
+      @contributor.assign_attributes(
         first_name: contributor_params[:first_name],
         last_name: contributor_params[:last_name],
-        data_processing_consent: contributor_params[:data_processing_consent])
+        data_processing_consent: contributor_params[:data_processing_consent]
+      )
 
+      if @contributor.save(context: :contributor_signup)
         redirect_to_success
       else
         render :create

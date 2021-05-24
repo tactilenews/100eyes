@@ -1,0 +1,14 @@
+<div <%= attrs %> data-controller="two-column-layout">
+  <section
+    id="contributors-sidebar"
+    class="TwoColumnLayout-sidebar"
+    data-two-column-layout-target="sidebar"
+    data-turbo-preserve-scroll-position
+  >
+    <%= sidebar %>
+  </section>
+
+  <section class="TwoColumnLayout-content">
+    <%= content %>
+  </section>
+</div>

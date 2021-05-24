@@ -33,3 +33,20 @@
   white-space: nowrap;
   width: 1px;
 }
+
+.skip-link {
+  position: absolute;
+  top: var(--spacing-unit-s);
+  left: var(--spacing-unit-s);
+  transform: translateY(-9999px);
+  z-index: 9999;
+
+  padding: var(--spacing-unit-xs) var(--spacing-unit-s);
+  border: 2px solid var(--color-blue);
+  border-radius: var(--border-radius);
+  background-color: #fff;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}

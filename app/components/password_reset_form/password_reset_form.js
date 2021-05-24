@@ -11,8 +11,8 @@ export default class extends Controller {
   handleInput(event) {
     event.preventDefault();
     const passwordLength = this.passwordTarget.value.length;
-    const passwordConfirmationLength = this.passwordConfirmationTarget.value
-      .length;
+    const passwordConfirmationLength =
+      this.passwordConfirmationTarget.value.length;
     const matchingPassword =
       this.passwordTarget.value == this.passwordConfirmationTarget.value;
     const validLength = passwordLength >= 20 && passwordLength <= 128;

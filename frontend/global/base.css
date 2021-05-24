@@ -2,12 +2,13 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  line-height: var(--line-height);
 }
 
 html,
 body {
   font-size: var(--font-size);
-  line-height: var(--spacing-unit);
+  line-height: var(--line-height);
 
   background-color: var(--color-bg);
   color: var(--color-text);
@@ -29,7 +30,6 @@ input,
 button,
 textarea {
   font-size: var(--font-size);
-  line-height: var(--spacing-unit);
   font-family: var(--font-family);
   box-sizing: border-box;
 }
@@ -41,4 +41,10 @@ a {
 
 strong {
   font-weight: 600;
+}
+
+.turbo-progress-bar {
+  height: 2px;
+  background-color: var(--color-blue);
+  box-shadow: 0 0 2px var(--color-blue-lightest);
 }

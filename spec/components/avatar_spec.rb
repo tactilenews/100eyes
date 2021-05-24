@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Avatar::Avatar, type: :component do
   include Rails.application.routes.url_helpers
-  let(:params) { {} }
+  let(:params) { { contributor: contributor } }
   let(:component) { render_inline(described_class.new(**params)) }
 
   describe 'img' do
@@ -12,7 +12,6 @@ RSpec.describe Avatar::Avatar, type: :component do
 
     describe 'given contributor without attached avatar' do
       let(:contributor) { build(:contributor, avatar: nil) }
-      let(:params) { { contributor: contributor } }
       it { should be_empty }
     end
   end
@@ -21,10 +20,14 @@ RSpec.describe Avatar::Avatar, type: :component do
     subject { component.css('img').first['src'] }
 
     describe 'given a contributor with attached avatar' do
-      let(:contributor) { build(:contributor, :with_an_avatar) }
-      let(:params) { { contributor: contributor } }
+      let(:contributor) { create(:contributor, :with_an_avatar) }
 
-      it { should eq(rails_blob_path(contributor.avatar, only_path: true)) }
+      it 'displays avatar thumbnail' do
+        thumbnail = contributor.avatar.variant(resize_to_fit: [200, 200])
+        url = rails_representation_url(thumbnail, only_path: true)
+
+        expect(subject).to eq(url)
+      end
     end
   end
 
@@ -33,8 +36,6 @@ RSpec.describe Avatar::Avatar, type: :component do
 
     describe 'given a contributor' do
       let(:contributor) { build(:contributor, id: 0) }
-      let(:params) { { contributor: contributor } }
-
       it { should start_with('--avatar-color: ') }
     end
   end
@@ -44,25 +45,21 @@ RSpec.describe Avatar::Avatar, type: :component do
 
     describe 'given a contributor without name' do
       let(:contributor) { build(:contributor, first_name: nil, last_name: nil) }
-      let(:params) { { contributor: contributor } }
       it { should eq('?') }
     end
 
     describe 'given a contributor called "Zora"' do
       let(:contributor) { build(:contributor, first_name: 'Zora', last_name: nil) }
-      let(:params) { { contributor: contributor } }
       it { should eq('Z') }
     end
 
     describe 'given a contributor called "Zora Ackermann"' do
       let(:contributor) { build(:contributor, first_name: 'Zora', last_name: 'Ackermann') }
-      let(:params) { { contributor: contributor } }
       it { should eq('ZA') }
     end
 
     describe 'given a contributor called "Vicco von Bülow"' do
       let(:contributor) { build(:contributor, first_name: 'Vicco', last_name: 'von Bülow') }
-      let(:params) { { contributor: contributor } }
       it { should eq('VvB') }
     end
   end

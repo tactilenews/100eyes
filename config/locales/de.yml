@@ -163,6 +163,7 @@ de:
 
   save: Speichern
   discard: Änderungen verwerfen
+  skip_to_content: Zum Hauptinhalt springen
 
   dashboard:
     how_it_works: So funktioniert 100eyes
@@ -201,6 +202,9 @@ de:
       onboarding_logo:
         label: Logo (URL)
         help: Das Logo sollte eine Bilddatei im SVG-, PNG-Format sein und ca. 90 Pixel hoch sein. Es wird während des Onboardings angezeigt.
+      onboarding_byline:
+        label: Unterzeile
+        help: Wird unter dem Projekttitel bzw. Logo angezeigt.
       onboarding_hero:
         label: Header-Bild (URL)
         help: Das Header-Bild sollte eine Bilddatei im JPEG-Format sein. Es sollte ein Seitenverhältnis von 2:1 haben und ca. 900 Pixel breit sein. Es wird während des Onboardings angezeigt.
@@ -235,6 +239,12 @@ de:
     saved: Informationen zu %{name} gespeichert
     invalid: Informationen zu %{name} sind ungültig
     message-send: Nachricht an %{name} wurde verschickt
+    skip_to_profile: Zum Profil springen
+    data_processing_callout:
+      heading: Datenschutz
+      text:
+        - Wenn du ein Mitglied manuell hinzufügst, musst du sicherstellen, dass das Mitglied zuvor die Allgemeinen Nutzungsbedingungen und die Datenschutzerklärung von 100eyes zur Kenntnis genommen und seine Einwilligung erklärt hat, Nachrichten zu erhalten. Die Verantwortung für die Dokumentation der Einwilligung liegt in diesem Fall bei dir.
+        - Fragen? <a class="Link" href="mailto:support@tactile.news">support@tactile.news</a>
     form:
       first_name:
         label: Vorname
@@ -271,8 +281,7 @@ de:
         label: Aktiv
       data_processing_consent:
         label: Einwilligung zur Datenverarbeitung
-        help: Ich habe die <a class="Link" href="https://tactile.news/100-eyesdatenschutz-verbraucherinnen/" target="_blank">Allgemeine Nutzungsbedingungen 100eyes</a> und die <a class="Link" href="https://tactile.news/100eyes-agb-verbraucherinnen/" target="_blank">Datenschutzerklärung</a> zur Kenntnis genommen und bin mit deren Geltung einverstanden. In unserer Datenschutzerklärung ist erklärt, welche Tools wir nutzen und mit welchen Firmen wir zusammenarbeiten. Diese Partner speichern und übertragen je nach Nutzung auch Daten in Länder außerhalb der Europäischen Union.
-
+        help: Ich habe die <a class="Link" href="https://tactile.news/100eyes-datenschutz/" target="_blank">Datenschutzerklärung</a> zur Kenntnis genommen und bin mit deren Geltung einverstanden. In unserer Datenschutzerklärung ist erklärt, welche Tools wir nutzen und mit welchen Firmen wir zusammenarbeiten.
   request:
     request:
       one: Frage

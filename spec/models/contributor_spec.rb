@@ -360,7 +360,7 @@ RSpec.describe Contributor, type: :model do
 
     describe 'number of database calls' do
       subject { -> { contributor.recent_replies.first.request } }
-      it { should make_database_queries(count: 1) }
+      it { should make_database_queries(count: 2) }
     end
   end
 
@@ -466,6 +466,28 @@ RSpec.describe Contributor, type: :model do
         it { expect { contributor.data_processing_consent = '1' }.to change { contributor.data_processing_consent? }.to(true) }
         it { expect { contributor.data_processing_consent = 'on' }.to change { contributor.data_processing_consent? }.to(true) }
       end
+    end
+  end
+
+  describe '.avatar_url=', vcr: { cassette_name: :download_roberts_telegram_profile_picture } do
+    let(:url) { 'https://t.me/i/userpic/320/2CixclGZED6EeKGQHKm9wk2v7xKy3LWCJGHJPkgcih0.jpg' }
+    subject { -> { contributor.avatar_url = url } }
+    it { is_expected.to(change { contributor.avatar.attached? }.from(false).to(true)) }
+
+    context 'given a bogus url' do
+      let(:url) { 'not a url' }
+      it { is_expected.not_to(change { contributor.avatar.attached? }.from(false)) }
+    end
+
+    context 'with existing avatar' do
+      let(:contributor) { create(:contributor, :with_an_avatar) }
+      it {
+        is_expected.to(
+          change { contributor.avatar.blob.filename.to_param }
+            .from('example-image.png')
+            .to('2CixclGZED6EeKGQHKm9wk2v7xKy3LWCJGHJPkgcih0.jpg')
+        )
+      }
     end
   end
 end

@@ -16,7 +16,7 @@ class Contributor < ApplicationRecord
   default_scope { order(:first_name, :last_name) }
   scope :active, -> { where(deactivated_at: nil) }
 
-  validates :data_processing_consent, acceptance: true, on: %i[contributor_signup update]
+  validates :data_processing_consent, acceptance: true, on: :contributor_signup
 
   validates :email, uniqueness: { case_sensitive: false }, allow_nil: true, 'valid_email_2/email': true
   validates :threema_id, uniqueness: { case_sensitive: false }, allow_blank: true, format: { with: /\A[A-Za-z0-9]+\z/ }, length: { is: 8 }
@@ -42,7 +42,7 @@ class Contributor < ApplicationRecord
         id: tag.id,
         name: tag.name,
         value: tag.name,
-        count: Contributor.tagged_with([tag]).count,
+        count: tag.taggings_count,
         color: Contributor.tag_color_from_id(tag.id)
       }
     end
@@ -97,11 +97,11 @@ class Contributor < ApplicationRecord
   end
 
   def tags?
-    tag_list.any?
+    tags.any?
   end
 
   def recent_replies
-    result = replies.eager_load(:request, :sender).reorder(created_at: :desc)
+    result = replies.includes(:request, :sender).reorder(created_at: :desc)
     result = result.group_by(&:request).values # array or groups
     result = result.map(&:first) # choose most recent message per group
     result.sort_by(&:created_at).reverse # ensure descending order
@@ -111,6 +111,17 @@ class Contributor < ApplicationRecord
     deactivated_at.nil?
   end
   alias active active?
+
+  def avatar_url=(url)
+    return unless url
+
+    begin
+      remote_file_location = URI(url)
+    rescue URI::InvalidURIError
+      return
+    end
+    avatar.attach(io: remote_file_location.open, filename: File.basename(remote_file_location.path))
+  end
 
   def active=(value)
     self.deactivated_at = ActiveModel::Type::Boolean.new.cast(value) ? nil : Time.current

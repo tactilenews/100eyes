@@ -1,10 +1,10 @@
 :root {
-  --font-size: 18px;
-  --line-height: 26px;
+  --font-size: 1.1rem;
+  --line-height: 1.6em;
   --font-size-s: 0.85em;
   --font-size-xs: 0.75em;
 
-  --spacing-unit: 30px;
+  --spacing-unit: 1.75rem;
   --spacing-unit-s: calc(0.5 * var(--spacing-unit));
   --spacing-unit-xs: calc(0.25 * var(--spacing-unit));
   --spacing-unit-l: calc(1.5 * var(--spacing-unit));
@@ -41,11 +41,13 @@
   --color-yellow-dark: #92853e;
   --color-yellow-darkest: #5a4d07;
 
+  --color-orange: #f99904;
   --color-orange-lightest: #fdebcf;
   --color-orange-darkest: #884600;
 
   --color-gray: #868e92;
   --color-gray-light: #e9edf0;
+  --color-gray-lightest: #f5f6f9;
   --color-gray-dark: #333;
 
   --color-pink: #f4177a;
@@ -61,6 +63,7 @@
   --color-primary: var(--color-pink);
   --color-accent: var(--color-blue);
   --color-border: #ccc;
+  --color-border-light: #dedede;
   --color-focus: var(--color-blue);
   --color-focus-outline: var(--color-blue-light);
 
@@ -74,4 +77,6 @@
   --input-margin: var(--spacing-unit-xs) 0;
 
   --soft-shadow: 0 0 3px -3px rgba(0, 0, 0, 0.1), 0 3px 15px rgba(0, 0, 0, 0.1);
+
+  --nav-bar-height: calc(2.5 * var(--spacing-unit));
 }

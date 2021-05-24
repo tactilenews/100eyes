@@ -1,0 +1,13 @@
+.SidebarItem {
+  position: relative;
+  padding: var(--spacing-unit-s);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.SidebarItem--active {
+  background-color: #fff;
+
+  /* Display a 3px border on the left, preventing
+     the default slanted effect in border edges */
+  box-shadow: inset 3px 0 var(--color-blue);
+}

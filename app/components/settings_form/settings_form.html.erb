@@ -20,6 +20,10 @@
         <%= c 'input', field.input_defaults.merge(type: :url) %>
       <% end %>
 
+      <%= c 'field', object: setting, value: Setting.onboarding_byline, id: :onboarding_byline do |field| %>
+        <%= c 'input', field.input_defaults %>
+      <% end %>
+
       <%= c 'field', object: setting, value: Setting.onboarding_hero, id: :onboarding_hero do |field| %>
         <%= c 'input', field.input_defaults.merge(type: :url) %>
       <% end %>
@@ -27,7 +31,6 @@
       <%= c 'field', object: setting, value: Setting.onboarding_title, id: :onboarding_title do |field| %>
         <%= c 'input', field.input_defaults %>
       <% end %>
-
       <%= c 'field', object: setting, value: Setting.onboarding_page, id: :onboarding_page do |field| %>
         <%= c 'textarea', field.input_defaults %>
       <% end %>

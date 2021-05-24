@@ -75,7 +75,7 @@ RSpec.describe 'Onboarding::Threema', type: :request do
         subject.call
         parsed = Capybara::Node::Simple.new(response.body)
         fields = parsed.all('.Field')
-        data_processing_consent_field = fields.find { |f| f.has_text? 'Allgemeine Nutzungsbedingungen' }
+        data_processing_consent_field = fields.find { |f| f.has_text? 'Datenschutzerklärung' }
         expect(data_processing_consent_field).to have_text('muss akzeptiert werden')
       end
 

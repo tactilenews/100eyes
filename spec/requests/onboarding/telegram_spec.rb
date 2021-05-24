@@ -102,7 +102,7 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
       end
     end
 
-    context 'valid' do
+    context 'valid', vcr: { cassette_name: :download_matts_telegram_profile_picture } do
       it { is_expected.not_to raise_exception }
 
       it 'is successful' do
@@ -110,17 +110,22 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
         expect(response).to be_successful
       end
 
-      it 'creates contributor' do
-        expect { subject.call }.to change(Contributor, :count).by(1)
+      it { is_expected.to change(Contributor, :count).by(1) }
 
-        contributor = Contributor.first
-        expect(contributor).to have_attributes(
+      it 'creates contributor' do
+        subject.call
+        expect(Contributor.first).to have_attributes(
           first_name: 'Matthew',
           last_name: 'Rider',
           telegram_id: 123,
           username: 'matthew_rider',
           jwt: jwt
         )
+      end
+
+      it 'attaches telegram profile picture' do
+        subject.call
+        expect(Contributor.first.avatar).to be_attached
       end
 
       it 'invalidates the jwt' do
@@ -220,7 +225,7 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
           subject.call
           parsed = Capybara::Node::Simple.new(response.body)
           fields = parsed.all('.Field')
-          data_processing_consent_field = fields.find { |f| f.has_text? 'Allgemeine Nutzungsbedingungen' }
+          data_processing_consent_field = fields.find { |f| f.has_text? 'Datenschutzerklärung' }
           expect(data_processing_consent_field).to have_text('muss akzeptiert werden')
         end
       end

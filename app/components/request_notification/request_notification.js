@@ -13,8 +13,14 @@ export default class extends Controller {
 
   connect() {
     this.messageTemplate = JSON.parse(this.messageTemplateValue);
-    this.fetchMessages();
-    setInterval(() => this.fetchMessages(), POLLING_INTERVAL);
+    this.intervalHandle = setInterval(
+      () => this.fetchMessages(),
+      POLLING_INTERVAL
+    );
+  }
+
+  disconnect() {
+    clearInterval(this.intervalHandle);
   }
 
   fetchMessages() {
@@ -24,23 +30,23 @@ export default class extends Controller {
       data: new URLSearchParams({
         last_updated_at: this.lastUpdatedAtValue,
       }).toString(),
-      success: ({ message_count }) => {
-        if (message_count == 0) {
-          return;
-        }
-
-        this.element.hidden = false;
-
-        if (message_count == 1) {
-          this.textTarget.innerHTML = this.messageTemplate.one;
-          return;
-        }
-
-        this.textTarget.innerHTML = this.messageTemplate.other.replace(
-          '{count}',
-          message_count
-        );
-      },
+      success: ({ message_count: count }) => this.updateMessageCount(count),
     });
+  }
+
+  updateMessageCount(count) {
+    if (count == 0) {
+      return;
+    }
+
+    this.element.hidden = false;
+
+    if (count == 1) {
+      this.textTarget.innerHTML = this.messageTemplate.one;
+      return;
+    }
+
+    const message = this.messageTemplate.other.replace('{count}', count);
+    this.textTarget.innerHTML = message;
   }
 }

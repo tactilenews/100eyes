@@ -10,6 +10,7 @@ class Setting < RailsSettings::Base
   field :onboarding_logo, default: ''
   field :onboarding_hero, default: ''
   field :onboarding_title, default: 'Hallo und herzlich willkommen!'
+  field :onboarding_byline, default: ''
   field :onboarding_page, default: File.read(File.join('config', 'locales', 'onboarding', 'page.md'))
   field :onboarding_success_heading, default: File.read(File.join('config', 'locales', 'onboarding', 'success_heading.txt'))
   field :onboarding_success_text, default: File.read(File.join('config', 'locales', 'onboarding', 'success_text.txt'))
