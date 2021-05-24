@@ -341,7 +341,7 @@ GEM
       activemodel (>= 3.2)
       mail (~> 2.5)
     vcr (6.0.0)
-    view_component (2.31.1)
+    view_component (2.32.0)
       activesupport (>= 5.0.0, < 7.0)
     web-console (4.1.0)
       actionview (>= 6.0.0)
