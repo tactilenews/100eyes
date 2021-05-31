@@ -11,7 +11,7 @@ module OnboardingEmailForm
     private
 
     attr_reader :contributor
-    
+
     def data_protection_link
       Setting.onboarding_data_protection_link
     end
