@@ -17,6 +17,7 @@ class Setting < RailsSettings::Base
   field :onboarding_unauthorized_heading,
         default: File.read(File.join('config', 'locales', 'onboarding', 'unauthorized_heading.txt'))
   field :onboarding_unauthorized_text, default: File.read(File.join('config', 'locales', 'onboarding', 'unauthorized_text.txt'))
+  field :onboarding_data_protection_link, default: 'https://tactile.news/100eyes-datenschutz/'
 
   field :telegram_unknown_content_message, default: File.read(File.join('config', 'locales', 'telegram', 'unknown_content.txt'))
   field :telegram_contributor_not_found_message, default: File.read(File.join('config', 'locales', 'telegram', 'unknown_contributor.txt'))

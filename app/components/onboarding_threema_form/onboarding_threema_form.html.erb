@@ -22,7 +22,7 @@
         <%= c 'input', field.input_defaults.merge(required: true, pattern: '[A-Za-z0-9]{8}') %>
       <% end %>
 
-      <%= c 'field', object: @contributor, id: :data_processing_consent, styles: [:horizontal, :leftAligned] do |field| %>
+      <%= c 'field', object: @contributor, id: :data_processing_consent, value: data_protection_link, styles: [:horizontal, :leftAligned] do |field| %>
         <%= c 'checkbox', field.input_defaults.merge(required: true, value: nil) %>
       <% end %>
 
