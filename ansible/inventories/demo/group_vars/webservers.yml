@@ -1,5 +1,0 @@
-ansible_user: ansible
-ansible_host: "{{ vps.hostname }}"
-ansible_become_pass: "{{ vps.sudo_password }}"
-webservers:
-  authorized_keys: "{{lookup('fileglob', 'ssh/*.pub', wantlist=True)}}"
