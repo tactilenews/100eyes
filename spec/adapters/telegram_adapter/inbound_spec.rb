@@ -5,8 +5,27 @@ require 'telegram/bot/rspec/integration/rails'
 
 RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
   let(:adapter) { described_class.new }
-  before { create(:contributor, telegram_id: 47) }
+  let(:contributor) { create(:contributor, telegram_id: telegram_id) }
+  let(:telegram_id) { 47 }
   let(:telegram_message) { { 'chat' => { 'id' => 42 }, 'from' => { 'id' => 47 } } }
+  before { contributor }
+
+  describe '#avatar_url', vcr: { cassette_name: :avatar_url } do
+    before do
+      allow(Telegram.bot).to receive(:get_user_profile_photos).and_return(get_user_profile_photos)
+      allow(Telegram.bot).to receive(:get_file).with(file_id: '<largest_file_id>').and_return(get_file)
+    end
+
+    let(:telegram_id) { 4711 }
+    subject { adapter.avatar_url(contributor) }
+    let(:expected_url) { 'https://api.telegram.org/file/botTOKEN/photos/file_7.jpg' }
+    it { is_expected.to eq(expected_url) }
+
+    context 'of a contributor without `telegram_id`' do
+      let(:telegram_id) { nil }
+      it { is_expected.to be(nil) }
+    end
+  end
 
   describe '#consume' do
     let(:message) do
@@ -208,5 +227,40 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
         'file_size' => 134_866,
         'width' => 1280,
         'height' => 960 }] }
+  end
+
+  let(:get_user_profile_photos) do
+    { 'ok' => true,
+      'result' =>
+  { 'total_count' => 1,
+    'photos' =>
+    [[{ 'file_id' =>
+        'AgACAgIAAxUAAWC4DHtVI8MrfOwy9wJFLT7hZx-SAAJRqDEbzPO4CHVJ3MNErvhcVrWrDgAEAQADAgADYQAD7UcAAh8E',
+        'file_unique_id' => 'AQADVrWrDgAE7UcAAg',
+        'file_size' => 7455,
+        'width' => 160,
+        'height' => 160 },
+      { 'file_id' =>
+        'AgACAgIAAxUAAWC4DHtVI8MrfOwy9wJFLT7hZx-SAAJRqDEbzPO4CHVJ3MNErvhcVrWrDgAEAQADAgADYgAD7kcAAh8E',
+        'file_unique_id' => 'AQADVrWrDgAE7kcAAg',
+        'file_size' => 21_268,
+        'width' => 320,
+        'height' => 320 },
+      { 'file_id' =>
+        '<largest_file_id>',
+        'file_unique_id' => 'AQADVrWrDgAE70cAAg',
+        'file_size' => 58_194,
+        'width' => 640,
+        'height' => 640 }]] } }
+  end
+
+  let(:get_file) do
+    { 'ok' => true,
+      'result' =>
+  { 'file_id' =>
+    'AgACAgIAAxUAAWC4DHtVI8MrfOwy9wJFLT7hZx-SAAJRqDEbzPO4CHVJ3MNErvhcVrWrDgAEAQADAgADYwAD70cAAh8E',
+    'file_unique_id' => 'AQADVrWrDgAE70cAAg',
+    'file_size' => 58_194,
+    'file_path' => 'photos/file_7.jpg' } }
   end
 end

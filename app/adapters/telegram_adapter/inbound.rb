@@ -48,6 +48,19 @@ module TelegramAdapter
       yield(@message) if block_given?
     end
 
+    def avatar_url(contributor)
+      return unless contributor.telegram_id
+
+      profile_photos = Telegram.bot.get_user_profile_photos(user_id: contributor.telegram_id, limit: 1)
+      largest_photo = profile_photos
+                      .dig('result', 'photos', 0)
+                      .max { |a, b| a['file_size'] <=> b['file_size'] }
+
+      file = Telegram.bot.get_file(file_id: largest_photo['file_id'])
+      file_path = file.dig('result', 'file_path')
+      "https://api.telegram.org/file/bot#{Telegram.bot.token}/#{file_path}"
+    end
+
     private
 
     def trigger(event, *args)
