@@ -191,7 +191,7 @@ de:
         help: Das Header-Bild sollte eine Bilddatei im JPEG-Format sein. Es sollte ein Seitenverhältnis von 2:1 haben und ca. 900 Pixel breit sein. Es wird während des Onboardings angezeigt.
       onboarding_data_protection_link:
         label: Link zur Datenschutzerklärung
-        help: Falls eine projektspezifische Datenschutzerklärung existiert, kann sie hier angegeben werden. Contributor müssen diese während des Onboardingprozesses akzeptieren.
+        help: Falls eine projektspezifische Datenschutzerklärung existiert, kannst du sie hier angegeben. Mitglieder müssen diese während des Onboarding-Prozesses akzeptieren.
       telegram_unknown_content_message:
         label: Fehler-Nachricht bei unbekannten Inhalten
         help: Wenn ein Mitglied via Telegram Nachrichten versendet, die von 100eyes noch nicht unterstützt werden, erhält es diese Nachricht.
