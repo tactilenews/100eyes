@@ -36,7 +36,7 @@ module Field
 
     def help
       # rubocop:disable Rails/OutputSafety
-      I18n.t("#{type}.form.#{id}.help", default: nil)&.html_safe
+      I18n.t("#{type}.form.#{id}.help", value: value, default: nil)&.html_safe
       # rubocop:enable Rails/OutputSafety
     end
 

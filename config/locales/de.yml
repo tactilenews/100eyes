@@ -189,6 +189,9 @@ de:
       onboarding_hero:
         label: Header-Bild (URL)
         help: Das Header-Bild sollte eine Bilddatei im JPEG-Format sein. Es sollte ein Seitenverhältnis von 2:1 haben und ca. 900 Pixel breit sein. Es wird während des Onboardings angezeigt.
+      onboarding_data_protection_link:
+        label: Link zur Datenschutzerklärung
+        help: Falls eine projektspezifische Datenschutzerklärung existiert, kannst du sie hier angegeben. Mitglieder müssen diese während des Onboarding-Prozesses akzeptieren.
       telegram_unknown_content_message:
         label: Fehler-Nachricht bei unbekannten Inhalten
         help: Wenn ein Mitglied via Telegram Nachrichten versendet, die von 100eyes noch nicht unterstützt werden, erhält es diese Nachricht.
@@ -265,7 +268,7 @@ de:
         label: Aktiv
       data_processing_consent:
         label: Einwilligung zur Datenverarbeitung
-        help: Ich habe die <a class="Link" href="https://tactile.news/100eyes-datenschutz/" target="_blank">Datenschutzerklärung</a> zur Kenntnis genommen und bin mit deren Geltung einverstanden. In unserer Datenschutzerklärung ist erklärt, welche Tools wir nutzen und mit welchen Firmen wir zusammenarbeiten.
+        help: Ich habe die <a class="Link" href=%{value} target="_blank">Datenschutzerklärung</a> zur Kenntnis genommen und bin mit deren Geltung einverstanden. In unserer Datenschutzerklärung ist erklärt, welche Tools wir nutzen und mit welchen Firmen wir zusammenarbeiten.
   request:
     request:
       one: Frage
