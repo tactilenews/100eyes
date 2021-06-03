@@ -299,7 +299,7 @@ RSpec.describe Contributor, type: :model do
         end
       end
 
-      let(:contributor) { create(:contributor, telegram_id: 4711) }
+      let(:contributor) { create(:contributor, :with_an_avatar, telegram_id: 4711) }
 
       it { should_not raise_error }
       it { should_not(change { Message.count }) }
