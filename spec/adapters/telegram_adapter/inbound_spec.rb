@@ -5,7 +5,7 @@ require 'telegram/bot/rspec/integration/rails'
 
 RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
   let(:adapter) { described_class.new }
-  let(:contributor) { create(:contributor, telegram_id: telegram_id) }
+  let(:contributor) { create(:contributor, :with_an_avatar, telegram_id: telegram_id) }
   let(:telegram_id) { 146_338_764 }
   let(:telegram_message) { { 'chat' => { 'id' => 42 }, 'from' => { 'id' => telegram_id } } }
   before { contributor }
@@ -28,7 +28,7 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
     Telegram::Bot::ClientStub.stub_all!(true)
   end
 
-  describe '#avatar_url', vcr: { cassette_name: :avatar_url } do
+  describe '#avatar_url', vcr: { cassette_name: :avatar_url_and_download_file } do
     subject { adapter.avatar_url(contributor) }
     let(:expected_url) { Regexp.new([Regexp.quote('https://api.telegram.org/file/bot'), '.*', Regexp.quote('/photos/file_7.jpg')].join) }
     specify { expect(subject.to_s).to match(expected_url) }
@@ -164,11 +164,19 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
     describe '#sender' do
       subject { message.sender }
 
-      context 'known sender, but outdated contributor record' do
-        let(:telegram_message) { { 'chat' => { 'id' => 42 }, 'from' => { 'id' => contributor.telegram_id, 'username' => 'alice' } } }
-        let(:contributor) { create(:contributor, telegram_id: 42, username: 'bob') }
+      context 'contributor exists' do
+        context 'but missing `avatar_url`', vcr: { cassette_name: :avatar_url_and_download_file } do
+          let(:contributor) { create(:contributor, telegram_id: telegram_id) }
+          let(:telegram_message) { { 'chat' => { 'id' => 42 }, 'from' => { 'id' => contributor.telegram_id } } }
+          it { expect { subject.save! }.to(change { contributor.reload.avatar.attached? }.from(false).to(true)) }
+        end
 
-        it { expect { subject.save! }.to(change { contributor.reload.username }.from('bob').to('alice')) }
+        context 'but `username` is outdated' do
+          let(:contributor) { create(:contributor, :with_an_avatar, telegram_id: 42, username: 'bob') }
+          let(:telegram_message) { { 'chat' => { 'id' => 42 }, 'from' => { 'id' => contributor.telegram_id, 'username' => 'alice' } } }
+
+          it { expect { subject.save! }.to(change { contributor.reload.username }.from('bob').to('alice')) }
+        end
       end
     end
   end

@@ -33,6 +33,8 @@ module TelegramAdapter
       @sender = initialize_sender(telegram_message)
       return unless @sender
 
+      @sender.avatar_url = avatar_url(@sender) unless @sender.avatar.attached?
+
       @message = initialize_message(telegram_message)
       if telegram_message.keys.any? { |key| UNKNOWN_CONTENT_KEYS.include?(key) }
         @message.unknown_content = true
