@@ -54,8 +54,11 @@ module TelegramAdapter
       return unless contributor.telegram_id
 
       profile_photos = Telegram.bot.get_user_profile_photos(user_id: contributor.telegram_id, limit: 1).with_indifferent_access
-      largest_photo = profile_photos.dig(:result, :photos, 0).max { |a, b| a[:file_size] <=> b[:file_size] }
-      file_url(largest_photo)
+      first_photo = profile_photos.dig(:result, :photos, 0)
+      return unless first_photo
+
+      largest_size = first_photo.max { |a, b| a[:file_size] <=> b[:file_size] }
+      file_url(largest_size)
     end
 
     private

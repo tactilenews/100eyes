@@ -37,6 +37,14 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
       let(:telegram_id) { nil }
       it { is_expected.to be(nil) }
     end
+
+    context 'if contributor has no profile photo' do
+      before do
+        mock_response = { result: { photos: [] } }
+        allow(Telegram.bot).to receive(:get_user_profile_photos).and_return(mock_response)
+      end
+      it { is_expected.to be(nil) }
+    end
   end
 
   describe '#consume' do
