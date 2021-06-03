@@ -1,0 +1,87 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.telegram.org/botTELEGRAM_BOT_API_KEY/getUserProfilePhotos
+    body:
+      encoding: UTF-8
+      string: user_id=146338764&limit=1
+    headers:
+      User-Agent:
+      - HTTPClient/1.0 (2.8.3, ruby 2.7.1 (2020-03-31))
+      Accept:
+      - "*/*"
+      Date:
+      - Thu, 03 Jun 2021 13:22:44 GMT
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.20.1
+      Date:
+      - Thu, 03 Jun 2021 13:23:38 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '614'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Expose-Headers:
+      - Content-Length,Content-Type,Date,Server,Connection
+    body:
+      encoding: UTF-8
+      string: '{"ok":true,"result":{"total_count":1,"photos":[[{"file_id":"AgACAgIAAxUAAWC4DHtVI8MrfOwy9wJFLT7hZx-SAAJRqDEbzPO4CHVJ3MNErvhcVrWrDgAEAQADAgADYQAD7UcAAh8E","file_unique_id":"AQADVrWrDgAE7UcAAg","file_size":7455,"width":160,"height":160},{"file_id":"AgACAgIAAxUAAWC4DHtVI8MrfOwy9wJFLT7hZx-SAAJRqDEbzPO4CHVJ3MNErvhcVrWrDgAEAQADAgADYgAD7kcAAh8E","file_unique_id":"AQADVrWrDgAE7kcAAg","file_size":21268,"width":320,"height":320},{"file_id":"AgACAgIAAxUAAWC4DHtVI8MrfOwy9wJFLT7hZx-SAAJRqDEbzPO4CHVJ3MNErvhcVrWrDgAEAQADAgADYwAD70cAAh8E","file_unique_id":"AQADVrWrDgAE70cAAg","file_size":58194,"width":640,"height":640}]]}}'
+  recorded_at: Thu, 03 Jun 2021 13:22:44 GMT
+- request:
+    method: post
+    uri: https://api.telegram.org/botTELEGRAM_BOT_API_KEY/getFile
+    body:
+      encoding: UTF-8
+      string: file_id=AgACAgIAAxUAAWC4DHtVI8MrfOwy9wJFLT7hZx-SAAJRqDEbzPO4CHVJ3MNErvhcVrWrDgAEAQADAgADYwAD70cAAh8E
+    headers:
+      User-Agent:
+      - HTTPClient/1.0 (2.8.3, ruby 2.7.1 (2020-03-31))
+      Accept:
+      - "*/*"
+      Date:
+      - Thu, 03 Jun 2021 13:22:44 GMT
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.20.1
+      Date:
+      - Thu, 03 Jun 2021 13:23:38 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '215'
+      Connection:
+      - keep-alive
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Expose-Headers:
+      - Content-Length,Content-Type,Date,Server,Connection
+    body:
+      encoding: UTF-8
+      string: '{"ok":true,"result":{"file_id":"AgACAgIAAxUAAWC4DHtVI8MrfOwy9wJFLT7hZx-SAAJRqDEbzPO4CHVJ3MNErvhcVrWrDgAEAQADAgADYwAD70cAAh8E","file_unique_id":"AQADVrWrDgAE70cAAg","file_size":58194,"file_path":"photos/file_7.jpg"}}'
+  recorded_at: Thu, 03 Jun 2021 13:22:44 GMT
+recorded_with: VCR 6.0.0

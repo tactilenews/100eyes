@@ -46,6 +46,11 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
       end
 
       describe 'from' do
+        before do
+          allow(Setting).to receive(:email_from_address).and_return('100eyes-test-account@example.org')
+          allow(Setting).to receive(:project_name).and_return('TestingProject')
+        end
+
         subject { message_email[:from].formatted }
         it { should eq(['TestingProject <100eyes-test-account@example.org>']) }
       end

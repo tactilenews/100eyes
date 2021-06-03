@@ -13,6 +13,6 @@ RSpec.describe 'Admin::Settings', type: :request do
     subject { -> { post settings_path(as: create(:user)), params: params } }
     let(:params) { { setting: { project_name: 'Shiny new project' } } }
 
-    it { should change { Setting.project_name }.from('TestingProject').to('Shiny new project') }
+    it { should change { Setting.project_name }.to('Shiny new project') }
   end
 end

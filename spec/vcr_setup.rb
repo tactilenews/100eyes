@@ -5,7 +5,11 @@ require 'vcr'
 VCR.configure do |c|
   c.cassette_library_dir = 'vcr_cassettes'
   c.hook_into :webmock
-  c.filter_sensitive_data('<TELEGRAM_BOT_API_KEY>') { Telegram.bot.token }
-  c.filter_sensitive_data('<TELEGRAM_BOT_USERNAME>') { Telegram.bot.username }
+  c.filter_sensitive_data('TELEGRAM_BOT_API_KEY') { ENV['TELEGRAM_BOT_API_KEY'] }
+  c.filter_sensitive_data('TELEGRAM_BOT_USERNAME') { ENV['TELEGRAM_BOT_USERNAME'] }
+  c.filter_sensitive_data('*100EYES') { ENV['THREEMARB_API_IDENTITY'] }
+  c.filter_sensitive_data('THREEMARB_API_SECRET') { ENV['THREEMARB_API_SECRET'] }
+  c.filter_sensitive_data('THREEMARB_PRIVATE') { ENV['THREEMARB_PRIVATE'] }
+
   c.configure_rspec_metadata!
 end
