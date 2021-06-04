@@ -11,9 +11,11 @@
   collections:
     - devsec.hardening
   roles:
-    - role: initial_setup
     - role: devsec.hardening.ssh_hardening
     - role: devsec.hardening.os_hardening
+      vars:
+        ufw_enable_ipv6: false
+    - role: initial_setup
     - role: gantsign.inotify
       inotify_max_user_watches: 524288
     - role: geerlingguy.pip
