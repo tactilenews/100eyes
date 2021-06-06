@@ -4,18 +4,23 @@
   <%= c 'box', style: :large do %>
     <%= c 'wrapper' do %>
       <%= c 'stack', space: :large do %>
+      
         <%= c 'heading', tag: :h2 do %>
           <%= I18n.t 'dashboard.how_it_works' %>
         <% end %>
+        
+        <%= c 'wrapper', style: :narrow do %>
+          <%= c 'icon_list', list: :how_it_works, styles: [:vertical, :alternating] %>
+        <% end %>
 
-        <%= c 'icon_list', list: :how_it_works, style: :centered %>
+        <br><br>
 
         <%= c 'heading', tag: :h2 do %>
           <%= I18n.t 'dashboard.become_a_pioneer' %> 
           <%= I18n.t 'dashboard.provided_technology' %>
         <% end %>
 
-        <%= c 'icon_list', list: :hundred_eyes_selling_points %>
+        <%= c 'icon_list', list: :hundred_eyes_selling_points, styles: [:bordered, :bold, :'row-3'] %>
       <% end %>
     <% end %>
   <% end %>
