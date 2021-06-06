@@ -72,12 +72,12 @@ de:
       how_it_works:
         - icon: community
           title: Community aufbauen
-          text: Bauen Sie Ihre Community auf. Finden Sie ihr “Mini Public” von 50-100 spannenden Menschen – treue Leser*innen, junge Menschen oder als Hörer*innenredaktion.
+          text: Finden Sie Ihr Mini Public. Laden Sie 50 Menschen oder mehr zum Dialog ein.
         - icon: mail
           title: Nachrichten versenden
           text: Stellen Sie alle Fragen und senden diese mit einem Klick an viele Menschen gleichzeitig – direkt auf den Lieblingsmessenger.
         - icon: chat-history
-          title: Antworten werden zusammengestellt
+          title: Antworten empfangen
           text: 100eyes sammelt alle Antworten und stellt sie übersichtlich als Chatverlauf zur Verfügung.
         - icon: user-connection
           title: Antworten auswerten
