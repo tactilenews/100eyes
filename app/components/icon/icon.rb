@@ -15,7 +15,7 @@ module Icon
     attr_reader :icon, :title, :size
 
     def url
-      "/icons.svg#nc-icon-#{icon}-glyph-#{size}"
+      "/icons.svg#icon-#{icon}-glyph-#{size}"
     end
   end
 end
