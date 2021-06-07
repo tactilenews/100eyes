@@ -5,6 +5,14 @@ require 'rails_helper'
 RSpec.describe IconList::IconList, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
-  let(:params) { { list: 'how_it_works' } }
+  let(:params) { { elements: elements } }
+  let(:elements) do
+    [
+      { icon: 'my-icon', title: 'My Title', text: 'Lorem Ipsum' }
+    ]
+  end
+
   it { should have_css('.IconList') }
+  it { should have_css('.IconList-title', text: 'My Title') }
+  it { should have_text('Lorem Ipsum') }
 end

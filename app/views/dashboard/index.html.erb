@@ -10,7 +10,7 @@
         <% end %>
         
         <%= c 'icon_list',
-          list: :how_it_works,
+          elements: I18n.t('dashboard.how_it_works_list'),
           styles: [:vertical, :alternating]
         %>
 
@@ -29,7 +29,7 @@
       <% end %>
 
       <%= c 'icon_list',
-        list: :hundred_eyes_selling_points,
+        elements: I18n.t('dashboard.selling_points_list'),
         styles: [:bordered, :bold, :'row-3']
       %>
 

@@ -2,14 +2,14 @@
 
 module IconList
   class IconList < ApplicationComponent
-    def initialize(list: nil, **)
+    def initialize(elements:, **)
       super
 
-      @list = list.to_s
+      @elements = elements
     end
 
     private
 
-    attr_reader :list
+    attr_reader :elements
   end
 end
