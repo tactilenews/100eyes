@@ -1,0 +1,2 @@
+<!-- As svg fragments / symbols don't work as the content of a pseudo element, we need a dedicated svg for the icon backgrounds. --> 
+<svg viewBox="0 0 62 62" xmlns="http://www.w3.org/2000/svg"><path d="M9.326 55.916C2.536 51.217-1.142 40.39.316 30.194 1.734 19.958 8.37 10.39 16.602 7.232c8.234-3.116 18.142.173 26.956 4.367 8.855 4.191 16.657 9.285 18.173 15.784 1.476 6.501-3.336 14.366-8.721 19.637-5.345 5.27-11.265 7.903-19.151 9.995-7.887 2.092-17.786 3.562-24.532-1.099z" fill="#EFF2F4" fill-rule="nonzero"/></svg>

@@ -1,0 +1,20 @@
+<ul <%= attrs %>>
+  <% elements.each do |elem| %>
+    <li class="IconList-element">
+      
+      <div class="IconList-icon">
+        <%= c 'icon', icon: elem[:icon], size: 36 %>
+      </div>
+      
+      <div class="IconList-text">
+        <% if elem[:title] %>
+          <%= c 'heading', tag: :h3, class: 'IconList-title' do %>
+            <%= elem[:title] %>
+          <% end %>
+        <% end %>
+        <%= elem[:text] %>
+      </div>
+      
+    </li>
+  <% end %>
+</ul>

@@ -1,0 +1,86 @@
+.IconList {
+  display: flex;
+  list-style: none;
+  gap: var(--spacing-unit);
+}
+
+.IconList--vertical {
+  flex-direction: column;
+  margin-top: var(--spacing-unit-l);
+  gap: var(--spacing-unit-xl) var(--spacing-unit);
+}
+
+.IconList--row-3 {
+  flex-wrap: wrap;
+  gap: 0 var(--spacing-unit);
+}
+
+.IconList-element {
+  display: flex;
+  flex-basis: 100%;
+  flex-direction: row;
+  align-items: center;
+
+  gap: var(--spacing-unit);
+
+  color: var(--color-text-light);
+  font-size: var(--font-size-s);
+  line-height: 1.6;
+}
+
+.IconList--row-3 .IconList-element {
+  flex: 1 0 30%;
+  gap: calc(2 / 3 * var(--spacing-unit));
+}
+
+.IconList--bold .IconList-element {
+  color: var(--color-text);
+  font-size: calc(0.9 * var(--font-size));
+  font-weight: 500;
+}
+
+.IconList--alternating .IconList-element {
+  gap: var(--spacing-unit-s) var(--spacing-unit-l);
+}
+
+.IconList--alternating .IconList-element:nth-child(even) {
+  flex-direction: row-reverse;
+}
+
+.IconList-icon {
+  position: relative;
+  flex: 0 0 30%;
+
+  display: flex;
+  align-items: center;
+}
+
+.IconList--alternating .IconList-icon::before {
+  content: url('/icon-background.svg');
+
+  position: absolute;
+  left: calc(0.1 * var(--spacing-unit-xl));
+  width: 100%;
+}
+
+.IconList--bordered .IconList-icon::before {
+  content: '';
+  position: absolute;
+
+  width: 100%;
+  padding-top: 100%;
+
+  border-radius: 50%;
+  box-shadow: inset 0px 0px 0px 1px var(--color-pink);
+}
+
+.IconList-title {
+  color: var(--color-text);
+  font-size: var(--font-size);
+  font-weight: 600;
+  margin-bottom: var(--spacing-unit-xs);
+}
+
+.IconList-icon > svg {
+  position: relative;
+}

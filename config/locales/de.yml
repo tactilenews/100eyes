@@ -68,16 +68,8 @@ de:
       message_template:
         one: Du hast eine neue Antwort.
         other: Du hast {count} neue Antworten.
-    steps:
-      steps:
-        - icon: r-chat
-          text: Stelle mit 100eyes eine Frage und sende sie mit einem Klick an 50 Menschen.
-        - icon: mobile-chat
-          text: Deine Frage erreicht die Empfänger per Telegram-Messenger oder eMail, je nachdem wie sie es wünschen.
-        - icon: bullet-list-68
-          text: 100eyes sammelt alle Antworten und stellt sie dir übersichtlich zur Auswertung dar.
-        - icon: app-services
-          text: Werte die Antworten mit Hilfe von 100eyes aus und komponiere deine Veröffentlichung.
+    onboarding_header:
+      byline: eine Dialog-Recherche von <a class="Link" href="https://tactile.news" target="_blank">tactile.news</a>
     onboarding_email_form:
       heading: Per E-Mail teilnehmen
       text: Geben Sie bitte unten Ihre Kontaktdaten ein, um Ihre Anmeldung abzuschließen.
@@ -150,6 +142,37 @@ de:
 
   dashboard:
     how_it_works: So funktioniert 100eyes
+    become_a_pioneer: Werden Sie zur Dialog-Pionier:in.
+    provided_technology: Wir stellen die Technologie.
+    how_it_works_list:
+      - icon: community
+        title: Community aufbauen
+        text: Finden Sie Ihr Mini Public. Laden Sie 50 Menschen oder mehr zum Dialog ein.
+      - icon: mail
+        title: Nachrichten versenden
+        text: Stellen Sie alle Fragen und senden diese mit einem Klick an viele Menschen gleichzeitig – direkt auf den Lieblingsmessenger.
+      - icon: chat-history
+        title: Antworten empfangen
+        text: 100eyes sammelt alle Antworten und stellt sie übersichtlich als Chatverlauf zur Verfügung.
+      - icon: user-connection
+        title: Antworten auswerten
+        text: Werten Sie die Antworten aus und machen Sie Programm am Puls der Nutzer:innen.
+      - icon: new-formats
+        title: Neue Formate entwicklen
+        text: Entwickeln Sie neue Formate dialog-getrieben, maßgeschneidert für neue Zielgruppen.
+    selling_points_list:
+      - icon: dsgvo
+        text: DSGVO konform
+      - icon: data-protection
+        text: Deutscher Datenschutz
+      - icon: billing
+        text: Faires modulares Preissystem
+      - icon: community
+        text: Kontakte & Inhalte  gehören Ihnen
+      - icon: support
+        text: Fixer persönlicher Support
+      - icon: download
+        text: Neue Features als Erste testen
 
   setting:
     setting:
@@ -329,9 +352,9 @@ de:
         help: Wähle eine kurze, einfache Formulierung. Beschreibe genau, welche Informationen du benötigst.
         placeholder: Gib hier deine Frage ein…
       tag_list:
-        label: Empfänger*innen einschränken
+        label: Empfänger:innen einschränken
         help: |
-          Wähle Tags, um den Kreis der Empfänger*innen deiner Frage einzuschränken.
+          Wähle Tags, um den Kreis der Empfänger:innen deiner Frage einzuschränken.
           Die Tags summieren sich: „Lehrer” und „Biologie” verschickt die Frage an alle Biologie-Lehrer, aber z.B. nicht an Mathe-Lehrer.
       hints:
         label: Hinweise anhängen
