@@ -8,7 +8,9 @@
       
       <div class="IconList-text">
         <% if elem[:title] %>
-          <div class="IconList-title"> <%= elem[:title] %> </div>
+          <%= c 'heading', tag: :h3, class: 'IconList-title' do %>
+            <%= elem[:title] %>
+          <% end %>
         <% end %>
         <%= elem[:text] %>
       </div>

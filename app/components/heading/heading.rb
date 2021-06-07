@@ -15,7 +15,7 @@ module Heading
     end
 
     def call
-      content_tag(tag, content, class: class_names)
+      content_tag(tag, content, class: class_names, **attrs)
     end
 
     private
