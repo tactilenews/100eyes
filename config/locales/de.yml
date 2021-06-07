@@ -172,7 +172,7 @@ de:
 
   dashboard:
     how_it_works: So funktioniert 100eyes
-    become_a_pioneer: Werden Sie zur Dialog-Pionier*in.  
+    become_a_pioneer: Werden Sie zur Dialog-Pionier:in.
     provided_technology: Wir stellen die Technologie.
 
   setting:
@@ -353,9 +353,9 @@ de:
         help: Wähle eine kurze, einfache Formulierung. Beschreibe genau, welche Informationen du benötigst.
         placeholder: Gib hier deine Frage ein…
       tag_list:
-        label: Empfänger*innen einschränken
+        label: Empfänger:innen einschränken
         help: |
-          Wähle Tags, um den Kreis der Empfänger*innen deiner Frage einzuschränken.
+          Wähle Tags, um den Kreis der Empfänger:innen deiner Frage einzuschränken.
           Die Tags summieren sich: „Lehrer” und „Biologie” verschickt die Frage an alle Biologie-Lehrer, aber z.B. nicht an Mathe-Lehrer.
       hints:
         label: Hinweise anhängen
