@@ -30,6 +30,7 @@
 
 .IconList--row-3 .IconList-element {
   flex: 1 0 30%;
+  gap: calc(2 / 3 * var(--spacing-unit));
 }
 
 .IconList--bold .IconList-element {
