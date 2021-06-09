@@ -13,9 +13,23 @@ module PostmarkAdapter
       with(message: message).message_email.deliver_later
     end
 
+    def self.send_welcome_message!(contributor)
+      return unless contributor&.email
+
+      with(contributor: contributor).welcome_email.deliver_later
+    end
+
     def bounce_email
       @text = params[:text]
       mail(params[:mail])
+    end
+
+    def welcome_email
+      contributor = params[:contributor]
+      subject = Setting.onboarding_success_heading
+      message_stream = Setting.postmark_transactional_stream
+      @text = [subject, Setting.onboarding_success_text].join("\n")
+      mail(to: contributor.email, subject: subject, message_stream: message_stream)
     end
 
     def message_email

@@ -25,6 +25,27 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
         it { should include('This is the @text') }
       end
     end
+
+    describe '#welcome_email' do
+      before do
+        Setting.onboarding_success_heading = 'Welcome new contributor!'
+        Setting.onboarding_success_text = 'You onboarded successfully.'
+      end
+      let(:contributor) { create(:contributor, email: 'contributor@example.org') }
+      let(:welcome_email) do
+        described_class.with(contributor: contributor).welcome_email
+      end
+
+      describe 'subject' do
+        subject { welcome_email.subject }
+        it { should eq('Welcome new contributor!') }
+      end
+
+      describe 'body' do
+        subject { welcome_email.text_part.body.decoded }
+        it { should include("Welcome new contributor!\r\nYou onboarded successfully.") }
+      end
+    end
   end
 
   describe 'with(message: message)' do

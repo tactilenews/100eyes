@@ -505,18 +505,19 @@ RSpec.describe Contributor, type: :model do
   end
 
   describe '.send_welcome_message!', telegram_bot: :rails do
+    let(:contributor) { create(:contributor, telegram_id: nil, email: nil, threema_id: nil) }
     before do
       Setting.onboarding_success_heading = 'Welcome new contributor!'
       Setting.onboarding_success_text = 'You onboarded successfully.'
     end
-    subject { -> { perform_enqueued_jobs { contributor.send_welcome_message! } } }
+    subject { -> { contributor.send_welcome_message! } }
 
     it 'does nothing' do
-      pending 'to be implemented'
-      fail
+      expect { subject.call }.not_to have_enqueued_job.on_queue('default')
     end
 
     context 'signed up via telegram' do
+      subject { -> { perform_enqueued_jobs { contributor.send_welcome_message! } } }
       let(:contributor) { create(:contributor, telegram_id: nil, telegram_onboarding_token: 'ABCDEF') }
       it 'sends no message' do
         expect(Telegram.bot).not_to receive(:send_message)
@@ -526,7 +527,7 @@ RSpec.describe Contributor, type: :model do
       context 'and connected' do
         let(:contributor) { create(:contributor, telegram_id: 4711, telegram_onboarding_token: 'ABCDEF') }
         it 'sends welcome message' do
-          message =  "<b>Welcome new contributor!</b>\nYou onboarded successfully."
+          message = "<b>Welcome new contributor!</b>\nYou onboarded successfully."
           args = { chat_id: 4711, text: message, parse_mode: :HTML }
           expect(Telegram.bot).to receive(:send_message).with(args)
           subject.call
@@ -537,14 +538,22 @@ RSpec.describe Contributor, type: :model do
     context 'signed up via threema' do
       it 'sends threema welcome message' do
         pending 'to be implemented'
-        fail
+        raise
       end
     end
 
     context 'signed up via email' do
-      it 'sends welcome email' do
-        pending 'to be implemented'
-        fail
+      let(:contributor) { create(:contributor, email: 'text@example.org') }
+      it 'enqueues a Mailer' do
+        expect { subject.call }.to have_enqueued_job.on_queue('default').with(
+          'PostmarkAdapter::Outbound',
+          'welcome_email',
+          'deliver_now',
+          {
+            params: { contributor: contributor },
+            args: []
+          }
+        )
       end
     end
   end
