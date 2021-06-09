@@ -13,7 +13,7 @@ RSpec.describe ThreemaAdapter::Outbound do
   end
 
   describe '#perform' do
-    subject { adapter.perform(message) }
+    subject { adapter.perform(text: message.text, recipient: message.recipient) }
 
     it 'sends the message' do
       expect(threema).to receive(:send).with({ type: :text, threema_id: contributor.threema_id, text: message.text })

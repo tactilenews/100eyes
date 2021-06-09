@@ -511,41 +511,30 @@ RSpec.describe Contributor, type: :model do
       Setting.onboarding_success_text = 'You onboarded successfully.'
     end
     subject { -> { contributor.send_welcome_message! } }
+    let(:expected_job_args) { { recipient: contributor, text: "Welcome new contributor!\nYou onboarded successfully." } }
 
-    it 'does nothing' do
-      expect { subject.call }.not_to have_enqueued_job.on_queue('default')
-    end
+    it { should_not have_enqueued_job }
 
     context 'signed up via telegram' do
-      subject { -> { perform_enqueued_jobs { contributor.send_welcome_message! } } }
-      let(:contributor) { create(:contributor, telegram_id: nil, telegram_onboarding_token: 'ABCDEF') }
-      it 'sends no message' do
-        expect(Telegram.bot).not_to receive(:send_message)
-        subject.call
-      end
+      let(:expected_job_args) { { recipient: contributor, text: "<b>Welcome new contributor!</b>\nYou onboarded successfully." } }
+      let(:contributor) { create(:contributor, telegram_id: nil, telegram_onboarding_token: 'ABCDEF', email: nil) }
+      it { should_not have_enqueued_job }
 
       context 'and connected' do
-        let(:contributor) { create(:contributor, telegram_id: 4711, telegram_onboarding_token: 'ABCDEF') }
-        it 'sends welcome message' do
-          message = "<b>Welcome new contributor!</b>\nYou onboarded successfully."
-          args = { chat_id: 4711, text: message, parse_mode: :HTML }
-          expect(Telegram.bot).to receive(:send_message).with(args)
-          subject.call
-        end
+        let(:contributor) { create(:contributor, telegram_id: 4711, telegram_onboarding_token: 'ABCDEF', email: nil) }
+        it { should enqueue_job(TelegramAdapter::Outbound).with(expected_job_args) }
       end
     end
 
     context 'signed up via threema' do
-      it 'sends threema welcome message' do
-        pending 'to be implemented'
-        raise
-      end
+      let(:contributor) { create(:contributor, threema_id: 'AAAAAAAA', email: nil, telegram_id: nil) }
+      it { should enqueue_job(ThreemaAdapter::Outbound).with(expected_job_args) }
     end
 
     context 'signed up via email' do
       let(:contributor) { create(:contributor, email: 'text@example.org') }
-      it 'enqueues a Mailer' do
-        expect { subject.call }.to have_enqueued_job.on_queue('default').with(
+      it {
+        should enqueue_job.with(
           'PostmarkAdapter::Outbound',
           'welcome_email',
           'deliver_now',
@@ -554,7 +543,7 @@ RSpec.describe Contributor, type: :model do
             args: []
           }
         )
-      end
+      }
     end
   end
 end
