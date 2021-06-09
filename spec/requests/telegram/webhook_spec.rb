@@ -13,8 +13,9 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
 
   describe '#start!' do
     let(:message) { '/start' }
-    let(:message_options) { { from: { id: 9876 } } }
-    subject { -> { dispatch_message message, message_options } }
+    let(:chat_id) { 9876 }
+    let(:message_options) { { from: { id: chat_id } } }
+    subject { -> { perform_enqueued_jobs { dispatch_message message, message_options } } }
     it { should_not(change { Message.count }) }
     it { should respond_with_message 'Who are you?' }
 
@@ -70,12 +71,13 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
   describe '#message' do
     let(:message) { 'Hello Bot!' }
     let(:message_options) { { from: { id: 'whoami' } } }
-    subject { -> { dispatch_message message, message_options } }
+    subject { -> { perform_enqueued_jobs { dispatch_message message, message_options } } }
     it { is_expected.to respond_with_message 'Who are you?' }
 
     context 'from a contributor' do
       before { contributor }
-      let(:message_options) { { from: { id: 12_345 } } }
+      let(:chat_id) { 12_345 }
+      let(:message_options) { { from: { id: chat_id } } }
 
       context 'who just signed up' do
         let(:contributor) { create(:contributor, telegram_id: nil, telegram_onboarding_token: 'GHIJKL') }
