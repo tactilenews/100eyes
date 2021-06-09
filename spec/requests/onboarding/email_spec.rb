@@ -38,6 +38,18 @@ RSpec.describe 'Onboarding::Email', type: :request do
       )
     end
 
+    it {
+      should enqueue_job(ActionMailer::MailDeliveryJob).with(
+        'PostmarkAdapter::Outbound',
+        'welcome_email',
+        'deliver_now',
+        {
+          params: anything,
+          args: []
+        }
+      )
+    }
+
     it 'redirects to success page' do
       subject.call
       expect(response).to redirect_to onboarding_success_path

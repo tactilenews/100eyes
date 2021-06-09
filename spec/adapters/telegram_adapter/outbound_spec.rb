@@ -11,6 +11,25 @@ RSpec.describe TelegramAdapter::Outbound do
     let(:contributor) { create(:contributor, telegram_id: 4) }
     let(:expected_message) { { chat_id: 4, text: 'Forgot to ask: How are you?', parse_mode: :HTML } }
 
+    describe '::send!' do
+      before { message } # we don't count the extra ::send here
+      subject { -> { described_class.send!(message) } }
+      it { should enqueue_job(described_class) }
+      context 'contributor has no telegram_id' do
+        let(:contributor) { create(:contributor, telegram_id: nil, email: nil) }
+        it { should_not enqueue_job(described_class) }
+      end
+    end
+
+    describe '::send_welcome_message!' do
+      subject { -> { described_class.send_welcome_message!(contributor) } }
+      it { should enqueue_job(described_class) }
+      context 'contributor has no telegram_id' do
+        let(:contributor) { create(:contributor, telegram_id: nil, email: nil) }
+        it { should_not enqueue_job(described_class) }
+      end
+    end
+
     it 'sends the message with TelegramBot' do
       expect(Telegram.bot).to receive(:send_message).with(expected_message)
 
