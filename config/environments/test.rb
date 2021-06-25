@@ -8,16 +8,6 @@
 Telegram.reset_bots
 Telegram::Bot::ClientStub.stub_all!
 
-# some specs expect these
-ENV['ONBOARDING_TOKEN'] = 'ONBOARDING_TOKEN'
-ENV['TELEGRAM_BOT_API_KEY'] = 'TOKEN'
-ENV['TELEGRAM_BOT_USERNAME'] = 'TestingBot'
-ENV['HUNDRED_EYES_PROJECT_NAME'] = 'TestingProject'
-ENV['EMAIL_FROM_ADDRESS'] = '100eyes-test-account@example.org'
-ENV['THREEMARB_API_IDENTITY'] = '*100EYES'
-ENV['THREEMARB_API_SECRET'] = 'ThreemaSecret'
-ENV['THREEMARB_PRIVATE'] = 'ThreemaPrivateKey'
-
 require_relative '../../app/models/setting'
 
 Rails.application.configure do

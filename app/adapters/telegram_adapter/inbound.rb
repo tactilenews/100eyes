@@ -33,6 +33,8 @@ module TelegramAdapter
       @sender = initialize_sender(telegram_message)
       return unless @sender
 
+      @sender.avatar_url = avatar_url(@sender) unless @sender.avatar.attached?
+
       @message = initialize_message(telegram_message)
       if telegram_message.keys.any? { |key| UNKNOWN_CONTENT_KEYS.include?(key) }
         @message.unknown_content = true
@@ -46,6 +48,17 @@ module TelegramAdapter
       end
 
       yield(@message) if block_given?
+    end
+
+    def avatar_url(contributor)
+      return unless contributor.telegram_id
+
+      profile_photos = Telegram.bot.get_user_profile_photos(user_id: contributor.telegram_id, limit: 1).with_indifferent_access
+      first_photo = profile_photos.dig(:result, :photos, 0)
+      return unless first_photo
+
+      largest_size = first_photo.max { |a, b| a[:file_size] <=> b[:file_size] }
+      file_url(largest_size)
     end
 
     private
@@ -96,7 +109,7 @@ module TelegramAdapter
 
       telegram_file = telegram_message[:photo].max { |a, b| a[:file_size] <=> b[:file_size] }
       photo = Photo.new
-      remote_file_location = retrieve_message_type_and_attach(telegram_file)
+      remote_file_location = file_url(telegram_file)
       photo.attachment.attach(io: remote_file_location.open, filename: File.basename(remote_file_location.path))
       [photo]
     end
@@ -105,19 +118,15 @@ module TelegramAdapter
       return nil unless telegram_message[:voice]
 
       file = Message::File.new
-      remote_file_location = retrieve_message_type_and_attach(telegram_message[:voice])
+      remote_file_location = file_url(telegram_message[:voice])
       file.attachment.attach(io: remote_file_location.open, filename: File.basename(remote_file_location.path))
       file
     end
 
-    def retrieve_message_type_and_attach(telegram_file)
-      bot_token = "bot#{Telegram.bot.token}"
-      file_id = telegram_file[:file_id]
-      uri = URI("https://api.telegram.org/#{bot_token}/getFile")
-      uri.query = URI.encode_www_form({ file_id: file_id })
-      response = JSON.parse(uri.open.read)
-      file_path = response.dig('result', 'file_path')
-      URI("https://api.telegram.org/file/#{bot_token}/#{file_path}")
+    def file_url(telegram_file)
+      file = Telegram.bot.get_file(file_id: telegram_file[:file_id]).with_indifferent_access
+      file_path = file.dig(:result, :file_path)
+      URI("https://api.telegram.org/file/bot#{Telegram.bot.token}/#{file_path}")
     end
   end
 end

@@ -27,7 +27,7 @@ class Setting < RailsSettings::Base
   field :telegram_bot_username, readonly: true, default: ENV['TELEGRAM_BOT_USERNAME']
 
   field :inbound_email_password, readonly: true, default: ENV['RAILS_INBOUND_EMAIL_PASSWORD']
-  field :email_from_address, readonly: true, default: ENV['EMAIL_FROM_ADDRESS']
+  field :email_from_address, readonly: true, default: ENV['EMAIL_FROM_ADDRESS'] || 'redaktion@localhost'
   field :postmark_api_token, readonly: true, default: ENV['POSTMARK_API_TOKEN']
   field :postmark_broadcasts_stream, readonly: true, default: ENV['POSTMARK_BROADCASTS_STREAM'] || 'broadcasts'
   field :postmark_transactional_stream, readonly: true, default: ENV['POSTMARK_TRANSACTIONAL_STREAM'] || 'outbound'

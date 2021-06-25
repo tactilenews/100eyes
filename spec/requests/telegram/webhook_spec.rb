@@ -22,7 +22,7 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
       before { contributor }
 
       context 'who just signed up' do
-        let(:contributor) { create(:contributor, telegram_id: nil, telegram_onboarding_token: 'ABCDEF') }
+        let(:contributor) { create(:contributor, :with_an_avatar, telegram_id: nil, telegram_onboarding_token: 'ABCDEF') }
         it { should respond_with_message 'Who are you?' }
         it { should_not(change { Message.count }) }
         context 'and sends the right telegram_onboarding_token' do
@@ -33,14 +33,14 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
       end
 
       context 'who is already connected but not the person sending the telegram message' do
-        let(:contributor) { create(:contributor, telegram_id: 9876, telegram_onboarding_token: 'ABCDEF') }
+        let(:contributor) { create(:contributor, :with_an_avatar, telegram_id: 9876, telegram_onboarding_token: 'ABCDEF') }
         let(:message_options) { { from: { id: 9877 } } }
         it { should respond_with_message 'Who are you?' }
         it { should_not(change { Contributor.first.telegram_id }) }
       end
 
       context 'with a matching `telegram_id`' do
-        let(:contributor) { create(:contributor, telegram_id: 9876) }
+        let(:contributor) { create(:contributor, :with_an_avatar, telegram_id: 9876) }
         it { should respond_with_message "<b>Welcome new contributor!</b>\n" }
         it { should_not(change(Contributor, :count)) }
 
@@ -78,7 +78,7 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
       let(:message_options) { { from: { id: 12_345 } } }
 
       context 'who just signed up' do
-        let(:contributor) { create(:contributor, telegram_id: nil, telegram_onboarding_token: 'GHIJKL') }
+        let(:contributor) { create(:contributor, :with_an_avatar, telegram_id: nil, telegram_onboarding_token: 'GHIJKL') }
         it { should respond_with_message 'Who are you?' }
 
         context 'and sends telegram_onboarding_token' do
@@ -94,7 +94,7 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
 
           context 'even if other contributors are not connected yet' do
             before { other_contributor }
-            let(:other_contributor) { create(:contributor, telegram_id: nil, telegram_onboarding_token: 'XYZXYZ') }
+            let(:other_contributor) { create(:contributor, :with_an_avatar, telegram_id: nil, telegram_onboarding_token: 'XYZXYZ') }
             it { should(change { contributor.reload.telegram_id }.from(nil).to(12_345)) }
             it { should_not(change { other_contributor.reload.telegram_id }) }
           end
@@ -102,7 +102,7 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
       end
 
       context 'who is already connected' do
-        let(:contributor) { create(:contributor, telegram_id: 12_345) }
+        let(:contributor) { create(:contributor, :with_an_avatar, telegram_id: 12_345) }
         it { should_not(change { Message.count }) }
 
         context 'given a recent request' do

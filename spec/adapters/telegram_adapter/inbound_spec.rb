@@ -5,8 +5,47 @@ require 'telegram/bot/rspec/integration/rails'
 
 RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
   let(:adapter) { described_class.new }
-  before { create(:contributor, telegram_id: 47) }
-  let(:telegram_message) { { 'chat' => { 'id' => 42 }, 'from' => { 'id' => 47 } } }
+  let(:contributor) { create(:contributor, :with_an_avatar, telegram_id: telegram_id) }
+  let(:telegram_id) { 146_338_764 }
+  let(:telegram_message) { { 'chat' => { 'id' => 42 }, 'from' => { 'id' => telegram_id } } }
+  before { contributor }
+
+  before(:all) do
+    Telegram::Bot::ClientStub.stub_all!(false)
+  end
+
+  before do
+    config = {
+      # must be the filtered values from /spec/vcr_setup.rb
+      token: ENV['TELEGRAM_BOT_API_KEY'] || 'TELEGRAM_BOT_API_KEY',
+      username: ENV['TELEGRAM_BOT_USERNAME'] || 'TELEGRAM_BOT_USERNAME'
+    }
+    bot = Telegram::Bot::Client.wrap(config, id: :default)
+    allow(Telegram).to receive(:bot).and_return(bot)
+  end
+
+  after(:all) do
+    Telegram::Bot::ClientStub.stub_all!(true)
+  end
+
+  describe '#avatar_url', vcr: { cassette_name: :avatar_url_and_download_file } do
+    subject { adapter.avatar_url(contributor) }
+    let(:expected_url) { Regexp.new([Regexp.quote('https://api.telegram.org/file/bot'), '.*', Regexp.quote('/photos/file_7.jpg')].join) }
+    specify { expect(subject.to_s).to match(expected_url) }
+
+    context 'of a contributor without `telegram_id`' do
+      let(:telegram_id) { nil }
+      it { is_expected.to be(nil) }
+    end
+
+    context 'if contributor has no profile photo' do
+      before do
+        mock_response = { result: { photos: [] } }
+        allow(Telegram.bot).to receive(:get_user_profile_photos).and_return(mock_response)
+      end
+      it { is_expected.to be(nil) }
+    end
+  end
 
   describe '#consume' do
     let(:message) do
@@ -51,7 +90,6 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
       end
 
       describe 'given a voice message', vcr: { cassette_name: :voice_message } do
-        before { create(:contributor, telegram_id: 875_171_743) }
         let(:telegram_message) { message_with_voice }
 
         describe 'attachment' do
@@ -79,7 +117,6 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
       end
 
       describe 'given a message with multiple photos', vcr: { cassette_name: :photo_with_image } do
-        before { create(:contributor, telegram_id: 875_171_743) }
         let(:telegram_message) { message_with_photo }
 
         it { should_not be_empty }
@@ -87,7 +124,7 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
 
         it 'chooses the largest image' do
           photo = subject.first
-          expect(photo.attachment.blob.byte_size).to eq(134_866)
+          expect(photo.attachment.blob.byte_size).to eq(20_852)
         end
 
         describe 'assigning a request and calling #save! on the message' do
@@ -115,8 +152,6 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
     describe '|message|unknown_content' do
       subject { message.unknown_content }
       describe 'given a telegram api message' do
-        before { create(:contributor, telegram_id: 875_171_743) }
-
         describe 'with a photo', vcr: { cassette_name: :photo_with_image } do
           let(:telegram_message) { message_with_photo }
           it { should be(false) }
@@ -137,76 +172,82 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
     describe '#sender' do
       subject { message.sender }
 
-      context 'known sender, but outdated contributor record' do
-        let(:telegram_message) { { 'chat' => { 'id' => 42 }, 'from' => { 'id' => contributor.telegram_id, 'username' => 'alice' } } }
-        let(:contributor) { create(:contributor, telegram_id: 42, username: 'bob') }
+      context 'contributor exists' do
+        context 'but missing `avatar_url`', vcr: { cassette_name: :avatar_url_and_download_file } do
+          let(:contributor) { create(:contributor, telegram_id: telegram_id) }
+          let(:telegram_message) { { 'chat' => { 'id' => 42 }, 'from' => { 'id' => contributor.telegram_id } } }
+          it { expect { subject.save! }.to(change { contributor.reload.avatar.attached? }.from(false).to(true)) }
+        end
 
-        it { expect { subject.save! }.to(change { contributor.reload.username }.from('bob').to('alice')) }
+        context 'but `username` is outdated' do
+          let(:contributor) { create(:contributor, :with_an_avatar, telegram_id: 42, username: 'bob') }
+          let(:telegram_message) { { 'chat' => { 'id' => 42 }, 'from' => { 'id' => contributor.telegram_id, 'username' => 'alice' } } }
+
+          it { expect { subject.save! }.to(change { contributor.reload.username }.from('bob').to('alice')) }
+        end
       end
     end
   end
 
   let(:message_with_voice) do
-    { 'message_id' => 44,
+    { 'message_id' => 317,
       'from' =>
-    { 'id' => 875_171_743,
-      'is_bot' => false,
-      'first_name' => 'Matthew',
-      'last_name' => 'Rider',
-      'username' => 'matthew_rider',
-      'language_code' => 'en' },
+  { 'id' => 146_338_764,
+    'is_bot' => false,
+    'first_name' => 'Robert',
+    'last_name' => 'Schäfer',
+    'username' => 'roschaefer',
+    'language_code' => 'en' },
       'chat' =>
-    { 'id' => 875_171_743,
-      'first_name' => 'Matthew',
-      'last_name' => 'Rider',
-      'username' => 'matthew_rider',
-      'type' => 'private' },
-      'date' => 1_605_027_501,
+  { 'id' => 146_338_764,
+    'first_name' => 'Robert',
+    'last_name' => 'Schäfer',
+    'username' => 'roschaefer',
+    'type' => 'private' },
+      'date' => 1_622_727_630,
       'voice' =>
-    { 'duration' => 4,
-      'mime_type' => 'audio/ogg',
-      'file_id' =>
-    'AwACAgIAAxkBAAMsX6rGrbnRVqtmAdt2vtmhT4_r1-MAAgYLAAIHD1hJ1hEoFDaF0TUeBA',
-      'file_unique_id' => 'AgADBgsAAgcPWEk',
-      'file_size' => 15_988 } }
+  { 'duration' => 2,
+    'mime_type' => 'audio/ogg',
+    'file_id' =>
+    'AwACAgIAAxkBAAIBPWC4287e4Mfa9WSthwQlfrNg3GzYAAInDwACn6XJSb3eHU7xTx8MHwQ',
+    'file_unique_id' => 'AgADJw8AAp-lyUk',
+    'file_size' => 15_578 } }
   end
 
   let(:message_with_photo) do
-    { 'message_id' => 48,
+    { 'message_id' => 313,
       'from' =>
-    { 'id' => 875_171_743,
-      'is_bot' => false,
-      'first_name' => 'Matthew',
-      'last_name' => 'Rider',
-      'username' => 'matthew_rider',
-      'language_code' => 'en' },
+  { 'id' => 146_338_764,
+    'is_bot' => false,
+    'first_name' => 'Robert',
+    'last_name' => 'Schäfer',
+    'username' => 'roschaefer',
+    'language_code' => 'en' },
       'chat' =>
-    { 'id' => 875_171_743,
-      'first_name' => 'Matthew',
-      'last_name' => 'Rider',
-      'username' => 'matthew_rider',
-      'type' => 'private' },
-      'date' => 1_605_028_446,
-      'media_group_id' => '12840227575408058',
+  { 'id' => 146_338_764,
+    'first_name' => 'Robert',
+    'last_name' => 'Schäfer',
+    'username' => 'roschaefer',
+    'type' => 'private' },
+      'date' => 1_622_727_327,
       'photo' =>
-     [{ 'file_id' =>
-     'AgACAgIAAxkBAAMwX6rKXsVDydXIHrEryL-TGemMtlcAAiuxMRsHD1hJKApaFpocC4skq-uXLgADAQADAgADbQAD6dkCAAEeBA',
-        'file_unique_id' => 'AQADJKvrly4AA-nZAgAB',
-        'file_size' => 17_617,
-        'width' => 320,
-        'height' => 240 },
-      { 'file_id' =>
-      'AgACAgIAAxkBAAMwX6rKXsVDydXIHrEryL-TGemMtlcAAiuxMRsHD1hJKApaFpocC4skq-uXLgADAQADAgADeAAD6tkCAAEeBA',
-        'file_unique_id' => 'AQADJKvrly4AA-rZAgAB',
-        'file_size' => 80_847,
-        'width' => 800,
-        'height' => 600 },
-      { 'file_id' =>
-      'AgACAgIAAxkBAAMwX6rKXsVDydXIHrEryL-TGemMtlcAAiuxMRsHD1hJKApaFpocC4skq-uXLgADAQADAgADeQAD59kCAAEeBA',
-        'file_unique_id' =>
-      'AQADJKvrly4AA-fZAgAB',
-        'file_size' => 134_866,
-        'width' => 1280,
-        'height' => 960 }] }
+  [{ 'file_id' =>
+     'AgACAgIAAxkBAAIBOWC42p5o6Tg3wgtKpdoxUansjDGjAAKstDEbn6XJSRgNrAl8s3FxoaEdpC4AAwEAAwIAA3MAAyPoAQABHwQ',
+     'file_unique_id' => 'AQADoaEdpC4AAyPoAQAB',
+     'file_size' => 1460,
+     'width' => 90,
+     'height' => 90 },
+   { 'file_id' =>
+     'AgACAgIAAxkBAAIBOWC42p5o6Tg3wgtKpdoxUansjDGjAAKstDEbn6XJSRgNrAl8s3FxoaEdpC4AAwEAAwIAA20AAyToAQABHwQ',
+     'file_unique_id' => 'AQADoaEdpC4AAyToAQAB',
+     'file_size' => 15_028,
+     'width' => 320,
+     'height' => 320 },
+   { 'file_id' =>
+     'AgACAgIAAxkBAAIBOWC42p5o6Tg3wgtKpdoxUansjDGjAAKstDEbn6XJSRgNrAl8s3FxoaEdpC4AAwEAAwIAA3gAAyXoAQABHwQ',
+     'file_unique_id' => 'AQADoaEdpC4AAyXoAQAB',
+     'file_size' => 20_852,
+     'width' => 460,
+     'height' => 460 }] }
   end
 end
