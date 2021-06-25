@@ -16,6 +16,7 @@ module Field
           label: label,
           help: help,
           errors: errors,
+          styles: styles,
           **attrs
         }) do
         content

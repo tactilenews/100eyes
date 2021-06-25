@@ -6,7 +6,7 @@
         <%= t 'setting.form.groups.project_settings' %>
       <% end %>
 
-      <%= c 'field', object: setting, value: Setting.project_name, id: :project_name do |field| %>
+      <%= c 'field', object: setting, value: Setting.project_name, attr: :project_name do |field| %>
         <%= c 'input', field.input_defaults %>
       <% end %>
     <% end %>
@@ -16,27 +16,27 @@
         <%= t 'setting.form.groups.onboarding' %>
       <% end %>
 
-      <%= c 'field', object: setting, value: Setting.onboarding_logo, id: :onboarding_logo do |field| %>
+      <%= c 'field', object: setting, value: Setting.onboarding_logo, attr: :onboarding_logo do |field| %>
         <%= c 'input', field.input_defaults.merge(type: :url) %>
       <% end %>
 
-      <%= c 'field', object: setting, value: Setting.onboarding_byline, id: :onboarding_byline do |field| %>
+      <%= c 'field', object: setting, value: Setting.onboarding_byline, attr: :onboarding_byline do |field| %>
         <%= c 'input', field.input_defaults %>
       <% end %>
 
-      <%= c 'field', object: setting, value: Setting.onboarding_hero, id: :onboarding_hero do |field| %>
+      <%= c 'field', object: setting, value: Setting.onboarding_hero, attr: :onboarding_hero do |field| %>
         <%= c 'input', field.input_defaults.merge(type: :url) %>
       <% end %>
 
-      <%= c 'field', object: setting, value: Setting.onboarding_title, id: :onboarding_title do |field| %>
+      <%= c 'field', object: setting, value: Setting.onboarding_title, attr: :onboarding_title do |field| %>
         <%= c 'input', field.input_defaults %>
       <% end %>
 
-      <%= c 'field', object: setting, value: Setting.onboarding_page, id: :onboarding_page do |field| %>
+      <%= c 'field', object: setting, value: Setting.onboarding_page, attr: :onboarding_page do |field| %>
         <%= c 'textarea', field.input_defaults %>
       <% end %>
 
-      <%= c 'field', object: setting, value: Setting.onboarding_data_protection_link, id: :onboarding_data_protection_link do |field| %>
+      <%= c 'field', object: setting, value: Setting.onboarding_data_protection_link, attr: :onboarding_data_protection_link do |field| %>
         <%= c 'input', field.input_defaults.merge(type: :url) %>
       <% end %>
     <% end %>
@@ -46,11 +46,11 @@
         <%= t 'setting.form.groups.onboarding_success' %>
       <% end %>
 
-      <%= c 'field', object: setting, value: Setting.onboarding_success_heading, id: :onboarding_success_heading do |field| %>
+      <%= c 'field', object: setting, value: Setting.onboarding_success_heading, attr: :onboarding_success_heading do |field| %>
         <%= c 'input', field.input_defaults %>
       <% end %>
 
-      <%= c 'field', object: setting, value: Setting.onboarding_success_text, id: :onboarding_success_text do |field| %>
+      <%= c 'field', object: setting, value: Setting.onboarding_success_text, attr: :onboarding_success_text do |field| %>
         <%= c 'textarea', field.input_defaults %>
       <% end %>
     <% end %>
@@ -60,11 +60,11 @@
         <%= t 'setting.form.groups.onboarding_unauthorized' %>
       <% end %>
 
-      <%= c 'field', object: setting, value: Setting.onboarding_unauthorized_heading, id: :onboarding_unauthorized_heading do |field| %>
+      <%= c 'field', object: setting, value: Setting.onboarding_unauthorized_heading, attr: :onboarding_unauthorized_heading do |field| %>
         <%= c 'input', field.input_defaults %>
       <% end %>
 
-      <%= c 'field', object: setting, value: Setting.onboarding_unauthorized_text, id: :onboarding_unauthorized_text do |field| %>
+      <%= c 'field', object: setting, value: Setting.onboarding_unauthorized_text, attr: :onboarding_unauthorized_text do |field| %>
         <%= c 'textarea', field.input_defaults %>
       <% end %>
     <% end %>
@@ -74,11 +74,11 @@
         <%= t 'setting.form.groups.telegram' %>
       <% end %>
 
-      <%= c 'field', object: setting, value: Setting.telegram_unknown_content_message, id: :telegram_unknown_content_message do |field| %>
+      <%= c 'field', object: setting, value: Setting.telegram_unknown_content_message, attr: :telegram_unknown_content_message do |field| %>
         <%= c 'textarea', field.input_defaults %>
       <% end %>
 
-      <%= c 'field', object: setting, value: Setting.telegram_contributor_not_found_message, id: :telegram_contributor_not_found_message do |field| %>
+      <%= c 'field', object: setting, value: Setting.telegram_contributor_not_found_message, attr: :telegram_contributor_not_found_message do |field| %>
         <%= c 'textarea', field.input_defaults %>
       <% end %>
     <% end %>
@@ -88,7 +88,7 @@
         <%= t 'setting.form.groups.threema' %>
       <% end %>
 
-      <%= c 'field', object: setting, value: Setting.threema_unknown_content_message, id: :threema_unknown_content_message do |field| %>
+      <%= c 'field', object: setting, value: Setting.threema_unknown_content_message, attr: :threema_unknown_content_message do |field| %>
         <%= c 'textarea', field.input_defaults %>
       <% end %>
     <% end %>

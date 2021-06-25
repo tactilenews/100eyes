@@ -302,7 +302,7 @@ de:
       username:
         label: Telegram
         placeholder: Kein Telegram-Nutzername hinterlegt
-        title: Du kannst den Nutzernamen nicht selbst ändern. Sobald %{value} das erste Mal via Telegram interagiert, erscheint hier der Nutzername.
+        help: Du kannst den Nutzernamen nicht selbst ändern. Sobald das Mitglied das erste Mal via Telegram interagiert, erscheint hier der Nutzername.
       threema_id:
         label: Threema ID
         placeholder: Keine Threema-ID hinterlegt
@@ -314,12 +314,11 @@ de:
         label: Tags
       note:
         label: Notiz
-        placeholder: Klicke hier, um eine Notiz zu %{value} zu hinterlegen
       active:
         label: Aktiv
       data_processing_consent:
         label: Einwilligung zur Datenverarbeitung
-        help: Ich habe die <a class="Link" href=%{value} target="_blank">Datenschutzerklärung</a> zur Kenntnis genommen und bin mit deren Geltung einverstanden. In unserer Datenschutzerklärung ist erklärt, welche Tools wir nutzen und mit welchen Firmen wir zusammenarbeiten.
+        help: Ich habe die <a class="Link" href=%{link} target="_blank">Datenschutzerklärung</a> zur Kenntnis genommen und bin mit deren Geltung einverstanden. In unserer Datenschutzerklärung ist erklärt, welche Tools wir nutzen und mit welchen Firmen wir zusammenarbeiten.
   request:
     request:
       one: Frage
