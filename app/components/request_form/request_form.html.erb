@@ -9,18 +9,18 @@
     <%= form_with(scope: :request, url: requests_path, local: true) do %>
       <%= c 'stack', space: :large do %>
 
-        <%= c 'field', object: @request, id: :title do |field| %>
+        <%= c 'field', object: @request, attr: :title do |field| %>
           <%= c 'input', field.input_defaults.merge(required: true) %>
         <% end %>
 
-        <%= c 'field', object: @request, id: :text do |field| %>
+        <%= c 'field', object: @request, attr: :text do |field| %>
           <%= c 'textarea', field.input_defaults.merge(
             required: true,
             data: { request_form_target: 'message' }
           ) %>
         <% end %>
 
-        <%= c 'field', object: @request, id: :tag_list do |field| %>
+        <%= c 'field', object: @request, attr: :tag_list do |field| %>
           <%= c 'stack', space: :small do %>
             <div class="Field-help" data-request-form-target="membersCount"></div>
 
