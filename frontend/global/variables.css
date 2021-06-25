@@ -72,8 +72,7 @@
 
   --input-border-width: 1px;
   --input-focus-shadow: 0 0 0 3px #007eff40;
-  --input-padding: calc(0.33 * var(--spacing-unit)) var(--spacing-unit-s);
-  --input-padding-s: var(--spacing-unit-xs) var(--spacing-unit-s);
+  --input-padding: var(--spacing-unit-xs) var(--spacing-unit-s);
   --input-margin: var(--spacing-unit-xs) 0;
 
   --soft-shadow: 0 0 3px -3px rgba(0, 0, 0, 0.1), 0 3px 15px rgba(0, 0, 0, 0.1);
