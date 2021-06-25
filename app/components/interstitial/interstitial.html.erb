@@ -1,5 +1,19 @@
-<%= c 'wrapper', style: :xnarrow, **attrs do %>
-  <%= c 'box' do %>
-    <%= content %>
+<main <%= attrs %>>
+  <%= c 'wrapper', style: :xnarrow do %>
+    <% if styles.include?(:stripes) %>
+
+     <%= c 'card' do %>
+       <%= c 'box', style: :large do %>
+         <%= content %>
+       <% end %>
+     <% end %>
+
+    <% else %>
+
+      <%= c 'box' do %>
+        <%= content %>
+      <% end %>
+
+    <% end %>
   <% end %>
-<% end %>
+</main>

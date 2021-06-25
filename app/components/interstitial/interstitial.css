@@ -6,3 +6,12 @@
   width: 100%;
   min-height: 100vh;
 }
+
+.Interstitial--stripes {
+  background-color: var(--color-gray-light);
+  background-image: linear-gradient(
+    to bottom,
+    var(--color-blue-dark) 45%,
+    transparent 45%
+  );
+}
