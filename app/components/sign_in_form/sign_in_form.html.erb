@@ -1,27 +1,46 @@
-<main class="SignInForm">
-  <%= c 'heading', tag: :h1 do %>
-    <%= t 'users.new.sign_in' %>
-  <% end %>
+<%= c 'interstitial', style: :stripes do %>
+  <%= c 'stack' do %>
+    <%= c 'heading', tag: :h1 do %>
+      <%= t 'users.new.sign_in' %>
+    <% end %>
 
-  <%= form_with(url: session_path, local: true, data: { turbo: false }) do |f| %>
-    <label for='session[email]'><%= t 'helpers.label.password.email' %></label>
-    <%= c 'input', type: :email, id: 'session[email]' %>
+    <%= form_with(url: session_path, local: true, data: { turbo: false }) do |f| %>
+      <%= c 'stack' do %>
+        <%= c('base_field',
+          id: 'session[email]',
+          label: I18n.t('helpers.label.password.email'),
+        ) do %>
+          <%= c 'input', type: :email, id: 'session[email]' %>
+        <% end %>
 
-    <label for='session[password]'><%= t 'helpers.label.session.password' %></label>
-    <%= c 'input', type: :password, id: 'session[password]' %>
+        <%= c('base_field',
+          id: 'session[password]',
+          label: I18n.t('helpers.label.session.password'),
+        ) do %>
+          <%= c 'input', type: :password, id: 'session[password]' %>
+        <% end %>
 
-    <label for='session[otp_code]'><%= t 'two_factor_authentication.otp_code.label' %></label>
-    <small><%= t 'two_factor_authentication.otp_code.help_text' %></small>
-    <%= c 'input', id: 'session[otp_code]' %>
+        <%= c('base_field',
+          id: 'session[otp_code]',
+          label: I18n.t('two_factor_authentication.otp_code.label'),
+          help: 'Der Code wird dir in der Authentifizierungs-App auf deinem Smartphone angezeigt.',
+        ) do %>
+          <%= c 'input', id: 'session[otp_code]' %>
+        <% end %>
 
-    <%= c 'button', type: 'submit', label: I18n.t('helpers.submit.session.submit') %>
-  <% end %>
-  <footer>
-    <p>
-      <%= t 'sessions.form.forgot_password' %>
-      <%= link_to new_password_path, class: "Link SignInForm-password-reset-link" do %>
-        <%= t 'sessions.form.link_text' %>
+        <%= c 'button',
+          type: 'submit',
+          label: I18n.t('helpers.submit.session.submit'),
+          styles: [:primary, :block]
+        %>
       <% end %>
+    <% end %>
+
+    <p class="text-small text-light text-center">
+      <a class="Link" href="<%= new_password_path %>">
+        <%= t 'sessions.form.forgot_password' %>
+      </a>
     </p>
-  </footer>
-</main>
+
+  <% end %>
+<% end %>

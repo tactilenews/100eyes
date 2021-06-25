@@ -2,7 +2,7 @@
 
 module PasswordResetForm
   class PasswordResetForm < ApplicationComponent
-    def initialize(user: nil)
+    def initialize(user:)
       super
 
       @user = user
@@ -11,11 +11,5 @@ module PasswordResetForm
     private
 
     attr_reader :user
-
-    def help
-      # rubocop:disable Rails/OutputSafety
-      I18n.t('helpers.hint.password_reset.password')&.html_safe
-      # rubocop:enable Rails/OutputSafety
-    end
   end
 end
