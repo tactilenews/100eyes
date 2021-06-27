@@ -37,7 +37,10 @@ class ContributorsController < ApplicationController
   end
 
   def update
+    @contributors = Contributor.with_attached_avatar
+
     @contributor.editor_guarantees_data_consent = true
+
     if @contributor.update(contributor_params)
       redirect_to contributor_url, flash: { success: I18n.t('contributor.saved', name: @contributor.name) }
     else
