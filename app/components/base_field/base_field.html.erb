@@ -1,0 +1,22 @@
+<div <%= attrs %>>
+  <div class="BaseField-textWrapper">
+    <label class="BaseField-labelText" for="<%= id %>">
+      <%= label %>
+    </label>
+
+    <% if help %>
+      <small class="BaseField-helpText"><%= help %></small>
+    <% end %>
+
+    <% if errors.any? %>
+      <% errors.each do |error| %>
+        <strong class="BaseField-errorText">
+          <%= error %>
+        </strong>
+      <% end %>
+    <% end %>
+
+  </div>
+
+  <%= content %>
+</div>
