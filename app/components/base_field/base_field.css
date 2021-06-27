@@ -1,34 +1,35 @@
-.Field {
+.BaseField {
   display: block;
 }
 
-.Field-labelText {
+.BaseField-labelText {
+  display: block;
   font-weight: 600;
 }
 
-.Field-helpText,
-.Field-errorText {
+.BaseField-helpText,
+.BaseField-errorText {
   font-size: var(--font-size-s);
   display: block;
 }
 
-.Field-helpText {
+.BaseField-helpText {
   color: var(--color-text-light);
 }
 
-.Field-errorText {
+.BaseField-errorText {
   color: var(--color-red);
 }
 
-.Field:not(.Field--horizontal) .Field-textWrapper {
+.BaseField:not(.BaseField--horizontal) .BaseField-textWrapper {
   margin-bottom: var(--spacing-unit-xs);
 }
 
-.Field--horizontal {
+.BaseField--horizontal {
   display: flex;
 }
 
-.Field--horizontal .Field-textWrapper {
+.BaseField--horizontal .BaseField-textWrapper {
   width: 20%;
   display: flex;
   flex-direction: column;
@@ -38,7 +39,7 @@
   margin-right: var(--spacing-unit);
 }
 
-.Field--horizontal.Field--leftAligned .Field-textWrapper {
+.BaseField--horizontal.BaseField--leftAligned .BaseField-textWrapper {
   width: 85%;
   order: 2;
 }

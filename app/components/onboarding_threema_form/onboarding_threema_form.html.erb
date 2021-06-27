@@ -10,19 +10,24 @@
 
   <%= form_with(model: @contributor, local: true, url: onboarding_threema_path) do %>
     <%= c 'stack' do %>
-      <%= c 'field', object: @contributor, id: :first_name do |field| %>
+      <%= c 'field', object: @contributor, attr: :first_name do |field| %>
         <%= c 'input', field.input_defaults.merge(required: true) %>
       <% end %>
 
-      <%= c 'field', object: @contributor, id: :last_name do |field| %>
+      <%= c 'field', object: @contributor, attr: :last_name do |field| %>
         <%= c 'input', field.input_defaults.merge(required: true) %>
       <% end %>
 
-      <%= c 'field', object: @contributor, id: :threema_id do |field| %>
+      <%= c 'field', object: @contributor, attr: :threema_id do |field| %>
         <%= c 'input', field.input_defaults.merge(required: true, pattern: '[A-Za-z0-9]{8}') %>
       <% end %>
 
-      <%= c 'field', object: @contributor, id: :data_processing_consent, value: data_protection_link, styles: [:horizontal, :leftAligned] do |field| %>
+      <%= c('field',
+        object: @contributor,
+        attr: :data_processing_consent,
+        help: I18n.t('contributor.form.data_processing_consent.help', link: data_protection_link).html_safe,
+        styles: [:horizontal, :leftAligned]
+      ) do |field| %>
         <%= c 'checkbox', field.input_defaults.merge(required: true, value: nil) %>
       <% end %>
 
