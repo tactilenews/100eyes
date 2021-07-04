@@ -46,4 +46,4 @@ jobs:
           options: |
             --inventory ansible/inventories/staging
             --skip-tags skip_ci
-            --verbose
+            --vvv
