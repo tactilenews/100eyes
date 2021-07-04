@@ -11,6 +11,10 @@
     ufw_enable_ipv6: false
   collections:
     - devsec.hardening
+  tasks:
+    - name: Print ufw_enable_ipv6 variable
+      ansible.builtin.debug:
+        var: ufw_enable_ipv6
   roles:
     - role: devsec.hardening.ssh_hardening
     - role: devsec.hardening.os_hardening

@@ -16,6 +16,10 @@
     - ssh
     - sshd
 
+- name: Print ufw_enable_ipv6 variable
+  ansible.builtin.debug:
+    var: ufw_enable_ipv6
+
 # UFW Setup
 - name: UFW - Allow SSH connections
   ufw:
