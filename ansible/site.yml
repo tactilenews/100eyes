@@ -12,6 +12,8 @@
     - devsec.hardening
   roles:
     - role: devsec.hardening.ssh_hardening
+      vars:
+        network_ipv6_enable: false
     - role: devsec.hardening.os_hardening
       vars:
         ufw_enable_ipv6: false
