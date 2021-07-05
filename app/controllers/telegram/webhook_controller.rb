@@ -12,8 +12,8 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
       respond_with :message, text: Setting.telegram_contributor_not_found_message
     end
 
-    adapter.consume(payload) do
-      respond_with(*telegram_welcome_message)
+    adapter.consume(payload) do |m|
+      m.contributor.send_welcome_message!
     end
   end
 
@@ -25,7 +25,7 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
     adapter.on(TelegramAdapter::CONNECT) do |contributor|
       contributor.save!
       contributor_connected = true
-      respond_with(*telegram_welcome_message)
+      contributor.send_welcome_message!
     end
 
     adapter.on(TelegramAdapter::UNKNOWN_CONTENT) do
@@ -42,12 +42,5 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
         m.contributor.reply(adapter)
       end
     end
-  end
-
-  private
-
-  def telegram_welcome_message
-    text = ["<b>#{Setting.onboarding_success_heading}</b>", Setting.onboarding_success_text].join("\n")
-    [:message, { text: text, parse_mode: :HTML }]
   end
 end

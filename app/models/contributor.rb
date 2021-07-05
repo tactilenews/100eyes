@@ -66,6 +66,10 @@ class Contributor < ApplicationRecord
     end
   end
 
+  def send_welcome_message!
+    [TelegramAdapter::Outbound, PostmarkAdapter::Outbound, ThreemaAdapter::Outbound].each { |adapter| adapter.send_welcome_message!(self) }
+  end
+
   def name
     "#{first_name} #{last_name}"
   end

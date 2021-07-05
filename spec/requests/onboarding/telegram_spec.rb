@@ -57,6 +57,8 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
       )
     end
 
+    it { should_not enqueue_job(TelegramAdapter::Outbound) }
+
     it 'redirects to telegram link page' do
       subject.call
       expect(response).to redirect_to onboarding_telegram_link_path(jwt: jwt, telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN')

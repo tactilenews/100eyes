@@ -25,6 +25,7 @@ class OnboardingController < ApplicationController
     @contributor = Contributor.new(contributor_params.merge(json_web_token_attributes: { invalidated_jwt: jwt_param }))
 
     if @contributor.save
+      @contributor.send_welcome_message!
       redirect_to_success
     else
       render :show

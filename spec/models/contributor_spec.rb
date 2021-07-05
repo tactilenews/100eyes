@@ -503,4 +503,47 @@ RSpec.describe Contributor, type: :model do
       }
     end
   end
+
+  describe '.send_welcome_message!', telegram_bot: :rails do
+    let(:contributor) { create(:contributor, telegram_id: nil, email: nil, threema_id: nil) }
+    before do
+      Setting.onboarding_success_heading = 'Welcome new contributor!'
+      Setting.onboarding_success_text = 'You onboarded successfully.'
+    end
+    subject { -> { contributor.send_welcome_message! } }
+    let(:expected_job_args) { { recipient: contributor, text: "Welcome new contributor!\nYou onboarded successfully." } }
+
+    it { should_not have_enqueued_job }
+
+    context 'signed up via telegram' do
+      let(:expected_job_args) { { recipient: contributor, text: "<b>Welcome new contributor!</b>\nYou onboarded successfully." } }
+      let(:contributor) { create(:contributor, telegram_id: nil, telegram_onboarding_token: 'ABCDEF', email: nil) }
+      it { should_not have_enqueued_job }
+
+      context 'and connected' do
+        let(:contributor) { create(:contributor, telegram_id: 4711, telegram_onboarding_token: 'ABCDEF', email: nil) }
+        it { should enqueue_job(TelegramAdapter::Outbound).with(expected_job_args) }
+      end
+    end
+
+    context 'signed up via threema' do
+      let(:contributor) { create(:contributor, threema_id: 'AAAAAAAA', email: nil, telegram_id: nil) }
+      it { should enqueue_job(ThreemaAdapter::Outbound).with(expected_job_args) }
+    end
+
+    context 'signed up via email' do
+      let(:contributor) { create(:contributor, email: 'text@example.org') }
+      it {
+        should enqueue_job.with(
+          'PostmarkAdapter::Outbound',
+          'welcome_email',
+          'deliver_now',
+          {
+            params: { contributor: contributor },
+            args: []
+          }
+        )
+      }
+    end
+  end
 end
