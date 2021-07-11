@@ -103,6 +103,19 @@ RSpec.describe '/contributors', type: :request do
         expect { subject.call }.to_not(change { contributor.data_processing_consent })
       end
     end
+
+    context 'with validations failing' do
+      let(:new_attrs) { { email: 'INVALID' } }
+
+      it do
+        subject.call
+
+        parsed = Capybara::Node::Simple.new(response.body)
+        text = I18n.t('contributor.invalid', name: contributor.name)
+
+        expect(parsed).to have_css('.Notification', text: text)
+      end
+    end
   end
 
   describe 'DELETE /destroy' do
