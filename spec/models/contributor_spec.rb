@@ -527,6 +527,7 @@ RSpec.describe Contributor, type: :model do
     end
 
     context 'signed up via threema' do
+      let(:expected_job_args) { { recipient: contributor, text: "*Welcome new contributor!*\nYou onboarded successfully." } }
       let(:contributor) { create(:contributor, threema_id: 'AAAAAAAA', email: nil, telegram_id: nil) }
       it { should enqueue_job(ThreemaAdapter::Outbound).with(expected_job_args) }
     end
