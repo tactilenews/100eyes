@@ -83,7 +83,7 @@ See this [blog post](https://rossta.net/blog/how-to-specify-local-ruby-gems-in-y
 * nginx or another reverse proxy
 
 ## Funding
-The [Medieninnovationszentrum Babelsberg](http://miz-babelsberg.de) supports the development of additional modules.
+The [Medieninnovationszentrum Babelsberg](http://miz-babelsberg.de) supported the development of additional modules.
 
 ## License
 `100eyes` is developed by [tactile.news](https://tactile.news) and is licensed under the [MIT license](https://github.com/tactilenews/100eyes/blob/master/LICENSE).
