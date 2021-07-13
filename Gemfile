@@ -83,7 +83,7 @@ gem 'rack-attack', '~> 6.5'
 gem 'acts-as-taggable-on'
 gem 'jwt'
 
-gem 'rails-settings-cached', '~> 2.5'
+gem 'rails-settings-cached', '~> 2.7'
 
 gem 'kramdown', '~> 2.3'
 
