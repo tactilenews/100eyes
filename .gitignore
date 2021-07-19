@@ -45,3 +45,5 @@ backups/
 
 .env
 traefik/
+
+signal-cli-config/
