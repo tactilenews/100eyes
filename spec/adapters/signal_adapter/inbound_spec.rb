@@ -76,6 +76,11 @@ RSpec.describe SignalAdapter::Inbound do
       end
     end
 
+    describe '|message|raw_data' do
+      subject { message.raw_data }
+      it { should be_attached }
+    end
+
     describe '#sender' do
       subject { message.sender }
 

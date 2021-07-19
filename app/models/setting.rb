@@ -26,6 +26,9 @@ class Setting < RailsSettings::Base
   field :telegram_bot_api_key, readonly: true, default: ENV['TELEGRAM_BOT_API_KEY']
   field :telegram_bot_username, readonly: true, default: ENV['TELEGRAM_BOT_USERNAME']
 
+  field :signal_phone_number, readonly: true, default: ENV['SIGNAL_PHONE_NUMBER']
+  field :signal_rest_cli_endpoint, readonly: true, default: ENV['SIGNAL_REST_CLI_ENDPOINT'] || 'http://localhost:8080'
+
   field :inbound_email_password, readonly: true, default: ENV['RAILS_INBOUND_EMAIL_PASSWORD']
   field :email_from_address, readonly: true, default: ENV['EMAIL_FROM_ADDRESS'] || 'redaktion@localhost'
   field :postmark_api_token, readonly: true, default: ENV['POSTMARK_API_TOKEN']

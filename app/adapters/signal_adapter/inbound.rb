@@ -42,7 +42,13 @@ module SignalAdapter
       is_receipt = signal_message.dig(:envelope, :receiptMessage)
       return nil if is_receipt
 
-      Message.new(text: text, sender: sender)
+      message = Message.new(text: text, sender: sender)
+      message.raw_data.attach(
+        io: StringIO.new(JSON.generate(signal_message)),
+        filename: 'signal_message.json',
+        content_type: 'application/json'
+      )
+      message
     end
   end
 end
