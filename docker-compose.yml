@@ -7,6 +7,7 @@ services:
       PORT: 3000
       POSTGRES_HOST: "${POSTGRES_HOST:-db}"
       POSTGRES_PORT: "${POSTGRES_PORT:-5432}"
+      SIGNAL_REST_CLI_ENDPOINT: "http://signal:8080"
     command: bundle exec rails server
     depends_on: [ db ]
 
@@ -14,6 +15,16 @@ services:
     image: postgres:12.2-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  signal:
+    image: bbernhard/signal-cli-rest-api:latest
+    environment:
+      - USE_NATIVE=0
+        #- AUTO_RECEIVE_SCHEDULE=0 22 * * * #enable this parameter on demand (see description below)
+    ports:
+      - "8080:8080" #map docker port 8080 to host port 8080.
+    volumes:
+      - ./signal-cli-config:/home/.local/share/signal-cli
 
 volumes:
   postgres_data:
