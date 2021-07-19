@@ -15,5 +15,15 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  signal:
+    image: bbernhard/signal-cli-rest-api:latest
+    environment:
+      - USE_NATIVE=0
+        #- AUTO_RECEIVE_SCHEDULE=0 22 * * * #enable this parameter on demand (see description below)
+    ports:
+      - "8080:8080" #map docker port 8080 to host port 8080.
+    volumes:
+      - ./signal-cli-config:/home/.local/share/signal-cli
+
 volumes:
   postgres_data:
