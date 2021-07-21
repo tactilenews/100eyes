@@ -10,6 +10,10 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
     end
   end
   describe 'performing enqueued jobs', vcr: { cassette_name: :receive_signal_messages } do
+    before do
+      allow(Setting).to receive(:signal_phone_number).and_return('SIGNAL_PHONE_NUMBER') unless Setting.signal_phone_number
+    end
+
     subject do
       lambda {
         perform_enqueued_jobs do
