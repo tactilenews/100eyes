@@ -2,7 +2,7 @@
 
 class ApplicationController < ActionController::Base
   include Clearance::Controller
-  before_action :require_login, :ensure_2fa_setup
+  before_action :require_login, :ensure_2fa_setup, :enqueue_signal_job
   around_action :use_locale
 
   private
@@ -20,6 +20,10 @@ class ApplicationController < ActionController::Base
 
   def locale_params
     params.permit(:locale)
+  end
+
+  def enqueue_signal_job
+    SignalAdapter::ReceivePollingJob.perform_later
   end
 
   def ensure_2fa_setup

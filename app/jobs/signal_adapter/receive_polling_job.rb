@@ -4,7 +4,9 @@ require 'net/http'
 
 module SignalAdapter
   class ReceivePollingJob < ApplicationJob
+    include SuckerPunch::Job
     queue_as :default
+    max_jobs 1
 
     def perform(*_args)
       url = URI.parse("#{Setting.signal_rest_cli_endpoint}/v1/receive/#{Setting.signal_phone_number}")
