@@ -9,6 +9,8 @@ module SignalAdapter
     max_jobs 1
 
     def perform(*_args)
+      return if Setting.signal_phone_number.blank?
+
       url = URI.parse("#{Setting.signal_rest_cli_endpoint}/v1/receive/#{Setting.signal_phone_number}")
       req = Net::HTTP::Get.new(url.to_s)
       req['Accept'] = 'application/json'

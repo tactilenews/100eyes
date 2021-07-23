@@ -23,6 +23,8 @@ class ApplicationController < ActionController::Base
   end
 
   def enqueue_signal_job
+    # if we really want to receive messages after every request, do this:
+    # return if Setting.signal_phone_number.blank?
     SignalAdapter::ReceivePollingJob.perform_later
   end
 
