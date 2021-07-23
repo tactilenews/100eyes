@@ -39,5 +39,14 @@ RSpec.describe ThreemaAdapter::Outbound do
 
       subject
     end
+
+    describe '#welcome_message' do
+      subject { described_class.welcome_message }
+      it 'strips whitespace to not break basic formatting' do
+        allow(Setting).to receive(:onboarding_success_heading).and_return(" \n text with leading and trailing whitespace \t \n ")
+        allow(Setting).to receive(:onboarding_success_text).and_return("\nSuccess text.\n")
+        is_expected.to eq("*text with leading and trailing whitespace*\n\nSuccess text.\n")
+      end
+    end
   end
 end
