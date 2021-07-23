@@ -31,6 +31,7 @@ jobs:
   deploy:
     needs: [docker_push]
     runs-on: ubuntu-latest
+    concurrency: staging_environment
 
     steps:
       - name: Checkout repository
