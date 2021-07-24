@@ -1,0 +1,37 @@
+<%= c 'stack', **attrs do %>
+
+  <%= c 'stack', class: 'text-serif', space: :xsmall do %>
+    <%= c 'heading', tag: :h1 do %>
+      <%= I18n.t('components.onboarding_signal_form.heading') %>
+    <% end %>
+
+    <p><%= I18n.t('components.onboarding_signal_form.text') %></p>
+  <% end %>
+
+  <%= form_with(model: @contributor, local: true, url: onboarding_signal_path) do %>
+    <%= c 'stack' do %>
+      <%= c 'field', object: @contributor, id: :first_name do |field| %>
+        <%= c 'input', field.input_defaults.merge(required: true) %>
+      <% end %>
+
+      <%= c 'field', object: @contributor, id: :last_name do |field| %>
+        <%= c 'input', field.input_defaults.merge(required: true) %>
+      <% end %>
+
+      <%= c 'field', object: @contributor, id: :phone_number do |field| %>
+        <%= c 'input', field.input_defaults.merge(placeholder: '', required: true, type: :phone_number) %>
+      <% end %>
+
+      <%= c 'field', object: @contributor, id: :data_processing_consent, value: data_protection_link, styles: [:horizontal, :leftAligned] do |field| %>
+        <%= c 'checkbox', field.input_defaults.merge(required: true, value: nil) %>
+      <% end %>
+
+      <%= c 'button',
+        type: 'submit',
+        label: I18n.t('components.onboarding_signal_form.submit'),
+        styles: [:primary, :block]
+      %>
+    <% end %>
+  <% end %>
+
+<% end %>

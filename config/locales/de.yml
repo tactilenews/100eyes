@@ -70,6 +70,10 @@ de:
         other: Du hast {count} neue Antworten.
     onboarding_header:
       byline: eine Dialog-Recherche von <a class="Link" href="https://tactile.news" target="_blank">tactile.news</a>
+    onboarding_signal_form:
+      heading: Mit dem Signal-Messenger teilnehmen
+      text: Geben Sie bitte unten Ihre Telefonnummer ein, um Ihre Anmeldung abzuschließen.
+      submit: Anmeldung abschließen
     onboarding_email_form:
       heading: Per E-Mail teilnehmen
       text: Geben Sie bitte unten Ihre Kontaktdaten ein, um Ihre Anmeldung abzuschließen.
