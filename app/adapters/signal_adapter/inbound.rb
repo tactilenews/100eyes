@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
 module SignalAdapter
+  UNKNOWN_CONTRIBUTOR = :unknown_contributor
+  UNKNOWN_CONTENT = :unknown_content
+
   class Inbound
-    UNKNOWN_CONTRIBUTOR = :unknown_contributor
+    UNKNOWN_CONTENT_KEYS = %w[mentions attachments contacts].freeze
+
     attr_reader :sender, :text, :message
 
     def initialize
@@ -46,12 +50,19 @@ module SignalAdapter
       is_receipt = signal_message.dig(:envelope, :receiptMessage)
       return nil if is_receipt
 
+      data_message = signal_message.dig(:envelope, :dataMessage)
+
       message = Message.new(text: text, sender: sender)
       message.raw_data.attach(
         io: StringIO.new(JSON.generate(signal_message)),
         filename: 'signal_message.json',
         content_type: 'application/json'
       )
+      if data_message.entries.any? { |key, value| UNKNOWN_CONTENT_KEYS.include?(key) && value.present? }
+        message.unknown_content = true
+        trigger(UNKNOWN_CONTENT)
+      end
+
       message
     end
   end
