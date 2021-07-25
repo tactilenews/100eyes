@@ -9,6 +9,10 @@ module SignalAdapter
       @callbacks = {}
     end
 
+    def on(callback, &block)
+      @callbacks[callback] = block
+    end
+
     def consume(signal_message)
       signal_message = signal_message.with_indifferent_access
 

@@ -87,4 +87,24 @@ RSpec.describe SignalAdapter::Inbound do
       it { should eq(Contributor.find(4711)) }
     end
   end
+
+  describe '#on' do
+    describe 'UNKNOWN_CONTRIBUTOR' do
+      let(:unknown_contributor_callback) { spy('unknown_contributor_callback') }
+      before { adapter.on(SignalAdapter::Inbound::UNKNOWN_CONTRIBUTOR) { unknown_contributor_callback.call } }
+      subject do
+        adapter.consume(signal_message)
+        unknown_contributor_callback
+      end
+
+      describe 'if the sender is a contributor ' do
+        it { should_not have_received(:call) }
+      end
+
+      describe 'if the sender is unknown' do
+        before { signal_message[:envelope][:source] = '+4955443322' }
+        it { should have_received(:call) }
+      end
+    end
+  end
 end
