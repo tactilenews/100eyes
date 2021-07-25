@@ -91,7 +91,7 @@ RSpec.describe SignalAdapter::Inbound do
   describe '#on' do
     describe 'UNKNOWN_CONTRIBUTOR' do
       let(:unknown_contributor_callback) { spy('unknown_contributor_callback') }
-      before { adapter.on(SignalAdapter::UNKNOWN_CONTRIBUTOR) { unknown_contributor_callback.call } }
+      before { adapter.on(SignalAdapter::UNKNOWN_CONTRIBUTOR) { |phone_number| unknown_contributor_callback.call(phone_number) } }
       subject do
         adapter.consume(signal_message)
         unknown_contributor_callback
@@ -103,13 +103,13 @@ RSpec.describe SignalAdapter::Inbound do
 
       describe 'if the sender is unknown' do
         before { signal_message[:envelope][:source] = '+4955443322' }
-        it { should have_received(:call) }
+        it { should have_received(:call).with('+4955443322') }
       end
     end
 
     describe 'UNKNOWN_CONTENT' do
       let(:unknown_content_callback) { spy('unknown_content_callback') }
-      before { adapter.on(SignalAdapter::UNKNOWN_CONTENT) { unknown_content_callback.call } }
+      before { adapter.on(SignalAdapter::UNKNOWN_CONTENT) { |contributor| unknown_content_callback.call(contributor) } }
       subject do
         adapter.consume(signal_message)
         unknown_content_callback
@@ -121,7 +121,7 @@ RSpec.describe SignalAdapter::Inbound do
 
       describe 'if the message contains attachments' do
         before { signal_message[:envelope][:dataMessage][:attachments] = ['whatever'] }
-        it { should have_received(:call) }
+        it { should have_received(:call).with(contributor) }
       end
     end
   end

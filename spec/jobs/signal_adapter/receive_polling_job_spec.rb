@@ -9,14 +9,9 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
       should have_enqueued_job
     end
   end
-  describe 'performing enqueued jobs' do
-    subject do
-      lambda {
-        perform_enqueued_jobs do
-          described_class.perform_now
-        end
-      }
-    end
+  describe '#perform' do
+    let(:job) { described_class.new }
+    subject { -> { job.perform } }
 
     describe 'without a phone number' do
       before do
@@ -33,14 +28,29 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         allow(Setting).to receive(:signal_phone_number).and_return('SIGNAL_PHONE_NUMBER') unless Setting.signal_phone_number
       end
 
-      it 'does not crash' do
-        should_not raise_error
+      describe 'if an unknown contributor sends us a message' do
+        it 'raises an error so that our admins get notified' do
+          should raise_error(SignalAdapter::UnknownContributorError)
+        end
+
+        it 'does not create messages' do
+          expect do
+            subject.call
+          rescue SignalAdapter::UnknownContributorError
+            nil
+          end.not_to(change { Message.count })
+        end
       end
 
       describe 'given a request' do
         before { create(:request) }
-        it 'does not create messages' do
-          should_not(change { Message.count })
+
+        it 'does not create messages without a recipient' do
+          expect do
+            subject.call
+          rescue SignalAdapter::UnknownContributorError
+            nil
+          end.not_to(change { Message.count })
         end
 
         describe 'and a corresponding contributor' do
@@ -58,6 +68,23 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
             expect(Message.first.contributor.phone_number).to eq('+4915112345789')
           end
         end
+      end
+    end
+
+    describe 'if unknown content is included in the message', vcr: { cassette_name: :receive_signal_messages_containing_attachment } do
+      let(:contributor) { create(:contributor, phone_number: '+4915112345678') }
+      before do
+        allow(Setting).to receive(:signal_phone_number).and_return('SIGNAL_PHONE_NUMBER') unless Setting.signal_phone_number
+        allow(Setting).to receive(:signal_unknown_content_message).and_return('We cannot process this content')
+        create(:request)
+        contributor
+      end
+
+      it 'bounces a warning to the contributor' do
+        should have_enqueued_job(SignalAdapter::Outbound).with(
+          text: 'We cannot process this content',
+          recipient: contributor
+        )
       end
     end
   end

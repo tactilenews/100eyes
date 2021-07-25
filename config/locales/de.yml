@@ -218,6 +218,7 @@ de:
     form:
       groups:
         project_settings: Allgemein
+        signal: Signal
         telegram: Telegram
         threema: Threema
         onboarding: Onboarding
@@ -252,6 +253,9 @@ de:
       onboarding_data_protection_link:
         label: Link zur Datenschutzerklärung
         help: Falls eine projektspezifische Datenschutzerklärung existiert, kannst du sie hier angegeben. Mitglieder müssen diese während des Onboarding-Prozesses akzeptieren.
+      signal_unknown_content_message:
+        label: Fehler-Nachricht bei unbekannten Inhalten
+        help: Wenn ein Mitglied via Signal Nachrichten versendet, die von 100eyes noch nicht unterstützt werden, erhält es diese Nachricht.
       telegram_unknown_content_message:
         label: Fehler-Nachricht bei unbekannten Inhalten
         help: Wenn ein Mitglied via Telegram Nachrichten versendet, die von 100eyes noch nicht unterstützt werden, erhält es diese Nachricht.

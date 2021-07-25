@@ -21,13 +21,14 @@ class Setting < RailsSettings::Base
 
   field :telegram_unknown_content_message, default: File.read(File.join('config', 'locales', 'telegram', 'unknown_content.txt'))
   field :telegram_contributor_not_found_message, default: File.read(File.join('config', 'locales', 'telegram', 'unknown_contributor.txt'))
-  field :threema_unknown_content_message, default: File.read(File.join('config', 'locales', 'threema', 'unknown_content.txt'))
-
   field :telegram_bot_api_key, readonly: true, default: ENV['TELEGRAM_BOT_API_KEY']
   field :telegram_bot_username, readonly: true, default: ENV['TELEGRAM_BOT_USERNAME']
 
+  field :threema_unknown_content_message, default: File.read(File.join('config', 'locales', 'threema', 'unknown_content.txt'))
+
   field :signal_phone_number, readonly: true, default: ENV['SIGNAL_PHONE_NUMBER']
   field :signal_rest_cli_endpoint, readonly: true, default: ENV['SIGNAL_REST_CLI_ENDPOINT'] || 'http://localhost:8080'
+  field :signal_unknown_content_message, default: File.read(File.join('config', 'locales', 'signal', 'unknown_content.txt'))
 
   field :inbound_email_password, readonly: true, default: ENV['RAILS_INBOUND_EMAIL_PASSWORD']
   field :email_from_address, readonly: true, default: ENV['EMAIL_FROM_ADDRESS'] || 'redaktion@localhost'

@@ -43,7 +43,7 @@ module SignalAdapter
       sender = Contributor.find_by(phone_number: phone_number)
       return sender if sender
 
-      trigger(UNKNOWN_CONTRIBUTOR) and return nil
+      trigger(UNKNOWN_CONTRIBUTOR, phone_number) and return nil
     end
 
     def initialize_message(signal_message)
@@ -60,7 +60,7 @@ module SignalAdapter
       )
       if data_message.entries.any? { |key, value| UNKNOWN_CONTENT_KEYS.include?(key) && value.present? }
         message.unknown_content = true
-        trigger(UNKNOWN_CONTENT)
+        trigger(UNKNOWN_CONTENT, sender)
       end
 
       message

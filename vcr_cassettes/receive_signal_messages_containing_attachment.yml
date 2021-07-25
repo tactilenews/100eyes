@@ -1,0 +1,31 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:8080/v1/receive/SIGNAL_PHONE_NUMBER
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - application/json
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Date:
+      - Sun, 25 Jul 2021 11:55:04 GMT
+      Content-Length:
+      - '309'
+    body:
+      encoding: UTF-8
+      string: '[{"envelope":{"source":"+4915112345678","sourceDevice":2,"timestamp":1627214089915,"dataMessage":{"timestamp":1627214089915,"message":null,"expiresInSeconds":0,"viewOnce":false,"mentions":[],"attachments":[{"contentType":"audio/mpeg","filename":null,"id":"7135555403174649725","size":79412}],"contacts":[]}}}]'
+  recorded_at: Sun, 25 Jul 2021 11:55:04 GMT
+recorded_with: VCR 6.0.0
