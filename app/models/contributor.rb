@@ -96,7 +96,7 @@ class Contributor < ApplicationRecord
   end
 
   def channels
-    { email: email?, telegram: telegram?, threema: threema? }.select { |_k, v| v }.keys
+    { email: email?, signal: phone_number.present?, telegram: telegram?, threema: threema? }.select { |_k, v| v }.keys
   end
 
   def active_request
