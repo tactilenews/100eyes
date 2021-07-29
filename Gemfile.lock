@@ -349,7 +349,7 @@ GEM
       activemodel (>= 3.2)
       mail (~> 2.5)
     vcr (6.0.0)
-    view_component (2.35.0)
+    view_component (2.36.0)
       activesupport (>= 5.0.0, < 8.0)
       method_source (~> 1.0)
     web-console (4.1.0)
