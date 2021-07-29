@@ -2,7 +2,7 @@
 
 class ApplicationController < ActionController::Base
   include Clearance::Controller
-  before_action :require_login, :ensure_2fa_setup, :enqueue_signal_job
+  before_action :require_login, :ensure_2fa_setup
   around_action :use_locale
 
   private
@@ -20,12 +20,6 @@ class ApplicationController < ActionController::Base
 
   def locale_params
     params.permit(:locale)
-  end
-
-  def enqueue_signal_job
-    # if we really want to receive messages after every request, do this:
-    # return if Setting.signal_phone_number.blank?
-    SignalAdapter::ReceivePollingJob.perform_later
   end
 
   def ensure_2fa_setup
