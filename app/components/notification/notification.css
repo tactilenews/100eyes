@@ -31,7 +31,8 @@
   border-color: var(--color-green-light);
 }
 
-.Notification--error {
+.Notification--error,
+.Notification--alert {
   color: var(--color-red-dark);
   background-color: var(--color-red-lightest);
   border-color: var(--color-red-light);
