@@ -5,7 +5,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: var(--spacing-unit-s) var(--spacing-unit);
+  padding: var(--spacing-unit-xs) var(--spacing-unit);
 
   font-weight: 500;
   font-size: var(--font-size-s);
