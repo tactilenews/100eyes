@@ -1,0 +1,7 @@
+<%= c('base_field',
+  label: t('.label'),
+  help: t('.help'),
+  **attrs
+) do %>
+  <%= c 'input', required: true, **attrs.slice(:id) %>
+<% end %>

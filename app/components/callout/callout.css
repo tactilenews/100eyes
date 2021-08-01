@@ -14,3 +14,7 @@
   --border-color: var(--color-orange);
   --text-color: var(--color-orange-darkest);
 }
+
+.Callout--compact {
+  padding: var(--spacing-unit-xs);
+}
