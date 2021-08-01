@@ -122,6 +122,9 @@ de:
         Auf einem Smartphone ist eine Chat-App geöffnet.
         Sichtbar ist ein angedeuteter Chatverlauf aus der Sicht eines Community-Mitglieds.
         Als neueste Nachricht ist eine Vorschau der Frage zu sehen.
+    password_input:
+      unmask: Passwort einblenden
+      mask: Passwort ausblenden
 
   mailer:
     unsubscribe:
