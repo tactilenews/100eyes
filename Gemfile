@@ -76,7 +76,7 @@ gem 'valid_email2', '~> 4.0'
 
 gem 'counter_culture', '~> 2.8'
 
-gem 'activestorage-validator', '~> 0.1.3'
+gem 'activestorage-validator', '~> 0.1.4'
 
 gem 'rack-attack', '~> 6.5'
 
