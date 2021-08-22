@@ -14,23 +14,19 @@ RSpec.describe 'Password Reset' do
 
         expect(page).to have_current_path('/sign_in')
 
-        click_link I18n.t('sessions.form.link_text')
+        click_link 'Passwort vergessen?'
         expect(page).to have_current_path('/passwords/new')
 
-        fill_in I18n.t('helpers.label.password.email'), with: email
-        click_button I18n.t('helpers.submit.password_reset.submit')
+        fill_in 'E-Mail', with: email
+        click_button 'Passwort ändern'
 
         expect(page).to have_current_path('/passwords')
-        expect(page).to have_content(I18n.t('passwords.create.description'))
+        expect(page).to have_content('Wir haben dir eine E-Mail gesendet.')
         visit "/users/#{user.id}/password/edit?token=#{user.reload.confirmation_token}"
 
-        expect(page).to have_content(I18n.t('passwords.edit.title'))
-        fill_in I18n.t('helpers.label.password_reset.password'), with: password
-
-        # Since this input does not have a id, we cannot use fill_in with the label, name, id
-        find('input[data-password-reset-form-target="passwordConfirmation"]').set(password)
-
-        click_button I18n.t('helpers.submit.password_reset.submit')
+        expect(page).to have_content('Passwort ändern')
+        fill_in 'Passwort', with: password
+        click_button 'Passwort ändern'
 
         expect(page).to have_current_path(two_factor_auth_setup_user_setting_path(user))
 
@@ -59,25 +55,22 @@ RSpec.describe 'Password Reset' do
 
         expect(page).to have_current_path('/sign_in')
 
-        click_link I18n.t('sessions.form.link_text')
+        click_link 'Passwort vergessen?'
         expect(page).to have_current_path('/passwords/new')
 
-        fill_in I18n.t('helpers.label.password.email'), with: email
-        click_button I18n.t('helpers.submit.password_reset.submit')
+        fill_in 'E-Mail', with: email
+        click_button 'Passwort ändern'
 
         expect(page).to have_current_path('/passwords')
-        expect(page).to have_content(I18n.t('passwords.create.description'))
+        expect(page).to have_content('Wir haben dir eine E-Mail gesendet.')
         visit "/users/#{user.id}/password/edit?token=#{user.reload.confirmation_token}"
 
-        expect(page).to have_content(I18n.t('passwords.edit.title'))
-        fill_in I18n.t('helpers.label.password_reset.password'), with: password
+        expect(page).to have_content('Passwort ändern')
+        fill_in 'Passwort', with: password
 
-        # Since this input does not have a id, we cannot use fill_in with the label, name, id
-        find('input[data-password-reset-form-target="passwordConfirmation"]').set(password)
+        fill_in '6-stelliger Anmeldecode', with: user.otp_code
 
-        fill_in I18n.t('two_factor_authentication.otp_code.label'), with: user.otp_code
-
-        click_button I18n.t('helpers.submit.password_reset.submit')
+        click_button 'Passwort ändern'
 
         expect(page).to have_current_path('/dashboard')
         expect(page).to have_link(I18n.t('components.nav_bar.sign_out'))

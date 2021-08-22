@@ -15,9 +15,9 @@ RSpec.describe 'Sign in' do
 
         expect(page).to have_current_path('/sign_in')
 
-        fill_in I18n.t('helpers.label.password.email'), with: user.email
-        fill_in I18n.t('helpers.label.session.password'), with: user.password
-        click_button I18n.t('helpers.submit.session.submit')
+        fill_in 'E-Mail', with: user.email
+        fill_in 'Passwort', with: user.password
+        click_button 'Anmelden'
 
         expect(page).to have_current_path(two_factor_auth_setup_user_setting_path(user))
       end
@@ -68,11 +68,11 @@ RSpec.describe 'Sign in' do
 
         expect(page).to have_current_path('/sign_in')
 
-        fill_in I18n.t('helpers.label.password.email'), with: user.email
-        fill_in I18n.t('helpers.label.session.password'), with: user.password
-        fill_in I18n.t('two_factor_authentication.otp_code.label'), with: user.otp_code
+        fill_in 'E-Mail', with: user.email
+        fill_in 'Passwort', with: user.password
+        fill_in '6-stelliger Anmeldecode', with: user.otp_code
 
-        click_button I18n.t('helpers.submit.session.submit')
+        click_button 'Anmelden'
 
         expect(page).to have_current_path(dashboard_path)
         expect(page).to have_link(I18n.t('components.nav_bar.sign_out'))
