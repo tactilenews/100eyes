@@ -59,7 +59,7 @@ RSpec.describe 'Passwords' do
       {
         token: "I'm not a user",
         password_reset: {
-          password: Faker::Internet.password(min_length: 20, max_length: 128),
+          password: Faker::Internet.password(min_length: 8, max_length: 128),
           otp_code: user.otp_code
         }
       }
@@ -83,7 +83,7 @@ RSpec.describe 'Passwords' do
           }
         }
       end
-      let(:password) { Faker::Internet.password(min_length: 20, max_length: 128) }
+      let(:password) { Faker::Internet.password(min_length: 8, max_length: 128) }
       let(:otp_code) { '123456' }
 
       context 'Incorrect otp_code' do
@@ -94,7 +94,7 @@ RSpec.describe 'Passwords' do
       end
 
       context 'Password not long enough' do
-        let(:password) { Faker::Internet.password(max_length: 19) }
+        let(:password) { Faker::Internet.password(min_length: 1, max_length: 7) }
         let(:otp_code) { user.otp_code }
 
         it 'renders alert message' do
@@ -114,7 +114,7 @@ RSpec.describe 'Passwords' do
       end
 
       context 'Success' do
-        let(:password) { Faker::Internet.password(min_length: 20, max_length: 128) }
+        let(:password) { Faker::Internet.password(min_length: 8, max_length: 128) }
         let(:otp_code) { user.otp_code }
 
         it 'redirects to dashboard and refreshes session/cookie data' do
