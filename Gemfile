@@ -94,7 +94,7 @@ gem 'active_model_otp'
 gem 'clearance'
 gem 'rqrcode'
 
-gem 'threema', git: 'https://github.com/threemarb/threema.git', branch: 'master'
+gem 'threema', git: 'https://github.com/tactilenews/threema.git', branch: 'master'
 
 gem 'sentry-rails'
 gem 'sentry-ruby'
