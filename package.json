@@ -4,7 +4,7 @@
     "prettier-check": "prettier --check '{app,frontend}/**/*.{js,css}'"
   },
   "dependencies": {
-    "@hotwired/turbo": "^7.0.0-rc.1",
+    "@hotwired/turbo": "^7.0.0-rc.2",
     "@rails/ujs": "^6.1.4",
     "@rails/webpacker": "5.4.2",
     "@yaireo/tagify": "^3.25.0",
