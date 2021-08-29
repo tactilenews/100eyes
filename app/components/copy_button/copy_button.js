@@ -1,4 +1,5 @@
 import { Controller } from 'stimulus';
+import * as clipboard from 'clipboard-polyfill/text';
 import Rails from '@rails/ujs';
 
 const SUCCESS_NOTIFICATION_DURATION = 2000;
@@ -31,13 +32,32 @@ export default class extends Controller {
     this.element.disabled = true;
     this.element.dataset.state = 'loading';
 
+    /* Some browser require that copying to the clipboard (via
+     * document.execCommand('copy') which is used by polyfill)
+     * happens in response to a user interaction, e.g. clicking
+     * a button. This doesn't work when copying in a callback
+     * though, e.g. in response to an AJAX request. It does
+     * however work when calling the method in an interval that
+     * has been set as a direct response to the user interaction.
+     */
+    let url = null;
+
     Rails.ajax({
       url: this.urlValue,
       type: 'POST',
       success: response => {
-        this.writeToClipboard(response[this.keyValue]);
+        url = response[this.keyValue];
       },
     });
+
+    const interval = window.setInterval(() => {
+      if (!url) {
+        return;
+      }
+
+      this.writeToClipboard(url);
+      window.clearInterval(interval);
+    }, 100);
   }
 
   writeToClipboard(text) {
