@@ -15,6 +15,7 @@ Rails.application.routes.draw do
       post '/email', to: 'email#create'
 
       get '/signal/', to: 'signal#show'
+      get '/signal/splash/', to: 'signal#splash', as: 'signal_splash'
       post '/signal/', to: 'signal#create'
 
       get '/threema/', to: 'threema#show'

@@ -70,9 +70,18 @@ de:
         other: Du hast {count} neue Antworten.
     onboarding_header:
       byline: eine Dialog-Recherche von <a class="Link" href="https://tactile.news" target="_blank">tactile.news</a>
+    onboarding_signal_splash:
+      heading: Bevor es weitergeht…
+      text: Damit wir Ihnen zukünftig auf Signal schreiben können, müssen Sie uns zuerst kontaktieren.
+      action: Senden Sie dazu auf Signal eine Nachricht an die Telefonnummer <strong>%{number}</strong>. Ein kurzes „Hallo” reicht aus!
+      link: Zur Signal-App
+      copy: Nummer kopieren
+      help:  Über den Button gelangen Sie direkt zu unserem Kontakt in der Signal-App. Alternativ können Sie unsere Nummer kopieren.
+      done: "Setzen sie Ihre Anmeldung fort, nachdem Sie eine Nachricht gesendet haben:"
+      continue: Anmeldung fortsetzen
     onboarding_signal_form:
-      heading: Mit dem Signal-Messenger teilnehmen
-      text: Geben Sie bitte unten Ihre Telefonnummer ein, um Ihre Anmeldung abzuschließen.
+      heading: Mit Signal teilnehmen
+      text: Geben Sie bitte unten die Handynummer ein, mit der Sie bei Signal registriert sind.
       submit: Anmeldung abschließen
     onboarding_email_form:
       heading: Per E-Mail teilnehmen

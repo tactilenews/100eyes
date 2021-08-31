@@ -1,0 +1,48 @@
+<%= c 'stack', **attrs do %>
+
+  <%= c 'stack', class: 'text-serif', space: :xsmall do %>
+    <%= c 'heading', tag: :h1 do %>
+      <%= t('components.onboarding_signal_splash.heading') %>
+    <% end %>
+
+    <p>
+      <%= t('components.onboarding_signal_splash.text') %>
+    </p>
+
+    <p>
+      <%= t('components.onboarding_signal_splash.action', number: Setting.signal_phone_number).html_safe %>
+    </p>
+  <% end %>
+
+  <%= c 'stack', space: :small do %>
+    <%= c 'button',
+      styles: [:block, :primary],
+      link: "https://signal.me/#p/#{Setting.signal_phone_number}",
+      label: 'Zur Signal-App',
+      target: '_blank',
+      rel: 'noopener noreferrer'
+     %>
+
+    <%= c 'copy_button',
+      styles: [:block, :secondary],
+      label: 'Handynummer kopieren',
+      copy: Setting.signal_phone_number
+    %>
+
+    <p class="text-small text-light">
+      <%= t('components.onboarding_signal_splash.help') %>
+    </p>
+  <% end %>
+
+  <%= c 'stack', space: :small do %>
+    <p class="text-serif">
+      <%= t('components.onboarding_signal_splash.done') %>
+    </p>
+
+    <%= c 'button',
+      styles: [:block, :secondary],
+      link: onboarding_signal_path,
+      label: t('components.onboarding_signal_splash.continue')
+    %>
+  <% end %>
+<% end %>
