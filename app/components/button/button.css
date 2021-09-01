@@ -15,6 +15,8 @@
   border: none;
   font-weight: 500;
   font-size: inherit;
+
+  transition: 0.1s all ease-out;
 }
 
 .Button:hover {

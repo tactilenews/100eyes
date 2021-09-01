@@ -1,4 +1,6 @@
-<%= c 'stack', **attrs do %>
+<%= c 'stack', **attrs.merge({
+  data: { controller: 'onboarding-signal-splash' }
+}) do %>
 
   <%= c 'stack', class: 'text-serif', space: :xsmall do %>
     <%= c 'heading', tag: :h1 do %>
@@ -15,19 +17,24 @@
   <% end %>
 
   <%= c 'stack', space: :small do %>
-    <%= c 'button',
-      styles: [:block, :primary],
-      link: "https://signal.me/#p/#{Setting.signal_phone_number}",
-      label: 'Zur Signal-App',
-      target: '_blank',
-      rel: 'noopener noreferrer'
-     %>
+    <div data-action="click->onboarding-signal-splash#highlightNext">
+      <%= c 'button',
+        styles: [:block, :primary],
+        link: "https://signal.me/#p/#{Setting.signal_phone_number}",
+        label: 'Zur Signal-App',
+        target: '_blank',
+        rel: 'noopener noreferrer',
+        data: { onboarding_signal_splash_target: 'linkButton' }
+      %>
+    </div>
 
-    <%= c 'copy_button',
-      styles: [:block, :secondary],
-      label: 'Handynummer kopieren',
-      copy: Setting.signal_phone_number
-    %>
+    <div data-action="click->onboarding-signal-splash#highlightNext">
+      <%= c 'copy_button',
+        styles: [:block, :secondary],
+        label: 'Handynummer kopieren',
+        copy: Setting.signal_phone_number
+      %>
+    </div>
 
     <p class="text-small text-light">
       <%= t('components.onboarding_signal_splash.help') %>
@@ -40,9 +47,12 @@
     </p>
 
     <%= c 'button',
+      name: 'next',
+      id: 'next',
       styles: [:block, :secondary],
       link: onboarding_signal_path,
-      label: t('components.onboarding_signal_splash.continue')
+      label: t('components.onboarding_signal_splash.next'),
+      data: { onboarding_signal_splash_target: 'nextButton' }
     %>
   <% end %>
 <% end %>
