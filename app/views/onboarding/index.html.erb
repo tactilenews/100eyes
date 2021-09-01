@@ -25,23 +25,9 @@
 
         <%= c 'flex' do %>
           <%= c 'button',
-            link: onboarding_email_path,
-            label: 'E-Mail',
-            styles: [:block, :primary, :email]
-          %>
-
-          <%= c 'button',
             link: onboarding_threema_path,
             label: 'Threema',
             styles: [:block, :primary, :threema]
-          %>
-        <% end %>
-
-        <%= c 'flex' do %>
-          <%= c 'button',
-            link: onboarding_signal_splash_path,
-            label: 'Signal',
-            styles: [:block, :primary, :signal]
           %>
           
           <%= c 'button',
@@ -49,6 +35,20 @@
             label: 'Telegram',
             styles: [:block, :primary, :telegram]
           %>
+
+          <%= c 'button',
+            link: onboarding_email_path,
+            label: 'E-Mail',
+            styles: [:block, :primary, :email]
+          %>
+
+          <!--
+            <%= c 'button',
+              link: onboarding_signal_splash_path,
+              label: 'Signal',
+              styles: [:block, :primary, :signal]
+            %>
+          -->
         <% end %>
 
       <% end %>
