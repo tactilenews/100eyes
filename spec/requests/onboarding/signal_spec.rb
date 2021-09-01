@@ -61,6 +61,11 @@ RSpec.describe 'Onboarding::Signals', type: :request do
         phone_number_field = fields.find { |f| f.has_text? 'Signal Telefonnummer' }
         expect(phone_number_field).to have_text('ist keine gültige Nummer')
       end
+
+      it 'has 422 status code' do
+        subject.call
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
     end
 
     context 'without data processing consent' do
@@ -76,6 +81,11 @@ RSpec.describe 'Onboarding::Signals', type: :request do
 
       it 'does not create new contributor' do
         expect { subject.call }.not_to change(Contributor, :count)
+      end
+
+      it 'has 422 status code' do
+        subject.call
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
 
