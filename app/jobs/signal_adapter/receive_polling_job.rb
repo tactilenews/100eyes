@@ -14,11 +14,7 @@ module SignalAdapter
       return if Setting.signal_phone_number.blank?
 
       url = URI.parse("#{Setting.signal_rest_cli_endpoint}/v1/receive/#{Setting.signal_phone_number}")
-      req = Net::HTTP::Get.new(url.to_s)
-      req['Accept'] = 'application/json'
-      res = Net::HTTP.start(url.host, url.port) do |http|
-        http.request(req)
-      end
+      res = Net::HTTP.get_response(url)
       signal_messages = JSON.parse(res.body)
 
       adapter = SignalAdapter::Inbound.new
