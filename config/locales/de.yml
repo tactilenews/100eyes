@@ -125,13 +125,6 @@ de:
     password_input:
       unmask: Passwort einblenden
       mask: Passwort ausblenden
-      valid_icon_label: 'Ok'
-      invalid_icon_label: 'Nicht ok'
-      validations:
-        minLength: min. %{length} Zeichen
-        letters: enthält Buchstaben
-        numbers: enthält Zahlen
-        special: enthält Sonderzeichen
     sign_in_form:
       heading: Anmelden
       email: E-Mail
@@ -154,7 +147,7 @@ de:
       heading: Passwort ändern
       password:
         label: Neues Passwort
-        help: Das Passwort muss mindestens 8 Zeichen lang sein und Buchstaben, Zahlen und Sonderzeichen enthalten.
+        help: mindestens 8 Zeichen lang
       submit: Passwort ändern
 
   mailer:
