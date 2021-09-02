@@ -9,11 +9,12 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
       should have_enqueued_job
     end
   end
+
   describe '#perform' do
     let(:job) { described_class.new }
     subject { -> { job.perform } }
 
-    describe 'without a phone number' do
+    describe 'without a registered signal phone number on the server' do
       before do
         allow(Setting).to receive(:signal_server_phone_number).and_return(nil)
       end
@@ -23,51 +24,58 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
       end
     end
 
-    describe 'given a phone number', vcr: { cassette_name: :receive_signal_messages } do
+    describe 'given a registered signal phone number on the server', vcr: { cassette_name: :receive_signal_messages } do
       before do
         unless Setting.signal_server_phone_number
           allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
         end
+        allow(Sentry).to receive(:capture_exception).with(an_instance_of(SignalAdapter::UnknownContributorError))
       end
 
       describe 'if an unknown contributor sends us a message' do
-        it 'raises an error so that our admins get notified' do
-          should raise_error(SignalAdapter::UnknownContributorError)
-        end
+        it { should_not(change { Message.count }) }
 
-        it 'does not create messages' do
-          expect do
-            subject.call
-          rescue SignalAdapter::UnknownContributorError
-            nil
-          end.not_to(change { Message.count })
+        it 'sends an error to Sentry so that our admins get notified' do
+          subject.call
+          expect(Sentry).to have_received(:capture_exception)
         end
       end
 
       describe 'given a request' do
         before { create(:request) }
 
-        it 'does not create messages without a recipient' do
-          expect do
-            subject.call
-          rescue SignalAdapter::UnknownContributorError
-            nil
-          end.not_to(change { Message.count })
+        describe 'and one message from an unknown contributor' do
+          it { should_not(change { Message.count }) }
         end
 
-        describe 'and a corresponding contributor' do
+        describe 'and one message from a known contributor' do
           before do
             create(:contributor, signal_phone_number: '+4915112345789')
             create(:contributor, signal_phone_number: '+4915155555555')
           end
 
-          it 'create a message' do
+          it 'is expected to create a message' do
             should(change { Message.count }.from(0).to(1))
           end
 
-          it 'assigns the correct contributor' do
+          it 'is expected to assign the correct contributor' do
             subject.call
             expect(Message.first.contributor.signal_phone_number).to eq('+4915112345789')
+          end
+        end
+
+        describe 'and multiple messages from known and unknown contributors', vcr: { cassette_name: :receive_multiple_signal_messages } do
+          before do
+            create(:contributor, signal_phone_number: '+4915112345789')
+          end
+
+          it 'creates a message for the known contributor' do
+            should(change { Message.count }.from(0).to(1))
+          end
+
+          it 'raises an error for the unknown contributor so that our admins get notified' do
+            subject.call
+            expect(Sentry).to have_received(:capture_exception)
           end
         end
       end

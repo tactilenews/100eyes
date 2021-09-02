@@ -20,7 +20,8 @@ module SignalAdapter
       adapter = SignalAdapter::Inbound.new
 
       adapter.on(SignalAdapter::UNKNOWN_CONTRIBUTOR) do |signal_phone_number|
-        raise SignalAdapter::UnknownContributorError.new(signal_phone_number: signal_phone_number)
+        exception = SignalAdapter::UnknownContributorError.new(signal_phone_number: signal_phone_number)
+        Sentry.capture_exception(exception)
       end
 
       adapter.on(SignalAdapter::UNKNOWN_CONTENT) do |contributor|
