@@ -36,7 +36,7 @@ RSpec.describe SignalAdapter::Outbound do
     let(:perform) { -> { adapter.perform(text: 'Hello Signal', recipient: contributor) } }
     subject { perform }
     before do
-      allow(Setting).to receive(:signal_phone_number).and_return('SIGNAL_PHONE_NUMBER')
+      allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
       allow(Setting).to receive(:signal_rest_cli_endpoint).and_return('http://signal:8080')
     end
 
@@ -58,7 +58,7 @@ RSpec.describe SignalAdapter::Outbound do
       it { should have_requested(:post, 'http://signal:8080/v2/send') }
       it { should have_requested(:post, 'http://signal:8080/v2/send').with(body: hash_including({ message: 'Hello Signal' })) }
       it { should have_requested(:post, 'http://signal:8080/v2/send').with(body: hash_including({ recipients: ['+4915112345678'] })) }
-      it { should have_requested(:post, 'http://signal:8080/v2/send').with(body: hash_including({ number: 'SIGNAL_PHONE_NUMBER' })) }
+      it { should have_requested(:post, 'http://signal:8080/v2/send').with(body: hash_including({ number: 'SIGNAL_SERVER_PHONE_NUMBER' })) }
     end
   end
 end

@@ -12,7 +12,7 @@
     </p>
 
     <p>
-      <%= t('components.onboarding_signal_splash.action', number: Setting.signal_phone_number).html_safe %>
+      <%= t('components.onboarding_signal_splash.action', number: Setting.signal_server_phone_number).html_safe %>
     </p>
   <% end %>
 
@@ -20,7 +20,7 @@
     <div data-action="click->onboarding-signal-splash#highlightNext">
       <%= c 'button',
         styles: [:block, :primary],
-        link: "https://signal.me/#p/#{Setting.signal_phone_number}",
+        link: "https://signal.me/#p/#{Setting.signal_server_phone_number}",
         label: 'Zur Signal-App',
         target: '_blank',
         rel: 'noopener noreferrer',
@@ -32,7 +32,7 @@
       <%= c 'copy_button',
         styles: [:block, :secondary],
         label: 'Handynummer kopieren',
-        copy: Setting.signal_phone_number
+        copy: Setting.signal_server_phone_number
       %>
     </div>
 

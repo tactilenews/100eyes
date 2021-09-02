@@ -24,7 +24,7 @@ module SignalAdapter
         'Content-Type': 'application/json'
       }
       data = {
-        number: Setting.signal_phone_number,
+        number: Setting.signal_server_phone_number,
         recipients: [recipient.phone_number],
         message: text
       }

@@ -15,7 +15,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
 
     describe 'without a phone number' do
       before do
-        allow(Setting).to receive(:signal_phone_number).and_return(nil)
+        allow(Setting).to receive(:signal_server_phone_number).and_return(nil)
       end
 
       it 'stops immediately as there are no messages to receive' do
@@ -25,7 +25,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
 
     describe 'given a phone number', vcr: { cassette_name: :receive_signal_messages } do
       before do
-        allow(Setting).to receive(:signal_phone_number).and_return('SIGNAL_PHONE_NUMBER') unless Setting.signal_phone_number
+        allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER') unless Setting.signal_server_phone_number
       end
 
       describe 'if an unknown contributor sends us a message' do
@@ -74,7 +74,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
     describe 'if unknown content is included in the message', vcr: { cassette_name: :receive_signal_messages_containing_attachment } do
       let(:contributor) { create(:contributor, phone_number: '+4915112345678') }
       before do
-        allow(Setting).to receive(:signal_phone_number).and_return('SIGNAL_PHONE_NUMBER') unless Setting.signal_phone_number
+        allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER') unless Setting.signal_server_phone_number
         allow(Setting).to receive(:signal_unknown_content_message).and_return('We cannot process this content')
         create(:request)
         contributor

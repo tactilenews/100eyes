@@ -5,7 +5,7 @@ http_interactions:
     uri: http://signal:8080/v2/send
     body:
       encoding: UTF-8
-      string: '{"number":"SIGNAL_PHONE_NUMBER","recipients":["+49151123456789"],"message":"Hello
+      string: '{"number":"SIGNAL_SERVER_PHONE_NUMBER","recipients":["+49151123456789"],"message":"Hello
         Signal"}'
     headers:
       Accept:

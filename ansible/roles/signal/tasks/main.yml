@@ -8,7 +8,7 @@
 
 - name: Register phone number
   uri:
-    url: "{{ signal_rest_cli_endpoint }}/v1/register/{{ signal_phone_number }}"
+    url: "{{ signal_rest_cli_endpoint }}/v1/register/{{ signal_server_phone_number }}"
     method: POST
     status_code: 201
     body_format: json
@@ -24,7 +24,7 @@
 
 - name: Verify phone number
   uri:
-    url: "{{ signal_rest_cli_endpoint }}/v1/register/{{ signal_phone_number }}/verify/{{ verification_token }}"
+    url: "{{ signal_rest_cli_endpoint }}/v1/register/{{ signal_server_phone_number }}/verify/{{ verification_token }}"
     method: POST
     status_code: 201
     body_format: json
