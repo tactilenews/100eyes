@@ -11,7 +11,7 @@ de:
       opening: "Jemand hat einen Link zum Ändern des Passworts angefordert:"
   flashes:
     failure_after_create: E-Mail-Adresse, Passwort oder 6-stelliger Anmeldecode ungültig.
-    failure_after_update: Das Feld für Passwort muss mindestens 8 Zeichen lang sein.
+    failure_after_update: Das Passwort ist nicht lang genug oder der 6-stellige Anmeldecode ist ungültig.
     failure_when_forbidden: Der Link zum Ändern deines deines Passworts ist ungültig. Probiere es noch einmal oder wende dich an unseren Support.
     failure_when_not_signed_in: Bitte logge dich ein.
     failure_when_missing_email: Das Feld für E-Mail darf nicht leer sein.
