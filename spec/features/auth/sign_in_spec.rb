@@ -25,7 +25,7 @@ RSpec.feature 'Sign in', type: :feature do
       click_button 'Anmelden'
 
       # User is redirected to set up 2FA
-      expect(page).to have_current_path(two_factor_auth_setup_user_setting_path(user))
+      expect(page).to have_current_path(new_otp_setup_path)
     end
   end
 

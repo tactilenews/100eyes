@@ -83,5 +83,6 @@ Rails.application.routes.draw do
 
   namespace :otp do
     resource :confirmation, only: %i[new create]
+    resource :setup, only: %i[new create]
   end
 end

@@ -22,7 +22,8 @@ RSpec.feature 'Password Reset', type: :feature do
       fill_in 'password_reset[password]', with: new_password
       click_button 'Passwort ändern'
 
-      expect(page).to have_current_path(dashboard_path)
+      # Editor is prompted to set up 2FA
+      expect(page).to have_current_path(new_otp_setup_path)
     end
   end
 
