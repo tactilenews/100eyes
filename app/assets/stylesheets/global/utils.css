@@ -18,6 +18,10 @@
   color: var(--color-text-light);
 }
 
+.text-green {
+  color: var(--color-green-dark);
+}
+
 .sticky {
   position: sticky;
   top: 0;

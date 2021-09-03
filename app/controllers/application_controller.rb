@@ -3,8 +3,7 @@
 class ApplicationController < ActionController::Base
   include Clearance::Controller
 
-  before_action :require_login, :ensure_otp_setup
-  before_action :ensure_otp_verified
+  before_action :require_login, :ensure_otp_setup, :ensure_otp_verified
 
   private
 
@@ -23,6 +22,6 @@ class ApplicationController < ActionController::Base
   def ensure_otp_setup
     return if signed_out? || current_user.otp_enabled?
 
-    redirect_to two_factor_auth_setup_user_setting_path(current_user)
+    redirect_to new_otp_setup_path
   end
 end

@@ -87,6 +87,7 @@ Rails.application.routes.draw do
 
   namespace :otp do
     resource :confirmation, only: %i[new create]
+    resource :setup, only: %i[new create]
   end
 
   get '/sign_in' => 'sessions#new', as: 'sign_in'
