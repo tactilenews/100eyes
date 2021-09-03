@@ -230,7 +230,7 @@ de:
         copy: Code kopieren
       step_3:
         heading: Bestätige die Einrichtung
-        text: Deine App generiert jetzt alle 30 Sekunden einen neuen, <strong>6-stelligen Zahlencode</strong>. Diesen Code benötigst du zusätzlich zu deinen Zugangsdaten, um dich bei 100eyes anzumelden. Gib den jetzt den Code ein, um die Einrichtung abzuschließen.
+        text: Deine App generiert jetzt alle 30 Sekunden einen neuen, <strong>6-stelligen Zahlencode</strong>. Diesen Code benötigst du zusätzlich zu deinen Zugangsdaten, um dich bei 100eyes anzumelden. Gib jetzt den Code ein, um die Einrichtung abzuschließen.
 
   mailer:
     unsubscribe:
