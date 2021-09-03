@@ -24,11 +24,7 @@
 
     <%= c 'flex' do %>
       <div>
-        <%= RQRCode::QRCode
-          .new(user.provisioning_uri(nil, issuer: Setting.application_host))
-          .as_svg(module_size: 3)
-          .html_safe
-        %>
+        <%= c 'qr_code', url: provisioning_url %>
       </div>
 
       <%= c 'stack', space: :small, class: 'text-small text-light' do %>
