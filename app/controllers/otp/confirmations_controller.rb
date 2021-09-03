@@ -2,7 +2,7 @@
 
 module Otp
   class ConfirmationsController < ApplicationController
-    skip_before_action :ensure_otp_verified
+    skip_before_action :ensure_otp_is_verified
     before_action :redirect_if_otp_is_already_verified
 
     layout 'clearance'
