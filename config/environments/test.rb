@@ -9,6 +9,7 @@ Telegram.reset_bots
 Telegram::Bot::ClientStub.stub_all!
 
 require_relative '../../app/models/setting'
+require_relative '../../lib/middlewares/back_door'
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -64,6 +65,6 @@ Rails.application.configure do
 
   # CUSTOM
   config.active_job.queue_adapter = :test
-  config.middleware.use Clearance::BackDoor
+  config.middleware.use BackDoor
   config.action_mailer.default_url_options = { host: Setting.application_host }
 end
