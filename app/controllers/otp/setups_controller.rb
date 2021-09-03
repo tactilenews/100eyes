@@ -2,7 +2,7 @@
 
 module Otp
   class SetupsController < ApplicationController
-    skip_before_action :ensure_otp_setup
+    skip_before_action :ensure_otp_is_set_up
     before_action :redirect_if_otp_is_already_set_up
 
     layout 'clearance'
