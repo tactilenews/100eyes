@@ -149,6 +149,10 @@ de:
         label: Neues Passwort
         help: mindestens 8 Zeichen lang
       submit: Passwort ändern
+    otp_confirmation:
+      heading: Anmeldung bestätigen
+      submit: Bestätigen
+      cancel: Abbrechen
 
   mailer:
     unsubscribe:
@@ -415,6 +419,10 @@ de:
       success: Die bearbeitete Antwort wurde gespeichert
       error: Die bearbeitete Antwort konnte nicht gespeichet werden
     only_manually_created: Diese Aktion kann nur auf manuell erstellten Nachrichten ausgeführt werden.
+
+  sessions:
+    errors:
+      otp_incorrect: "Der 6-stellige Anmeldecode ist nicht korrekt."
 
   activerecord:
     errors:

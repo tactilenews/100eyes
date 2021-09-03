@@ -2,7 +2,7 @@
 
 # rubocop:disable Style/ClassAndModuleChildren
 class User::SettingsController < ApplicationController
-  skip_before_action :ensure_2fa_setup, only: %i[two_factor_auth_setup enable_otp]
+  skip_before_action :ensure_otp_setup, only: %i[two_factor_auth_setup enable_otp]
   before_action :ensure_otp_not_enabled, only: :two_factor_auth_setup
   before_action :qr_code, only: %i[two_factor_auth_setup enable_otp]
 
