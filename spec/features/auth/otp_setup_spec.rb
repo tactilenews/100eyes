@@ -47,14 +47,15 @@ RSpec.feature 'OTP Setup', type: :feature do
   context 'with 2FA set up' do
     let(:otp_enabled) { true }
 
-    scenario 'editor tries to access page' do
+    scenario 'editor tries to access any page' do
       visit dashboard_path(as: user)
 
-      # Editor has to confirm OTP, but is not prompted to
-      # set up 2FA
-      expect(page).to have_current_path(new_otp_confirmation_path)
-      fill_in 'session[otp]', with: user.otp_code
-      click_button 'Bestätigen'
+      # Editor is not redirected
+      expect(page).to have_current_path(dashboard_path)
+    end
+
+    scenario 'editor tries to access setup page' do
+      visit new_otp_setup_path(as: user)
 
       expect(page).to have_current_path(dashboard_path)
     end

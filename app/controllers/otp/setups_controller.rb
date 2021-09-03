@@ -3,6 +3,8 @@
 module Otp
   class SetupsController < ApplicationController
     skip_before_action :ensure_otp_setup
+    before_action :redirect_if_otp_is_already_set_up
+
     layout 'clearance'
 
     def new; end
@@ -21,6 +23,10 @@ module Otp
     end
 
     private
+
+    def redirect_if_otp_is_already_set_up
+      redirect_to dashboard_path if current_user.otp_enabled?
+    end
 
     def otp_params
       params.require(:setup).permit(:otp)
