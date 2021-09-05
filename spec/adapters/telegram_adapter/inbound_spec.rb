@@ -81,19 +81,20 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
       end
     end
 
-    describe '|message|file' do
-      subject { message.file }
+    describe '|message|files' do
+      subject { message.files }
 
       describe 'given a text message' do
         before { telegram_message['text'] = 'Ich bin eine normale Nachricht' }
-        it { should be_nil }
+        it { should eq([]) }
       end
 
       describe 'given a voice message', vcr: { cassette_name: :voice_message } do
         let(:telegram_message) { message_with_voice }
 
         describe 'attachment' do
-          subject { message.file.attachment }
+          let(:file) { message.files.first }
+          subject { file.attachment }
           it { should be_attached }
         end
 

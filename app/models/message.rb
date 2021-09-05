@@ -12,7 +12,7 @@ class Message < ApplicationRecord
   belongs_to :creator, class_name: 'User', optional: true
   belongs_to :request
   has_many :photos, dependent: :destroy
-  has_one :file, dependent: :destroy, class_name: 'Message::File'
+  has_many :files, dependent: :destroy, class_name: 'Message::File'
 
   counter_culture :request, column_name: proc { |model| model.reply? ? 'replies_count' : nil }
 

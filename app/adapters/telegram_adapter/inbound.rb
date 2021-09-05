@@ -28,24 +28,23 @@ module TelegramAdapter
 
     def consume(telegram_message)
       telegram_message = telegram_message.with_indifferent_access
-
       @text = telegram_message[:text] || telegram_message[:caption] || ''
       @sender = initialize_sender(telegram_message)
       return unless @sender
-
       @sender.avatar_url = avatar_url(@sender) unless @sender.avatar.attached?
-
       @message = initialize_message(telegram_message)
       if telegram_message.keys.any? { |key| UNKNOWN_CONTENT_KEYS.include?(key) }
         @message.unknown_content = true
         trigger(UNKNOWN_CONTENT)
       end
+
       @photos = initialize_photos(telegram_message)
-      @file = initialize_file(telegram_message)
-      @message.file = @file
       @photos.each do |photo|
         @message.association(:photos).add_to_target(photo)
       end
+
+      files = initialize_files(telegram_message)
+      @message.files = files
 
       yield(@message) if block_given?
     end
@@ -114,13 +113,13 @@ module TelegramAdapter
       [photo]
     end
 
-    def initialize_file(telegram_message)
-      return nil unless telegram_message[:voice]
+    def initialize_files(telegram_message)
+      return [] unless telegram_message[:voice]
 
       file = Message::File.new
       remote_file_location = file_url(telegram_message[:voice])
       file.attachment.attach(io: remote_file_location.open, filename: File.basename(remote_file_location.path))
-      file
+      [file]
     end
 
     def file_url(telegram_file)
