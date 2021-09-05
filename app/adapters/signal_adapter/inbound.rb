@@ -6,6 +6,7 @@ module SignalAdapter
 
   class Inbound
     UNKNOWN_CONTENT_KEYS = %w[mentions contacts reaction sticker].freeze
+    SUPPORTED_ATTACHMENT_TYPES =  %w[image/jpg image/jpeg image/png image/gif audio/oog audio/aac audio/mp4].freeze
 
     attr_reader :sender, :text, :message
 
@@ -73,6 +74,12 @@ module SignalAdapter
     def initialize_files(signal_message)
       attachments = signal_message.dig(:envelope, :dataMessage, :attachments)
       return [] unless attachments.any?
+
+      if attachments.any? { |attachment| SUPPORTED_ATTACHMENT_TYPES.exclude?(attachment[:contentType]) }
+        @message.unknown_content = true
+        trigger(UNKNOWN_CONTENT, sender)
+        attachments = attachments.select { |attachment| SUPPORTED_ATTACHMENT_TYPES.include?(attachment[:contentType]) }
+      end 
 
       attachments.map {
         |attachment|
