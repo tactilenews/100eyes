@@ -10,11 +10,9 @@ http_interactions:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
-      - "*/*"
+      - application/json
       User-Agent:
       - Ruby
-      Host:
-      - localhost:8080
   response:
     status:
       code: 200
@@ -23,11 +21,31 @@ http_interactions:
       Content-Type:
       - text/plain; charset=utf-8
       Date:
-      - Sat, 04 Sep 2021 21:39:54 GMT
+      - Sun, 25 Jul 2021 11:55:04 GMT
       Content-Length:
-      - '2'
+      - '309'
     body:
       encoding: UTF-8
-      string: "[]"
-  recorded_at: Sat, 04 Sep 2021 21:39:54 GMT
+      string: '[{
+                "envelope": {
+                    "source": "+4915112345678",
+                    "sourceDevice": 2,
+                    "timestamp": 1630790514242,
+                    "dataMessage": {
+                        "timestamp": 1630790514242,
+                        "message": null,
+                        "expiresInSeconds": 0,
+                        "viewOnce": false,
+                        "mentions": [],
+                        "attachments": [{
+                            "contentType": "application/pdf",
+                            "filename": "verygoodpdf.pdf",
+                            "id": "4672339980807658243",
+                            "size": 1806406
+                        }],
+                        "contacts": []
+                    }
+                }
+            }]'
+  recorded_at: Sun, 25 Jul 2021 11:55:04 GMT
 recorded_with: VCR 6.0.0
