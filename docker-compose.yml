@@ -8,6 +8,7 @@ services:
       POSTGRES_HOST: "${POSTGRES_HOST:-db}"
       POSTGRES_PORT: "${POSTGRES_PORT:-5432}"
       SIGNAL_REST_CLI_ENDPOINT: "http://signal:8080"
+      SIGNAL_REST_CLI_ATTACHMENT_PATH: "signal-cli-config/attachments/"
     command: bundle exec rails server
     depends_on: [ db ]
 

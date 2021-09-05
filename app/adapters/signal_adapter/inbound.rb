@@ -87,7 +87,7 @@ module SignalAdapter
         |attachment|
         file = Message::File.new
         file.attachment.attach(
-          io: File.open('signal-cli-config/attachments/' +  attachment[:id]),
+          io: File.open(Setting.signal_rest_cli_attachment_path +  attachment[:id]),
           filename: attachment[:filename],
           content_type: attachment[:contentType],
           identify: false

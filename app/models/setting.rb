@@ -28,6 +28,7 @@ class Setting < RailsSettings::Base
 
   field :signal_server_phone_number, readonly: true, default: ENV['SIGNAL_SERVER_PHONE_NUMBER']
   field :signal_rest_cli_endpoint, readonly: true, default: ENV['SIGNAL_REST_CLI_ENDPOINT'] || 'http://localhost:8080'
+  field :signal_rest_cli_attachment_path, readonly: true, default: ENV['SIGNAL_REST_CLI_ATTACHMENT_PATH'] || 'signal-cli-config/attachments/'
   field :signal_unknown_content_message, default: File.read(File.join('config', 'locales', 'signal', 'unknown_content.txt'))
 
   field :inbound_email_password, readonly: true, default: ENV['RAILS_INBOUND_EMAIL_PASSWORD']

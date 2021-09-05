@@ -88,7 +88,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
           allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
         end
         allow(File).to receive(:open).and_call_original
-        allow(File).to receive(:open).with('signal-cli-config/attachments/zuNhdpIHpRU_9Du-B4oG').and_return(file_fixture("signal_message_with_attachment").open)
+        allow(File).to receive(:open).with(Setting.signal_rest_cli_attachment_path + 'zuNhdpIHpRU_9Du-B4oG').and_return(file_fixture("signal_message_with_attachment").open)
         create(:request)
         contributor
       end
