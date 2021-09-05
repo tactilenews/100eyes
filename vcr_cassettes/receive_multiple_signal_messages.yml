@@ -26,9 +26,37 @@ http_interactions:
       - '235'
     body:
       encoding: UTF-8
-      string: '[{"envelope":{"source":"+4915100000000","sourceDevice":1,"timestamp":1630589332148,"dataMessage":{"timestamp":1630589332148,"message":"Message from Misses X",
-        "expiresInSeconds":0,"viewOnce":false,"mentions":[],"attachments":[],"contacts":[]}}},
-        {"envelope":{"source":"+4915112345789","sourceDevice":1,"timestamp":1630589338630,"dataMessage":{"timestamp":1630589338630,"message":"Message from known contributor",
-        "expiresInSeconds":0,"viewOnce":false,"mentions":[],"attachments":[],"contacts":[]}}}]'
+      string: '[{
+        "envelope": {
+            "source": "+4915100000000",
+            "sourceDevice": 1,
+            "timestamp": 1630589332148,
+            "dataMessage": {
+                "timestamp": 1630589332148,
+                "message": "Message from Misses X",
+                "expiresInSeconds": 0,
+                "viewOnce": false,
+                "mentions": [],
+                "attachments": [],
+                "contacts": []
+            }
+        }
+      },
+      {
+        "envelope": {
+            "source": "+4915112345789",
+            "sourceDevice": 1,
+            "timestamp": 1630589338630,
+            "dataMessage": {
+                "timestamp": 1630589338630,
+                "message": "Message from known contributor",
+                "expiresInSeconds": 0,
+                "viewOnce": false,
+                "mentions": [],
+                "attachments": [],
+                "contacts": []
+            }
+        }
+      }]'
   recorded_at: Wed, 21 Jul 2021 16:20:49 GMT
 recorded_with: VCR 6.0.0

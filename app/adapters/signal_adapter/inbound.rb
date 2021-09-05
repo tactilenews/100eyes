@@ -6,7 +6,7 @@ module SignalAdapter
 
   class Inbound
     UNKNOWN_CONTENT_KEYS = %w[mentions contacts reaction sticker].freeze
-    SUPPORTED_ATTACHMENT_TYPES =  %w[image/jpg image/jpeg image/png image/gif audio/oog audio/aac audio/mp4].freeze
+    SUPPORTED_ATTACHMENT_TYPES = %w[image/jpg image/jpeg image/png image/gif audio/oog audio/aac audio/mp4].freeze
 
     attr_reader :sender, :text, :message
 
@@ -81,19 +81,18 @@ module SignalAdapter
         @message.unknown_content = true
         trigger(UNKNOWN_CONTENT, sender)
         attachments = attachments.select { |attachment| SUPPORTED_ATTACHMENT_TYPES.include?(attachment[:contentType]) }
-      end 
+      end
 
-      attachments.map {
-        |attachment|
+      attachments.map do |attachment|
         file = Message::File.new
         file.attachment.attach(
-          io: File.open(Setting.signal_rest_cli_attachment_path +  attachment[:id]),
+          io: File.open(Setting.signal_rest_cli_attachment_path + attachment[:id]),
           filename: attachment[:filename],
           content_type: attachment[:contentType],
           identify: false
         )
         file
-      }
-    end 
+      end
+    end
   end
 end

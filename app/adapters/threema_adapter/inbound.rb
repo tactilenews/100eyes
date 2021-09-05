@@ -22,7 +22,6 @@ module ThreemaAdapter
 
       files = initialize_files(decrypted_message)
       @message.files = files
-
     end
 
     private

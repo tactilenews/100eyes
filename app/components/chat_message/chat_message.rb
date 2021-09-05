@@ -35,7 +35,7 @@ module ChatMessage
       message.photos
     end
 
-    def files 
+    def files
       message.files
     end
 

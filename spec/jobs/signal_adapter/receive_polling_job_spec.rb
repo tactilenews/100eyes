@@ -88,12 +88,15 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
           allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
         end
         allow(File).to receive(:open).and_call_original
-        allow(File).to receive(:open).with(Setting.signal_rest_cli_attachment_path + 'zuNhdpIHpRU_9Du-B4oG').and_return(file_fixture("signal_message_with_attachment").open)
+        allow(File).to receive(:open)
+          .with("#{Setting.signal_rest_cli_attachment_path}zuNhdpIHpRU_9Du-B4oG")
+          .and_return(file_fixture('signal_message_with_attachment').open)
         create(:request)
         contributor
       end
 
-      describe 'if the attachment included in the message is supported', vcr: { cassette_name: :receive_signal_messages_containing_supported_attachment } do
+      describe 'if the attachment included in the message is supported',
+               vcr: { cassette_name: :receive_signal_messages_containing_supported_attachment } do
         let(:attached_file) { Message.first.files.first.attachment }
         it 'is expected to save the attachments as attached files' do
           subject.call
@@ -101,11 +104,12 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         end
       end
 
-      describe 'if the attachment included in the message is not supported', vcr: { cassette_name: :receive_signal_messages_containing_unsupported_attachment } do
+      describe 'if the attachment included in the message is not supported',
+               vcr: { cassette_name: :receive_signal_messages_containing_unsupported_attachment } do
         before do
           allow(Setting).to receive(:signal_unknown_content_message).and_return('We cannot process this content')
         end
-  
+
         it 'bounces a warning to the contributor' do
           should have_enqueued_job(SignalAdapter::Outbound).with(
             text: 'We cannot process this content',

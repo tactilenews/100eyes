@@ -54,11 +54,11 @@ RSpec.describe SignalAdapter::Inbound do
           viewOnce: false,
           mentions: [],
           attachments: [{
-                contentType: "audio/aac",
-                filename: "Sprachnachricht.m4a",
-                id: "YBAdllZwFGbAyFSMKotg",
-                size: 89549
-            }],
+            contentType: 'audio/aac',
+            filename: 'Sprachnachricht.m4a',
+            id: 'YBAdllZwFGbAyFSMKotg',
+            size: 89_549
+          }],
           contacts: []
         }
       }
@@ -78,17 +78,17 @@ RSpec.describe SignalAdapter::Inbound do
           viewOnce: false,
           mentions: [],
           attachments: [{
-                        contentType: "image/jpeg",
-                        filename: "signal-2021-09.jpeg",
-                        id: "l6p45gFMqagnxXT_St4V",
-                        size: 145078
-                    },
-                    {
-                        contentType: "image/jpeg",
-                        filename: "signal-2021-09.jpeg",
-                        id: "S8lmoTAkH5M5Ad0BEarh",
-                        size: 115809
-                    }],
+            contentType: 'image/jpeg',
+            filename: 'signal-2021-09.jpeg',
+            id: 'l6p45gFMqagnxXT_St4V',
+            size: 145_078
+          },
+                        {
+                          contentType: 'image/jpeg',
+                          filename: 'signal-2021-09.jpeg',
+                          id: 'S8lmoTAkH5M5Ad0BEarh',
+                          size: 115_809
+                        }],
           contacts: []
         }
       }
@@ -125,8 +125,8 @@ RSpec.describe SignalAdapter::Inbound do
           message: nil,
           expiresInSeconds: 0,
           remoteDelete: {
-              "timestamp": 1630444176328
-            },
+            timestamp: 1_630_444_176_328
+          },
           viewOnce: false,
           mentions: [],
           attachments: [],
@@ -135,7 +135,6 @@ RSpec.describe SignalAdapter::Inbound do
       }
     }
   end
-
 
   before { contributor }
   let(:contributor) { create(:contributor, id: 4711, signal_phone_number: '+4912345789') }
@@ -182,7 +181,7 @@ RSpec.describe SignalAdapter::Inbound do
           expect(message.text).to eq('Hello 100eyes')
           expect(message.files.first.attachment).to be_attached
         end
-      end 
+      end
     end
 
     describe '|message|text' do
@@ -219,7 +218,7 @@ RSpec.describe SignalAdapter::Inbound do
 
         context 'given an audio file' do
           before { signal_message[:envelope][:dataMessage][:attachments][0][:contentType] = 'audio/aac' }
-          
+
           it { should be_attached }
 
           it 'preserves the content_type' do
@@ -246,21 +245,20 @@ RSpec.describe SignalAdapter::Inbound do
         end
       end
 
-    context 'given a message with multiple attached images' do
-      let(:signal_message) { signal_message_with_multiple_attachments }
-      it 'is expected to store all files' do
-        expect(message.files[0].attachment).to be_attached
-        expect(message.files[1].attachment).to be_attached
+      context 'given a message with multiple attached images' do
+        let(:signal_message) { signal_message_with_multiple_attachments }
+        it 'is expected to store all files' do
+          expect(message.files[0].attachment).to be_attached
+          expect(message.files[1].attachment).to be_attached
+        end
       end
-    end 
-  end
+    end
   end
 
   describe '#on' do
-
     describe 'UNKNOWN_CONTRIBUTOR' do
       let(:unknown_contributor_callback) { spy('unknown_contributor_callback') }
-      
+
       before do
         adapter.on(SignalAdapter::UNKNOWN_CONTRIBUTOR) do |signal_phone_number|
           unknown_contributor_callback.call(signal_phone_number)
@@ -284,9 +282,9 @@ RSpec.describe SignalAdapter::Inbound do
 
     describe 'UNKNOWN_CONTENT' do
       let(:unknown_content_callback) { spy('unknown_content_callback') }
-      
-      before do 
-        adapter.on(SignalAdapter::UNKNOWN_CONTENT) do |contributor| 
+
+      before do
+        adapter.on(SignalAdapter::UNKNOWN_CONTENT) do |contributor|
           unknown_content_callback.call(contributor)
         end
       end
@@ -306,23 +304,23 @@ RSpec.describe SignalAdapter::Inbound do
       end
 
       context 'if the message contains a reaction' do
-        before do 
+        before do
           signal_message[:envelope][:dataMessage][:reaction] = {
-            "emoji": "❤️",
-            "targetAuthor": "+4915100000000",
-            "targetSentTimestamp": 1630442783119,
-            "isRemove": false
+            emoji: '❤️',
+            targetAuthor: '+4915100000000',
+            targetSentTimestamp: 1_630_442_783_119,
+            isRemove: false
           }
         end
         it { should have_received(:call).with(contributor) }
       end
 
       context 'if the message contains a sticker' do
-        before do 
+        before do
           signal_message[:envelope][:dataMessage][:sticker] = {
-            "packId": "zMiaBdwHeFa1c1HpBpeXbA==",
-            "packKey": "RXMOYPCdVWYRUiN0RTemt9nqmc7qy3eh+9aAG5YH+88=",
-            "stickerId": 3
+            packId: 'zMiaBdwHeFa1c1HpBpeXbA==',
+            packKey: 'RXMOYPCdVWYRUiN0RTemt9nqmc7qy3eh+9aAG5YH+88=',
+            stickerId: 3
           }
         end
         it { should have_received(:call).with(contributor) }

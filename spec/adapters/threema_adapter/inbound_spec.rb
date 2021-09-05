@@ -61,7 +61,6 @@ RSpec.describe ThreemaAdapter::Inbound do
       subject { file.attachment }
 
       describe 'handling different content types' do
-
         context 'audio' do
           it { should be_attached }
 
