@@ -56,7 +56,7 @@ RSpec.describe SignalAdapter::Inbound do
           attachments: [{
             contentType: 'audio/aac',
             filename: 'Sprachnachricht.m4a',
-            id: 'YBAdllZwFGbAyFSMKotg',
+            id: 'zuNhdpIHpRU_9Du-B4oG',
             size: 89_549
           }],
           contacts: []
@@ -80,13 +80,13 @@ RSpec.describe SignalAdapter::Inbound do
           attachments: [{
             contentType: 'image/jpeg',
             filename: 'signal-2021-09.jpeg',
-            id: 'l6p45gFMqagnxXT_St4V',
+            id: 'zuNhdpIHpRU_9Du-B4oG',
             size: 145_078
           },
                         {
                           contentType: 'image/jpeg',
                           filename: 'signal-2021-09.jpeg',
-                          id: 'S8lmoTAkH5M5Ad0BEarh',
+                          id: 'zuNhdpIHpRU_9Du-B4oG',
                           size: 115_809
                         }],
           contacts: []
@@ -136,7 +136,13 @@ RSpec.describe SignalAdapter::Inbound do
     }
   end
 
-  before { contributor }
+  before do
+    allow(File).to receive(:open).and_call_original
+    allow(File).to receive(:open)
+      .with("#{Setting.signal_rest_cli_attachment_path}zuNhdpIHpRU_9Du-B4oG")
+      .and_return(file_fixture('signal_message_with_attachment').open)
+    contributor
+  end
   let(:contributor) { create(:contributor, id: 4711, signal_phone_number: '+4912345789') }
 
   describe '#consume' do
