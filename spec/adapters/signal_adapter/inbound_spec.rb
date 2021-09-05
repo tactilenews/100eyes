@@ -95,6 +95,47 @@ RSpec.describe SignalAdapter::Inbound do
     }
   end
 
+  let(:signal_expire_time_message) do
+    {
+      envelope: {
+        source: '+4912345789',
+        sourceDevice: 2,
+        timestamp: 1_626_708_555_697,
+        dataMessage: {
+          timestamp: 1_626_708_555_697,
+          message: nil,
+          expiresInSeconds: 3600,
+          viewOnce: false,
+          mentions: [],
+          attachments: [],
+          contacts: []
+        }
+      }
+    }
+  end
+
+  let(:signal_remote_delete_message) do
+    {
+      envelope: {
+        source: '+4912345789',
+        sourceDevice: 2,
+        timestamp: 1_626_708_555_697,
+        dataMessage: {
+          timestamp: 1_626_708_555_697,
+          message: nil,
+          expiresInSeconds: 0,
+          remoteDelete: {
+              "timestamp": 1630444176328
+            },
+          viewOnce: false,
+          mentions: [],
+          attachments: [],
+          contacts: []
+        }
+      }
+    }
+  end
+
 
   before { contributor }
   let(:contributor) { create(:contributor, id: 4711, signal_phone_number: '+4912345789') }
@@ -110,17 +151,38 @@ RSpec.describe SignalAdapter::Inbound do
       subject { message }
       it { should be_a(Message) }
 
-      context 'contributor not found' do
+      context 'from an unknown contributor' do
         let(:contributor) { create(:contributor, signal_phone_number: '+495555555') }
 
         it { should be(nil) }
       end
 
-      context 'receipt message' do
+      context 'given a receipt message' do
         let(:signal_message) { receipt_message }
 
         it { should be(nil) }
       end
+
+      describe 'with ignored content' do
+        context 'given an expire time message' do
+          let(:signal_message) { signal_expire_time_message }
+          it { should be(nil) }
+        end
+
+        context 'given a remote delete message' do
+          let(:signal_message) { signal_remote_delete_message }
+          it { should be(nil) }
+        end
+      end
+
+      context 'given a message with text and an attachment' do
+        let(:signal_message) { signal_message_with_attachment }
+
+        it 'is expected to store message text and attached file' do
+          expect(message.text).to eq('Hello 100eyes')
+          expect(message.files.first.attachment).to be_attached
+        end
+      end 
     end
 
     describe '|message|text' do
@@ -130,7 +192,7 @@ RSpec.describe SignalAdapter::Inbound do
         it { should eq('Hello 100eyes') }
       end
 
-      context 'given a signal_message without a `message` and with attachment' do
+      context 'given a signal_message without a `message` and with an attachment' do
         let(:signal_message) { signal_message_with_attachment }
         before { signal_message[:envelope][:dataMessage][:message] = nil }
         it { should be(nil) }
@@ -186,21 +248,12 @@ RSpec.describe SignalAdapter::Inbound do
 
     context 'given a message with multiple attached images' do
       let(:signal_message) { signal_message_with_multiple_attachments }
-      it 'should store all files' do
+      it 'is expected to store all files' do
         expect(message.files[0].attachment).to be_attached
         expect(message.files[1].attachment).to be_attached
       end
     end 
   end
-
-    context 'given a message with text and an attachment' do
-      let(:signal_message) { signal_message_with_attachment }
-
-      it 'should contain text and file' do
-        expect(message.text).to eq('Hello 100eyes')
-        expect(message.files.first.attachment).to be_attached
-      end
-    end 
   end
 
   describe '#on' do

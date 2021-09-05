@@ -24,12 +24,14 @@ module SignalAdapter
       @sender = initialize_sender(signal_message)
       return unless @sender
 
-      @text = signal_message.dig(:envelope, :dataMessage, :message)
       @message = initialize_message(signal_message)
       return unless @message
 
       files = initialize_files(signal_message)
       @message.files = files
+
+      has_content = @message.text || @message.files.any? || @message.unknown_content
+      return unless has_content
 
       yield(@message) if block_given?
     end
@@ -56,7 +58,7 @@ module SignalAdapter
 
       data_message = signal_message.dig(:envelope, :dataMessage)
 
-      message = Message.new(text: text, sender: sender)
+      message = Message.new(text: data_message[:message], sender: sender)
       message.raw_data.attach(
         io: StringIO.new(JSON.generate(signal_message)),
         filename: 'signal_message.json',
