@@ -1,1 +1,1 @@
-Unsere Software kann derzeit Textnachrichten verarbeiten, aber noch nicht andere Inhalte wie Bilder, Sprachnachrichten oder Dateianhänge. In der Zwischenzeit senden Sie bitte Nachrichten mit solchen Inhalten an <KONTAKTDATEN EINFÜGEN>. Herzlichen Dank!
+Unsere Software kann derzeit Textnachrichten, Sprachnachrichten und Bilder verarbeiten, jedoch noch keine weiteren Inhalte wie z.B. Sticker, Kontakte oder Reaktionen auf Nachrichten. In der Zwischenzeit senden Sie bitte Nachrichten mit solchen Inhalten an <KONTAKTDATEN EINFÜGEN>. Herzlichen Dank!
