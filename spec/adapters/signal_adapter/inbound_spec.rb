@@ -195,7 +195,7 @@ RSpec.describe SignalAdapter::Inbound do
 
     context 'given a message with text and an attachment' do
       let(:signal_message) { signal_message_with_attachment }
-      
+
       it 'should contain text and file' do
         expect(message.text).to eq('Hello 100eyes')
         expect(message.files.first.attachment).to be_attached
@@ -243,16 +243,49 @@ RSpec.describe SignalAdapter::Inbound do
         unknown_content_callback
       end
 
-      describe 'if the message is a plaintext message' do
+      context 'if the message is a plaintext message' do
         it { should_not have_received(:call) }
       end
 
-      describe 'if the message contains supported attachments' do
+      context 'if the message contains a contact' do
+        before { signal_message[:envelope][:dataMessage][:contacts] = ['Käptn Blaubär'] }
+        it { should have_received(:call).with(contributor) }
+      end
+
+      context 'if the message contains a reaction' do
+        before do 
+          signal_message[:envelope][:dataMessage][:reaction] = {
+            "emoji": "❤️",
+            "targetAuthor": "+4915100000000",
+            "targetSentTimestamp": 1630442783119,
+            "isRemove": false
+          }
+        end
+        it { should have_received(:call).with(contributor) }
+      end
+
+      context 'if the message contains a sticker' do
+        before do 
+          signal_message[:envelope][:dataMessage][:sticker] = {
+            "packId": "zMiaBdwHeFa1c1HpBpeXbA==",
+            "packKey": "RXMOYPCdVWYRUiN0RTemt9nqmc7qy3eh+9aAG5YH+88=",
+            "stickerId": 3
+          }
+        end
+        it { should have_received(:call).with(contributor) }
+      end
+
+      context 'if the message contains a mention' do
+        before { signal_message[:envelope][:dataMessage][:mentions] = ['everyone'] }
+        it { should have_received(:call).with(contributor) }
+      end
+
+      context 'if the message contains supported attachments' do
         let(:signal_message) { signal_message_with_attachment }
         it { should_not have_received(:call) }
       end
 
-      describe 'if the message contains unsupported attachments' do
+      context 'if the message contains unsupported attachments' do
         let(:signal_message) { signal_message_with_attachment }
         before { signal_message[:envelope][:dataMessage][:attachments][0][:contentType] = ['application/pdf'] }
         it { should have_received(:call).with(contributor) }
