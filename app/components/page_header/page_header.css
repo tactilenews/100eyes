@@ -1,0 +1,25 @@
+.PageHeader {
+  background-color: var(--color-gray-light);
+  padding: var(--spacing-unit-l);
+}
+
+.PageHeader-wrapper {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.PageHeader-actions {
+  display: flex;
+  gap: var(--spacing-unit-s);
+  font-size: var(--font-size-s);
+}
+
+.PageHeader-tabBar {
+  margin-top: var(--spacing-unit-s);
+}
+
+.PageHeader--tabBar {
+  padding-bottom: 0;
+}

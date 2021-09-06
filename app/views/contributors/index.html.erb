@@ -1,29 +1,22 @@
-<%= c 'box', styles: [:large, :gray] do %>
-  <%= c 'wrapper' do %>
-    <%= c 'flex', styles: [:spaceBetween] do %>
-
-      <%= c 'heading' do %>
-        <%= I18n.t 'contributor.contributor', count: :other %>
-      <% end %>
-
-      <div class="text-small">
-        <%= c 'button',
-          style: :secondary,
-          label: I18n.t('contributor.actions.create'),
-          link: new_contributor_path
-        %>
-        <%= c 'copy_button',
-          label: I18n.t('contributor.actions.copy_invite'),
-          url: invites_url,
-          key: 'url'
-        %>
-      </div>
-
-    <% end %>
+<%= c 'page_header' do |header| %>
+  <%= c 'heading' do %>
+    <%= I18n.t 'contributor.contributor', count: :other %>
   <% end %>
-<% end %>
-<div class="bg-gray">
-  <%= c 'wrapper' do %>
+
+  <% header.actions do %>
+    <%= c 'button',
+      style: :secondary,
+      label: I18n.t('contributor.actions.create'),
+      link: new_contributor_path
+    %>
+    <%= c 'copy_button',
+      label: I18n.t('contributor.actions.copy_invite'),
+      url: invites_url,
+      key: 'url'
+    %>
+  <% end %>
+
+  <% header.tab_bar do %>
     <%= c('tab_bar', items: {
       contributors_path => {
         label: "Aktiv",
@@ -37,7 +30,7 @@
       },
     }) %>
   <% end %>
-</div>
+<% end %>
 
 <%= c 'box', style: :large do %>
   <%= c 'wrapper' do %>
