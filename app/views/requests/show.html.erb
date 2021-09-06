@@ -2,24 +2,22 @@
   <%= c 'request_notification', request: @request %>
 <% end %>
 
-<%= c 'box', styles: [:large, :gray] do %>
-  <%= c 'wrapper' do %>
-    <%= c 'stack', space: :small do %>
-        <%= c 'heading', style: :alpha do %>
-          <%= @request.title %>
+<%= c 'page_header' do %>
+  <%= c 'stack', space: :small do %>
+      <%= c 'heading', style: :alpha do %>
+        <%= @request.title %>
+      <% end %>
+
+      <%= c 'flex', style: :small_gap do %>
+        <% if @request.tags.any? %>
+          <%= c 'tags_list', tags: @request.tags %>
         <% end %>
 
-        <%= c 'flex', style: :small_gap do %>
-          <% if @request.tags.any? %>
-            <%= c 'tags_list', tags: @request.tags %>
-          <% end %>
-
-          <%= c 'text', styles: [:small, :light] do %>
-            <%= I18n.t('request.created_at', created_at: date_time(@request.created_at)) %>
-          <% end %>
+        <%= c 'text', styles: [:small, :light] do %>
+          <%= I18n.t('request.created_at', created_at: date_time(@request.created_at)) %>
         <% end %>
-      <%= c 'plaintext_message', message: @request.text %>
-    <% end %>
+      <% end %>
+    <%= c 'plaintext_message', message: @request.text %>
   <% end %>
 <% end %>
 
