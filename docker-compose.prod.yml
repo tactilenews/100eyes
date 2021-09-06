@@ -28,6 +28,7 @@ x-prod-defaults: &x-prod-defaults
   volumes:
     - ./log:/app/log
     - ./storage:/app/storage
+    - ./signal-cli-config:/app/signal-cli-config
 
 services:
   app:
