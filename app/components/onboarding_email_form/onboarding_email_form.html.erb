@@ -8,22 +8,22 @@
     <p><%= I18n.t('components.onboarding_email_form.text') %></p>
   <% end %>
 
-  <%= form_with(model: @contributor, local: true, url: onboarding_email_path) do %>
+  <%= form_with(model: contributor, local: true, url: onboarding_email_path, data: { turbo: false }) do %>
     <%= c 'stack' do %>
-      <%= c 'field', object: @contributor, attr: :first_name do |field| %>
+      <%= c 'field', object: contributor, attr: :first_name do |field| %>
         <%= c 'input', field.input_defaults.merge(required: true) %>
       <% end %>
 
-      <%= c 'field', object: @contributor, attr: :last_name do |field| %>
+      <%= c 'field', object: contributor, attr: :last_name do |field| %>
         <%= c 'input', field.input_defaults.merge(required: true) %>
       <% end %>
 
-      <%= c 'field', object: @contributor, attr: :email do |field| %>
+      <%= c 'field', object: contributor, attr: :email do |field| %>
         <%= c 'input', field.input_defaults.merge(placeholder: '', required: true, type: :email) %>
       <% end %>
 
       <%= c('field',
-        object: @contributor,
+        object: contributor,
         attr: :data_processing_consent,
         styles: [:horizontal, :leftAligned],
         help: I18n.t('contributor.form.data_processing_consent.help', link: data_protection_link).html_safe
