@@ -37,6 +37,6 @@ class ApplicationComponent < ViewComponent::Base
   end
 
   def virtual_path
-    self.class.name.demodulize.underscore
+    "components.#{self.class.name.demodulize.underscore}"
   end
 end

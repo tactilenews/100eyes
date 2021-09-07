@@ -122,6 +122,33 @@ de:
         Auf einem Smartphone ist eine Chat-App geöffnet.
         Sichtbar ist ein angedeuteter Chatverlauf aus der Sicht eines Community-Mitglieds.
         Als neueste Nachricht ist eine Vorschau der Frage zu sehen.
+    password_input:
+      unmask: Passwort einblenden
+      mask: Passwort ausblenden
+    sign_in_form:
+      heading: Anmelden
+      email: E-Mail
+      password: Passwort
+      submit: Anmelden
+      forgot_password: Passwort vergessen?
+    otp_field:
+      label: 6-stelliger Anmeldecode
+      help: Der Code wird dir in der Authentifizierungs-App auf deinem Smartphone angezeigt.
+    request_password_reset_form:
+      heading: Passwort ändern
+      text: Gib hier die E-Mail-Adresse an. Wir senden dir dann einen Link zu, mit dem du dein Passwort ändern kannst.
+      email: E-Mail
+      submit: Passwort ändern
+    request_password_reset_confirmation:
+      heading: Wir haben dir eine E-Mail gesendet.
+      text: Klicke auf den Link in der E-Mail, um ein neues Passwort zu vergeben.
+      no_email: <strong>Keine E-Mail erhalten?</strong> Warte noch fünf Minuten ab – der Versand dauert manchmal etwas länger.
+    password_reset_form:
+      heading: Passwort ändern
+      password:
+        label: Neues Passwort
+        help: mindestens 8 Zeichen lang
+      submit: Passwort ändern
 
   mailer:
     unsubscribe:
@@ -275,7 +302,7 @@ de:
       username:
         label: Telegram
         placeholder: Kein Telegram-Nutzername hinterlegt
-        title: Du kannst den Nutzernamen nicht selbst ändern. Sobald %{value} das erste Mal via Telegram interagiert, erscheint hier der Nutzername.
+        help: Du kannst den Nutzernamen nicht selbst ändern. Sobald das Mitglied das erste Mal via Telegram interagiert, erscheint hier der Nutzername.
       threema_id:
         label: Threema ID
         placeholder: Keine Threema-ID hinterlegt
@@ -287,12 +314,11 @@ de:
         label: Tags
       note:
         label: Notiz
-        placeholder: Klicke hier, um eine Notiz zu %{value} zu hinterlegen
       active:
         label: Aktiv
       data_processing_consent:
         label: Einwilligung zur Datenverarbeitung
-        help: Ich habe die <a class="Link" href=%{value} target="_blank">Datenschutzerklärung</a> zur Kenntnis genommen und bin mit deren Geltung einverstanden. In unserer Datenschutzerklärung ist erklärt, welche Tools wir nutzen und mit welchen Firmen wir zusammenarbeiten.
+        help: Ich habe die <a class="Link" href=%{link} target="_blank">Datenschutzerklärung</a> zur Kenntnis genommen und bin mit deren Geltung einverstanden. In unserer Datenschutzerklärung ist erklärt, welche Tools wir nutzen und mit welchen Firmen wir zusammenarbeiten.
   request:
     request:
       one: Frage

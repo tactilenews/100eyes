@@ -10,18 +10,27 @@
 
   <%= form_with(model: contributor, local: true, url: onboarding_telegram_path) do %>
     <%= c 'stack' do %>
-      <%= c 'field', object: contributor, id: :first_name do |field| %>
+      <%= c 'field', object: contributor, attr: :first_name do |field| %>
         <%= c 'input', field.input_defaults.merge(required: true) %>
       <% end %>
 
-      <%= c 'field', object: contributor, id: :last_name do |field| %>
+      <%= c 'field', object: contributor, attr: :last_name do |field| %>
         <%= c 'input', field.input_defaults.merge(required: true) %>
       <% end %>
 
-      <%= c 'input', id: 'contributor[telegram_onboarding_token]', type: 'hidden', value: contributor.telegram_onboarding_token %>
+      <%= c 'input',
+        id: 'contributor[telegram_onboarding_token]',
+        type: 'hidden',
+        value: contributor.telegram_onboarding_token
+      %>
 
-      <%= c 'field', object: contributor, id: :data_processing_consent, value: data_protection_link, styles: [:horizontal, :leftAligned] do |field| %>
-        <%= c 'checkbox', field.input_defaults.merge(required: true, value: nil) %>
+      <%= c('field',
+        object: contributor,
+        attr: :data_processing_consent,
+        styles: [:horizontal, :leftAligned],
+        help: I18n.t('contributor.form.data_processing_consent.help', link: data_protection_link).html_safe
+      ) do |field| %>
+        <%= c 'checkbox', **field.input_defaults, required: true %>
       <% end %>
 
       <%= c 'button',
