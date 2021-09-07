@@ -12,9 +12,11 @@
       <%= c 'input', field.input_defaults.merge(type: :file, value: nil) %>
     <% end %>
 
-    <%= c 'field', object: contributor, attr: :phone_number, styles: [:horizontal] do |field| %>
-      <%= c 'input', field.input_defaults.merge(disabled: true) %>
-    <% end %>
+    <!--
+      <%= c 'field', object: contributor, attr: :phone_number, styles: [:horizontal] do |field| %>
+        <%= c 'input', field.input_defaults.merge(disabled: true) %>
+      <% end %>
+    -->
 
     <%= c 'field', object: contributor, attr: :phone, styles: [:horizontal] do |field| %>
       <%= c 'input', field.input_defaults.merge(type: :phone) %>
