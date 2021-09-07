@@ -42,7 +42,7 @@ RSpec.describe SignalAdapter::Inbound do
   end
 
   before { contributor }
-  let(:contributor) { create(:contributor, id: 4711, phone_number: '+4912345789') }
+  let(:contributor) { create(:contributor, id: 4711, signal_phone_number: '+4912345789') }
 
   describe '#consume' do
     let(:message) do
@@ -56,7 +56,7 @@ RSpec.describe SignalAdapter::Inbound do
       it { should be_a(Message) }
 
       context 'contributor not found' do
-        let(:contributor) { create(:contributor, phone_number: '+495555555') }
+        let(:contributor) { create(:contributor, signal_phone_number: '+495555555') }
 
         it { should be(nil) }
       end
@@ -91,7 +91,11 @@ RSpec.describe SignalAdapter::Inbound do
   describe '#on' do
     describe 'UNKNOWN_CONTRIBUTOR' do
       let(:unknown_contributor_callback) { spy('unknown_contributor_callback') }
-      before { adapter.on(SignalAdapter::UNKNOWN_CONTRIBUTOR) { |phone_number| unknown_contributor_callback.call(phone_number) } }
+      before do
+        adapter.on(SignalAdapter::UNKNOWN_CONTRIBUTOR) do |signal_phone_number|
+          unknown_contributor_callback.call(signal_phone_number)
+        end
+      end
       subject do
         adapter.consume(signal_message)
         unknown_contributor_callback

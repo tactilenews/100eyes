@@ -19,8 +19,8 @@ module SignalAdapter
 
       adapter = SignalAdapter::Inbound.new
 
-      adapter.on(SignalAdapter::UNKNOWN_CONTRIBUTOR) do |phone_number|
-        raise SignalAdapter::UnknownContributorError.new(phone_number: phone_number)
+      adapter.on(SignalAdapter::UNKNOWN_CONTRIBUTOR) do |signal_phone_number|
+        raise SignalAdapter::UnknownContributorError.new(signal_phone_number: signal_phone_number)
       end
 
       adapter.on(SignalAdapter::UNKNOWN_CONTENT) do |contributor|

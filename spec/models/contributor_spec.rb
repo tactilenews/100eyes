@@ -77,40 +77,40 @@ RSpec.describe Contributor, type: :model do
     end
   end
 
-  describe '#phone_number' do
+  describe '#signal_phone_number' do
     it 'strips whitespaces' do
-      contributor = create(:contributor, phone_number: ' +49 123 456 789  ')
-      expect(contributor.phone_number).to eq '+49123456789'
+      contributor = create(:contributor, signal_phone_number: ' +49 123 456 789  ')
+      expect(contributor.signal_phone_number).to eq '+49123456789'
     end
 
     it 'strips slashes, hypens and parantheses' do
-      contributor = create(:contributor, phone_number: '+49(0)/123-456789')
-      expect(contributor.phone_number).to eq '+49123456789'
+      contributor = create(:contributor, signal_phone_number: '+49(0)/123-456789')
+      expect(contributor.signal_phone_number).to eq '+49123456789'
     end
 
     it 'replaces leading zeros' do
-      contributor = create(:contributor, phone_number: '0049123456789')
-      expect(contributor.phone_number).to eq '+49123456789'
+      contributor = create(:contributor, signal_phone_number: '0049123456789')
+      expect(contributor.signal_phone_number).to eq '+49123456789'
     end
 
     it 'assumes German country code by default' do
-      contributor = create(:contributor, phone_number: '015112345678')
-      expect(contributor.phone_number).to eq '+4915112345678'
+      contributor = create(:contributor, signal_phone_number: '015112345678')
+      expect(contributor.signal_phone_number).to eq '+4915112345678'
     end
 
     it 'can be nil' do
-      expect(build(:contributor, phone_number: nil)).to be_valid
+      expect(build(:contributor, signal_phone_number: nil)).to be_valid
     end
 
     it 'must be unique' do
-      create(:contributor, phone_number: '+491511234567')
-      contributor = build(:contributor, phone_number: '+491511234567')
+      create(:contributor, signal_phone_number: '+491511234567')
+      contributor = build(:contributor, signal_phone_number: '+491511234567')
       expect(contributor).not_to be_valid
       expect { contributor.save!(validate: false) }.to raise_error(ActiveRecord::RecordNotUnique)
     end
 
     it 'must be a valid phone number' do
-      expect(build(:contributor, phone_number: 'A+49151123456789')).not_to be_valid
+      expect(build(:contributor, signal_phone_number: 'A+49151123456789')).not_to be_valid
     end
   end
 

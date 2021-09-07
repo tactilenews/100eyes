@@ -39,11 +39,11 @@ module SignalAdapter
     end
 
     def initialize_sender(signal_message)
-      phone_number = signal_message.dig(:envelope, :source)
-      sender = Contributor.find_by(phone_number: phone_number)
+      signal_phone_number = signal_message.dig(:envelope, :source)
+      sender = Contributor.find_by(signal_phone_number: signal_phone_number)
       return sender if sender
 
-      trigger(UNKNOWN_CONTRIBUTOR, phone_number) and return nil
+      trigger(UNKNOWN_CONTRIBUTOR, signal_phone_number) and return nil
     end
 
     def initialize_message(signal_message)

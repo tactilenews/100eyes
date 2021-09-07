@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Onboarding::Signals', type: :request do
-  let(:phone_number) { '+4915112345678' }
+  let(:signal_phone_number) { '+4915112345678' }
   let(:data_processing_consent) { true }
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
   let(:params) { { jwt: jwt } }
@@ -13,7 +13,7 @@ RSpec.describe 'Onboarding::Signals', type: :request do
       {
         first_name: 'Zora',
         last_name: 'Zimmermann',
-        phone_number: phone_number,
+        signal_phone_number: signal_phone_number,
         data_processing_consent: data_processing_consent
       }
     end
@@ -29,7 +29,7 @@ RSpec.describe 'Onboarding::Signals', type: :request do
       expect(contributor).to have_attributes(
         first_name: 'Zora',
         last_name: 'Zimmermann',
-        phone_number: '+4915112345678',
+        signal_phone_number: '+4915112345678',
         data_processing_consent: true
       )
       expect(contributor.json_web_token).to have_attributes(
@@ -52,14 +52,14 @@ RSpec.describe 'Onboarding::Signals', type: :request do
     end
 
     context 'given invalid phone number' do
-      let(:phone_number) { 'invalid-phone-number' }
+      let(:signal_phone_number) { 'invalid-phone-number' }
 
       it 'displays validation errors' do
         subject.call
         parsed = Capybara::Node::Simple.new(response.body)
         fields = parsed.all('.Field')
-        phone_number_field = fields.find { |f| f.has_text? 'Signal Telefonnummer' }
-        expect(phone_number_field).to have_text('ist keine gültige Nummer')
+        signal_phone_number_field = fields.find { |f| f.has_text? 'Signal Telefonnummer' }
+        expect(signal_phone_number_field).to have_text('ist keine gültige Nummer')
       end
 
       it 'has 422 status code' do

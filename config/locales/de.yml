@@ -318,7 +318,7 @@ de:
       email:
         label: E-Mail-Adresse
         placeholder: Keine E-Mail-Adresse hinterlegt
-      phone_number:
+      signal_phone_number:
         label: Signal Telefonnummer
       threema_id:
         label: Threema ID
@@ -452,7 +452,7 @@ de:
           has_many: Datensatz kann nicht gelöscht werden, da abhängige %{record} existieren.
     attributes:
       contributor:
-        phone_number: Telefonnummer
+        signal_phone_number: Telefonnummer
   date:
     abbr_day_names:
     - So

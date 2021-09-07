@@ -25,7 +25,9 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
 
     describe 'given a phone number', vcr: { cassette_name: :receive_signal_messages } do
       before do
-        allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER') unless Setting.signal_server_phone_number
+        unless Setting.signal_server_phone_number
+          allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
+        end
       end
 
       describe 'if an unknown contributor sends us a message' do
@@ -55,8 +57,8 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
 
         describe 'and a corresponding contributor' do
           before do
-            create(:contributor, phone_number: '+4915112345789')
-            create(:contributor, phone_number: '+4915155555555')
+            create(:contributor, signal_phone_number: '+4915112345789')
+            create(:contributor, signal_phone_number: '+4915155555555')
           end
 
           it 'create a message' do
@@ -65,16 +67,18 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
 
           it 'assigns the correct contributor' do
             subject.call
-            expect(Message.first.contributor.phone_number).to eq('+4915112345789')
+            expect(Message.first.contributor.signal_phone_number).to eq('+4915112345789')
           end
         end
       end
     end
 
     describe 'if unknown content is included in the message', vcr: { cassette_name: :receive_signal_messages_containing_attachment } do
-      let(:contributor) { create(:contributor, phone_number: '+4915112345678') }
+      let(:contributor) { create(:contributor, signal_phone_number: '+4915112345678') }
       before do
-        allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER') unless Setting.signal_server_phone_number
+        unless Setting.signal_server_phone_number
+          allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
+        end
         allow(Setting).to receive(:signal_unknown_content_message).and_return('We cannot process this content')
         create(:request)
         contributor

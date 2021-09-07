@@ -7,7 +7,7 @@ module Onboarding
     private
 
     def attr_name
-      :phone_number
+      :signal_phone_number
     end
   end
 end

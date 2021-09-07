@@ -5,13 +5,13 @@ module SignalAdapter
     queue_as :default
     def self.send!(message)
       recipient = message.recipient
-      return unless recipient&.phone_number
+      return unless recipient&.signal_phone_number
 
       perform_later(text: message.text, recipient: recipient)
     end
 
     def self.send_welcome_message!(contributor)
-      return unless contributor&.phone_number
+      return unless contributor&.signal_phone_number
 
       welcome_message = [Setting.onboarding_success_heading, Setting.onboarding_success_text].join("\n")
       perform_later(text: welcome_message, recipient: contributor)
@@ -25,7 +25,7 @@ module SignalAdapter
       }
       data = {
         number: Setting.signal_server_phone_number,
-        recipients: [recipient.phone_number],
+        recipients: [recipient.signal_phone_number],
         message: text
       }
       req = Net::HTTP::Post.new(url.to_s, header)
