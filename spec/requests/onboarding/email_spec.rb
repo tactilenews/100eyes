@@ -5,7 +5,6 @@ require 'rails_helper'
 RSpec.describe 'Onboarding::Email', type: :request do
   let(:email) { 'zora@example.org' }
   let(:data_processing_consent) { true }
-  let(:contributor) { create(:contributor) }
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
   let(:params) { { jwt: jwt } }
 

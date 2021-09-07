@@ -63,14 +63,18 @@
   text-align: center;
 }
 
-.Button--threema {
-  --button-color: var(--color-threema);
+.Button--email {
+  --button-color: var(--color-email);
 }
 
 .Button--telegram {
   --button-color: var(--color-telegram);
 }
 
-.Button--email {
-  --button-color: var(--color-email);
+.Button--threema {
+  --button-color: var(--color-threema);
+}
+
+.Button--signal {
+  --button-color: var(--color-signal);
 }

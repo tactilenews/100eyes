@@ -3,13 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe 'Onboarding::Signals', type: :request do
-  let(:phone_number) { '+49151123456789' }
+  let(:phone_number) { '+4915112345678' }
   let(:data_processing_consent) { true }
-  let(:contributor) { create(:contributor) }
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
   let(:params) { { jwt: jwt } }
 
-  describe 'POST /onboarding/email' do
+  describe 'POST /onboarding/signal' do
     let(:attrs) do
       {
         first_name: 'Zora',
@@ -21,7 +20,7 @@ RSpec.describe 'Onboarding::Signals', type: :request do
 
     let(:params) { { jwt: jwt, contributor: attrs, context: :contributor_signup } }
 
-    subject { -> { post onboarding_email_path, params: params } }
+    subject { -> { post onboarding_signal_path, params: params } }
 
     it 'creates contributor' do
       expect { subject.call }.to change(Contributor, :count).by(1)
@@ -30,14 +29,15 @@ RSpec.describe 'Onboarding::Signals', type: :request do
       expect(contributor).to have_attributes(
         first_name: 'Zora',
         last_name: 'Zimmermann',
-        phone_number: '+49151123456789',
+        phone_number: '+4915112345678',
         data_processing_consent: true
       )
       expect(contributor.json_web_token).to have_attributes(
         invalidated_jwt: jwt
       )
     end
-    it { should enqueue_job(SignalAdapter::Outbound).with(recipient: contributor, text: anything) }
+
+    it('sends welcome message') { should enqueue_job(SignalAdapter::Outbound).with(text: anything, recipient: anything) }
 
     it 'redirects to success page' do
       subject.call
@@ -58,8 +58,8 @@ RSpec.describe 'Onboarding::Signals', type: :request do
         subject.call
         parsed = Capybara::Node::Simple.new(response.body)
         fields = parsed.all('.Field')
-        email_field = fields.find { |f| f.has_text? 'Telefonnummer' }
-        expect(email_field).to have_text('ist nicht gültig')
+        phone_number_field = fields.find { |f| f.has_text? 'Signal Telefonnummer' }
+        expect(phone_number_field).to have_text('ist keine gültige Nummer')
       end
     end
 

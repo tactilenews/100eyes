@@ -13,7 +13,7 @@ RSpec.describe SignalAdapter::Outbound do
     before { message } # we don't count the extra ::send here
     it { should_not enqueue_job }
     context 'contributor has a phone number' do
-      let(:contributor) { create(:contributor, phone_number: '+4915112345', email: nil) }
+      let(:contributor) { create(:contributor, phone_number: '+491511234567', email: nil) }
       it { should enqueue_job(described_class) }
     end
   end
@@ -24,7 +24,7 @@ RSpec.describe SignalAdapter::Outbound do
     it { should_not enqueue_job }
 
     describe 'contributor has a phone number' do
-      let(:contributor) { create(:contributor, email: nil, phone_number: '+4915112345') }
+      let(:contributor) { create(:contributor, email: nil, phone_number: '+491511234567') }
 
       it { should enqueue_job(described_class) }
     end
@@ -32,7 +32,7 @@ RSpec.describe SignalAdapter::Outbound do
 
   describe 'perform' do
     let(:adapter) { described_class.new }
-    let(:contributor) { create(:contributor, phone_number: '+49151123456789', email: nil) }
+    let(:contributor) { create(:contributor, phone_number: '+4915112345678', email: nil) }
     let(:perform) { -> { adapter.perform(text: 'Hello Signal', recipient: contributor) } }
     subject { perform }
     before do
@@ -57,7 +57,7 @@ RSpec.describe SignalAdapter::Outbound do
 
       it { should have_requested(:post, 'http://signal:8080/v2/send') }
       it { should have_requested(:post, 'http://signal:8080/v2/send').with(body: hash_including({ message: 'Hello Signal' })) }
-      it { should have_requested(:post, 'http://signal:8080/v2/send').with(body: hash_including({ recipients: ['+49151123456789'] })) }
+      it { should have_requested(:post, 'http://signal:8080/v2/send').with(body: hash_including({ recipients: ['+4915112345678'] })) }
       it { should have_requested(:post, 'http://signal:8080/v2/send').with(body: hash_including({ number: 'SIGNAL_PHONE_NUMBER' })) }
     end
   end

@@ -54,9 +54,10 @@
   --color-pink: #f4177a;
   --color-pink-dark: #c11361;
 
+  --color-email: var(--color-gray-dark);
+  --color-signal: #3a76f0;
   --color-telegram: #0089ce;
   --color-threema: #00862f;
-  --color-email: var(--color-gray-dark);
 
   --color-bg: #fff;
   --color-text: #333;

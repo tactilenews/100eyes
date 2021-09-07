@@ -305,6 +305,8 @@ de:
       email:
         label: E-Mail-Adresse
         placeholder: Keine E-Mail-Adresse hinterlegt
+      phone_number:
+        label: Signal Telefonnummer
       threema_id:
         label: Threema ID
         help: 6 Zeichen lang, besteht nur aus Zahlen und Buchstaben
@@ -312,10 +314,11 @@ de:
       username:
         label: Telegram
         placeholder: Kein Telegram-Nutzername hinterlegt
-        help: Du kannst den Nutzernamen nicht selbst ändern. Sobald das Mitglied das erste Mal via Telegram interagiert, erscheint hier der Nutzername.
+        help: Du kannst den Nutzernamen nicht selbst ändern.
       threema_id:
         label: Threema ID
         placeholder: Keine Threema-ID hinterlegt
+        help: Du kannst den Nutzernamen nicht selbst ändern.
       zip_code:
         label: Postleitzahl
       city:

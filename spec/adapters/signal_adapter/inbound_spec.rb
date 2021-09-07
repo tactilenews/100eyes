@@ -56,7 +56,7 @@ RSpec.describe SignalAdapter::Inbound do
       it { should be_a(Message) }
 
       context 'contributor not found' do
-        let(:contributor) { create(:contributor, phone_number: '+49555555') }
+        let(:contributor) { create(:contributor, phone_number: '+495555555') }
 
         it { should be(nil) }
       end

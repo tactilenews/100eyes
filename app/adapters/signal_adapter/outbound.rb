@@ -13,7 +13,7 @@ module SignalAdapter
     def self.send_welcome_message!(contributor)
       return unless contributor&.phone_number
 
-      welcome_message = ["<b>#{Setting.onboarding_success_heading}</b>", Setting.onboarding_success_text].join("\n")
+      welcome_message = [Setting.onboarding_success_heading, Setting.onboarding_success_text].join("\n")
       perform_later(text: welcome_message, recipient: contributor)
     end
 
