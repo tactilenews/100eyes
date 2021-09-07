@@ -1,7 +1,7 @@
 #############################
 Available hosts are:
 
-{% for folder in backup_hosts.files|sort(attribute='path', case_sensitive=False) %}
+{% for folder in backup_hosts_ordered %}
 {{ loop.index }}. {{ folder.path }}
 {% endfor %}
 
