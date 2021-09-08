@@ -24,7 +24,7 @@ RSpec.feature 'Auth', type: :feature do
 
     scenario 'trying to access' do
       visit admin_users_path(as: user)
-      expect(page).to have_link('user erstellen')
+      expect(page).to have_link('New user')
     end
   end
 end
