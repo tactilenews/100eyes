@@ -90,7 +90,7 @@ class Contributor < ApplicationRecord
   end
 
   def telegram?
-    telegram_id.present?
+    telegram_id.present? || telegram_onboarding_token.present?
   end
 
   def email?
