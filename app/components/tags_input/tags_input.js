@@ -16,8 +16,10 @@ function dropdownItemTemplate(tagData) {
       tabindex="0"
       role="option"
     >
-      <span class="TagsInput-name" style="--tag-bg: ${color}">
-        ${tagData.name}
+      <span class="tagify__tag" style="--tag-color: ${color}">
+        <div>
+          <span class="tagify__tag-text">${tagData.name}</span>
+        </div>
       </span>
       <span class="TagsInput-count">${tagData.count} ${membersLabel}<span>
     </div>
@@ -27,12 +29,7 @@ function dropdownItemTemplate(tagData) {
 function transformTag(tagData) {
   const color = tagColor(tagData);
 
-  tagData.style = `
-    --tag-bg: ${color};
-    --tag-hover: ${color};
-    --tag-remove-bg: ${color};
-    --tag-remove-btn-bg--hover: ${color};
-  `;
+  tagData.style = `--tag-color: ${color}`;
 }
 
 export default class extends Controller {
@@ -51,11 +48,14 @@ export default class extends Controller {
 
       whitelist: JSON.parse(this.availableTagsValue),
       enforceWhitelist: !this.allowNewValue,
+      editTags: false,
 
       dropdown: {
         classname: 'TagsInput-dropdown',
         enabled: 0,
         closeOnSelect: false,
+        placeAbove: false,
+        maxItems: 100,
       },
 
       templates: {

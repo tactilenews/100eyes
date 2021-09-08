@@ -1,53 +1,143 @@
+/* These styles overwrite lots of Tagify's default styles
+ * in rather hacky ways. Be extra careful when changing
+ * styles and make sure to test your changes manually.
+ */
 @import '@yaireo/tagify/dist/tagify.css';
 
 .TagsInput {
   width: 100%;
 }
 
-.TagsInput tags {
-  --tag-text-color: #fff;
-
-  --tag-remove-btn-color: #fff;
-  --tag-remove-btn-bg--hover: var(--color-pink);
-  --tag-remove-bg: var(--color-pink);
-
-  --tags-border-color: var(--color-border);
-  --tags-focus-border-color: var(--color-focus);
-
+.tagify {
   border-radius: var(--border-radius);
-
   transition: none;
 }
 
-.TagsInput tags:focus-within {
+.tagify:focus-within {
   box-shadow: var(--input-focus-shadow);
+  border-color: var(--color-focus);
 }
 
-.TagsInput tag {
+.tagify[aria-expanded='true'] {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.tagify__input {
+  padding-left: calc(0.125 * var(--spacing-unit));
+}
+
+.tagify__tag {
+  transform: translateY(-1px);
   margin-bottom: 0;
+
   font-size: var(--font-size-s);
+  border: 1px solid var(--tag-color);
+  border-radius: 9999px;
+
+  transition: none !important;
+  overflow: hidden;
 }
 
-.TagsInput-dropdownItem {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
+.tagify__tag > div {
+  padding: 0.25em 0.75em;
 }
 
-.tagify__dropdown__item--active,
-.tagify__dropdown__item:hover {
-  background-color: var(--color-gray-light);
+.tagify__tag > div::before,
+.tagify__tag:hover:not([readonly]) > div::before {
+  opacity: 0.125;
+  background-color: var(--tag-color);
+  box-shadow: none;
+}
+
+.tagify__tag__removeBtn {
+  color: var(--tag-color);
+  filter: brightness(0.66);
+  transition: none;
+}
+
+.tagify__tag__removeBtn:hover {
+  color: #fff;
+  background-color: var(--tag-color);
+  filter: unset;
+}
+
+.tagify__tag-text {
+  color: var(--tag-color);
+  font-weight: 500;
+  filter: brightness(0.66);
+
+  transition: none;
+  opacity: 1 !important;
 }
 
 .TagsInput-name {
   padding: 0 var(--spacing-unit-xs);
-  border-radius: var(--border-radius);
+  border-radius: 9999px;
   background-color: var(--tag-bg);
   color: #fff;
 }
 
-.TagsInput-count,
-.tagify__dropdown__item--active .TagsInput-count {
+.tagify__dropdown,
+.tagify__dropdown__wrapper,
+.tagify__dropdown::before {
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+}
+
+.tagify__dropdown {
+  overflow: visible;
+}
+
+.tagify__dropdown::before {
+  content: '';
+  position: absolute;
+  top: var(--border-radius);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-shadow: var(--input-focus-shadow);
+}
+
+.tagify__dropdown__wrapper {
+  position: relative;
+  width: 100%;
+  overflow-x: hidden !important;
+
+  border-color: var(--color-focus);
+  background-color: #fff;
+  transition: none;
+}
+
+.tagify__dropdown__item {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: calc(0.125 * var(--spacing-unit));
+  padding-right: var(--spacing-unit-s);
+}
+
+.tagify__dropdown__item:first-child {
+  padding-top: calc(0.175 * var(--spacing-unit));
+}
+
+.tagify__dropdown__item:last-child {
+  padding-bottom: calc(0.175 * var(--spacing-unit));
+}
+
+.tagify__dropdown__item--active,
+.tagify__dropdown__item:hover {
+  background-color: var(--color-gray-lightest);
+}
+
+.tagify__dropdown .TagsInput-count {
   font-size: var(--font-size-xs);
   color: var(--color-text-light);
+}
+
+.tagify__dropdown .tagify__tag {
+  transform: none;
+  margin: 0;
 }
