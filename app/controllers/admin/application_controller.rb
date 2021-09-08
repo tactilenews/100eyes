@@ -2,10 +2,12 @@
 
 module Admin
   class ApplicationController < Administrate::ApplicationController
-    before_action :authenticate_admin
+    include Authentication
 
-    def authenticate_admin
-      # TODO
+    before_action :authorize_admin
+
+    def authorize_admin
+      head :forbidden unless current_user.admin?
     end
   end
 end
