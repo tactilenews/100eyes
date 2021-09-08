@@ -4,7 +4,7 @@ require 'net/http'
 
 module SignalAdapter
   class ReceivePollingJob < ApplicationJob
-    queue_as :default
+    queue_as :poll_signal_messages
 
     def perform(*_args)
       return if Setting.signal_server_phone_number.blank?
