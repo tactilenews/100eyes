@@ -219,8 +219,8 @@ de:
       submit: Bestätigen
       cancel: Abbrechen
     otp_setup:
-      heading: Dein Konto absichern
-      text: In drei Schritten richtest du die <strong>Anmeldung in zwei Schritten</strong> ein. Damit sicherst du dein Konto zusätzlich ab und schützt die Daten deiner Community.
+      heading: Schütze dein Konto
+      text: Richte jetzt die <strong>Zwei-Faktor-Authentifizierung</strong> ein. Damit sicherst du dein Konto zusätzlich ab und schützt so die Daten deiner Community.
       step_1:
         heading: Lade eine App herunter
         text: Um die Anmeldung in zwei Schritten zu nutzen, benötigst du eine App wie z.B. <a class="Link" href="https://freeotp.github.io/" target="_blank" rel="noreferrer noopener">FreeOTP</a> oder <a class="Link" href="https://support.google.com/accounts/answer/1066447?hl=de" rel="noreferrer noopener">Google Authenticator</a>. Wenn du schon eine andere App verwendest, kannst du sie auch für 100eyes verwenden.

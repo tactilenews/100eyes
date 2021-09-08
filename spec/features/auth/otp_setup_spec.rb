@@ -16,7 +16,7 @@ RSpec.feature 'OTP Setup', type: :feature do
       visit dashboard_path(as: user)
 
       expect(page).to have_current_path(new_otp_setup_path)
-      expect(page).to have_text('Dein Konto absichern')
+      expect(page).to have_text('Schütze dein Konto')
 
       # Editor enters incorrect OTP
       fill_in 'setup[otp]', with: user.otp_code.reverse
@@ -36,7 +36,7 @@ RSpec.feature 'OTP Setup', type: :feature do
       visit dashboard_path(as: user)
 
       expect(page).to have_current_path(new_otp_setup_path)
-      expect(page).to have_text('Dein Konto absichern')
+      expect(page).to have_text('Schütze dein Konto')
 
       click_link 'Abbrechen'
 
