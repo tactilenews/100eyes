@@ -22,7 +22,7 @@
 
         <%= c 'field', object: @request, attr: :tag_list do |field| %>
           <%= c 'stack', space: :small do %>
-            <div class="Field-help" data-request-form-target="membersCount"></div>
+            <%= c 'callout', style: :small, data: { request_form_target: 'membersCount' } %>
 
             <div data-action="changeTags->request-form#updateMembersCount">
               <%= c 'tags_input', field.input_defaults.merge(

@@ -6,7 +6,11 @@
   padding: var(--spacing-unit-s) calc(0.75 * var(--spacing-unit));
   background-color: var(--background-color);
   border-left: 3px solid var(--border-color);
-  color: var(--text-color);
+  color: var(--color-blue-dark);
+}
+
+.Callout--small {
+  padding: var(--spacing-unit-xs) var(--spacing-unit-s);
 }
 
 .Callout--warning {
