@@ -9,11 +9,14 @@
   overflow: hidden;
 
   display: inline-block;
-  border-radius: 9999px;
   padding: 0.125em 0.5em;
+
+  border-radius: 9999px;
   font-weight: 500;
   font-size: var(--font-size-s);
+
   border: 1px solid var(--tag-color);
+  background-color: #fff;
 }
 
 .TagsList > li > span {

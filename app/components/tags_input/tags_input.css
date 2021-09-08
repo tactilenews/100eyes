@@ -33,6 +33,7 @@
 
   font-size: var(--font-size-s);
   border: 1px solid var(--tag-color);
+  background-color: #fff;
   border-radius: 9999px;
 
   transition: none !important;
