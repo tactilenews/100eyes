@@ -98,3 +98,6 @@ gem 'threema', git: 'https://github.com/tactilenews/threema.git', branch: 'maste
 
 gem 'sentry-rails'
 gem 'sentry-ruby'
+
+# Admin
+gem 'administrate'

@@ -85,4 +85,12 @@ Rails.application.routes.draw do
     resource :confirmation, only: %i[new create]
     resource :setup, only: %i[new create]
   end
+
+  namespace :admin do
+    resources :users
+    resources :contributors, except: %i[new create]
+    resources :requests, except: %i[new create]
+
+    root to: 'users#index'
+  end
 end
