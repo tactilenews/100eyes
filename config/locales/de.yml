@@ -70,7 +70,7 @@ de:
         other: Du hast {count} neue Antworten.
     onboarding_header:
       byline: eine Dialog-Recherche von <a class="Link" href="https://tactile.news" target="_blank">tactile.news</a>
-    onboarding_signal_splash:
+    onboarding_signal_link:
       heading: Fast geschafft…
       text: Damit wir Ihnen zukünftig auf Signal schreiben können, müssen Sie uns zuerst kontaktieren.
       action: Senden Sie uns hierzu eine Nachricht auf Signal. Ein kurzes „Hallo” reicht aus! Unsere Nummer ist <strong>%{number}</strong>.

@@ -2,9 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.describe OnboardingSignalSplash::OnboardingSignalSplash, type: :component do
+RSpec.describe OnboardingSignalLink::OnboardingSignalLink, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
   let(:params) { {} }
-  it { should have_css('.OnboardingSignalSplash') }
+  it { should have_css('.OnboardingSignalLink') }
 end

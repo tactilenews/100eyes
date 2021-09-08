@@ -39,9 +39,9 @@ RSpec.describe 'Onboarding::Signal', type: :request do
 
     it('sends welcome message') { should enqueue_job(SignalAdapter::Outbound).with(text: anything, recipient: anything) }
 
-    it 'redirects to splash screen' do
+    it 'redirects to onboarding signal link page' do
       subject.call
-      expect(response).to redirect_to onboarding_signal_splash_path
+      expect(response).to redirect_to onboarding_signal_link_path
     end
 
     it 'invalidates the jwt' do
@@ -94,7 +94,7 @@ RSpec.describe 'Onboarding::Signal', type: :request do
 
       it 'redirects to success page so that an attacker cannot make a phone number listing' do
         subject.call
-        expect(response).to redirect_to onboarding_signal_splash_path
+        expect(response).to redirect_to onboarding_signal_link_path
       end
 
       it 'invalidates the jwt' do

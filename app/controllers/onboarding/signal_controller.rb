@@ -2,9 +2,9 @@
 
 module Onboarding
   class SignalController < OnboardingController
-    skip_before_action :verify_jwt, only: :splash
+    skip_before_action :verify_jwt, only: :link
 
-    def splash; end
+    def link; end
 
     private
 
@@ -13,7 +13,7 @@ module Onboarding
     end
 
     def redirect_to_success
-      redirect_to onboarding_signal_splash_path(jwt: nil)
+      redirect_to onboarding_signal_link_path(jwt: nil)
     end
   end
 end
