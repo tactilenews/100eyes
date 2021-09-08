@@ -6,6 +6,10 @@ module SignalAdapter
   class ReceivePollingJob < ApplicationJob
     queue_as :poll_signal_messages
 
+    before_enqueue do
+      throw(:abort) if Delayed::Job.where(queue: 'poll_signal_messages', failed_at: nil).any?
+    end
+
     def perform(*_args)
       return if Setting.signal_server_phone_number.blank?
 
