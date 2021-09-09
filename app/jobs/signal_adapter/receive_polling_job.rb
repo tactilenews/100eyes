@@ -13,10 +13,7 @@ module SignalAdapter
     def perform(*_args)
       return if Setting.signal_server_phone_number.blank?
 
-      url = URI.parse("#{Setting.signal_rest_cli_endpoint}/v1/receive/#{Setting.signal_server_phone_number}")
-      res = Net::HTTP.get_response(url)
-      signal_messages = JSON.parse(res.body)
-
+      signal_messages = request_new_messages
       adapter = SignalAdapter::Inbound.new
 
       adapter.on(SignalAdapter::CONNECT) do |contributor|
@@ -43,6 +40,12 @@ module SignalAdapter
     end
 
     private
+
+    def request_new_messages
+      url = URI.parse("#{Setting.signal_rest_cli_endpoint}/v1/receive/#{Setting.signal_server_phone_number}")
+      res = Net::HTTP.get_response(url)
+      JSON.parse(res.body)
+    end
 
     def ping_monitoring_service
       monitoring_url = URI.parse(Setting.signal_monitoring_url)
