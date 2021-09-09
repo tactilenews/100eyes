@@ -266,6 +266,19 @@ RSpec.describe SignalAdapter::Inbound do
             expect(subject.blob.content_type).to eq('image/gif')
           end
         end
+
+        context 'given attachment without filename' do
+          before do
+            signal_message[:envelope][:dataMessage][:attachments][0][:contentType] = 'image/jpeg'
+            signal_message[:envelope][:dataMessage][:attachments][0][:filename] = nil
+          end
+
+          it { should be_attached }
+
+          it 'sets a fallback filename based on mime type' do
+            expect(subject.filename.to_s).to eq('attachment.jpeg')
+          end
+        end
       end
 
       context 'given a message with multiple attached images' do

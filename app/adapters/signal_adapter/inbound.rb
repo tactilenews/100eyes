@@ -93,16 +93,25 @@ module SignalAdapter
         attachments = attachments.select { |attachment| SUPPORTED_ATTACHMENT_TYPES.include?(attachment[:contentType]) }
       end
 
-      attachments.map do |attachment|
-        file = Message::File.new
-        file.attachment.attach(
-          io: File.open(Setting.signal_rest_cli_attachment_path + attachment[:id]),
-          filename: attachment[:filename],
-          content_type: attachment[:contentType],
-          identify: false
-        )
-        file
-      end
+      attachments.map { |attachment| initialize_file(attachment) }
+    end
+
+    def initialize_file(attachment)
+      file = Message::File.new
+
+      # Some Signal clients do not set the filename
+      content_type = attachment[:contentType]
+      extension = Mime::Type.lookup(content_type).symbol.to_s
+      filename = attachment[:filename] || "attachment.#{extension}"
+
+      file.attachment.attach(
+        io: File.open(Setting.signal_rest_cli_attachment_path + attachment[:id]),
+        filename: filename,
+        content_type: content_type,
+        identify: false
+      )
+
+      file
     end
   end
 end
