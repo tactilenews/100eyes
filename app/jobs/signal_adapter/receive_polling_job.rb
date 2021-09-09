@@ -48,6 +48,8 @@ module SignalAdapter
     end
 
     def ping_monitoring_service
+      return if Setting.signal_monitoring_url.blank?
+
       monitoring_url = URI.parse(Setting.signal_monitoring_url)
       Net::HTTP.get(monitoring_url)
     end
