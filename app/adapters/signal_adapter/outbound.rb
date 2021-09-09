@@ -3,15 +3,16 @@
 module SignalAdapter
   class Outbound < ApplicationJob
     queue_as :default
+
     def self.send!(message)
-      recipient = message.recipient
-      return unless recipient&.signal_phone_number
+      recipient = message&.recipient
+      return unless contributor_can_receive_messages?(recipient)
 
       perform_later(text: message.text, recipient: recipient)
     end
 
     def self.send_welcome_message!(contributor)
-      return unless contributor&.signal_phone_number
+      return unless contributor_can_receive_messages?(contributor)
 
       welcome_message = [Setting.onboarding_success_heading, Setting.onboarding_success_text].join("\n")
       perform_later(text: welcome_message, recipient: contributor)
@@ -34,6 +35,10 @@ module SignalAdapter
         http.request(req)
       end
       res.value # may raise exception
+    end
+
+    def self.contributor_can_receive_messages?(recipient)
+      recipient&.signal_phone_number.present? && recipient.signal_onboarding_completed_at.present?
     end
   end
 end

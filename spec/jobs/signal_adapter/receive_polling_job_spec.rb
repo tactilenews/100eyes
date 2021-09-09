@@ -63,8 +63,8 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
 
       describe 'given a message from a known contributor' do
         before do
-          create(:contributor, signal_phone_number: '+4915112345789')
-          create(:contributor, signal_phone_number: '+4915155555555')
+          create(:contributor, signal_phone_number: '+4915112345789', signal_onboarding_completed_at: Time.zone.now)
+          create(:contributor, signal_phone_number: '+4915155555555', signal_onboarding_completed_at: Time.zone.now)
         end
 
         it 'is expected to create a message' do
@@ -79,7 +79,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
 
       describe 'given multiple messages from known and unknown contributors', vcr: { cassette_name: :receive_multiple_signal_messages } do
         before do
-          create(:contributor, signal_phone_number: '+4915112345789')
+          create(:contributor, signal_phone_number: '+4915112345789', signal_onboarding_completed_at: Time.zone.now)
         end
 
         it 'creates a message for the known contributor' do
@@ -93,7 +93,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
       end
 
       describe 'given a message with attachments' do
-        let!(:contributor) { create(:contributor, signal_phone_number: '+4915112345678') }
+        let!(:contributor) { create(:contributor, signal_phone_number: '+4915112345678', signal_onboarding_completed_at: Time.zone.now) }
 
         before do
           allow(File).to receive(:open).and_call_original

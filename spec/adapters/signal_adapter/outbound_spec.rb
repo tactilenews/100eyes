@@ -11,10 +11,26 @@ RSpec.describe SignalAdapter::Outbound do
   describe '::send_welcome_message!' do
     subject { -> { described_class.send_welcome_message!(contributor) } }
     before { message } # we don't count the extra ::send here
+
     it { should_not enqueue_job }
+
     context 'contributor has a phone number' do
-      let(:contributor) { create(:contributor, signal_phone_number: '+491511234567', email: nil) }
-      it { should enqueue_job(described_class) }
+      let(:onboarding_completed_at) { nil }
+      let(:contributor) do
+        create(
+          :contributor,
+          signal_phone_number: '+491511234567',
+          signal_onboarding_completed_at: onboarding_completed_at,
+          email: nil
+        )
+      end
+
+      it { should_not enqueue_job }
+
+      context 'and has completed onboarding' do
+        let(:onboarding_completed_at) { Time.zone.now }
+        it { should enqueue_job(described_class) }
+      end
     end
   end
 
@@ -24,8 +40,23 @@ RSpec.describe SignalAdapter::Outbound do
     it { should_not enqueue_job }
 
     describe 'contributor has a phone number' do
-      let(:contributor) { create(:contributor, email: nil, signal_phone_number: '+491511234567') }
-      it { should enqueue_job(described_class) }
+      let(:onboarding_completed_at) { nil }
+
+      let(:contributor) do
+        create(
+          :contributor,
+          email: nil,
+          signal_phone_number: '+491511234567',
+          signal_onboarding_completed_at: onboarding_completed_at
+        )
+      end
+
+      it { should_not enqueue_job(described_class) }
+
+      context 'and has completed onboarding' do
+        let(:onboarding_completed_at) { Time.zone.now }
+        it { should enqueue_job(described_class) }
+      end
     end
   end
 
