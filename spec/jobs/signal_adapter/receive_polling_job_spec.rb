@@ -5,8 +5,23 @@ require 'rails_helper'
 RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
   describe '#perform_later' do
     subject { -> { described_class.perform_later } }
-    it 'enqueues a job' do
-      should have_enqueued_job
+    let(:queue) { 'poll_signal_messages' }
+
+    it { should have_enqueued_job(described_class).on_queue(queue) }
+
+    context 'given a polling job' do
+      # Our implementation is specific to `delayed_job`. During test
+      # execution, an in-memory test adapter is used. Thus, we have
+      # to set up the job record explicitly.
+      let!(:job) { Delayed::Job.create(queue: queue, handler: 'Job', failed_at: failed_at) }
+      let(:failed_at) { nil }
+
+      it { should_not have_enqueued_job(described_class).on_queue(queue) }
+
+      context 'that has failed' do
+        let(:failed_at) { Time.zone.now }
+        it { should have_enqueued_job(described_class).on_queue(queue) }
+      end
     end
   end
 

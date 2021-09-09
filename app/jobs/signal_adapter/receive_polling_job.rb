@@ -7,7 +7,7 @@ module SignalAdapter
     queue_as :poll_signal_messages
 
     before_enqueue do
-      throw(:abort) if Delayed::Job.where(queue: 'poll_signal_messages', failed_at: nil).any?
+      throw(:abort) unless queue_empty?
     end
 
     def perform(*_args)
@@ -42,6 +42,10 @@ module SignalAdapter
     def ping_monitoring_service
       monitoring_url = URI.parse(Setting.signal_monitoring_url)
       Net::HTTP.get(monitoring_url)
+    end
+
+    def queue_empty?
+      Delayed::Job.where(queue: queue_name, failed_at: nil).none?
     end
   end
 end
