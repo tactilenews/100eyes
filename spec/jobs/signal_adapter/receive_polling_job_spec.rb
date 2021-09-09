@@ -61,7 +61,30 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         end
       end
 
-      describe 'given a message from a known contributor' do
+      describe 'given a message from a contributor with incomplete onboarding' do
+        let!(:contributor) { create(:contributor, signal_phone_number: '+4915112345789') }
+
+        before do
+          Setting.onboarding_success_heading = 'Welcome!'
+          Setting.onboarding_success_text = ''
+        end
+
+        it { should_not(change { Message.count }) }
+
+        it 'sends welcome message' do
+          should have_enqueued_job(SignalAdapter::Outbound).with do |text, recipient|
+            expect(text).to eq("Welcome!\n")
+            expect(recipient.id).to eq(contributor.id)
+          end
+        end
+
+        it 'sets signal_onboarding_completed_at' do
+          subject.call
+          expect(contributor.reload.signal_onboarding_completed_at).to be_present
+        end
+      end
+
+      describe 'given a message from a contributor with completed onboarding' do
         before do
           create(:contributor, signal_phone_number: '+4915112345789', signal_onboarding_completed_at: Time.zone.now)
           create(:contributor, signal_phone_number: '+4915155555555', signal_onboarding_completed_at: Time.zone.now)

@@ -19,6 +19,11 @@ module SignalAdapter
 
       adapter = SignalAdapter::Inbound.new
 
+      adapter.on(SignalAdapter::CONNECT) do |contributor|
+        contributor.update!(signal_onboarding_completed_at: Time.zone.now)
+        SignalAdapter::Outbound.send_welcome_message!(contributor)
+      end
+
       adapter.on(SignalAdapter::UNKNOWN_CONTRIBUTOR) do |signal_phone_number|
         exception = SignalAdapter::UnknownContributorError.new(signal_phone_number: signal_phone_number)
         Sentry.capture_exception(exception)
