@@ -3,6 +3,7 @@
 module SignalAdapter
   UNKNOWN_CONTRIBUTOR = :unknown_contributor
   UNKNOWN_CONTENT = :unknown_content
+  CONNECT = :connect
 
   class Inbound
     UNKNOWN_CONTENT_KEYS = %w[mentions contacts reaction sticker].freeze
@@ -47,9 +48,18 @@ module SignalAdapter
     def initialize_sender(signal_message)
       signal_phone_number = signal_message.dig(:envelope, :source)
       sender = Contributor.find_by(signal_phone_number: signal_phone_number)
-      return sender if sender
 
-      trigger(UNKNOWN_CONTRIBUTOR, signal_phone_number) and return nil
+      unless sender
+        trigger(UNKNOWN_CONTRIBUTOR, signal_phone_number)
+        return nil
+      end
+
+      if sender.signal_onboarding_completed_at.blank?
+        trigger(CONNECT, sender)
+        return nil
+      end
+
+      sender
     end
 
     def initialize_message(signal_message)

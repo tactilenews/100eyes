@@ -141,9 +141,19 @@ RSpec.describe SignalAdapter::Inbound do
     allow(File).to receive(:open)
       .with("#{Setting.signal_rest_cli_attachment_path}zuNhdpIHpRU_9Du-B4oG")
       .and_return(file_fixture('signal_message_with_attachment').open)
-    contributor
   end
-  let(:contributor) { create(:contributor, id: 4711, signal_phone_number: '+4912345789') }
+
+  let(:onboarding_completed_at) { Time.zone.now }
+  let(:phone_number) { '+4912345789' }
+
+  let!(:contributor) do
+    create(
+      :contributor,
+      id: 4711,
+      signal_phone_number: phone_number,
+      signal_onboarding_completed_at: onboarding_completed_at
+    )
+  end
 
   describe '#consume' do
     let(:message) do
@@ -157,7 +167,14 @@ RSpec.describe SignalAdapter::Inbound do
       it { should be_a(Message) }
 
       context 'from an unknown contributor' do
-        let(:contributor) { create(:contributor, signal_phone_number: '+495555555') }
+        let(:onboarding_completed_at) { nil }
+        let!(:phone_number) { '+495555555' }
+
+        it { should be(nil) }
+      end
+
+      context 'from a contributor with incomplete onboarding' do
+        let(:onboarding_completed_at) { nil }
 
         it { should be(nil) }
       end
@@ -262,6 +279,35 @@ RSpec.describe SignalAdapter::Inbound do
   end
 
   describe '#on' do
+    describe 'CONNECT' do
+      let(:connect_callback) { spy('connect_callback') }
+
+      before do
+        adapter.on(SignalAdapter::CONNECT) do |contributor|
+          connect_callback.call(contributor)
+        end
+      end
+
+      subject do
+        adapter.consume(signal_message)
+        connect_callback
+      end
+
+      context 'if the sender is unknown' do
+        let(:phone_number) { nil }
+        it { should_not have_received(:call) }
+      end
+
+      context 'if the sender is a contributor with incomplete onboarding' do
+        let(:onboarding_completed_at) { nil }
+        it { should have_received(:call).with(contributor) }
+      end
+
+      context 'if the sender is a contributor who has completed onboarding' do
+        it { should_not have_received(:call) }
+      end
+    end
+
     describe 'UNKNOWN_CONTRIBUTOR' do
       let(:unknown_contributor_callback) { spy('unknown_contributor_callback') }
 
@@ -277,6 +323,11 @@ RSpec.describe SignalAdapter::Inbound do
       end
 
       describe 'if the sender is a contributor ' do
+        it { should_not have_received(:call) }
+      end
+
+      describe 'if the sender has not completed onboarding' do
+        let(:onboarding_completed_at) { nil }
         it { should_not have_received(:call) }
       end
 
