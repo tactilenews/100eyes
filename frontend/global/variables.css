@@ -17,6 +17,7 @@
 
   --border-radius: 5px;
   --border-radius-l: 9px;
+  --border-radius-full: 9999px;
 
   --color-blue: #007eff;
   --color-blue-dark: #1a2d3a;
@@ -71,7 +72,7 @@
   --font-family-serif: PT Serif;
 
   --input-border-width: 1px;
-  --input-focus-shadow: 0 0 0 3px #007eff40;
+  --input-focus-shadow: 0 0 0 3px var(--color-blue-lightest);
   --input-padding: var(--spacing-unit-xs) var(--spacing-unit-s);
   --input-margin: var(--spacing-unit-xs) 0;
 

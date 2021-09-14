@@ -8,7 +8,7 @@
   padding: var(--input-padding);
   padding-left: var(--spacing-unit);
   padding-right: var(--spacing-unit);
-  border-radius: 999px;
+  border-radius: var(--border-radius-full);
 
   text-decoration: none;
   background: none;
