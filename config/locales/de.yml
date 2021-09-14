@@ -71,7 +71,7 @@ de:
     onboarding_header:
       byline: eine Dialog-Recherche von <a class="Link" href="https://tactile.news" target="_blank">tactile.news</a>
     onboarding_signal_link:
-      heading: Fast geschafft…
+      heading: Fast geschafft.
       text: Damit wir Ihnen zukünftig auf Signal schreiben können, müssen Sie uns zuerst kontaktieren.
       action: Senden Sie uns hierzu eine Nachricht auf Signal. Ein kurzes „Hallo” reicht aus! Unsere Nummer ist <strong>%{number}</strong>.
       link: Zur Signal-App
@@ -94,14 +94,14 @@ de:
       text: Geben Sie bitte unten Ihren Namen ein, um die Anmeldung abzuschließen.
       submit: Anmeldung fortsetzen
     onboarding_telegram_link:
-      heading: Fast geschafft!
+      heading: Fast geschafft.
       text: Verbinden Sie Ihr Telegram-Konto in der Telegram-App, um die Anmeldung abzuschließen.
       link: Zur Telegram-App
       copy: Link kopieren
       help: Über den Button gelangen Sie direkt zum Telegram-Profil von „%{project_name}”. Alternativ können Sie einen Link kopieren und auf Ihrem Smartphone öffnen.
       didnt_work: Hat das nicht funktioniert? Oder werden Sie nach einem Code gefragt?
     onboarding_telegram_fallback:
-      heading: Fast geschafft!
+      heading: Fast geschafft.
       text: Verbinden Sie Ihr Telegram-Konto in der Telegram-App, um die Anmeldung abzuschließen.
       steps:
         - "Finden Sie uns auf Telegram. Suchen Sie dazu nach <strong>%{telegram_handle}</strong>."
