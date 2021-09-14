@@ -62,7 +62,7 @@ rails:
   postmark:
     api_token: # (REQUIRED) API token for your new Postmark server
     transactional_stream: "outbound"
-    broadcasts_stream: "broadcasts"
+    broadcasts_stream: "broadcast"
   sentry:
     dsn: # (REQUIRED) Sentry DSN to enable error tracking
 CONFIGURATION
