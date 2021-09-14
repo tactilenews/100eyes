@@ -171,6 +171,11 @@ RSpec.describe Contributor, type: :model do
   describe '#telegram?' do
     subject { contributor.telegram? }
 
+    describe 'given a contributor with a telegram onboarding token' do
+      let(:contributor) { create(:contributor, telegram_id: nil, telegram_onboarding_token: 'ABC') }
+      it { should be(true) }
+    end
+
     describe 'given a contributor with a telegram_id and telegram_id' do
       let(:contributor) { create(:contributor, telegram_id: '123') }
       it { should be(true) }

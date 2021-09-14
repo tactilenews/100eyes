@@ -15,8 +15,14 @@ RSpec.describe TelegramAdapter::Outbound do
       before { message } # we don't count the extra ::send here
       subject { -> { described_class.send!(message) } }
       it { should enqueue_job(described_class) }
+
       context 'contributor has no telegram_id' do
         let(:contributor) { create(:contributor, telegram_id: nil, email: nil) }
+        it { should_not enqueue_job(described_class) }
+      end
+
+      context 'contributor has telegram_onboarding_token' do
+        let(:contributor) { create(:contributor, telegram_id: nil, telegram_onboarding_token: nil, email: nil) }
         it { should_not enqueue_job(described_class) }
       end
     end
