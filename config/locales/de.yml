@@ -317,7 +317,7 @@ de:
         label: E-Mail-Adresse
         placeholder: Keine E-Mail-Adresse hinterlegt
       signal_phone_number:
-        label: Signal Telefonnummer
+        label: Handynummer
       threema_id:
         label: Threema ID
         help: 6 Zeichen lang, besteht nur aus Zahlen und Buchstaben
@@ -450,7 +450,7 @@ de:
           has_many: Datensatz kann nicht gelöscht werden, da abhängige %{record} existieren.
     attributes:
       contributor:
-        signal_phone_number: Telefonnummer
+        signal_phone_number: Handynummer
   date:
     abbr_day_names:
     - So

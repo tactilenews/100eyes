@@ -60,7 +60,7 @@ RSpec.describe 'Onboarding::Signal', type: :request do
         subject.call
         parsed = Capybara::Node::Simple.new(response.body)
         fields = parsed.all('.Field')
-        signal_phone_number_field = fields.find { |f| f.has_text? 'Signal Telefonnummer' }
+        signal_phone_number_field = fields.find { |f| f.has_text? 'Handynummer' }
         expect(signal_phone_number_field).to have_text('ist keine gültige Nummer')
       end
 
