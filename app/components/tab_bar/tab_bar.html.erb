@@ -1,0 +1,17 @@
+<nav class="TabBar">
+  <ul>
+    <% items.each do |url, options| %>
+      <li class="TabBar-item <%= 'TabBar-item--active' if options.dig(:active) %>">
+        <a href="<%= url %>">
+          <%= options.dig(:label) %>
+
+          <% if options.key?(:count) %>
+            <span class="TabBar-count">
+              <%= options[:count] %>
+            </span>
+          <% end %>
+        </a>
+      </li>
+    <% end %>
+  </ul>
+</nav>

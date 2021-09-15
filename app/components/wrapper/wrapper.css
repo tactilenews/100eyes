@@ -1,7 +1,8 @@
 .Wrapper {
   width: 100%;
   max-width: var(--grid-max-width);
-  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .Wrapper--narrow {

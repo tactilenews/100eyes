@@ -14,11 +14,16 @@ class ContributorsController < ApplicationController
   end
 
   def index
-    @contributors = Contributor.with_attached_avatar.includes(:tags)
+    @filter = filter_param
+    @active_count = Contributor.active.count
+    @inactive_count = Contributor.inactive.count
+
+    @contributors = @filter == :inactive ? Contributor.inactive : Contributor.active
+    @contributors = @contributors.with_attached_avatar.includes(:tags)
   end
 
   def show
-    @contributors = Contributor.with_attached_avatar
+    @contributors = Contributor.active.with_attached_avatar
   end
 
   def new
@@ -75,6 +80,14 @@ class ContributorsController < ApplicationController
 
   def count_params
     params.permit(tag_list: [])
+  end
+
+  def filter_param
+    value = params.permit(:filter)[:filter]&.to_sym
+
+    return :active unless %i[active inactive].include?(value)
+
+    value
   end
 
   attr_reader :contributor

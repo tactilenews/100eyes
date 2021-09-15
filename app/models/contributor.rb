@@ -20,6 +20,7 @@ class Contributor < ApplicationRecord
 
   default_scope { order(:first_name, :last_name) }
   scope :active, -> { where(deactivated_at: nil) }
+  scope :inactive, -> { where.not(deactivated_at: nil) }
 
   validates :data_processing_consent, acceptance: true, unless: proc { |c| c.editor_guarantees_data_consent }
 
@@ -119,7 +120,14 @@ class Contributor < ApplicationRecord
   def active?
     deactivated_at.nil?
   end
+
   alias active active?
+
+  def inactive?
+    !active?
+  end
+
+  alias inactive inactive?
 
   def avatar_url=(url)
     return unless url

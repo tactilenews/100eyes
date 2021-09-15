@@ -398,6 +398,7 @@ RSpec.describe Contributor, type: :model do
 
   describe 'scope ::active' do
     subject { Contributor.active }
+
     context 'given some inactive and active contributors' do
       let(:active_contributor) { create(:contributor, active: true) }
       let(:inactive_contributor) { create(:contributor, active: false) }
@@ -410,6 +411,21 @@ RSpec.describe Contributor, type: :model do
     end
   end
 
+  describe 'scope ::inactive' do
+    subject { Contributor.inactive }
+
+    context 'given some inactive and active contributors' do
+      let(:active_contributor) { create(:contributor, active: true) }
+      let(:inactive_contributor) { create(:contributor, active: false) }
+
+      before { active_contributor && inactive_contributor }
+
+      it 'returns only inactive contributors' do
+        should eq([inactive_contributor])
+      end
+    end
+  end
+
   describe '.active' do
     subject { contributor.active }
     it { should be(true) }
@@ -417,6 +433,17 @@ RSpec.describe Contributor, type: :model do
     describe 'given "deactivated_at" timestamp' do
       let(:contributor) { create(:contributor, deactivated_at: 1.day.ago) }
       it { should be(false) }
+    end
+  end
+
+  describe '.inactive' do
+    subject { contributor.inactive }
+
+    it { should be(false) }
+
+    describe 'given "deactivated_at" timestamp' do
+      let(:contributor) { create(:contributor, deactivated_at: 1.day.ago) }
+      it { should be(true) }
     end
   end
 

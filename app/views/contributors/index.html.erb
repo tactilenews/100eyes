@@ -1,25 +1,34 @@
-<%= c 'box', styles: [:large, :gray] do %>
-  <%= c 'wrapper' do %>
-    <%= c 'flex', styles: [:spaceBetween] do %>
+<%= c 'page_header' do |header| %>
+  <%= c 'heading' do %>
+    <%= I18n.t 'contributor.contributor', count: :other %>
+  <% end %>
 
-      <%= c 'heading' do %>
-        <%= Contributor.count %> <%= I18n.t 'contributor.contributor', count: Contributor.count %>
-      <% end %>
+  <% header.actions do %>
+    <%= c 'button',
+      style: :secondary,
+      label: I18n.t('contributor.actions.create'),
+      link: new_contributor_path
+    %>
+    <%= c 'copy_button',
+      label: I18n.t('contributor.actions.copy_invite'),
+      url: invites_url,
+      key: 'url'
+    %>
+  <% end %>
 
-      <div class="text-small">
-        <%= c 'button',
-          style: :secondary,
-          label: I18n.t('contributor.actions.create'),
-          link: new_contributor_path
-        %>
-        <%= c 'copy_button',
-          label: I18n.t('contributor.actions.copy_invite'),
-          url: invites_url,
-          key: 'url'
-        %>
-      </div>
-
-    <% end %>
+  <% header.tab_bar do %>
+    <%= c('tab_bar', items: {
+      contributors_path => {
+        label: "Aktiv",
+        active: @filter == :active,
+        count: @active_count,
+      },
+      contributors_path(filter: :inactive) => {
+        label: "Inaktiv",
+        active: @filter == :inactive,
+        count: @inactive_count,
+      },
+    }) %>
   <% end %>
 <% end %>
 
