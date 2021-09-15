@@ -37,3 +37,9 @@
   background-color: var(--color-red-lightest);
   border-color: var(--color-red-light);
 }
+
+.Notification--alert {
+  color: var(--color-orange-darkest);
+  background-color: var(--color-orange-lightest);
+  border-color: var(--color-orange);
+}

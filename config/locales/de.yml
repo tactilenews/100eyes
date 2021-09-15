@@ -149,6 +149,12 @@ de:
         label: Neues Passwort
         help: mindestens 8 Zeichen lang
       submit: Passwort ändern
+    browser_support_notification:
+      message: >
+        Einige Funktionen werden in deinem Browser womöglich nicht unterstützt.
+        Um 100eyes vollständig zu nutzen, verwende eine aktuelle Version von
+        <a class="Link" href="https://mozilla.org/firefox" target="_blank" rel="noreferrer noopener">Mozilla Firefox</a> oder
+        <a class="Link" href="https://google.com/chrome" target="_blank" rel="noreferrer noopener">Google Chrome</a>.
 
   mailer:
     unsubscribe:

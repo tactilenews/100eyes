@@ -15,8 +15,12 @@
       <%= t 'skip_to_content' %>
     </a>
 
+
     <div class="sticky">
       <%= c 'nav_bar' %>
+
+      <%= c 'browser_support_notification' %>
+
       <% flash.each do |type, message| %>
         <%= c 'notification', styles: [type] do %>
           <%= message %>
