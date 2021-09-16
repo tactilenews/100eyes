@@ -19,7 +19,7 @@ module SignalAdapter
     end
 
     def perform(text:, recipient:)
-      url = URI.parse("#{Setting.signal_rest_cli_endpoint}/v2/send")
+      url = URI.parse("#{Setting.signal_cli_rest_api_endpoint}/v2/send")
       header = {
         Accept: 'application/json',
         'Content-Type': 'application/json'

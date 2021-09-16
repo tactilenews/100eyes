@@ -1,2 +1,2 @@
-signal_rest_cli_endpoint: http://localhost:8080
+signal_cli_rest_api_endpoint: http://localhost:8080
 signal_server_phone_number: "{{ rails.signal.server_phone_number }}"

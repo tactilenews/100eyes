@@ -105,7 +105,7 @@ module SignalAdapter
       filename = attachment[:filename] || "attachment.#{extension}"
 
       file.attachment.attach(
-        io: File.open(Setting.signal_rest_cli_attachment_path + attachment[:id]),
+        io: File.open(Setting.signal_cli_rest_api_attachment_path + attachment[:id]),
         filename: filename,
         content_type: content_type,
         identify: false

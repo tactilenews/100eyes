@@ -121,7 +121,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         before do
           allow(File).to receive(:open).and_call_original
           allow(File).to receive(:open)
-            .with("#{Setting.signal_rest_cli_attachment_path}zuNhdpIHpRU_9Du-B4oG")
+            .with("#{Setting.signal_cli_rest_api_attachment_path}zuNhdpIHpRU_9Du-B4oG")
             .and_return(file_fixture('signal_message_with_attachment').open)
         end
 

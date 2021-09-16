@@ -42,7 +42,7 @@ module SignalAdapter
     private
 
     def request_new_messages
-      url = URI.parse("#{Setting.signal_rest_cli_endpoint}/v1/receive/#{Setting.signal_server_phone_number}")
+      url = URI.parse("#{Setting.signal_cli_rest_api_endpoint}/v1/receive/#{Setting.signal_server_phone_number}")
       res = Net::HTTP.get_response(url)
       JSON.parse(res.body)
     end

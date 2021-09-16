@@ -67,7 +67,7 @@ RSpec.describe SignalAdapter::Outbound do
     subject { perform }
     before do
       allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
-      allow(Setting).to receive(:signal_rest_cli_endpoint).and_return('http://signal:8080')
+      allow(Setting).to receive(:signal_cli_rest_api_endpoint).and_return('http://signal:8080')
     end
 
     describe 'signal-rest-cli HTTP response status' do
