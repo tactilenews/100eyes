@@ -33,7 +33,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   signal:
-    image: bbernhard/signal-cli-rest-api:latest
+    image: bbernhard/signal-cli-rest-api:0.42
     environment:
       - USE_NATIVE=0
         #- AUTO_RECEIVE_SCHEDULE=0 22 * * * #enable this parameter on demand (see description below)
