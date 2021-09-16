@@ -31,16 +31,6 @@
     body:
       ping: "string"
 
-- name: Query id of app container
-  command:
-    cmd: docker-compose -f docker-compose.yml -f docker-compose.prod.yml ps -q app
-    chdir: /home/ansible
-  register: get_container_id
-
-- name: Save container id of app
-  set_fact:
-    app_container_id: "{{ get_container_id.stdout }}"
-
 - name: Setup cronjob to receive messages
   ansible.builtin.cron:
     name: "Receive signal messages"
