@@ -33,6 +33,7 @@ module SignalAdapter
       res = Net::HTTP.start(url.host, url.port) do |http|
         http.request(req)
       end
+      res.value # may raise exception
     end
   end
 end

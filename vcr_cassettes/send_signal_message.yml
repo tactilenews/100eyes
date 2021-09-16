@@ -5,7 +5,7 @@ http_interactions:
     uri: http://signal:8080/v2/send
     body:
       encoding: UTF-8
-      string: '{"number":"SIGNAL_PHONE_NUMBER","recipients":["+4915112345"],"message":"Hello
+      string: '{"number":"SIGNAL_PHONE_NUMBER","recipients":["+49151123456789"],"message":"Hello
         Signal"}'
     headers:
       Accept:
@@ -18,18 +18,15 @@ http_interactions:
       - Ruby
   response:
     status:
-      code: 400
-      message: Bad Request
+      code: 201
+      message: Created
     headers:
-      Content-Type:
-      - application/json; charset=utf-8
       Date:
-      - Sat, 24 Jul 2021 14:26:09 GMT
+      - Sat, 24 Jul 2021 14:43:45 GMT
       Content-Length:
-      - '244'
+      - '0'
     body:
-      encoding: ASCII-8BIT
-      string: !binary |-
-        eyJlcnJvciI6IklORk8gU2lnbmFsQWNjb3VudCAtIENvbmZpZyBmaWxlIGlzIGluIHVzZSBieSBhbm90aGVyIGluc3RhbmNlLCB3YWl0aW5n4oCmXG5JTkZPIFNpZ25hbEFjY291bnQgLSBDb25maWcgZmlsZSBsb2NrIGFjcXVpcmVkLlxuRmFpbGVkIHRvIHNlbmQgbWVzc2FnZTogb3JnLndoaXNwZXJzeXN0ZW1zLnNpZ25hbHNlcnZpY2UuYXBpLnB1c2guZXhjZXB0aW9ucy5Ob3RGb3VuZEV4Y2VwdGlvbjogTm90IGZvdW5kXG4ifQ==
-  recorded_at: Sat, 24 Jul 2021 14:26:09 GMT
+      encoding: UTF-8
+      string: ''
+  recorded_at: Sat, 24 Jul 2021 14:43:45 GMT
 recorded_with: VCR 6.0.0
