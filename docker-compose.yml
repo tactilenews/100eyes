@@ -13,9 +13,9 @@ services:
   app:
     <<: *x-defaults
     command: bundle exec rails server
-    depends_on: [ db, queue ]
+    depends_on: [ db, job-worker ]
 
-  queue:
+  job-worker:
     <<: *x-defaults
     environment:
       BINDING: 0.0.0.0

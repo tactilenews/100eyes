@@ -43,6 +43,6 @@ services:
       POSTGRES_DB: "${POSTGRES_DB:-app_production}"
     restart: always
 
-  queue:
+  job-worker:
     <<: *x-prod-defaults
     restart: always
