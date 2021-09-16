@@ -27,6 +27,7 @@ class Setting < RailsSettings::Base
   field :threema_unknown_content_message, default: File.read(File.join('config', 'locales', 'threema', 'unknown_content.txt'))
 
   field :signal_server_phone_number, readonly: true, default: ENV['SIGNAL_SERVER_PHONE_NUMBER']
+  field :signal_monitoring_url, readonly: true, default: ENV['SIGNAL_MONITORING_URL']
   field :signal_rest_cli_endpoint, readonly: true, default: ENV['SIGNAL_REST_CLI_ENDPOINT'] || 'http://localhost:8080'
   field :signal_rest_cli_attachment_path, readonly: true,
                                           default: ENV['SIGNAL_REST_CLI_ATTACHMENT_PATH'] || 'signal-cli-config/attachments/'

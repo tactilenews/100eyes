@@ -20,6 +20,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
       end
 
       it 'stops immediately as there are no messages to receive' do
+        expect(job).not_to receive(:ping_monitoring_service)
         should_not raise_error
       end
     end
@@ -29,6 +30,8 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         unless Setting.signal_server_phone_number
           allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
         end
+
+        allow(job).to receive(:ping_monitoring_service).and_return(nil)
         allow(Sentry).to receive(:capture_exception).with(an_instance_of(SignalAdapter::UnknownContributorError))
       end
 

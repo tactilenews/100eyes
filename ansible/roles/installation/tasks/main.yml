@@ -45,6 +45,7 @@
     THREEMARB_API_SECRET: "{{ rails.threema.api_secret }}"
     THREEMARB_PRIVATE: "{{ rails.threema.private_key }}"
     SIGNAL_SERVER_PHONE_NUMBER: "{{ rails.signal.server_phone_number }}"
+    SIGNAL_MONITORING_URL: "{{ rails.signal.monitoring_url }}"
     SENTRY_DSN: "{{ rails.sentry.dsn }}"
   community.general.docker_compose:
     project_src: /home/ansible

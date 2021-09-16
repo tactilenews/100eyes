@@ -33,6 +33,15 @@ module SignalAdapter
           m.contributor.reply(adapter)
         end
       end
+
+      ping_monitoring_service && return
+    end
+
+    private
+
+    def ping_monitoring_service
+      monitoring_url = URI.parse(Setting.signal_monitoring_url)
+      Net::HTTP.get(monitoring_url)
     end
   end
 end
