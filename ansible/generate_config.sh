@@ -55,8 +55,8 @@ rails:
     transactional_stream: "outbound"
     broadcasts_stream: "broadcast"
   signal:
-    server_phone_number: # (REQUIRED)
-    monitoring_url: # (REQUIRED)
+    server_phone_number:
+    monitoring_url:
   secret_key_base: "${secret_key_base}"
   postgres:
     user: app
