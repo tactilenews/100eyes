@@ -46,3 +46,6 @@ services:
   job-worker:
     <<: *x-prod-defaults
     restart: always
+
+  signal:
+    restart: always
