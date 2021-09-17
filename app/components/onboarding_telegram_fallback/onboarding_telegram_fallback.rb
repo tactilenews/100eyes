@@ -14,7 +14,7 @@ module OnboardingTelegramFallback
 
     def fallback_steps
       data = { telegram_handle: Setting.telegram_bot_username, token: telegram_onboarding_token }
-      I18n.t('components.onboarding_telegram_fallback.steps', data)
+      I18n.t('components.onboarding_telegram_fallback.steps', **data)
     end
   end
 end

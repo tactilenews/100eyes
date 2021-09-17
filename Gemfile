@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '~> 2.7.1'
+ruby '~> 3.0.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.1.4'
@@ -93,8 +93,6 @@ gem 'postmark-rails'
 gem 'active_model_otp'
 gem 'clearance'
 gem 'rqrcode'
-
-gem 'threema', git: 'https://github.com/tactilenews/threema.git', branch: 'master'
-
 gem 'sentry-rails'
 gem 'sentry-ruby'
+gem 'threema', git: 'https://github.com/tactilenews/threema.git', branch: 'master'
