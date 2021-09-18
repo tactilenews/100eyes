@@ -229,6 +229,20 @@ RSpec.describe Contributor, type: :model do
     end
   end
 
+  describe '.all_tags_with_count' do
+    subject { Contributor.all_tags_with_count.pluck(:name, :count) }
+
+    context 'given a contributor with a tag' do
+      let!(:contributor) { create(:contributor, tag_list: %w[Homeowner]) }
+      it { should eq([['Homeowner', 1]]) }
+
+      context 'and a request with the same tag' do
+        let!(:request) { create(:request, tag_list: %w[Homeowner]) }
+        it { should eq([['Homeowner', 1]]) }
+      end
+    end
+  end
+
   describe '#conversation_about' do
     subject { contributor.conversation_about(the_request) }
 

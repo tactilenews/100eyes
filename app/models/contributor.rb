@@ -43,15 +43,21 @@ class Contributor < ApplicationRecord
   end
 
   def self.all_tags_with_count
-    Contributor.all_tags.map do |tag|
-      {
-        id: tag.id,
-        name: tag.name,
-        value: tag.name,
-        count: tag.taggings_count,
-        color: Contributor.tag_color_from_id(tag.id)
-      }
-    end
+    ActsAsTaggableOn::Tag
+      .joins(:taggings)
+      .select('tags.id, tags.name, count(taggings.id) as taggings_count')
+      .group('tags.id')
+      .where(taggings: { taggable_type: name })
+      .all
+      .map do |tag|
+        {
+          id: tag.id,
+          name: tag.name,
+          value: tag.name,
+          count: tag.taggings_count,
+          color: Contributor.tag_color_from_id(tag.id)
+        }
+      end
   end
 
   def self.tag_color_from_id(tag_id)
