@@ -23,7 +23,10 @@ class ContributorsController < ApplicationController
   end
 
   def show
-    @contributors = Contributor.active.with_attached_avatar
+    @contributors = Contributor
+                    .active
+                    .or(Contributor.where(id: @contributor.id))
+                    .with_attached_avatar
   end
 
   def new

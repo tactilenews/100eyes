@@ -23,10 +23,17 @@ RSpec.feature 'Filter contributors', type: :feature do
     expect(page).not_to have_link(nil, href: contributor_path(active_contributor))
   end
 
-  scenario 'Editor views contributor profile' do
+  scenario 'Editor views profile of an active contributor' do
     visit contributor_path(active_contributor, as: user)
 
     expect(page).to have_link(nil, href: contributor_path(active_contributor))
     expect(page).not_to have_link(nil, href: contributor_path(inactive_contributor))
+  end
+
+  scenario 'Editor views profile of an inactive contributor' do
+    visit contributor_path(inactive_contributor, as: user)
+
+    expect(page).to have_link(nil, href: contributor_path(active_contributor))
+    expect(page).to have_link(nil, href: contributor_path(inactive_contributor))
   end
 end
