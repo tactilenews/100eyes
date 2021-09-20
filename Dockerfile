@@ -16,6 +16,10 @@ RUN apk --update add \
     less \
     libsodium
 
+COPY entrypoint.sh /usr/bin/
+RUN chmod +x /usr/bin/entrypoint.sh
+ENTRYPOINT ["entrypoint.sh"]
+
 RUN mkdir -p /app
 WORKDIR /app
 CMD ["bundle", "exec", "rails", "server"]
