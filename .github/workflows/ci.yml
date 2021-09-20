@@ -46,17 +46,20 @@ jobs:
       - name: Install NPM dependencies
         run: yarn install
 
-      - name: Build packs
-        run: bin/rails webpacker:compile
+      - name: Run prettier
+        run: yarn prettier
+
+      - name: Build JS
+        run: yarn build:js
+
+      - name: Build CSS
+        run: yarn build:css
 
       - name: Run database migrations
         run: bin/rails db:migrate
 
       - name: Run rubocop
         run: bundle exec rubocop
-
-      - name: Run prettier
-        run: yarn prettier-check
 
       - name: Run tests
         run: bin/rake spec

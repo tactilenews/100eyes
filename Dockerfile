@@ -24,16 +24,16 @@ RUN mkdir -p /app
 WORKDIR /app
 CMD ["bundle", "exec", "rails", "server"]
 
+ENV RAILS_ENV=production
 COPY Gemfile Gemfile.lock ./
 RUN gem install bundler
 RUN bundle install
 
-ENV RAILS_ENV development
-ENV NODE_ENV production
-
+ENV NODE_ENV=production
 COPY package.json yarn.lock ./
-RUN yarn install
+RUN yarn install --production=false
 
 COPY . .
 
-ENV RAILS_ENV production
+RUN yarn build:js
+RUN yarn build:css
