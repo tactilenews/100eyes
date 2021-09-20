@@ -27,7 +27,8 @@ module Field
       {
         id: id,
         value: value,
-        placeholder: placeholder
+        placeholder: placeholder,
+        styles: errors.any? ? [:error] : []
       }
     end
 

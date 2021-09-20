@@ -23,6 +23,11 @@
   box-shadow: var(--input-focus-shadow);
 }
 
+.Input--error > input {
+  border-color: var(--color-red);
+  box-shadow: 0 0 0 1px var(--color-red);
+}
+
 .Input--inverted {
   color: rgba(255, 255, 255, 0.8);
 }
