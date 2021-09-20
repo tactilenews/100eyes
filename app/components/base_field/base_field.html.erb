@@ -1,5 +1,5 @@
 <div <%= attrs %>>
-  <div class="BaseField-textWrapper">
+  <div class="BaseField-textWrapper <%= hide_label ? 'visually-hidden' : '' %>">
     <label class="BaseField-labelText" for="<%= id %>">
       <%= label %>
     </label>
@@ -15,7 +15,6 @@
         </strong>
       <% end %>
     <% end %>
-
   </div>
 
   <%= content %>
