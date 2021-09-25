@@ -1090,10 +1090,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
-"@hotwired/turbo@^7.0.0-rc.4":
-  version "7.0.0-rc.4"
-  resolved "https://registry.yarnpkg.com/@hotwired/turbo/-/turbo-7.0.0-rc.4.tgz#d3ab9555544534f5ec649613553e72ff6c7d7122"
-  integrity sha512-4qx+6O6mUN+cSN+ZLGCOGc+2MxNrs7cFbmnWD6LIfiHAQyuNiIuB87Y5IAtOo8xj16fOBd2CdU1WRJya4Wkw0A==
+"@hotwired/turbo@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@hotwired/turbo/-/turbo-7.0.0.tgz#8293ceec2a40fe4a214b65f7727c205c5d30f888"
+  integrity sha512-LQY/BiYJ/7zNvkQ8++lB+AFz5m2q0x2aXrzwXLGECIBgOUYdN+52WHC/hr9faW9nmUa2jW1o1c80U1jiEkC9Bw==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
