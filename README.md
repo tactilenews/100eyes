@@ -78,7 +78,7 @@ See this [blog post](https://rossta.net/blog/how-to-specify-local-ruby-gems-in-y
 ### Production
 `100eyes` is a relatively simple Ruby on Rails (RoR) application and consists of the application server and a background worker to receive incoming Telegram messages.
 
-* Ruby 2.7 (and the bundler gem)
+* Ruby 3.0 (and the bundler gem)
 * PostgreSQL (Version 12+)
 * nginx or another reverse proxy
 
