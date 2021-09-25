@@ -61,7 +61,7 @@ export default class extends Controller {
   }
 
   writeToClipboard(text) {
-    navigator.clipboard.writeText(text).then(() => this.onCopy());
+    clipboard.writeText(text).then(() => this.onCopy());
   }
 
   onCopy() {
