@@ -27,6 +27,10 @@
 
         <%= c 'contributor_form', contributor: @contributor %>
 
+        <hr>
+
+        <%= c 'contributor_status_toggle', contributor: @contributor %>
+
         <%= c 'stack' do %>
           <%= c 'heading', styles: [:section] do %>
             <%= I18n.t 'contributor.activity' %>

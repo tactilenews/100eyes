@@ -1,0 +1,46 @@
+<turbo-frame id="contributor-status-toggle">
+  <%= c 'stack', space: :small do %>
+    <% if contributor.active? %>
+
+      <%= c 'heading', tag: :h2 do %>
+        <%= t('.active.heading') %>
+      <% end %>
+
+      <p>
+        <%= t('.active.text',
+          name: contributor.name,
+          first_name: contributor.first_name
+        ).html_safe %>
+      </p>
+
+    <% else %>
+
+      <%= c 'heading', tag: :h2 do %>
+        <%= t('.inactive.heading') %>
+      <% end %>
+
+      <p>
+        <%= t('.inactive.text',
+          name: contributor.name,
+          first_name: contributor.first_name
+        ).html_safe %>
+      </p>
+
+    <% end %>
+
+    <%= c 'form', model: contributor do %>
+      <input
+        type="hidden"
+        id="contributor[active]"
+        name="contributor[active]"
+        value="<%= contributor.active? ? 'off' : 'on' %>"
+      />
+
+      <%= c 'button',
+        type: :submit,
+        style: :secondary,
+        label: contributor.active? ? t('.active.action') : t('.inactive.action')
+      %>
+    <% end %>
+  <% end %>
+</turbo-frame>

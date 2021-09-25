@@ -157,6 +157,22 @@ de:
         <a class="Link" href="https://google.com/chrome" target="_blank" rel="noreferrer noopener">Google Chrome</a>.
     form:
       loading: Lade…
+    contributor_status_toggle:
+      active:
+        heading: Mitglied deaktivieren
+        text: |
+          %{name} ist ein <strong>aktives Mitglied</strong> deiner Community.
+          Du kannst das Mitgliedskonto deaktivieren.
+          %{first_name} erhält dann keine Recherchen mehr.
+          Du kannst das Konto jederzeit reaktivieren.
+        action: Mitglied deaktivieren
+      inactive:
+        heading: Mitglied reaktivieren
+        text: |
+          %{name} ist ein <strong>inaktives Mitglied</strong> deiner Community und erhält aktuell keine Recherchen über 100eyes.
+          Du kannst das Konto reaktivieren.
+          %{first_name} erhält dann wieder alle Recherchen.
+        action: Mitglied reaktivieren
 
   mailer:
     unsubscribe:
