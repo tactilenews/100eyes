@@ -30,18 +30,9 @@
 
         <%= c 'contributor_status_toggle', contributor: @contributor %>
 
-        <%= c 'stack' do %>
-          <%= c 'heading', styles: [:section] do %>
-            <%= I18n.t 'contributor.activity' %>
-          <% end %>
+        <hr>
 
-          <%= c 'requests_feed' do %>
-            <% @contributor.recent_replies.each do |reply| %>
-              <%= c 'requests_feed_item', latest_reply: reply %>
-            <% end %>
-          <% end %>
-        <% end %>
-
+        <%= c 'requests_feed', contributor: @contributor %>
       <% end %>
     <% end %>
   <% end %>
