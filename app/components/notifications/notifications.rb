@@ -2,14 +2,15 @@
 
 module Notifications
   class Notifications < ApplicationComponent
-    def initialize(notifications:, **)
+    def initialize(notifications:, close_after: nil, **)
       super
 
       @notifications = notifications
+      @close_after = close_after
     end
 
     private
 
-    attr_reader :notifications
+    attr_reader :notifications, :close_after
   end
 end

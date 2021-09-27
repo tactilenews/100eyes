@@ -1,6 +1,6 @@
 <div <%= attrs %> data-controller="notifications">
   <% notifications.each do |type, message| %>
-    <%= c 'notification', styles: [type] do %>
+    <%= c 'notification', styles: [type, *styles], close_after: close_after do %>
       <%= message %>
     <% end %>
   <% end %>

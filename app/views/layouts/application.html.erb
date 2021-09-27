@@ -19,7 +19,7 @@
     <div class="sticky">
       <%= c 'nav_bar' %>
       <%= c 'browser_support_notification' %>
-      <%= c 'notifications', notifications: flash %>
+      <%= c 'notifications', notifications: flash, style: :floating, close_after: 6000 %>
       <%= yield :notifications %>
     </div>
 

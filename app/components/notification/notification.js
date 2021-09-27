@@ -3,6 +3,7 @@ import { Controller } from '@hotwired/stimulus';
 export default class extends Controller {
   static values = {
     showAlways: Boolean,
+    closeAfter: Number,
   };
 
   connect() {
@@ -15,9 +16,13 @@ export default class extends Controller {
 
       this.close();
     });
+
+    if (this.closeAfterValue) {
+      window.setTimeout(() => this.close(), this.closeAfterValue);
+    }
   }
 
   close() {
-    this.element.remove();
+    this.element.classList.add('Notification--closed');
   }
 }
