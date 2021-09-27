@@ -12,11 +12,7 @@
 </head>
 
 <body>
-  <% flash.each do |type, message| %>
-    <%= c 'notification', styles: [type] do %>
-      <%= message %>
-    <% end %>
-  <% end %>
+  <%= c 'notifications', notifications: flash %>
 
   <%= yield %>
 </body>

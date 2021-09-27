@@ -1,0 +1,7 @@
+<div <%= attrs %> data-controller="notifications">
+  <% notifications.each do |type, message| %>
+    <%= c 'notification', styles: [type] do %>
+      <%= message %>
+    <% end %>
+  <% end %>
+</div>
