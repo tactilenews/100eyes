@@ -14,10 +14,13 @@ module Notification
     attr_reader :show_close, :show_always, :close_after
 
     def attrs
-      super.merge(data: {
-                    controller: 'notification',
-                    notification_show_always_value: show_always,
-                    notification_close_after_value: close_after
+      super.merge({
+                    role: 'alert',
+                    data: {
+                      controller: 'notification',
+                      notification_show_always_value: show_always,
+                      notification_close_after_value: close_after
+                    }
                   })
     end
   end
