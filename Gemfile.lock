@@ -165,7 +165,6 @@ GEM
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
-    foreman (0.87.2)
     globalid (0.5.2)
       activesupport (>= 5.0)
     hashdiff (1.0.1)
@@ -398,7 +397,6 @@ DEPENDENCIES
   dotenv-rails
   factory_bot_rails
   faker
-  foreman
   image_processing (~> 1.2)
   jbuilder (~> 2.11)
   jwt

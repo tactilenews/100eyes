@@ -23,11 +23,14 @@ services:
 
   app:
     <<: *x-dev-defaults
-    command: bin/dev
-    depends_on: [ db, mailserver ]
+    depends_on: [ db, mailserver, assets ]
     ports:
       - 3000:3000
       - 3035:3035
+
+  assets:
+    command: yarn run build
+    <<: *x-dev-defaults
 
   job-worker:
     <<: *x-dev-defaults
