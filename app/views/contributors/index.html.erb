@@ -4,11 +4,6 @@
   <% end %>
 
   <% header.actions do %>
-    <%= c 'button',
-      style: :secondary,
-      label: I18n.t('contributor.actions.create'),
-      link: new_contributor_path
-    %>
     <%= c 'copy_button',
       label: I18n.t('contributor.actions.copy_invite'),
       url: invites_url,

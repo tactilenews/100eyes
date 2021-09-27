@@ -29,21 +29,6 @@ class ContributorsController < ApplicationController
                     .with_attached_avatar
   end
 
-  def new
-    @contributor = Contributor.new
-  end
-
-  def create
-    @contributor = Contributor.new(contributor_params)
-    @contributor.editor_guarantees_data_consent = true
-    if @contributor.save
-      redirect_to @contributor, flash: { success: I18n.t('contributor.success') }
-    else
-      flash.now[:error] = I18n.t('contributor.invalid', name: @contributor.name)
-      render :new, status: :unprocessable_entity
-    end
-  end
-
   def edit; end
 
   def update

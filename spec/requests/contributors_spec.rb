@@ -118,20 +118,6 @@ RSpec.describe '/contributors', type: :request do
     end
   end
 
-  describe 'DELETE /destroy' do
-    subject { -> { delete contributor_url(contributor, as: user) } }
-    before(:each) { contributor }
-
-    it 'destroys the requested contributor' do
-      expect { subject.call }.to change(Contributor, :count).by(-1)
-    end
-
-    it 'redirects to the contributors list' do
-      subject.call
-      expect(response).to redirect_to(contributors_url)
-    end
-  end
-
   describe 'POST /message', telegram_bot: :rails do
     subject do
       lambda do
