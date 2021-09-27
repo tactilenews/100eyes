@@ -25,7 +25,7 @@
       <%= c('field',
         object: contributor,
         attr: :data_processing_consent,
-        styles: [:horizontal, :leftAligned],
+        style: :leftAligned,
         help: I18n.t('contributor.form.data_processing_consent.help', link: data_protection_link).html_safe
       ) do |field| %>
         <%= c 'checkbox', **field.input_defaults, required: true %>

@@ -26,7 +26,7 @@
         object: @contributor,
         attr: :data_processing_consent,
         help: I18n.t('contributor.form.data_processing_consent.help', link: data_protection_link).html_safe,
-        styles: [:horizontal, :leftAligned]
+        style: :leftAligned
       ) do |field| %>
         <%= c 'checkbox', field.input_defaults.merge(required: true, value: nil) %>
       <% end %>

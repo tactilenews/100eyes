@@ -22,25 +22,17 @@
   color: var(--color-red);
 }
 
-.BaseField:not(.BaseField--horizontal) .BaseField-textWrapper {
+.BaseField-textWrapper {
   margin-bottom: var(--spacing-unit-xs);
 }
 
-.BaseField--horizontal {
+.BaseField--leftAligned {
   display: flex;
+  width: 100%;
+  flex-direction: row-reverse;
 }
 
-.BaseField--horizontal .BaseField-textWrapper {
-  width: 20%;
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  flex-grow: 0;
-  margin: 0;
-  margin-right: var(--spacing-unit);
-}
-
-.BaseField--horizontal.BaseField--leftAligned .BaseField-textWrapper {
-  width: 85%;
-  order: 2;
+.BaseField--leftAligned .BaseField-textWrapper {
+  margin-bottom: 0;
+  margin-left: var(--spacing-unit-s);
 }

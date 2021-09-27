@@ -1,15 +1,7 @@
-  <label class="<%= class_attr %>" for="<%= id %>">
-    <input name="<%= name %>" type="hidden" value="0" />
-    <input
-      type="checkbox"
-      id="<%= id %>"
-      name="<%= name %>"
-      <%= value ? 'checked' : '' %>
-      <%= required ? 'required' : '' %>
-      class="Checkbox-input"
-      />
-      <% if styles.include?(:switch) %>
-        <div class="Checkbox-slider"></div>
-      <% end %>
-      <span class="Checkbox-label"><%= label %></span>
-  </label>
+<input
+  type="checkbox"
+  id="<%= id %>"
+  name="<%= name %>"
+  <%= value ? 'checked' : '' %>
+  <%= required ? 'required' : '' %>
+/>
