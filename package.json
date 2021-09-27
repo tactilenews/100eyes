@@ -1,8 +1,9 @@
 {
   "scripts": {
     "build:css": "postcss ./app/assets/stylesheets/application.css -o ./app/assets/builds/application.css",
-    "prettier-write": "prettier --write '{app,frontend}/**/*.{js,css}'",
-    "prettier-check": "prettier --check '{app,frontend}/**/*.{js,css}'"
+    "build:js": "bin/esbuild",
+    "prettier": "prettier --check 'app/**/*.{js,css}'",
+    "prettier:fix": "prettier --write 'app/**/*.{js,css}'"
   },
   "dependencies": {
     "@hotwired/turbo": "^7.0.1",
@@ -14,6 +15,8 @@
   "devDependencies": {
     "@arkweid/lefthook": "^0.7.6",
     "cssnano": "^5.0.8",
+    "esbuild": "^0.12.28",
+    "esbuild-plugin-import-glob": "^0.1.1",
     "postcss": "^8.3.6",
     "postcss-cli": "^8.3.1",
     "postcss-easy-import": "^3.0.0",

@@ -97,3 +97,4 @@ gem 'sentry-ruby'
 
 # Frontend
 gem 'cssbundling-rails'
+gem 'jsbundling-rails'
