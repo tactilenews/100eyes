@@ -28,9 +28,8 @@ services:
       - 3000:3000
       - 3035:3035
 
-  queue:
+  job-worker:
     <<: *x-dev-defaults
-    depends_on: [ db ]
 
   db:
     environment:
