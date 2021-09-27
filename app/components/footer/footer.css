@@ -1,23 +1,7 @@
 .Footer {
-  display: flex;
-  width: 100%;
-  gap: var(--spacing-unit-l);
-  justify-content: space-between;
-
-  font-size: var(--font-size-s);
+  padding: var(--spacing-unit-s);
+  text-align: center;
+  border-top: 1px solid var(--color-border);
+  font-size: var(--font-size-xs);
   color: var(--color-text-light);
-}
-
-.Footer-column {
-  flex-basis: 100%;
-}
-
-.Footer-logo {
-  height: calc(2 * var(--spacing-unit));
-  max-width: calc(8 * var(--spacing-unit));
-  margin-right: var(--spacing-unit);
-}
-
-.Footer-logo:hover {
-  opacity: 0.75;
 }
