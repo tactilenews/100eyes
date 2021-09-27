@@ -8,6 +8,26 @@ RSpec.describe 'Onboarding::Signal', type: :request do
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
   let(:params) { { jwt: jwt } }
 
+  describe 'GET /onboarding/signal' do
+    subject { -> { get onboarding_signal_path(jwt: jwt) } }
+
+    before(:each) { allow(Setting).to receive(:signal_server_phone_number).and_return(signal_server_phone_number) }
+
+    context 'if Signal is not set up on the server' do
+      let(:signal_server_phone_number) { nil }
+      it { should raise_error(ActionController::RoutingError) }
+    end
+
+    context 'if Signal is set up on the server' do
+      let(:signal_server_phone_number) { '+4915258595146' }
+
+      it 'is successful' do
+        subject.call
+        expect(response).to be_successful
+      end
+    end
+  end
+
   describe 'POST /onboarding/signal' do
     let(:attrs) do
       {
@@ -21,6 +41,8 @@ RSpec.describe 'Onboarding::Signal', type: :request do
     let(:params) { { jwt: jwt, contributor: attrs, context: :contributor_signup } }
 
     subject { -> { post onboarding_signal_path, params: params } }
+
+    before(:each) { allow(Setting).to receive(:signal_server_phone_number).and_return('+4491234567890') }
 
     it 'creates contributor' do
       expect { subject.call }.to change(Contributor, :count).by(1)
