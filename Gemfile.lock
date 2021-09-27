@@ -119,9 +119,6 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
-    cssbundling-rails (0.2.1)
-      railties (>= 6.0.0)
-      sprockets-rails (>= 2.0.0)
     db-query-matchers (0.10.0)
       activesupport (>= 4.0, < 7)
       rspec (~> 3.0)
@@ -180,9 +177,6 @@ GEM
       ruby-vips (>= 2.0.17, < 3)
     jbuilder (2.11.2)
       activesupport (>= 5.0.0)
-    jsbundling-rails (0.1.6)
-      railties (>= 6.0.0)
-      sprockets-rails (>= 2.0.0)
     json (2.5.1)
     jwt (2.2.3)
     kramdown (2.3.1)
@@ -399,7 +393,6 @@ DEPENDENCIES
   capybara (>= 2.15)
   clearance
   counter_culture (~> 2.9)
-  cssbundling-rails
   db-query-matchers
   delayed_job_active_record (~> 4.1)
   dotenv-rails
@@ -408,7 +401,6 @@ DEPENDENCIES
   foreman
   image_processing (~> 1.2)
   jbuilder (~> 2.11)
-  jsbundling-rails
   jwt
   kramdown (~> 2.3)
   listen (>= 3.0.5, < 3.8)
@@ -446,4 +438,4 @@ RUBY VERSION
    ruby 3.0.0p0
 
 BUNDLED WITH
-   2.2.9
+   2.2.27

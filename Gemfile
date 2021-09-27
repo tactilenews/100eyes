@@ -94,7 +94,3 @@ gem 'rqrcode'
 gem 'sentry-delayed_job'
 gem 'sentry-rails'
 gem 'sentry-ruby'
-
-# Frontend
-gem 'cssbundling-rails'
-gem 'jsbundling-rails'
