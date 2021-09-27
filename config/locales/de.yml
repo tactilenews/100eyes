@@ -173,6 +173,32 @@ de:
           Du kannst das Konto reaktivieren.
           %{first_name} erhält dann wieder alle Recherchen.
         action: Mitglied reaktivieren
+    contributor_email_settings:
+      heading: Kommunikation via E-Mail
+      text: "%{name} hat sich via E-Mail angemeldet."
+    contributor_telegram_settings:
+      heading: Kommunikation via Telegram
+      complete:
+        text: |
+          %{name} hat sich unter dem Telegram-Nutzernamen „%{username}” angemeldet.
+      incomplete:
+        text: |
+          %{name} hat sich am %{date} via Telegram angemeldet, die Anmeldung aber noch nicht abgeschlossen.
+          Sende %{first_name} einen Link mit Hinweisen zum Abschließen der Anmeldung.
+        action: Link kopieren
+    contributor_threema_settings:
+      heading: Kommunikation via Threema
+      text: "%{name} hat sich unter der folgenden Threema-ID angemeldet."
+    contributor_signal_settings:
+      heading: Kommunikation via Signal
+      complete:
+        text: |
+          %{name} hat sich mit der Handynummer %{phone_number} angemeldet.
+      incomplete:
+        text: |
+          %{name} hat sich am %{date} via Signal angemeldet, die Anmeldung aber noch nicht abgeschlossen.
+          Sende %{first_name} einen Link mit Hinweisen zum Abschließen der Anmeldung.
+        action: Link kopieren
 
   mailer:
     unsubscribe:

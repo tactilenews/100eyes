@@ -19,7 +19,7 @@
       <% end %>
 
       <%= c 'field', object: @contributor, attr: :threema_id do |field| %>
-        <%= c 'input', field.input_defaults.merge(required: true, pattern: '[A-Za-z0-9]{8}') %>
+        <%= c 'threema_id_input', field.input_defaults.merge(required: true) %>
       <% end %>
 
       <%= c('field',

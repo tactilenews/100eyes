@@ -1,5 +1,6 @@
 .BaseField {
   display: block;
+  width: 100%;
 }
 
 .BaseField-labelText {

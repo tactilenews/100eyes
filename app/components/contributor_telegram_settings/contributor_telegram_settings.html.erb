@@ -1,0 +1,35 @@
+<turbo-frame id="contributor-email-settings">
+  <%= c 'stack', space: :small do %>
+    <%= c 'heading', tag: :h2 do %>
+      <%= t('.heading') %>
+    <% end %>
+
+    <% if contributor.telegram_id.present? %>
+      <p>
+        <%= t('.complete.text',
+          name: contributor.name,
+          username: contributor.username || contributor.telegram_id
+        ) %>
+      </p>
+    <% else %>
+      <%= c 'callout', style: :warning do %>
+        <%= c 'stack', space: :small do %>
+          <p>
+            <%= t('.incomplete.text',
+              name: contributor.name,
+              first_name: contributor.first_name,
+              date: l(contributor.created_at.to_date),
+            ) %>
+          </p>
+
+          <%= c 'copy_button',
+            style: :secondary,
+            copy: onboarding_telegram_link_url(contributor.telegram_onboarding_token),
+            label: t('.incomplete.action')
+          %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+  <% end %>
+</turbo-frame>

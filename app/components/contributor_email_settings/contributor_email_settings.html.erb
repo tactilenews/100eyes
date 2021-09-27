@@ -1,0 +1,21 @@
+<turbo-frame id="contributor-email-settings">
+  <%= c 'stack', space: :small do %>
+    <%= c 'heading', tag: :h2 do %>
+      <%= t('.heading') %>
+    <% end %>
+
+    <p><%= t('.text', name: contributor.name) %></p>
+
+    <%= c 'form', model: contributor do %>
+      <%= c 'flex' do %>
+
+        <%= c 'field', object: contributor, hide_label: true, attr: :email do |field| %>
+          <%= c 'input', field.input_defaults.merge(required: true, type: :email) %>
+        <% end %>
+
+        <%= c 'button', style: :secondary, type: 'submit', label: t('save') %>
+
+      <% end %>
+    <% end %>
+  <% end %>
+</turbo-frame>
