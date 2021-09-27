@@ -36,5 +36,4 @@ RUN yarn install
 
 COPY . .
 
-RUN bundle exec rake webpacker:compile
 ENV RAILS_ENV production
