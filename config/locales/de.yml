@@ -155,6 +155,8 @@ de:
         Um 100eyes vollständig zu nutzen, verwende eine aktuelle Version von
         <a class="Link" href="https://mozilla.org/firefox" target="_blank" rel="noreferrer noopener">Mozilla Firefox</a> oder
         <a class="Link" href="https://google.com/chrome" target="_blank" rel="noreferrer noopener">Google Chrome</a>.
+    form:
+      loading: Lade…
 
   mailer:
     unsubscribe:
