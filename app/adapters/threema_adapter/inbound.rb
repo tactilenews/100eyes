@@ -19,8 +19,9 @@ module ThreemaAdapter
       @text = initialize_text(decrypted_message)
       @unknown_content = initialize_unknown_content(decrypted_message)
       @message = initialize_message(decrypted_message)
-      @file = initialize_file(decrypted_message)
-      @message.file = @file
+
+      files = initialize_files(decrypted_message)
+      @message.files = files
     end
 
     private
@@ -50,8 +51,8 @@ module ThreemaAdapter
       message
     end
 
-    def initialize_file(decrypted_message)
-      return nil unless decrypted_message.instance_of? Threema::Receive::File
+    def initialize_files(decrypted_message)
+      return [] unless decrypted_message.instance_of? Threema::Receive::File
 
       file = Message::File.new
       file.attachment.attach(
@@ -60,8 +61,7 @@ module ThreemaAdapter
         content_type: decrypted_message.mime_type,
         identify: false
       )
-      message.unknown_content = unknown_content
-      file
+      [file]
     end
 
     def file_type_unsupported?(decrypted_message)

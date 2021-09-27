@@ -28,7 +28,7 @@ class OnboardingController < ApplicationController
       @contributor.send_welcome_message!
       redirect_to_success
     else
-      render :show
+      render :show, status: :unprocessable_entity
     end
   end
 

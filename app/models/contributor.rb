@@ -22,10 +22,15 @@ class Contributor < ApplicationRecord
   scope :active, -> { where(deactivated_at: nil) }
   scope :inactive, -> { where.not(deactivated_at: nil) }
 
+  phony_normalize :signal_phone_number, default_country_code: 'DE'
+
+  validates :signal_phone_number, phony_plausible: true
   validates :data_processing_consent, acceptance: true, unless: proc { |c| c.editor_guarantees_data_consent }
 
   validates :email, uniqueness: { case_sensitive: false }, allow_nil: true, 'valid_email_2/email': true
   validates :threema_id, uniqueness: { case_sensitive: false }, allow_blank: true, format: { with: /\A[A-Za-z0-9]+\z/ }, length: { is: 8 }
+  validates :telegram_id, uniqueness: true, allow_nil: true
+  validates :signal_phone_number, uniqueness: true, allow_nil: true
 
   validates :avatar, blob: { content_type: ['image/png', 'image/jpg', 'image/jpeg'], size_range: 0..(5.megabytes) }
 
@@ -74,7 +79,9 @@ class Contributor < ApplicationRecord
   end
 
   def send_welcome_message!
-    [TelegramAdapter::Outbound, PostmarkAdapter::Outbound, ThreemaAdapter::Outbound].each { |adapter| adapter.send_welcome_message!(self) }
+    [PostmarkAdapter::Outbound, SignalAdapter::Outbound, TelegramAdapter::Outbound, ThreemaAdapter::Outbound].each do |adapter|
+      adapter.send_welcome_message!(self)
+    end
   end
 
   def name
@@ -89,7 +96,7 @@ class Contributor < ApplicationRecord
   end
 
   def channels
-    { email: email?, telegram: telegram?, threema: threema? }.select { |_k, v| v }.keys
+    { email: email?, signal: signal?, telegram: telegram?, threema: threema? }.select { |_k, v| v }.keys
   end
 
   def active_request
@@ -106,6 +113,10 @@ class Contributor < ApplicationRecord
 
   def threema?
     threema_id.present?
+  end
+
+  def signal?
+    signal_phone_number.present?
   end
 
   def avatar?

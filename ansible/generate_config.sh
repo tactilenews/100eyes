@@ -50,6 +50,13 @@ rails:
   telegram_bot:
     api_key: # (REQUIRED) your telegram API token
     username: # (REQUIRED) your telegram bot name, e.g. 'HundredEyesBot'
+  postmark:
+    api_token: # (REQUIRED) API token for your new Postmark server
+    transactional_stream: "outbound"
+    broadcasts_stream: "broadcast"
+  signal:
+    server_phone_number:
+    monitoring_url:
   secret_key_base: "${secret_key_base}"
   postgres:
     user: app
@@ -59,10 +66,6 @@ rails:
     port: # optional (e.g. for managed databases)
   inbound_email_password: "${inbound_email_password}"
   email_from_address: "redaktion@${domain}"
-  postmark:
-    api_token: # (REQUIRED) API token for your new Postmark server
-    transactional_stream: "outbound"
-    broadcasts_stream: "broadcast"
   sentry:
     dsn: # (REQUIRED) Sentry DSN to enable error tracking
 CONFIGURATION

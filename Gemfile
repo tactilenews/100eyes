@@ -67,32 +67,31 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
-gem 'sucker_punch', '~> 3.0'
-gem 'telegram-bot'
-
+gem 'activestorage-validator', '~> 0.1.4'
+gem 'acts-as-taggable-on'
+gem 'counter_culture', '~> 2.9'
+gem 'delayed_job_active_record', '~> 4.1'
+gem 'jwt'
+gem 'kramdown', '~> 2.3'
 gem 'pg_search'
-
+gem 'phony_rails'
+gem 'rails-settings-cached', '~> 2.8'
 gem 'valid_email2', '~> 4.0'
 
-gem 'counter_culture', '~> 2.9'
-
-gem 'activestorage-validator', '~> 0.1.4'
-
+# Middleware
 gem 'rack-attack', '~> 6.5'
 
-gem 'acts-as-taggable-on'
-gem 'jwt'
-
-gem 'rails-settings-cached', '~> 2.8'
-
-gem 'kramdown', '~> 2.3'
-
+# Channel adapters
 gem 'postmark-rails'
+gem 'telegram-bot'
+gem 'threema', git: 'https://github.com/tactilenews/threema.git', branch: 'master'
 
 # User management
 gem 'active_model_otp'
 gem 'clearance'
 gem 'rqrcode'
+
+# Error reporting
+gem 'sentry-delayed_job'
 gem 'sentry-rails'
 gem 'sentry-ruby'
-gem 'threema', git: 'https://github.com/tactilenews/threema.git', branch: 'master'

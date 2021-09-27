@@ -57,11 +57,10 @@ RSpec.describe ThreemaAdapter::Inbound do
     before { allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::File).and_return(true) }
 
     describe '#file' do
-      subject { threema_message.message.file }
+      let(:file) { threema_message.message.files.first }
+      subject { file.attachment }
 
       describe 'handling different content types' do
-        subject { threema_message.message.file.attachment }
-
         context 'audio' do
           it { should be_attached }
 
@@ -71,7 +70,6 @@ RSpec.describe ThreemaAdapter::Inbound do
         end
 
         context 'image' do
-          subject { threema_message.message.file.attachment }
           let(:threema_mock) { instance_double(Threema::Receive::File, name: 'my image', content: 'x\00x\\0', mime_type: 'image/jpeg') }
 
           it { should be_attached }

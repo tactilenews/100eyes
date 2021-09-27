@@ -35,7 +35,7 @@ module App
     config.generators.assets = false
     config.generators.helper = false
 
-    config.active_job.queue_adapter = :sucker_punch
+    config.active_job.queue_adapter = :delayed_job
 
     config.i18n.available_locales = %i[de fi]
     config.i18n.default_locale = :de

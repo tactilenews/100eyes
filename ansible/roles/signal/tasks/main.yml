@@ -1,0 +1,39 @@
+---
+- pause:
+    prompt: "{{ lookup('template', 'enter_captcha.j2') | trim }}"
+  register: captcha_prompt_result
+
+- set_fact:
+    captcha: "{{ captcha_prompt_result.user_input }}"
+
+- name: Register phone number
+  uri:
+    url: "{{ signal_cli_rest_api_endpoint }}/v1/register/{{ signal_server_phone_number }}"
+    method: POST
+    status_code: 201
+    body_format: json
+    body:
+      captcha: "{{ captcha }}"
+
+- pause:
+    prompt: "{{ lookup('template', 'enter_verification_token.j2') | trim }}"
+  register: verification_token_prompt_result
+
+- set_fact:
+    verification_token: "{{ verification_token_prompt_result.user_input }}"
+
+- name: Verify phone number
+  uri:
+    url: "{{ signal_cli_rest_api_endpoint }}/v1/register/{{ signal_server_phone_number }}/verify/{{ verification_token }}"
+    method: POST
+    status_code: 201
+    body_format: json
+    body:
+      ping: "string"
+
+- name: Setup cronjob to receive messages
+  ansible.builtin.cron:
+    name: "Receive signal messages"
+    minute: "*" # job gets run every minute
+    job: "/usr/local/bin/docker-compose -f /home/ansible/docker-compose.yml -f /home/ansible/docker-compose.prod.yml exec -T app bin/rails signal:receive_messages"
+

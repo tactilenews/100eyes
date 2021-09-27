@@ -24,15 +24,23 @@ module ChatMessage
     end
 
     def audio?
-      message.file && message.file.attachment.blob.audio?
+      files.first.attachment.blob.audio? unless files.empty?
     end
 
     def image?
-      message.file && message.file.attachment.blob.image?
+      files.first.attachment.blob.image? unless files.empty?
     end
 
     def photos
       message.photos
+    end
+
+    def files
+      message.files
+    end
+
+    def audio
+      files.first unless files.empty?
     end
 
     def creator_name

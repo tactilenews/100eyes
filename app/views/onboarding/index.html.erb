@@ -23,13 +23,13 @@
           <%= c 'markdown', raw: Setting.onboarding_page %>
         </div>
 
-        <%= c 'flex', style: :equal do %>
+        <%= c 'flex' do %>
           <%= c 'button',
             link: onboarding_threema_path,
             label: 'Threema',
             styles: [:block, :primary, :threema]
           %>
-
+          
           <%= c 'button',
             link: onboarding_telegram_path,
             label: 'Telegram',
@@ -41,6 +41,14 @@
             label: 'E-Mail',
             styles: [:block, :primary, :email]
           %>
+
+          <!--
+            <%= c 'button',
+              link: onboarding_signal_path,
+              label: 'Signal',
+              styles: [:block, :primary, :signal]
+            %>
+          -->
         <% end %>
 
       <% end %>

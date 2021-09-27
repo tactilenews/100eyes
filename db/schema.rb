@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_14_135331) do
+ActiveRecord::Schema.define(version: 2021_09_09_111936) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -70,10 +70,28 @@ ActiveRecord::Schema.define(version: 2021_05_14_135331) do
     t.string "threema_id"
     t.datetime "data_processing_consented_at"
     t.string "telegram_onboarding_token"
+    t.string "signal_phone_number"
+    t.datetime "signal_onboarding_completed_at"
     t.index ["email"], name: "index_contributors_on_email", unique: true
+    t.index ["signal_phone_number"], name: "index_contributors_on_signal_phone_number", unique: true
     t.index ["telegram_chat_id"], name: "index_contributors_on_telegram_chat_id", unique: true
     t.index ["telegram_id"], name: "index_contributors_on_telegram_id", unique: true
     t.index ["threema_id"], name: "index_contributors_on_threema_id", unique: true
+  end
+
+  create_table "delayed_jobs", force: :cascade do |t|
+    t.integer "priority", default: 0, null: false
+    t.integer "attempts", default: 0, null: false
+    t.text "handler", null: false
+    t.text "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string "locked_by"
+    t.string "queue"
+    t.datetime "created_at", precision: 6
+    t.datetime "updated_at", precision: 6
+    t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
   create_table "json_web_tokens", force: :cascade do |t|

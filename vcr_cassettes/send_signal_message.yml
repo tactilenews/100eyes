@@ -1,0 +1,32 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://signal:8080/v2/send
+    body:
+      encoding: UTF-8
+      string: '{"number":"SIGNAL_SERVER_PHONE_NUMBER","recipients":["+49151123456789"],"message":"Hello
+        Signal"}'
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Date:
+      - Sat, 24 Jul 2021 14:43:45 GMT
+      Content-Length:
+      - '0'
+    body:
+      encoding: UTF-8
+      string: ''
+  recorded_at: Sat, 24 Jul 2021 14:43:45 GMT
+recorded_with: VCR 6.0.0

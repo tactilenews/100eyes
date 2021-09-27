@@ -85,6 +85,11 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
       it 'does not create new contributor' do
         expect { subject.call }.not_to change(Contributor, :count)
       end
+
+      it 'has 422 status code' do
+        subject.call
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
     end
 
     describe 'with unsigned jwt' do

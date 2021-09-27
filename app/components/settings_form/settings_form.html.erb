@@ -71,6 +71,16 @@
 
     <%= c 'stack' do %>
       <%= c 'heading', tag: :h2 do %>
+        <%= t 'setting.form.groups.signal' %>
+      <% end %>
+
+      <%= c 'field', object: setting, value: Setting.signal_unknown_content_message, attr: :signal_unknown_content_message do |field| %>
+        <%= c 'textarea', field.input_defaults %>
+      <% end %>
+    <% end %>
+
+    <%= c 'stack' do %>
+      <%= c 'heading', tag: :h2 do %>
         <%= t 'setting.form.groups.telegram' %>
       <% end %>
 

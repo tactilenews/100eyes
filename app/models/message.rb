@@ -12,7 +12,7 @@ class Message < ApplicationRecord
   belongs_to :creator, class_name: 'User', optional: true
   belongs_to :request
   has_many :photos, dependent: :destroy
-  has_one :file, dependent: :destroy, class_name: 'Message::File'
+  has_many :files, dependent: :destroy, class_name: 'Message::File'
 
   counter_culture :request, column_name: proc { |model| model.reply? ? 'replies_count' : nil }
 
@@ -25,7 +25,9 @@ class Message < ApplicationRecord
   validates :unknown_content, inclusion: { in: [true, false] }
 
   after_commit(on: :create, unless: :manually_created?) do
-    [PostmarkAdapter::Outbound, TelegramAdapter::Outbound, ThreemaAdapter::Outbound].each { |adapter| adapter.send!(self) }
+    [PostmarkAdapter::Outbound, SignalAdapter::Outbound, TelegramAdapter::Outbound, ThreemaAdapter::Outbound].each do |adapter|
+      adapter.send!(self)
+    end
   end
 
   def reply?
