@@ -1,6 +1,6 @@
 version: '3.7'
 
-x-defaults: &x-defaults
+x-dev-defaults: &x-dev-defaults
   build:
     context: .
   environment:
@@ -18,15 +18,19 @@ x-defaults: &x-defaults
 
 services:
   telegram:
-    <<: *x-defaults
+    <<: *x-dev-defaults
     command: rake telegram:bot:poller
 
   app:
-    <<: *x-defaults
+    <<: *x-dev-defaults
     depends_on: [ db, mailserver ]
     ports:
       - 3000:3000
       - 3035:3035
+
+  queue:
+    <<: *x-dev-defaults
+    depends_on: [ db ]
 
   db:
     environment:

@@ -122,6 +122,11 @@ GEM
     db-query-matchers (0.10.0)
       activesupport (>= 4.0, < 7)
       rspec (~> 3.0)
+    delayed_job (4.1.9)
+      activesupport (>= 3.0, < 6.2)
+    delayed_job_active_record (4.1.6)
+      activerecord (>= 3.0, < 6.2)
+      delayed_job (>= 3.0, < 5)
     diff-lcs (1.4.4)
     dotenv (2.7.6)
     dotenv-rails (2.7.6)
@@ -317,6 +322,8 @@ GEM
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
     semantic_range (3.0.0)
+    sentry-delayed_job (4.5.2)
+      sentry-ruby-core (~> 4.5.0)
     sentry-rails (4.7.3)
       railties (>= 5.0)
       sentry-ruby-core (~> 4.7.0)
@@ -340,8 +347,6 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    sucker_punch (3.0.1)
-      concurrent-ruby (~> 1.0)
     telegram-bot (0.15.4)
       actionpack (>= 4.0, < 6.2)
       activesupport (>= 4.0, < 6.2)
@@ -396,6 +401,7 @@ DEPENDENCIES
   clearance
   counter_culture (~> 2.9)
   db-query-matchers
+  delayed_job_active_record (~> 4.1)
   dotenv-rails
   factory_bot_rails
   faker
@@ -417,12 +423,12 @@ DEPENDENCIES
   rspec-rails
   rubocop-rails
   selenium-webdriver
+  sentry-delayed_job
   sentry-rails
   sentry-ruby
   spring
   spring-commands-rspec
   spring-watcher-listen (~> 2.0.0)
-  sucker_punch (~> 3.0)
   telegram-bot
   threema!
   timecop

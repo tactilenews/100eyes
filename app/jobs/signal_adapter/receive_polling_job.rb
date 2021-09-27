@@ -4,9 +4,7 @@ require 'net/http'
 
 module SignalAdapter
   class ReceivePollingJob < ApplicationJob
-    include SuckerPunch::Job
     queue_as :default
-    max_jobs 1
 
     def perform(*_args)
       return if Setting.signal_server_phone_number.blank?
