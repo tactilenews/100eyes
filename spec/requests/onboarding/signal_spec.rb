@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Onboarding::Signals', type: :request do
+RSpec.describe 'Onboarding::Signal', type: :request do
   let(:signal_phone_number) { '+4915112345678' }
   let(:data_processing_consent) { true }
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }

@@ -21,7 +21,7 @@
       <%= c 'button',
         styles: [:block, :primary],
         link: "https://signal.me/#p/#{Setting.signal_server_phone_number}",
-        label: 'Zur Signal-App',
+        label: t('components.onboarding_signal_splash.link'),
         target: '_blank',
         rel: 'noopener noreferrer',
         data: { onboarding_signal_splash_target: 'linkButton' }
@@ -31,7 +31,7 @@
     <div data-action="click->onboarding-signal-splash#highlightNext">
       <%= c 'copy_button',
         styles: [:block, :secondary],
-        label: 'Handynummer kopieren',
+        label: t('components.onboarding_signal_splash.copy'),
         copy: Setting.signal_server_phone_number
       %>
     </div>

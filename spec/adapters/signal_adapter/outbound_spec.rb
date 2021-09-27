@@ -25,7 +25,6 @@ RSpec.describe SignalAdapter::Outbound do
 
     describe 'contributor has a phone number' do
       let(:contributor) { create(:contributor, email: nil, signal_phone_number: '+491511234567') }
-
       it { should enqueue_job(described_class) }
     end
   end

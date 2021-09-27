@@ -98,6 +98,11 @@ RSpec.describe Contributor, type: :model do
       expect(contributor.signal_phone_number).to eq '+4915112345678'
     end
 
+    it 'accepts Non-German country codes if given' do
+      contributor = create(:contributor, signal_phone_number: '+33244445555')
+      expect(contributor.signal_phone_number).to eq '+33244445555'
+    end
+
     it 'can be nil' do
       expect(build(:contributor, signal_phone_number: nil)).to be_valid
     end

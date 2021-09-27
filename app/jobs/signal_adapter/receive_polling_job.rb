@@ -8,8 +8,6 @@ module SignalAdapter
     queue_as :default
     max_jobs 1
 
-    discard_on SignalAdapter::UnknownContributorError
-
     def perform(*_args)
       return if Setting.signal_server_phone_number.blank?
 
