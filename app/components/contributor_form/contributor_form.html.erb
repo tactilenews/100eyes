@@ -1,59 +1,15 @@
-<%= form_with(model: contributor, local: true, class: "ContributorForm", multipart: true, data: { turbo: false }) do %>
-  <%= c 'stack' do %>
-    <%= c 'field', object: contributor, attr: :first_name, styles: [:horizontal] do |field| %>
-      <%= c 'input', field.input_defaults %>
-    <% end %>
-
-    <%= c 'field', object: contributor, attr: :last_name, styles: [:horizontal] do |field| %>
-      <%= c 'input', field.input_defaults %>
-    <% end %>
-
-    <%= c 'field', object: contributor, attr: :avatar, styles: [:horizontal] do |field| %>
-      <%= c 'input', field.input_defaults.merge(type: :file, value: nil) %>
-    <% end %>
-
-    <!--
-      <%= c 'field', object: contributor, attr: :signal_phone_number, styles: [:horizontal] do |field| %>
-        <%= c 'input', field.input_defaults.merge(disabled: true) %>
+<turbo-frame id="contributor-form">
+  <%= c 'form', model: contributor do %>
+    <%= c 'stack' do %>
+      <%= c 'field', object: contributor, attr: :tag_list do |field| %>
+        <%= c 'tags_input', field.input_defaults.merge(available_tags: available_tags) %>
       <% end %>
-    -->
 
-    <%= c 'field', object: contributor, attr: :phone, styles: [:horizontal] do |field| %>
-      <%= c 'input', field.input_defaults.merge(type: :phone) %>
+      <%= c 'field', object: contributor, attr: :note do |field| %>
+        <%= c 'textarea', field.input_defaults %>
+      <% end %>
+
+      <%= c 'button', style: :secondary, type: 'submit', label: I18n.t('save') %>
     <% end %>
-
-    <%= c 'field', object: contributor, attr: :email, styles: [:horizontal] do |field| %>
-      <%= c 'input', field.input_defaults %>
-    <% end %>
-
-    <%= c 'field', object: contributor, attr: :username, styles: [:horizontal] do |field| %>
-      <%= c 'input', field.input_defaults.merge(disabled: true) %>
-    <% end %>
-
-    <%= c 'field', object: contributor, attr: :threema_id, styles: [:horizontal] do |field| %>
-      <%= c 'input', field.input_defaults %>
-    <% end %>
-
-    <%= c 'field', object: contributor, attr: :zip_code, styles: [:horizontal] do |field| %>
-      <%= c 'input', field.input_defaults %>
-    <% end %>
-
-    <%= c 'field', object: contributor, attr: :city, styles: [:horizontal] do |field| %>
-      <%= c 'input', field.input_defaults %>
-    <% end %>
-
-    <%= c 'field', object: contributor, attr: :tag_list, styles: [:horizontal] do |field| %>
-      <%= c 'tags_input', field.input_defaults.merge(available_tags: available_tags) %>
-    <% end %>
-
-    <%= c 'field', object: contributor, attr: :note, styles: [:horizontal] do |field| %>
-      <%= c 'textarea', field.input_defaults %>
-    <% end %>
-
-    <%= c 'field', object: contributor, attr: :active, styles: [:horizontal] do |field| %>
-      <%= c 'checkbox', field.input_defaults.merge(styles: [:switch]) %>
-    <% end %>
-
-    <%= c 'button', type: 'submit', label: I18n.t('save') %>
   <% end %>
-<% end %>
+</turbo-frame>

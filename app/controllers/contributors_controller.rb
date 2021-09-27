@@ -39,8 +39,8 @@ class ContributorsController < ApplicationController
     if @contributor.save
       redirect_to @contributor, flash: { success: I18n.t('contributor.success') }
     else
-      flash[:error] = I18n.t('contributor.invalid', name: @contributor.name)
-      render :new
+      flash.now[:error] = I18n.t('contributor.invalid', name: @contributor.name)
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -52,8 +52,8 @@ class ContributorsController < ApplicationController
     if @contributor.update(contributor_params)
       redirect_to contributor_url, flash: { success: I18n.t('contributor.saved', name: @contributor.name) }
     else
-      flash[:error] = I18n.t('contributor.invalid', name: @contributor.name)
-      render :show
+      flash.now[:error] = I18n.t('contributor.invalid', name: @contributor.name)
+      render :show, status: :unprocessable_entity
     end
   end
 
