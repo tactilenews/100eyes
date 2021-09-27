@@ -72,6 +72,7 @@ ActiveRecord::Schema.define(version: 2021_07_19_155339) do
     t.string "telegram_onboarding_token"
     t.string "phone_number"
     t.index ["email"], name: "index_contributors_on_email", unique: true
+    t.index ["phone_number"], name: "index_contributors_on_phone_number", unique: true
     t.index ["telegram_chat_id"], name: "index_contributors_on_telegram_chat_id", unique: true
     t.index ["telegram_id"], name: "index_contributors_on_telegram_id", unique: true
     t.index ["threema_id"], name: "index_contributors_on_threema_id", unique: true
