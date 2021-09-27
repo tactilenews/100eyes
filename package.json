@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "build:css": "postcss ./app/assets/stylesheets/application.css -o ./app/assets/builds/application.css",
     "prettier-write": "prettier --write '{app,frontend}/**/*.{js,css}'",
     "prettier-check": "prettier --check '{app,frontend}/**/*.{js,css}'"
   },
@@ -12,6 +13,12 @@
   },
   "devDependencies": {
     "@arkweid/lefthook": "^0.7.6",
+    "cssnano": "^5.0.8",
+    "postcss": "^8.3.6",
+    "postcss-cli": "^8.3.1",
+    "postcss-easy-import": "^3.0.0",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-preset-env": "^6.7.0",
     "prettier": "^2.4.1"
   }
 }

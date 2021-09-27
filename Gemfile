@@ -46,6 +46,8 @@ group :development do
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'spring-watcher-listen', '~> 2.0.0'
+
+  gem 'foreman'
 end
 
 group :test do
@@ -92,3 +94,6 @@ gem 'rqrcode'
 gem 'sentry-delayed_job'
 gem 'sentry-rails'
 gem 'sentry-ruby'
+
+# Frontend
+gem 'cssbundling-rails'
