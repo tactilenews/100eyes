@@ -1,0 +1,15 @@
+.OnboardingChannelButtons {
+  display: grid;
+  gap: var(--spacing-unit);
+  grid-template-columns: 1fr;
+}
+
+@media screen and (min-width: 640px) {
+  .OnboardingChannelButtons {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .OnboardingChannelButtons--even {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
