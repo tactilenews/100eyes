@@ -17,4 +17,7 @@ RSpec.describe ContributorHeader::ContributorHeader, type: :component do
     it { should have_css('p', text: 'Mitglied seit 01.01.2021') }
     it { should have_css('p', text: 'deaktiviert am 01.02.2021') }
   end
+
+  it { should have_css("a[href='/contributors/#{contributor.id}/edit']", text: 'Stammdaten bearbeiten') }
+  it { should have_css('button', text: 'Profilbild ändern') }
 end

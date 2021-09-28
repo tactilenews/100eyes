@@ -17,10 +17,22 @@
       <% end %>
     </p>
 
-    <p class="text-small text-light">
+    <div class="text-small text-light">
       <a class="Link" href="<%= edit_contributor_path(contributor) %>"><%= t('.edit') %></a>
       ·
-      <span class="Link">Profilbild ändern</span>
-    </p>
+      <%= c('form',
+        model: contributor,
+        auto_submit: true,
+        multipart: true,
+        style: :inline,
+      ) do %>
+        <%= c 'upload_button',
+          styles: [:inline, :underline],
+          label: t('.change_avatar'),
+          id: 'contributor[avatar]',
+          name: 'contributor[avatar]'
+        %>
+      <% end %>
+    </div>
   </div>
 </header>

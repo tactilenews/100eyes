@@ -50,6 +50,8 @@
 
 .Button--inline {
   padding: 0;
+  font-weight: inherit;
+  font-size: inherit;
 }
 
 .Button--small {
