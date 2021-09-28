@@ -16,5 +16,11 @@
         · <%= t('.deactivated_at', date: l(contributor.deactivated_at.to_date)) %>
       <% end %>
     </p>
+
+    <p class="text-small text-light">
+      <a class="Link" href="<%= edit_contributor_path(contributor) %>"><%= t('.edit') %></a>
+      ·
+      <span class="Link">Profilbild ändern</span>
+    </p>
   </div>
 </header>

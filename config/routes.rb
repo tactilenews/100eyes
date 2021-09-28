@@ -43,7 +43,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :contributors, except: :edit do
+  resources :contributors do
     resources :requests, only: %i[show], to: 'requests#show_contributor_messages'
 
     member do

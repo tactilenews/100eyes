@@ -202,6 +202,7 @@ de:
     contributor_header:
       created_at: Mitglied seit %{date}
       deactivated_at: deaktiviert am %{date}
+      edit: Stammdaten bearbeiten
     requests_feed:
       heading: Letzte Antworten
       no_replies: "%{name} hat bisher auf keine Recherche geantwortet."
@@ -220,7 +221,7 @@ de:
         subject: Die Redaktion hat eine neue Frage
 
   save: Speichern
-  discard: Änderungen verwerfen
+  cancel: Abbrechen
   skip_to_content: Zum Hauptinhalt springen
 
   dashboard:

@@ -1,0 +1,28 @@
+<%= c 'form', model: contributor do %>
+  <%= c 'stack' do %>
+    <%= c 'field', object: contributor, attr: :first_name do |field| %>
+      <%= c 'input', field.input_defaults.merge(required: true) %>
+    <% end %>
+
+    <%= c 'field', object: contributor, attr: :last_name do |field| %>
+      <%= c 'input', field.input_defaults.merge(required: true) %>
+    <% end %>
+
+    <%= c 'field', object: contributor, attr: :phone do |field| %>
+      <%= c 'input', field.input_defaults.merge(type: :tel) %>
+    <% end %>
+
+    <%= c 'field', object: contributor, attr: :zip_code do |field| %>
+      <%= c 'input', field.input_defaults.merge(inputmode: :numeric) %>
+    <% end %>
+
+    <%= c 'field', object: contributor, attr: :city do |field| %>
+      <%= c 'input', field.input_defaults %>
+    <% end %>
+
+    <%= c 'flex', styles: [:space_between, :reverse] do %>
+      <%= c 'button', type: :submit, label: t('save') %>
+      <%= c 'button', style: :secondary, link: contributor_path(contributor), label: t('cancel') %>
+    <% end %>
+  <% end %>
+<% end %>

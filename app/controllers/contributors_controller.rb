@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ContributorsController < ApplicationController
-  before_action :set_contributor, only: %i[update destroy show message]
+  before_action :set_contributor, only: %i[update destroy show edit message]
   before_action :count_params, only: :count
 
   def message
@@ -43,6 +43,8 @@ class ContributorsController < ApplicationController
       render :new, status: :unprocessable_entity
     end
   end
+
+  def edit; end
 
   def update
     @contributors = Contributor.with_attached_avatar
