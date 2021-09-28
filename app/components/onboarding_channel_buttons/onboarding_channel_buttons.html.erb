@@ -1,0 +1,27 @@
+<div <%= attrs %>>
+  <%= c 'button',
+    link: onboarding_threema_path,
+    label: 'Threema',
+    styles: [:block, :primary, :threema]
+  %>
+
+  <% if show_signal? %>
+    <%= c 'button',
+      link: onboarding_signal_path,
+      label: 'Signal',
+      styles: [:block, :primary, :signal]
+    %>
+  <% end %>
+
+  <%= c 'button',
+    link: onboarding_telegram_path,
+    label: 'Telegram',
+    styles: [:block, :primary, :telegram]
+  %>
+
+  <%= c 'button',
+    link: onboarding_email_path,
+    label: 'E-Mail',
+    styles: [:block, :primary, :email]
+  %>
+</div>

@@ -23,33 +23,7 @@
           <%= c 'markdown', raw: Setting.onboarding_page %>
         </div>
 
-        <%= c 'flex' do %>
-          <%= c 'button',
-            link: onboarding_threema_path,
-            label: 'Threema',
-            styles: [:block, :primary, :threema]
-          %>
-          
-          <%= c 'button',
-            link: onboarding_telegram_path,
-            label: 'Telegram',
-            styles: [:block, :primary, :telegram]
-          %>
-
-          <%= c 'button',
-            link: onboarding_email_path,
-            label: 'E-Mail',
-            styles: [:block, :primary, :email]
-          %>
-
-          <!--
-            <%= c 'button',
-              link: onboarding_signal_path,
-              label: 'Signal',
-              styles: [:block, :primary, :signal]
-            %>
-          -->
-        <% end %>
+        <%= c 'onboarding_channel_buttons' %>
 
       <% end %>
     <% end %>
