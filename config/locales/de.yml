@@ -41,18 +41,7 @@ de:
     hero:
       title: Willkommen bei 100eyes. Nutze die Intelligenz der Community.
     footer:
-      authors:
-        heading: Ein Projekt von
-        text: |
-          tactile.news
-          Csuraji Vicari OHG
-          Große Bäckerstraße 10
-          21335 Lüneburg
-      funding:
-        heading: Unterstützt durch
-      license:
-        heading: Lizenz
-        licensed_under: Lizenziert unter MIT‑Lizenz
+      text: Ein Service der <a class="Link" href="https://tactile.news" target="_blank" rel="noopener noreferrer">tactile.news GmbH</a>
     request_metrics:
       contributors:
         one: hat geantwortet
@@ -186,7 +175,7 @@ de:
 
   dashboard:
     how_it_works: So funktioniert 100eyes
-    become_a_pioneer: Werden Sie zur Dialog-Pionier:in.
+    become_a_pioneer: Werden Sie Dialog-Pionier:in.
     provided_technology: Wir stellen die Technologie.
     how_it_works_list:
       - icon: community
