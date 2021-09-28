@@ -1,6 +1,6 @@
 import { Controller } from 'stimulus';
 import Rails from '@rails/ujs';
-import sanitize from '../../../frontend/helpers/sanitize.js';
+import sanitize from '../../assets/javascript/helpers/sanitize.js';
 
 const template = ({ message, fallback }) => {
   message = sanitize(message) || fallback;

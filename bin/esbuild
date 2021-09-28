@@ -1,0 +1,17 @@
+#!/usr/bin/env node
+
+const esbuild = require('esbuild');
+const ImportGlobPlugin = require('esbuild-plugin-import-glob').default;
+
+esbuild.build({
+  entryPoints: ['app/assets/javascript/application.js'],
+  outdir: 'app/assets/builds',
+  bundle: true,
+  target: 'es2017',
+  minify: process.env.NODE_ENV === 'production',
+  logLevel: 'info',
+  watch: process.argv.includes('--watch'),
+  plugins: [
+    ImportGlobPlugin(),
+  ],
+}).catch(() => process.exit(1));

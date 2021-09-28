@@ -1,19 +1,29 @@
 {
   "scripts": {
-    "prettier-write": "prettier --write '{app,frontend}/**/*.{js,css}'",
-    "prettier-check": "prettier --check '{app,frontend}/**/*.{js,css}'"
+    "build:css": "postcss ./app/assets/stylesheets/application.css -o ./app/assets/builds/application.css",
+    "build:js": "bin/esbuild",
+    "build": "run-p -l 'build:** --watch'",
+    "prettier": "prettier --check 'app/**/*.{js,css}'",
+    "prettier:fix": "prettier --write 'app/**/*.{js,css}'"
   },
   "dependencies": {
     "@hotwired/turbo": "^7.0.1",
     "@rails/ujs": "^6.1.4",
-    "@rails/webpacker": "5.4.3",
     "@yaireo/tagify": "^3.25.0",
     "clipboard-polyfill": "^3.0.3",
     "stimulus": "^2.0.0"
   },
   "devDependencies": {
     "@arkweid/lefthook": "^0.7.6",
-    "prettier": "^2.4.1",
-    "webpack-dev-server": "^3.11.2"
+    "cssnano": "^5.0.8",
+    "esbuild": "^0.12.28",
+    "esbuild-plugin-import-glob": "^0.1.1",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.3.6",
+    "postcss-cli": "^8.3.1",
+    "postcss-easy-import": "^3.0.0",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-preset-env": "^6.7.0",
+    "prettier": "^2.4.1"
   }
 }

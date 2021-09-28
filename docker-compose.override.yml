@@ -6,7 +6,7 @@ x-dev-defaults: &x-dev-defaults
   environment:
     HUNDRED_EYES_PROJECT_NAME: "${HUNDRED_EYES_PROJECT_NAME}"
     RAILS_ENV: "${RAILS_ENV:-development}"
-    NODE_ENV: development
+    NODE_ENV: "${NODE_ENV:-development}"
     MAILSERVER_HOST: mailserver
     MAILSERVER_PORT: 25
     POSTGRES_HOST: db
@@ -23,10 +23,14 @@ services:
 
   app:
     <<: *x-dev-defaults
-    depends_on: [ db, mailserver ]
+    depends_on: [ db, mailserver, assets ]
     ports:
       - 3000:3000
       - 3035:3035
+
+  assets:
+    command: yarn run build
+    <<: *x-dev-defaults
 
   job-worker:
     <<: *x-dev-defaults
