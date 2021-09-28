@@ -18,12 +18,7 @@
     <%= c 'wrapper' do %>
       <%= c 'stack', space: :xlarge do %>
 
-        <%= c 'flex' do %>
-          <%= c 'avatar', contributor: @contributor, expandable: true, style: :large %>
-          <%= c 'heading' do %>
-            <%= @contributor.name %>
-          <% end %>
-        <% end %>
+        <%= c 'contributor_header', contributor: @contributor %>
 
         <%= c 'contributor_form', contributor: @contributor %>
 

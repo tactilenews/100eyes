@@ -1,0 +1,20 @@
+<header <%= attrs %>>
+  <%= c 'avatar',
+    contributor: contributor,
+    expandable: true,
+    style: :large,
+    class: 'ContributorHeader-avatar'
+  %>
+
+  <div>
+    <%= c('heading') { contributor.name } %>
+
+    <p class="text-small text-light">
+      <%= t('.created_at', date: l(contributor.created_at.to_date)) %>
+
+      <% if contributor.inactive? %>
+        · <%= t('.deactivated_at', date: l(contributor.deactivated_at.to_date)) %>
+      <% end %>
+    </p>
+  </div>
+</header>

@@ -1,0 +1,10 @@
+.ContributorHeader {
+  display: flex;
+  width: 100%;
+  gap: var(--spacing-unit);
+}
+
+.ContributorHeader-avatar {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
