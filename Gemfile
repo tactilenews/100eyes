@@ -81,7 +81,7 @@ gem 'rack-attack', '~> 6.5'
 # Channel adapters
 gem 'postmark-rails'
 gem 'telegram-bot'
-gem 'threema', git: 'https://github.com/tactilenews/threema.git', branch: 'master'
+gem 'threema', git: 'https://github.com/threemarb/threema.git', branch: 'master'
 
 # User management
 gem 'active_model_otp'
