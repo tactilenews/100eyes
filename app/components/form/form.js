@@ -5,12 +5,6 @@ export default class extends Controller {
     autoSubmit: Boolean,
   };
 
-  disableSubmit() {
-    const submit = this.element.querySelector('.Button[type="submit"]');
-    submit.disabled = true;
-    submit.classList.add('Button--loading');
-  }
-
   autoSubmit() {
     if (!this.autoSubmitValue) {
       return;

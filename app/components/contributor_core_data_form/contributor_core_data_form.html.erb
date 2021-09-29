@@ -21,7 +21,7 @@
     <% end %>
 
     <%= c 'flex', styles: [:space_between, :reverse] do %>
-      <%= c 'button', type: :submit, label: t('save') %>
+      <%= c 'submit_button', label: t('save') %>
       <%= c 'button', style: :secondary, link: contributor_path(contributor), label: t('cancel') %>
     <% end %>
   <% end %>

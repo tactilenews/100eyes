@@ -36,8 +36,7 @@
         value="<%= contributor.active? ? 'off' : 'on' %>"
       />
 
-      <%= c 'button',
-        type: :submit,
+      <%= c 'submit_button',
         style: :secondary,
         label: contributor.active? ? t('.active.action') : t('.inactive.action')
       %>
