@@ -64,7 +64,7 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
-gem 'activestorage-validator', '~> 0.1.4'
+gem 'activestorage-validator', '~> 0.2.0'
 gem 'acts-as-taggable-on'
 gem 'counter_culture', '~> 2.9'
 gem 'delayed_job_active_record', '~> 4.1'
