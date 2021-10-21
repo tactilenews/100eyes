@@ -19,7 +19,7 @@
     "esbuild": "^0.13.6",
     "esbuild-plugin-import-glob": "^0.1.1",
     "npm-run-all": "^4.1.5",
-    "postcss": "^8.3.9",
+    "postcss": "^8.3.10",
     "postcss-cli": "^9.0.1",
     "postcss-easy-import": "^3.0.0",
     "postcss-flexbugs-fixes": "^5.0.2",
