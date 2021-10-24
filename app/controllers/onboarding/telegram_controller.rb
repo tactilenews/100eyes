@@ -4,7 +4,7 @@ require 'securerandom'
 
 module Onboarding
   class TelegramController < OnboardingController
-    rescue_from ActiveRecord::RecordNotFound, with: :render_unauthorized
+    skip_before_action :verify_jwt, only: %i[link fallback]
 
     def show
       super
@@ -12,21 +12,17 @@ module Onboarding
     end
 
     def link
-      @telegram_onboarding_token = contributor.telegram_onboarding_token
+      @telegram_onboarding_token = telegram_onboarding_token
     end
 
     def fallback
-      @telegram_onboarding_token = contributor.telegram_onboarding_token
+      @telegram_onboarding_token = telegram_onboarding_token
     end
 
     private
 
-    def contributor
-      @contributor ||= Contributor.find_by!(telegram_onboarding_params)
-    end
-
     def redirect_to_success
-      telegram_onboarding_token = contributor.telegram_onboarding_token
+      telegram_onboarding_token = @contributor.telegram_onboarding_token
       redirect_to onboarding_telegram_link_path(telegram_onboarding_token: telegram_onboarding_token)
     end
 
@@ -34,8 +30,8 @@ module Onboarding
       :telegram_onboarding_token
     end
 
-    def telegram_onboarding_params
-      params.permit(:telegram_onboarding_token).merge(telegram_id: nil)
+    def telegram_onboarding_token
+      params.require(:telegram_onboarding_token)
     end
   end
 end
