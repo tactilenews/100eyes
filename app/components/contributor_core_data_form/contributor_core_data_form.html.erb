@@ -12,12 +12,14 @@
       <%= c 'input', field.input_defaults.merge(type: :tel) %>
     <% end %>
 
-    <%= c 'field', object: contributor, attr: :zip_code do |field| %>
-      <%= c 'input', field.input_defaults.merge(inputmode: :numeric) %>
-    <% end %>
+    <%= c 'flex' do %>
+      <%= c 'field', object: contributor, attr: :zip_code do |field| %>
+        <%= c 'input', field.input_defaults.merge(inputmode: :numeric) %>
+      <% end %>
 
-    <%= c 'field', object: contributor, attr: :city do |field| %>
-      <%= c 'input', field.input_defaults %>
+      <%= c 'field', object: contributor, attr: :city do |field| %>
+        <%= c 'input', field.input_defaults %>
+      <% end %>
     <% end %>
 
     <%= c 'flex', styles: [:space_between, :reverse] do %>

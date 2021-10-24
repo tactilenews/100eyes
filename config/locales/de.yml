@@ -368,7 +368,7 @@ de:
       zip_code:
         label: Postleitzahl
       city:
-        label: Stadt
+        label: Wohnort
       tag_list:
         label: Tags
       note:
