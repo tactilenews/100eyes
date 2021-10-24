@@ -174,10 +174,10 @@ de:
           %{first_name} erhält dann wieder alle Recherchen.
         action: Mitglied reaktivieren
     contributor_email_settings:
-      heading: Kommunikation via E-Mail
+      heading: "Ausgewählter Kanal: E-Mail"
       text: "%{name} hat sich via E-Mail angemeldet."
     contributor_telegram_settings:
-      heading: Kommunikation via Telegram
+      heading: "Ausgewählter Kanal: Telegram"
       complete:
         text: |
           %{name} hat sich unter dem Telegram-Nutzernamen „%{username}” angemeldet.
@@ -187,10 +187,10 @@ de:
           Sende %{first_name} einen Link mit Hinweisen zum Abschließen der Anmeldung.
         action: Link kopieren
     contributor_threema_settings:
-      heading: Kommunikation via Threema
+      heading: "Ausgewählter Kanal: Threema"
       text: "%{name} hat sich unter der folgenden Threema-ID angemeldet."
     contributor_signal_settings:
-      heading: Kommunikation via Signal
+      heading: "Ausgewählter Kanal: Signal"
       complete:
         text: |
           %{name} hat sich mit der Handynummer %{phone_number} angemeldet.

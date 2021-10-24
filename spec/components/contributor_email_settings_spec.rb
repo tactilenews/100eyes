@@ -15,7 +15,7 @@ RSpec.describe ContributorEmailSettings::ContributorEmailSettings, type: :compon
 
   let(:params) { { contributor: contributor } }
 
-  it { should have_css('h2', text: 'via E-Mail') }
+  it { should have_css('h2', text: 'E-Mail') }
   it { should have_css('p', text: 'Max Mustermann hat sich via E-Mail angemeldet.') }
 
   it { should have_css("form[action='/contributors/#{contributor.id}']") }

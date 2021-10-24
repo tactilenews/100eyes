@@ -18,7 +18,7 @@ RSpec.describe ContributorSignalSettings::ContributorSignalSettings, type: :comp
 
   let(:onboarding_completed_at) { Time.zone.now }
 
-  it { should have_css('h2', text: 'via Signal') }
+  it { should have_css('h2', text: 'Signal') }
   it { should have_css('p', text: 'Max Mustermann hat sich mit der Handynummer 0151 1234 5678 angemeldet.') }
 
   context 'given a contributor with incomplete onboarding' do

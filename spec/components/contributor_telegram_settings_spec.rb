@@ -20,7 +20,7 @@ RSpec.describe ContributorTelegramSettings::ContributorTelegramSettings, type: :
   let(:telegram_id) { 123 }
   let(:onboarding_token) { nil }
 
-  it { should have_css('h2', text: 'via Telegram') }
+  it { should have_css('h2', text: 'Telegram') }
   it { should have_css('p', text: 'Max Mustermann hat sich unter dem Telegram-Nutzernamen „max.mustermann” angemeldet.') }
 
   context 'given a contributor with incomplete onboarding' do
