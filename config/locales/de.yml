@@ -209,6 +209,11 @@ de:
     requests_feed:
       heading: Letzte Antworten
       no_replies: "%{name} hat bisher auf keine Recherche geantwortet."
+    contributor_core_data_form:
+      heading: Stammdaten bearbeiten
+      text: |
+        Hinterlege zusätzliche Informationen zu <strong>%{name}</strong> für deine Unterlagen.
+        Sie haben keine Auswirkungen darauf, über welchen Kommunikationskanal %{first_name} Nachrichten erhält.
 
   mailer:
     unsubscribe:
@@ -349,7 +354,7 @@ de:
       avatar:
         label: Profilbild
       phone:
-        label: Telefon
+        label: Telefonnummer
       email:
         label: E-Mail-Adresse
         placeholder: Keine E-Mail-Adresse hinterlegt

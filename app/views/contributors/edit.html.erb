@@ -1,11 +1,5 @@
 <%= c 'box', style: :large do %>
   <%= c 'wrapper', style: :xnarrow do %>
-    <%= c 'stack' do %>
-      <%= c 'heading', tag: :h1 do %>
-        Stammdaten bearbeiten
-      <% end %>
-
-      <%= c 'contributor_core_data_form', contributor: @contributor %>
-    <% end %>
+    <%= c 'contributor_core_data_form', contributor: @contributor %>
   <% end %>
 <% end %>
