@@ -36,10 +36,7 @@
         value="<%= contributor.active? ? 'off' : 'on' %>"
       />
 
-      <%= c 'submit_button',
-        style: :secondary,
-        label: contributor.active? ? t('.active.action') : t('.inactive.action')
-      %>
+      <%= c 'submit_button', label: contributor.active? ? t('.active.action') : t('.inactive.action') %>
     <% end %>
   <% end %>
 </turbo-frame>
