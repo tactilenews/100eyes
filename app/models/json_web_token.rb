@@ -5,7 +5,7 @@ class JsonWebToken < ApplicationRecord
 
   belongs_to :contributor, optional: true
 
-  def self.encode(payload, expires_in: 7.days.from_now.to_i)
+  def self.encode(payload, expires_in: 1.year.from_now.to_i)
     expires_in_payload = { data: payload, exp: expires_in }
     JWT.encode(expires_in_payload, SECRET_KEY, 'HS256')
   end
