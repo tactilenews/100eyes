@@ -48,6 +48,7 @@ RSpec.describe '/contributors', type: :request do
         city: 'Musterstadt',
         note: '11 Jahre alt',
         email: 'zora@example.org',
+        additional_email: 'zora@zimmermann.de',
         tag_list: 'programmer,student'
       }
     end
@@ -65,6 +66,7 @@ RSpec.describe '/contributors', type: :request do
       expect(contributor.city).to eq('Musterstadt')
       expect(contributor.note).to eq('11 Jahre alt')
       expect(contributor.email).to eq('zora@example.org')
+      expect(contributor.additional_email).to eq('zora@zimmermann.de')
       expect(contributor.tag_list).to eq(%w[programmer student])
     end
 

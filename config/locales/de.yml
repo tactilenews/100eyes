@@ -213,7 +213,7 @@ de:
       heading: Stammdaten bearbeiten
       text: |
         Hinterlege zusätzliche Informationen zu <strong>%{name}</strong> für deine Unterlagen.
-        Sie haben keine Auswirkungen darauf, über welchen Kommunikationskanal %{first_name} Nachrichten erhält.
+        Sie haben keine Auswirkungen auf den Kommunikationskanal, über den %{first_name} Nachrichten erhält.
 
   mailer:
     unsubscribe:
@@ -355,9 +355,12 @@ de:
         label: Profilbild
       phone:
         label: Telefonnummer
+        help: Hinterlege eine zusätzliche Telefonnummer. Das kann praktisch sein, falls du das Mitglied einmal schnell außerhalb von 100eyes kontaktieren möchtest.
+      additional_email:
+        label: E-Mail-Adresse
+        help: Hinterlege eine zusätzliche E-Mail-Adresse. Das kann praktisch sein, falls sich das Mitglied über einen Messenger angemeldet hat, du aber dennoch die E-Mail-Adresse speichern möchtest.
       email:
         label: E-Mail-Adresse
-        placeholder: Keine E-Mail-Adresse hinterlegt
       signal_phone_number:
         label: Handynummer
       threema_id:

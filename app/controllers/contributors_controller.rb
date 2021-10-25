@@ -61,7 +61,7 @@ class ContributorsController < ApplicationController
 
   def contributor_params
     params.require(:contributor).permit(:note, :first_name, :last_name, :avatar, :email, :threema_id, :phone, :zip_code, :city, :tag_list,
-                                        :active)
+                                        :active, :additional_email)
   end
 
   def message_params
