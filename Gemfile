@@ -92,3 +92,6 @@ gem 'rqrcode'
 gem 'sentry-delayed_job'
 gem 'sentry-rails'
 gem 'sentry-ruby'
+
+# Admin
+gem 'administrate'

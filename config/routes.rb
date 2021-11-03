@@ -94,4 +94,12 @@ Rails.application.routes.draw do
 
   get '/sign_in' => 'sessions#new', as: 'sign_in'
   delete '/sign_out' => 'sessions#destroy', as: 'sign_out'
+
+  namespace :admin do
+    resources :users
+    resources :contributors, except: %i[new create]
+    resources :requests, except: %i[new create]
+
+    root to: 'users#index'
+  end
 end
