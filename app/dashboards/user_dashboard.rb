@@ -8,6 +8,7 @@ class UserDashboard < Administrate::BaseDashboard
     first_name: Field::String,
     last_name: Field::String,
     email: Field::String,
+    admin: Field::Boolean,
     otp_enabled: Field::Boolean.with_options(searchable: false),
     created_at: Field::DateTime,
     updated_at: Field::DateTime
@@ -18,6 +19,7 @@ class UserDashboard < Administrate::BaseDashboard
     first_name
     last_name
     email
+    admin
     otp_enabled
   ].freeze
 
@@ -26,6 +28,7 @@ class UserDashboard < Administrate::BaseDashboard
     first_name
     last_name
     email
+    admin
     otp_enabled
     created_at
     updated_at
@@ -35,6 +38,7 @@ class UserDashboard < Administrate::BaseDashboard
     first_name
     last_name
     email
+    admin
   ].freeze
 
   COLLECTION_FILTERS = {}.freeze

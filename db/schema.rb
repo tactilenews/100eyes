@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_09_111936) do
+ActiveRecord::Schema.define(version: 2021_09_19_202258) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -201,6 +201,7 @@ ActiveRecord::Schema.define(version: 2021_09_09_111936) do
     t.boolean "otp_enabled", default: false
     t.string "first_name"
     t.string "last_name"
+    t.boolean "admin", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["remember_token"], name: "index_users_on_remember_token"
   end
