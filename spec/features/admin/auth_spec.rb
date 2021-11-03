@@ -26,7 +26,7 @@ RSpec.feature 'Auth', type: :feature do
       visit admin_users_path(as: user)
 
       expect(page).to have_http_status(:ok)
-      expect(page).to have_link('user erstellen')
+      expect(page).to have_link('New user')
     end
   end
 end
