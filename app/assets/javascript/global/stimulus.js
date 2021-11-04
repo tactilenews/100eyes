@@ -1,4 +1,4 @@
-import { Application } from '@stimulus/core';
+import { Application } from '@hotwired/stimulus';
 import controllers, { filenames } from '../../../components/**/*.js';
 
 const application = Application.start();

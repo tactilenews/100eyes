@@ -7,11 +7,11 @@
     "prettier:fix": "prettier --write 'app/**/*.{js,css}'"
   },
   "dependencies": {
+    "@hotwired/stimulus": "^3.0.1",
     "@hotwired/turbo": "^7.0.1",
     "@rails/ujs": "^6.1.4",
     "@yaireo/tagify": "^3.25.0",
-    "clipboard-polyfill": "^3.0.3",
-    "stimulus": "^2.0.0"
+    "clipboard-polyfill": "^3.0.3"
   },
   "devDependencies": {
     "@arkweid/lefthook": "^0.7.7",

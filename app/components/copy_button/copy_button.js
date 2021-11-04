@@ -1,4 +1,4 @@
-import { Controller } from 'stimulus';
+import { Controller } from '@hotwired/stimulus';
 import * as clipboard from 'clipboard-polyfill/text';
 import Rails from '@rails/ujs';
 

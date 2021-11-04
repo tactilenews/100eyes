@@ -1,4 +1,4 @@
-import { Controller } from 'stimulus';
+import { Controller } from '@hotwired/stimulus';
 import Rails from '@rails/ujs';
 
 const POLLING_INTERVAL = 1000 * 30;

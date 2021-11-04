@@ -1,4 +1,4 @@
-import { Controller } from 'stimulus';
+import { Controller } from '@hotwired/stimulus';
 import Rails from '@rails/ujs';
 import sanitize from '../../assets/javascript/helpers/sanitize.js';
 
