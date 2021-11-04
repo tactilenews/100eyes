@@ -22,8 +22,8 @@ RSpec.feature 'Password Reset', type: :feature do
       fill_in 'password_reset[password]', with: new_password
       click_button 'Passwort ändern'
 
-      # Editor is prompted to set up 2FA
-      expect(page).to have_current_path(new_otp_setup_path)
+      # Editor is not signed-in automatically
+      expect(page).to have_current_path(sign_in_path)
     end
   end
 
@@ -42,18 +42,8 @@ RSpec.feature 'Password Reset', type: :feature do
       fill_in 'password_reset[password]', with: new_password
       click_button 'Passwort ändern'
 
-      expect(page).to have_current_path(new_otp_confirmation_path)
-
-      # Enters incorrect OTP
-      fill_in 'session[otp]', with: user.otp_code.reverse
-      click_button 'Bestätigen'
-
-      # Enters correct OTP
-      expect(page).to have_current_path(otp_confirmation_path)
-      fill_in 'session[otp]', with: user.otp_code
-      click_button 'Bestätigen'
-
-      expect(page).to have_current_path(dashboard_path)
+      # Editor is not signed-in automatically
+      expect(page).to have_current_path(sign_in_path)
     end
   end
 end
