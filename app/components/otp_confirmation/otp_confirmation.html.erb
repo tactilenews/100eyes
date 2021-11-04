@@ -3,7 +3,7 @@
     <%= t('.heading') %>
   <% end %>
 
-  <%= form_with(url: otp_confirmation_path, local: true, data: { turbo: false }) do %>
+  <%= form_with(url: otp_auth_path, local: true) do %>
     <%= c 'stack' do %>
 
       <%= c 'otp_field', id: 'session[otp]' %>

@@ -4,11 +4,7 @@
       <%= t('.heading') %>
     <% end %>
 
-    <%= form_with(
-      url: session_path,
-      local: true,
-      data: { turbo: false }
-    ) do %>
+    <%= form_with(url: session_path, local: true) do %>
       <%= c 'stack' do %>
         <%= c 'base_field', id: 'session[email]', label: t('.email') do %>
           <%= c 'input',
