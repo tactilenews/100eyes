@@ -15,7 +15,7 @@ RSpec.feature 'OTP Setup', type: :feature do
     scenario 'editor tries to access any page' do
       visit dashboard_path(as: user)
 
-      expect(page).to have_current_path(new_otp_setup_path)
+      expect(page).to have_current_path(otp_setup_path)
       expect(page).to have_text('Schütze dein Konto')
 
       # Editor enters incorrect OTP
@@ -35,7 +35,7 @@ RSpec.feature 'OTP Setup', type: :feature do
     scenario 'editor cancels setup' do
       visit dashboard_path(as: user)
 
-      expect(page).to have_current_path(new_otp_setup_path)
+      expect(page).to have_current_path(otp_setup_path)
       expect(page).to have_text('Schütze dein Konto')
 
       click_link 'Abbrechen'
@@ -55,7 +55,7 @@ RSpec.feature 'OTP Setup', type: :feature do
     end
 
     scenario 'editor tries to access setup page' do
-      visit new_otp_setup_path(as: user)
+      visit otp_setup_path(as: user)
 
       expect(page).to have_current_path(dashboard_path)
     end

@@ -2,26 +2,38 @@
 
 class ApplicationController < ActionController::Base
   include Clearance::Controller
-
-  before_action :require_login, :ensure_otp_is_set_up, :ensure_otp_is_verified
+  before_action :require_login, :require_otp_setup
 
   private
 
+  def redirect_if_signed_in
+    redirect_to dashboard_path if signed_in?
+  end
+
+  def require_otp_setup
+    redirect_to otp_setup_path if signed_in? && !current_user.otp_enabled?
+  end
+
+  def sign_in(user)
+    delete_otp_session_variables
+
+    super(user) do |status|
+      if status.success?
+        redirect_to dashboard_path
+      else
+        flash.now.alert = status.failure_message
+        render template: 'sessions/new', status: :unauthorized
+      end
+    end
+  end
+
   def sign_out
+    delete_otp_session_variables
     super
-
-    session.delete(:otp_verified_for_user)
   end
 
-  def ensure_otp_is_verified
-    return if signed_out? || !current_user.otp_enabled?
-
-    redirect_to new_otp_confirmation_path if session[:otp_verified_for_user] != current_user.id
-  end
-
-  def ensure_otp_is_set_up
-    return if signed_out? || current_user.otp_enabled?
-
-    redirect_to new_otp_setup_path
+  def delete_otp_session_variables
+    session.delete(:otp_user_id)
+    session.delete(:otp_time)
   end
 end

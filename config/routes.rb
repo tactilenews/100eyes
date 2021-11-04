@@ -66,32 +66,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resource :session, controller: 'sessions', only: [:create]
-  resources :passwords, controller: 'passwords', only: %i[create new]
-
-  get '/sign_in' => 'sessions#new', as: 'sign_in'
-  delete '/sign_out' => 'sessions#destroy', as: 'sign_out'
+  resource :session, controller: 'sessions', only: %i[create]
+  resources :passwords, controller: 'passwords', only: %i[new create]
 
   resources :users, only: [] do
-    resource :password do
-      resource :password, controller: 'passwords', only: %i[edit update]
-    end
-
-    resources :settings do
-      member do
-        get '/two_factor_auth_setup', to: 'settings#two_factor_auth_setup'
-        patch '/two_factor_auth_setup', to: 'settings#enable_otp'
-      end
-    end
+    resource :password, controller: 'passwords', only: %i[edit update]
   end
-
-  namespace :otp do
-    resource :confirmation, only: %i[new create]
-    resource :setup, only: %i[new create]
-  end
-
-  get '/sign_in' => 'sessions#new', as: 'sign_in'
-  delete '/sign_out' => 'sessions#destroy', as: 'sign_out'
 
   namespace :admin do
     constraints Clearance::Constraints::SignedIn.new(&:admin?) do
@@ -102,4 +82,10 @@ Rails.application.routes.draw do
       resources :requests, except: %i[new create]
     end
   end
+
+  resource :otp_setup, controller: :otp_setup, only: %i[show create]
+  resource :otp_auth, controller: :otp_auth, only: %i[show create]
+
+  get '/sign_in' => 'sessions#new', as: 'sign_in'
+  delete '/sign_out' => 'sessions#destroy', as: 'sign_out'
 end
