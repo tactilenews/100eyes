@@ -15,7 +15,11 @@ RSpec.describe 'Onboarding::Signal', type: :request do
 
     context 'if Signal is not set up on the server' do
       let(:signal_server_phone_number) { nil }
-      it { should raise_error(ActionController::RoutingError) }
+
+      it 'show 404 error page' do
+        subject.call
+        expect(response).to have_http_status(:not_found)
+      end
     end
 
     context 'if Signal is set up on the server' do
