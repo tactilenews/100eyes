@@ -67,6 +67,9 @@ Rails.application.routes.draw do
   end
 
   resource :session, controller: 'sessions', only: %i[create]
+  get '/sign_in' => 'sessions#new', as: 'sign_in'
+  delete '/sign_out' => 'sessions#destroy', as: 'sign_out'
+
   resources :passwords, controller: 'passwords', only: %i[new create]
 
   resources :users, only: [] do
@@ -85,7 +88,4 @@ Rails.application.routes.draw do
 
   resource :otp_setup, controller: :otp_setup, only: %i[show create]
   resource :otp_auth, controller: :otp_auth, only: %i[show create]
-
-  get '/sign_in' => 'sessions#new', as: 'sign_in'
-  delete '/sign_out' => 'sessions#destroy', as: 'sign_out'
 end
