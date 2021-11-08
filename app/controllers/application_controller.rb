@@ -4,12 +4,6 @@ class ApplicationController < ActionController::Base
   include Clearance::Controller
   before_action :require_login, :require_otp_setup
 
-  private
-
-  def redirect_if_signed_in
-    redirect_to dashboard_path if signed_in?
-  end
-
   def require_otp_setup
     redirect_to otp_setup_path if signed_in? && !current_user.otp_enabled?
   end

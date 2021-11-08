@@ -32,4 +32,8 @@ class OtpAuthController < ApplicationController
     sign_out
     redirect_to sign_in_path
   end
+
+  def redirect_if_signed_in
+    redirect_to dashboard_path if signed_in?
+  end
 end
