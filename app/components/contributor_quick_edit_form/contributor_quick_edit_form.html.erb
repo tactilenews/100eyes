@@ -1,0 +1,15 @@
+<turbo-frame id="contributor-quick-edit-form">
+  <%= c 'form', model: contributor do %>
+    <%= c 'stack' do %>
+      <%= c 'field', object: contributor, attr: :tag_list do |field| %>
+        <%= c 'tags_input', field.input_defaults.merge(available_tags: available_tags) %>
+      <% end %>
+
+      <%= c 'field', object: contributor, attr: :note do |field| %>
+        <%= c 'textarea', field.input_defaults %>
+      <% end %>
+
+      <%= c 'submit_button', label: I18n.t('save') %>
+    <% end %>
+  <% end %>
+</turbo-frame>

@@ -14,31 +14,25 @@
     <% end %>
   <% end %>
 
-  <%= c 'box', style: :large, id: 'profile', name: 'profile' do %>
-    <%= c 'wrapper' do %>
+  <%= c 'box', style: :large do %>
+    <%= c 'wrapper', style: :narrow do %>
       <%= c 'stack', space: :xlarge do %>
 
-        <%= c 'flex' do %>
-          <%= c 'avatar', contributor: @contributor, expandable: true, style: :large %>
-          <%= c 'heading' do %>
-            <%= @contributor.name %>
-          <% end %>
-        <% end %>
+        <%= c 'contributor_header', contributor: @contributor %>
 
-        <%= c 'contributor_form', contributor: @contributor %>
+        <%= c 'contributor_quick_edit_form', contributor: @contributor %>
 
-        <%= c 'stack' do %>
-          <%= c 'heading', styles: [:section] do %>
-            <%= I18n.t 'contributor.activity' %>
-          <% end %>
+        <hr>
 
-          <%= c 'requests_feed' do %>
-            <% @contributor.recent_replies.each do |reply| %>
-              <%= c 'requests_feed_item', latest_reply: reply %>
-            <% end %>
-          <% end %>
-        <% end %>
+        <%= c 'contributor_channel_settings', contributor: @contributor %>
 
+        <hr>
+
+        <%= c 'requests_feed', contributor: @contributor %>
+
+        <hr>
+
+        <%= c 'contributor_status_toggle', contributor: @contributor %>
       <% end %>
     <% end %>
   <% end %>

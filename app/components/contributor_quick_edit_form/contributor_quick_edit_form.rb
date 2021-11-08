@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module ContributorForm
-  class ContributorForm < ApplicationComponent
+module ContributorQuickEditForm
+  class ContributorQuickEditForm < ApplicationComponent
     def initialize(contributor:)
       super
 

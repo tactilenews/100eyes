@@ -1,5 +1,33 @@
-<div class="RequestsFeed">
-  <%= c 'stack' do %>
-    <%= content %>
+<%= c 'stack', class: 'RequestsFeed' do %>
+  <% if replies.any? %>
+    <%= c 'heading', tag: :h2 do %>
+      <%= t('.heading') %>
+    <% end %>
+  <% else %>
+    <%= c 'stack', space: :xsmall do %>
+      <%= c 'heading', tag: :h2 do %>
+        <%= t('.heading') %>
+      <% end %>
+
+      <p><%= t('.no_replies', name: contributor.name) %></p>
+    <% end %>
   <% end %>
-</div>
+
+  <% if replies.any? %>
+    <ul>
+      <% replies.each do |reply| %>
+        <li>
+          <a
+            class="Link"
+            href="<%= request_path(reply.request, anchor: "contributor-#{reply.sender.id}") %>"
+          >
+            <strong><%= reply.request.title %></strong>
+          </a>
+          <p class="text-small text-light">
+            <%= date_time(reply.created_at) %>
+          </p>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+<% end %>

@@ -1,0 +1,38 @@
+<header <%= attrs %>>
+  <%= c 'avatar',
+    contributor: contributor,
+    expandable: true,
+    style: :large,
+    class: 'ContributorHeader-avatar'
+  %>
+
+  <div>
+    <%= c('heading') { contributor.name } %>
+
+    <p class="text-small text-light">
+      <%= t('.created_at', date: l(contributor.created_at.to_date)) %>
+
+      <% if contributor.inactive? %>
+        · <%= t('.deactivated_at', date: l(contributor.deactivated_at.to_date)) %>
+      <% end %>
+    </p>
+
+    <div class="text-small text-light">
+      <a class="Link" href="<%= edit_contributor_path(contributor) %>"><%= t('.edit') %></a>
+      ·
+      <%= c('form',
+        model: contributor,
+        auto_submit: true,
+        multipart: true,
+        style: :inline,
+      ) do %>
+        <%= c 'upload_button',
+          styles: [:inline, :underline],
+          label: t('.change_avatar'),
+          id: 'contributor[avatar]',
+          name: 'contributor[avatar]'
+        %>
+      <% end %>
+    </div>
+  </div>
+</header>

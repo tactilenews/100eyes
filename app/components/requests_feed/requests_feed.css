@@ -1,17 +1,7 @@
-.RequestsFeed {
-  --bullet-size: 0.5rem;
-
-  position: relative;
+.RequestsFeed ul {
+  list-style: none;
 }
 
-.RequestsFeed::before {
-  content: '';
-  position: absolute;
-  left: calc(0.5 * var(--bullet-size));
-  transform: translateX(-50%);
-
-  display: block;
-  width: 2px;
-  height: 100%;
-  background-color: var(--color-gray-light);
+.RequestsFeed li + li {
+  margin-top: var(--spacing-unit-s);
 }

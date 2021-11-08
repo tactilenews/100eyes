@@ -1,8 +1,4 @@
-<div
-  <%= attrs %>
-  data-controller="notification"
-  data-notification-show-always-value="'<%= show_always ? 'true' : 'false' %>"
->
+<div <%= attrs %>>
   <%= content %>
   <% if show_close %>
     <button

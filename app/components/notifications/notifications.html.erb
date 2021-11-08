@@ -1,0 +1,11 @@
+<div
+  <%= attrs %>
+  data-controller="notifications"
+  data-action="turbo:frame-render@window->notifications#replaceNotifications"
+>
+  <% notifications.each do |type, message| %>
+    <%= c 'notification', styles: [type, *styles], close_after: close_after do %>
+      <%= message %>
+    <% end %>
+  <% end %>
+</div>

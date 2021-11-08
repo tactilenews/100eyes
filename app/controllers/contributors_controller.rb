@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ContributorsController < ApplicationController
-  before_action :set_contributor, only: %i[update destroy show message]
+  before_action :set_contributor, only: %i[update destroy show edit message]
   before_action :count_params, only: :count
 
   def message
@@ -29,20 +29,7 @@ class ContributorsController < ApplicationController
                     .with_attached_avatar
   end
 
-  def new
-    @contributor = Contributor.new
-  end
-
-  def create
-    @contributor = Contributor.new(contributor_params)
-    @contributor.editor_guarantees_data_consent = true
-    if @contributor.save
-      redirect_to @contributor, flash: { success: I18n.t('contributor.success') }
-    else
-      flash[:error] = I18n.t('contributor.invalid', name: @contributor.name)
-      render :new
-    end
-  end
+  def edit; end
 
   def update
     @contributors = Contributor.with_attached_avatar
@@ -52,8 +39,8 @@ class ContributorsController < ApplicationController
     if @contributor.update(contributor_params)
       redirect_to contributor_url, flash: { success: I18n.t('contributor.saved', name: @contributor.name) }
     else
-      flash[:error] = I18n.t('contributor.invalid', name: @contributor.name)
-      render :show
+      flash.now[:error] = I18n.t('contributor.invalid', name: @contributor.name)
+      render :show, status: :unprocessable_entity
     end
   end
 
@@ -74,7 +61,7 @@ class ContributorsController < ApplicationController
 
   def contributor_params
     params.require(:contributor).permit(:note, :first_name, :last_name, :avatar, :email, :threema_id, :phone, :zip_code, :city, :tag_list,
-                                        :active)
+                                        :active, :additional_email)
   end
 
   def message_params

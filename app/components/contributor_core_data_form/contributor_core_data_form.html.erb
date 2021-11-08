@@ -1,0 +1,46 @@
+<%= c 'stack' do %>
+  <%= c 'stack', space: :xsmall do %>
+    <%= c 'heading', tag: :h1 do %>
+      <%= t('.heading') %>
+    <% end %>
+
+    <p><%= t('.text', name: contributor.name, first_name: contributor.first_name).html_safe %></p>
+  <% end %>
+
+  <%= c 'form', model: contributor do %>
+    <%= c 'stack' do %>
+      <%= c 'flex' do %>
+        <%= c 'field', object: contributor, attr: :first_name do |field| %>
+          <%= c 'input', field.input_defaults.merge(required: true) %>
+        <% end %>
+
+        <%= c 'field', object: contributor, attr: :last_name do |field| %>
+          <%= c 'input', field.input_defaults.merge(required: true) %>
+        <% end %>
+      <% end %>
+
+      <%= c 'field', object: contributor, attr: :additional_email do |field| %>
+        <%= c 'input', field.input_defaults.merge(type: :email) %>
+      <% end %>
+
+      <%= c 'field', object: contributor, attr: :phone do |field| %>
+        <%= c 'input', field.input_defaults.merge(type: :tel) %>
+      <% end %>
+
+      <%= c 'flex' do %>
+        <%= c 'field', object: contributor, attr: :zip_code do |field| %>
+          <%= c 'input', field.input_defaults.merge(inputmode: :numeric) %>
+        <% end %>
+
+        <%= c 'field', object: contributor, attr: :city do |field| %>
+          <%= c 'input', field.input_defaults %>
+        <% end %>
+      <% end %>
+
+      <%= c 'flex', styles: [:space_between, :reverse] do %>
+        <%= c 'submit_button', label: t('save') %>
+        <%= c 'button', style: :secondary, link: contributor_path(contributor), label: t('cancel') %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

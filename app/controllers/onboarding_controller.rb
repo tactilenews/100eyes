@@ -67,7 +67,7 @@ class OnboardingController < ApplicationController
   end
 
   def default_url_options
-    super.merge(jwt: jwt_param)
+    super.merge(jwt: params[:jwt])
   end
 
   def redirect_to_success

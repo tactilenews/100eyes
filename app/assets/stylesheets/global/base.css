@@ -43,8 +43,17 @@ strong {
   font-weight: 600;
 }
 
+hr {
+  border: 2px solid var(--color-gray-light);
+}
+
 .turbo-progress-bar {
   height: 2px;
   background-color: var(--color-blue);
   box-shadow: 0 0 2px var(--color-blue-lightest);
+}
+
+turbo-frame,
+turbo-stream {
+  display: block;
 }

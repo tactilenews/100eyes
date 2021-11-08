@@ -155,6 +155,65 @@ de:
         Um 100eyes vollständig zu nutzen, verwende eine aktuelle Version von
         <a class="Link" href="https://mozilla.org/firefox" target="_blank" rel="noreferrer noopener">Mozilla Firefox</a> oder
         <a class="Link" href="https://google.com/chrome" target="_blank" rel="noreferrer noopener">Google Chrome</a>.
+    form:
+      loading: Lade…
+    contributor_status_toggle:
+      active:
+        heading: Mitglied deaktivieren
+        text: |
+          %{name} ist ein <strong>aktives Mitglied</strong> deiner Community.
+          Du kannst das Mitgliedskonto deaktivieren.
+          %{first_name} erhält dann keine Recherchefragen mehr.
+          Direkte Nachfragen kannst du jedoch weiterhin stellen.
+          Das Konto kannst du jederzeit reaktivieren.
+        action: Mitglied deaktivieren
+      inactive:
+        heading: Mitglied reaktivieren
+        text: |
+          %{name} ist ein <strong>inaktives Mitglied</strong> deiner Community und erhält aktuell keine Recherchefragen über 100eyes.
+          Direkte Nachfragen kannst du jedoch weiterhin stellen.
+          Du kannst das Konto reaktivieren.
+          %{first_name} erhält dann wieder alle Recherchefragen.
+        action: Mitglied reaktivieren
+    contributor_email_settings:
+      heading: "Ausgewählter Kanal: E-Mail"
+      text: "%{name} hat sich via E-Mail angemeldet."
+    contributor_telegram_settings:
+      heading: "Ausgewählter Kanal: Telegram"
+      complete:
+        text: |
+          %{name} hat sich unter dem Telegram-Nutzernamen „%{username}” angemeldet.
+      incomplete:
+        text: |
+          %{name} hat sich am %{date} via Telegram angemeldet, die Anmeldung aber noch nicht abgeschlossen.
+          Sende %{first_name} einen Link mit Hinweisen zum Abschließen der Anmeldung.
+        action: Link kopieren
+    contributor_threema_settings:
+      heading: "Ausgewählter Kanal: Threema"
+      text: "%{name} hat sich unter der folgenden Threema-ID angemeldet."
+    contributor_signal_settings:
+      heading: "Ausgewählter Kanal: Signal"
+      complete:
+        text: |
+          %{name} hat sich mit der Handynummer %{phone_number} angemeldet.
+      incomplete:
+        text: |
+          %{name} hat sich am %{date} via Signal angemeldet, die Anmeldung aber noch nicht abgeschlossen.
+          Sende %{first_name} einen Link mit Hinweisen zum Abschließen der Anmeldung.
+        action: Link kopieren
+    contributor_header:
+      created_at: Mitglied seit %{date}
+      deactivated_at: deaktiviert am %{date}
+      edit: Stammdaten bearbeiten
+      change_avatar: Profilbild ändern
+    requests_feed:
+      heading: Letzte Antworten
+      no_replies: "%{name} hat bisher auf keine Recherche geantwortet."
+    contributor_core_data_form:
+      heading: Stammdaten bearbeiten
+      text: |
+        Hinterlege zusätzliche Informationen zu <strong>%{name}</strong> für deine Unterlagen.
+        Sie haben keine Auswirkungen auf den Kommunikationskanal, über den %{first_name} Nachrichten erhält.
 
   mailer:
     unsubscribe:
@@ -170,7 +229,7 @@ de:
         subject: Die Redaktion hat eine neue Frage
 
   save: Speichern
-  discard: Änderungen verwerfen
+  cancel: Abbrechen
   skip_to_content: Zum Hauptinhalt springen
 
   dashboard:
@@ -287,12 +346,6 @@ de:
     invalid: Informationen zu %{name} sind ungültig
     message-send: Nachricht an %{name} wurde verschickt
     skip_to_profile: Zum Profil springen
-    data_processing_callout:
-      heading: Datenschutz
-      text:
-        - Wenn du ein Mitglied manuell hinzufügst, musst du sicherstellen, dass das Mitglied zuvor die Allgemeinen Nutzungsbedingungen und die Datenschutzerklärung von 100eyes zur Kenntnis genommen und seine Einwilligung erklärt hat, Nachrichten zu erhalten. Die Verantwortung für die Dokumentation der Einwilligung liegt in diesem Fall bei dir.
-        - Außerdem erhält ein Mitglied, das du manuell hinzufügst, keine automatische Benachrichtigung. Am Besten gibst du dem Mitglied also eine kurze Rückmeldung, dass es jetzt Teil deiner 100eyes-community ist.
-        - Fragen? <a class="Link" href="mailto:support@tactile.news">support@tactile.news</a>
     form:
       first_name:
         label: Vorname
@@ -301,10 +354,13 @@ de:
       avatar:
         label: Profilbild
       phone:
-        label: Telefon
+        label: Telefonnummer
+        help: Hinterlege eine zusätzliche Telefonnummer. Das kann praktisch sein, falls du das Mitglied einmal schnell außerhalb von 100eyes kontaktieren möchtest.
+      additional_email:
+        label: E-Mail-Adresse
+        help: Hinterlege eine zusätzliche E-Mail-Adresse. Das kann praktisch sein, falls sich das Mitglied über einen Messenger angemeldet hat, du aber dennoch die E-Mail-Adresse speichern möchtest.
       email:
         label: E-Mail-Adresse
-        placeholder: Keine E-Mail-Adresse hinterlegt
       signal_phone_number:
         label: Handynummer
       threema_id:
@@ -322,7 +378,7 @@ de:
       zip_code:
         label: Postleitzahl
       city:
-        label: Stadt
+        label: Wohnort
       tag_list:
         label: Tags
       note:

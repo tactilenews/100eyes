@@ -1,0 +1,10 @@
+<%= c 'button', **attrs
+  .defaults(type: :submit)
+  .merge(
+    styles: styles,
+    data: {
+      controller: 'submit-button',
+      action: 'turbo:before-cache@window->submit-button#resetLoadingState',
+    }
+  )
+%>
