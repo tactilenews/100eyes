@@ -2,39 +2,27 @@
 
 class ApplicationController < ActionController::Base
   include Clearance::Controller
-  before_action :require_login, :ensure_2fa_setup
-  around_action :use_locale
+
+  before_action :require_login, :ensure_otp_setup
+  before_action :ensure_otp_verified
 
   private
 
-  def use_locale(&action)
-    locale = locale_params[:locale] || I18n.default_locale
-    I18n.with_locale(locale, &action)
+  def sign_out
+    super
+
+    session.delete(:otp_verified_for_user)
   end
 
-  def default_url_options(options = {})
-    return options.merge(locale: I18n.locale) unless I18n.locale == I18n.default_locale
+  def ensure_otp_verified
+    return if signed_out? || !current_user.otp_enabled?
 
-    options
+    redirect_to new_otp_confirmation_path if session[:otp_verified_for_user] != current_user.id
   end
 
-  def locale_params
-    params.permit(:locale)
-  end
-
-  def ensure_2fa_setup
+  def ensure_otp_setup
     return if signed_out? || current_user.otp_enabled?
 
     redirect_to two_factor_auth_setup_user_setting_path(current_user)
-  end
-
-  def create_session
-    sign_in(@user) do |status|
-      if status.success?
-        redirect_back_or dashboard_path
-      else
-        redirect_to sign_in_path, flash: { alert: I18n.t('flashes.failure_when_not_signed_in') }
-      end
-    end
   end
 end

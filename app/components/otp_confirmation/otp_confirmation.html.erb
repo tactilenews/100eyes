@@ -1,0 +1,29 @@
+<%= c 'stack', **attrs do %>
+  <%= c 'heading', tag: :h1 do %>
+    <%= t('.heading') %>
+  <% end %>
+
+  <%= form_with(url: otp_confirmation_path, local: true, data: { turbo: false }) do %>
+    <%= c 'stack' do %>
+
+      <%= c 'otp_field', id: 'session[otp]' %>
+
+      <%= c 'flex' do %>
+        <%= c 'button',
+          type: 'submit',
+          label: t('.submit'),
+          styles: [:primary, :block]
+        %>
+
+        <%= c 'button',
+          link: sign_out_path,
+          data: { method: 'delete' },
+          rel: 'nofollow',
+          styles: [:secondary],
+          label: t('.cancel')
+        %>
+      <% end %>
+
+    <% end %>
+  <% end %>
+<% end %>
