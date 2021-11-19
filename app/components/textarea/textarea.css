@@ -1,4 +1,8 @@
 .Textarea {
+  width: 100%;
+}
+
+.Textarea-input {
   -webkit-appearance: none;
   -moz-appearance: none;
 
@@ -12,12 +16,16 @@
   resize: none;
 }
 
-.Textarea:focus {
+.Textarea-input:focus {
   border-color: var(--color-focus);
   outline: none;
   box-shadow: var(--input-focus-shadow);
 }
 
-.Textarea--small {
+.Textarea--small .Textarea-input {
   padding: var(--input-padding-s);
+}
+
+.Textarea-emojiPickerHint {
+  margin-top: var(--spacing-unit-xs);
 }

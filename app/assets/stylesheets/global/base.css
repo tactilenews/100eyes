@@ -47,6 +47,15 @@ hr {
   border: 2px solid var(--color-gray-light);
 }
 
+kbd {
+  display: inline-block;
+  border-radius: var(--border-radius);
+  background-color: var(--color-gray-light);
+  font-family: inherit;
+  font-size: 0.9em;
+  padding: 0.05em 0.3em;
+}
+
 .turbo-progress-bar {
   height: 2px;
   background-color: var(--color-blue);
