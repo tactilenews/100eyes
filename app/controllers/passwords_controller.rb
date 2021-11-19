@@ -1,27 +1,21 @@
 # frozen_string_literal: true
 
 class PasswordsController < Clearance::PasswordsController
-  before_action :load_user
-  before_action :verify_otp_code, only: :update, if: -> { @user.otp_enabled? }
+  skip_before_action :require_login
+  skip_before_action :require_otp_setup
 
-  private
+  def update
+    # This method is almost completely copied from `Clearance::PasswordsController`.
+    # However, in contrast to the parent class, it doesn't automatically sign in
+    # a user after a successful password reset.
+    @user = find_user_for_update
 
-  # rubocop:disable Naming/MemoizedInstanceVariableName
-  def load_user
-    @user ||= find_user_for_update
-  end
-  # rubocop:enable Naming/MemoizedInstanceVariableName
-
-  def verify_otp_code
-    return if @user&.authenticate_otp(verify_user_params['otp_code'], drift: 30)
-
-    @qr_code = RQRCode::QRCode.new(@user.provisioning_uri(Setting.project_name))
-    flash.now[:alert] = I18n.t('flashes.failure_after_update')
-    # Filter chain halted as :verify_otp_code rendered or redirected
-    render :edit, status: :unauthorized
-  end
-
-  def verify_user_params
-    params.require(:password_reset).permit(:otp_code, :password)
+    if @user.update_password(password_from_password_reset_params)
+      redirect_to sign_in_path
+      session[:password_reset_token] = nil
+    else
+      flash_failure_after_update
+      render template: 'passwords/edit'
+    end
   end
 end

@@ -214,6 +214,23 @@ de:
       text: |
         Hinterlege zusätzliche Informationen zu <strong>%{name}</strong> für deine Unterlagen.
         Sie haben keine Auswirkungen auf den Kommunikationskanal, über den %{first_name} Nachrichten erhält.
+    otp_confirmation:
+      heading: Anmeldung bestätigen
+      submit: Bestätigen
+      cancel: Abbrechen
+    otp_setup:
+      heading: Schütze dein Konto
+      text: Richte jetzt die <strong>Zwei-Faktor-Authentifizierung</strong> ein. Damit sicherst du dein Konto zusätzlich ab und schützt so die Daten deiner Community.
+      step_1:
+        heading: Lade eine App herunter
+        text: Um die Anmeldung in zwei Schritten zu nutzen, benötigst du eine App wie z.B. <a class="Link" href="https://freeotp.github.io/" target="_blank" rel="noreferrer noopener">FreeOTP</a> oder <a class="Link" href="https://support.google.com/accounts/answer/1066447?hl=de" rel="noreferrer noopener">Google Authenticator</a>. Wenn du schon eine andere App verwendest, kannst du sie auch für 100eyes verwenden.
+      step_2:
+        heading: Scanne den QR-Code
+        text: "Alternativ kannst du auch den folgenden Code kopieren oder händisch in deiner App eingeben:"
+        copy: Code kopieren
+      step_3:
+        heading: Bestätige die Einrichtung
+        text: Deine App generiert jetzt alle 30 Sekunden einen neuen, <strong>6-stelligen Zahlencode</strong>. Diesen Code benötigst du zusätzlich zu deinen Zugangsdaten, um dich bei 100eyes anzumelden. Gib jetzt den Code ein, um die Einrichtung abzuschließen.
 
   mailer:
     unsubscribe:
@@ -484,6 +501,10 @@ de:
       success: Die bearbeitete Antwort wurde gespeichert
       error: Die bearbeitete Antwort konnte nicht gespeichet werden
     only_manually_created: Diese Aktion kann nur auf manuell erstellten Nachrichten ausgeführt werden.
+
+  sessions:
+    errors:
+      otp_incorrect: "Der 6-stellige Anmeldecode ist nicht korrekt."
 
   activerecord:
     errors:

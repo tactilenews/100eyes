@@ -66,35 +66,6 @@ Rails.application.routes.draw do
     end
   end
 
-  namespace :user, only: %i[two_factor_auth_setup] do
-    resources :settings do
-      member do
-        get '/two_factor_auth_setup', to: 'settings#two_factor_auth_setup'
-        patch '/two_factor_auth_setup', to: 'settings#enable_otp'
-      end
-    end
-  end
-
-  # Clearance routes
-
-  resources :passwords,
-            controller: 'passwords',
-            only: %i[create new]
-
-  resource :session,
-           controller: 'sessions',
-           only: :create
-
-  resources :users,
-            only: Clearance.configuration.user_actions do
-    resource :password,
-             controller: 'passwords',
-             only: %i[edit update]
-  end
-
-  get '/sign_in' => 'sessions#new', as: 'sign_in'
-  delete '/sign_out' => 'sessions#destroy', as: 'sign_out'
-
   namespace :admin do
     constraints Clearance::Constraints::SignedIn.new(&:admin?) do
       root to: 'users#index'
@@ -104,4 +75,17 @@ Rails.application.routes.draw do
       resources :requests, except: %i[new create]
     end
   end
+
+  resource :session, controller: 'sessions', only: %i[create]
+  get '/sign_in' => 'sessions#new', as: 'sign_in'
+  delete '/sign_out' => 'sessions#destroy', as: 'sign_out'
+
+  resources :passwords, controller: 'passwords', only: %i[new create]
+
+  resources :users, only: [] do
+    resource :password, controller: 'passwords', only: %i[edit update]
+  end
+
+  resource :otp_setup, controller: :otp_setup, only: %i[show create]
+  resource :otp_auth, controller: :otp_auth, only: %i[show create]
 end

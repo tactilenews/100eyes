@@ -1,1 +1,3 @@
-<%= c 'password_reset_form', user: @user %>
+<%= c 'interstitial', style: :stripes do %>
+  <%= c 'password_reset_form', user: @user %>
+<% end %>

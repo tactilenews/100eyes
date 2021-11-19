@@ -1,0 +1,76 @@
+<%= c 'stack', **attrs do %>
+
+  <%= c 'stack', space: :small do %>
+    <%= c 'heading', tag: :h1 do %>
+      <%= t('.heading') %>
+      <%= c 'icon', icon: :privacy, style: :inline, class: 'text-green' %>
+    <% end %>
+
+    <p><%= t('.text').html_safe %></p>
+  <% end %>
+
+  <%= c 'stack', space: :xsmall do %>
+    <%= c 'heading', tag: :h2, style: :gamma do %>
+      <%= t('.step_1.heading') %>
+    <% end %>
+
+    <p><%= t('.step_1.text').html_safe %></p>
+  <% end %>
+
+  <%= c 'stack', space: :xsmall do %>
+    <%= c 'heading', tag: :h2, style: :gamma do %>
+      <%= t('.step_2.heading') %>
+    <% end %>
+
+    <%= c 'flex' do %>
+      <div>
+        <%= c 'qr_code', url: provisioning_url %>
+      </div>
+
+      <%= c 'stack', space: :small, class: 'text-small text-light' do %>
+        <p>
+          <%= t('.step_2.text') %>
+          <br>
+          <code><%= user.otp_secret_key %></code>
+        </p>
+
+        <%= c 'copy_button',
+          label: t('.step_2.copy'),
+          copy: user.otp_secret_key,
+          style: :secondary
+        %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= c 'stack', space: :xsmall do %>
+    <%= c 'heading', tag: :h2, style: :gamma do %>
+      <%= t('.step_3.heading') %>
+    <% end %>
+
+    <p><%= t('.step_3.text').html_safe %></p>
+  <% end %>
+
+  <%= form_with(url: otp_setup_path, local: true, data: { turbo: false }) do %>
+    <%= c 'stack' do %>
+      <%= c 'otp_field', id: 'setup[otp]', help: nil %>
+
+      <%= c 'flex' do %>
+        <%= c 'button',
+          type: 'submit',
+          label: 'Bestätigen',
+          styles: [:primary, :block]
+        %>
+
+        <%= c 'button',
+          link: sign_out_path,
+          data: { method: 'delete' },
+          rel: 'nofollow',
+          styles: [:secondary, :block],
+          label: 'Abbrechen'
+        %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+<% end %>
