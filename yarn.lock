@@ -1355,11 +1355,6 @@ postcss-env-function@^4.0.2:
   dependencies:
     postcss-values-parser "6.0.1"
 
-postcss-flexbugs-fixes@^5.0.2:
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/postcss-flexbugs-fixes/-/postcss-flexbugs-fixes-5.0.2.tgz#2028e145313074fc9abe276cb7ca14e5401eb49d"
-  integrity sha512-18f9voByak7bTktR2QgDveglpn9DTbBWPUzSOe9g0N4WR/2eSt6Vrcbf0hmspvMI6YWGywz6B9f7jzpFNJJgnQ==
-
 postcss-focus-visible@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/postcss-focus-visible/-/postcss-focus-visible-6.0.1.tgz#b12a859616eca7152976fec24ef337ab29bbc405"
