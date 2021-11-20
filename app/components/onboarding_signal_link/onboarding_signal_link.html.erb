@@ -10,7 +10,9 @@
     </p>
 
     <p>
-      <%= t('components.onboarding_signal_link.action', number: Setting.signal_server_phone_number).html_safe %>
+      <%= t('components.onboarding_signal_link.action',
+        number: Setting.signal_server_phone_number.phony_formatted(spaces: ' ')
+      ).html_safe %>
     </p>
   <% end %>
 
