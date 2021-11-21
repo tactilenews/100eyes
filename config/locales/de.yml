@@ -231,6 +231,9 @@ de:
       step_3:
         heading: Bestätige die Einrichtung
         text: Deine App generiert jetzt alle 30 Sekunden einen neuen, <strong>6-stelligen Zahlencode</strong>. Diesen Code benötigst du zusätzlich zu deinen Zugangsdaten, um dich bei 100eyes anzumelden. Gib jetzt den Code ein, um die Einrichtung abzuschließen.
+    textarea:
+      windows_emoji_picker_hint: Füge Emojis mit <kbd>Windows-Taste</kbd> + <kbd>Punkt</kbd> ein.
+      macos_emoji_picker_hint: Füge Emojis mit <kbd>Control ⌃</kbd> + <kbd>Command ⌘</kbd> + <kbd>Leertaste</kbd> ein.
 
   mailer:
     unsubscribe:

@@ -1,16 +1,7 @@
-<div
-  <%= attrs %>
-  data-controller="browser-support-notification"
-  hidden
->
-  <%= c('notification',
-    style: :alert,
-    show_close: false,
-    show_always: true,
-  ) do %>
+<% if !browser_supported? %>
+  <%= c('notification', style: :alert, show_close: false, show_always: true, **attrs) do %>
     <%= c 'wrapper' do %>
-      <%= t('components.browser_support_notification.message').html_safe %>
+      <%= t('.message').html_safe %>
     <% end %>
   <% end %>
-</div>
-
+<% end %>

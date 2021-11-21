@@ -1,0 +1,10 @@
+<div <%= attrs.slice(:class) %>>
+  <textarea <%= attrs.except(:class).merge(class: 'Textarea-input') %>><%= value %></textarea>
+
+  <% if show_emoji_picker_hint? && emoji_picker_supported? %>
+    <p class="Textarea-emojiPickerHint text-small text-light">
+      <%= t('.windows_emoji_picker_hint').html_safe if windows_emoji_picker_supported? %>
+      <%= t('.macos_emoji_picker_hint').html_safe if macos_emoji_picker_supported? %>
+    </p>
+  <% end %>
+</div>
