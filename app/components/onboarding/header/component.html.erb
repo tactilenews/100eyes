@@ -1,0 +1,15 @@
+<header <%= attrs %>>
+  <% if logo.present? %>
+    <img src="<%= logo %>" alt="<%= project_name %>" />
+  <% else %>
+    <div class="Onboarding-Header__logoText">
+      <%= project_name %>
+    </div>
+  <% end %>
+
+  <% if byline %>
+    <span class="Onboarding-Header-byline">
+      <%= byline %>
+    </span>
+  <% end %>
+</header>

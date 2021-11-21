@@ -25,7 +25,7 @@ class ApplicationComponent < ViewComponent::Base
   end
 
   def block_name
-    self.class.name.deconstantize
+    self.class.name.deconstantize.gsub('::', '-')
   end
 
   def class_names

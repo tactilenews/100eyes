@@ -1,0 +1,18 @@
+.Onboarding-Response-icon {
+  display: inline-block;
+  width: var(--spacing-unit-xl);
+  height: var(--spacing-unit-xl);
+  padding: var(--spacing-unit-s);
+
+  border-radius: 50%;
+  color: #fff;
+  background-color: var(--color-text);
+}
+
+.Onboarding-Response--success .Onboarding-Response-icon {
+  background-color: var(--color-green);
+}
+
+.Onboarding-Response--error .Onboarding-Response-icon {
+  background-color: var(--color-red);
+}

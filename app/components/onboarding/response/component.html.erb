@@ -1,0 +1,7 @@
+<%= c 'interstitial', **attrs do %>
+  <%= c 'stack', space: :small, class: 'text-serif text-center' do %>
+    <%= c 'icon', icon: icon, class: 'Onboarding-Response-icon' %>
+    <%= c('heading', tag: :h1) { heading } %>
+    <p><%= text %></p>
+  <% end %>
+<% end %>

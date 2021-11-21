@@ -5,6 +5,17 @@ require 'rails_helper'
 RSpec.describe ApplicationComponent, type: :component do
   let(:params) { {} }
   before { stub_const('HelloWorld::Component', Class.new(ApplicationComponent)) }
+  before { stub_const('Nested::HelloWorld::Component', Class.new(ApplicationComponent)) }
+
+  describe '#block_name' do
+    subject { HelloWorld::Component.new.send(:block_name) }
+    it { should eq('HelloWorld') }
+
+    context 'given a nested component' do
+      subject { Nested::HelloWorld::Component.new.send(:block_name) }
+      it { should eq('Nested-HelloWorld') }
+    end
+  end
 
   describe '#class_names' do
     subject { HelloWorld::Component.new(**params).send(:class_names) }
