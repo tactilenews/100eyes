@@ -11,19 +11,24 @@ RSpec.describe ApplicationComponent, type: :component do
 
     it { should eq(['HelloWorld']) }
 
-    describe 'given a list of styles' do
+    context 'given a style' do
+      let(:params) { { style: :large } }
+      it { should eq(['HelloWorld', 'HelloWorld--large']) }
+    end
+
+    context 'given a list of styles' do
       let(:params) { { styles: %w[large brandColor] } }
       it { should eq(['HelloWorld', 'HelloWorld--large', 'HelloWorld--brandColor']) }
     end
   end
 
   describe '#attrs' do
-    subject { HelloWorld::Component.new(**params).send(:attrs).attrs }
+    subject { HelloWorld::Component.new(**params).send(:attrs) }
     it { should eq({ class: 'HelloWorld' }) }
 
     context 'with attributes given explicitly' do
       let(:params) { { id: 'my-component' } }
-      it { should eq({ class: 'HelloWorld', id: 'my-component' }) }
+      it { should eq(AttributeBag.new(class: 'HelloWorld', id: 'my-component')) }
     end
   end
 end
