@@ -34,7 +34,7 @@
 
   background-image: linear-gradient(
     to bottom,
-    transparent,
+    rgba(255, 255, 255, 0),
     var(--color-gray-lightest) 90%
   );
 }
