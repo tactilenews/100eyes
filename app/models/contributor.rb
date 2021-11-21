@@ -14,6 +14,10 @@ class Contributor < ApplicationRecord
 
   has_one_attached :avatar
   has_one :json_web_token, dependent: :destroy
+  has_one :most_recent_reply, lambda {
+    select('DISTINCT ON (sender_id) *')
+      .reorder(:sender_id, created_at: :desc)
+  }, class_name: 'Message', foreign_key: 'sender_id', dependent: :destroy, inverse_of: false
   accepts_nested_attributes_for :json_web_token
 
   acts_as_taggable_on :tags
