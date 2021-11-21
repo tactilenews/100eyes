@@ -25,7 +25,7 @@ class ApplicationComponent < ViewComponent::Base
   end
 
   def block_name
-    self.class.name.demodulize
+    self.class.name.deconstantize
   end
 
   def class_names
@@ -37,6 +37,6 @@ class ApplicationComponent < ViewComponent::Base
   end
 
   def virtual_path
-    "components.#{self.class.name.demodulize.underscore}"
+    "components.#{self.class.name.deconstantize.underscore.gsub('/', '.')}"
   end
 end

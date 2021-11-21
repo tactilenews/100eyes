@@ -6,8 +6,8 @@ const application = Application.start();
 filenames.forEach((filename, index) => {
   const identifier = filename
     .split('/')
-    .slice(-1)[0]
-    .replace('.js', '')
+    .slice(4, -1)
+    .join('--')
     .replace(/_/g, '-');
 
   application.register(identifier, controllers[index].default);

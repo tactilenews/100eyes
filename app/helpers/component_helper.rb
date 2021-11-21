@@ -16,7 +16,7 @@ module ComponentHelper
   private
 
   def class_from_identifier(name)
-    path = "#{name}/#{name}"
+    path = "#{name}/component"
     class_name = path.camelize
 
     unless class_name.safe_constantize
