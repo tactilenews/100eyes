@@ -4,6 +4,21 @@ RSpec.describe AttributeBag do
   let(:attrs) { {} }
   let(:bag) { described_class.new(**attrs) }
 
+  describe '==' do
+    let(:bag) { AttributeBag.new(foo: 'bar', bar: 'baz') }
+    subject { bag == other_bag }
+
+    context 'given bags with same attributes' do
+      let(:other_bag) { AttributeBag.new(bar: 'baz', foo: 'bar') }
+      it { should be(true) }
+    end
+
+    context 'given bags with different attributes' do
+      let(:other_bag) { AttributeBag.new(bar: 'baz') }
+      it { should be(false) }
+    end
+  end
+
   describe 'to_s' do
     subject { bag.to_s }
     let(:attrs) { { type: :button } }
@@ -29,7 +44,7 @@ RSpec.describe AttributeBag do
   end
 
   describe 'merge' do
-    subject { bag.merge(**additional_attrs).attrs }
+    subject { bag.merge(**additional_attrs).to_hash }
     let(:attrs) { { type: :button } }
     let(:additional_attrs) { { id: 'form-action' } }
 
@@ -37,7 +52,7 @@ RSpec.describe AttributeBag do
 
     it 'does not manipulate original bag' do
       bag.merge(**additional_attrs)
-      expect(bag.attrs).to eq({ type: :button })
+      expect(bag.to_hash).to eq({ type: :button })
     end
 
     context 'with nested attributes' do
@@ -54,13 +69,13 @@ RSpec.describe AttributeBag do
 
       it 'does not manipulate bag' do
         bag.merge(class: 'visually-hidden')
-        expect(bag.attrs).to eq({ class: 'Button' })
+        expect(bag.to_hash).to eq({ class: 'Button' })
       end
     end
   end
 
   describe 'defaults' do
-    subject { bag.defaults(**default_attrs).attrs }
+    subject { bag.defaults(**default_attrs).to_hash }
     let(:default_attrs) { { type: :button } }
 
     it { should eq({ type: :button }) }
@@ -74,7 +89,7 @@ RSpec.describe AttributeBag do
   end
 
   describe 'slice' do
-    subject { bag.slice(*slice_attrs).attrs }
+    subject { bag.slice(*slice_attrs).to_hash }
     let(:attrs) { { type: :button, id: 'form-action' } }
     let(:slice_attrs) { [] }
 
@@ -87,7 +102,7 @@ RSpec.describe AttributeBag do
   end
 
   describe 'except' do
-    subject { bag.except(*except_attrs).attrs }
+    subject { bag.except(*except_attrs).to_hash }
     let(:attrs) { { type: :button, id: 'form-action' } }
     let(:except_attrs) { [] }
 

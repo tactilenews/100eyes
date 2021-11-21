@@ -3,10 +3,12 @@
 class AttributeBag
   include ActionView::Helpers::TagHelper
 
-  attr_reader :attrs
-
   def initialize(attrs = {})
     @attrs = attrs
+  end
+
+  def ==(other)
+    to_hash == other.to_hash
   end
 
   def to_s
@@ -43,6 +45,8 @@ class AttributeBag
   end
 
   private
+
+  attr_reader :attrs
 
   def tag_builder
     @tag_builder ||= TagBuilder.new(self)
