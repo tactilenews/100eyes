@@ -30,6 +30,12 @@
 <%= c 'box', style: :large do %>
   <%= c 'wrapper' do %>
     <%= c 'stack' do %>
+      <%= c 'dashboard_controls', params: params %>
+    <% end %>
+  <% end %>
+
+  <%= c 'wrapper' do %>
+    <%= c 'stack' do %>
       <% @contributors.each do |contributor| %>
         <%= c 'contributor_row', contributor: contributor %>
       <% end %>

@@ -32,6 +32,14 @@ de:
     contributor_row:
       via_channels: via %{channels}
       activity: (%{last_active} her)
+    dashboard_controls:
+      label: "Sortiert nach:"
+      order:
+        activity: Letzter Aktivität
+        name: Vor- und Nachnamen
+      order_direction:
+        asc: 'aufsteigend'
+        desc: 'absteigend'
     nav_bar:
       community:
         other: Community
