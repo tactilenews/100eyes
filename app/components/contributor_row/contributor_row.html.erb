@@ -13,6 +13,11 @@
 
     <span class="ContributorRow-channels">
         <%= I18n.t('components.contributor_row.via_channels', channels: channels) %>
+        <% if contributor.most_recent_reply %>
+          <span class="ContributorRow-activity">
+            <%= I18n.t('components.contributor_row.activity', last_active: distance_of_time_in_words_to_now(contributor.most_recent_reply.created_at)) %>
+          </span>
+        <% end %>
     </span>
 
     <% if !compact? && contributor.tags? %>

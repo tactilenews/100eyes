@@ -20,3 +20,7 @@ a.ContributorRow:hover .ContributorRow-name {
   color: var(--color-gray);
   font-size: var(--font-size-s);
 }
+
+.ContributorRow-activity {
+  white-space: nowrap;
+}

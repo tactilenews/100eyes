@@ -31,6 +31,7 @@ de:
       no_audio_support: Dein Browser unterstützt das Audio Element nicht
     contributor_row:
       via_channels: via %{channels}
+      activity: (%{last_active} her)
     nav_bar:
       community:
         other: Community
