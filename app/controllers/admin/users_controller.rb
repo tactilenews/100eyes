@@ -6,7 +6,8 @@ module Admin
 
     def resource_params
       params = super
-      return params if params.key?(:encrypted_password)
+
+      return params unless action_name == 'create'
 
       new_password = SecureRandom.alphanumeric(12)
       params.merge(password: new_password)

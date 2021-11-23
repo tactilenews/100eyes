@@ -2,9 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.feature 'Auth', type: :feature do
+RSpec.feature 'Users', type: :feature do
   context 'as user with admin permissions' do
-    let(:user) { create(:user, admin: true) }
+    let(:user) { create(:user, first_name: 'Max', last_name: 'Mustermann', admin: true, password: '12345678') }
 
     scenario 'admin creates user' do
       visit admin_users_path(as: user)
@@ -18,6 +18,11 @@ RSpec.feature 'Auth', type: :feature do
       click_on 'Sign up'
 
       expect(page).to have_text('User was successfully created.')
+    end
+
+    scenario 'admin updates user' do
+      visit edit_admin_user_path(user, as: user)
+      expect { click_on 'Update User' }.not_to(change { user.reload.encrypted_password })
     end
   end
 end
