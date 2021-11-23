@@ -6,7 +6,7 @@ module SignalAdapter
   CONNECT = :connect
 
   class Inbound
-    UNKNOWN_CONTENT_KEYS = %w[mentions contacts reaction sticker].freeze
+    UNKNOWN_CONTENT_KEYS = %w[mentions contacts sticker].freeze
     SUPPORTED_ATTACHMENT_TYPES = %w[image/jpg image/jpeg image/png image/gif audio/oog audio/aac audio/mp4].freeze
 
     attr_reader :sender, :text, :message
@@ -68,7 +68,12 @@ module SignalAdapter
 
       data_message = signal_message.dig(:envelope, :dataMessage)
 
-      message = Message.new(text: data_message[:message], sender: sender)
+      reaction = data_message[:reaction]
+      return nil if reaction && reaction[:isRemove]
+
+      message_text = reaction ? reaction[:emoji] : data_message[:message]
+
+      message = Message.new(text: message_text, sender: sender)
       message.raw_data.attach(
         io: StringIO.new(JSON.generate(signal_message)),
         filename: 'signal_message.json',
