@@ -51,7 +51,7 @@ gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 gem 'activestorage-validator', '~> 0.2.0'
 gem 'acts-as-taggable-on'
 gem 'browser'
-gem 'counter_culture', '~> 3.0'
+gem 'counter_culture', '~> 3.1'
 gem 'delayed_job_active_record', '~> 4.1'
 gem 'jwt'
 gem 'kramdown', '~> 2.3'
