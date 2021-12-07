@@ -15,7 +15,6 @@ module Form
     def attrs
       super.merge(data: {
                     controller: 'form',
-                    form_loading_label_value: I18n.t('components.form.loading'),
                     action: 'change->form#autoSubmit',
                     form_auto_submit_value: auto_submit
                   })
