@@ -39,6 +39,7 @@ class ContributorsController < ApplicationController
     if @contributor.update(contributor_params)
       redirect_to contributor_url, flash: { success: I18n.t('contributor.saved', name: @contributor.name) }
     else
+      set_contributor # reset @contributor from database to avoid rendering incorrect state after failed update
       flash.now[:error] = I18n.t('contributor.invalid', name: @contributor.name)
       render :show, status: :unprocessable_entity
     end
