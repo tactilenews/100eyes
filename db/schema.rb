@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_25_081905) do
+ActiveRecord::Schema.define(version: 2021_12_10_163538) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -55,13 +55,13 @@ ActiveRecord::Schema.define(version: 2021_10_25_081905) do
 
   create_table "contributors", force: :cascade do |t|
     t.string "email"
-    t.integer "telegram_chat_id"
+    t.bigint "telegram_chat_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "username"
     t.string "first_name"
     t.string "last_name"
-    t.integer "telegram_id"
+    t.bigint "telegram_id"
     t.string "note"
     t.string "zip_code"
     t.string "city"
