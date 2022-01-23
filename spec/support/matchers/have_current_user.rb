@@ -11,7 +11,7 @@ RSpec::Matchers.define :have_current_user do |user|
     "have current user #{user&.id}"
   end
 
-  failure_message_for_should do |_response|
+  failure_message do |_response|
     "have current user #{user&.id}, but got #{user&.id}"
   end
 

@@ -136,6 +136,31 @@ RSpec.describe SignalAdapter::Inbound do
     }
   end
 
+  let(:signal_reaction_emoji_message) do
+    {
+      envelope: {
+        source: '+4912345789',
+        sourceDevice: 2,
+        timestamp: 1_626_708_555_697,
+        dataMessage: {
+          timestamp: 1_626_708_555_697,
+          message: nil,
+          expiresInSeconds: 0,
+          viewOnce: false,
+          reaction: {
+            emoji: '❤️',
+            targetAuthor: '+4912345781',
+            targetSentTimestamp: 1_630_442_783_119,
+            isRemove: false
+          },
+          mentions: [],
+          attachments: [],
+          contacts: []
+        }
+      }
+    }
+  end
+
   before do
     allow(File).to receive(:open).and_call_original
     allow(File).to receive(:open)
@@ -195,6 +220,14 @@ RSpec.describe SignalAdapter::Inbound do
           let(:signal_message) { signal_remote_delete_message }
           it { should be(nil) }
         end
+
+        context 'given a reaction emoji that got removed' do
+          let(:signal_message) { signal_reaction_emoji_message }
+          before do
+            signal_reaction_emoji_message[:envelope][:dataMessage][:reaction][:isRemove] = true
+          end
+          it { should be(nil) }
+        end
       end
 
       context 'given a message with text and an attachment' do
@@ -218,6 +251,11 @@ RSpec.describe SignalAdapter::Inbound do
         let(:signal_message) { signal_message_with_attachment }
         before { signal_message[:envelope][:dataMessage][:message] = nil }
         it { should be(nil) }
+      end
+
+      context 'given a reaction emoji that got added' do
+        let(:signal_message) { signal_reaction_emoji_message }
+        it { should eq('❤️') }
       end
     end
 
@@ -370,18 +408,6 @@ RSpec.describe SignalAdapter::Inbound do
 
       context 'if the message contains a contact' do
         before { signal_message[:envelope][:dataMessage][:contacts] = ['Käptn Blaubär'] }
-        it { should have_received(:call).with(contributor) }
-      end
-
-      context 'if the message contains a reaction' do
-        before do
-          signal_message[:envelope][:dataMessage][:reaction] = {
-            emoji: '❤️',
-            targetAuthor: '+4915100000000',
-            targetSentTimestamp: 1_630_442_783_119,
-            isRemove: false
-          }
-        end
         it { should have_received(:call).with(contributor) }
       end
 
