@@ -33,14 +33,20 @@ class ContributorsController < ApplicationController
 
   def update
     @contributors = Contributor.with_attached_avatar
-
     @contributor.editor_guarantees_data_consent = true
 
     if @contributor.update(contributor_params)
       redirect_to contributor_url, flash: { success: I18n.t('contributor.saved', name: @contributor.name) }
     else
-      set_contributor # reset @contributor from database to avoid rendering incorrect state after failed update
       flash.now[:error] = I18n.t('contributor.invalid', name: @contributor.name)
+
+      if @contributor.avatar.changed?
+        # Reset the avatar attachment to it's previous, valid state.
+        # Otherwise, the (potentially invalid) avatar might be rendered.
+        old_avatar = Contributor.with_attached_avatar.find(@contributor.id).avatar
+        @contributor.avatar = old_avatar.blob
+      end
+
       render :show, status: :unprocessable_entity
     end
   end

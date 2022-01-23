@@ -2,11 +2,11 @@
   <%= c 'button',
     class: 'UploadButton-button',
     styles: styles,
-    label: label,
+    label: button_label,
     aria: { hidden: true },
     tabindex: -1
   %>
 
-  <label class="visually-hidden" for="<%= id %>"><%= label %></label>
+  <label class="visually-hidden" for="<%= id %>"><%= input_label %></label>
   <%= c 'input', class: 'UploadButton-fileInput', type: :file, id: id %>
 </div>

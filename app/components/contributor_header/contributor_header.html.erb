@@ -28,10 +28,12 @@
       ) do %>
         <%= c 'upload_button',
           styles: [:inline, :underline],
-          label: t('.change_avatar'),
+          input_label: t('.avatar'),
+          button_label: t('.change_avatar'),
           id: 'contributor[avatar]',
           name: 'contributor[avatar]'
         %>
+        <%= c 'submit_button', class: 'visually-hidden', label: t('.change_avatar') %>
       <% end %>
     </div>
   </div>
