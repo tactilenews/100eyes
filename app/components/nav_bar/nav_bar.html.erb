@@ -21,9 +21,16 @@
           <%= t 'setting.setting', count: :many %>
         <% end %>
       </li>
+      <% if current_user.admin? %>
+        <li class="NavBar-item">
+          <%= link_to admin_root_path do %>
+            <%= t '.admin' %>
+          <% end %>
+        </li>
+      <% end %>
       <li class="NavBar-item">
         <%= link_to sign_out_path, method: :delete do %>
-          <%= t 'components.nav_bar.sign_out' %>
+          <%= t '.sign_out' %>
         <% end %>
       </li>
     </ul>

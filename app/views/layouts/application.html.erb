@@ -10,14 +10,12 @@
   </head>
 
   <body>
-
     <a class="skip-link" href="#main" data-turbo="false">
       <%= t 'skip_to_content' %>
     </a>
 
-
     <div class="sticky">
-      <%= c 'nav_bar' %>
+      <%= c 'nav_bar', current_user: current_user %>
       <%= c 'browser_support_notification' %>
       <%= c 'notifications', notifications: flash, style: :floating, close_after: 6000 %>
       <%= yield :notifications %>
