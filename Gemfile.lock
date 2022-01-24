@@ -357,9 +357,9 @@ GEM
       sprockets-rails
       tilt
     selectize-rails (0.12.6)
-    sentry-delayed_job (4.8.1)
+    sentry-delayed_job (4.8.3)
       delayed_job (>= 4.0)
-      sentry-ruby-core (~> 4.8.1)
+      sentry-ruby-core (~> 4.8.3)
     sentry-rails (4.8.1)
       railties (>= 5.0)
       sentry-ruby-core (~> 4.8.1)
