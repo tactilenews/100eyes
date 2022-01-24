@@ -234,6 +234,8 @@ de:
     textarea:
       windows_emoji_picker_hint: Füge Emojis mit <kbd>Windows-Taste</kbd> + <kbd>Punkt</kbd> ein.
       macos_emoji_picker_hint: Füge Emojis mit <kbd>Control ⌃</kbd> + <kbd>Command ⌘</kbd> + <kbd>Leertaste</kbd> ein.
+    avatar:
+      expand: In Originalgröße anzeigen
 
   mailer:
     unsubscribe:

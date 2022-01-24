@@ -5,7 +5,8 @@
       expandable?,
       image_tag(url, alt: '', loading: 'lazy'),
       contributor_avatar,
-      target: '_blank'
+      target: '_blank',
+      aria: { label: t('.expand') },
     ) %>
   <% else %>
     <svg
