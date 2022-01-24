@@ -40,9 +40,9 @@ class ContributorsController < ApplicationController
     else
       flash.now[:error] = I18n.t('contributor.invalid', name: @contributor.name)
 
-      if @contributor.avatar.changed?
-        # Reset the avatar attachment to it's previous, valid state.
-        # Otherwise, the (potentially invalid) avatar might be rendered.
+      if @contributor.errors[:avatar].present?
+        # Reset the avatar attachment to it's previous, valid state,
+        # as displaying an invalid avatar will result in rendering errors.
         old_avatar = Contributor.with_attached_avatar.find(@contributor.id).avatar
         @contributor.avatar = old_avatar.blob
       end
