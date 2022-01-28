@@ -24,4 +24,13 @@ RSpec.describe About::About, type: :component do
 
     it { should have_text('0157 1234 5678') }
   end
+
+  context 'with git commit info set' do
+    before(:each) do
+      allow(Setting).to receive(:git_commit_sha).and_return('abcdef123456')
+      allow(Setting).to receive(:git_commit_date).and_return('2022-01-01T12:34:56+00:00')
+    end
+
+    it { should have_text('Version abcdef12 (01.01.2022)') }
+  end
 end

@@ -7,6 +7,9 @@ class Setting < RailsSettings::Base
   field :project_name, default: ENV['HUNDRED_EYES_PROJECT_NAME'] || '100eyes'
   field :application_host, readonly: true, default: ENV['APPLICATION_HOSTNAME'] || 'localhost:3000'
 
+  field :git_commit_sha, readonly: true, default: ENV['GIT_COMMIT_SHA']
+  field :git_commit_date, readonly: true, default: ENV['GIT_COMMIT_DATE']
+
   field :onboarding_logo, default: ''
   field :onboarding_hero, default: ''
   field :onboarding_title, default: 'Hallo und herzlich willkommen!'

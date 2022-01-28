@@ -240,6 +240,7 @@ de:
       expand: In Originalgröße anzeigen
     about:
       heading: Über 100eyes
+      version: "Version %{version} (%{date})"
       email_from_address: E-Mail-Adresse
       telegram_bot_username: Telegram-Handle
       threemarb_api_identity: Threema-ID

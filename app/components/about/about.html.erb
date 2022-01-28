@@ -1,5 +1,13 @@
 <%= c 'stack', **attrs do %>
-  <%= c('heading', tag: :h1) { t('.heading') } %>
+  <div>
+    <%= c('heading', tag: :h1) { t('.heading') } %>
+
+    <% if Setting.git_commit_sha.present? && Setting.git_commit_date.present? %>
+      <p class="text-small text-light">
+        <%= t('.version', version: version, date: date) %>
+      </p>
+    <% end %>
+  </div>
 
   <dl>
     <dt><%= t('.email_from_address') %></dt>
