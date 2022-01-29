@@ -1,13 +1,13 @@
 <%= c('base_field',
   label: t('.label'),
   help: t('.help'),
-  **attrs
+  **attrs.except(:autofocus)
 ) do |field| %>
   <%= c 'input',
     required: true,
     minlength: 6,
     maxlength: 6,
     inputmode: 'numeric',
-    **attrs.slice(:id)
+    **attrs.slice(:id, :autofocus)
   %>
 <% end %>

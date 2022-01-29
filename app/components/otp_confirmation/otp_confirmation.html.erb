@@ -6,7 +6,7 @@
   <%= form_with(url: otp_auth_path, local: true) do %>
     <%= c 'stack' do %>
 
-      <%= c 'otp_field', id: 'session[otp]' %>
+      <%= c 'otp_field', id: 'session[otp]', autofocus: true %>
 
       <%= c 'flex' do %>
         <%= c 'button',
