@@ -4,7 +4,8 @@
 
 .OnboardingHeader img {
   display: block;
-  height: var(--spacing-unit-l);
+  max-width: 100%;
+  max-height: var(--spacing-unit-l);
   margin: var(--spacing-unit-xs) auto;
 }
 
