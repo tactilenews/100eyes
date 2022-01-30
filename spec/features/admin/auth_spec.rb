@@ -27,7 +27,7 @@ RSpec.feature 'Auth', type: :feature do
   context 'as user with admin permissions' do
     let(:user) { create(:user, admin: true) }
 
-    scenario 'user visists the admin dashboard' do
+    scenario 'user visits the admin dashboard from the main app' do
       visit dashboard_path(as: user)
 
       click_link 'Admin'
