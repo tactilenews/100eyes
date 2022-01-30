@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Avatar::Avatar, type: :component do
   include Rails.application.routes.url_helpers
+  subject { component }
   let(:params) { { contributor: contributor } }
   let(:component) { render_inline(described_class.new(**params)) }
 
@@ -61,6 +62,29 @@ RSpec.describe Avatar::Avatar, type: :component do
     describe 'given a contributor called "Vicco von Bülow"' do
       let(:contributor) { build(:contributor, first_name: 'Vicco', last_name: 'von Bülow') }
       it { should eq('VvB') }
+    end
+  end
+
+  describe 'link' do
+    context 'given a contributor without an avatar' do
+      let(:contributor) { build(:contributor, avatar: nil) }
+      it { should_not have_css('.Avatar a') }
+
+      context 'if it is expandable' do
+        let(:params) { { contributor: contributor, expandable: true } }
+        it { should_not have_css('.Avatar a') }
+      end
+    end
+
+    context 'given a contributor with an avatar' do
+      let(:contributor) { create(:contributor, :with_an_avatar) }
+
+      it { should_not have_css('.Avatar a') }
+
+      context 'if it is expandable' do
+        let(:params) { { contributor: contributor, expandable: true } }
+        it { should have_css('.Avatar a[aria-label="In Originalgröße anzeigen"]') }
+      end
     end
   end
 end
