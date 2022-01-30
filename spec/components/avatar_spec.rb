@@ -81,7 +81,7 @@ RSpec.describe Avatar::Avatar, type: :component do
 
       it { should_not have_css('.Avatar a') }
 
-      context 'if it is explandable' do
+      context 'if it is expandable' do
         let(:params) { { contributor: contributor, expandable: true } }
         it { should have_css('.Avatar a[aria-label="In Originalgröße anzeigen"]') }
       end
