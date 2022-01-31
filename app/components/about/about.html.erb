@@ -1,0 +1,17 @@
+<%= c 'stack', **attrs do %>
+  <%= c('heading', tag: :h1) { t('.heading') } %>
+
+  <dl>
+    <dt><%= t('.email_from_address') %></dt>
+    <dd><%= Setting.email_from_address %></dd>
+
+    <dt><%= t('.telegram_bot_username') %></dt>
+    <dd><%= Setting.telegram_bot_username %></dd>
+
+    <dt><%= t('.threemarb_api_identity') %></dt>
+    <dd><%= Setting.threemarb_api_identity %></dd>
+
+    <dt><%= t('.signal_server_phone_number') %></dt>
+    <dd><%= Setting.signal_server_phone_number&.phony_formatted || t('.signal_not_set_up') %></dd>
+  </dl>
+<% end %>
