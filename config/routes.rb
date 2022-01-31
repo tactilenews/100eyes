@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get '/dashboard', to: 'dashboard#index'
   get '/search', to: 'search#index'
   get '/health', to: 'health#index'
+  get '/about', to: 'about#index'
 
   namespace :onboarding, module: nil do
     get '/', to: 'onboarding#index'

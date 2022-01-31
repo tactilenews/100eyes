@@ -12,7 +12,6 @@ Clearance.configure do |config|
   config.routes = false
 
   Rails.application.config.to_prepare do
-    Clearance::PasswordsController.layout 'clearance'
-    Clearance::SessionsController.layout 'clearance'
+    Clearance::BaseController.layout 'minimal'
   end
 end

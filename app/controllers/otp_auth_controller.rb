@@ -5,7 +5,7 @@ class OtpAuthController < ApplicationController
   skip_before_action :require_otp_setup
   before_action :redirect_if_signed_in, :redirect_unless_user_set, :reset_when_inactive
 
-  layout 'clearance'
+  layout 'minimal'
 
   def show; end
 

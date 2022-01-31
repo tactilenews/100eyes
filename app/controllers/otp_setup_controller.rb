@@ -4,7 +4,7 @@ class OtpSetupController < ApplicationController
   skip_before_action :require_otp_setup
   before_action :redirect_if_set_up
 
-  layout 'clearance'
+  layout 'minimal'
 
   def show; end
 

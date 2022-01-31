@@ -238,6 +238,14 @@ de:
       macos_emoji_picker_hint: Füge Emojis mit <kbd>Control ⌃</kbd> + <kbd>Command ⌘</kbd> + <kbd>Leertaste</kbd> ein.
     avatar:
       expand: In Originalgröße anzeigen
+    about:
+      heading: Über 100eyes
+      version: "Version %{version} (%{date})"
+      email_from_address: E-Mail-Adresse
+      telegram_bot_username: Telegram-Handle
+      threemarb_api_identity: Threema-ID
+      signal_server_phone_number: Signal-Handynummer
+      signal_not_set_up: Signal ist für diese Instanz nicht aktiviert.
 
   mailer:
     unsubscribe:

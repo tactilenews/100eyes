@@ -1,0 +1,25 @@
+<%= c 'stack', **attrs do %>
+  <div>
+    <%= c('heading', tag: :h1) { t('.heading') } %>
+
+    <% if Setting.git_commit_sha.present? && Setting.git_commit_date.present? %>
+      <p class="text-small text-light">
+        <%= t('.version', version: version, date: date) %>
+      </p>
+    <% end %>
+  </div>
+
+  <dl>
+    <dt><%= t('.email_from_address') %></dt>
+    <dd><%= Setting.email_from_address %></dd>
+
+    <dt><%= t('.telegram_bot_username') %></dt>
+    <dd><%= Setting.telegram_bot_username %></dd>
+
+    <dt><%= t('.threemarb_api_identity') %></dt>
+    <dd><%= Setting.threemarb_api_identity %></dd>
+
+    <dt><%= t('.signal_server_phone_number') %></dt>
+    <dd><%= Setting.signal_server_phone_number&.phony_formatted || t('.signal_not_set_up') %></dd>
+  </dl>
+<% end %>

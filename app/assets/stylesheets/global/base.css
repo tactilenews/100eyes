@@ -66,3 +66,11 @@ turbo-frame,
 turbo-stream {
   display: block;
 }
+
+dt {
+  font-weight: 600;
+}
+
+dd + dt {
+  margin-top: var(--spacing-unit-s);
+}

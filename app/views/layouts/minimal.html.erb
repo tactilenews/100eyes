@@ -15,16 +15,11 @@
     </a>
 
     <div class="sticky">
-      <%= c 'nav_bar', current_user: current_user %>
       <%= c 'browser_support_notification' %>
-      <%= c 'notifications', notifications: flash, style: :floating, close_after: 6000 %>
+      <%= c 'notifications', notifications: flash %>
       <%= yield :notifications %>
     </div>
 
-    <main id="main" name="main">
-      <%= yield %>
-    </main>
-
-    <%= c 'footer' %>
+    <%= yield %>
   </body>
 </html>

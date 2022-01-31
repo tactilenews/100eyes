@@ -7,6 +7,9 @@ class Setting < RailsSettings::Base
   field :project_name, default: ENV['HUNDRED_EYES_PROJECT_NAME'] || '100eyes'
   field :application_host, readonly: true, default: ENV['APPLICATION_HOSTNAME'] || 'localhost:3000'
 
+  field :git_commit_sha, readonly: true, default: ENV['GIT_COMMIT_SHA']
+  field :git_commit_date, readonly: true, default: ENV['GIT_COMMIT_DATE']
+
   field :onboarding_logo, default: ''
   field :onboarding_hero, default: ''
   field :onboarding_title, default: 'Hallo und herzlich willkommen!'
@@ -25,6 +28,7 @@ class Setting < RailsSettings::Base
   field :telegram_bot_username, readonly: true, default: ENV['TELEGRAM_BOT_USERNAME']
 
   field :threema_unknown_content_message, default: File.read(File.join('config', 'locales', 'threema', 'unknown_content.txt'))
+  field :threemarb_api_identity, readonly: true, default: ENV['THREEMARB_API_IDENTITY']
 
   field :signal_server_phone_number, readonly: true, default: ENV['SIGNAL_SERVER_PHONE_NUMBER']
   field :signal_monitoring_url, readonly: true, default: ENV['SIGNAL_MONITORING_URL']

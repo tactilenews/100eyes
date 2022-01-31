@@ -1,5 +1,8 @@
 FROM ruby:3.0.2-alpine3.12
 
+ARG git_commit_sha
+ARG git_commit_date
+
 # Install dependencies
 RUN apk --update add \
     build-base \
@@ -37,3 +40,6 @@ COPY . .
 
 RUN yarn build:js
 RUN yarn build:css
+
+ENV GIT_COMMIT_SHA=$git_commit_sha
+ENV GIT_COMMIT_DATE=$git_commit_date
