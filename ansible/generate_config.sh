@@ -9,16 +9,24 @@ read domain
 
 script_directory=$(dirname "$0")
 
+unameOut="$(uname -s)"
+
+if [[ "$unameOut" == "Darwin" ]]; then #MacOS
+  TR="gtr"
+else
+  TR="tr"
+fi
+
 domain_head="${domain%%.*}"
 domain_tail="${domain#*.}"
 traefik_domain="${domain_head}-traefik.${domain_tail}"
-traefik_password=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 20 | head -n 1)
-sudo_password=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 20 | head -n 1)
+traefik_password=$(cat /dev/urandom | ${TR} -dc 'a-zA-Z0-9' | fold -w 20 | head -n 1)
+sudo_password=$(cat /dev/urandom | ${TR} -dc 'a-zA-Z0-9' | fold -w 20 | head -n 1)
 
-postgres_password=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
-secret_key_base=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
-postgres_password=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
-inbound_email_password=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
+postgres_password=$(cat /dev/urandom | ${TR} -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
+secret_key_base=$(cat /dev/urandom | ${TR} -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
+postgres_password=$(cat /dev/urandom | ${TR} -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
+inbound_email_password=$(cat /dev/urandom | ${TR} -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
 
 CONFIG_FILE=$(mktemp /tmp/host.XXXXXXXXXX)
 
@@ -75,13 +83,26 @@ cat <<- INSTRUCTIONS
   INSTRUCTIONS:
 --------------------------------------------------------------------------------------------------------------------------
 
-  1. Configure your DNS-Server:
+  1. Encrypt the configuration as host variable file:
+
+    $ ansible-vault encrypt ${CONFIG_FILE} --output ${script_directory}/inventories/custom/host_vars/${nickname}.yml
+
+  2. Add missing configuration, e.g. Telegram API token:
+
+    $ ansible-vault edit ${script_directory}/inventories/custom/host_vars/${nickname}.yml
+
+  3. Add your server "${nickname}" in your ${script_directory}/inventories/custom/hosts file:
+
+    [webservers]
+    ${nickname}
+
+  4. Configure your DNS-Server:
 
     A  ${domain} -> IP ADDRESS
     A  ${traefik_domain} -> IP ADDRESS
     MX ${domain} -> inbound.postmarkapp.com
 
-  2. Configure Postmark:
+  5. Configure Postmark:
 
      - Log in to your Postmark account.
 
@@ -102,18 +123,5 @@ cat <<- INSTRUCTIONS
        https://actionmailbox:${inbound_email_password}@${domain}/rails/action_mailbox/postmark/inbound_emails
 
      - Add "${domain}" as the inbound domain.
-
-  3. Encrypt the configuration as host variable file:
-
-    $ ansible-vault encrypt ${CONFIG_FILE} --output ${script_directory}/inventories/custom/host_vars/${nickname}.yml
-
-  4. Add missing configuration, e.g. Telegram API token:
-
-    $ ansible-vault edit ${script_directory}/inventories/custom/host_vars/${nickname}.yml
-
-  5. Add your server "${nickname}" in your ${script_directory}/inventories/custom/hosts file:
-
-    [webservers]
-    ${nickname}
 --------------------------------------------------------------------------------------------------------------------------
 INSTRUCTIONS
