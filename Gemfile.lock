@@ -239,7 +239,7 @@ GEM
       nio4r (~> 2.0)
     racc (1.6.0)
     rack (2.2.3)
-    rack-attack (6.5.0)
+    rack-attack (6.6.0)
       rack (>= 1.0, < 3)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
@@ -367,7 +367,7 @@ GEM
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.1.0)
-    valid_email2 (4.0.1)
+    valid_email2 (4.0.3)
       activemodel (>= 3.2)
       mail (~> 2.5)
     vcr (6.0.0)
@@ -414,7 +414,7 @@ DEPENDENCIES
   postmark-rails
   pry-rails
   puma (~> 5.5)
-  rack-attack (~> 6.5)
+  rack-attack (~> 6.6)
   rails (~> 6.1.4)
   rails-settings-cached (~> 2.8)
   rqrcode
