@@ -10,7 +10,7 @@ gem 'rails', '~> 6.1.4'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
-gem 'puma', '~> 5.5'
+gem 'puma', '~> 5.6'
 # Use Active Storage variant
 gem 'image_processing', '~> 1.2'
 # Reduces boot times through caching; required in config/boot.rb
@@ -51,7 +51,7 @@ gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 gem 'activestorage-validator', '~> 0.2.0'
 gem 'acts-as-taggable-on'
 gem 'browser'
-gem 'counter_culture', '~> 3.1'
+gem 'counter_culture', '~> 3.2'
 gem 'delayed_job_active_record', '~> 4.1'
 gem 'jwt'
 gem 'kramdown', '~> 2.3'
