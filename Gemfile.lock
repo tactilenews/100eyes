@@ -367,7 +367,7 @@ GEM
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.1.0)
-    valid_email2 (4.0.1)
+    valid_email2 (4.0.3)
       activemodel (>= 3.2)
       mail (~> 2.5)
     vcr (6.0.0)
