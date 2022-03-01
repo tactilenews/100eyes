@@ -39,6 +39,10 @@
       <%= c 'field', object: setting, value: Setting.onboarding_data_protection_link, attr: :onboarding_data_protection_link do |field| %>
         <%= c 'input', field.input_defaults.merge(type: :url) %>
       <% end %>
+
+      <%= c 'field', object: setting, value: Setting.onboarding_imprint_link, attr: :onboarding_imprint_link do |field| %>
+        <%= c 'input', field.input_defaults.merge(type: :url) %>
+      <% end %>
     <% end %>
 
     <%= c 'stack' do %>

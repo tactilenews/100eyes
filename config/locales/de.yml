@@ -99,6 +99,7 @@ de:
         - "Geben Sie diesen Code ein, sobald sie danach gefragt werden: <strong>%{token}</strong>"
     onboarding_footer:
       imprint: Impressum
+      data_protection: Datenschutz
     two_factor_auth_setup:
       header: Anmeldung in zwei Schritten einrichten
       step_1: "1. Fügen Sie 100eyes zu einer App wie Authy oder FreeOTP hinzu, indem Sie entweder den folgenden QR-Code scannen oder den geheimen Schlüssel manuell kopieren."
@@ -339,7 +340,10 @@ de:
         help: Das Header-Bild sollte eine Bilddatei im JPEG-Format sein. Es sollte ein Seitenverhältnis von 2:1 haben und ca. 900 Pixel breit sein. Es wird während des Onboardings angezeigt.
       onboarding_data_protection_link:
         label: Link zur Datenschutzerklärung
-        help: Falls eine projektspezifische Datenschutzerklärung existiert, kannst du sie hier angegeben. Mitglieder müssen diese während des Onboarding-Prozesses akzeptieren.
+        help: Der Link wird während des Onboardings in der Fußzeile angezeigt. Vor der Anmeldung müssen neue Mitglieder der Erklärung außerdem explizit zustimmen.
+      onboarding_imprint_link:
+        label: Link zum Impressum
+        help: Der Link wird während des Onboardings in der Fußzeile angezeigt.
       signal_unknown_content_message:
         label: Fehler-Nachricht bei unbekannten Inhalten
         help: Wenn ein Mitglied via Signal Nachrichten versendet, die von 100eyes noch nicht unterstützt werden, erhält es diese Nachricht.

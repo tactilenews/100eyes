@@ -1,19 +1,31 @@
 .OnboardingFooter {
-  text-align: center;
+  display: flex;
+  width: 100%;
+  padding-top: var(--spacing-unit);
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   font-size: var(--font-size-s);
   opacity: 0.5;
-}
-
-.OnboardingFooter hr {
-  margin-bottom: var(--spacing-unit);
-  border: none;
   border-top: 1px solid var(--color-border);
 }
 
+@media screen and (min-width: 720px) {
+  .OnboardingFooter {
+    flex-direction: row;
+  }
+}
+
+.OnboardingFooter-nav li {
+  display: inline;
+  list-style: none;
+}
+
+.OnboardingFooter-nav li + li {
+  margin-left: var(--spacing-unit-s);
+}
+
 .OnboardingFooter img {
-  display: block;
-  margin: auto;
-  margin-bottom: var(--spacing-unit-s);
-  height: var(--spacing-unit-l);
+  height: var(--spacing-unit);
   filter: grayscale(1);
 }
