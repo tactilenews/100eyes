@@ -239,7 +239,7 @@ GEM
       nio4r (~> 2.0)
     racc (1.6.0)
     rack (2.2.3)
-    rack-attack (6.5.0)
+    rack-attack (6.6.0)
       rack (>= 1.0, < 3)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
@@ -414,7 +414,7 @@ DEPENDENCIES
   postmark-rails
   pry-rails
   puma (~> 5.5)
-  rack-attack (~> 6.5)
+  rack-attack (~> 6.6)
   rails (~> 6.1.4)
   rails-settings-cached (~> 2.8)
   rqrcode

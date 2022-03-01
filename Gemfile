@@ -62,7 +62,7 @@ gem 'valid_email2', '~> 4.0'
 gem 'view_component', '~> 2'
 
 # Middleware
-gem 'rack-attack', '~> 6.5'
+gem 'rack-attack', '~> 6.6'
 
 # Channel adapters
 gem 'postmark-rails'
