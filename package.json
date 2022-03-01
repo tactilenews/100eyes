@@ -22,7 +22,7 @@
     "postcss": "^8.4.7",
     "postcss-cli": "^9.1.0",
     "postcss-easy-import": "^3.0.0",
-    "postcss-preset-env": "^7.2.3",
+    "postcss-preset-env": "^7.4.1",
     "prettier": "^2.5.1"
   }
 }
