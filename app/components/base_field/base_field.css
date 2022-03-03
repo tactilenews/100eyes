@@ -32,6 +32,18 @@
   flex-direction: row-reverse;
 }
 
+.BaseField--leftAligned > input {
+  /*
+   * Fix a browser quirk that causes radio buttons and checkboxes
+   * to be scaled down until they essentially become invisible in
+   * some browsers (e.g. mobile Safari).
+   */
+  flex-shrink: 0;
+
+  /* Vertically align the input's top border with the label text */
+  margin-top: var(--spacing-unit-xs);
+}
+
 .BaseField--leftAligned .BaseField-textWrapper {
   margin-bottom: 0;
   margin-left: var(--spacing-unit-s);
