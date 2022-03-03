@@ -27,6 +27,7 @@ class SettingsController < ApplicationController
       :onboarding_unauthorized_text,
       :onboarding_page,
       :onboarding_data_protection_link,
+      :onboarding_imprint_link,
       :signal_unknown_content_message,
       :telegram_unknown_content_message,
       :telegram_contributor_not_found_message,
