@@ -407,10 +407,6 @@ de:
         label: Telegram
         placeholder: Kein Telegram-Nutzername hinterlegt
         help: Du kannst den Nutzernamen nicht selbst ändern.
-      threema_id:
-        label: Threema ID
-        placeholder: Keine Threema-ID hinterlegt
-        help: Du kannst den Nutzernamen nicht selbst ändern.
       zip_code:
         label: Postleitzahl
       city:
