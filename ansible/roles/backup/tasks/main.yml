@@ -45,12 +45,34 @@
     path: /home/ansible/storage
     dest: /tmp/100eyes-storage.tgz
 
+# As for some instances downloading big archives can fail due to not enough memory,
+# make storage archive accesible as non-root user which halfs the necessary memory
+# for downloading it.
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/fetch_module.html#notes
+
+- name: Make storage archive read accessible for all users.
+  ansible.builtin.file:
+    path: /tmp/100eyes-storage.tgz
+    mode: '0444'
+
 - name: Download database dump
   fetch:
     src: /tmp/100eyes-db-dump
     dest: "{{ backup_directory }}"
+  become: no
 
 - name: Download storage archive
   fetch:
     src: /tmp/100eyes-storage.tgz
     dest: "{{ backup_directory }}"
+  become: no
+
+- name: Remove database dump
+  ansible.builtin.file:
+    path: /tmp/100eyes-db-dump
+    state: absent
+
+- name: Remove storage archive
+  ansible.builtin.file:
+    path: /tmp/100eyes-storage.tgz
+    state: absent
