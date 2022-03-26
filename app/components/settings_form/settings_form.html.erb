@@ -52,17 +52,17 @@
 
       <%= c('field',
         object: setting,
-        attr: :ask_for_additional_consent,
+        attr: :onboarding_ask_for_additional_consent,
         styles: [:horizontal, :leftAligned],
       ) do |field| %>
-        <%= c 'checkbox', **field.input_defaults, checked: Setting.ask_for_additional_consent %>
+        <%= c 'checkbox', **field.input_defaults, checked: Setting.onboarding_ask_for_additional_consent %>
       <% end %>
 
-      <%= c 'field', object: setting, value: Setting.additional_consent_heading, attr: :additional_consent_heading do |field| %>
+      <%= c 'field', object: setting, value: Setting.onboarding_additional_consent_heading, attr: :onboarding_additional_consent_heading do |field| %>
         <%= c 'input', field.input_defaults %>
       <% end %>
 
-      <%= c 'field', object: setting, value: Setting.additional_consent_text, attr: :additional_consent_text do |field| %>
+      <%= c 'field', object: setting, value: Setting.onboarding_additional_consent_text, attr: :onboarding_additional_consent_text do |field| %>
         <%= c 'textarea', field.input_defaults %>
       <% end %>
     <% end %>

@@ -582,7 +582,7 @@ RSpec.describe Contributor, type: :model do
       specify { expect(contributor).to be_valid }
     end
 
-    describe 'given a contributor who has not given consent' do
+    describe 'given a contributor who has not given additional consent' do
       let(:contributor) { build(:contributor, additional_consent_given_at: nil) }
       it { should be(false) }
       specify { expect(contributor).to be_valid }
@@ -600,7 +600,7 @@ RSpec.describe Contributor, type: :model do
       end
     end
 
-    describe 'given contributor who has not additional given consent' do
+    describe 'given contributor who has not given additional consent' do
       let(:contributor) { build(:contributor, additional_consent_given_at: nil) }
       describe 'true' do
         it {

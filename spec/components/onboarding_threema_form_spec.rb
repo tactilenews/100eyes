@@ -13,24 +13,24 @@ RSpec.describe OnboardingThreemaForm::OnboardingThreemaForm, type: :component do
 
   describe 'additional consent check box' do
     before do
-      Setting.ask_for_additional_consent = true
-      Setting.additional_consent_heading = 'Great expectations.'
+      Setting.onboarding_ask_for_additional_consent = true
+      Setting.onboarding_additional_consent_heading = 'Great expectations.'
     end
     context 'given a request for additional consent' do
-      it { should have_text(Setting.additional_consent_heading) }
+      it { should have_text(Setting.onboarding_additional_consent_heading) }
       it { should have_css('input[type="checkbox"][name="contributor[additional_consent]"]') }
     end
 
     context 'given no request for additional consent' do
       before do
-        Setting.ask_for_additional_consent = false
+        Setting.onboarding_ask_for_additional_consent = false
       end
       it { should_not have_css('input[type="checkbox"][name="contributor[additional_consent]"]') }
     end
 
     context 'given no specified additional consent heading' do
       before do
-        Setting.additional_consent_heading = '  '
+        Setting.onboarding_additional_consent_heading = '  '
       end
       it { should_not have_css('input[type="checkbox"][name="contributor[additional_consent]"]') }
     end

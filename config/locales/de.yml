@@ -312,13 +312,13 @@ de:
         onboarding: Onboarding
         onboarding_success: Nachricht nach erfolgreichem Onboarding
         onboarding_unauthorized: Meldung nach erfolglosem Onboarding
-        additional_consent: Zusätzliche Einverständnisfragen während des Onboarding
-      ask_for_additional_consent:
-        label: Nach zusätzlichem Einverständnis während des Onboardings fragen
-        help: Falls aktiviert wird beim Onboarding eine zusätzliche, optionale Checkbox mit der hier konfigurierbaren Überschrift und Text angezeigt.
-      additional_consent_heading:
+        additional_consent: Zusätzliches Einverständnis während des Onboardings
+      onboarding_ask_for_additional_consent:
+        label: Nach zusätzlichem Einverständnis fragen
+        help: Falls aktiviert, wird neuen Community-Mitgliedern eine zusätzliche, optionale Checkbox angezeigt. Diese kannst du beispielsweise nutzen, um das Einverständnis für den Versand von E-Mail-Newslettern o.ä. einzuholen.
+      onboarding_additional_consent_heading:
         label: Überschrift
-      additional_consent_text:
+      onboarding_additional_consent_text:
         label: Text
       project_name:
         label: Projekt-Name

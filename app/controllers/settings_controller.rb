@@ -16,9 +16,9 @@ class SettingsController < ApplicationController
 
   def settings_params
     params.require(:setting).permit(
-      :ask_for_additional_consent,
-      :additional_consent_heading,
-      :additional_consent_text,
+      :onboarding_ask_for_additional_consent,
+      :onboarding_additional_consent_heading,
+      :onboarding_additional_consent_text,
       :project_name,
       :onboarding_logo,
       :onboarding_hero,

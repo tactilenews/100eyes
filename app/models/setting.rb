@@ -5,8 +5,8 @@ class Setting < RailsSettings::Base
   cache_prefix { 'v1' }
 
   class << self
-    def additional_consent_defined
-      additional_consent_heading.strip.present?
+    def onboarding_additional_consent_defined?
+      onboarding_additional_consent_heading.strip.present?
     end
   end
 
@@ -29,9 +29,9 @@ class Setting < RailsSettings::Base
   field :onboarding_data_protection_link, default: 'https://tactile.news/100eyes-datenschutz/'
   field :onboarding_imprint_link, default: 'https://tactile.news/impressum/'
 
-  field :ask_for_additional_consent, type: :boolean, default: false
-  field :additional_consent_heading, default: ''
-  field :additional_consent_text, default: ''
+  field :onboarding_ask_for_additional_consent, type: :boolean, default: false
+  field :onboarding_additional_consent_heading, default: ''
+  field :onboarding_additional_consent_text, default: ''
 
   field :telegram_unknown_content_message, default: File.read(File.join('config', 'locales', 'telegram', 'unknown_content.txt'))
   field :telegram_contributor_not_found_message, default: File.read(File.join('config', 'locales', 'telegram', 'unknown_contributor.txt'))
