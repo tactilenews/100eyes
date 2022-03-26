@@ -2,10 +2,10 @@
 
 module Checkbox
   class Checkbox < ApplicationComponent
-    def initialize(id: nil, value: nil, group: false, label: nil, required: false, **)
+    def initialize(id: nil, checked: false, group: false, label: nil, required: false, **)
       super
       @id = id
-      @value = value
+      @checked = checked
       @group = group
       @label = label
       @required = required
@@ -19,6 +19,6 @@ module Checkbox
       id
     end
 
-    attr_reader :id, :value, :group, :label, :required
+    attr_reader :id, :checked, :group, :label, :required
   end
 end

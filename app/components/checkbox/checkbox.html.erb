@@ -1,7 +1,9 @@
+<input type='hidden' value='0' name="<%= name %>">
 <input
   type="checkbox"
   id="<%= id %>"
   name="<%= name %>"
-  <%= value ? 'checked' : '' %>
+  value='1'
+  <%= checked ? 'checked' : '' %>
   <%= required ? 'required' : '' %>
 />
