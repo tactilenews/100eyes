@@ -16,6 +16,9 @@ class SettingsController < ApplicationController
 
   def settings_params
     params.require(:setting).permit(
+      :ask_for_additional_consent,
+      :additional_consent_heading,
+      :additional_consent_text,
       :project_name,
       :onboarding_logo,
       :onboarding_hero,
@@ -34,4 +37,5 @@ class SettingsController < ApplicationController
       :threema_unknown_content_message
     )
   end
+
 end

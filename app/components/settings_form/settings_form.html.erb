@@ -47,6 +47,28 @@
 
     <%= c 'stack' do %>
       <%= c 'heading', tag: :h2 do %>
+        <%= t 'setting.form.groups.additional_consent' %>
+      <% end %>
+
+      <%= c('field',
+        object: setting,
+        attr: :ask_for_additional_consent,
+        styles: [:horizontal, :leftAligned],
+      ) do |field| %>
+        <%= c 'checkbox', **field.input_defaults, checked: Setting.ask_for_additional_consent %>
+      <% end %>
+
+      <%= c 'field', object: setting, value: Setting.additional_consent_heading, attr: :additional_consent_heading do |field| %>
+        <%= c 'input', field.input_defaults %>
+      <% end %>
+
+      <%= c 'field', object: setting, value: Setting.additional_consent_text, attr: :additional_consent_text do |field| %>
+        <%= c 'textarea', field.input_defaults %>
+      <% end %>
+    <% end %>
+
+    <%= c 'stack' do %>
+      <%= c 'heading', tag: :h2 do %>
         <%= t 'setting.form.groups.onboarding_success' %>
       <% end %>
 

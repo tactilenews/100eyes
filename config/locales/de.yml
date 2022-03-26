@@ -312,6 +312,14 @@ de:
         onboarding: Onboarding
         onboarding_success: Nachricht nach erfolgreichem Onboarding
         onboarding_unauthorized: Meldung nach erfolglosem Onboarding
+        additional_consent: Zusätzliche Einverständnisfragen während des Onboarding
+      ask_for_additional_consent:
+        label: Nach zusätzlichem Einverständnis während des Onboardings fragen
+        help: Falls aktiviert wird beim Onboarding eine zusätzliche, optionale Checkbox mit der hier konfigurierbaren Überschrift und Text angezeigt.
+      additional_consent_heading:
+        label: Überschrift
+      additional_consent_text:
+        label: Text
       project_name:
         label: Projekt-Name
         help: Der Projekt-Name wird Community-Mitgliedern z.B. während des Onboardings und als Absender von E-Mails angezeigt.
