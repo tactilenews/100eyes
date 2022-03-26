@@ -28,13 +28,15 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
     let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
     let(:params) { { jwt: jwt } }
     let(:data_processing_consent) { true }
+    let(:additional_consent) { true }
 
     let(:attrs) do
       {
         first_name: 'Zora',
         last_name: 'Zimmermann',
         data_processing_consent: data_processing_consent,
-        telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN'
+        telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN',
+        additional_consent: additional_consent
       }
     end
 
@@ -50,7 +52,8 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
         first_name: 'Zora',
         last_name: 'Zimmermann',
         data_processing_consent: data_processing_consent,
-        telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN'
+        telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN',
+        additional_consent: additional_consent
       )
       expect(contributor.json_web_token).to have_attributes(
         invalidated_jwt: jwt
@@ -89,6 +92,23 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
       it 'has 422 status code' do
         subject.call
         expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+
+    context 'without additional consent' do
+      let(:additional_consent) { false }
+
+      it 'creates contributor without additional consent' do
+        expect { subject.call }.to change(Contributor, :count).by(1)
+
+        contributor = Contributor.first
+        expect(contributor).to have_attributes(
+          first_name: 'Zora',
+          last_name: 'Zimmermann',
+          data_processing_consent: data_processing_consent,
+          telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN',
+          additional_consent: additional_consent
+        )
       end
     end
 

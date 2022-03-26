@@ -4,6 +4,12 @@
 class Setting < RailsSettings::Base
   cache_prefix { 'v1' }
 
+  class << self
+    def onboarding_additional_consent_defined?
+      onboarding_additional_consent_heading.strip.present?
+    end
+  end
+
   field :project_name, default: ENV['HUNDRED_EYES_PROJECT_NAME'] || '100eyes'
   field :application_host, readonly: true, default: ENV['APPLICATION_HOSTNAME'] || 'localhost:3000'
 
@@ -22,6 +28,10 @@ class Setting < RailsSettings::Base
   field :onboarding_unauthorized_text, default: File.read(File.join('config', 'locales', 'onboarding', 'unauthorized_text.txt'))
   field :onboarding_data_protection_link, default: 'https://tactile.news/100eyes-datenschutz/'
   field :onboarding_imprint_link, default: 'https://tactile.news/impressum/'
+
+  field :onboarding_ask_for_additional_consent, type: :boolean, default: false
+  field :onboarding_additional_consent_heading, default: ''
+  field :onboarding_additional_consent_text, default: ''
 
   field :telegram_unknown_content_message, default: File.read(File.join('config', 'locales', 'telegram', 'unknown_content.txt'))
   field :telegram_contributor_not_found_message, default: File.read(File.join('config', 'locales', 'telegram', 'unknown_contributor.txt'))

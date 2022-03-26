@@ -559,7 +559,7 @@ RSpec.describe Contributor, type: :model do
       end
     end
 
-    describe 'given contributor who has not given content' do
+    describe 'given contributor who has not given consent' do
       let(:contributor) { build(:contributor, data_processing_consented_at: nil) }
       describe 'true' do
         it {
@@ -569,6 +569,47 @@ RSpec.describe Contributor, type: :model do
         it { expect { contributor.data_processing_consent = true }.to change { contributor.data_processing_consent? }.to(true) }
         it { expect { contributor.data_processing_consent = '1' }.to change { contributor.data_processing_consent? }.to(true) }
         it { expect { contributor.data_processing_consent = 'on' }.to change { contributor.data_processing_consent? }.to(true) }
+      end
+    end
+  end
+
+  describe '.additional_consent' do
+    subject { contributor.additional_consent }
+
+    describe 'given a contributor who has given additional consent' do
+      let(:contributor) { build(:contributor, additional_consent_given_at: 1.day.ago) }
+      it { should be(true) }
+      specify { expect(contributor).to be_valid }
+    end
+
+    describe 'given a contributor who has not given additional consent' do
+      let(:contributor) { build(:contributor, additional_consent_given_at: nil) }
+      it { should be(false) }
+      specify { expect(contributor).to be_valid }
+    end
+  end
+
+  describe '.additional_consent=' do
+    describe 'given contributor who has given additional consent' do
+      let(:contributor) { create(:contributor, additional_consent: 1.day.ago) }
+      describe 'false' do
+        it { expect { contributor.additional_consent = false }.to change { contributor.additional_consent_given_at }.to(nil) }
+        it { expect { contributor.additional_consent = false }.to change { contributor.additional_consent_given_at? }.to(false) }
+        it { expect { contributor.additional_consent = '0' }.to change { contributor.additional_consent? }.to(false) }
+        it { expect { contributor.additional_consent = 'off' }.to change { contributor.additional_consent? }.to(false) }
+      end
+    end
+
+    describe 'given contributor who has not given additional consent' do
+      let(:contributor) { build(:contributor, additional_consent_given_at: nil) }
+      describe 'true' do
+        it {
+          expect { contributor.additional_consent = true }
+            .to change { contributor.additional_consent_given_at.is_a?(ActiveSupport::TimeWithZone) }.to(true)
+        }
+        it { expect { contributor.additional_consent = true }.to change { contributor.additional_consent? }.to(true) }
+        it { expect { contributor.additional_consent = '1' }.to change { contributor.additional_consent? }.to(true) }
+        it { expect { contributor.additional_consent = 'on' }.to change { contributor.additional_consent? }.to(true) }
       end
     end
   end

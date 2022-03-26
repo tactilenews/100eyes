@@ -33,6 +33,18 @@
         <%= c 'checkbox', **field.input_defaults, required: true %>
       <% end %>
 
+      <% if Setting.onboarding_ask_for_additional_consent && Setting.onboarding_additional_consent_defined? %>
+        <%= c('field',
+          object: contributor,
+          attr: :additional_consent,
+          styles: [:horizontal, :leftAligned],
+          label: Setting.onboarding_additional_consent_heading,
+          help: Setting.onboarding_additional_consent_text
+        ) do |field| %>
+          <%= c 'checkbox', field.input_defaults %>
+        <% end %>
+      <% end %>
+
       <%= c 'button',
         type: 'submit',
         label: t('components.onboarding_telegram_form.submit'),

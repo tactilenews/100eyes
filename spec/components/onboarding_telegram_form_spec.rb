@@ -10,4 +10,29 @@ RSpec.describe OnboardingTelegramForm::OnboardingTelegramForm, type: :component 
 
   it { should have_css('.OnboardingTelegramForm') }
   it { should have_link(href: Setting.onboarding_data_protection_link) }
+
+  describe 'additional consent check box' do
+    before do
+      Setting.onboarding_ask_for_additional_consent = true
+      Setting.onboarding_additional_consent_heading = 'Great expectations.'
+    end
+    context 'given a request for additional consent' do
+      it { should have_text(Setting.onboarding_additional_consent_heading) }
+      it { should have_css('input[type="checkbox"][name="contributor[additional_consent]"]') }
+    end
+
+    context 'given no request for additional consent' do
+      before do
+        Setting.onboarding_ask_for_additional_consent = false
+      end
+      it { should_not have_css('input[type="checkbox"][name="contributor[additional_consent]"]') }
+    end
+
+    context 'given no specified additional consent heading' do
+      before do
+        Setting.onboarding_additional_consent_heading = '  '
+      end
+      it { should_not have_css('input[type="checkbox"][name="contributor[additional_consent]"]') }
+    end
+  end
 end

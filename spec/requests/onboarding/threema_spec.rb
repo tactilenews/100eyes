@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe 'Onboarding::Threema', type: :request do
   let(:data_processing_consent) { true }
   let(:contributor) { create(:contributor) }
+  let(:additional_consent) { true }
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
   let(:params) { { jwt: jwt } }
 
@@ -14,7 +15,8 @@ RSpec.describe 'Onboarding::Threema', type: :request do
         first_name: 'Zora',
         last_name: 'Zimmermann',
         threema_id: 'ABCD1234',
-        data_processing_consent: data_processing_consent
+        data_processing_consent: data_processing_consent,
+        additional_consent: additional_consent
       }
     end
 
@@ -30,7 +32,8 @@ RSpec.describe 'Onboarding::Threema', type: :request do
         first_name: 'Zora',
         last_name: 'Zimmermann',
         threema_id: 'ABCD1234',
-        data_processing_consent: data_processing_consent
+        data_processing_consent: data_processing_consent,
+        additional_consent: additional_consent
       )
       expect(contributor.json_web_token).to have_attributes(
         invalidated_jwt: jwt
@@ -89,6 +92,23 @@ RSpec.describe 'Onboarding::Threema', type: :request do
       it 'has 422 status code' do
         subject.call
         expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+
+    context 'without additional consent' do
+      let(:additional_consent) { false }
+
+      it 'creates contributor without additional consent' do
+        expect { subject.call }.to change(Contributor, :count).by(1)
+
+        contributor = Contributor.first
+        expect(contributor).to have_attributes(
+          first_name: 'Zora',
+          last_name: 'Zimmermann',
+          threema_id: 'ABCD1234',
+          data_processing_consent: data_processing_consent,
+          additional_consent: additional_consent
+        )
       end
     end
 

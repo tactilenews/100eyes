@@ -168,5 +168,16 @@ class Contributor < ApplicationRecord
   def data_processing_consent?
     data_processing_consented_at.present?
   end
+
   alias data_processing_consent data_processing_consent?
+
+  def additional_consent=(value)
+    self.additional_consent_given_at = ActiveModel::Type::Boolean.new.cast(value) ? Time.current : nil
+  end
+
+  def additional_consent?
+    additional_consent_given_at.present?
+  end
+
+  alias additional_consent additional_consent?
 end
