@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe 'Onboarding::Signal', type: :request do
   let(:signal_phone_number) { '+4915112345678' }
   let(:data_processing_consent) { true }
+  let(:additional_consent) { true }
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
   let(:params) { { jwt: jwt } }
 
@@ -38,7 +39,8 @@ RSpec.describe 'Onboarding::Signal', type: :request do
         first_name: 'Zora',
         last_name: 'Zimmermann',
         signal_phone_number: signal_phone_number,
-        data_processing_consent: data_processing_consent
+        data_processing_consent: data_processing_consent,
+        additional_consent: additional_consent
       }
     end
 
@@ -56,7 +58,8 @@ RSpec.describe 'Onboarding::Signal', type: :request do
         first_name: 'Zora',
         last_name: 'Zimmermann',
         signal_phone_number: '+4915112345678',
-        data_processing_consent: true
+        data_processing_consent: data_processing_consent,
+        additional_consent: additional_consent
       )
       expect(contributor.json_web_token).to have_attributes(
         invalidated_jwt: jwt
@@ -134,6 +137,23 @@ RSpec.describe 'Onboarding::Signal', type: :request do
 
       it 'does not create new contributor' do
         expect { subject.call }.not_to change(Contributor, :count)
+      end
+    end
+
+    context 'without additional consent' do
+      let(:additional_consent) { false }
+
+      it 'creates contributor without additional consent' do
+        expect { subject.call }.to change(Contributor, :count).by(1)
+
+        contributor = Contributor.first
+        expect(contributor).to have_attributes(
+          first_name: 'Zora',
+          last_name: 'Zimmermann',
+          signal_phone_number: '+4915112345678',
+          data_processing_consent: data_processing_consent,
+          additional_consent: additional_consent
+        )
       end
     end
 

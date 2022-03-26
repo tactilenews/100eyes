@@ -559,7 +559,7 @@ RSpec.describe Contributor, type: :model do
       end
     end
 
-    describe 'given contributor who has not given content' do
+    describe 'given contributor who has not given consent' do
       let(:contributor) { build(:contributor, data_processing_consented_at: nil) }
       describe 'true' do
         it {
