@@ -28,7 +28,19 @@
         help: I18n.t('contributor.form.data_processing_consent.help', link: data_protection_link).html_safe,
         style: :leftAligned
       ) do |field| %>
-        <%= c 'checkbox', field.input_defaults.merge(required: true, value: nil) %>
+        <%= c 'checkbox', **field.input_defaults, required: true %>
+      <% end %>
+
+      <% if Setting.ask_for_additional_consent && Setting.additional_consent_defined %>
+        <%= c('field',
+          object: contributor,
+          attr: :additional_consent,
+          styles: [:horizontal, :leftAligned],
+          label: Setting.additional_consent_heading,
+          help: Setting.additional_consent_text
+        ) do |field| %>
+          <%= c 'checkbox', field.input_defaults %>
+        <% end %>
       <% end %>
 
       <%= c 'button',

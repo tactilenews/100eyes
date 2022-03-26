@@ -39,11 +39,11 @@ class OnboardingController < ApplicationController
   end
 
   def contributor_params
-    params.require(:contributor).permit(:first_name, :last_name, :data_processing_consent, attr_name)
+    params.require(:contributor).permit(:first_name, :last_name, :data_processing_consent, :additional_consent, attr_name)
   end
 
   def redirect_if_contributor_exists
-    # We handle an onbaording request for a contributor that
+    # We handle an onboarding request for a contributor that
     # already exists in the exact same way as a successful
     # onboarding so that we don't disclose wether someone
     # is a contributor.
