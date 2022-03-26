@@ -14,8 +14,7 @@ RSpec.describe Checkbox::Checkbox, type: :component do
   it { should have_css('input[type="hidden"][value="0"]', visible: false) }
 
   describe 'can be displayed checked and required' do
-    let(:params) { {checked: true, required: true} }
+    let(:params) { { checked: true, required: true } }
     it { should have_css('input[type="checkbox"][value="1"][checked][required]') }
   end
-
 end
