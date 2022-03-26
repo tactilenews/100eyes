@@ -178,6 +178,6 @@ class Contributor < ApplicationRecord
   def additional_consent?
     additional_consent_given_at.present?
   end
-  
+
   alias additional_consent additional_consent?
 end

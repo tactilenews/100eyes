@@ -37,5 +37,4 @@ class SettingsController < ApplicationController
       :threema_unknown_content_message
     )
   end
-
 end

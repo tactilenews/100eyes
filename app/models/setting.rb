@@ -6,7 +6,7 @@ class Setting < RailsSettings::Base
 
   class << self
     def additional_consent_defined
-      self.additional_consent_heading.strip.present?
+      additional_consent_heading.strip.present?
     end
   end
 
@@ -56,5 +56,4 @@ class Setting < RailsSettings::Base
 
   field :mailserver_host, readonly: true, default: ENV['MAILSERVER_HOST'] || 'localhost'
   field :mailserver_port, readonly: true, default: ENV['MAILSERVER_PORT'] || 1025
-
 end
