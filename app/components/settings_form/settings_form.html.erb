@@ -1,136 +1,65 @@
-<%= form_with(url: settings_path, local: true, class: 'SettingsForm' ) do |f|%>
+<%= c 'form', model: Setting.new do %>
   <%= c 'stack', space: :xlarge do %>
 
     <%= c 'stack' do %>
-      <%= c 'heading', tag: :h2 do %>
-        <%= t 'setting.form.groups.project_settings' %>
-      <% end %>
-
-      <%= c 'field', object: setting, value: Setting.project_name, attr: :project_name do |field| %>
-        <%= c 'input', field.input_defaults %>
-      <% end %>
+      <%= c('heading', tag: :h2) { t('setting.form.groups.project_settings') } %>
+      <%= c('settings_field', type: :input, setting: :project_name) %>
     <% end %>
 
     <%= c 'stack' do %>
-      <%= c 'heading', tag: :h2 do %>
-        <%= t 'setting.form.groups.onboarding' %>
-      <% end %>
-
-      <%= c 'field', object: setting, value: Setting.onboarding_logo, attr: :onboarding_logo do |field| %>
-        <%= c 'input', field.input_defaults.merge(type: :url) %>
-      <% end %>
-
-      <%= c 'field', object: setting, value: Setting.onboarding_byline, attr: :onboarding_byline do |field| %>
-        <%= c 'input', field.input_defaults %>
-      <% end %>
-
-      <%= c 'field', object: setting, value: Setting.onboarding_hero, attr: :onboarding_hero do |field| %>
-        <%= c 'input', field.input_defaults.merge(type: :url) %>
-      <% end %>
-
-      <%= c 'field', object: setting, value: Setting.onboarding_title, attr: :onboarding_title do |field| %>
-        <%= c 'input', field.input_defaults %>
-      <% end %>
-
-      <%= c 'field', object: setting, value: Setting.onboarding_page, attr: :onboarding_page do |field| %>
-        <%= c 'textarea', field.input_defaults %>
-      <% end %>
-
-      <%= c 'field', object: setting, value: Setting.onboarding_data_protection_link, attr: :onboarding_data_protection_link do |field| %>
-        <%= c 'input', field.input_defaults.merge(type: :url) %>
-      <% end %>
-
-      <%= c 'field', object: setting, value: Setting.onboarding_imprint_link, attr: :onboarding_imprint_link do |field| %>
-        <%= c 'input', field.input_defaults.merge(type: :url) %>
-      <% end %>
+      <%= c('heading', tag: :h2) { t('setting.form.groups.onboarding') } %>
+      <%= c('settings_field', type: :url_input, setting: :onboarding_logo) %>
+      <%= c('settings_field', type: :input, setting: :onboarding_byline) %>
+      <%= c('settings_field', type: :url_input, setting: :onboarding_hero) %>
+      <%= c('settings_field', type: :input, setting: :onboarding_title) %>
+      <%= c('settings_field', type: :textarea, setting: :onboarding_page) %>
+      <%= c('settings_field', type: :url_input, setting: :onboarding_data_protection_link) %>
+      <%= c('settings_field', type: :url_input, setting: :onboarding_imprint_link) %>
     <% end %>
 
     <%= c 'stack' do %>
-      <%= c 'heading', tag: :h2 do %>
-        <%= t 'setting.form.groups.additional_consent' %>
-      <% end %>
+      <%= c('heading', tag: :h2) { t 'setting.form.groups.additional_consent' } %>
 
       <%= c('field',
-        object: setting,
+        object: Setting.new,
         attr: :onboarding_ask_for_additional_consent,
         styles: [:horizontal, :leftAligned],
       ) do |field| %>
         <%= c 'checkbox', **field.input_defaults, checked: Setting.onboarding_ask_for_additional_consent %>
       <% end %>
 
-      <%= c 'field', object: setting, value: Setting.onboarding_additional_consent_heading, attr: :onboarding_additional_consent_heading do |field| %>
-        <%= c 'input', field.input_defaults %>
-      <% end %>
-
-      <%= c 'field', object: setting, value: Setting.onboarding_additional_consent_text, attr: :onboarding_additional_consent_text do |field| %>
-        <%= c 'textarea', field.input_defaults %>
-      <% end %>
+      <%= c('settings_field', type: :input, setting: :onboarding_additional_consent_heading) %>
+      <%= c('settings_field', type: :input, setting: :onboarding_additional_consent_text) %>
     <% end %>
 
     <%= c 'stack' do %>
-      <%= c 'heading', tag: :h2 do %>
-        <%= t 'setting.form.groups.onboarding_success' %>
-      <% end %>
-
-      <%= c 'field', object: setting, value: Setting.onboarding_success_heading, attr: :onboarding_success_heading do |field| %>
-        <%= c 'input', field.input_defaults %>
-      <% end %>
-
-      <%= c 'field', object: setting, value: Setting.onboarding_success_text, attr: :onboarding_success_text do |field| %>
-        <%= c 'textarea', field.input_defaults %>
-      <% end %>
+      <%= c('heading', tag: :h2) { t('setting.form.groups.onboarding_success') } %>
+      <%= c('settings_field', type: :input, setting: :onboarding_success_heading) %>
+      <%= c('settings_field', type: :textarea, setting: :onboarding_success_text) %>
     <% end %>
 
      <%= c 'stack' do %>
-      <%= c 'heading', tag: :h2 do %>
-        <%= t 'setting.form.groups.onboarding_unauthorized' %>
-      <% end %>
-
-      <%= c 'field', object: setting, value: Setting.onboarding_unauthorized_heading, attr: :onboarding_unauthorized_heading do |field| %>
-        <%= c 'input', field.input_defaults %>
-      <% end %>
-
-      <%= c 'field', object: setting, value: Setting.onboarding_unauthorized_text, attr: :onboarding_unauthorized_text do |field| %>
-        <%= c 'textarea', field.input_defaults %>
-      <% end %>
+      <%= c('heading', tag: :h2) { t('setting.form.groups.onboarding_unauthorized') } %>
+      <%= c('settings_field', type: :input, setting: :onboarding_unauthorized_heading) %>
+      <%= c('settings_field', type: :textarea, setting: :onboarding_unauthorized_text) %>
     <% end %>
 
     <%= c 'stack' do %>
-      <%= c 'heading', tag: :h2 do %>
-        <%= t 'setting.form.groups.signal' %>
-      <% end %>
-
-      <%= c 'field', object: setting, value: Setting.signal_unknown_content_message, attr: :signal_unknown_content_message do |field| %>
-        <%= c 'textarea', field.input_defaults %>
-      <% end %>
+      <%= c('heading', tag: :h2) { t('setting.form.groups.signal') } %>
+      <%= c('settings_field', type: :textarea, setting: :signal_unknown_content_message) %>
     <% end %>
 
     <%= c 'stack' do %>
-      <%= c 'heading', tag: :h2 do %>
-        <%= t 'setting.form.groups.telegram' %>
-      <% end %>
-
-      <%= c 'field', object: setting, value: Setting.telegram_unknown_content_message, attr: :telegram_unknown_content_message do |field| %>
-        <%= c 'textarea', field.input_defaults %>
-      <% end %>
-
-      <%= c 'field', object: setting, value: Setting.telegram_contributor_not_found_message, attr: :telegram_contributor_not_found_message do |field| %>
-        <%= c 'textarea', field.input_defaults %>
-      <% end %>
+      <%= c('heading', tag: :h2) { t('setting.form.groups.telegram') } %>
+      <%= c('settings_field', type: :textarea, setting: :telegram_unknown_content_message) %>
+      <%= c('settings_field', type: :textarea, setting: :telegram_contributor_not_found_message) %>
     <% end %>
 
     <%= c 'stack' do %>
-      <%= c 'heading', tag: :h2 do %>
-        <%= t 'setting.form.groups.threema' %>
-      <% end %>
-
-      <%= c 'field', object: setting, value: Setting.threema_unknown_content_message, attr: :threema_unknown_content_message do |field| %>
-        <%= c 'textarea', field.input_defaults %>
-      <% end %>
+      <%= c('heading', tag: :h2) { t('setting.form.groups.threema') } %>
+      <%= c('settings_field', type: :textarea, setting: :threema_unknown_content_message) %>
     <% end %>
 
-    <div class="SettingForm-actions">
-      <%= c 'button', type: 'submit', label: I18n.t('save') %>
-    </div>
+    <%= c 'submit_button', label: t('save') %>
   <% end %>
 <% end %>

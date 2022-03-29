@@ -2,9 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.describe SettingsForm::SettingsForm, type: :component do
+RSpec.describe UrlInput::UrlInput, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
   let(:params) { {} }
-  it { should have_css('form') }
+  it { should have_css('input[type="url"]') }
 end
