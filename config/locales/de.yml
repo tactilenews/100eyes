@@ -311,7 +311,7 @@ de:
         threema: Threema
         onboarding: Onboarding
         onboarding_success: Nachricht nach erfolgreichem Onboarding
-        onboarding_unauthorized: Meldung nach erfolglosem Onboarding
+        onboarding_unauthorized: Nachricht bei abgelaufenem Einladungs-Link
         additional_consent: Zusätzliches Einverständnis während des Onboardings
       onboarding_ask_for_additional_consent:
         label: Nach zusätzlichem Einverständnis fragen
