@@ -72,8 +72,9 @@ Rails.application.routes.draw do
       root to: 'users#index'
 
       resources :users
-      resources :contributors, except: %i[new create]
-      resources :requests, except: %i[new create]
+      resources :contributors, only: %i[index show edit destroy]
+      resources :requests, only: %i[index show destroy]
+      resources :delayed_jobs, only: %i[index show destroy]
     end
   end
 
