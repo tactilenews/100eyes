@@ -74,6 +74,7 @@ Rails.application.routes.draw do
       resources :users
       resources :contributors, except: %i[new create]
       resources :requests, except: %i[new create]
+      resources :messages, only: %i[index show destroy]
     end
   end
 

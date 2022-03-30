@@ -8,7 +8,8 @@ class RequestDashboard < Administrate::BaseDashboard
     title: Field::String,
     text: Field::String,
     created_at: Field::DateTime,
-    updated_at: Field::DateTime
+    updated_at: Field::DateTime,
+    messages: Field::HasMany
   }.freeze
 
   COLLECTION_ATTRIBUTES = %i[
@@ -23,6 +24,7 @@ class RequestDashboard < Administrate::BaseDashboard
     text
     created_at
     updated_at
+    messages
   ].freeze
 
   FORM_ATTRIBUTES = %i[
