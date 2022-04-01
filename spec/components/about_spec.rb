@@ -17,12 +17,19 @@ RSpec.describe About::About, type: :component do
   it { should have_text('redaktion@example.org') }
   it { should have_text('RedaktionBot') }
   it { should have_text('*ABCDEFG') }
-  it { should have_text('Signal ist für diese Instanz nicht aktiviert.') }
 
-  context 'with Signal set up' do
-    before(:each) { allow(Setting).to receive(:signal_server_phone_number).and_return('+4915712345678') }
+  describe 'Signal server phone number' do
+    before(:each) { allow(Setting).to receive(:signal_server_phone_number).and_return(signal_server_phone_number) }
 
-    it { should have_text('0157 1234 5678') }
+    context 'without Signal set up' do
+      let(:signal_server_phone_number) { nil }
+      it { should have_text('Signal ist für diese Instanz nicht aktiviert.') }
+    end
+
+    context 'with Signal set up' do
+      let(:signal_server_phone_number) { '+4915712345678' }
+      it { should have_text('0157 1234 5678') }
+    end
   end
 
   context 'with git commit info set' do
