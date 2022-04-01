@@ -166,10 +166,10 @@ RSpec.describe SignalAdapter::Inbound do
       envelope: {
         source: '+4912345789',
         sourceDevice: 1,
-        timestamp: 1648534000000,
+        timestamp: 1_648_534_000_000,
         typingMessage: {
-          action: "STARTED",
-          timestamp: 1648534000000
+          action: 'STARTED',
+          timestamp: 1_648_534_000_000
         }
       }
     }
