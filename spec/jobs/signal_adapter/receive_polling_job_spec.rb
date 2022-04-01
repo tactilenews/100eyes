@@ -65,8 +65,8 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         let!(:contributor) { create(:contributor, signal_phone_number: '+4915112345789') }
 
         before do
-          Setting.onboarding_success_heading = 'Welcome!'
-          Setting.onboarding_success_text = ''
+          allow(Setting).to receive(:onboarding_success_heading).and_return('Welcome!')
+          allow(Setting).to receive(:onboarding_success_text).and_return('')
         end
 
         it { should_not(change { Message.count }) }
