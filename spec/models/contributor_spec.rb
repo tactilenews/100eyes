@@ -639,8 +639,8 @@ RSpec.describe Contributor, type: :model do
   describe '.send_welcome_message!', telegram_bot: :rails do
     let(:contributor) { create(:contributor, telegram_id: nil, email: nil, threema_id: nil) }
     before do
-      Setting.onboarding_success_heading = 'Welcome new contributor!'
-      Setting.onboarding_success_text = 'You onboarded successfully.'
+      allow(Setting).to receive(:onboarding_success_heading).and_return('Welcome new contributor!')
+      allow(Setting).to receive(:onboarding_success_text).and_return('You onboarded successfully.')
     end
     subject { -> { contributor.send_welcome_message! } }
     let(:expected_job_args) { { recipient: contributor, text: "Welcome new contributor!\nYou onboarded successfully." } }

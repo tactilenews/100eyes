@@ -1,0 +1,22 @@
+<%= c 'stack', space: :small do %>
+  <%= c('field',
+    object: contributor,
+    attr: :data_processing_consent,
+    style: :leftAligned,
+    help: data_processing_consent_help.html_safe
+  ) do |field| %>
+    <%= c 'checkbox', **field.input_defaults, required: true %>
+  <% end %>
+
+  <% if display_additional_consent_checkbox? %>
+    <%= c('field',
+      object: contributor,
+      attr: :additional_consent,
+      styles: [:leftAligned],
+      label: Setting.onboarding_additional_consent_heading,
+      help: Setting.onboarding_additional_consent_text
+    ) do |field| %>
+      <%= c 'checkbox', field.input_defaults %>
+    <% end %>
+  <% end %>
+<% end %>

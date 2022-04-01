@@ -28,8 +28,8 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
 
     describe '#welcome_email' do
       before do
-        Setting.onboarding_success_heading = 'Welcome new contributor!'
-        Setting.onboarding_success_text = 'You onboarded successfully.'
+        allow(Setting).to receive(:onboarding_success_heading).and_return('Welcome new contributor!')
+        allow(Setting).to receive(:onboarding_success_text).and_return('You onboarded successfully.')
       end
       let(:contributor) { create(:contributor, email: 'contributor@example.org') }
       let(:welcome_email) do

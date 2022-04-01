@@ -5,10 +5,10 @@ require 'telegram/bot/rspec/integration/rails'
 
 RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
   before do
-    Setting.telegram_contributor_not_found_message = 'Who are you?'
-    Setting.telegram_unknown_content_message = "Cannot handle this, I'm sorry :("
-    Setting.onboarding_success_heading = 'Welcome new contributor!'
-    Setting.onboarding_success_text = ''
+    allow(Setting).to receive(:telegram_contributor_not_found_message).and_return('Who are you?')
+    allow(Setting).to receive(:telegram_unknown_content_message).and_return("Cannot handle this, I'm sorry :(")
+    allow(Setting).to receive(:onboarding_success_heading).and_return('Welcome new contributor!')
+    allow(Setting).to receive(:onboarding_success_text).and_return('')
   end
 
   describe '#start!' do

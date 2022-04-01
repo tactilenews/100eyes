@@ -4,12 +4,6 @@
 class Setting < RailsSettings::Base
   cache_prefix { 'v1' }
 
-  class << self
-    def onboarding_additional_consent_defined?
-      onboarding_additional_consent_heading.strip.present?
-    end
-  end
-
   field :project_name, default: ENV['HUNDRED_EYES_PROJECT_NAME'] || '100eyes'
   field :application_host, readonly: true, default: ENV['APPLICATION_HOSTNAME'] || 'localhost:3000'
 
