@@ -10,7 +10,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # GitHub Actions do not expose the commit date, so we need to
       # store it in an env variable ourselves.
@@ -51,7 +51,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Run playbook
         uses: dawidd6/action-ansible-playbook@671974ed60e946e11964cb0c26e69caaa4b1f559
