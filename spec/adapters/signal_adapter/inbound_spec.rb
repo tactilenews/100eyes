@@ -23,7 +23,7 @@ RSpec.describe SignalAdapter::Inbound do
     }
   end
 
-  let(:receipt_message) do
+  let(:signal_receipt_message) do
     {
       envelope: {
         source: '+4912345789',
@@ -161,6 +161,20 @@ RSpec.describe SignalAdapter::Inbound do
     }
   end
 
+  let(:signal_typing_message) do
+    {
+      envelope: {
+        source: '+4912345789',
+        sourceDevice: 1,
+        timestamp: 1_648_534_000_000,
+        typingMessage: {
+          action: 'STARTED',
+          timestamp: 1_648_534_000_000
+        }
+      }
+    }
+  end
+
   before do
     allow(File).to receive(:open).and_call_original
     allow(File).to receive(:open)
@@ -205,7 +219,13 @@ RSpec.describe SignalAdapter::Inbound do
       end
 
       context 'given a receipt message' do
-        let(:signal_message) { receipt_message }
+        let(:signal_message) { signal_receipt_message }
+
+        it { should be(nil) }
+      end
+
+      context 'given a typing indicator message' do
+        let(:signal_message) { signal_typing_message }
 
         it { should be(nil) }
       end

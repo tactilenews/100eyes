@@ -63,9 +63,9 @@ module SignalAdapter
     end
 
     def initialize_message(signal_message)
-      is_receipt = signal_message.dig(:envelope, :receiptMessage)
+      is_data_message = signal_message.dig(:envelope, :dataMessage)
       is_remove_emoji = signal_message.dig(:envelope, :dataMessage, :reaction, :isRemove)
-      return nil if is_receipt || is_remove_emoji
+      return nil if !is_data_message || is_remove_emoji
 
       data_message = signal_message.dig(:envelope, :dataMessage)
       reaction = data_message[:reaction]
