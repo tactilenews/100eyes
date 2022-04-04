@@ -31,9 +31,9 @@ module SignalAdapter
       end
 
       signal_messages.each do |raw_message|
-        adapter.consume(raw_message) do |m|
-          m.contributor.reply(adapter)
-        end
+        adapter.consume(raw_message) { |m| m.contributor.reply(adapter) }
+      rescue StandardError => e
+        Sentry.capture_exception(e)
       end
 
       ping_monitoring_service && return

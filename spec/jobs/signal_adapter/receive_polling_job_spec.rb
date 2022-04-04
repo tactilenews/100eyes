@@ -49,10 +49,24 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         end
 
         allow(job).to receive(:ping_monitoring_service).and_return(nil)
-        allow(Sentry).to receive(:capture_exception).with(an_instance_of(SignalAdapter::UnknownContributorError))
+      end
+
+      context 'if consuming the message fails' do
+        before do
+          allow(Sentry).to receive(:capture_exception).with(an_instance_of(StandardError))
+          allow_any_instance_of(SignalAdapter::Inbound).to receive(:consume).and_raise(StandardError)
+        end
+
+        it 'sends error to Sentry' do
+          expect { subject.call }.not_to raise_error
+          expect(Sentry).to have_received(:capture_exception)
+          expect(job).to have_received(:ping_monitoring_service)
+        end
       end
 
       describe 'given a message from an unknown contributor' do
+        before { allow(Sentry).to receive(:capture_exception).with(an_instance_of(SignalAdapter::UnknownContributorError)) }
+
         it { should_not(change { Message.count }) }
 
         it 'sends an error to Sentry so that our admins get notified' do
@@ -102,6 +116,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
 
       describe 'given multiple messages from known and unknown contributors', vcr: { cassette_name: :receive_multiple_signal_messages } do
         before do
+          allow(Sentry).to receive(:capture_exception).with(an_instance_of(SignalAdapter::UnknownContributorError))
           create(:contributor, signal_phone_number: '+4915112345789', signal_onboarding_completed_at: Time.zone.now)
         end
 
