@@ -311,8 +311,8 @@ de:
         threema: Threema
         onboarding: Onboarding
         onboarding_success: Nachricht nach erfolgreichem Onboarding
-        onboarding_unauthorized: Meldung nach erfolglosem Onboarding
-        additional_consent: Zusätzliches Einverständnis während des Onboardings
+        onboarding_unauthorized: Nachricht bei abgelaufenem Einladungs-Link
+        onboarding_additional_consent: Zusätzliches Einverständnis während des Onboardings
       onboarding_ask_for_additional_consent:
         label: Nach zusätzlichem Einverständnis fragen
         help: Falls aktiviert, wird neuen Community-Mitgliedern eine zusätzliche, optionale Checkbox angezeigt. Diese kannst du beispielsweise nutzen, um das Einverständnis für den Versand von E-Mail-Newslettern o.ä. einzuholen.

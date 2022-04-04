@@ -1,3 +1,1 @@
 Unsere Software kann derzeit Textnachrichten, Sprachnachrichten und Bilder verarbeiten, jedoch noch keine weiteren Inhalte wie z.B. Sticker, Dateianhänge oder Kontakte. Für die Zwischenzeit bitten wir Sie, Nachrichten mit solchen Inhalten an @FrauCsu (Astrid Csuraji) zu schicken. Herzlichen Dank!
-
-Ohjelmistomme pystyy tällä hetkellä käsittelemään teksti- ja ääniviestejä ja kuvia, mutta ei muita sisältöjä, kuten esim. tiedostoliitteitä. Voisitteko ystävällisesti lähettää viestit jossa on liite osoitteeseen @FrauCsu (Astrid Csuraji). Paljon kiitoksia!
