@@ -3,18 +3,18 @@
 
     <%= c 'stack' do %>
       <%= c('heading', tag: :h2) { t('setting.form.groups.project_settings') } %>
-      <%= c('settings_field', type: :input, setting: :project_name) %>
+      <%= c('settings_field', type: :input, attr: :project_name) %>
     <% end %>
 
     <%= c 'stack' do %>
       <%= c('heading', tag: :h2) { t('setting.form.groups.onboarding') } %>
-      <%= c('settings_field', type: :url_input, setting: :onboarding_logo) %>
-      <%= c('settings_field', type: :input, setting: :onboarding_byline) %>
-      <%= c('settings_field', type: :url_input, setting: :onboarding_hero) %>
-      <%= c('settings_field', type: :input, setting: :onboarding_title) %>
-      <%= c('settings_field', type: :textarea, setting: :onboarding_page) %>
-      <%= c('settings_field', type: :url_input, setting: :onboarding_data_protection_link) %>
-      <%= c('settings_field', type: :url_input, setting: :onboarding_imprint_link) %>
+      <%= c('settings_field', type: :url_input, attr: :onboarding_logo) %>
+      <%= c('settings_field', type: :input, attr: :onboarding_byline) %>
+      <%= c('settings_field', type: :url_input, attr: :onboarding_hero) %>
+      <%= c('settings_field', type: :input, attr: :onboarding_title) %>
+      <%= c('settings_field', type: :textarea, attr: :onboarding_page) %>
+      <%= c('settings_field', type: :url_input, attr: :onboarding_data_protection_link) %>
+      <%= c('settings_field', type: :url_input, attr: :onboarding_imprint_link) %>
     <% end %>
 
     <%= c 'stack' do %>
@@ -28,36 +28,36 @@
         <%= c 'checkbox', **field.input_defaults, checked: Setting.onboarding_ask_for_additional_consent %>
       <% end %>
 
-      <%= c('settings_field', type: :input, setting: :onboarding_additional_consent_heading) %>
-      <%= c('settings_field', type: :input, setting: :onboarding_additional_consent_text) %>
+      <%= c('settings_field', type: :input, attr: :onboarding_additional_consent_heading) %>
+      <%= c('settings_field', type: :input, attr: :onboarding_additional_consent_text) %>
     <% end %>
 
     <%= c 'stack' do %>
       <%= c('heading', tag: :h2) { t('setting.form.groups.onboarding_success') } %>
-      <%= c('settings_field', type: :input, setting: :onboarding_success_heading) %>
-      <%= c('settings_field', type: :textarea, setting: :onboarding_success_text) %>
+      <%= c('settings_field', type: :input, attr: :onboarding_success_heading) %>
+      <%= c('settings_field', type: :textarea, attr: :onboarding_success_text) %>
     <% end %>
 
      <%= c 'stack' do %>
       <%= c('heading', tag: :h2) { t('setting.form.groups.onboarding_unauthorized') } %>
-      <%= c('settings_field', type: :input, setting: :onboarding_unauthorized_heading) %>
-      <%= c('settings_field', type: :textarea, setting: :onboarding_unauthorized_text) %>
+      <%= c('settings_field', type: :input, attr: :onboarding_unauthorized_heading) %>
+      <%= c('settings_field', type: :textarea, attr: :onboarding_unauthorized_text) %>
     <% end %>
 
     <%= c 'stack' do %>
       <%= c('heading', tag: :h2) { t('setting.form.groups.signal') } %>
-      <%= c('settings_field', type: :textarea, setting: :signal_unknown_content_message) %>
+      <%= c('settings_field', type: :textarea, attr: :signal_unknown_content_message) %>
     <% end %>
 
     <%= c 'stack' do %>
       <%= c('heading', tag: :h2) { t('setting.form.groups.telegram') } %>
-      <%= c('settings_field', type: :textarea, setting: :telegram_unknown_content_message) %>
-      <%= c('settings_field', type: :textarea, setting: :telegram_contributor_not_found_message) %>
+      <%= c('settings_field', type: :textarea, attr: :telegram_unknown_content_message) %>
+      <%= c('settings_field', type: :textarea, attr: :telegram_contributor_not_found_message) %>
     <% end %>
 
     <%= c 'stack' do %>
       <%= c('heading', tag: :h2) { t('setting.form.groups.threema') } %>
-      <%= c('settings_field', type: :textarea, setting: :threema_unknown_content_message) %>
+      <%= c('settings_field', type: :textarea, attr: :threema_unknown_content_message) %>
     <% end %>
 
     <%= c 'submit_button', label: t('save') %>

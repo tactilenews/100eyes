@@ -2,21 +2,21 @@
 
 module SettingsField
   class SettingsField < ApplicationComponent
-    def initialize(type:, setting:, **)
+    def initialize(type:, attr:, **)
       super
 
       @type = type
-      @setting = setting
+      @attr = attr
     end
 
     def call
-      component('field', object: Setting.new, value: Setting.send(setting), attr: setting) do |field|
+      component('field', object: Setting.new, value: Setting.send(attr), attr: attr) do |field|
         component(type, field.input_defaults)
       end
     end
 
     private
 
-    attr_reader :type, :setting
+    attr_reader :type, :attr
   end
 end
