@@ -58,7 +58,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         end
 
         it 'sends error to Sentry' do
-          subject.call
+          expect { subject.call }.not_to raise_error
           expect(Sentry).to have_received(:capture_exception)
           expect(job).to have_received(:ping_monitoring_service)
         end
