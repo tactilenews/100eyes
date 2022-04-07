@@ -29,7 +29,7 @@ services:
       - 3035:3035
 
   assets:
-    command: yarn run build
+    command: npm run build
     <<: *x-dev-defaults
 
   job-worker:

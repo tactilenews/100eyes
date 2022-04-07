@@ -40,20 +40,20 @@ jobs:
         uses: actions/cache@v3.0.1
         with:
           path: node_modules
-          key: ${{ runner.os }}-npm-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
           restore-keys: ${{ runner.os }}-npm-
 
       - name: Install NPM dependencies
-        run: yarn install
+        run: npm install
 
       - name: Run prettier
-        run: yarn prettier
+        run: npm run prettier
 
       - name: Build JS
-        run: yarn build:js
+        run: npm run build:js
 
       - name: Build CSS
-        run: yarn build:css
+        run: npm run build:css
 
       - name: Run database migrations
         run: bin/rails db:migrate

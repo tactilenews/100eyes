@@ -1,6 +1,6 @@
 pre-push:
   commands:
     prettier:
-      run: 'yarn prettier'
+      run: 'npm run prettier'
     rubocop:
       run: 'bundle exec rubocop'
