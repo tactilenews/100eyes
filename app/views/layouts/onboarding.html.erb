@@ -15,7 +15,9 @@
 
 <%= yield %>
 
-<%= c 'gdpr_modal' %>
+<% if Setting.onboarding_show_gdpr_modal %>
+  <%= c 'gdpr_modal' %>
+<% end %>
 
 </body>
 </html>
