@@ -9,7 +9,7 @@ RUN apk --update add \
     bash \
     git \
     nodejs \
-    yarn \
+    npm \
     postgresql-dev=~12 \
     postgresql-client=~12 \
     tzdata \
@@ -33,13 +33,13 @@ RUN gem install bundler
 RUN bundle install
 
 ENV NODE_ENV=production
-COPY package.json yarn.lock ./
-RUN yarn install --production=false
+COPY package.json package-lock.json ./
+RUN npm install --production=false
 
 COPY . .
 
-RUN yarn build:js
-RUN yarn build:css
+RUN npm run build:js
+RUN npm run build:css
 
 ENV GIT_COMMIT_SHA=$git_commit_sha
 ENV GIT_COMMIT_DATE=$git_commit_date
