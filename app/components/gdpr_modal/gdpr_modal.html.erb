@@ -1,0 +1,18 @@
+<%= c 'modal', **attrs.merge(class: 'text-small', data: {
+  controller: 'modal gdpr-modal',
+  action: 'close->gdpr-modal#closePermanently'
+}) do %>
+  <%= c 'stack', space: :small do %>
+    <%= c('heading', tag: :h2) do %>
+      <%= t('.heading') %>
+    <% end %>
+
+    <p><%= t('.text', link: Setting.onboarding_data_protection_link).html_safe %></p>
+
+    <form method="dialog">
+      <%= c('button', style: :block, autofocus: true) do %>
+        <%= t('.accept') %>
+      <% end %>
+    </form>
+  <% end %>
+<% end %>
