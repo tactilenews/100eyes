@@ -3,9 +3,19 @@
 class SettingsController < ApplicationController
   def index; end
 
+  include Rails.application.routes.url_helpers
+
   def update
     settings_params.each_key do |key|
       Setting.send("#{key}=", settings_params[key].strip) unless settings_params[key].nil?
+    end
+
+    settings_files_params.each_key do |key|
+      tempfile = settings_files_params[key]
+      next if tempfile.nil?
+
+      blob = ActiveStorage::Blob.create_and_upload!(io: tempfile, filename: tempfile.original_filename)
+      Setting.send("#{key}=", rails_blob_path(blob, only_path: true))
     end
 
     flash[:success] = I18n.t('settings.success')
@@ -14,14 +24,19 @@ class SettingsController < ApplicationController
 
   private
 
+  def settings_files_params
+    params.require(:setting_files).permit(
+      :onboarding_logo,
+      :onboarding_hero
+    )
+  end
+
   def settings_params
     params.require(:setting).permit(
       :onboarding_ask_for_additional_consent,
       :onboarding_additional_consent_heading,
       :onboarding_additional_consent_text,
       :project_name,
-      :onboarding_logo,
-      :onboarding_hero,
       :onboarding_title,
       :onboarding_byline,
       :onboarding_success_heading,
