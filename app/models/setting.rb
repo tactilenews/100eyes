@@ -22,7 +22,7 @@ class Setting < RailsSettings::Base
   field :onboarding_unauthorized_text, default: File.read(File.join('config', 'locales', 'onboarding', 'unauthorized_text.txt'))
   field :onboarding_data_protection_link, default: 'https://tactile.news/100eyes-datenschutz/'
   field :onboarding_imprint_link, default: 'https://tactile.news/impressum/'
-  field :onboarding_show_gdpr_modal, readonly: true, default: ENV['ONBOARDING_SHOW_GDPR_MODAL'] || false
+  field :onboarding_show_gdpr_modal, type: :boolean, readonly: true, default: ENV['ONBOARDING_SHOW_GDPR_MODAL'] || false
 
   field :onboarding_ask_for_additional_consent, type: :boolean, default: false
   field :onboarding_additional_consent_heading, default: ''
