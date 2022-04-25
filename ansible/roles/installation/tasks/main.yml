@@ -47,7 +47,7 @@
     SIGNAL_SERVER_PHONE_NUMBER: "{{ rails.signal.server_phone_number | default('') }}"
     SIGNAL_MONITORING_URL: "{{ rails.signal.monitoring_url | default('') }}"
     SENTRY_DSN: "{{ rails.sentry.dsn }}"
-    ONBOARDING_SHOW_GDPR_MODAL: "{{ rails.onboarding.show_gdpr_modal | default('') }}"
+    ONBOARDING_SHOW_GDPR_MODAL: "{{ rails.onboarding.show_gdpr_modal | default('') | string | lower }}"
   community.general.docker_compose:
     project_src: /home/ansible
     build: no
