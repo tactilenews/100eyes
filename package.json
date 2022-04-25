@@ -2,7 +2,8 @@
   "scripts": {
     "build:css": "postcss ./app/assets/stylesheets/application.css -o ./app/assets/builds/application.css",
     "build:js": "bin/esbuild",
-    "build": "run-p -l 'build:** --watch'",
+    "build": "run-p -l build:**",
+    "dev": "run-p -l 'build:** -- --watch'",
     "prettier": "prettier --check 'app/**/!(build)/*.{js,css}'",
     "prettier:fix": "prettier --write 'app/**/!(build)/*.{js,css}'"
   },
