@@ -2,18 +2,25 @@
   width: 100%;
 }
 
-.Textarea-input {
-  -webkit-appearance: none;
-  -moz-appearance: none;
+.Textarea-wrapper {
+  position: relative;
+}
 
+.Textarea-input,
+.Textarea-highlights {
   display: block;
   width: 100%;
   padding: var(--input-padding);
 
   border-radius: var(--border-radius);
   border: var(--input-border-width) solid var(--color-border);
+}
 
+.Textarea-input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
   resize: none;
+  background-color: transparent;
 }
 
 .Textarea-input:focus {
@@ -28,4 +35,20 @@
 
 .Textarea-emojiPickerHint {
   margin-top: var(--spacing-unit-xs);
+}
+
+.Textarea-highlights {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: pre-wrap;
+  border-color: transparent;
+  color: transparent;
+}
+
+.Textarea-placeholder {
+  background-color: var(--color-blue-lightest);
+  border-radius: var(--border-radius);
+  color: var(--color-blue);
 }

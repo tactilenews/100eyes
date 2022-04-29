@@ -18,14 +18,7 @@ module Textarea
     alias show_emoji_picker_hint? show_emoji_picker_hint
 
     def attrs
-      super.defaults(
-        id: id,
-        name: id,
-        data: {
-          controller: 'textarea',
-          action: 'input->textarea#resize'
-        }
-      )
+      super.defaults(id: id, name: id)
     end
 
     def emoji_picker_supported?
