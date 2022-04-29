@@ -10,11 +10,13 @@
       <%= attrs.except(:class) %>
     ><%= value %></textarea>
 
-    <div
-      class="Textarea-highlights"
-      data-textarea-target="highlights"
-      aria-hidden="true"
-    ></div>
+    <% if highlight_placeholders? %>
+      <div
+        class="Textarea-highlights"
+        data-textarea-target="highlights"
+        aria-hidden="true"
+      ></div>
+    <% end %>
   </div>
 
   <% if show_emoji_picker_hint? && emoji_picker_supported? %>
