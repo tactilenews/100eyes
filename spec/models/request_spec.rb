@@ -8,15 +8,14 @@ RSpec.describe Request, type: :model do
   let(:request) do
     Request.new(
       title: 'Hitchhiker’s Guide',
-      text: 'What is the answer to life, the universe, and everything?',
-      hints: %w[photo confidential]
+      text: 'What is the answer to life, the universe, and everything?'
     )
   end
 
   subject { request }
 
-  it 'has title, text, and hints' do
-    expect(subject.attributes.keys).to include('title', 'text', 'hints')
+  it 'has title and text' do
+    expect(subject.attributes.keys).to include('title', 'text')
   end
 
   it 'is by default sorted in reverse chronological order' do
@@ -43,32 +42,6 @@ RSpec.describe Request, type: :model do
       request.reload
       expect(request.tag_list).to eq(['programmer'])
       expect(Request.all_tags.map(&:name)).to eq(['programmer'])
-    end
-  end
-
-  describe '#hints' do
-    subject { Request.new(title: 'Example').hints }
-    it { should match_array([]) }
-  end
-
-  describe '#plaintext' do
-    subject { request.plaintext }
-
-    it 'returns correct plaintext message' do
-      expected = [
-        'What is the answer to life, the universe, and everything?',
-        I18n.t('request.hints.photo.text'),
-        I18n.t('request.hints.confidential.text')
-      ].join("\n\n")
-
-      expect(subject).to eql(expected)
-    end
-
-    describe 'without hints' do
-      let(:request) { create(:request, text: 'Hello World!', hints: []) }
-      subject { request.plaintext }
-
-      it { should eql('Hello World!') }
     end
   end
 
@@ -184,7 +157,6 @@ RSpec.describe Request, type: :model do
         Request.new(
           title: 'Hitchhiker’s Guide',
           text: 'What is the answer to life, the universe, and everything?',
-          hints: %w[photo confidential],
           tag_list: 'programmer'
         )
       end

@@ -443,44 +443,6 @@ de:
       other: Deine Frage wurde erfolgreich an %{count} Mitglieder in der Community gesendet
     replies: Alle Antworten
     created_at: Frage gestellt %{created_at}
-    hints:
-      photo:
-        label: Fotos
-        text: >
-          Schick uns doch auch ein Foto (oder mehrere). Bitte schick uns
-          nur Fotos, die du selber gemacht hast. Mit der Zusendung von Fotos
-          gibst du gleichzeitig dein Einverständnis für eine mögliche
-          Veröffentlichung. Bei Veröffentlichung nennen wir dich als Urheber
-          (Foto: Max Mustermann/100eyes).
-      address:
-        label: Adressen
-        text: >
-          Schick uns doch eine Adresse oder genaue Koordinaten. Wir nutzen
-          die Geodaten für unsere Recherchen und werden sie eventuell in einem
-          Text verarbeiten oder als Datenpunkt auf einer Karte verwenden.
-      contact:
-        label: Kontaktdaten
-        text: >
-          Schick uns gerne Kontaktdaten. Wir nutzen die Kontaktdaten für
-          unsere Recherchen und werden die Person eventuell kontaktieren, aber
-          keine Kontaktdaten veröffentlichen.
-      medicalInfo:
-        label: Medizinische Informationen
-        text: >
-          Du stellst uns hier möglicherweise sensible medizinische
-          Informationen bereit. Wir sind uns dessen bewusst und behandeln deine
-          Daten mit aller gebotenen Vorsicht. Wenn du uns Daten schickst,
-          helfen uns diese Informationen für unsere weiteren Recherchen. Deine
-          Daten werden wir nur intern auswerten, aber nicht veröffentlichen. Es
-          sei denn, du gibst uns dein ausdrückliches Einverständnis, nachdem wir
-          dich separat darum gebeten haben.
-      confidential:
-        label: Vertrauliche Informationen
-        text: >
-          Du stellst uns hier möglicherweise vertrauliche Informationen bereit.
-          Wir sind uns dessen bewusst und behandeln diese Informationen mit
-          aller gebotenen Vorsicht. Wir werden deine Informationen nur intern
-          auswerten, aber nicht ungefragt veröffentlichen.
     no_replies: Bisher hat noch niemand auf diese Frage geantwortet. Schau doch später noch einmal rein!
     form:
       title:

@@ -47,7 +47,7 @@ class RequestsController < ApplicationController
   end
 
   def request_params
-    params.require(:request).permit(:title, :text, :tag_list, hints: [])
+    params.require(:request).permit(:title, :text, :tag_list)
   end
 
   def notifications_params
