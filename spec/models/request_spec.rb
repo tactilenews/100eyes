@@ -45,6 +45,43 @@ RSpec.describe Request, type: :model do
     end
   end
 
+  describe '#personalized_text' do
+    let(:contributor) { create(:contributor, first_name: 'Zora', last_name: 'Zimmermanne') }
+    let(:request) { create(:request, text: text) }
+
+    subject { request.personalized_text(contributor) }
+
+    context 'with uppercase placeholder' do
+      let(:text) { 'Hi {{FIRST_NAME}}, how are you?' }
+      it { should eq('Hi Zora, how are you?') }
+    end
+
+    context 'with lowercase placeholder' do
+      let(:text) { 'Hi {{first_name}}, how are you?' }
+      it { should eq('Hi Zora, how are you?') }
+    end
+
+    context 'with mixed-cased placeholder' do
+      let(:text) { 'Hi {{First_Name}}, how are you?' }
+      it { should eq('Hi Zora, how are you?') }
+    end
+
+    context 'with optional whitespace in placeholder' do
+      let(:text) { 'Hi {{ FIRST_NAME }}, how are you?' }
+      it { should eq('Hi Zora, how are you?') }
+    end
+
+    context 'with multiple placeholders' do
+      let(:text) { '{{FIRST_NAME}}! {{FIRST_NAME}}! {{FIRST_NAME}}!' }
+      it { should eq('Zora! Zora! Zora!') }
+    end
+
+    context 'with unsupported placeholder' do
+      let(:text) { 'This is {{NOT_SUPPORTED}}' }
+      it { should eq('This is {{NOT_SUPPORTED}}') }
+    end
+  end
+
   describe '#messages_by_contributor' do
     subject { request.messages_by_contributor }
     let(:request) { create(:request) }

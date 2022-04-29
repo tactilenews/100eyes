@@ -12,6 +12,10 @@ class Request < ApplicationRecord
 
   delegate :replies, to: :messages
 
+  def personalized_text(contributor)
+    text.gsub(/{{\s*FIRST_NAME\s*}}/i, contributor.first_name)
+  end
+
   def stats
     {
       counts: {
@@ -35,7 +39,7 @@ class Request < ApplicationRecord
       Message.create!(
         sender: nil,
         recipient: contributor,
-        text: request.text,
+        text: request.personalized_text(contributor),
         request: request,
         broadcasted: true
       )
