@@ -1,4 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
+import replacePlaceholder from '../../assets/javascript/helpers/replace-placeholder.js';
 
 export default class extends Controller {
   static targets = ['input', 'highlights'];
@@ -20,8 +21,9 @@ export default class extends Controller {
       return;
     }
 
-    const highlightedText = this.inputTarget.value.replace(
-      /({{\s*FIRST_NAME\s*}})/gi,
+    const highlightedText = replacePlaceholder(
+      this.inputTarget.value,
+      'FIRST_NAME',
       '<span class="Textarea-placeholder">$1</span>'
     );
 
