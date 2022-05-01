@@ -5,6 +5,6 @@ require 'rails_helper'
 RSpec.describe SettingsFile::SettingsFile, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
-  let(:params) { {} }
-  it { should have_css('.SettingsFile') }
+  let(:params) { { attr: :onboarding_logo } }
+  it { should have_css('input[id="setting_files[onboarding_logo]"][type="file"]') }
 end
