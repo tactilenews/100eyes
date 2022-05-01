@@ -185,7 +185,7 @@ GEM
       activerecord
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
-    kramdown (2.3.2)
+    kramdown (2.4.0)
       rexml
     listen (3.7.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
@@ -403,7 +403,7 @@ DEPENDENCIES
   faker
   image_processing (~> 1.12)
   jwt
-  kramdown (~> 2.3)
+  kramdown (~> 2.4)
   listen (>= 3.0.5, < 3.8)
   pg (>= 0.18, < 2.0)
   pg_search
