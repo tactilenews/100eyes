@@ -11,8 +11,19 @@ RSpec.describe 'Admin::Settings', type: :request do
 
   describe 'POST /settings' do
     subject { -> { post settings_path(as: create(:user)), params: params } }
-    let(:params) { { setting: { project_name: 'Shiny new project' } } }
 
-    it { should change { Setting.project_name }.to('Shiny new project') }
+    describe '`settting` params' do
+      let(:params) { { setting: { project_name: 'Shiny new project' } } }
+
+      it { should change { Setting.project_name }.to('Shiny new project') }
+    end
+
+    describe '`settting_files` params' do
+      let(:params) do
+        { setting: { project_name: 'Shiny new project' }, setting_files: { onboarding_logo: fixture_file_upload('profile_picture.jpg') } }
+      end
+
+      it { should change { Setting.onboarding_logo }.from('').to(%r{/rails/active_storage/blobs/redirect/.*/profile_picture.jpg}) }
+    end
   end
 end
