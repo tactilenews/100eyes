@@ -9,7 +9,7 @@ RSpec.describe PlaintextMessage::PlaintextMessage, type: :component do
   let(:message) { 'Hello World!' }
   it { should have_css('.PlaintextMessage') }
 
-  describe 'given a message with leading/tailing whitespace' do
+  context 'given a message with leading/tailing whitespace' do
     let(:message) do
       <<~MESSAGE
 
@@ -23,7 +23,7 @@ RSpec.describe PlaintextMessage::PlaintextMessage, type: :component do
     end
   end
 
-  describe 'given a message with consecutive line breaks' do
+  context 'given a message with consecutive line breaks' do
     let(:message) do
       <<~MESSAGE
         This message contains consecutive
@@ -38,7 +38,7 @@ RSpec.describe PlaintextMessage::PlaintextMessage, type: :component do
     end
   end
 
-  describe 'given a message with HTML' do
+  context 'given a message with HTML' do
     let(:message) { '<h1>Hello!</h1>' }
 
     it 'escapes HTML' do
@@ -46,11 +46,22 @@ RSpec.describe PlaintextMessage::PlaintextMessage, type: :component do
     end
   end
 
-  describe 'given a nil message' do
+  context 'given a nil message' do
     let(:message) { nil }
 
     it 'renders successfully' do
       expect(subject.child.inner_html).to be_empty
     end
+  end
+
+  context 'with highlight_placeholders: true' do
+    let(:message) { 'Hi {{FIRST_NAME}}, how are you?' }
+    let(:params) { { message: message, highlight_placeholders: true } }
+
+    it 'does not insert newlines after placeholders' do
+      expect(subject).to have_text('Hi {{FIRST_NAME}}, how are you?')
+    end
+
+    it { should have_css('.Placeholder', text: '{{FIRST_NAME}}') }
   end
 end

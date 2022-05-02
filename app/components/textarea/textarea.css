@@ -52,9 +52,3 @@
   border-color: transparent;
   color: var(--color-text);
 }
-
-.Textarea-placeholder {
-  background-color: var(--color-blue-lightest);
-  border-radius: var(--border-radius);
-  color: var(--color-blue);
-}

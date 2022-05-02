@@ -17,7 +17,7 @@
           <%= I18n.t('request.created_at', created_at: date_time(@request.created_at)) %>
         <% end %>
       <% end %>
-    <%= c 'plaintext_message', message: @request.text %>
+    <%= c 'plaintext_message', message: @request.text, highlight_placeholders: true %>
   <% end %>
 <% end %>
 

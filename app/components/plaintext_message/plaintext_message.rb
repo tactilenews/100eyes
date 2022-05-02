@@ -2,22 +2,31 @@
 
 module PlaintextMessage
   class PlaintextMessage < ApplicationComponent
-    def initialize(message: nil, **)
+    def initialize(message: nil, highlight_placeholders: false, **)
       super
 
       @message = message
+      @highlight_placeholders = highlight_placeholders
     end
 
     private
 
-    attr_reader :message
+    attr_reader :message, :highlight_placeholders
+    alias highlight_placeholders? highlight_placeholders
 
     def empty?
       message_content.empty?
     end
 
     def rendered
-      simple_format(h(message_content))
+      rendered = html_escape(message_content)
+      rendered = simple_format(rendered)
+
+      if highlight_placeholders?
+        rendered.gsub(/{{\s*FIRST_NAME\s*}}/i, component('placeholder') { '{{FIRST_NAME}}' }.strip)
+      else
+        rendered
+      end
     end
 
     def message_content
