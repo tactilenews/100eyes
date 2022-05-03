@@ -17,6 +17,7 @@
 }
 
 .Textarea-input {
+  position: relative;
   -webkit-appearance: none;
   -moz-appearance: none;
   resize: none;
@@ -37,6 +38,11 @@
   margin-top: var(--spacing-unit-xs);
 }
 
+.Textarea--highlighted .Textarea-input {
+  color: transparent;
+  caret-color: var(--color-text);
+}
+
 .Textarea-highlights {
   pointer-events: none;
   position: absolute;
@@ -44,7 +50,7 @@
   left: 0;
   white-space: pre-wrap;
   border-color: transparent;
-  color: transparent;
+  color: var(--color-text);
 }
 
 .Textarea-placeholder {

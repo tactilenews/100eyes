@@ -19,6 +19,12 @@ module Textarea
     alias show_emoji_picker_hint? show_emoji_picker_hint
     alias highlight_placeholders? highlight_placeholders
 
+    def styles
+      return super unless highlight_placeholders
+
+      super << :highlighted
+    end
+
     def attrs
       super.defaults(id: id, name: id)
     end

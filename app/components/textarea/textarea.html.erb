@@ -4,12 +4,6 @@
   data-action="input->textarea#resize input->textarea#highlightPlaceholders"
 >
   <div class="Textarea-wrapper">
-    <textarea
-      class="Textarea-input"
-      data-textarea-target="input"
-      <%= attrs.except(:class) %>
-    ><%= value %></textarea>
-
     <% if highlight_placeholders? %>
       <div
         class="Textarea-highlights"
@@ -17,6 +11,12 @@
         aria-hidden="true"
       ></div>
     <% end %>
+
+    <textarea
+      class="Textarea-input"
+      data-textarea-target="input"
+      <%= attrs.except(:class) %>
+    ><%= value %></textarea>
   </div>
 
   <% if show_emoji_picker_hint? && emoji_picker_supported? %>
