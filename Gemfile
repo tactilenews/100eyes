@@ -80,3 +80,4 @@ gem 'sentry-ruby'
 
 # Admin
 gem 'administrate'
+gem 'administrate_exportable'
