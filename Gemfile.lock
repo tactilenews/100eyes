@@ -91,6 +91,11 @@ GEM
       momentjs-rails (~> 2.8)
       sassc-rails (~> 2.1)
       selectize-rails (~> 0.6)
+    administrate_exportable (0.5.0)
+      actionview (>= 5.2.2.1)
+      administrate (>= 0.13.0)
+      rails (>= 4.2)
+      railties (>= 5.2.2.1)
     argon2 (2.0.3)
       ffi (~> 1.14)
       ffi-compiler (~> 1.0)
@@ -390,6 +395,7 @@ DEPENDENCIES
   activestorage-validator (~> 0.2.0)
   acts-as-taggable-on
   administrate
+  administrate_exportable
   bootsnap (>= 1.4.2)
   browser
   byebug

@@ -12,7 +12,9 @@ class ContributorDashboard < Administrate::BaseDashboard
     note: Field::Text,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
-    deactivated_at: Field::DateTime
+    deactivated_at: Field::DateTime,
+    data_processing_consented_at: Field::DateTime,
+    additional_consent_given_at: Field::DateTime
   }.freeze
 
   COLLECTION_ATTRIBUTES = %i[
@@ -21,6 +23,8 @@ class ContributorDashboard < Administrate::BaseDashboard
     last_name
     channels
     active
+    data_processing_consented_at
+    additional_consent_given_at
   ].freeze
 
   SHOW_PAGE_ATTRIBUTES = %i[
@@ -29,6 +33,8 @@ class ContributorDashboard < Administrate::BaseDashboard
     last_name
     active
     channels
+    data_processing_consented_at
+    additional_consent_given_at
     note
     created_at
     updated_at
