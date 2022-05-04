@@ -1,13 +1,13 @@
 <%= c 'wrapper', style: :narrow do %>
   <%= c 'box' do %>
-    <%= c 'onboarding_header', logo: Setting.onboarding_logo %>
+    <%= c 'onboarding_header', logo: url_for(Setting.onboarding_logo) %>
   <% end %>
 <% end %>
 
 <main>
   <% if Setting.onboarding_hero.present? %>
     <%= c 'wrapper' do %>
-      <%= c 'onboarding_hero', image: Setting.onboarding_hero %>
+      <%= c 'onboarding_hero', image: url_for(Setting.onboarding_hero) %>
     <% end %>
   <% end %>
 

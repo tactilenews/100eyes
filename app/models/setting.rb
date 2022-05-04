@@ -4,14 +4,38 @@
 class Setting < RailsSettings::Base
   cache_prefix { 'v1' }
 
+  def self.onboarding_logo
+    ActiveStorage::Blob.find(onboarding_logo_blob_id)
+  rescue ActiveRecord::RecordNotFound
+    nil
+  end
+
+  def self.onboarding_logo=(blob)
+    existing_blob = onboarding_logo
+    existing_blob&.purge_later
+    self.onboarding_logo_blob_id = blob.id
+  end
+
+  def self.onboarding_hero
+    ActiveStorage::Blob.find(onboarding_hero_blob_id)
+  rescue ActiveRecord::RecordNotFound
+    nil
+  end
+
+  def self.onboarding_hero=(blob)
+    existing_blob = onboarding_hero
+    existing_blob&.purge_later
+    self.onboarding_hero_blob_id = blob.id
+  end
+
   field :project_name, default: ENV['HUNDRED_EYES_PROJECT_NAME'] || '100eyes'
   field :application_host, readonly: true, default: ENV['APPLICATION_HOSTNAME'] || 'localhost:3000'
 
   field :git_commit_sha, readonly: true, default: ENV['GIT_COMMIT_SHA']
   field :git_commit_date, readonly: true, default: ENV['GIT_COMMIT_DATE']
 
-  field :onboarding_logo, default: ''
-  field :onboarding_hero, default: ''
+  field :onboarding_logo_blob_id, type: :integer
+  field :onboarding_hero_blob_id, type: :integer
   field :onboarding_title, default: 'Hallo und herzlich willkommen!'
   field :onboarding_byline, default: ''
   field :onboarding_page, default: File.read(File.join('config', 'locales', 'onboarding', 'page.md'))
