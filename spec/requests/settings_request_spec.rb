@@ -23,7 +23,7 @@ RSpec.describe 'Admin::Settings', type: :request do
         { setting: { project_name: 'Shiny new project' }, setting_files: { onboarding_logo: fixture_file_upload('profile_picture.jpg') } }
       end
 
-      it { should change { Setting.onboarding_logo }.from('').to(%r{/rails/active_storage/blobs/redirect/.*/profile_picture.jpg}) }
+      it { should change { Setting.onboarding_logo }.from(nil).to(instance_of(ActiveStorage::Blob)) }
     end
   end
 end

@@ -3,8 +3,6 @@
 class SettingsController < ApplicationController
   def index; end
 
-  include Rails.application.routes.url_helpers
-
   def update
     settings_params.each_key do |key|
       Setting.send("#{key}=", settings_params[key].strip) unless settings_params[key].nil?
@@ -15,7 +13,7 @@ class SettingsController < ApplicationController
       next if tempfile.nil?
 
       blob = ActiveStorage::Blob.create_and_upload!(io: tempfile, filename: tempfile.original_filename)
-      Setting.send("#{key}=", rails_blob_path(blob, only_path: true))
+      Setting.send("#{key}=", blob)
     end
 
     flash[:success] = I18n.t('settings.success')
