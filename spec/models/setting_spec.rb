@@ -24,11 +24,11 @@ RSpec.describe Setting, type: :model do
     describe setter do
       subject { -> { Setting.send(setter, blob) } }
       it "sets #{getter}" do
-        it_should change { Setting.send(getter) }.from(nil).to(blob)
+        will change { Setting.send(getter) }.from(nil).to(blob)
       end
 
       it "changes #{blob_id_getter}" do
-        it_should change { Setting.send(blob_id_getter) }.from(nil).to(blob.id)
+        will change { Setting.send(blob_id_getter) }.from(nil).to(blob.id)
       end
 
       context 'any existing blob' do
@@ -39,15 +39,15 @@ RSpec.describe Setting, type: :model do
         before { Setting.send(blob_id_setter, another_blob.id) }
 
         it 'gets deleted' do
-          it_should enqueue_job(ActiveStorage::PurgeJob)
+          will enqueue_job(ActiveStorage::PurgeJob)
         end
 
         it "changes #{getter}" do
-          it_should change { Setting.send(getter) }.from(another_blob).to(blob)
+          will change { Setting.send(getter) }.from(another_blob).to(blob)
         end
 
         it "overwrites #{blob_id_getter}" do
-          it_should change { Setting.send(blob_id_getter) }.from(another_blob.id).to(blob.id)
+          will change { Setting.send(blob_id_getter) }.from(another_blob.id).to(blob.id)
         end
       end
     end
