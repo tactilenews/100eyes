@@ -689,6 +689,9 @@ de:
       create: "%{model} erstellen"
       submit: "%{model} speichern"
       update: "%{model} aktualisieren"
+    label:
+      contributor:
+        username: Telegram Username
   number:
     currency:
       format:

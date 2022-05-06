@@ -9,6 +9,10 @@ class ContributorDashboard < Administrate::BaseDashboard
     last_name: Field::String,
     active: Field::Boolean,
     channels: Field::String.with_options(searchable: false),
+    email: Field::String,
+    username: Field::String,
+    signal_phone_number: Field::String,
+    threema_id: Field::String,
     note: Field::Text,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
@@ -33,6 +37,10 @@ class ContributorDashboard < Administrate::BaseDashboard
     last_name
     active
     channels
+    email
+    username
+    signal_phone_number
+    threema_id
     data_processing_consented_at
     additional_consent_given_at
     note
