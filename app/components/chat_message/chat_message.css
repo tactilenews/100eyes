@@ -48,6 +48,13 @@
   display: block;
 }
 
+/* Reserve space in last line to prevent that the toggle button overlays text */
+.ChatMessage--expanded .ChatMessage-text p:last-child::after {
+  content: '';
+  display: inline-block;
+  width: 5em;
+}
+
 .ChatMessage-meta {
   color: var(--color-text-light);
   font-size: var(--font-size-s);
