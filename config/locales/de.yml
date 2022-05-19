@@ -342,13 +342,13 @@ de:
       onboarding_unauthorized_text:
         label: Text
       onboarding_logo:
-        label: Logo (URL)
+        label: Logo
         help: Das Logo sollte eine Bilddatei im SVG-, PNG-Format sein und ca. 90 Pixel hoch sein. Es wird während des Onboardings angezeigt.
       onboarding_byline:
         label: Unterzeile
         help: Wird unter dem Projekttitel bzw. Logo angezeigt.
       onboarding_hero:
-        label: Header-Bild (URL)
+        label: Header-Bild
         help: Das Header-Bild sollte eine Bilddatei im JPEG-Format sein. Es sollte ein Seitenverhältnis von 2:1 haben und ca. 900 Pixel breit sein. Es wird während des Onboardings angezeigt.
       onboarding_data_protection_link:
         label: Link zur Datenschutzerklärung
