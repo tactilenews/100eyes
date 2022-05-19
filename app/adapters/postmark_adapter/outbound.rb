@@ -62,7 +62,7 @@ module PostmarkAdapter
     end
 
     def default_from
-      "#{Setting.project_name} <#{Setting.email_from_address}>"
+      "\"#{Setting.project_name}\" <#{Setting.email_from_address}>"
     end
   end
 end
