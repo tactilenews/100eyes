@@ -1,20 +1,27 @@
 .ImageInput {
-  display: flex;
   padding: var(--spacing-unit-xs);
-  align-items: center;
   background-color: var(--color-gray-lightest);
   border-radius: var(--border-radius);
 }
 
+.ImageInput-selectedImage:not([hidden]),
+.ImageInput-emptyState:not([hidden]) {
+  display: flex;
+  align-items: center;
+}
+
+.ImageInput-selectedImage {
+  gap: var(--spacing-unit-xs);
+}
+
 .ImageInput-icon,
-.ImageInput-preview {
+.ImageInput-thumbnail {
   display: block;
   width: calc(2 * var(--spacing-unit));
   height: calc(2 * var(--spacing-unit));
 }
 
-.ImageInput-preview {
-  margin-right: var(--spacing-unit-xs);
+.ImageInput-thumbnail {
   object-fit: contain;
   background-color: #fff;
   border-radius: var(--border-radius-s);

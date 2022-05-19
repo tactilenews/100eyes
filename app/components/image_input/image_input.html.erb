@@ -1,31 +1,52 @@
-<div <%= attrs %>>
-  <% if blob? %>
-    <a href="<%= url %>" target="_blank">
+<div
+  <%= attrs.merge(class: 'text-small') %>
+  data-controller="image-input"
+  data-action="change->image-input#selectFile"
+>
+  <div
+    class="ImageInput-selectedImage"
+    data-image-input-target="selectedImage"
+    <%= blob? ? '' : 'hidden' %>
+  >
+    <a href="<%= url %>" target="_blank" data-image-input-target="link">
       <img
-        class="ImageInput-preview"
+        class="ImageInput-thumbnail"
         src="<%= thumbnail_url %>"
         alt="<%= t('.thumbnail_alt_text') %>"
+        data-image-input-target="thumbnail"
       />
     </a>
-  <% else %>
-    <%= c 'icon', class: 'ImageInput-icon', icon: :attach %>
-  <% end %>
 
-  <div>
-    <div class="text-small">
-      <% if blob? %>
-        <%= filename %>
-      <% else %>
-        <%= t('.no_image') %>
-      <% end %>
-    </div>
+    <div>
+      <div data-image-input-target="filename"><%= filename %></div>
 
-    <div class="text-small text-light">
       <%= c 'upload_button',
         id: id,
         input_label: t('.input_label'),
-        button_label: button_label,
-        styles: [:underline, :inline]
+        button_label: t('.replace_image'),
+        styles: [:underline, :inline],
+        class: 'text-light'
+      %>
+
+    </div>
+  </div>
+
+  <div
+    class="ImageInput-emptyState"
+    data-image-input-target="emptyState"
+    <%= blob? ? 'hidden' : '' %>
+  >
+    <%= c 'icon', class: 'ImageInput-icon', icon: :attach %>
+
+    <div>
+      <div><%= t('.no_image') %></div>
+
+      <%= c 'upload_button',
+        id: id,
+        input_label: t('.input_label'),
+        button_label: t('.upload_image'),
+        styles: [:underline, :inline],
+        class: 'text-light'
       %>
     </div>
   </div>
