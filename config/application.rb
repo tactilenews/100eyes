@@ -45,5 +45,10 @@ module App
     # us to preview raw message data, which is often stored as JSON, directly
     # in the browser.
     config.active_storage.content_types_allowed_inline << 'application/json'
+    # Allow SVG files to be served without forced downloads. This is disabled by default,
+    # because SVG files can be used for XSS attacks. We do only render user-uploaded
+    # SVG files using `img` tags, which won’t execute any inline JavaScript embedded into
+    # SVG files. Additionally, our Content Security Policy disallows inline JavaScript.
+    config.active_storage.content_types_to_serve_as_binary -= ['image/svg+xml']
   end
 end
