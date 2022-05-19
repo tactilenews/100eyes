@@ -13,8 +13,16 @@ RSpec.feature 'Image uploads', type: :feature do
     expect(page).not_to have_css('img')
 
     visit settings_path(as: user)
+
+    # Image inputs in settings form are empty
+    expect(page).to have_text('Noch kein Bild hochgeladen', count: 2)
+
     attach_file 'Logo', 'example-image.png'
     click_on 'Speichern'
+
+    # The logo image input is not empty any more
+    expect(page).to have_text('Noch kein Bild hochgeladen', count: 1)
+    expect(page).to have_text('example-image.png')
 
     visit onboarding_path(jwt: jwt)
     expect(page).to have_css('header img[alt="Die Lokal-Community!"]')

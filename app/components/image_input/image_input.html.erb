@@ -1,0 +1,32 @@
+<div <%= attrs %>>
+  <% if blob? %>
+    <a href="<%= url %>" target="_blank">
+      <img
+        class="ImageInput-preview"
+        src="<%= thumbnail_url %>"
+        alt="<%= t('.thumbnail_alt_text') %>"
+      />
+    </a>
+  <% else %>
+    <%= c 'icon', class: 'ImageInput-icon', icon: :attach %>
+  <% end %>
+
+  <div>
+    <div class="text-small">
+      <% if blob? %>
+        <%= filename %>
+      <% else %>
+        <%= t('.no_image') %>
+      <% end %>
+    </div>
+
+    <div class="text-small text-light">
+      <%= c 'upload_button',
+        id: id,
+        input_label: t('.input_label'),
+        button_label: button_label,
+        styles: [:underline, :inline]
+      %>
+    </div>
+  </div>
+</div>
