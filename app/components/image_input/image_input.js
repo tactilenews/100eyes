@@ -2,6 +2,7 @@ import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
   static targets = [
+    'input',
     'filename',
     'thumbnail',
     'link',
@@ -12,14 +13,16 @@ export default class extends Controller {
   connect() {
     const files = this.element.querySelector('input').files;
 
-    if (files.length <= 0) {
-      return;
+    if (files.length > 0) {
+      this.updateFilePreview(files[0]);
     }
-
-    this.updateFilePreview(files[0]);
   }
 
-  selectFile(event) {
+  select() {
+    this.inputTarget.click();
+  }
+
+  handleChange(event) {
     this.updateFilePreview(event.target.files[0]);
   }
 

@@ -1,8 +1,17 @@
 <div
   <%= attrs.merge(class: 'text-small') %>
   data-controller="image-input"
-  data-action="change->image-input#selectFile"
+  data-action="change->image-input#handleChange"
 >
+  <input
+    type="file"
+    accept="image/*"
+    data-image-input-target="input"
+    id="<%= id %>"
+    name="<%= id %>"
+    hidden
+  />
+
   <div
     class="ImageInput-selectedImage"
     data-image-input-target="selectedImage"
@@ -20,14 +29,12 @@
     <div>
       <div data-image-input-target="filename"><%= filename %></div>
 
-      <%= c 'upload_button',
-        id: id,
-        input_label: t('.input_label'),
-        button_label: t('.replace_image'),
+      <%= c 'button',
+        type: :button,
         styles: [:underline, :inline],
-        class: 'text-light'
+        data: { action: 'click->image-input#select' },
+        label: t('.replace_image')
       %>
-
     </div>
   </div>
 
@@ -41,12 +48,11 @@
     <div>
       <div><%= t('.no_image') %></div>
 
-      <%= c 'upload_button',
-        id: id,
-        input_label: t('.input_label'),
-        button_label: t('.upload_image'),
+      <%= c 'button',
+        type: :button,
         styles: [:underline, :inline],
-        class: 'text-light'
+        data: { action: 'click->image-input#select' },
+        label: t('.upload_image')
       %>
     </div>
   </div>
