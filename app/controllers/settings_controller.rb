@@ -4,12 +4,11 @@ class SettingsController < ApplicationController
   def index; end
 
   def update
-    settings_params.each_key do |key|
-      Setting.send("#{key}=", settings_params[key].strip) unless settings_params[key].nil?
+    settings_params.each do |key, value|
+      Setting.send("#{key}=", value.strip) unless value.nil?
     end
 
-    settings_files_params.each_key do |key|
-      tempfile = settings_files_params[key]
+    settings_files_params.each do |key, tempfile|
       next if tempfile.nil?
 
       blob = ActiveStorage::Blob.create_and_upload!(io: tempfile, filename: tempfile.original_filename)
