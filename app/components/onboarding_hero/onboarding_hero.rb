@@ -5,11 +5,13 @@ module OnboardingHero
     private
 
     def hero
-      Setting.onboarding_hero
+      blob = Setting.onboarding_hero
+
+      blob.variant(resize_to_fill: [900, 450], quality: 65, convert: 'jpeg') if blob.present? && blob.variable?
     end
 
     def hero?
-      hero.present? && hero.image?
+      hero.present?
     end
   end
 end

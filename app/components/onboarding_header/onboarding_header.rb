@@ -5,11 +5,19 @@ module OnboardingHeader
     private
 
     def logo
-      Setting.onboarding_logo
+      blob = Setting.onboarding_logo
+
+      return nil if blob.blank?
+
+      if blob.image? && blob.variable?
+        blob.variant(resize_to_limit: [nil, 100])
+      elsif blob.image?
+        blob
+      end
     end
 
     def logo?
-      logo.present? && logo.image?
+      logo.present?
     end
 
     def project_name
