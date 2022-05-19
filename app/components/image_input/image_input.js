@@ -18,12 +18,29 @@ export default class extends Controller {
     }
   }
 
-  select() {
+  showFilePicker() {
     this.inputTarget.click();
   }
 
   handleChange(event) {
     this.updateFilePreview(event.target.files[0]);
+  }
+
+  dropFile(event) {
+    event.preventDefault();
+
+    if (event.dataTransfer.files.length <= 0) {
+      return;
+    }
+
+    const file = event.dataTransfer.files[0];
+
+    if (!file.type.startsWith('image/')) {
+      return;
+    }
+
+    this.inputTarget.files = event.dataTransfer.files;
+    this.updateFilePreview(event.dataTransfer.files[0]);
   }
 
   updateFilePreview(file) {
@@ -35,5 +52,25 @@ export default class extends Controller {
 
     this.emptyStateTarget.hidden = true;
     this.selectedImageTarget.hidden = false;
+  }
+
+  showDropArea(event) {
+    event.preventDefault();
+    this.element.classList.add('ImageInput--dragging');
+  }
+
+  hideDropArea(event) {
+    event.preventDefault();
+    this.element.classList.remove('ImageInput--dragging');
+  }
+
+  highlightDropArea(event) {
+    event.preventDefault();
+    this.element.classList.add('ImageInput--active');
+  }
+
+  unhighlightDropArea(event) {
+    event.preventDefault();
+    this.element.classList.remove('ImageInput--active');
   }
 }

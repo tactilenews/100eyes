@@ -1,15 +1,24 @@
 <div
   <%= attrs.merge(class: 'text-small') %>
   data-controller="image-input"
-  data-action="change->image-input#handleChange"
+  data-action="
+    dragover@document->image-input#showDropArea
+    dragleave@document->image-input#hideDropArea
+    dragover->image-input#highlightDropArea
+    dragleave->image-input#unhighlightDropArea
+    drop->image-input#dropFile
+    drop@document->image-input#hideDropArea
+    drop@document->image-input#unhighlightDropArea
+  "
 >
   <input
     type="file"
     accept="image/*"
-    data-image-input-target="input"
     id="<%= id %>"
     name="<%= id %>"
     hidden
+    data-image-input-target="input"
+    data-action="change->image-input#handleChange"
   />
 
   <div
@@ -32,7 +41,7 @@
       <%= c 'button',
         type: :button,
         styles: [:underline, :inline],
-        data: { action: 'click->image-input#select' },
+        data: { action: 'click->image-input#showFilePicker' },
         label: t('.replace_image')
       %>
     </div>
@@ -51,7 +60,7 @@
       <%= c 'button',
         type: :button,
         styles: [:underline, :inline],
-        data: { action: 'click->image-input#select' },
+        data: { action: 'click->image-input#showFilePicker' },
         label: t('.upload_image')
       %>
     </div>

@@ -4,6 +4,14 @@
   border-radius: var(--border-radius);
 }
 
+.ImageInput--dragging {
+  outline: 2px dashed var(--color-border);
+}
+
+.ImageInput--active {
+  outline-color: var(--color-accent);
+}
+
 .ImageInput-selectedImage:not([hidden]),
 .ImageInput-emptyState:not([hidden]) {
   display: flex;
