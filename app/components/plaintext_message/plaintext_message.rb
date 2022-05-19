@@ -2,6 +2,8 @@
 
 module PlaintextMessage
   class PlaintextMessage < ApplicationComponent
+    include PlaceholderHelper
+
     def initialize(message: nil, highlight_placeholders: false, **)
       super
 
@@ -23,7 +25,7 @@ module PlaintextMessage
       rendered = simple_format(rendered)
 
       if highlight_placeholders?
-        rendered.gsub(/{{\s*FIRST_NAME\s*}}/i, component('placeholder') { '{{FIRST_NAME}}' }.strip)
+        replace_placeholder(rendered, 'FIRST_NAME', component('placeholder') { '{{FIRST_NAME}}' }.strip)
       else
         rendered
       end

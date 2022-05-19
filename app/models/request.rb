@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Request < ApplicationRecord
+  include PlaceholderHelper
+
   has_many :messages, dependent: :destroy
   has_many :contributors, through: :messages
   has_many :photos, through: :messages
@@ -13,7 +15,7 @@ class Request < ApplicationRecord
   delegate :replies, to: :messages
 
   def personalized_text(contributor)
-    text.gsub(/{{\s*FIRST_NAME\s*}}/i, contributor.first_name)
+    replace_placeholder(text, 'FIRST_NAME', contributor.first_name)
   end
 
   def stats
