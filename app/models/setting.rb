@@ -8,9 +8,7 @@ class Setting < RailsSettings::Base
   delegate :onboarding_hero, to: :class
 
   def self.onboarding_logo
-    ActiveStorage::Blob.find(onboarding_logo_blob_id)
-  rescue ActiveRecord::RecordNotFound
-    nil
+    ActiveStorage::Blob.find_by(id: onboarding_logo_blob_id)
   end
 
   def self.onboarding_logo=(blob)
@@ -20,9 +18,7 @@ class Setting < RailsSettings::Base
   end
 
   def self.onboarding_hero
-    ActiveStorage::Blob.find(onboarding_hero_blob_id)
-  rescue ActiveRecord::RecordNotFound
-    nil
+    ActiveStorage::Blob.find_by(id: onboarding_hero_blob_id)
   end
 
   def self.onboarding_hero=(blob)
