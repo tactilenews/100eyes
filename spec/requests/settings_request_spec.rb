@@ -18,9 +18,9 @@ RSpec.describe 'Admin::Settings', type: :request do
       it { will change { Setting.project_name }.to('Shiny new project') }
     end
 
-    describe '`settting_files` params' do
+    describe '`settting` params with files' do
       let(:params) do
-        { setting: { project_name: 'Shiny new project' }, setting_files: { onboarding_logo: fixture_file_upload('profile_picture.jpg') } }
+        { setting: { onboarding_logo: fixture_file_upload('profile_picture.jpg') } }
       end
 
       it { will change { Setting.onboarding_logo }.from(nil).to(instance_of(ActiveStorage::Blob)) }
