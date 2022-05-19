@@ -23,7 +23,7 @@ class SettingsController < ApplicationController
   private
 
   def settings_files_params
-    params.require(:setting_files).permit(
+    params.require(:setting).permit(
       :onboarding_logo,
       :onboarding_hero
     )

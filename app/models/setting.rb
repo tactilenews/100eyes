@@ -4,6 +4,9 @@
 class Setting < RailsSettings::Base
   cache_prefix { 'v1' }
 
+  delegate :onboarding_logo, to: :class
+  delegate :onboarding_hero, to: :class
+
   def self.onboarding_logo
     ActiveStorage::Blob.find(onboarding_logo_blob_id)
   rescue ActiveRecord::RecordNotFound
