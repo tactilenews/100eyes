@@ -74,6 +74,14 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
 
         subject { message_email[:from].formatted }
         it { should eq(['TestingProject <100eyes-test-account@example.org>']) }
+
+        context 'with a comma / list separator in the project name' do
+          before do
+            allow(Setting).to receive(:project_name).and_return('TestingProject, with a comma!')
+          end
+
+          it { should eq(['"TestingProject, with a comma!" <100eyes-test-account@example.org>']) }
+        end
       end
 
       describe 'plaintext body' do
