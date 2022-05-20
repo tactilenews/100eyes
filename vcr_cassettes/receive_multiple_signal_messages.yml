@@ -35,10 +35,7 @@ http_interactions:
                 "timestamp": 1630589332148,
                 "message": "Message from Misses X",
                 "expiresInSeconds": 0,
-                "viewOnce": false,
-                "mentions": [],
-                "attachments": [],
-                "contacts": []
+                "viewOnce": false
             }
         }
       },
@@ -51,10 +48,7 @@ http_interactions:
                 "timestamp": 1630589338630,
                 "message": "Message from known contributor",
                 "expiresInSeconds": 0,
-                "viewOnce": false,
-                "mentions": [],
-                "attachments": [],
-                "contacts": []
+                "viewOnce": false
             }
         }
       }]'
