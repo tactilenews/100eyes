@@ -10,9 +10,9 @@ RSpec.describe ImageInput::ImageInput, type: :component do
   it { should have_css('input[type="file"][id="logo"][name="logo"][hidden]', visible: :all) }
 
   context 'without existing upload' do
-    it { should have_text('Noch kein Bild hochgeladen') }
+    it { should have_text('Kein Bild ausgewählt') }
     it { should have_css('svg.Icon') }
-    it { should have_button('Bild hochladen') }
+    it { should have_button('Bild auswählen') }
     it { should_not have_css('.ImageInput-selectedImage') }
   end
 

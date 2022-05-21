@@ -15,13 +15,13 @@ RSpec.feature 'Image uploads', type: :feature do
     visit settings_path(as: user)
 
     # Image inputs in settings form are empty
-    expect(page).to have_text('Noch kein Bild hochgeladen', count: 2)
+    expect(page).to have_text('Kein Bild ausgewählt', count: 2)
 
     page.find_field('Logo', visible: :all).attach_file('example-image.png')
     click_on 'Speichern'
 
     # The logo image input is not empty any more
-    expect(page).to have_text('Noch kein Bild hochgeladen', count: 1)
+    expect(page).to have_text('Kein Bild ausgewählt', count: 1)
     expect(page).to have_text('example-image.png')
 
     visit onboarding_path(jwt: jwt)
