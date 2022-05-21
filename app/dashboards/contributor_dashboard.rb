@@ -11,8 +11,13 @@ class ContributorDashboard < Administrate::BaseDashboard
     channels: Field::String.with_options(searchable: false),
     email: Field::String,
     username: Field::String,
+    telegram_id: Field::Number,
     signal_phone_number: Field::String,
     threema_id: Field::String,
+    phone: Field::String,
+    additional_email: Field::String,
+    zip_code: Field::String,
+    city: Field::String,
     note: Field::Text,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
@@ -39,14 +44,19 @@ class ContributorDashboard < Administrate::BaseDashboard
     channels
     email
     username
+    telegram_id
     signal_phone_number
     threema_id
-    data_processing_consented_at
-    additional_consent_given_at
+    phone
+    additional_email
+    zip_code
+    city
     note
     created_at
     updated_at
     deactivated_at
+    data_processing_consented_at
+    additional_consent_given_at
   ].freeze
 
   FORM_ATTRIBUTES = %i[

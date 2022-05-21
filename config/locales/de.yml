@@ -692,6 +692,8 @@ de:
     label:
       contributor:
         username: Telegram Username
+        threema_id: Threema Id
+        telegram_id: Telegram Id
   number:
     currency:
       format:
