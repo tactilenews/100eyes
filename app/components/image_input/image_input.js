@@ -24,6 +24,7 @@ export default class extends Controller {
 
   handleChange(event) {
     this.updateFilePreview(event.target.files[0]);
+    this.element.focus();
   }
 
   dropFile(event) {
@@ -41,6 +42,7 @@ export default class extends Controller {
 
     this.inputTarget.files = event.dataTransfer.files;
     this.updateFilePreview(event.dataTransfer.files[0]);
+    this.element.focus();
   }
 
   updateFilePreview(file) {

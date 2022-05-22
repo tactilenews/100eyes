@@ -1,5 +1,8 @@
 <div
   <%= attrs.merge(class: 'text-small') %>
+  role="group"
+  aria-labelledby="label-<%= id %>"
+  tabindex="-1"
   data-controller="image-input"
   data-action="
     dragover@document->image-input#showDropArea
