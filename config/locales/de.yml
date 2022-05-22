@@ -689,6 +689,11 @@ de:
       create: "%{model} erstellen"
       submit: "%{model} speichern"
       update: "%{model} aktualisieren"
+    label:
+      contributor:
+        username: Telegram Username
+        threema_id: Threema Id
+        telegram_id: Telegram Id
   number:
     currency:
       format:
