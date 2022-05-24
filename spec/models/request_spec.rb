@@ -46,8 +46,8 @@ RSpec.describe Request, type: :model do
   end
 
   describe '#personalized_text' do
-    let(:contributor) { create(:contributor, first_name: 'Zora', last_name: 'Zimmermanne') }
-    let(:request) { create(:request, text: text) }
+    let(:contributor) { build(:contributor, first_name: 'Zora', last_name: 'Zimmermanne') }
+    let(:request) { build(:request, text: text) }
 
     subject { request.personalized_text(contributor) }
 
@@ -79,6 +79,12 @@ RSpec.describe Request, type: :model do
     context 'with unsupported placeholder' do
       let(:text) { 'This is {{NOT_SUPPORTED}}' }
       it { should eq('This is {{NOT_SUPPORTED}}') }
+    end
+
+    context 'if name contains leading/trailing whitespace' do
+      let(:text) { 'Hi {{FIRST_NAME}}, how are you?' }
+      let(:contributor) { build(:contributor, first_name: ' Zora ') }
+      it { should eq('Hi Zora, how are you?') }
     end
   end
 
