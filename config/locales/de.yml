@@ -200,7 +200,7 @@ de:
           %{name} hat sich mit der Handynummer %{phone_number} angemeldet.
       incomplete:
         text: |
-          %{name} hat sich am %{date} via Signal angemeldet, die Anmeldung aber noch nicht abgeschlossen.
+          %{name} hat sich am %{date} via Signal mit der Handynummer %{phone_number} angemeldet, die Anmeldung aber noch nicht abgeschlossen.
           Sende %{first_name} einen Link mit Hinweisen zum Abschließen der Anmeldung.
         action: Link kopieren
     contributor_header:
