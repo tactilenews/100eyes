@@ -12,7 +12,7 @@ module ThreemaAdapter
     def initialize(threema_message)
       decrypted_message = Threema.new.receive(payload: threema_message)
 
-      @sender = Contributor.find_by(threema_id: threema_message[:from])
+      @sender = Contributor.where('UPPER(threema_id) = ?', threema_message[:from]).first
       return unless @sender
 
       @delivery_receipt = delivery_receipt?(decrypted_message)
