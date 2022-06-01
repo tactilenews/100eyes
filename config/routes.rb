@@ -72,7 +72,7 @@ Rails.application.routes.draw do
       root to: 'users#index'
 
       resources :users
-      resources :contributors, only: %i[index show edit destroy] do
+      resources :contributors, only: %i[index show destroy] do
         get :export, on: :collection
       end
       resources :requests, only: %i[index show destroy]
