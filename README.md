@@ -28,7 +28,7 @@ For development purposes, you can set up `100eyes` using Docker. To perform the 
 
     ```bash
     $ cd ~/100eyes
-    $ docker-compose build
+    $ docker compose build
     ```
 
 3. #### Configuration
@@ -44,15 +44,29 @@ For development purposes, you can set up `100eyes` using Docker. To perform the 
     You can start all containers with a single command. `100eyes` can then be viewed in your browser at http://localhost:3000.
 
     ```bash
-    $ docker-compose up
+    $ docker compose up
     ```
 
-5. #### Seed database
+5. #### Create database
+
+   The database is not created in the steps above because it is a one-time task, whereas building and starting the services should be reproducible. Create the database with:
+
+   ```bash
+   $ docker exec 100eyes-app-1 rails db:create
+   ```
+
+6. #### Run the migrations
+
+   ```bash
+   $ docker exec 100eyes-app-1 rails db:migrate
+   ```
+
+7. #### Seed database
 
    One user has been created to use in development, since registration is disabled. You can create your own user in the `rails console` if you want, or you can run:
 
    ```bash
-   $ docker-compose exec app rails db:seed
+   $ docker exec 100eyes-app-1 rails db:seed
    ```
 
   ##### Webpack Development Server
@@ -60,7 +74,7 @@ For development purposes, you can set up `100eyes` using Docker. To perform the 
   With this command you can speed up the compilation of the assets for development purposes (e.g. for many changes to CSS files):
 
   ```bash
-  $ docker-compose exec app bin/webpack-dev-server
+  $ docker exec 100eyes-app-1 bin/webpack-dev-server
   ```
 
 #### Messengers
