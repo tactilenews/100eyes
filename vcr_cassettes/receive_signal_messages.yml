@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: http://localhost:8080/v1/receive/SIGNAL_SERVER_PHONE_NUMBER
+    uri: http://signal:8080/v1/receive/SIGNAL_SERVER_PHONE_NUMBER
     body:
       encoding: US-ASCII
       string: ''
