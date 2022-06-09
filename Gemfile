@@ -39,10 +39,10 @@ group :test do
   gem 'capybara', '>= 2.15'
   gem 'db-query-matchers'
   gem 'faker'
+  gem 'selenium-webdriver'
   gem 'timecop'
   gem 'vcr'
   gem 'webmock'
-  gem 'selenium-webdriver'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
@@ -83,4 +83,4 @@ gem 'sentry-ruby'
 gem 'administrate'
 gem 'administrate_exportable'
 
-gem "noticed", "~> 1.5"
+gem 'noticed', '~> 1.5'

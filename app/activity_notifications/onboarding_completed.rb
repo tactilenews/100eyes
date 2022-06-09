@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # To deliver this notification:
 #
 # OnboardingCompleted.with(contributor: @contributor).deliver_later(current_user)
@@ -18,12 +20,11 @@ class OnboardingCompleted < Noticed::Base
   # Define helper methods to make rendering easier.
   #
   def message
-    t(".message",
-    contributor_name: params[:contributor].name,
-    contributor_channel: params[:contributor].channels.first.to_s.capitalize
-    )
+    t('.message',
+      contributor_name: params[:contributor].name,
+      contributor_channel: params[:contributor].channels.first.to_s.capitalize)
   end
-  
+
   def url
     contributor_path(params[:id])
   end
