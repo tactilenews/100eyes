@@ -3,7 +3,10 @@
 class User < ApplicationRecord
   include Clearance::User
 
-  has_many :activity_notifications, as: :recipient
+  has_many :notifications,
+           as: :recipient,
+           class_name: 'ActivityNotification',
+           dependent: :destroy
 
   has_one_time_password
   validates :password, length: { in: 8..128 }, unless: :skip_password_validation?
