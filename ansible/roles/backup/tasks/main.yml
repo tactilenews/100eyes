@@ -46,13 +46,23 @@
     dest: /tmp/100eyes-storage.tgz
 
 # As for some instances downloading big archives can fail due to not enough memory,
-# make storage archive accesible as non-root user which halfs the necessary memory
+# make archives accessible as non-root user which halfs the necessary memory
 # for downloading it.
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/fetch_module.html#notes
 
 - name: Make storage archive read accessible for all users.
   ansible.builtin.file:
     path: /tmp/100eyes-storage.tgz
+    mode: '0444'
+
+- name: Archive signal-cli-config folder into a single file
+  ansible.builtin.archive:
+    path: /home/ansible/signal-cli-config
+    dest: /tmp/100eyes-signal-cli-config.tgz
+
+- name: Make signal-cli-config archive read accessible for all users.
+  ansible.builtin.file:
+    path: /tmp/100eyes-signal-cli-config.tgz
     mode: '0444'
 
 - name: Download database dump
@@ -67,6 +77,12 @@
     dest: "{{ backup_directory }}"
   become: no
 
+- name: Download signal-cli-config archive
+  fetch:
+    src: /tmp/100eyes-signal-cli-config.tgz
+    dest: "{{ backup_directory }}"
+  become: no
+
 - name: Remove database dump
   ansible.builtin.file:
     path: /tmp/100eyes-db-dump
@@ -75,4 +91,9 @@
 - name: Remove storage archive
   ansible.builtin.file:
     path: /tmp/100eyes-storage.tgz
+    state: absent
+
+- name: Remove signal-cli-config archive
+  ansible.builtin.file:
+    path: /tmp/100eyes-signal-cli-config.tgz
     state: absent
