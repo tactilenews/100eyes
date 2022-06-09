@@ -1,0 +1,14 @@
+<%= c 'card' do %>
+  <%= c 'heading', tag: :h2 do %>
+    <%= I18n.t 'components.hero.activity_notifications.heading' %>
+  <% end%>
+  <% if notifications.any? %>
+    <% notifications.each do |notification| %>
+      <%= notification.to_notification.message %>
+    <% end %>
+  <% else %>
+    <%= c 'empty_state' do %>
+      <%= I18n.t 'request.no_replies' %>
+    <% end %>
+  <% end %>
+<% end %>

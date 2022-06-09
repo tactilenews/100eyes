@@ -1,13 +1,17 @@
 <div <%= attrs %>>
-  <%= c 'wrapper' do %>
-    <div class="Hero-text">
-      <%= c 'stack' do %>
-        <%= c 'heading', style: :hero do %>
-          <%= I18n.t 'components.hero.title' %>
-        <% end %>
+  <%= c 'wrapper', style: :wide do %>
+    <%= c 'flex', styles: [:equal, :largeGap] do %>
+      <div class="Hero-text">
+        <%= c 'stack' do %>
+          <%= c 'heading', style: :hero do %>
+            <%= I18n.t 'components.hero.title' %>
+          <% end %>
 
-        <%= c 'button', label: I18n.t('request.create'), link: new_request_path %>
-      <% end %>
-    </div>
+          <%= c 'button', label: I18n.t('request.create'), link: new_request_path %>
+        <% end %>
+      </div>
+
+      <%= c 'activity_notifications', notifications: helpers.current_user.notifications %>
+    <% end %>
   <% end %>
 </div>
