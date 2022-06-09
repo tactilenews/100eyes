@@ -117,6 +117,7 @@ GEM
       xpath (~> 3.2)
     case_transform (0.2)
       activesupport
+    childprocess (4.1.0)
     chunky_png (1.4.0)
     clearance (2.5.0)
       actionmailer (>= 5.0)
@@ -345,6 +346,7 @@ GEM
     ruby-progressbar (1.11.0)
     ruby-vips (2.1.4)
       ffi (~> 1.12)
+    rubyzip (2.3.2)
     sassc (2.4.0)
       ffi (~> 1.9)
     sassc-rails (2.1.2)
@@ -354,6 +356,11 @@ GEM
       sprockets-rails
       tilt
     selectize-rails (0.12.6)
+    selenium-webdriver (4.2.1)
+      childprocess (>= 0.5, < 5.0)
+      rexml (~> 3.2, >= 3.2.5)
+      rubyzip (>= 1.2.2, < 3.0)
+      websocket (~> 1.0)
     sentry-delayed_job (5.3.1)
       delayed_job (>= 4.0)
       sentry-ruby-core (~> 5.3.1)
@@ -399,6 +406,7 @@ GEM
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
+    websocket (1.2.9)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -443,6 +451,7 @@ DEPENDENCIES
   rqrcode
   rspec-rails
   rubocop-rails
+  selenium-webdriver
   sentry-delayed_job
   sentry-rails
   sentry-ruby
