@@ -89,7 +89,7 @@ module SignalAdapter
 
     def initialize_files(signal_message)
       attachments = signal_message.dig(:envelope, :dataMessage, :attachments)
-      return [] unless attachments.any?
+      return [] unless attachments&.any?
 
       if attachments.any? { |attachment| SUPPORTED_ATTACHMENT_TYPES.exclude?(attachment[:contentType]) }
         @message.unknown_content = true

@@ -14,10 +14,7 @@ RSpec.describe SignalAdapter::Inbound do
           timestamp: 1_626_708_555_697,
           message: 'Hello 100eyes',
           expiresInSeconds: 0,
-          viewOnce: false,
-          mentions: [],
-          attachments: [],
-          contacts: []
+          viewOnce: false
         }
       }
     }
@@ -52,14 +49,12 @@ RSpec.describe SignalAdapter::Inbound do
           message: 'Hello 100eyes',
           expiresInSeconds: 0,
           viewOnce: false,
-          mentions: [],
           attachments: [{
             contentType: 'audio/aac',
             filename: 'Sprachnachricht.m4a',
             id: 'zuNhdpIHpRU_9Du-B4oG',
             size: 89_549
-          }],
-          contacts: []
+          }]
         }
       }
     }
@@ -76,7 +71,6 @@ RSpec.describe SignalAdapter::Inbound do
           message: 'Hello 100eyes',
           expiresInSeconds: 0,
           viewOnce: false,
-          mentions: [],
           attachments: [{
             contentType: 'image/jpeg',
             filename: 'signal-2021-09.jpeg',
@@ -88,8 +82,7 @@ RSpec.describe SignalAdapter::Inbound do
                           filename: 'signal-2021-09.jpeg',
                           id: 'zuNhdpIHpRU_9Du-B4oG',
                           size: 115_809
-                        }],
-          contacts: []
+                        }]
         }
       }
     }
@@ -105,10 +98,7 @@ RSpec.describe SignalAdapter::Inbound do
           timestamp: 1_626_708_555_697,
           message: nil,
           expiresInSeconds: 3600,
-          viewOnce: false,
-          mentions: [],
-          attachments: [],
-          contacts: []
+          viewOnce: false
         }
       }
     }
@@ -127,10 +117,7 @@ RSpec.describe SignalAdapter::Inbound do
           remoteDelete: {
             timestamp: 1_630_444_176_328
           },
-          viewOnce: false,
-          mentions: [],
-          attachments: [],
-          contacts: []
+          viewOnce: false
         }
       }
     }
@@ -152,10 +139,7 @@ RSpec.describe SignalAdapter::Inbound do
             targetAuthor: '+4912345781',
             targetSentTimestamp: 1_630_442_783_119,
             isRemove: false
-          },
-          mentions: [],
-          attachments: [],
-          contacts: []
+          }
         }
       }
     }

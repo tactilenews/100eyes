@@ -36,14 +36,12 @@ http_interactions:
                         "message": null,
                         "expiresInSeconds": 0,
                         "viewOnce": false,
-                        "mentions": [],
                         "attachments": [{
                             "contentType": "application/pdf",
                             "filename": "verygoodpdf.pdf",
                             "id": "4672339980807658243",
                             "size": 1806406
-                        }],
-                        "contacts": []
+                        }]
                     }
                 }
             }]'
