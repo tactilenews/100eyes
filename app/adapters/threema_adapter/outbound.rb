@@ -26,7 +26,7 @@ module ThreemaAdapter
     end
 
     def perform(recipient:, text:)
-      self.class.threema_instance.send(type: :text, threema_id: recipient.threema_id, text: text)
+      self.class.threema_instance.send(type: :text, threema_id: recipient.threema_id.upcase, text: text)
     end
   end
 end
