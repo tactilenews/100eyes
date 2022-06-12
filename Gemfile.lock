@@ -118,7 +118,7 @@ GEM
     case_transform (0.2)
       activesupport
     chunky_png (1.4.0)
-    clearance (2.5.0)
+    clearance (2.6.0)
       actionmailer (>= 5.0)
       activemodel (>= 5.0)
       activerecord (>= 5.0)
@@ -441,4 +441,4 @@ RUBY VERSION
    ruby 3.0.0p0
 
 BUNDLED WITH
-   2.3.11
+   2.3.15
