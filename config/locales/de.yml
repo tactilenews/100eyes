@@ -41,8 +41,6 @@ de:
       sign_out: Abmelden
     hero:
       title: Willkommen bei 100eyes. Nutze die Intelligenz der Community.
-      activity_notifications:
-        heading: Letzte Aktivität
     footer:
       text: Ein Service der <a class="Link" href="https://tactile.news" target="_blank" rel="noopener noreferrer">tactile.news GmbH</a>
     request_metrics:
@@ -734,6 +732,3 @@ de:
       time_only: "%H:%M Uhr"
       today: "heute, %H:%M"
     pm: nachmittags
-  notifications:
-    onboarding_completed:
-      message: "%{contributor_name} hat sich via %{contributor_channel} angemeldet."

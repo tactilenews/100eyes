@@ -12,7 +12,3 @@
 .Wrapper--xnarrow {
   max-width: var(--grid-max-width-xs);
 }
-
-.Wrapper--wide {
-  max-width: var(--grid-max-width-l);
-}
