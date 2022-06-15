@@ -12,6 +12,7 @@
     rgba(255, 255, 255, 0.05)
   );
   background-blend-mode: luminosity;
+  color: #fff;
 }
 
 .Hero::before {
@@ -34,5 +35,4 @@
 .Hero-text {
   position: relative;
   width: 60%;
-  color: #fff;
 }
