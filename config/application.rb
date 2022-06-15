@@ -40,5 +40,10 @@ module App
     config.i18n.default_locale = :de
     config.time_zone = 'Berlin'
     config.i18n.fallbacks = true
+
+    # Serve JSON files inline, i.e. without forcing a download. This allows
+    # us to preview raw message data, which is often stored as JSON, directly
+    # in the browser.
+    config.active_storage.content_types_allowed_inline << 'application/json'
   end
 end

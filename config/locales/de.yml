@@ -415,7 +415,7 @@ de:
         label: Handynummer
       threema_id:
         label: Threema ID
-        help: 6 Zeichen lang, besteht nur aus Zahlen und Buchstaben
+        help: 6 Zeichen lang, besteht nur aus Zahlen und Großbuchstaben
         placeholder: z.B. A12BC345
       username:
         label: Telegram

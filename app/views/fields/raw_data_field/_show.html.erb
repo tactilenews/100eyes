@@ -1,0 +1,9 @@
+<ul>
+  <% field.data.each do |file| %>
+    <li>
+      <a href="<%= rails_blob_path(file, disposition: :inline) %>" target="_blank">
+        <%= file.filename %>
+      </a>
+    </li>
+  <% end %>
+</ul>

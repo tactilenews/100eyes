@@ -9,7 +9,8 @@ class MessageDashboard < Administrate::BaseDashboard
     recipient: Field::BelongsTo,
     request: Field::BelongsTo,
     created_at: Field::DateTime,
-    text: Field::Text
+    text: Field::Text,
+    raw_data: RawDataField
   }.freeze
 
   COLLECTION_ATTRIBUTES = %i[
