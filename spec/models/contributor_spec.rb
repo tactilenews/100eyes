@@ -676,4 +676,12 @@ RSpec.describe Contributor, type: :model do
       }
     end
   end
+
+  describe 'callbacks' do
+    let!(:user) { create(:user) }
+
+    it "creates an ActivityNotification on after_create_commit" do
+      expect { create(:contributor) }.to change(ActivityNotification.where(type: "OnboardingCompleted"), :count).by(1)
+    end
+  end
 end
