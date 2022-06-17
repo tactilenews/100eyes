@@ -64,19 +64,8 @@ RSpec.describe 'Onboarding::Email', type: :request do
       expect(json_web_token).to exist
     end
 
-    context 'ActivityNotifications' do
-      let!(:users) { create_list(:user, 5) }
-
-      it 'creates an ActivityNotification of type OnboardingCompleted' do
-        expect { subject.call }.to change(ActivityNotification.where(type: 'OnboardingCompleted'), :count).by(User.count)
-      end
-
-      it 'creates an ActivityNotification for each user' do
-        subject.call
-        recipient_ids = ActivityNotification.where(type: 'OnboardingCompleted').pluck(:recipient_id)
-        user_ids = User.pluck(:id)
-        expect(recipient_ids).to eq(user_ids)
-      end
+    context 'creates an ActivityNotifications' do
+      include_examples 'activity_notifications'
     end
 
     context 'given invalid email address' do
