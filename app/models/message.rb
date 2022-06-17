@@ -24,11 +24,7 @@ class Message < ApplicationRecord
   validates :raw_data, presence: true, if: -> { sender.present? }
   validates :unknown_content, inclusion: { in: [true, false] }
 
-  after_commit(on: :create, unless: :manually_created?) do
-    [PostmarkAdapter::Outbound, SignalAdapter::Outbound, TelegramAdapter::Outbound, ThreemaAdapter::Outbound].each do |adapter|
-      adapter.send!(self)
-    end
-  end
+  after_create_commit :send_outbound_messages, unless: proc { :manually_created? || :reply? }
 
   def reply?
     sender_id.present?
@@ -58,5 +54,13 @@ class Message < ApplicationRecord
       request,
       anchor: "chat-row-#{id}"
     )
+  end
+
+  private
+
+  def send_outbound_messages
+    [PostmarkAdapter::Outbound, SignalAdapter::Outbound, TelegramAdapter::Outbound, ThreemaAdapter::Outbound].each do |adapter|
+      adapter.send!(self)
+    end
   end
 end

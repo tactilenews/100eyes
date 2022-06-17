@@ -113,5 +113,17 @@ RSpec.describe Message, type: :model do
         end
       end
     end
+
+    describe 'incoming message' do
+      let(:message) { create(:message, sender: create(:contributor), recipient: nil) }
+
+      it 'does not send outbound messages to any channels' do
+        [PostmarkAdapter::Outbound, SignalAdapter::Outbound, TelegramAdapter::Outbound, ThreemaAdapter::Outbound].each do |adapter|
+          expect(adapter).not_to receive(:send!)
+        end
+
+        message
+      end
+    end
   end
 end
