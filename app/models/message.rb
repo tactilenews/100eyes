@@ -65,6 +65,6 @@ class Message < ApplicationRecord
   private
 
   def notify_recipient
-    MessageReceived.with(contributor: self.sender, request: self.request).deliver_later(User.all)
+    MessageReceived.with(contributor: sender, request: request).deliver_later(User.all)
   end
 end
