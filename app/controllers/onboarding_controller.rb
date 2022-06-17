@@ -26,7 +26,6 @@ class OnboardingController < ApplicationController
 
     if @contributor.save
       @contributor.send_welcome_message!
-      OnboardingCompleted.with(contributor: @contributor).deliver_later(User.all)
       redirect_to_success
     else
       render :show, status: :unprocessable_entity
