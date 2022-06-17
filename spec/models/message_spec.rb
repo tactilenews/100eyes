@@ -113,11 +113,5 @@ RSpec.describe Message, type: :model do
         end
       end
     end
-
-    describe 'ActivityNotification' do
-      it 'creates an ActivityNotification on after_create_commit' do
-        expect { message }.to change(ActivityNotification.where(type: 'MessageReceived'), :count).by(1)
-      end
-    end
   end
 end

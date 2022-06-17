@@ -685,6 +685,6 @@ RSpec.describe Contributor, type: :model do
 
     let!(:user) { create(:user) }
 
-    it_behaves_like 'activity_notifications'
+    it_behaves_like 'activity_notifications', 'OnboardingCompleted'
   end
 end
