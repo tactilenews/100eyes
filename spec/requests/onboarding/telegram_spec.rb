@@ -75,7 +75,7 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
     end
 
     context 'creates an ActivityNotifications' do
-      include_examples 'activity_notifications'
+      it_behaves_like 'activity_notifications', 'request'
     end
 
     context 'without data processing consent' do
