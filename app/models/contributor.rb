@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/ClassLength
 class Contributor < ApplicationRecord
   include PgSearch::Model
 
@@ -189,3 +190,4 @@ class Contributor < ApplicationRecord
     OnboardingCompleted.with(contributor: self).deliver_later(User.all)
   end
 end
+# rubocop:enable Metrics/ClassLength
