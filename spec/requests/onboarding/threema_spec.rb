@@ -54,6 +54,10 @@ RSpec.describe 'Onboarding::Threema', type: :request do
       expect(json_web_token).to exist
     end
 
+    context 'creates an ActivityNotifications' do
+      include_examples 'activity_notifications'
+    end
+
     describe 'given an existing threema ID' do
       let!(:contributor) { create(:contributor, **attrs) }
 
