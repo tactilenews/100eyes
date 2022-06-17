@@ -5,6 +5,8 @@ class Contributor < ApplicationRecord
 
   attr_accessor :editor_guarantees_data_consent
 
+  after_create_commit :notify_recipient
+
   multisearchable against: %i[first_name last_name username note]
 
   has_many :replies, class_name: 'Message', inverse_of: :sender, foreign_key: 'sender_id', dependent: :destroy
@@ -180,4 +182,10 @@ class Contributor < ApplicationRecord
   end
 
   alias additional_consent additional_consent?
+
+  private
+
+  def notify_recipient
+    OnboardingCompleted.with(contributor: self).deliver_later(User.all)
+  end
 end
