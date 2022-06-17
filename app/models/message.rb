@@ -30,6 +30,8 @@ class Message < ApplicationRecord
     end
   end
 
+  after_create_commit :notify_recipient, if: :reply?
+
   def reply?
     sender_id.present?
   end
@@ -58,5 +60,11 @@ class Message < ApplicationRecord
       request,
       anchor: "chat-row-#{id}"
     )
+  end
+
+  private
+
+  def notify_recipient
+    MessageReceived.with(contributor: self.sender, request: self.request).deliver_later(User.all)
   end
 end

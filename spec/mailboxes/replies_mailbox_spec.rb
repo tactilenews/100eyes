@@ -44,6 +44,12 @@ RSpec.describe RepliesMailbox, type: :mailbox do
 
         it { should(change { Message.count }.from(2).to(3)) }
 
+        describe 'MessageReceived ActivityNotification' do
+          context 'creates an ActivityNotification' do
+            it_behaves_like 'activity_notifications', 'MessageReceived'
+          end
+        end
+
         describe 'with matching from address' do
           let(:from_address) { 'zora@example.org' }
 
