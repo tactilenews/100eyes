@@ -96,6 +96,18 @@ RSpec.describe Message, type: :model do
   describe '#after_commit(on: :commit)' do
     let(:message) { create(:message, sender: nil, recipient: recipient) }
 
+    describe 'sends outbound messages after request created' do
+      let(:recipient) { create(:contributor) }
+
+      it 'sends outbound messages to all channels' do
+        [PostmarkAdapter::Outbound, SignalAdapter::Outbound, TelegramAdapter::Outbound, ThreemaAdapter::Outbound].each do |adapter|
+          expect(adapter).to receive(:send!)
+        end
+
+        message
+      end
+    end
+
     describe 'given a recipient with telegram' do
       let(:recipient) { create(:contributor, telegram_id: 11) }
 
@@ -109,6 +121,7 @@ RSpec.describe Message, type: :model do
         it { should be(false) }
         describe 'but if contributor blocked the telegram bot' do
           before(:each) { allow(Telegram.bot).to receive(:send_message).and_raise(Telegram::Bot::Forbidden) }
+
           it { should be(true) }
         end
       end
