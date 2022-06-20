@@ -101,6 +101,4 @@ RSpec.configure do |config|
   config.after(:each) do
     Setting.clear_cache
   end
-
-  config.shared_context_metadata_behavior = :apply_to_host_groups
 end
