@@ -3,7 +3,7 @@
 RSpec.shared_examples 'activity_notifications' do |event_type|
   let!(:users) { create_list(:user, 5) }
 
-  it 'of type OnboardingCompleted' do
+  it "of type #{event_type}" do
     expect { run_action(subject) }.to change(ActivityNotification.where(type: event_type), :count).by(User.count)
   end
 
