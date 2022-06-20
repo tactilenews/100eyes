@@ -95,9 +95,12 @@ RSpec.describe Message, type: :model do
 
   describe '#after_commit(on: :commit)' do
     let(:message) { create(:message, sender: nil, recipient: recipient) }
+    let(:recipient) { create(:contributor) }
 
     describe 'given a recipient with telegram' do
-      let(:recipient) { create(:contributor, telegram_id: 11) }
+      before do
+        recipient.update(telegram_id: 11)
+      end
 
       describe '#blocked' do
         subject do
@@ -112,6 +115,16 @@ RSpec.describe Message, type: :model do
           it { should be(true) }
         end
       end
+    end
+
+    describe 'ActivityNotification' do
+      subject { create(:message, sender: create(:contributor), request: create(:request)) }
+
+      it 'is not created for replies' do
+        expect { message }.not_to(change { ActivityNotification.where(type: 'MessageReceived').count })
+      end
+
+      it_behaves_like 'activity_notifications', 'MessageReceived'
     end
   end
 end
