@@ -375,6 +375,88 @@ RSpec.describe Contributor, type: :model do
         it { should_not(change { Photo.count }) }
       end
     end
+
+    describe 'given a ThreemaAdapter::Inbound' do
+      let(:threema_mock) { instance_double(Threema::Receive::Text, content: 'Hello World!') }
+      let(:threema) { instance_double(Threema) }
+      let(:threema_message) do
+        ActionController::Parameters.new({
+                                           'from' => 'V5EA564T',
+                                           'to' => '*100EYES',
+                                           'messageId' => 'dfbe859c44f15125',
+                                           'date' => '1612808574',
+                                           'nonce' => 'b1c80cf818e289e6b1966b9bcab6fb9fb5e31862b46d8f98',
+                                           'box' => 'ENCRYPTED FILE',
+                                           'mac' => '8c58e9d4d9ad1aa960a58a1f11bcf712e9fcd50319778762824d8259dcbdc639',
+                                           'nickname' => 'matt.rider'
+                                         })
+      end
+      let(:threema_id) { 'V5EA564T' }
+      let(:contributor) { create(:contributor, threema_id: threema_id) }
+      let(:message_inbound_adapter) { ThreemaAdapter::Inbound.new(threema_message) }
+      before do
+        allow(Threema).to receive(:new).and_return(threema)
+        allow(threema).to receive(:receive).with({ payload: threema_message }).and_return(threema_mock)
+        allow(threema_mock).to receive(:instance_of?) { false }
+      end
+
+      it { should_not raise_error }
+      it { should_not(change { Message.count }) }
+
+      describe 'given a recent request' do
+        before do
+          create(:message, request: the_request, recipient: contributor)
+        end
+
+        it { is_expected.to(change { Message.count }.from(1).to(2)) }
+        it { should_not(change { Photo.count }) }
+      end
+    end
+
+    describe 'given a SignalAdapter::Inbound' do
+      subject do
+        lambda do
+          signal_message =
+            {
+              envelope: {
+                source: '+4912345789',
+                sourceDevice: 2,
+                timestamp: 1_626_708_555_697,
+                dataMessage: {
+                  timestamp: 1_626_708_555_697,
+                  message: 'Hello 100eyes',
+                  expiresInSeconds: 0,
+                  viewOnce: false
+                }
+              }
+            }
+          message_inbound_adapter = SignalAdapter::Inbound.new
+          message_inbound_adapter.consume(signal_message) do |message|
+            message.contributor.reply(message_inbound_adapter)
+          end
+        end
+      end
+
+      let(:onboarding_completed_at) { Time.zone.now }
+      let(:phone_number) { '+4912345789' }
+      let(:contributor) do
+        create(
+          :contributor,
+          signal_phone_number: phone_number,
+          signal_onboarding_completed_at: onboarding_completed_at
+        )
+      end
+
+      it { should_not raise_error }
+      it { should_not(change { Message.count }) }
+
+      describe 'given a recent request' do
+        before(:each) { create(:message, request: the_request, recipient: contributor) }
+
+        it { should change { Message.count }.from(1).to(2) }
+        it { should_not(change { Photo.count }) }
+      end
+    end
   end
 
   describe '#active_request' do
