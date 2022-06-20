@@ -30,7 +30,7 @@ class Message < ApplicationRecord
     end
   end
 
-  after_create_commit :notify_recipient, if: :reply?
+  after_create_commit :notify_recipient
 
   def reply?
     sender_id.present?
@@ -65,6 +65,8 @@ class Message < ApplicationRecord
   private
 
   def notify_recipient
+    return unless reply?
+
     MessageReceived.with(contributor: sender, request: request).deliver_later(User.all)
   end
 end
