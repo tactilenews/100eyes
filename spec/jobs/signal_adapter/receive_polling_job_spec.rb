@@ -112,6 +112,8 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
           subject.call
           expect(Message.first.contributor.signal_phone_number).to eq('+4915112345789')
         end
+
+        it_behaves_like 'activity_notifications', 'MessageReceived'
       end
 
       describe 'given multiple messages from known and unknown contributors', vcr: { cassette_name: :receive_multiple_signal_messages } do
