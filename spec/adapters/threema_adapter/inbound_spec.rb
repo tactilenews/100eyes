@@ -3,7 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe ThreemaAdapter::Inbound do
-  before { create(:contributor, threema_id: 'V5EA564T') }
+  let(:threema_id) { 'V5EA564T' }
+  let!(:contributor) { create(:contributor, threema_id: threema_id) }
 
   let(:threema_message) { described_class.new(message) }
   let(:message) do
@@ -49,6 +50,16 @@ RSpec.describe ThreemaAdapter::Inbound do
     describe 'saving the message' do
       subject { threema_message.message.raw_data }
       it { should be_attached }
+    end
+  end
+
+  describe '#contributor' do
+    subject { threema_message.message.contributor }
+    it { should eq(contributor) }
+
+    context 'if contributor has lowercase Threema ID' do
+      let(:threema_id) { 'v5ea564t' }
+      it { should eq(contributor) }
     end
   end
 
