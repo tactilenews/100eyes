@@ -774,10 +774,8 @@ RSpec.describe Contributor, type: :model do
     end
   end
 
-  describe 'callbacks' do
+  describe '#after_create_commit' do
     subject { create(:contributor) }
-
-    let!(:user) { create(:user) }
 
     it_behaves_like 'an ActivityNotification', 'OnboardingCompleted'
   end
