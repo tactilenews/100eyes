@@ -124,7 +124,7 @@ RSpec.describe Message, type: :model do
         expect { message }.not_to(change { ActivityNotification.where(type: 'MessageReceived').count })
       end
 
-      it_behaves_like 'activity_notifications', 'MessageReceived'
+      it_behaves_like 'an ActivityNotification', 'MessageReceived'
     end
   end
 end

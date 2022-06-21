@@ -49,7 +49,7 @@ RSpec.describe Threema::WebhookController do
         expect { subject }.to change(Message, :count).from(0).to(1)
       end
 
-      it_behaves_like 'activity_notifications', 'MessageReceived'
+      it_behaves_like 'an ActivityNotification', 'MessageReceived'
 
       describe 'DeliveryReceipt' do
         let(:threema_mock) { instance_double(Threema::Receive::DeliveryReceipt, content: 'x\00x\\0') }
