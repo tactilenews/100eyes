@@ -6,7 +6,7 @@ RSpec.describe Contributor, type: :model do
   let(:the_request) do
     create(:request, title: 'Hitchhiker’s Guide', text: 'What is the answer to life, the universe, and everything?')
   end
-  let(:contributor) { create(:contributor) }
+  let(:contributor) { create(:contributor, email: 'contributor@example.org') }
 
   it 'is sorted in alphabetical order' do
     zora = create(:contributor, first_name: 'Zora', last_name: 'Zimmermann')
@@ -331,11 +331,16 @@ RSpec.describe Contributor, type: :model do
 
       it { should_not raise_error }
       it { should_not(change { Message.count }) }
-      describe 'given a recent request' do
-        before(:each) { create(:message, request: the_request, recipient: contributor) }
 
-        it { should change { Message.count }.from(1).to(2) }
+      describe 'given a recent request' do
+        before(:each) { the_request }
+
+        it { should change { Message.count }.from(0).to(1) }
         it { should_not(change { Photo.count }) }
+
+        context 'ActivityNotifications' do
+          it_behaves_like 'activity_notifications', 'MessageReceived'
+        end
       end
     end
 
@@ -360,16 +365,20 @@ RSpec.describe Contributor, type: :model do
         end
       end
 
-      let(:contributor) { create(:contributor, :with_an_avatar, telegram_id: 4711) }
+      let!(:contributor) { create(:contributor, :with_an_avatar, telegram_id: 4711) }
 
       it { should_not raise_error }
       it { should_not(change { Message.count }) }
 
       describe 'given a recent request' do
-        before(:each) { create(:message, request: the_request, recipient: contributor) }
+        before(:each) { the_request }
 
-        it { should change { Message.count }.from(1).to(2) }
+        it { should change { Message.count }.from(0).to(1) }
         it { should_not(change { Photo.count }) }
+
+        context 'ActivityNotifications' do
+          it_behaves_like 'activity_notifications', 'MessageReceived'
+        end
       end
     end
 
@@ -401,12 +410,14 @@ RSpec.describe Contributor, type: :model do
       it { should_not(change { Message.count }) }
 
       describe 'given a recent request' do
-        before do
-          create(:message, request: the_request, recipient: contributor)
-        end
+        before(:each) { the_request }
 
-        it { is_expected.to(change { Message.count }.from(1).to(2)) }
+        it { is_expected.to(change { Message.count }.from(0).to(1)) }
         it { should_not(change { Photo.count }) }
+
+        context 'ActivityNotifications' do
+          it_behaves_like 'activity_notifications', 'MessageReceived'
+        end
       end
     end
 
@@ -436,7 +447,7 @@ RSpec.describe Contributor, type: :model do
 
       let(:onboarding_completed_at) { Time.zone.now }
       let(:phone_number) { '+4912345789' }
-      let(:contributor) do
+      let!(:contributor) do
         create(
           :contributor,
           signal_phone_number: phone_number,
@@ -448,10 +459,14 @@ RSpec.describe Contributor, type: :model do
       it { should_not(change { Message.count }) }
 
       describe 'given a recent request' do
-        before(:each) { create(:message, request: the_request, recipient: contributor) }
+        before(:each) { the_request }
 
-        it { should change { Message.count }.from(1).to(2) }
+        it { should change { Message.count }.from(0).to(1) }
         it { should_not(change { Photo.count }) }
+
+        context 'ActivityNotifications' do
+          it_behaves_like 'activity_notifications', 'MessageReceived'
+        end
       end
     end
   end
