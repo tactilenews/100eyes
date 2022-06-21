@@ -1,4 +1,4 @@
-<%= c 'form', model: Setting.new do %>
+<%= c 'form', model: Setting.new, multipart: true do %>
   <%= c 'stack', space: :xlarge do %>
 
     <%= c 'stack' do %>
@@ -8,9 +8,9 @@
 
     <%= c 'stack' do %>
       <%= c('heading', tag: :h2) { t('setting.form.groups.onboarding') } %>
-      <%= c('settings_field', type: :url_input, attr: :onboarding_logo) %>
+      <%= c('settings_field', type: :image_input, attr: :onboarding_logo) %>
       <%= c('settings_field', type: :input, attr: :onboarding_byline) %>
-      <%= c('settings_field', type: :url_input, attr: :onboarding_hero) %>
+      <%= c('settings_field', type: :image_input, attr: :onboarding_hero) %>
       <%= c('settings_field', type: :input, attr: :onboarding_title) %>
       <%= c('settings_field', type: :textarea, attr: :onboarding_page) %>
       <%= c('settings_field', type: :url_input, attr: :onboarding_data_protection_link) %>

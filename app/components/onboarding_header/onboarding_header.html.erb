@@ -1,6 +1,6 @@
 <header class="<%= class_attr %>">
-  <% if logo.present? %>
-    <img src="<%= logo %>" alt="<%= project_name %>" />
+  <% if logo? %>
+    <img src="<%= url_for(logo) %>" alt="<%= project_name %>" />
   <% else %>
     <div class="OnboardingHeader__logoText">
       <%= project_name %>
