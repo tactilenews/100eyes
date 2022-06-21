@@ -339,7 +339,7 @@ RSpec.describe Contributor, type: :model do
         it { should_not(change { Photo.count }) }
 
         context 'ActivityNotifications' do
-          it_behaves_like 'activity_notifications', 'MessageReceived'
+          it_behaves_like 'an ActivityNotification', 'MessageReceived'
         end
       end
     end
@@ -377,7 +377,7 @@ RSpec.describe Contributor, type: :model do
         it { should_not(change { Photo.count }) }
 
         context 'ActivityNotifications' do
-          it_behaves_like 'activity_notifications', 'MessageReceived'
+          it_behaves_like 'an ActivityNotification', 'MessageReceived'
         end
       end
     end
@@ -416,7 +416,7 @@ RSpec.describe Contributor, type: :model do
         it { should_not(change { Photo.count }) }
 
         context 'ActivityNotifications' do
-          it_behaves_like 'activity_notifications', 'MessageReceived'
+          it_behaves_like 'an ActivityNotification', 'MessageReceived'
         end
       end
     end
@@ -465,7 +465,7 @@ RSpec.describe Contributor, type: :model do
         it { should_not(change { Photo.count }) }
 
         context 'ActivityNotifications' do
-          it_behaves_like 'activity_notifications', 'MessageReceived'
+          it_behaves_like 'an ActivityNotification', 'MessageReceived'
         end
       end
     end
@@ -779,6 +779,6 @@ RSpec.describe Contributor, type: :model do
 
     let!(:user) { create(:user) }
 
-    it_behaves_like 'activity_notifications', 'OnboardingCompleted'
+    it_behaves_like 'an ActivityNotification', 'OnboardingCompleted'
   end
 end

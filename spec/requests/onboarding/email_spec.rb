@@ -65,7 +65,7 @@ RSpec.describe 'Onboarding::Email', type: :request do
     end
 
     context 'creates an ActivityNotification' do
-      it_behaves_like 'activity_notifications', 'OnboardingCompleted'
+      it_behaves_like 'an ActivityNotification', 'OnboardingCompleted'
     end
 
     context 'given invalid email address' do
