@@ -55,7 +55,7 @@ RSpec.describe 'Onboarding::Threema', type: :request do
     end
 
     context 'creates an ActivityNotification' do
-      it_behaves_like 'activity_notifications', 'OnboardingCompleted'
+      it_behaves_like 'an ActivityNotification', 'OnboardingCompleted'
     end
 
     describe 'given an existing threema ID' do

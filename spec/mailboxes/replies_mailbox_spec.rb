@@ -46,7 +46,7 @@ RSpec.describe RepliesMailbox, type: :mailbox do
 
         describe 'MessageReceived ActivityNotification' do
           context 'creates an ActivityNotification' do
-            it_behaves_like 'activity_notifications', 'MessageReceived'
+            it_behaves_like 'an ActivityNotification', 'MessageReceived'
           end
         end
 
