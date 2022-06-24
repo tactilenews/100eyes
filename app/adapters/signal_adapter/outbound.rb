@@ -2,6 +2,8 @@
 
 module SignalAdapter
   class Outbound < ApplicationJob
+    SignalError = Class.new(StandardError)
+
     queue_as :default
 
     def self.send!(message)
@@ -35,6 +37,13 @@ module SignalAdapter
         http.request(req)
       end
       res.value # may raise exception
+    rescue Net::HTTPServerException => e
+      ErrorNotifier.report(SignalError.new, context: {
+                             code: e.response.code,
+                             message: e.response.message,
+                             headers: e.response.each_header(&:header),
+                             body: e.response.body
+                           })
     end
 
     def self.contributor_can_receive_messages?(recipient)
