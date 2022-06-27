@@ -2,8 +2,6 @@
 
 module SignalAdapter
   class Outbound < ApplicationJob
-    ServerException = Class.new(StandardError)
-
     queue_as :default
 
     def self.send!(message)
@@ -38,10 +36,10 @@ module SignalAdapter
       end
       res.value # may raise exception
     rescue Net::HTTPServerException => e
-      ErrorNotifier.report(ServerException.new, context: {
+      ErrorNotifier.report(e, context: {
                              code: e.response.code,
                              message: e.response.message,
-                             headers: e.response.each_header { |key, value| "#{key} = #{value}" },
+                             headers: e.response.to_hash,
                              body: e.response.body
                            })
     end
