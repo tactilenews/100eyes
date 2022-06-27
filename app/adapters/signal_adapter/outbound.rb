@@ -41,7 +41,7 @@ module SignalAdapter
       ErrorNotifier.report(SignalError.new, context: {
                              code: e.response.code,
                              message: e.response.message,
-                             headers: e.response.each_header(&:header),
+                             headers: e.response.each_header { |key, value| "#{key} = #{value}" },
                              body: e.response.body
                            })
     end
