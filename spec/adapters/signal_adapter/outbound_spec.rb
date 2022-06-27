@@ -81,7 +81,7 @@ RSpec.describe SignalAdapter::Outbound do
         before(:each) { stub_request(:post, 'http://signal:8080/v2/send').to_return(status: 400) }
 
         it 'ErrorNotifier' do
-          expect(Sentry).to receive(:capture_exception).with(SignalAdapter::Outbound::ServerException)
+          expect(Sentry).to receive(:capture_exception).with(Net::HTTPServerException)
 
           subject.call
         end
