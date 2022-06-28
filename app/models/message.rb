@@ -24,7 +24,7 @@ class Message < ApplicationRecord
   validates :raw_data, presence: true, if: -> { sender.present? }
   validates :unknown_content, inclusion: { in: [true, false] }
 
-  after_create_commit :send_outbound_messages
+  after_create_commit :send_if_outbound
 
   def reply?
     sender_id.present?
@@ -58,7 +58,7 @@ class Message < ApplicationRecord
 
   private
 
-  def send_outbound_messages
+  def send_if_outbound
     return if manually_created? || reply?
 
     [PostmarkAdapter::Outbound, SignalAdapter::Outbound, TelegramAdapter::Outbound, ThreemaAdapter::Outbound].each do |adapter|
