@@ -14,7 +14,7 @@
     body_format: json
     body:
       captcha: "{{ captcha }}"
-      use_voice: true
+      # use_voice: true
 
 - pause:
     prompt: "{{ lookup('template', 'enter_verification_token.j2') | trim }}"
@@ -32,9 +32,24 @@
     body:
       ping: "string"
 
+- name: Set trust mode to always
+  uri:
+    url: "{{ signal_cli_rest_api_endpoint }}/v1/configuration/{{ signal_server_phone_number }}/settings"
+    method: POST
+    status_code: 204
+    body_format: json
+    body:
+      trust_mode: "always"
+
+- name: Get trust mode
+  uri:
+    url: "{{ signal_cli_rest_api_endpoint }}/v1/configuration/{{ signal_server_phone_number }}/settings"
+    method: GET
+    status_code: 200
+    body_format: json
+
 - name: Setup cronjob to receive messages
   ansible.builtin.cron:
     name: "Receive signal messages"
     minute: "*" # job gets run every minute
     job: "/usr/local/bin/docker-compose -f /home/ansible/docker-compose.yml -f /home/ansible/docker-compose.prod.yml exec -T app bin/rails signal:receive_messages"
-
