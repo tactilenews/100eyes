@@ -19,11 +19,11 @@ class OnboardingCompleted < Noticed::Base
 
   # Define helper methods to make rendering easier.
   #
-  # def message
-  #   t('.message',
-  #     contributor_name: params[:contributor].name,
-  #     contributor_channel: params[:contributor].channels.first.to_s.capitalize)
-  # end
+  def message
+    t('.message',
+      contributor_name: params[:contributor].name,
+      contributor_channel: params[:contributor].channels.first.to_s.capitalize)
+  end
 
   # def url
   #   contributor_path(params[:id])
