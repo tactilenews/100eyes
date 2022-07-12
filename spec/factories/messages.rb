@@ -6,6 +6,7 @@ FactoryBot.define do
     unknown_content { false }
     text { 'Am I an incoming message?' }
     association :sender, factory: :contributor
+    association :request
     with_sender
 
     after(:build) do |message|
@@ -19,7 +20,6 @@ FactoryBot.define do
     trait :with_sender do
       recipient { nil }
       association :sender, factory: :contributor
-      association :request
     end
 
     trait :with_recipient do

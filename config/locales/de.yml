@@ -708,4 +708,6 @@ de:
     onboarding_completed:
       message: "%{contributor_name} hat sich via %{contributor_channel} angemeldet."
     message_received:
-      message: "%{contributor_name} hat auf deine Frage '%{request_title}' beantwortet."
+      message:
+        one: "%{contributor_name} hat auf deine Frage '%{request_title}' beantwortet."
+        other: "%{contributor_name} und %{count} andere haben auf deine Frage '%{request_title}' beantwortet."

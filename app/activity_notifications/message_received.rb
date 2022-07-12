@@ -22,7 +22,13 @@ class MessageReceived < Noticed::Base
   def message
     t('.message',
       contributor_name: params[:contributor].name,
-      request_title:  params[:request].title)
+      request_title:  params[:request].title,
+      count: group_by_request_id[params[:request].id].count
+      )
+  end
+
+  def group_by_request_id
+    ActivityNotification.where(type: 'MessageReceived').group_by { |notification| notification.params[:request].id }
   end
 
   # def url
