@@ -20,7 +20,9 @@ class MessageReceived < Noticed::Base
   # Define helper methods to make rendering easier.
   #
   def message
-    t('.message')
+    t('.message',
+      contributor_name: params[:contributor].name,
+      request_title:  params[:request].title)
   end
 
   # def url
