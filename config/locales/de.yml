@@ -276,38 +276,8 @@ de:
   skip_to_content: Zum Hauptinhalt springen
 
   dashboard:
-    how_it_works: So funktioniert 100eyes
-    become_a_pioneer: Werden Sie Dialog-Pionier:in.
-    provided_technology: Wir stellen die Technologie.
-    how_it_works_list:
-      - icon: community
-        title: Community aufbauen
-        text: Finden Sie Ihr Mini Public. Laden Sie 50 Menschen oder mehr zum Dialog ein.
-      - icon: mail
-        title: Nachrichten versenden
-        text: Stellen Sie eine Frage und senden Sie diese mit einem Klick an viele Menschen gleichzeitig – direkt auf den Lieblingsmessenger.
-      - icon: chat-history
-        title: Antworten empfangen
-        text: 100eyes sammelt alle Antworten und stellt sie übersichtlich als Chatverlauf zur Verfügung.
-      - icon: user-connection
-        title: Antworten auswerten
-        text: Werten Sie die Antworten aus und machen Sie Programm am Puls der Nutzer:innen.
-      - icon: new-formats
-        title: Neue Formate entwickeln
-        text: Entwickeln Sie neue Formate dialog-getrieben, maßgeschneidert für neue Zielgruppen.
-    selling_points_list:
-      - icon: dsgvo
-        text: DSGVO konform
-      - icon: data-protection
-        text: Deutscher Datenschutz
-      - icon: billing
-        text: Faires modulares Preissystem
-      - icon: community
-        text: Kontakte & Inhalte  gehören Ihnen
-      - icon: support
-        text: Fixer persönlicher Support
-      - icon: download
-        text: Neue Features als Erste testen
+    activity_notifications:
+        heading: Letzte Aktivität
 
   setting:
     setting:
@@ -732,3 +702,7 @@ de:
       time_only: "%H:%M Uhr"
       today: "heute, %H:%M"
     pm: nachmittags
+
+  notifications:
+    onboarding_completed:
+      message: "%{contributor_name} hat sich via %{contributor_channel} angemeldet." 

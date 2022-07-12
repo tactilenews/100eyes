@@ -19,9 +19,9 @@ class MessageReceived < Noticed::Base
 
   # Define helper methods to make rendering easier.
   #
-  # def message
-  #   t('.message')
-  # end
+  def message
+    t('.message')
+  end
 
   # def url
   #   request_path(params[:id])

@@ -39,6 +39,7 @@ group :test do
   gem 'capybara', '>= 2.15'
   gem 'db-query-matchers'
   gem 'faker'
+  gem 'selenium-webdriver'
   gem 'timecop'
   gem 'vcr'
   gem 'webmock'
