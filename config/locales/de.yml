@@ -278,6 +278,7 @@ de:
   dashboard:
     activity_notifications:
         heading: Letzte Aktivität
+        empty_state: "Sie haben im Moment keine Benachrichtigungen. Bitte senden Sie uns Links zum Onboarding."
 
   setting:
     setting:
@@ -705,4 +706,6 @@ de:
 
   notifications:
     onboarding_completed:
-      message: "%{contributor_name} hat sich via %{contributor_channel} angemeldet." 
+      message: "%{contributor_name} hat sich via %{contributor_channel} angemeldet."
+    message_received:
+      message: "%{contributor_name} hat auf deine Frage '%{request_title}' beantwortet."
