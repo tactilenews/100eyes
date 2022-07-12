@@ -10,6 +10,7 @@ Clearance.configure do |config|
   config.same_site = :lax
   config.redirect_url = '/dashboard'
   config.routes = false
+  config.sign_in_on_password_reset = false
 
   Rails.application.config.to_prepare do
     Clearance::BaseController.layout 'minimal'
