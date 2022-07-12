@@ -86,5 +86,5 @@ See this [blog post](https://rossta.net/blog/how-to-specify-local-ruby-gems-in-y
 The [Medieninnovationszentrum Babelsberg](http://miz-babelsberg.de) supported the development of additional modules.
 
 ## License
-`100eyes` is developed by [tactile.news](https://tactile.news) and is licensed under the [MIT license](https://github.com/tactilenews/100eyes/blob/master/LICENSE).
+`100eyes` is developed by [tactile.news](https://tactile.news) and is licensed under the [MIT license](https://github.com/tactilenews/100eyes/blob/main/LICENSE).
 The development of `100eyes` was funded by the [Prototype Fund](https://prototypefund.de) from the [Bundesministerium für Bildung und Forschung](https://bmbf.de).
