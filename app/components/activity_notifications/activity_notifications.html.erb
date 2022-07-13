@@ -3,9 +3,14 @@
     <%= I18n.t 'dashboard.activity_notifications.heading' %>
   <% end%>
   <% if activity_notifications.any? %>
-    <% activity_notifications.each do |activity_notification| %>
-      <%= activity_notification.to_notification.message %>
-    <% end %>
+      <ul>
+        <% activity_notifications.each do |activity_notification| %>
+          <li>
+            <%= activity_notification.to_notification.message %>
+            <%= "vor #{time_ago_in_words(activity_notification.created_at)}" %>
+          </li>
+        <% end %>
+      </ul>
   <% else %>
     <%= c 'empty_state' do %>
       <%= I18n.t 'dashboard.activity_notifications.empty_state' %>

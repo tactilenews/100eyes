@@ -19,36 +19,26 @@ RSpec.describe 'Activity Notifications' do
       expect(page).to have_text('Sie haben im Moment keine Benachrichtigungen. Bitte senden Sie uns Links zum Onboarding.')
 
       # OnboardingCompleted
+      Timecop.travel(Time.current - 1.minute)
       contributor = create(:contributor)
+      Timecop.return
 
       visit dashboard_path(as: user)
       expect(page).to have_text(
         "#{contributor.name} hat sich via #{contributor.channels.first.to_s.capitalize} angemeldet."
       )
+      expect(page).to have_text('vor eine Minute')
 
       # MessageReceived
+      Timecop.travel(Time.current - 5.hours)
       reply = create(:message, :with_sender, request: request, sender: contributor)
+      Timecop.return
 
       visit dashboard_path(as: user)
       expect(page).to have_text(
         "#{contributor.name} hat auf deine Frage '#{reply.request.title}' beantwortet."
       )
-
-      # I shouldn't be grouped
-      contributor_two = create(:contributor, first_name: 'Timmy', last_name: 'Timmerson')
-
-      visit dashboard_path(as: user)
-      expect(page).to have_text(
-        "#{contributor.name} hat sich via #{contributor.channels.first.to_s.capitalize} angemeldet."
-      )
-
-      # I should be grouped
-      reply_two = create(:message, :with_sender, request: request, sender: contributor_two)
-
-      visit dashboard_path(as: user)
-      expect(page).to have_text(
-        "#{contributor_two.name} und 2 andere haben auf deine Frage '#{reply_two.request.title}' beantwortet."
-      )
+      expect(page).to have_text('vor etwa 5 Stunden')
     end
   end
 end
