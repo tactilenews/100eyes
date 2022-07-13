@@ -68,6 +68,7 @@ RSpec.describe SignalAdapter::Outbound do
     before do
       allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
       allow(Setting).to receive(:signal_cli_rest_api_endpoint).and_return('http://signal:8080')
+      allow(Sentry).to receive(:capture_exception)
     end
 
     describe 'signal-rest-cli HTTP response status' do
@@ -77,8 +78,13 @@ RSpec.describe SignalAdapter::Outbound do
       end
 
       describe 'on error' do
-        before { stub_request(:post, 'http://signal:8080/v2/send').to_return(status: 400) }
-        it { should raise_error(Net::HTTPServerException) }
+        before(:each) { stub_request(:post, 'http://signal:8080/v2/send').to_return(status: 400) }
+
+        it 'reports the error' do
+          expect(Sentry).to receive(:capture_exception).with(Net::HTTPServerException)
+
+          subject.call
+        end
       end
     end
 

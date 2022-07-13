@@ -23,7 +23,7 @@ module SignalAdapter
 
       adapter.on(SignalAdapter::UNKNOWN_CONTRIBUTOR) do |signal_phone_number|
         exception = SignalAdapter::UnknownContributorError.new(signal_phone_number: signal_phone_number)
-        Sentry.capture_exception(exception)
+        ErrorNotifier.report(exception)
       end
 
       adapter.on(SignalAdapter::UNKNOWN_CONTENT) do |contributor|
@@ -33,7 +33,7 @@ module SignalAdapter
       signal_messages.each do |raw_message|
         adapter.consume(raw_message) { |m| m.contributor.reply(adapter) }
       rescue StandardError => e
-        Sentry.capture_exception(e)
+        ErrorNotifier.report(e)
       end
 
       ping_monitoring_service && return

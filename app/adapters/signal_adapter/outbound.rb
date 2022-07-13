@@ -35,6 +35,13 @@ module SignalAdapter
         http.request(req)
       end
       res.value # may raise exception
+    rescue Net::HTTPServerException => e
+      ErrorNotifier.report(e, context: {
+                             code: e.response.code,
+                             message: e.response.message,
+                             headers: e.response.to_hash,
+                             body: e.response.body
+                           })
     end
 
     def self.contributor_can_receive_messages?(recipient)
