@@ -251,6 +251,12 @@ de:
       heading: Datenschutz
       text: Für die technische Unterstützung der Webseitenfunktionen benötigen wir Tools, deren Nutzung auf Grundlage unseres Interesses an einer sicheren und effizienten Bereitstellung, Analyse sowie Optimierung unseres Onlineangebotes erfolgt. Nähere Informationen, auch zur Datenverarbeitung außerhalb der EU, finden Sie in <a class="Link" href="%{link}" target="_blank" rel="noreferrer noopener">unserer Datenschutzerklärung</a>.
       accept: Alles klar!
+    image_input:
+      thumbnail_alt_text: Vorschau des aktuell hochgeladenen Bilds
+      no_image: Kein Bild ausgewählt
+      replace_image: Bild ersetzen
+      select_image: Bild auswählen
+      input_label: Bild
 
   mailer:
     unsubscribe:
@@ -343,13 +349,13 @@ de:
         label: Text
       onboarding_logo:
         label: Logo
-        help: Das Logo sollte eine Bilddatei im SVG-, PNG-Format sein und ca. 90 Pixel hoch sein. Es wird während des Onboardings angezeigt.
+        help: Bilddatei im SVG- oder PNG-Format
       onboarding_byline:
         label: Unterzeile
         help: Wird unter dem Projekttitel bzw. Logo angezeigt.
       onboarding_hero:
         label: Header-Bild
-        help: Das Header-Bild sollte eine Bilddatei im JPEG-Format sein. Es sollte ein Seitenverhältnis von 2:1 haben und ca. 900 Pixel breit sein. Es wird während des Onboardings angezeigt.
+        help: Bilddatei im JPEG-Format, Seitenverhältnis 2:1
       onboarding_data_protection_link:
         label: Link zur Datenschutzerklärung
         help: Der Link wird während des Onboardings in der Fußzeile angezeigt. Vor der Anmeldung müssen neue Mitglieder der Erklärung außerdem explizit zustimmen.
