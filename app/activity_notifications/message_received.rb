@@ -25,7 +25,11 @@ class MessageReceived < Noticed::Base
       request_title: params[:request].title)
   end
 
-  # def url
-  #   request_path(params[:id])
-  # end
+  def url
+    request_path(params[:request].id)
+  end
+
+  def link_text
+    t('.link_text')
+  end
 end

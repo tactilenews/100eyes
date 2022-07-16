@@ -1,6 +1,6 @@
 <%= c 'card' do %>
   <%= c 'heading', tag: :h2 do %>
-    <%= I18n.t 'dashboard.activity_notifications.heading' %>
+    <%= t 'dashboard.activity_notifications.heading' %>
   <% end%>
   <% if activity_notifications.any? %>
       <ul>
@@ -8,12 +8,15 @@
           <li>
             <%= activity_notification.to_notification.message %>
             <%= "vor #{time_ago_in_words(activity_notification.created_at)}" %>
+            <%= link_to activity_notification.to_notification.url do %>
+              <%= activity_notification.to_notification.link_text %>
+            <% end %>
           </li>
         <% end %>
       </ul>
   <% else %>
     <%= c 'empty_state' do %>
-      <%= I18n.t 'dashboard.activity_notifications.empty_state' %>
+      <%= t 'dashboard.activity_notifications.empty_state' %>
     <% end %>
   <% end %>
 <% end %>

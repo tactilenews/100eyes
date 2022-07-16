@@ -28,6 +28,7 @@ RSpec.describe 'Activity Notifications' do
         "#{contributor.name} hat sich via #{contributor.channels.first.to_s.capitalize} angemeldet."
       )
       expect(page).to have_text('vor eine Minute')
+      expect(page).to have_link('Zum Profil', href: contributor_path(contributor))
 
       # MessageReceived
       Timecop.travel(Time.current - 5.hours)
@@ -39,6 +40,7 @@ RSpec.describe 'Activity Notifications' do
         "#{contributor.name} hat auf deine Frage '#{reply.request.title}' beantwortet."
       )
       expect(page).to have_text('vor etwa 5 Stunden')
+      expect(page).to have_link('Zur Frage', href: request_path(reply.request))
     end
   end
 end

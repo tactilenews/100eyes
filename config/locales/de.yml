@@ -707,5 +707,7 @@ de:
   notifications:
     onboarding_completed:
       message: "%{contributor_name} hat sich via %{contributor_channel} angemeldet."
+      link_text: "Zum Profil"
     message_received:
       message: "%{contributor_name} hat auf deine Frage '%{request_title}' beantwortet."
+      link_text: "Zur Frage"
