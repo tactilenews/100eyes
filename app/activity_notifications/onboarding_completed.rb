@@ -25,7 +25,11 @@ class OnboardingCompleted < Noticed::Base
       contributor_channel: params[:contributor].channels.first.to_s.capitalize)
   end
 
-  # def url
-  #   contributor_path(params[:id])
-  # end
+  def url
+    contributor_path(params[:contributor].id)
+  end
+
+  def link_text
+    t('.link_text')
+  end
 end
