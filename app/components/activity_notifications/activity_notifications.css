@@ -1,0 +1,18 @@
+.ActivityNotifications-list {
+  margin-top: var(--spacing-unit);
+  list-style: none;
+}
+
+.ActivityNotifications-listItem {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--spacing-unit-s);
+}
+
+.ActivityNotifications-listItemRelativeTime {
+  color: var(--color-text-light);
+}
+
+.ActivityNotifications-listItemRelativeTime::after {
+  content: '\2027';
+}

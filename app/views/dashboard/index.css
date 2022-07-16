@@ -1,0 +1,9 @@
+.Dashboard {
+  padding: var(--spacing-unit-xl) 0;
+}
+
+.Dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-unit-l);
+}
