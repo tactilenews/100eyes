@@ -1,16 +1,22 @@
-<%= c 'card' do %>
+<%= c 'card', class: 'ActivityNotifications' do %>
   <%= c 'heading', tag: :h2 do %>
-    <%= t 'dashboard.activity_notifications.heading' %>
+    <%= t 'dashboard.activity_notifications.card_heading' %>
   <% end%>
   <% if activity_notifications.any? %>
-      <ul>
+      <ul role='list' class='ActivityNotifications-list'>
         <% activity_notifications.each do |activity_notification| %>
-          <li>
-            <%= activity_notification.to_notification.message %>
-            <%= "vor #{time_ago_in_words(activity_notification.created_at)}" %>
-            <%= link_to activity_notification.to_notification.url do %>
-              <%= activity_notification.to_notification.link_text %>
-            <% end %>
+          <li class='ActivityNotifications-listItem' >
+            <p>
+              <%= activity_notification.to_notification.message %>
+            </p>
+            <footer>
+              <time class='ActivityNotifications-listItemRelativeTime'>
+                <%= "vor #{time_ago_in_words(activity_notification.created_at)}" %>
+              </time>
+              <%= link_to activity_notification.to_notification.url, class: 'Link' do %>
+                <%= activity_notification.to_notification.link_text %>
+              <% end %>
+            </footer>
           </li>
         <% end %>
       </ul>
@@ -20,3 +26,5 @@
     <% end %>
   <% end %>
 <% end %>
+
+

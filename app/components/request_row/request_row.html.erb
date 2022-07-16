@@ -1,34 +1,32 @@
 <article class="<%= class_attr %>">
   <%= link_to request_path(id: request.id) do %>
     <%= c 'card' do %>
-      <%= c 'box' do %>
-        <%= c 'stack', space: :small do %>
+      <%= c 'stack', space: :small do %>
 
-          <%= c 'stack', space: :xsmall do %>
-            <%= c 'heading', tag: :h2 do %>
-              <%= request.title %>
-            <% end %>
-
-            <div class="RequestRow-meta">
-              <% if request.tags.any? %>
-                <%= c 'tags_list', tags: request.tags %>
-              <% end %>
-
-              <%= c 'request_metrics', request: request, style: :inline %>
-
-              <span>
-                <%= I18n.t('request.created_at', created_at: date_time(request.created_at)) %>
-              </span>
-            </div>
+        <%= c 'stack', space: :xsmall do %>
+          <%= c 'heading', tag: :h2 do %>
+            <%= request.title %>
           <% end %>
 
-          <%= c 'plaintext_message',
-            message: request.text,
-            highlight_placeholders: true
-          %>
+          <div class="RequestRow-meta">
+            <% if request.tags.any? %>
+              <%= c 'tags_list', tags: request.tags %>
+            <% end %>
+
+            <%= c 'request_metrics', request: request, style: :inline %>
+
+            <span>
+              <%= I18n.t('request.created_at', created_at: date_time(request.created_at)) %>
+            </span>
+          </div>
         <% end %>
 
+        <%= c 'plaintext_message',
+            message: request.text,
+            highlight_placeholders: true
+        %>
       <% end %>
+
     <% end %>
   <% end %>
 </article>
