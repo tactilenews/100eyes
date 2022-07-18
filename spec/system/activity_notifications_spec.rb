@@ -38,7 +38,7 @@ RSpec.describe 'Activity Notifications' do
       Timecop.return
 
       visit dashboard_path(as: user)
-      expect(page).to have_css("svg.Avatar-initials")
+      expect(page).to have_css('svg.Avatar-initials')
       expect(page).to have_text(
         "#{contributor_without_avatar.name} hat auf deine Frage '#{reply.request.title}' beantwortet."
       )
