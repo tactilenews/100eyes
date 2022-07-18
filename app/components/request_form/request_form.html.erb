@@ -14,6 +14,11 @@
         <% end %>
 
         <%= c 'field', object: @request, attr: :text do |field| %>
+          <%= c 'button',
+            type: 'button',
+            label: 'Insert {{FIRST_NAME}}',
+            data: { action: 'click->request-form#insertPlaceholderAtCursor' }
+          %>
           <%= c 'textarea', field.input_defaults.merge(
             required: true,
             show_emoji_picker_hint: true,
