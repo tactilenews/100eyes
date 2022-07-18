@@ -1,5 +1,5 @@
 .Dashboard {
-  padding: var(--spacing-unit-xl) 0;
+  padding: calc(1.5 * var(--spacing-unit-xl)) 0;
 }
 
 .Dashboard-header {
