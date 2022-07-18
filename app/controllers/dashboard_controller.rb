@@ -2,6 +2,6 @@
 
 class DashboardController < ApplicationController
   def index
-    @activity_notifications = current_user.notifications
+    @activity_notifications = current_user.notifications.limit(30)
   end
 end
