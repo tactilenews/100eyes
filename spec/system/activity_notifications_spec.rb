@@ -9,6 +9,7 @@ RSpec.describe 'Activity Notifications' do
     let(:otp_enabled) { true }
     let!(:user) { create(:user, email: email, password: password, otp_enabled: otp_enabled) }
     let(:request) { create(:request) }
+    let(:contributor_without_avatar) { create(:contributor) }
 
     it 'displays the activity notification on dashboard' do
       visit dashboard_path(as: user)
@@ -20,10 +21,11 @@ RSpec.describe 'Activity Notifications' do
 
       # OnboardingCompleted
       Timecop.travel(Time.current - 1.minute)
-      contributor = create(:contributor)
+      contributor = create(:contributor, :with_an_avatar)
       Timecop.return
 
       visit dashboard_path(as: user)
+      expect(page).to have_css("img[src*='example-image.png']")
       expect(page).to have_text(
         "#{contributor.name} hat sich via #{contributor.channels.first.to_s.capitalize} angemeldet."
       )
@@ -32,12 +34,13 @@ RSpec.describe 'Activity Notifications' do
 
       # MessageReceived
       Timecop.travel(Time.current - 5.hours)
-      reply = create(:message, :with_sender, request: request, sender: contributor)
+      reply = create(:message, :with_sender, request: request, sender: contributor_without_avatar)
       Timecop.return
 
       visit dashboard_path(as: user)
+      expect(page).to have_css("svg.Avatar-initials")
       expect(page).to have_text(
-        "#{contributor.name} hat auf deine Frage '#{reply.request.title}' beantwortet."
+        "#{contributor_without_avatar.name} hat auf deine Frage '#{reply.request.title}' beantwortet."
       )
       expect(page).to have_text('vor etwa 5 Stunden')
       expect(page).to have_link('Zur Frage', href: request_path(reply.request))

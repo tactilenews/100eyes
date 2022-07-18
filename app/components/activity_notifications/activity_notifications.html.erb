@@ -6,17 +6,21 @@
       <ul role='list' class='ActivityNotifications-list'>
         <% activity_notifications.each do |activity_notification| %>
           <li class='ActivityNotifications-listItem' >
-            <p>
-              <%= activity_notification.to_notification.message %>
-            </p>
-            <footer>
+            <%= c 'avatar',
+                style: :large,
+                contributor: activity_notification.to_notification.contributor
+            %>
+            <header class='ActivityNotifications-listItemHeader'>
+              <p>
+                <%= activity_notification.to_notification.message %>
+              </p>
               <time class='ActivityNotifications-listItemRelativeTime'>
                 <%= "vor #{time_ago_in_words(activity_notification.created_at)}" %>
               </time>
               <%= link_to activity_notification.to_notification.url, class: 'Link' do %>
                 <%= activity_notification.to_notification.link_text %>
               <% end %>
-            </footer>
+            </header>
           </li>
         <% end %>
       </ul>
@@ -26,5 +30,3 @@
     <% end %>
   <% end %>
 <% end %>
-
-

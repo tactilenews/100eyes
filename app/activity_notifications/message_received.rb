@@ -20,9 +20,9 @@ class MessageReceived < Noticed::Base
   # Define helper methods to make rendering easier.
   #
   def message
-    t('.message',
-      contributor_name: params[:contributor].name,
-      request_title: params[:request].title)
+    t('.message_html',
+      contributor_name: contributor.name,
+      request_title: params[:request].title).html_safe
   end
 
   def url
@@ -31,5 +31,9 @@ class MessageReceived < Noticed::Base
 
   def link_text
     t('.link_text')
+  end
+
+  def contributor
+    params[:contributor]
   end
 end
