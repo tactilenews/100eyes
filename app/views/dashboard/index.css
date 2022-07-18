@@ -5,5 +5,7 @@
 .Dashboard-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: var(--spacing-unit-l);
+  align-items: center;
+  margin-bottom: var(--spacing-unit-xl);
 }
+
