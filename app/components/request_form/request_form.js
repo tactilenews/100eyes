@@ -15,11 +15,23 @@ export default class extends Controller {
     this.updateMembersCount();
   }
 
+  insertPlaceholderAtCursor() {
+    console.log('im here baby');
+    const placeholder = '{{FIRST_NAME}}'
+    const [start, end] = [this.messageTarget.selectionStart, this.messageTarget.selectionEnd];
+    console.log("im here, what's next");
+
+    this.messageTarget.setRangeText(placeholder, start, end, 'end');
+    const event = new Event('input', { bubbles: true });
+    this.messageTarget.dispatchEvent(event)
+    this.messageTarget.focus();
+
+  }
+
   updatePreview() {
     let message = sanitize(this.messageTarget.value);
     message = message || this.previewFallbackValue;
     message = replacePlaceholder(message, 'FIRST_NAME', 'Max');
-
     this.previewTarget.innerHTML = message;
   }
 
