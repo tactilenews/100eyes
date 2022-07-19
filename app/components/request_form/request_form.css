@@ -10,6 +10,19 @@
   top: calc(3.5 * var(--spacing-unit));
 }
 
+.RequestForm-messageTextAreaToolbar {
+  width: 100%;
+  border: 2px solid transparent;
+  border-radius: 5px;
+  padding: 6px;
+  background-color: var(--color-gray-light);
+  margin: var(--spacing-unit-s) 0;
+}
+
+.RequestForm-insertPlaceholderButton {
+  background-color: #fff;
+}
+
 [data-request-form-target='preview'] {
   white-space: pre-wrap;
 }
