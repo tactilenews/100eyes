@@ -6,6 +6,10 @@
       <ul role='list' class='ActivityNotifications-list'>
         <% activity_notifications.each do |activity_notification| %>
           <li class='ActivityNotifications-listItem' >
+            <%= c 'avatar',
+                contributor: activity_notification.to_notification.contributor,
+                style: :large
+            %>
             <header class='ActivityNotifications-listItemHeader'>
               <p>
                 <%= activity_notification.to_notification.message %>
