@@ -1,4 +1,5 @@
 <%= c 'card', class: 'ActivityNotifications' do %>
+
   <%= c 'heading', tag: :h2 do %>
     <%= t 'dashboard.activity_notifications.card_heading' %>
   <% end%>
@@ -12,7 +13,7 @@
             %>
             <header class='ActivityNotifications-listItemHeader'>
               <p>
-                <%= activity_notification.to_notification.message %>
+                <%= activity_notification.to_notification.message(count_per_request.map { |count_hash| count_hash.select { |key, value| key == activity_notification.params[:request]&.id } }.first&.values.first || 1) %>
               </p>
               <time class='ActivityNotifications-listItemRelativeTime'>
                 <%= "vor #{time_ago_in_words(activity_notification.created_at)}" %>

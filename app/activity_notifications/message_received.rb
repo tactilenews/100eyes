@@ -20,10 +20,11 @@ class MessageReceived < Noticed::Base
   # Define helper methods to make rendering easier.
   #
   # rubocop:disable Rails/OutputSafety
-  def message
+  def message(count)
     t('.message_html',
       contributor_name: contributor.name,
-      request_title: params[:request].title).html_safe
+      request_title: params[:request].title,
+      count: count).html_safe
   end
   # rubocop:enable Rails/OutputSafety
 

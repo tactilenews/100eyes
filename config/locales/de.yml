@@ -710,5 +710,7 @@ de:
       message_html: "<b>%{contributor_name}</b> hat sich via %{contributor_channel} angemeldet."
       link_text: "Zum Profil"
     message_received:
-      message_html: "<b>%{contributor_name}</b> hat auf deine Frage <b>'%{request_title}'</b> beantwortet."
+      message_html: 
+        one: "<b>%{contributor_name}</b> hat auf deine Frage <b>'%{request_title}'</b> beantwortet."
+        other: "<b>%{contributor_name}</b> und %{count} andere haben auf deine Frage <b>'%{request_title}'</b> beantwortet."
       link_text: "Zur Frage"
