@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BetterRailsSystemTests
   # Make failure screenshots compatible with multi-session setup.
   # That's where we use Capybara.last_used_session introduced before.

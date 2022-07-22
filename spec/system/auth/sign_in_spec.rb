@@ -2,21 +2,21 @@
 
 require 'rails_helper'
 
-RSpec.feature 'Sign in', type: :feature do
+RSpec.describe 'Sign in' do
   let(:email) { 'zora@example.org' }
   let(:password) { '12345678' }
   let(:otp_enabled) { true }
   let!(:user) { create(:user, email: email, password: password, otp_enabled: otp_enabled) }
 
-  scenario 'editor tries to visit protected page' do
+  it 'editor tries to visit protected page' do
     visit dashboard_path
     expect(page).to have_current_path(sign_in_path)
   end
 
-  context 'without 2FA set up' do
+  describe 'without 2FA set up' do
     let(:otp_enabled) { false }
 
-    scenario 'editor signs in' do
+    it 'editor signs in' do
       visit sign_in_path
 
       # Enter incorrect credentials
@@ -24,7 +24,7 @@ RSpec.feature 'Sign in', type: :feature do
       fill_in 'session[password]', with: 'abcdefgh'
       click_button 'Anmelden'
 
-      expect(page).to have_current_path(session_path)
+      expect(page).to have_current_path(sign_in_path)
       expect(page).to have_text('E-Mail oder Passwort ungültig.')
 
       # Enters correct credentials
@@ -37,10 +37,10 @@ RSpec.feature 'Sign in', type: :feature do
     end
   end
 
-  context 'with 2FA set up' do
+  describe 'with 2FA set up' do
     let(:otp_enabled) { true }
 
-    scenario 'editor signs in' do
+    it 'editor signs in' do
       visit sign_in_path
 
       # Enter incorrect credentials
@@ -48,7 +48,7 @@ RSpec.feature 'Sign in', type: :feature do
       fill_in 'session[password]', with: 'abcdefgh'
       click_button 'Anmelden'
 
-      expect(page).to have_current_path(session_path)
+      expect(page).to have_current_path(sign_in_path)
       expect(page).to have_text('E-Mail oder Passwort ungültig.')
 
       # Enters correct credentials
@@ -74,7 +74,7 @@ RSpec.feature 'Sign in', type: :feature do
       expect(page).to have_current_path(dashboard_path)
     end
 
-    scenario 'editor cancels sign in' do
+    it 'editor cancels sign in' do
       visit sign_in_path
 
       # Sign in
@@ -91,7 +91,7 @@ RSpec.feature 'Sign in', type: :feature do
       expect(page).to have_current_path(sign_in_path)
     end
 
-    scenario 'signed-in editor visits OTP page' do
+    it 'signed-in editor visits OTP page' do
       visit otp_auth_path(as: user)
 
       expect(page).to have_current_path(dashboard_path)

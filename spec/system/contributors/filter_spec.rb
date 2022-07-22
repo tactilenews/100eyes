@@ -2,13 +2,13 @@
 
 require 'rails_helper'
 
-RSpec.feature 'Filter contributors', type: :feature do
+RSpec.describe 'Filter contributors' do
   let(:user) { create(:user) }
   let!(:active_contributor) { create(:contributor, active: true) }
   let!(:inactive_contributor) { create(:contributor, active: false) }
   let!(:another_contributor) { create(:contributor, active: true) }
 
-  scenario 'Editor lists contributors' do
+  it 'Editor lists contributors' do
     visit contributors_path(as: user)
 
     expect(page).to have_link('Aktiv 2', href: contributors_path)
@@ -23,14 +23,14 @@ RSpec.feature 'Filter contributors', type: :feature do
     expect(page).not_to have_link(nil, href: contributor_path(active_contributor))
   end
 
-  scenario 'Editor views profile of an active contributor' do
+  it 'Editor views profile of an active contributor' do
     visit contributor_path(active_contributor, as: user)
 
     expect(page).to have_link(nil, href: contributor_path(active_contributor))
     expect(page).not_to have_link(nil, href: contributor_path(inactive_contributor))
   end
 
-  scenario 'Editor views profile of an inactive contributor' do
+  it 'Editor views profile of an inactive contributor' do
     visit contributor_path(inactive_contributor, as: user)
 
     expect(page).to have_link(nil, href: contributor_path(active_contributor))

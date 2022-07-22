@@ -37,12 +37,12 @@ end
 group :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 2.15'
+  gem 'cuprite'
   gem 'db-query-matchers'
   gem 'faker'
   gem 'timecop'
   gem 'vcr'
   gem 'webmock'
-  gem 'cuprite'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
