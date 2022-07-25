@@ -55,13 +55,13 @@ RSpec.describe PlaintextMessage::PlaintextMessage, type: :component do
   end
 
   context 'with highlight_placeholders: true' do
-    let(:message) { 'Hi {{FIRST_NAME}}, how are you?' }
+    let(:message) { 'Hi {{VORNAME}}, how are you?' }
     let(:params) { { message: message, highlight_placeholders: true } }
 
     it 'does not insert newlines after placeholders' do
-      expect(subject).to have_text('Hi {{FIRST_NAME}}, how are you?')
+      expect(subject).to have_text('Hi {{VORNAME}}, how are you?')
     end
 
-    it { should have_css('.Placeholder', text: '{{FIRST_NAME}}') }
+    it { should have_css('.Placeholder', text: '{{VORNAME}}') }
   end
 end

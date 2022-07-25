@@ -16,7 +16,7 @@ export default class extends Controller {
   }
 
   insertPlaceholderAtCursor() {
-    const placeholder = '{{FIRST_NAME}}'
+    const placeholder = '{{VORNAME}}'
     const [start, end] = [this.messageTarget.selectionStart, this.messageTarget.selectionEnd];
     this.messageTarget.setRangeText(placeholder, start, end, 'end');
     const event = new Event('input', { bubbles: true });
@@ -27,7 +27,7 @@ export default class extends Controller {
   updatePreview() {
     let message = sanitize(this.messageTarget.value);
     message = message || this.previewFallbackValue;
-    message = replacePlaceholder(message, 'FIRST_NAME', 'Max');
+    message = replacePlaceholder(message, 'VORNAME', 'Max');
     this.previewTarget.innerHTML = message;
   }
 
