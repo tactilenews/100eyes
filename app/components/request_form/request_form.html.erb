@@ -17,8 +17,8 @@
           <div
             class='RequestForm-messageTextAreaToolbar'
             role='toolbar'
-            aria-label='Text Formatting'
-            aria-control='message-textarea'
+            aria-label='Symbolleiste'
+            aria-control='request[text]'
           >
             <%= c 'button',
               style: :secondary,
@@ -29,7 +29,6 @@
             %>
           </div>
           <%= c 'textarea', field.input_defaults.merge(
-            id: 'message-textarea',
             required: true,
             show_emoji_picker_hint: true,
             highlight_placeholders: true,

@@ -23,7 +23,7 @@ export default class extends Controller {
 
     const highlightedText = replacePlaceholder(
       this.inputTarget.value,
-      'FIRST_NAME',
+      'VORNAME',
       '<span class="Placeholder">$1</span>'
     );
 
