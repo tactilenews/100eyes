@@ -4,10 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Contributor, type: :model do
   let(:the_request) do
-    create(:request,
-           title: 'Hitchhiker’s Guide',
-           text: 'What is the answer to life, the universe, and everything?',
-           hints: %w[photo confidential])
+    create(:request, title: 'Hitchhiker’s Guide', text: 'What is the answer to life, the universe, and everything?')
   end
   let(:contributor) { create(:contributor) }
 

@@ -8,15 +8,14 @@ RSpec.describe Request, type: :model do
   let(:request) do
     Request.new(
       title: 'Hitchhiker’s Guide',
-      text: 'What is the answer to life, the universe, and everything?',
-      hints: %w[photo confidential]
+      text: 'What is the answer to life, the universe, and everything?'
     )
   end
 
   subject { request }
 
-  it 'has title, text, and hints' do
-    expect(subject.attributes.keys).to include('title', 'text', 'hints')
+  it 'has title and text' do
+    expect(subject.attributes.keys).to include('title', 'text')
   end
 
   it 'is by default sorted in reverse chronological order' do
@@ -46,29 +45,46 @@ RSpec.describe Request, type: :model do
     end
   end
 
-  describe '#hints' do
-    subject { Request.new(title: 'Example').hints }
-    it { should match_array([]) }
-  end
+  describe '#personalized_text' do
+    let(:contributor) { build(:contributor, first_name: 'Zora', last_name: 'Zimmermanne') }
+    let(:request) { build(:request, text: text) }
 
-  describe '#plaintext' do
-    subject { request.plaintext }
+    subject { request.personalized_text(contributor) }
 
-    it 'returns correct plaintext message' do
-      expected = [
-        'What is the answer to life, the universe, and everything?',
-        I18n.t('request.hints.photo.text'),
-        I18n.t('request.hints.confidential.text')
-      ].join("\n\n")
-
-      expect(subject).to eql(expected)
+    context 'with uppercase placeholder' do
+      let(:text) { 'Hi {{FIRST_NAME}}, how are you?' }
+      it { should eq('Hi Zora, how are you?') }
     end
 
-    describe 'without hints' do
-      let(:request) { create(:request, text: 'Hello World!', hints: []) }
-      subject { request.plaintext }
+    context 'with lowercase placeholder' do
+      let(:text) { 'Hi {{first_name}}, how are you?' }
+      it { should eq('Hi Zora, how are you?') }
+    end
 
-      it { should eql('Hello World!') }
+    context 'with mixed-cased placeholder' do
+      let(:text) { 'Hi {{First_Name}}, how are you?' }
+      it { should eq('Hi Zora, how are you?') }
+    end
+
+    context 'with optional whitespace in placeholder' do
+      let(:text) { 'Hi {{ FIRST_NAME }}, how are you?' }
+      it { should eq('Hi Zora, how are you?') }
+    end
+
+    context 'with multiple placeholders' do
+      let(:text) { '{{FIRST_NAME}}! {{FIRST_NAME}}! {{FIRST_NAME}}!' }
+      it { should eq('Zora! Zora! Zora!') }
+    end
+
+    context 'with unsupported placeholder' do
+      let(:text) { 'This is {{NOT_SUPPORTED}}' }
+      it { should eq('This is {{NOT_SUPPORTED}}') }
+    end
+
+    context 'if name contains leading/trailing whitespace' do
+      let(:text) { 'Hi {{FIRST_NAME}}, how are you?' }
+      let(:contributor) { build(:contributor, first_name: ' Zora ') }
+      it { should eq('Hi Zora, how are you?') }
     end
   end
 
@@ -184,7 +200,6 @@ RSpec.describe Request, type: :model do
         Request.new(
           title: 'Hitchhiker’s Guide',
           text: 'What is the answer to life, the universe, and everything?',
-          hints: %w[photo confidential],
           tag_list: 'programmer'
         )
       end

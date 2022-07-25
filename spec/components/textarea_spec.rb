@@ -57,4 +57,13 @@ RSpec.describe Textarea::Textarea, type: :component do
       end
     end
   end
+
+  describe 'placeholder highlights' do
+    it { should_not have_css('.Textarea-highlights') }
+
+    context 'with highlight_placeholder: true' do
+      let(:params) { { highlight_placeholders: true } }
+      it { should have_css('.Textarea-highlights') }
+    end
+  end
 end

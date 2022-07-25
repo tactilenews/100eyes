@@ -1,11 +1,7 @@
 import { Controller } from '@hotwired/stimulus';
 import Rails from '@rails/ujs';
 import sanitize from '../../assets/javascript/helpers/sanitize.js';
-
-const template = ({ message, fallback }) => {
-  message = sanitize(message) || fallback;
-  return message;
-};
+import replacePlaceholder from '../../assets/javascript/helpers/replace-placeholder.js';
 
 export default class extends Controller {
   static targets = ['preview', 'message', 'membersCount'];
@@ -20,10 +16,11 @@ export default class extends Controller {
   }
 
   updatePreview() {
-    this.previewTarget.innerHTML = template({
-      message: this.messageTarget.value,
-      fallback: this.previewFallbackValue,
-    });
+    let message = sanitize(this.messageTarget.value);
+    message = message || this.previewFallbackValue;
+    message = replacePlaceholder(message, 'FIRST_NAME', 'Max');
+
+    this.previewTarget.innerHTML = message;
   }
 
   updateMembersCount(event) {
