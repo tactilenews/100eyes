@@ -16,11 +16,14 @@ export default class extends Controller {
   }
 
   insertPlaceholderAtCursor() {
-    const placeholder = '{{VORNAME}}'
-    const [start, end] = [this.messageTarget.selectionStart, this.messageTarget.selectionEnd];
+    const placeholder = '{{VORNAME}}';
+    const [start, end] = [
+      this.messageTarget.selectionStart,
+      this.messageTarget.selectionEnd,
+    ];
     this.messageTarget.setRangeText(placeholder, start, end, 'end');
     const event = new Event('input', { bubbles: true });
-    this.messageTarget.dispatchEvent(event)
+    this.messageTarget.dispatchEvent(event);
     this.messageTarget.focus();
   }
 
