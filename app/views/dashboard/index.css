@@ -1,4 +1,9 @@
 .Dashboard {
+  background-color: var(--color-gray-lightest);
+  height: 100vw;
+}
+
+.Dashboard-wrapper {
   padding: var(--spacing-unit-xl) 0;
 }
 
