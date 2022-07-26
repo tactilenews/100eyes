@@ -710,5 +710,5 @@ de:
       message_html: "<b>%{contributor_name}</b> hat sich via %{contributor_channel} angemeldet."
       link_text: "Zum Profil"
     message_received:
-      message_html: "<b>%{contributor_name}</b> hat auf deine Frage <b>'%{request_title}'</b> beantwortet."
+      message_html: "<b>%{contributor_name}</b> hat auf die Frage <b>„%{request_title}”</b> geantwortet."
       link_text: "Zur Frage"

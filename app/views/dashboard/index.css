@@ -1,10 +1,10 @@
 .Dashboard {
-  padding: calc(1.5 * var(--spacing-unit-xl)) 0;
+  padding: var(--spacing-unit-xl) 0;
 }
 
 .Dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--spacing-unit-xl);
+  margin-bottom: var(--spacing-unit);
 }

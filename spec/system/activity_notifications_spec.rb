@@ -40,7 +40,7 @@ RSpec.describe 'Activity Notifications' do
       visit dashboard_path(as: user)
       expect(page).to have_css('svg.Avatar-initials')
       expect(page).to have_text(
-        "#{contributor_without_avatar.name} hat auf deine Frage '#{reply.request.title}' beantwortet."
+        "#{contributor_without_avatar.name} hat auf die Frage „#{reply.request.title}” geantwortet."
       )
       expect(page).to have_text('vor etwa 5 Stunden')
       expect(page).to have_link('Zur Frage', href: request_path(reply.request))
