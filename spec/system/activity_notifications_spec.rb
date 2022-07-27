@@ -46,10 +46,10 @@ RSpec.describe 'Activity Notifications' do
       expect(page).to have_link('Zur Frage', href: request_path(reply.request))
 
       # Limit ActivityNotifications to 30
-      create_list(:contributor, 21)
+      create_list(:contributor, 31)
 
       visit dashboard_path(as: user)
-      expect(page).to have_text('hat sich via Email angemeldet.', count: 20)
+      expect(page).to have_text('hat sich via Email angemeldet.', count: 30)
     end
   end
 end

@@ -19,4 +19,5 @@
 
 .ActivityNotifications-listItemHeader {
   margin-left: var(--spacing-unit-s);
+  width: 90%;
 }
