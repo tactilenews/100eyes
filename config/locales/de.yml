@@ -568,7 +568,7 @@ de:
         one: eine Minute
         other: "%{count} Minuten"
       x_days:
-        one: ein Tag
+        one: einem Tag
         other: "%{count} Tage"
       x_months:
         one: ein Monat
