@@ -279,7 +279,7 @@ de:
     activity_notifications:
         heading: "Guten Morgen, %{first_name}!"
         card_heading: Letzte Aktivität
-        empty_state: "Sie haben im Moment keine Benachrichtigungen. Bitte senden Sie uns Links zum Onboarding."
+        empty_state: "Du hast im Moment keine neuen Benachrichtigungen."
 
   setting:
     setting:
