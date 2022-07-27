@@ -17,7 +17,7 @@ RSpec.describe 'Activity Notifications' do
       expect(page).to have_text('Letzte Aktivität')
 
       # Empty State
-      expect(page).to have_text('Sie haben im Moment keine Benachrichtigungen. Bitte senden Sie uns Links zum Onboarding.')
+      expect(page).to have_text('Du hast im Moment keine neuen Benachrichtigungen.')
 
       # OnboardingCompleted
       Timecop.travel(Time.current - 1.minute)
