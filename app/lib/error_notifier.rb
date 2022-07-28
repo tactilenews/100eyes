@@ -2,15 +2,9 @@
 
 class ErrorNotifier
   class << self
-    def report(exception)
+    def report(exception, context: {})
       Sentry.with_scope do |scope|
-        context = {
-          code: exception.response.code,
-          message: exception.response.message,
-          headers: exception.response.to_hash,
-          body: exception.response.body
-        }
-        scope.set_context(exception, context)
+        scope.set_context(exception, context) if context.present?
         Sentry.capture_exception(exception)
       end
     end
