@@ -52,24 +52,6 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         allow(job).to receive(:ping_monitoring_service).and_return(nil)
       end
 
-      context 'if receiving messages fails' do
-        let(:error_message) { [["error", "Error while checking account #{Setting.signal_server_phone_number}: [502] Bad response: 502 \n"]].to_json }
-
-        before do
-          stub_request(:get, %r{v1/receive}).to_return(status: 502, body: error_message)
-        end
-
-        it 'raises an SignalAdapter::ReceivePollingJob::ServerError' do
-          expect { subject.call }.to raise_error(SignalAdapter::ReceivePollingJob::ServerError)
-        end
-
-        it 'stops immediately as a server error occurred' do
-          subject.call
-        rescue SignalAdapter::ReceivePollingJob::ServerError
-          expect(SignalAdapter::Inbound).not_to receive(:new)
-        end
-      end
-
       context 'if consuming the message fails' do
         before do
           allow(Sentry).to receive(:capture_exception).with(an_instance_of(StandardError))
@@ -181,6 +163,32 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
             )
           end
         end
+      end
+    end
+
+    describe 'given the Signal server is unavailable' do
+      let(:error_message) do
+        [['error', "Error while checking account #{Setting.signal_server_phone_number}: [502] Bad response: 502 \n"]].to_json
+      end
+
+      before do
+        create(:request)
+
+        unless Setting.signal_server_phone_number
+          allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
+        end
+        allow(job).to receive(:ping_monitoring_service).and_return(nil)
+        stub_request(:get, %r{v1/receive}).to_return(status: 502, body: error_message)
+      end
+
+      it 'raises an SignalAdapter::ReceivePollingJob::ServerError' do
+        expect { subject.call }.to raise_error(SignalAdapter::ReceivePollingJob::ServerError)
+      end
+
+      it 'stops immediately as a server error occurred' do
+        subject.call
+      rescue SignalAdapter::ReceivePollingJob::ServerError
+        expect(SignalAdapter::Inbound).not_to receive(:new)
       end
     end
   end
