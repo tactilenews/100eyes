@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'webmock/rspec'
 
 RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
   describe '#perform_later' do
@@ -49,6 +50,24 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         end
 
         allow(job).to receive(:ping_monitoring_service).and_return(nil)
+      end
+
+      context 'if receiving messages fails' do
+        before do
+          stub_request(:get, %r{v1/receive}).to_return(status: 502,
+                                                       body: "Error while checking account #{Setting.signal_server_phone_number}:
+                                                       [502] Bad response: 502 \n")
+        end
+
+        it 'raises an SignalAdapter::ReceivePollingJob::ServerError' do
+          expect { subject.call }.to raise_error(SignalAdapter::ReceivePollingJob::ServerError)
+        end
+
+        it 'stops immediately as a server error occurred' do
+          subject.call
+        rescue SignalAdapter::ReceivePollingJob::ServerError
+          expect(SignalAdapter::Inbound).not_to receive(:new)
+        end
       end
 
       context 'if consuming the message fails' do
