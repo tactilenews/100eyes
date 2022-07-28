@@ -178,7 +178,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
           allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
         end
         allow(job).to receive(:ping_monitoring_service).and_return(nil)
-        stub_request(:get, %r{v1/receive}).to_return(status: 502, body: error_message)
+        stub_request(:get, %r{v1/receive}).to_return(status: 400, body: error_message)
       end
 
       it 'raises an SignalAdapter::ServerError' do
@@ -189,6 +189,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         subject.call
       rescue SignalAdapter::ServerError
         expect(SignalAdapter::Inbound).not_to receive(:new)
+        expect(job).not_to receive(:ping_monitoring_service)
       end
     end
   end

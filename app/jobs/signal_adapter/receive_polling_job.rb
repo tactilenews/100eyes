@@ -44,7 +44,7 @@ module SignalAdapter
     def request_new_messages
       url = URI.parse("#{Setting.signal_cli_rest_api_endpoint}/v1/receive/#{Setting.signal_server_phone_number}")
       res = Net::HTTP.get_response(url)
-      raise SignalAdapter::ServerError if (500..509).include? res.code.to_i
+      raise SignalAdapter::ServerError if res.code.to_i.eql?(400)
 
       JSON.parse(res.body)
     end
