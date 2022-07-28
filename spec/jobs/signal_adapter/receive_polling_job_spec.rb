@@ -181,13 +181,13 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         stub_request(:get, %r{v1/receive}).to_return(status: 502, body: error_message)
       end
 
-      it 'raises an SignalAdapter::ReceivePollingJob::ServerError' do
-        expect { subject.call }.to raise_error(SignalAdapter::ReceivePollingJob::ServerError)
+      it 'raises an SignalAdapter::ServerError' do
+        expect { subject.call }.to raise_error(SignalAdapter::ServerError)
       end
 
       it 'stops immediately as a server error occurred' do
         subject.call
-      rescue SignalAdapter::ReceivePollingJob::ServerError
+      rescue SignalAdapter::ServerError
         expect(SignalAdapter::Inbound).not_to receive(:new)
       end
     end
