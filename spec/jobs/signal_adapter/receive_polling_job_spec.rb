@@ -53,10 +53,10 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
       end
 
       context 'if receiving messages fails' do
+        let(:error_message) { [["error", "Error while checking account #{Setting.signal_server_phone_number}: [502] Bad response: 502 \n"]].to_json }
+
         before do
-          stub_request(:get, %r{v1/receive}).to_return(status: 502,
-                                                       body: "Error while checking account #{Setting.signal_server_phone_number}:
-                                                       [502] Bad response: 502 \n")
+          stub_request(:get, %r{v1/receive}).to_return(status: 502, body: error_message)
         end
 
         it 'raises an SignalAdapter::ReceivePollingJob::ServerError' do
