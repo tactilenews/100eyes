@@ -13,7 +13,7 @@ module SignalAdapter
     def perform(*_args)
       return if Setting.signal_server_phone_number.blank?
 
-      @signal_messages = request_new_messages
+      signal_messages = request_new_messages
       adapter = SignalAdapter::Inbound.new
 
       adapter.on(SignalAdapter::CONNECT) do |contributor|
@@ -30,13 +30,16 @@ module SignalAdapter
         SignalAdapter::Outbound.perform_later(recipient: contributor, text: Setting.signal_unknown_content_message)
       end
 
-      consume_signal_messages
+      signal_messages.each do |raw_message|
+        adapter.consume(raw_message) { |m| m.contributor.reply(adapter) }
+      rescue StandardError => e
+        ErrorNotifier.report(e)
+      end
+
       ping_monitoring_service && return
     end
 
     private
-
-    attr_reader :signal_messages
 
     def request_new_messages
       url = URI.parse("#{Setting.signal_cli_rest_api_endpoint}/v1/receive/#{Setting.signal_server_phone_number}")
@@ -55,19 +58,6 @@ module SignalAdapter
 
     def queue_empty?
       Delayed::Job.where(queue: queue_name, failed_at: nil).none?
-    end
-
-    def consume_signal_messages
-      signal_messages.each do |raw_message|
-        adapter.consume(raw_message) { |m| m.contributor.reply(adapter) }
-      rescue StandardError => e
-        ErrorNotifier.report(e, context: {
-                               code: e.response.code,
-                               message: e.response.message,
-                               headers: e.response.to_hash,
-                               body: e.response.body
-                             })
-      end
     end
   end
 end
