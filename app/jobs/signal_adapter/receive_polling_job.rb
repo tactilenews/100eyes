@@ -33,7 +33,12 @@ module SignalAdapter
       signal_messages.each do |raw_message|
         adapter.consume(raw_message) { |m| m.contributor.reply(adapter) }
       rescue StandardError => e
-        ErrorNotifier.report(e)
+        ErrorNotifier.report(e, context: {
+          code: e.response.code,
+          message: e.response.message,
+          headers: e.response.to_hash,
+          body: e.response.body
+        })
       end
 
       ping_monitoring_service && return
