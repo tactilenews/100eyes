@@ -25,6 +25,7 @@ class OnboardingController < ApplicationController
     @contributor = Contributor.new(contributor_params.merge(json_web_token_attributes: { invalidated_jwt: jwt_param }))
 
     if @contributor.save
+      complete_onboarding(@contributor)
       @contributor.send_welcome_message!
       redirect_to_success
     else
@@ -82,6 +83,8 @@ class OnboardingController < ApplicationController
     return unless jwt
     raise ActionController::BadRequest unless resume_telegram_onboarding?
   end
+
+  def complete_onboarding(contributor); end
 
   def resume_telegram_onboarding
     return unless resume_telegram_onboarding?
