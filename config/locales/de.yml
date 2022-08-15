@@ -712,3 +712,6 @@ de:
     message_received:
       text_html: "<b>%{contributor_name}</b> hat auf die Frage <b>„%{request_title}”</b> geantwortet."
       link_text: "Zur Antwort"
+    chat_message_sent:
+      text_html: "<b>%{editor_name}</b> hat <b>%{contributor_name}</b> geantwortet auf <b>„%{request_title}”</b>."
+      link_text: "Zur Chat-Nachricht"

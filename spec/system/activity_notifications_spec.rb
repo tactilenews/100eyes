@@ -11,7 +11,7 @@ RSpec.describe 'Activity Notifications' do
     let(:request) { create(:request) }
     let(:contributor_without_avatar) { create(:contributor) }
 
-    it 'displays the activity notification on dashboard' do
+    it 'displays the activity notifications on dashboard' do
       visit dashboard_path(as: user)
 
       expect(page).to have_text('Letzte Aktivität')
@@ -34,7 +34,7 @@ RSpec.describe 'Activity Notifications' do
 
       # MessageReceived
       Timecop.travel(Time.current - 1.day)
-      reply = create(:message, :with_sender, request: request, sender: contributor_without_avatar)
+      reply = create(:message, :with_sender, text: "I'm a reply to #{request.title}", request: request, sender: contributor_without_avatar)
       Timecop.return
 
       visit dashboard_path(as: user)
@@ -44,6 +44,27 @@ RSpec.describe 'Activity Notifications' do
       )
       expect(page).to have_text('vor einem Tag')
       expect(page).to have_link('Zur Antwort', href: request_path(reply.request, anchor: "message-#{reply.id}"))
+
+      # ChatMessageSent
+
+      click_link 'Zur Antwort'
+      expect(page).to have_text("I'm a reply to #{reply.request.title}")
+      click_link 'nachfragen'
+      expect(page).to have_text('Nachrichtenverlauf')
+      fill_in 'message[text]', with: "Thanks for your reply #{contributor_without_avatar.name}!"
+      click_button 'Absenden'
+
+      Timecop.travel(Time.current + 5.hours)
+
+      visit dashboard_path(as: user)
+      expect(page).to have_text(
+        "#{user.name} hat #{contributor_without_avatar.name} geantwortet auf „#{reply.request.title}”."
+      )
+      expect(page).to have_text('vor etwa 5 Stunden')
+      expect(page).to have_link(
+        'Zur Chat-Nachricht',
+        href: contributor_request_path(contributor_without_avatar, reply.request, anchor: "chat-row-#{Message.first.id}")
+      )
 
       # Limit ActivityNotifications to 30
       create_list(:contributor, 31)
