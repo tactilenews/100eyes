@@ -2,8 +2,8 @@
 
 # To deliver this notification:
 #
-# MessageReceived.with(contributor: @contributor, request: @request).deliver_later(current_user)
-# MessageReceived.with(contributor: @contributor, request: @request).deliver(current_user)
+# MessageReceived.with(contributor: @contributor, request: @request, message: @message).deliver_later(current_user)
+# MessageReceived.with(contributor: @contributor, request: @request, message: @message).deliver(current_user)
 
 class MessageReceived < Noticed::Base
   # Add your delivery methods
@@ -15,20 +15,20 @@ class MessageReceived < Noticed::Base
 
   # Add required params
   #
-  param :contributor, :request
+  param :contributor, :request, :message
 
   # Define helper methods to make rendering easier.
   #
   # rubocop:disable Rails/OutputSafety
-  def message
-    t('.message_html',
+  def text
+    t('.text_html',
       contributor_name: contributor.name,
-      request_title: params[:request].title).html_safe
+      request_title: request.title).html_safe
   end
   # rubocop:enable Rails/OutputSafety
 
   def url
-    request_path(params[:request].id)
+    request_path(request, anchor: "message-#{message.id}")
   end
 
   def link_text
@@ -37,5 +37,13 @@ class MessageReceived < Noticed::Base
 
   def contributor
     params[:contributor]
+  end
+
+  def request
+    params[:request]
+  end
+
+  def message
+    params[:message]
   end
 end

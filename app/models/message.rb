@@ -67,6 +67,6 @@ class Message < ApplicationRecord
   def notify_recipient
     return unless reply?
 
-    MessageReceived.with(contributor: sender, request: request).deliver_later(User.all)
+    MessageReceived.with(contributor: sender, request: request, message: self).deliver_later(User.all)
   end
 end

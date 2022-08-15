@@ -9,7 +9,7 @@
             <%= c 'avatar', contributor: activity_notification.to_notification.contributor %>
             <header class='ActivityNotifications-listItemHeader'>
               <p>
-                <%= activity_notification.to_notification.message %>
+                <%= activity_notification.to_notification.text %>
               </p>
               <time class='ActivityNotifications-listItemRelativeTime'>
                 <%= "vor #{time_ago_in_words(activity_notification.created_at)}" %>

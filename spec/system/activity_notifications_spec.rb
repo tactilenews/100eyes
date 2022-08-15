@@ -7,7 +7,7 @@ RSpec.describe 'Activity Notifications' do
     let(:email) { Faker::Internet.safe_email }
     let(:password) { Faker::Internet.password(min_length: 8, max_length: 128) }
     let(:otp_enabled) { true }
-    let!(:user) { create(:user, email: email, password: password, otp_enabled: otp_enabled) }
+    let!(:user) { create(:user, first_name: 'Johnny', last_name: 'Appleseed', email: email, password: password, otp_enabled: otp_enabled) }
     let(:request) { create(:request) }
     let(:contributor_without_avatar) { create(:contributor) }
 
@@ -33,7 +33,7 @@ RSpec.describe 'Activity Notifications' do
       expect(page).to have_link('Zum Profil', href: contributor_path(contributor))
 
       # MessageReceived
-      Timecop.travel(Time.current - 5.hours)
+      Timecop.travel(Time.current - 1.day)
       reply = create(:message, :with_sender, request: request, sender: contributor_without_avatar)
       Timecop.return
 
@@ -42,8 +42,8 @@ RSpec.describe 'Activity Notifications' do
       expect(page).to have_text(
         "#{contributor_without_avatar.name} hat auf die Frage „#{reply.request.title}” geantwortet."
       )
-      expect(page).to have_text('vor etwa 5 Stunden')
-      expect(page).to have_link('Zur Frage', href: request_path(reply.request))
+      expect(page).to have_text('vor einem Tag')
+      expect(page).to have_link('Zur Antwort', href: request_path(reply.request, anchor: "message-#{reply.id}"))
 
       # Limit ActivityNotifications to 30
       create_list(:contributor, 31)
