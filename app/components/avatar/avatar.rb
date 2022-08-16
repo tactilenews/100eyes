@@ -2,31 +2,31 @@
 
 module Avatar
   class Avatar < ApplicationComponent
-    delegate :avatar, :avatar?, to: :contributor, prefix: true
+    delegate :avatar, :avatar?, to: :record, prefix: true
 
-    def initialize(contributor: nil, expandable: false, **)
+    def initialize(record: nil, expandable: false, **)
       super
-      @contributor = contributor
+      @record = record
       @expandable = expandable
     end
 
     private
 
-    attr_reader :contributor
+    attr_reader :record
 
     def key
-      contributor&.id
+      record&.id
     end
 
     def url
-      thumbnail = contributor_avatar.variant(resize_to_fit: [200, 200])
+      thumbnail = record_avatar.variant(resize_to_fit: [200, 200])
       url_for(thumbnail)
     end
 
     def initials
-      return '?' unless contributor
+      return '?' unless record
 
-      initials = contributor.name.split.map { |part| part&.first }
+      initials = record.name.split.map { |part| part&.first }
 
       return '?' if initials.empty?
 

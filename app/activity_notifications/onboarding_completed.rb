@@ -22,20 +22,20 @@ class OnboardingCompleted < Noticed::Base
   # rubocop:disable Rails/OutputSafety
   def text
     t('.text_html',
-      contributor_name: contributor.name,
-      contributor_channel: contributor.channels.first.to_s.capitalize).html_safe
+      contributor_name: record.name,
+      contributor_channel: record.channels.first.to_s.capitalize).html_safe
   end
   # rubocop:enable Rails/OutputSafety
 
   def url
-    contributor_path(contributor.id)
+    contributor_path(record.id)
   end
 
   def link_text
     t('.link_text')
   end
 
-  def contributor
+  def record
     params[:contributor]
   end
 end

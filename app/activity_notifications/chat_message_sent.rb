@@ -22,7 +22,7 @@ class ChatMessageSent < Noticed::Base
   # rubocop:disable Rails/OutputSafety
   def text
     t('.text_html',
-      contributor_name: contributor.name,
+      contributor_name: record.name,
       request_title: request.title,
       user_name: user.name).html_safe
   end
@@ -36,7 +36,7 @@ class ChatMessageSent < Noticed::Base
     t('.link_text')
   end
 
-  def contributor
+  def record
     params[:user]
   end
 
