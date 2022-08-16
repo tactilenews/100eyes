@@ -74,7 +74,7 @@ RSpec.describe Message, type: :model do
     describe '#chat_message_link' do
       subject { message.chat_message_link }
       let(:params) { { id: 8, recipient: nil, sender: contributor } }
-      it { should eq('/contributors/7/requests/6#chat-row-8') }
+      it { should eq('/contributors/7/requests/6#message-8') }
     end
   end
 

@@ -63,7 +63,7 @@ RSpec.describe 'Activity Notifications' do
       expect(page).to have_text('vor etwa 5 Stunden')
       expect(page).to have_link(
         'Zur Chat-Nachricht',
-        href: contributor_request_path(contributor_without_avatar, reply.request, anchor: "chat-row-#{Message.first.id}")
+        href: contributor_request_path(contributor_without_avatar, reply.request, anchor: "message-#{Message.first.id}")
       )
 
       # Limit ActivityNotifications to 30
