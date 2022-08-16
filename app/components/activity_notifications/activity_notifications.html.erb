@@ -10,7 +10,7 @@
             <%= c 'avatar', contributor: activity_notification.to_notification.contributor %>
             <header class='ActivityNotifications-listItemHeader'>
               <p>
-                <%= activity_notification.to_notification.message(count_per_request.map { |count_hash| count_hash.select { |key, value| key == activity_notification.request } }.first&.values.first || 1) %>
+                <%= activity_notification.to_notification.message(count(activity_notification.request)) %>
               </p>
               <time class='ActivityNotifications-listItemRelativeTime'>
                 <%= "vor #{time_ago_in_words(activity_notification.created_at)}" %>

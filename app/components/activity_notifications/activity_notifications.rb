@@ -10,5 +10,12 @@ module ActivityNotifications
     end
 
     attr_reader :activity_notifications, :count_per_request
+
+    def count(request)
+      count_per_request.reduce(1) do |accumulator, count_hash|
+        key, value = count_hash.first
+        key == request ? value : accumulator
+      end
+    end
   end
 end
