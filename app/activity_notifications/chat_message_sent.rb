@@ -2,8 +2,8 @@
 
 # To deliver this notification:
 #
-# ChatMessageSent.with(contributor: @contributor, request: @request, editor: @editor, message: @message).deliver_later(current_user)
-# ChatMessageSent.with(contributor: @contributor, request: @request, editor: @editor, message: @message).deliver(current_user)
+# ChatMessageSent.with(contributor: @contributor, request: @request, user: @user, message: @message).deliver_later(current_user)
+# ChatMessageSent.with(contributor: @contributor, request: @request, user: @user, message: @message).deliver(current_user)
 
 class ChatMessageSent < Noticed::Base
   # Add your delivery methods
@@ -15,7 +15,7 @@ class ChatMessageSent < Noticed::Base
 
   # Add required params
   #
-  param :contributor, :request, :editor, :message
+  param :contributor, :request, :user, :message
 
   # Define helper methods to make rendering easier.
   #
@@ -24,7 +24,7 @@ class ChatMessageSent < Noticed::Base
     t('.text_html',
       contributor_name: contributor.name,
       request_title: request.title,
-      editor_name: editor.name).html_safe
+      user_name: user.name).html_safe
   end
   # rubocop:enable Rails/OutputSafety
 
@@ -37,15 +37,15 @@ class ChatMessageSent < Noticed::Base
   end
 
   def contributor
-    params[:contributor]
+    params[:user]
   end
 
   def request
     params[:request]
   end
 
-  def editor
-    params[:editor]
+  def user
+    params[:user]
   end
 
   def message
