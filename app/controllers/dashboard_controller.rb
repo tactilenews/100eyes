@@ -2,8 +2,8 @@
 
 class DashboardController < ApplicationController
   def index
-    onboarding_completed = current_user.notifications.where(type: OnboardingCompleted.name).newest_first.limit(20)
-    message_received = current_user.notifications.where(type: MessageReceived.name).newest_first
+    onboarding_completed = current_user.notifications.onboarding_completed.newest_first.limit(20)
+    message_received = current_user.notifications.message_received.newest_first
     @count_per_request = []
     @activity_notifications =
       if message_received.any?

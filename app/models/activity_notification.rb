@@ -4,4 +4,7 @@ class ActivityNotification < ApplicationRecord
   include Noticed::Model
   belongs_to :recipient, polymorphic: true
   store_accessor :params, :request
+
+  scope :onboarding_completed, -> { where(type: OnboardingCompleted.name) }
+  scope :message_received, -> { where(type: MessageReceived.name) }
 end
