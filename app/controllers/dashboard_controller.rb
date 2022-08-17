@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class DashboardController < ApplicationController
+  before_action :set_current_user, only: :index
+
   def index
     onboarding_completed = current_user.notifications.onboarding_completed.newest_first.limit(20)
     message_received = current_user.notifications.message_received.newest_first
@@ -12,5 +14,11 @@ class DashboardController < ApplicationController
       else
         onboarding_completed
       end
+  end
+
+  private
+
+  def set_current_user
+    Current.user = current_user
   end
 end

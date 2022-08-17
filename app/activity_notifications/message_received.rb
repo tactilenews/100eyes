@@ -20,7 +20,7 @@ class MessageReceived < Noticed::Base
   # Define helper methods to make rendering easier.
   #
   # rubocop:disable Rails/OutputSafety
-  def message(count)
+  def message
     t('.message_html',
       contributor_name: contributor.name,
       request_title: request.title,
@@ -42,5 +42,9 @@ class MessageReceived < Noticed::Base
 
   def request
     params.dig(:request)
+  end
+
+  def count
+    Current.user.notifications.count_per_request(request)
   end
 end
