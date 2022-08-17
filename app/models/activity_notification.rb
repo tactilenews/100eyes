@@ -7,5 +7,5 @@ class ActivityNotification < ApplicationRecord
 
   scope :onboarding_completed, -> { where(type: OnboardingCompleted.name) }
   scope :message_received, -> { where(type: MessageReceived.name) }
-  scope :count_per_request, ->(request) { where("params @> ?", Noticed::Coder.dump(:request => request).to_json).count }
+  scope :count_per_request, ->(request) { where('params @> ?', Noticed::Coder.dump(request: request).to_json).count }
 end

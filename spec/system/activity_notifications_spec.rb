@@ -34,7 +34,7 @@ RSpec.describe 'Activity Notifications' do
 
       # I shouldn't be grouped
       contributor_two = create(:contributor, first_name: 'Timmy', last_name: 'Timmerson')
-      
+
       visit dashboard_path(as: user)
       expect(page).to have_css('svg.Avatar-initials')
       expect(page).to have_text(

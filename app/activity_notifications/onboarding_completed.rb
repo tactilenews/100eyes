@@ -20,7 +20,7 @@ class OnboardingCompleted < Noticed::Base
   # Define helper methods to make rendering easier.
   #
   # rubocop:disable Rails/OutputSafety
-  def message(count)
+  def message(_count)
     t('.message_html',
       contributor_name: contributor.name,
       contributor_channel: contributor.channels.first.to_s.capitalize).html_safe
