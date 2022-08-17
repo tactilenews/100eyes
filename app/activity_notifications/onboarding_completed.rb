@@ -36,6 +36,6 @@ class OnboardingCompleted < Noticed::Base
   end
 
   def contributor
-    params.dig(:contributor)
+    params[:contributor]
   end
 end

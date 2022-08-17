@@ -37,11 +37,11 @@ class MessageReceived < Noticed::Base
   end
 
   def contributor
-    params.dig(:contributor)
+    params[:contributor]
   end
 
   def request
-    params.dig(:request)
+    params[:request]
   end
 
   def count
