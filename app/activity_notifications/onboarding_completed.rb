@@ -20,7 +20,7 @@ class OnboardingCompleted < Noticed::Base
   # Define helper methods to make rendering easier.
   #
   # rubocop:disable Rails/OutputSafety
-  def message(count = 1)
+  def message(count)
     t('.message_html',
       contributor_name: contributor.name,
       contributor_channel: contributor.channels.first.to_s.capitalize).html_safe
@@ -28,7 +28,7 @@ class OnboardingCompleted < Noticed::Base
   # rubocop:enable Rails/OutputSafety
 
   def url
-    contributor_path(contributor.id)
+    contributor_path(contributor)
   end
 
   def link_text
@@ -36,6 +36,6 @@ class OnboardingCompleted < Noticed::Base
   end
 
   def contributor
-    params[:contributor]
+    params.dig(:contributor)
   end
 end

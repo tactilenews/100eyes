@@ -23,13 +23,13 @@ class MessageReceived < Noticed::Base
   def message(count)
     t('.message_html',
       contributor_name: contributor.name,
-      request_title: params[:request].title,
+      request_title: request.title,
       count: count).html_safe
   end
   # rubocop:enable Rails/OutputSafety
 
   def url
-    request_path(params[:request].id)
+    request_path(request)
   end
 
   def link_text
@@ -37,6 +37,10 @@ class MessageReceived < Noticed::Base
   end
 
   def contributor
-    params[:contributor]
+    params.dig(:contributor)
+  end
+
+  def request
+    params.dig(:request)
   end
 end
