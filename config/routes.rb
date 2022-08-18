@@ -7,25 +7,28 @@ Rails.application.routes.draw do
   get '/health', to: 'health#index'
   get '/about', to: 'about#index'
 
-  namespace :onboarding, module: nil do
-    get '/', to: 'onboarding#index'
-    get '/success', to: 'onboarding#success'
+  scope '(:locale)', locale: /#{I18n.available_locales.join("|")}/ do
+    namespace :onboarding, module: nil do
+      get '/', to: 'onboarding#index'
+      get '/success', to: 'onboarding#success'
+      post '/switch-locale', to: 'onboarding#switch_locale'
 
-    scope module: :onboarding do
-      get '/email', to: 'email#show'
-      post '/email', to: 'email#create'
+      scope module: :onboarding do
+        get '/email', to: 'email#show'
+        post '/email', to: 'email#create'
 
-      get '/signal/', to: 'signal#show'
-      get '/signal/link/', to: 'signal#link', as: 'signal_link'
-      post '/signal/', to: 'signal#create'
+        get '/signal/', to: 'signal#show'
+        get '/signal/link/', to: 'signal#link', as: 'signal_link'
+        post '/signal/', to: 'signal#create'
 
-      get '/threema/', to: 'threema#show'
-      post '/threema/', to: 'threema#create'
+        get '/threema/', to: 'threema#show'
+        post '/threema/', to: 'threema#create'
 
-      get '/telegram/', to: 'telegram#show'
-      get '/telegram/link/:telegram_onboarding_token', to: 'telegram#link', as: 'telegram_link'
-      get '/telegram/fallback/:telegram_onboarding_token', to: 'telegram#fallback', as: 'telegram_fallback'
-      post '/telegram/', to: 'telegram#create'
+        get '/telegram/', to: 'telegram#show'
+        get '/telegram/link/:telegram_onboarding_token', to: 'telegram#link', as: 'telegram_link'
+        get '/telegram/fallback/:telegram_onboarding_token', to: 'telegram#fallback', as: 'telegram_fallback'
+        post '/telegram/', to: 'telegram#create'
+      end
     end
   end
 
