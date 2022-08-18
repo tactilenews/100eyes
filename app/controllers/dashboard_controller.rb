@@ -4,8 +4,6 @@ class DashboardController < ApplicationController
   before_action :set_current_user, only: :index
 
   def index
-    onboarding_completed = current_user.notifications.onboarding_completed.newest_first.limit(20)
-    message_received = current_user.notifications.message_received.newest_first
     @activity_notifications =
       if message_received.any?
         grouped_by_request = message_received.group_by(&:request)
@@ -20,5 +18,22 @@ class DashboardController < ApplicationController
 
   def set_current_user
     Current.user = current_user
+  end
+
+  def onboarding_completed
+    current_user
+      .notifications
+      .includes(:contributor)
+      .onboarding_completed
+      .newest_first
+      .limit(20)
+  end
+
+  def message_received
+    current_user
+      .notifications
+      .includes(:contributor, :request)
+      .message_received
+      .newest_first
   end
 end
