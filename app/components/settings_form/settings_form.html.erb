@@ -11,10 +11,15 @@
       <%= c('settings_field', type: :image_input, attr: :onboarding_logo) %>
       <%= c('settings_field', type: :input, attr: :onboarding_byline) %>
       <%= c('settings_field', type: :image_input, attr: :onboarding_hero) %>
-      <%= c('settings_field', type: :input, attr: :onboarding_title) %>
-      <%= c('settings_field', type: :textarea, attr: :onboarding_page) %>
-      <%= c('settings_field', type: :url_input, attr: :onboarding_data_protection_link) %>
-      <%= c('settings_field', type: :url_input, attr: :onboarding_imprint_link) %>
+      <% I18n.available_locales.each do |locale| %>
+        <%= c('settings_field', type: :textarea, attr: :onboarding_title, locale: locale) %>
+        <%= c('settings_field', type: :textarea, attr: :onboarding_page, locale: locale) %>
+      <% end %>
+      <% I18n.available_locales.each do |locale| %>
+        <%= c('settings_field', type: :url_input, attr: :onboarding_data_protection_link, locale: locale) %>
+        <%= c('settings_field', type: :url_input, attr: :onboarding_imprint_link, locale: locale) %>
+      <% end %>
+
     <% end %>
 
     <%= c 'stack' do %>
@@ -27,21 +32,27 @@
       ) do |field| %>
         <%= c 'checkbox', **field.input_defaults, checked: Setting.onboarding_ask_for_additional_consent %>
       <% end %>
-
-      <%= c('settings_field', type: :input, attr: :onboarding_additional_consent_heading) %>
-      <%= c('settings_field', type: :input, attr: :onboarding_additional_consent_text) %>
+      
+      <% I18n.available_locales.each do |locale| %>
+        <%= c('settings_field', type: :input, attr: :onboarding_additional_consent_heading, locale: locale) %>
+        <%= c('settings_field', type: :textarea, attr: :onboarding_additional_consent_text, locale: locale) %>
+      <% end %>
+    <% end %>
+ 
+    <%= c 'stack' do %>
+      <%= c('heading', tag: :h2) { t('setting.form.groups.onboarding_success') } %>
+      <% I18n.available_locales.each do |locale| %>
+        <%= c('settings_field', type: :input, attr: :onboarding_success_heading, locale: locale) %>
+        <%= c('settings_field', type: :textarea, attr: :onboarding_success_text, locale: locale) %>
+      <% end %>
     <% end %>
 
     <%= c 'stack' do %>
-      <%= c('heading', tag: :h2) { t('setting.form.groups.onboarding_success') } %>
-      <%= c('settings_field', type: :input, attr: :onboarding_success_heading) %>
-      <%= c('settings_field', type: :textarea, attr: :onboarding_success_text) %>
-    <% end %>
-
-     <%= c 'stack' do %>
       <%= c('heading', tag: :h2) { t('setting.form.groups.onboarding_unauthorized') } %>
-      <%= c('settings_field', type: :input, attr: :onboarding_unauthorized_heading) %>
-      <%= c('settings_field', type: :textarea, attr: :onboarding_unauthorized_text) %>
+      <% I18n.available_locales.each do |locale| %>
+        <%= c('settings_field', type: :input, attr: :onboarding_unauthorized_heading, locale: locale) %>
+        <%= c('settings_field', type: :textarea, attr: :onboarding_unauthorized_text, locale: locale) %>
+      <% end %>
     <% end %>
 
     <%= c 'stack' do %>

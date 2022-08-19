@@ -2,12 +2,13 @@
 
 module Field
   class Field < ApplicationComponent
-    def initialize(object:, attr:, value: nil, **)
+    def initialize(object:, attr:, value: nil, locale: nil, **)
       super
 
       @object = object
       @attr = attr
       @value = value
+      @locale = locale
     end
 
     def call
@@ -34,10 +35,11 @@ module Field
 
     private
 
-    attr_reader :object, :attr
+    attr_reader :object, :attr, :locale
 
     def id
-      "#{model_name}[#{attr}]"
+      id = "#{model_name}[#{attr}]"
+      locale ? "#{id}[value_#{locale}]" : id
     end
 
     def model_name
@@ -49,7 +51,8 @@ module Field
     end
 
     def label
-      I18n.t("#{model_name}.form.#{attr}.label")
+      key = locale ? "label_#{locale}" : 'label'
+      I18n.t("#{model_name}.form.#{attr}.#{key}")
     end
 
     def help

@@ -24,7 +24,8 @@ class OnboardingController < ApplicationController
   end
 
   def create
-    @contributor = Contributor.new(contributor_params.merge(json_web_token_attributes: { invalidated_jwt: jwt_param }))
+    @contributor = Contributor.new(contributor_params.merge(json_web_token_attributes: { invalidated_jwt: jwt_param },
+                                                            tag_list: I18n.locale.to_s))
 
     if @contributor.save
       complete_onboarding(@contributor)

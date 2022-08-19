@@ -14,7 +14,8 @@ module SignalAdapter
     def self.send_welcome_message!(contributor)
       return unless contributor_can_receive_messages?(contributor)
 
-      welcome_message = [Setting.onboarding_success_heading, Setting.onboarding_success_text].join("\n")
+      welcome_message = [Setting.find_by(var: :onboarding_success_heading).send("value_#{I18n.locale}".to_sym),
+                         Setting.find_by(var: :onboarding_success_text).send("value_#{I18n.locale}".to_sym)].join("\n")
       perform_later(text: welcome_message, recipient: contributor)
     end
 

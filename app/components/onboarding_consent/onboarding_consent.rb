@@ -17,7 +17,7 @@ module OnboardingConsent
     end
 
     def display_additional_consent_checkbox?
-      Setting.onboarding_ask_for_additional_consent? && Setting.onboarding_additional_consent_heading.strip.present?
+      Setting.onboarding_ask_for_additional_consent? && Setting.find_by(var: :onboarding_additional_consent_heading).send("value_#{I18n.locale}".to_sym).strip.present?
     end
   end
 end

@@ -1,5 +1,5 @@
 <%= c 'onboarding_response',
   style: :error,
-  heading: Setting.onboarding_unauthorized_heading,
-  text: Setting.onboarding_unauthorized_text
+  heading: Setting.find_by(var: :onboarding_unauthorized_heading).send("value_#{I18n.locale}".to_sym),
+  text: Setting.find_by(var: :onboarding_unauthorized_text).send("value_#{I18n.locale}".to_sym)
 %>

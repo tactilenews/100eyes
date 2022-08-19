@@ -5,7 +5,13 @@ class SettingsController < ApplicationController
 
   def update
     settings_params.each do |key, value|
-      Setting.send("#{key}=", value.strip) unless value.nil?
+      if value.respond_to? :keys
+        value.each_key do |locale_value|
+          Setting.find_by(var: key).update(locale_value.to_sym => value[locale_value].strip)
+        end
+      else
+        Setting.send("#{key}=", value.strip) unless value.nil?
+      end
     end
 
     settings_files_params.each do |key, tempfile|
@@ -34,19 +40,25 @@ class SettingsController < ApplicationController
       :onboarding_additional_consent_heading,
       :onboarding_additional_consent_text,
       :project_name,
-      :onboarding_title,
       :onboarding_byline,
-      :onboarding_success_heading,
-      :onboarding_success_text,
       :onboarding_unauthorized_heading,
       :onboarding_unauthorized_text,
-      :onboarding_page,
       :onboarding_data_protection_link,
       :onboarding_imprint_link,
       :signal_unknown_content_message,
       :telegram_unknown_content_message,
       :telegram_contributor_not_found_message,
-      :threema_unknown_content_message
+      :threema_unknown_content_message,
+      onboarding_title: [available_locale_params],
+      onboarding_page: [available_locale_params],
+      onboarding_success_heading: [available_locale_params],
+      onboarding_success_text: [available_locale_params]
     )
+  end
+
+  def available_locale_params
+    I18n.available_locales.map do |locale|
+      [:"value_#{locale}"]
+    end.flatten
   end
 end

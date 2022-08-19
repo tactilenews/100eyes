@@ -4,11 +4,15 @@ require 'rails_helper'
 require 'telegram/bot/rspec/integration/rails'
 
 RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
+  let(:onboarding_success_heading_record) { Setting.new(var: :onboarding_success_heading) }
+  let(:onboarding_success_text_record) { Setting.new(var: :onboarding_success_text) }
   before do
     allow(Setting).to receive(:telegram_contributor_not_found_message).and_return('Who are you?')
     allow(Setting).to receive(:telegram_unknown_content_message).and_return("Cannot handle this, I'm sorry :(")
-    allow(Setting).to receive(:onboarding_success_heading).and_return('Welcome new contributor!')
-    allow(Setting).to receive(:onboarding_success_text).and_return('')
+    allow(Setting).to receive(:find_by).with(var: :onboarding_success_heading).and_return(onboarding_success_heading_record)
+    allow(onboarding_success_heading_record).to receive(:send).with("value_#{I18n.locale}".to_sym).and_return('Welcome new contributor!')
+    allow(Setting).to receive(:find_by).with(var: :onboarding_success_text).and_return(onboarding_success_text_record)
+    allow(onboarding_success_text_record).to receive(:send).with("value_#{I18n.locale}".to_sym).and_return('')
   end
 
   describe '#start!' do

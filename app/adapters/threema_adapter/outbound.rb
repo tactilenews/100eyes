@@ -16,7 +16,8 @@ module ThreemaAdapter
     end
 
     def self.welcome_message
-      ["*#{Setting.onboarding_success_heading.strip}*", Setting.onboarding_success_text].join("\n")
+      ["*#{Setting.find_by(var: :onboarding_success_heading).send("value_#{I18n.locale}".to_sym).strip}*",
+       Setting.find_by(var: :onboarding_success_text).send("value_#{I18n.locale}".to_sym)].join("\n")
     end
 
     def self.send_welcome_message!(contributor)

@@ -7,6 +7,16 @@ RSpec.describe ThreemaAdapter::Outbound do
   let(:threema_id) { 'V5EA564T' }
   let(:contributor) { create(:contributor, threema_id: threema_id, email: nil) }
   let(:message) { create(:message, recipient: contributor) }
+  let(:onboarding_success_heading_record) { Setting.new(var: :onboarding_success_heading) }
+  let(:onboarding_success_text_record) { Setting.new(var: :onboarding_success_text) }
+
+  before do
+    allow(Setting).to receive(:find_by).with(var: :onboarding_success_heading).and_return(onboarding_success_heading_record)
+    allow(onboarding_success_heading_record).to receive(:send)
+      .with("value_#{I18n.locale}".to_sym).and_return(" \n text with leading and trailing whitespace \t \n ")
+    allow(Setting).to receive(:find_by).with(var: :onboarding_success_text).and_return(onboarding_success_text_record)
+    allow(onboarding_success_text_record).to receive(:send).with("value_#{I18n.locale}".to_sym).and_return("\nSuccess text.\n")
+  end
 
   describe '::send!' do
     before { message } # we don't count the extra ::send here
@@ -54,8 +64,6 @@ RSpec.describe ThreemaAdapter::Outbound do
     subject { described_class.welcome_message }
 
     it 'strips whitespace to not break basic formatting' do
-      allow(Setting).to receive(:onboarding_success_heading).and_return(" \n text with leading and trailing whitespace \t \n ")
-      allow(Setting).to receive(:onboarding_success_text).and_return("\nSuccess text.\n")
       is_expected.to eq("*text with leading and trailing whitespace*\n\nSuccess text.\n")
     end
   end

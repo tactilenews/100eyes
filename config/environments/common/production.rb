@@ -120,4 +120,6 @@ Rails.application.configure do
   routes.default_url_options = {
     host: Setting.application_host, protocol: 'https'
   }
+
+  config.i18n.available_locales = Setting.available_locales
 end

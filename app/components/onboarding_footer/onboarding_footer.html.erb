@@ -1,13 +1,13 @@
 <div class="OnboardingFooter">
   <ul class="OnboardingFooter-nav">
     <li>
-      <a href="<%= Setting.onboarding_imprint_link %>" target="_blank" rel="noreferrer noopener">
+      <a href="<%= Setting.find_by(var: :onboarding_imprint_link)&.send("value_#{I18n.locale}".to_sym) || Setting.onboarding_imprint_link %>" target="_blank" rel="noreferrer noopener">
         <%= t('.imprint') %>
       </a>
     </li>
 
     <li>
-      <a href="<%= Setting.onboarding_data_protection_link %>" target="_blank" rel="noreferrer noopener">
+      <a href="<%= Setting.find_by(var: :onboarding_data_protection_link)&.send("value_#{I18n.locale}".to_sym) || Setting.onboarding_data_protection_link %>" target="_blank" rel="noreferrer noopener">
         <%= t('.data_protection') %>
       </a>
     </li>

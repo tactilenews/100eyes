@@ -327,26 +327,42 @@ de:
         label: Nach zusätzlichem Einverständnis fragen
         help: Falls aktiviert, wird neuen Community-Mitgliedern eine zusätzliche, optionale Checkbox angezeigt. Diese kannst du beispielsweise nutzen, um das Einverständnis für den Versand von E-Mail-Newslettern o.ä. einzuholen.
       onboarding_additional_consent_heading:
-        label: Überschrift
+        label_de: Überschrift (DE)
+        label_en: Überschrift (EN)
+        label_fr: Überschrift (FR)
       onboarding_additional_consent_text:
-        label: Text
+        label_de: Text (DE)
+        label_en: Text (EN)
+        label_fr: Text (FR)
       project_name:
         label: Projekt-Name
         help: Der Projekt-Name wird Community-Mitgliedern z.B. während des Onboardings und als Absender von E-Mails angezeigt.
       onboarding_title:
-        label: Titel
+        label_de: Titel (DE)
+        label_en: Titel (EN)
+        label_fr: Titel (FR)
       onboarding_page:
-        label: Text
+        label_de: Text (DE)
+        label_en: Text (EN)
+        label_fr: Text (FR)
         help: |
           Du kannst deinen Text mit <a class="Link" href="https://de.wikipedia.org/wiki/Markdown">Markdown</a>-Befehlen formatieren. Du kannst z.B. <em>*kursiven Text*</em>, <strong>**fetten Text**</strong> oder <a class="Link" href="https://tactile.news">[Links](https://tactile.news)</a> einfügen.
       onboarding_success_heading:
-        label: Titel
+        label_de: Titel (DE)
+        label_en: Titel (EN)
+        label_fr: Titel (FR)
       onboarding_success_text:
-        label: Text
+        label_de: Text (DE)
+        label_en: Text (EN)
+        label_fr: Text (FR)
       onboarding_unauthorized_heading:
-        label: Titel
+        label_de: Titel (DE)
+        label_en: Titel (EN)
+        label_fr: Titel (FR)
       onboarding_unauthorized_text:
-        label: Text
+        label_de: Text (DE)
+        label_en: Text (EN)
+        label_fr: Text (FR)
       onboarding_logo:
         label: Logo
         help: Bilddatei im SVG- oder PNG-Format
@@ -357,10 +373,14 @@ de:
         label: Header-Bild
         help: Bilddatei im JPEG-Format, Seitenverhältnis 2:1
       onboarding_data_protection_link:
-        label: Link zur Datenschutzerklärung
+        label_de: Link zur Datenschutzerklärung (DE)
+        label_en: Link zur Datenschutzerklärung (EN)
+        label_fr: Link zur Datenschutzerklärung (FR)
         help: Der Link wird während des Onboardings in der Fußzeile angezeigt. Vor der Anmeldung müssen neue Mitglieder der Erklärung außerdem explizit zustimmen.
       onboarding_imprint_link:
-        label: Link zum Impressum
+        label_de: Link zum Impressum (DE)
+        label_en: Link zum Impressum (EN)
+        label_fr: Link zum Impressum (FR)
         help: Der Link wird während des Onboardings in der Fußzeile angezeigt.
       signal_unknown_content_message:
         label: Fehler-Nachricht bei unbekannten Inhalten

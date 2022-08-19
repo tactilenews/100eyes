@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_25_112312) do
+ActiveRecord::Schema.define(version: 2022_08_19_103023) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -51,6 +51,18 @@ ActiveRecord::Schema.define(version: 2022_03_25_112312) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "activity_notifications", force: :cascade do |t|
+    t.string "recipient_type", null: false
+    t.bigint "recipient_id", null: false
+    t.string "type", null: false
+    t.jsonb "params"
+    t.datetime "read_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["read_at"], name: "index_activity_notifications_on_read_at"
+    t.index ["recipient_type", "recipient_id"], name: "index_activity_notifications_on_recipient"
   end
 
   create_table "contributors", force: :cascade do |t|
@@ -161,6 +173,9 @@ ActiveRecord::Schema.define(version: 2022_03_25_112312) do
     t.text "value"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.text "value_en"
+    t.text "value_fr"
+    t.text "value_de"
     t.index ["var"], name: "index_settings_on_var", unique: true
   end
 

@@ -14,11 +14,11 @@
       <%= c 'stack' do %>
 
         <%= c 'heading', styles: [:alpha, :serif], tag: :h1 do %>
-          <%= Setting.onboarding_title %>
+          <%= Setting.find_by(var: :onboarding_title)&.send("value_#{I18n.locale}".to_sym) || Setting.onboarding_title %>
         <% end %>
 
         <div class="text-serif">
-          <%= c 'markdown', raw: Setting.onboarding_page %>
+          <%= c 'markdown', raw: Setting.find_by(var: :onboarding_page)&.send("value_#{I18n.locale}".to_sym) || Setting.onboarding_page %>
         </div>
 
         <%= c 'onboarding_channel_buttons' %>

@@ -8,6 +8,14 @@ RSpec.describe 'Onboarding::Threema', type: :request do
   let(:additional_consent) { true }
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
   let(:params) { { jwt: jwt } }
+  let(:onboarding_success_heading_record) { Setting.new(var: :onboarding_success_heading) }
+  let(:onboarding_success_text_record) { Setting.new(var: :onboarding_success_text) }
+  before do
+    allow(Setting).to receive(:find_by).with(var: :onboarding_success_heading).and_return(onboarding_success_heading_record)
+    allow(onboarding_success_heading_record).to receive(:send).with("value_#{I18n.locale}".to_sym).and_return('Welcome new contributor!')
+    allow(Setting).to receive(:find_by).with(var: :onboarding_success_text).and_return(onboarding_success_text_record)
+    allow(onboarding_success_text_record).to receive(:send).with("value_#{I18n.locale}".to_sym).and_return('You onboarded successfully.')
+  end
 
   describe 'POST /onboarding/threema' do
     let(:attrs) do
@@ -44,7 +52,7 @@ RSpec.describe 'Onboarding::Threema', type: :request do
 
     it 'redirects to success page' do
       subject.call
-      expect(response).to redirect_to onboarding_success_path
+      expect(response).to redirect_to onboarding_success_path(jwt: nil)
     end
 
     it 'invalidates the jwt' do
@@ -59,7 +67,7 @@ RSpec.describe 'Onboarding::Threema', type: :request do
 
       it 'redirects to success page' do
         subject.call
-        expect(response).to redirect_to onboarding_success_path
+        expect(response).to redirect_to onboarding_success_path(jwt: nil)
       end
 
       it 'invalidates the jwt' do

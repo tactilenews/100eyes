@@ -74,4 +74,5 @@ class Setting < RailsSettings::Base
 
   field :mailserver_host, readonly: true, default: ENV['MAILSERVER_HOST'] || 'localhost'
   field :mailserver_port, readonly: true, default: ENV['MAILSERVER_PORT'] || 1025
+  field :available_locales, readonly: true, default: ENV['AVAILABLE_LOCALES']&.split(':')&.map(&:to_sym) || :de
 end

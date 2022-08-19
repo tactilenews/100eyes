@@ -11,7 +11,6 @@ Rails.application.routes.draw do
     namespace :onboarding, module: nil do
       get '/', to: 'onboarding#index'
       get '/success', to: 'onboarding#success'
-      post '/switch-locale', to: 'onboarding#switch_locale'
 
       scope module: :onboarding do
         get '/email', to: 'email#show'

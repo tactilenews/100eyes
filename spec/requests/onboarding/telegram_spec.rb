@@ -6,6 +6,7 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
   describe 'GET /onboarding/telegram' do
     let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
     let(:params) { { jwt: jwt } }
+
     subject { -> { get onboarding_telegram_path, params: params } }
     before { allow(SecureRandom).to receive(:alphanumeric).with(8).and_return('TELEGRAM_ONBOARDING_TOKEN') }
 
@@ -13,14 +14,6 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
       subject.call
       parsed = Capybara::Node::Simple.new(response.body)
       expect(parsed).to have_css('input[value="TELEGRAM_ONBOARDING_TOKEN"]', visible: :hidden)
-    end
-
-    describe 'with unsigned jwt' do
-      let(:jwt) { 'INCORRECT_TOKEN' }
-      describe 'http status' do
-        subject { super().call && response }
-        it { is_expected.to have_http_status(:unauthorized) }
-      end
     end
   end
 
@@ -112,31 +105,43 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
       end
     end
 
-    describe 'with unsigned jwt' do
-      let(:jwt) { 'INCORRECT_TOKEN' }
+    describe 'invalid jwt' do
+      let(:onboarding_unauthorized_heading_record) { Setting.new(var: :onboarding_unauthorized_heading) }
+      let(:onboarding_unauthorized_text_record) { Setting.new(var: :onboarding_unauthorized_text) }
 
-      it 'renders unauthorized page' do
-        subject.call
-
-        expect(response).not_to be_successful
+      before do
+        allow(Setting).to receive(:find_by).with(var: :onboarding_unauthorized_heading).and_return(onboarding_unauthorized_heading_record)
+        allow(onboarding_unauthorized_heading_record).to receive(:send).with("value_#{I18n.locale}".to_sym).and_return('Unauthorized')
+        allow(Setting).to receive(:find_by).with(var: :onboarding_unauthorized_text).and_return(onboarding_unauthorized_text_record)
+        allow(onboarding_unauthorized_text_record).to receive(:send).with("value_#{I18n.locale}".to_sym).and_return('Sorry')
       end
 
-      it 'does not create new contributor' do
-        expect { subject.call }.not_to change(Contributor, :count)
+      context 'with unsigned jwt' do
+        let(:jwt) { 'INCORRECT_TOKEN' }
+
+        it 'renders unauthorized page' do
+          subject.call
+
+          expect(response).not_to be_successful
+        end
+
+        it 'does not create new contributor' do
+          expect { subject.call }.not_to change(Contributor, :count)
+        end
       end
-    end
 
-    describe 'with invalidated jwt' do
-      let!(:invalidated_jwt) { create(:json_web_token, invalidated_jwt: 'INVALID_JWT') }
-      let(:jwt) { 'INVALID_JWT' }
+      context 'with invalidated jwt' do
+        let!(:invalidated_jwt) { create(:json_web_token, invalidated_jwt: 'INVALID_JWT') }
+        let(:jwt) { 'INVALID_JWT' }
 
-      describe 'http status' do
-        subject { super().call && response }
-        it { is_expected.to have_http_status(:unauthorized) }
-      end
+        context 'http status' do
+          subject { super().call && response }
+          it { is_expected.to have_http_status(:unauthorized) }
+        end
 
-      it 'does not create new contributor' do
-        expect { subject.call }.not_to change(Contributor, :count)
+        it 'does not create new contributor' do
+          expect { subject.call }.not_to change(Contributor, :count)
+        end
       end
     end
   end
