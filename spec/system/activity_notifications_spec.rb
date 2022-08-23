@@ -55,7 +55,7 @@ RSpec.describe 'Activity Notifications' do
       )
       expect(page).to have_text('vor einem Tag')
       expect(page).to have_link('Zur Antwort', href: request_path(reply.request, anchor: "message-#{reply.id}"))
-      
+
       # ChatMessageSent
       click_link 'Zur Antwort'
       expect(page).to have_text("I'm a reply to #{reply.request.title}")

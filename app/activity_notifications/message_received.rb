@@ -22,9 +22,9 @@ class MessageReceived < Noticed::Base
   # rubocop:disable Rails/OutputSafety
   def text
     t('.text_html',
-    contributor_name: record.name,
-    request_title: request.title,
-    count: count).html_safe
+      contributor_name: record.name,
+      request_title: request.title,
+      count: count).html_safe
   end
   # rubocop:enable Rails/OutputSafety
 
