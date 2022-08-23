@@ -26,9 +26,12 @@ module PostmarkAdapter
 
     def welcome_email
       contributor = params[:contributor]
-      subject = Setting.find_by(var: :onboarding_success_heading).send("value_#{I18n.locale}".to_sym)
+      subject = Setting.find_by(var: :onboarding_success_heading)
+                       .send("value_#{contributor.localization_tags.first}".to_sym)
       message_stream = Setting.postmark_transactional_stream
-      @text = [subject, Setting.find_by(var: :onboarding_success_text).send("value_#{I18n.locale}".to_sym)].join("\n")
+      @text = [subject,
+               Setting.find_by(var: :onboarding_success_text)
+                      .send("value_#{contributor.localization_tags.first}").to_sym].join("\n")
       mail(to: contributor.email, subject: subject, message_stream: message_stream)
     end
 

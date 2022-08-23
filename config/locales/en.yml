@@ -38,7 +38,7 @@ en:
       steps:
         - "Find us on Telegram. To do this search for <strong>%{telegram_handle}</strong>."
         - "Once you have found our Telegram account, click on <strong>Start</strong>."
-        - "Saisissez ce code dès qu'on vous le demande : <strong>%{token}</strong>"
+        - "Enter this code when prompted: <strong>%{token}</strong>"
     onboarding_footer:
       imprint: Imprint
       data_protection: Privacy policy

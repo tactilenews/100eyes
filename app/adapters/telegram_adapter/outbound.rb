@@ -18,8 +18,10 @@ module TelegramAdapter
     def self.send_welcome_message!(contributor)
       return unless contributor&.telegram_id
 
-      welcome_message = ["<b>#{Setting.find_by(var: :onboarding_success_heading).send("value_#{I18n.locale}".to_sym)}</b>",
-                         Setting.find_by(var: :onboarding_success_text).send("value_#{I18n.locale}".to_sym)].join("\n")
+      welcome_message = ["<b>#{Setting.find_by(var: :onboarding_success_heading)
+                                      .send("value_#{contributor.localization_tags.first}".to_sym)}</b>",
+                         Setting.find_by(var: :onboarding_success_text)
+                                .send("value_#{contributor.localization_tags.first}").to_sym].join("\n")
       perform_later(text: welcome_message, recipient: contributor)
     end
 
