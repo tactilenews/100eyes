@@ -48,6 +48,7 @@
     SIGNAL_MONITORING_URL: "{{ rails.signal.monitoring_url | default('') }}"
     SENTRY_DSN: "{{ rails.sentry.dsn }}"
     ONBOARDING_SHOW_GDPR_MODAL: "{{ rails.onboarding.show_gdpr_modal | default('') | string | lower }}"
+    AVAILABLE_LOCALES: "{{ rails.I18n.available_locales }}"
   community.general.docker_compose:
     project_src: /home/ansible
     build: no

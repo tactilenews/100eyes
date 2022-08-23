@@ -26,6 +26,7 @@ x-prod-defaults: &x-prod-defaults
     SIGNAL_MONITORING_URL: "${SIGNAL_MONITORING_URL}"
     SENTRY_DSN: "${SENTRY_DSN}"
     ONBOARDING_SHOW_GDPR_MODAL: "${ONBOARDING_SHOW_GDPR_MODAL}"
+    AVAILABLE_LOCALES: "${AVAILABLE_LOCALES}"
   volumes:
     - ./log:/app/log
     - ./storage:/app/storage
