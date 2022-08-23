@@ -32,6 +32,17 @@ RSpec.describe 'Activity Notifications' do
       expect(page).to have_text('vor eine Minute')
       expect(page).to have_link('Zum Profil', href: contributor_path(contributor))
 
+      # I shouldn't be grouped
+      contributor_two = create(:contributor, first_name: 'Timmy', last_name: 'Timmerson')
+
+      visit dashboard_path(as: user)
+      expect(page).to have_css('svg.Avatar-initials')
+      expect(page).to have_text(
+        "#{contributor_two.name} hat sich via #{contributor_two.channels.first.to_s.capitalize} angemeldet."
+      )
+      expect(page).to have_text('vor weniger als eine Minute')
+      expect(page).to have_link('Zum Profil', href: contributor_path(contributor_two))
+
       # MessageReceived
       Timecop.travel(Time.current - 1.day)
       reply = create(:message, :with_sender, text: "I'm a reply to #{request.title}", request: request, sender: contributor_without_avatar)
@@ -44,9 +55,8 @@ RSpec.describe 'Activity Notifications' do
       )
       expect(page).to have_text('vor einem Tag')
       expect(page).to have_link('Zur Antwort', href: request_path(reply.request, anchor: "message-#{reply.id}"))
-
+      
       # ChatMessageSent
-
       click_link 'Zur Antwort'
       expect(page).to have_text("I'm a reply to #{reply.request.title}")
       click_link 'nachfragen'
@@ -66,11 +76,15 @@ RSpec.describe 'Activity Notifications' do
         href: contributor_request_path(contributor_without_avatar, reply.request, anchor: "message-#{Message.first.id}")
       )
 
-      # Limit ActivityNotifications to 30
-      create_list(:contributor, 31)
+      # I should be grouped
+      reply_two = create(:message, :with_sender, request: request, sender: contributor_two)
 
       visit dashboard_path(as: user)
-      expect(page).to have_text('hat sich via Email angemeldet.', count: 30)
+      expect(page).to have_text(
+        "#{contributor_two.name} und 1 andere haben auf deine Frage „#{reply_two.request.title}” geantwortet."
+      )
+      expect(page).to have_text('vor weniger als eine Minute')
+      expect(page).to have_link('Zur Frage', href: request_path(reply.request))
     end
   end
 end

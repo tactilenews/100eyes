@@ -28,7 +28,7 @@ class OnboardingCompleted < Noticed::Base
   # rubocop:enable Rails/OutputSafety
 
   def url
-    contributor_path(record.id)
+    contributor_path(record)
   end
 
   def link_text
