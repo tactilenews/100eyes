@@ -21,7 +21,7 @@ class MessageReceived < Noticed::Base
   #
   # rubocop:disable Rails/OutputSafety
   def text
-    t('.message_html',
+    t('.text_html',
     contributor_name: record.name,
     request_title: request.title,
     count: count).html_safe
@@ -46,5 +46,9 @@ class MessageReceived < Noticed::Base
 
   def message
     params[:message]
+  end
+
+  def count
+    Current.user.notifications.count_per_request(request) - 1
   end
 end
