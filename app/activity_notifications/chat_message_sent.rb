@@ -37,7 +37,7 @@ class ChatMessageSent < Noticed::Base
   end
 
   def record
-    params[:user]
+    params[:contributor]
   end
 
   def request

@@ -81,10 +81,10 @@ RSpec.describe 'Activity Notifications' do
 
       visit dashboard_path(as: user)
       expect(page).to have_text(
-        "#{contributor_two.name} und 1 andere haben auf deine Frage „#{reply_two.request.title}” geantwortet."
+        "#{contributor_two.name} und 1 andere haben auf die Frage „#{reply_two.request.title}” geantwortet."
       )
       expect(page).to have_text('vor weniger als eine Minute')
-      expect(page).to have_link('Zur Frage', href: request_path(reply.request))
+      expect(page).to have_link('Zur Antwort', href: request_path(reply_two.request, anchor: "message-#{reply_two.id}"))
     end
   end
 end

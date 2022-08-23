@@ -49,6 +49,9 @@ class MessageReceived < Noticed::Base
   end
 
   def count
-    Current.user.notifications.count_per_request(request) - 1
+    count_minus_last_message = Current.user.notifications.message_received.count_per_request(request) - 1
+    return 0 if count_minus_last_message.zero?
+
+    count_minus_last_message
   end
 end

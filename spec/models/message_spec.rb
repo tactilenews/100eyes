@@ -21,7 +21,7 @@ RSpec.describe Message, type: :model do
     end
 
     context 'with recipient' do
-      let(:message) { create(:message, :with_recipient, recipient: contributor) }
+      let(:message) { create(:message, :with_recipient, recipient: contributor, broadcasted: true) }
       it { should eql(contributor) }
     end
   end
@@ -34,7 +34,7 @@ RSpec.describe Message, type: :model do
     end
 
     describe 'message has no sender' do
-      let(:message) { create(:message, sender: nil) }
+      let(:message) { create(:message, sender: nil, broadcasted: true) }
       it { should be(false) }
     end
   end
@@ -61,7 +61,7 @@ RSpec.describe Message, type: :model do
       subject { message.conversation_link }
 
       describe 'given a recipient' do
-        let(:params) { { sender: nil, recipient: contributor } }
+        let(:params) { { sender: nil, recipient: contributor, broadcasted: true } }
         it { should eq('/contributors/7/requests/6') }
       end
 
@@ -94,7 +94,7 @@ RSpec.describe Message, type: :model do
   end
 
   describe '#after_commit(on: :commit)' do
-    let(:message) { create(:message, sender: nil, recipient: recipient) }
+    let(:message) { create(:message, sender: nil, recipient: recipient, broadcasted: true) }
     let(:recipient) { create(:contributor) }
 
     describe 'given a recipient with telegram' do

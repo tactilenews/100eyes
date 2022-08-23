@@ -68,7 +68,7 @@ class Message < ApplicationRecord
     if reply?
       MessageReceived.with(contributor: sender, request: request, message: self).deliver_later(User.all)
     elsif !broadcasted?
-      ChatMessageSent.with(contributor: recipient, request: request, editor: Current.user, message: self).deliver_later(User.all)
+      ChatMessageSent.with(contributor: recipient, request: request, user: Current.user, message: self).deliver_later(User.all)
     end
   end
 end
