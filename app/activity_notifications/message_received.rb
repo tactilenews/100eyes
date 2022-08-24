@@ -49,9 +49,15 @@ class MessageReceived < Noticed::Base
   end
 
   def count
-    count_minus_last_message = Current.user.notifications.message_received.count_per_request(request) - 1
+    count_minus_last_message = base_query.where('params @> ?', Noticed::Coder.dump(request: request).to_json).count - 1
     return 0 if count_minus_last_message.zero?
 
     count_minus_last_message
+  end
+
+  def base_query
+    Current.user
+           .notifications
+           .message_received
   end
 end
