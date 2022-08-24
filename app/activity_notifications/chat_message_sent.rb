@@ -21,7 +21,7 @@ class ChatMessageSent < Noticed::Base
   #
   # rubocop:disable Rails/OutputSafety
   def text
-    t('.text_html',
+    t(".#{chat_message_sent_by_current_user? ? 'my_' : ''}text_html",
       contributor_name: record.name,
       request_title: request.title,
       user_name: user.name,
@@ -51,6 +51,10 @@ class ChatMessageSent < Noticed::Base
 
   def message
     params[:message]
+  end
+
+  def chat_message_sent_by_current_user?
+    user == Current.user
   end
 
   def count

@@ -5,9 +5,11 @@ require 'rails_helper'
 RSpec.describe 'Activity Notifications' do
   context 'with recent activity' do
     let(:email) { Faker::Internet.safe_email }
+    let(:coworker_email) { Faker::Internet.safe_email }
     let(:password) { Faker::Internet.password(min_length: 8, max_length: 128) }
     let(:otp_enabled) { true }
-    let!(:user) { create(:user, first_name: 'Johnny', last_name: 'Appleseed', email: email, password: password, otp_enabled: otp_enabled) }
+    let(:user) { create(:user, first_name: 'Johnny', last_name: 'Appleseed', email: email, password: password, otp_enabled: otp_enabled) }
+    let!(:coworker) { create(:user, first_name: 'Coworker', email: coworker_email, password: password, otp_enabled: otp_enabled) }
     let(:request) { create(:request) }
     let(:contributor_without_avatar) { create(:contributor) }
 
@@ -65,15 +67,21 @@ RSpec.describe 'Activity Notifications' do
       click_button 'Absenden'
 
       Timecop.travel(Time.current + 5.hours)
+      expect(page).to have_text("Thanks for your reply #{contributor_without_avatar.name}!")
 
       visit dashboard_path(as: user)
       expect(page).to have_text(
-        "#{user.name} hat #{contributor_without_avatar.name} geantwortet auf „#{reply.request.title}”."
+        "Du hast #{contributor_without_avatar.name} geantwortet auf „#{reply.request.title}”."
       )
       expect(page).to have_text('vor etwa 5 Stunden')
       expect(page).to have_link(
         'Zur Nachricht',
         href: request_path(reply.request, anchor: "message-#{Message.first.id}")
+      )
+
+      visit dashboard_path(as: coworker)
+      expect(page).to have_text(
+        "#{user.name} hat #{contributor_without_avatar.name} geantwortet auf „#{reply.request.title}”."
       )
 
       # I should be grouped
@@ -99,7 +107,7 @@ RSpec.describe 'Activity Notifications' do
 
       visit dashboard_path(as: user)
       expect(page).to have_text(
-        "#{user.name} hat #{contributor_two.name} und 1 anderen auf die Frage „#{reply_two.request.title}” geantwortet."
+        "Du hast #{contributor_two.name} und 1 anderen auf die Frage „#{reply_two.request.title}” geantwortet."
       )
       expect(page).to have_text('vor 7 Tage')
       expect(page).to have_link(
@@ -119,12 +127,17 @@ RSpec.describe 'Activity Notifications' do
 
       visit dashboard_path(as: user)
       expect(page).to have_text(
-        "#{user.name} hat #{contributor_two.name} und 1 anderen auf die Frage „#{reply_two.request.title}” geantwortet."
+        "Du hast #{contributor_two.name} und 1 anderen auf die Frage „#{reply_two.request.title}” geantwortet."
       )
       expect(page).to have_text('vor etwa ein Monat')
       expect(page).to have_link(
         'Zur Nachricht',
         href: request_path(reply.request, anchor: "message-#{Message.first.id}")
+      )
+
+      visit dashboard_path(as: coworker)
+      expect(page).to have_text(
+        "#{user.name} hat #{contributor_two.name} und 1 anderen auf die Frage „#{reply_two.request.title}” geantwortet."
       )
     end
   end

@@ -724,4 +724,8 @@ de:
         zero: "<strong>%{user_name}</strong> hat <strong>%{contributor_name}</strong> geantwortet auf <strong>„%{request_title}”</strong>."
         one: "<strong>%{user_name}</strong> hat <strong>%{contributor_name}</strong> und %{count} anderen auf die Frage <strong>„%{request_title}”</strong> geantwortet."
         other: "<strong>%{user_name}</strong> hat <strong>%{contributor_name}</strong> und %{count} anderen auf die Frage <strong>„%{request_title}”</strong> geantwortet."
+      my_text_html:
+        zero: "<strong>Du</strong> hast <strong>%{contributor_name}</strong> geantwortet auf <strong>„%{request_title}”</strong>."
+        one: "<strong>Du</strong> hast <strong>%{contributor_name}</strong> und %{count} anderen auf die Frage <strong>„%{request_title}”</strong> geantwortet."
+        other: "<strong>Du</strong> hast <strong>%{contributor_name}</strong> und %{count} anderen auf die Frage <strong>„%{request_title}”</strong> geantwortet."
       link_text: "Zur Nachricht"
