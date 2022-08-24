@@ -24,7 +24,8 @@ class ChatMessageSent < Noticed::Base
     t('.text_html',
       contributor_name: record.name,
       request_title: request.title,
-      user_name: user.name).html_safe
+      user_name: user.name,
+      count: count).html_safe
   end
   # rubocop:enable Rails/OutputSafety
 
@@ -50,5 +51,9 @@ class ChatMessageSent < Noticed::Base
 
   def message
     params[:message]
+  end
+
+  def count
+    Current.user.notifications.chat_message_sent.count_per_request(request, user, record)
   end
 end

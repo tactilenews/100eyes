@@ -35,8 +35,10 @@ class DashboardController < ApplicationController
   end
 
   def activity_notifications
-    grouped_by_request = message_received.group_by(&:request)
-    latest_message_received_per_request = grouped_by_request.map { |_key, value| value.first }
-    (onboarding_completed + latest_message_received_per_request + chat_message_sent).sort_by(&:created_at).reverse!
+    message_received_grouped = message_received.group_by(&:request)
+    latest_message_received_per_request = message_received_grouped.map { |_key, value| value.first }
+    chat_message_grouped = chat_message_sent.group_by { |message| [message.request, message.user] }
+    last_message_sent_per_user_on_request = chat_message_grouped.map { |_key, value| value.flatten.first }
+    (onboarding_completed + latest_message_received_per_request + last_message_sent_per_user_on_request).sort_by(&:created_at).reverse!
   end
 end

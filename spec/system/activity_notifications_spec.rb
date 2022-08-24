@@ -57,9 +57,9 @@ RSpec.describe 'Activity Notifications' do
       expect(page).to have_link('Zur Antwort', href: request_path(reply.request, anchor: "message-#{reply.id}"))
 
       # ChatMessageSent
-      click_link 'Zur Antwort'
+      click_link('Zur Antwort', href: request_path(reply.request, anchor: "message-#{reply.id}"))
       expect(page).to have_text("I'm a reply to #{reply.request.title}")
-      click_link 'nachfragen'
+      click_link('nachfragen', href: contributor_request_path(contributor_without_avatar, reply.request))
       expect(page).to have_text('Nachrichtenverlauf')
       fill_in 'message[text]', with: "Thanks for your reply #{contributor_without_avatar.name}!"
       click_button 'Absenden'
@@ -77,7 +77,8 @@ RSpec.describe 'Activity Notifications' do
       )
 
       # I should be grouped
-      reply_two = create(:message, :with_sender, request: request, sender: contributor_two)
+      reply_two = create(:message, :with_sender, request: request, sender: contributor_two,
+                                                 text: "I'm a reply from #{contributor_two.name}")
 
       visit dashboard_path(as: user)
       expect(page).to have_text(
@@ -85,6 +86,26 @@ RSpec.describe 'Activity Notifications' do
       )
       expect(page).to have_text('vor weniger als eine Minute')
       expect(page).to have_link('Zur Antwort', href: request_path(reply_two.request, anchor: "message-#{reply_two.id}"))
+
+      click_link('Zur Antwort', href: request_path(reply_two.request, anchor: "message-#{reply_two.id}"))
+      expect(page).to have_text("I'm a reply from #{contributor_two.name}")
+      click_link('nachfragen', href: contributor_request_path(contributor_two, reply_two.request))
+      expect(page).to have_text('Nachrichtenverlauf')
+      fill_in 'message[text]', with: "Thanks for your reply #{contributor_two.name}!"
+      click_button 'Absenden'
+
+      Timecop.travel(Time.current + 1.week)
+      expect(page).to have_text("Thanks for your reply #{contributor_two.name}!")
+
+      visit dashboard_path(as: user)
+      expect(page).to have_text(
+        "#{user.name} hat #{contributor_two.name} und 1 anderen auf die Frage „#{reply_two.request.title}” geantwortet."
+      )
+      expect(page).to have_text('vor 7 Tage')
+      expect(page).to have_link(
+        'Zur Nachricht',
+        href: request_path(reply.request, anchor: "message-#{Message.first.id}")
+      )
     end
   end
 end

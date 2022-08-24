@@ -719,5 +719,8 @@ de:
         other: "<b>%{contributor_name}</b> und %{count} andere haben auf die Frage <b>„%{request_title}”</b> geantwortet."
       link_text: "Zur Antwort"
     chat_message_sent:
-      text_html: "<b>%{user_name}</b> hat <b>%{contributor_name}</b> geantwortet auf <b>„%{request_title}”</b>."
+      text_html:
+        zero: "<strong>%{user_name}</strong> hat <strong>%{contributor_name}</strong> geantwortet auf <strong>„%{request_title}”</strong>."
+        one: "<strong>%{user_name}</strong> hat <strong>%{contributor_name}</strong> und %{count} anderen auf die Frage <strong>„%{request_title}”</strong> geantwortet."
+        other: "<strong>%{user_name}</strong> hat <strong>%{contributor_name}</strong> und %{count} anderen auf die Frage <strong>„%{request_title}”</strong> geantwortet."
       link_text: "Zur Nachricht"
