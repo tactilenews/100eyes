@@ -720,4 +720,4 @@ de:
       link_text: "Zur Antwort"
     chat_message_sent:
       text_html: "<b>%{user_name}</b> hat <b>%{contributor_name}</b> geantwortet auf <b>„%{request_title}”</b>."
-      link_text: "Zur Chat-Nachricht"
+      link_text: "Zur Nachricht"

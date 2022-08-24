@@ -72,8 +72,8 @@ RSpec.describe 'Activity Notifications' do
       )
       expect(page).to have_text('vor etwa 5 Stunden')
       expect(page).to have_link(
-        'Zur Chat-Nachricht',
-        href: contributor_request_path(contributor_without_avatar, reply.request, anchor: "message-#{Message.first.id}")
+        'Zur Nachricht',
+        href: request_path(reply.request, anchor: "message-#{Message.first.id}")
       )
 
       # I should be grouped
