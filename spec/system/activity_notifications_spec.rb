@@ -95,9 +95,19 @@ RSpec.describe 'Activity Notifications' do
       expect(page).to have_text('vor weniger als eine Minute')
       expect(page).to have_link('Zur Antwort', href: request_path(reply_two.request, anchor: "message-#{reply_two.id}"))
 
-      click_link('Zur Antwort', href: request_path(reply_two.request, anchor: "message-#{reply_two.id}"))
-      expect(page).to have_text("I'm a reply from #{contributor_two.name}")
-      click_link('nachfragen', href: contributor_request_path(contributor_two, reply_two.request))
+      reply_by_same_contributor = create(:message, :with_sender, request: request, sender: contributor_two,
+                                                                 text: "I'm a reply from the same contributor: #{contributor_two.name}")
+
+      visit dashboard_path(as: user)
+      expect(page).to have_text(
+        "#{contributor_two.name} und 1 andere haben auf die Frage „#{reply_by_same_contributor.request.title}” geantwortet."
+      )
+      expect(page).to have_link('Zur Antwort',
+                                href: request_path(reply_by_same_contributor.request, anchor: "message-#{reply_by_same_contributor.id}"))
+
+      click_link('Zur Antwort', href: request_path(reply_by_same_contributor.request, anchor: "message-#{reply_by_same_contributor.id}"))
+      expect(page).to have_text("I'm a reply from the same contributor: #{contributor_two.name}")
+      click_link('nachfragen', href: contributor_request_path(contributor_two, reply_by_same_contributor.request))
       expect(page).to have_text('Nachrichtenverlauf')
       fill_in 'message[text]', with: "Thanks for your reply #{contributor_two.name}!"
       click_button 'Absenden'
@@ -107,7 +117,7 @@ RSpec.describe 'Activity Notifications' do
 
       visit dashboard_path(as: user)
       expect(page).to have_text(
-        "Du hast #{contributor_two.name} und 1 anderen auf die Frage „#{reply_two.request.title}” geantwortet."
+        "Du hast #{contributor_two.name} und 1 anderen auf die Frage „#{reply_by_same_contributor.request.title}” geantwortet."
       )
       expect(page).to have_text('vor 7 Tage')
       expect(page).to have_link(
@@ -115,7 +125,7 @@ RSpec.describe 'Activity Notifications' do
         href: request_path(reply.request, anchor: "message-#{Message.first.id}")
       )
 
-      click_link('Zur Antwort', href: request_path(reply_two.request, anchor: "message-#{reply_two.id}"))
+      click_link('Zur Antwort', href: request_path(reply_by_same_contributor.request, anchor: "message-#{reply_by_same_contributor.id}"))
       expect(page).to have_text("I'm a reply from #{contributor_two.name}")
       click_link('nachfragen', href: contributor_request_path(contributor_two, reply_two.request))
       expect(page).to have_text('Nachrichtenverlauf')

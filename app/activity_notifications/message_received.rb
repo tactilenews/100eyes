@@ -49,10 +49,10 @@ class MessageReceived < Noticed::Base
   end
 
   def count
-    count_minus_last_message = base_query.where('params @> ?', Noticed::Coder.dump(request: request).to_json).count - 1
-    return 0 if count_minus_last_message.zero?
-
-    count_minus_last_message
+    replies_to_request = base_query.where('params @> ?', Noticed::Coder.dump(request: request).to_json)
+    with_contributor = replies_to_request.where('params @> ?', Noticed::Coder.dump(contributor: record).to_json)
+    without_contributor = replies_to_request - with_contributor
+    without_contributor.pluck(:params).pluck(:contributor).pluck(:id).uniq.count
   end
 
   def base_query

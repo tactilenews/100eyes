@@ -58,9 +58,8 @@ class ChatMessageSent < Noticed::Base
   end
 
   def count
-    query = base_query
-    requests_responded_to_by_user = query.where('params @> ?', Noticed::Coder.dump(request: request).to_json)
-                                         .where('params @> ?', Noticed::Coder.dump(user: user).to_json)
+    requests_responded_to_by_user = base_query.where('params @> ?', Noticed::Coder.dump(request: request).to_json)
+                                              .where('params @> ?', Noticed::Coder.dump(user: user).to_json)
     with_contributor = requests_responded_to_by_user.where('params @> ?', Noticed::Coder.dump(contributor: record).to_json)
     without_contributor = requests_responded_to_by_user - with_contributor
     without_contributor.pluck(:params).pluck(:contributor).pluck(:id).uniq.count
