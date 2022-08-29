@@ -13,6 +13,7 @@ class Message < ApplicationRecord
   belongs_to :request
   has_many :photos, dependent: :destroy
   has_many :files, dependent: :destroy, class_name: 'Message::File'
+  has_noticed_notifications model_name: 'ActivityNotification'
 
   counter_culture :request, column_name: proc { |model| model.reply? ? 'replies_count' : nil }
 

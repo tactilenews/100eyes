@@ -146,8 +146,21 @@ RSpec.describe 'Activity Notifications' do
       )
 
       visit dashboard_path(as: coworker)
+
+      click_link('Zur Antwort', href: request_path(reply_by_same_contributor.request, anchor: "message-#{reply_by_same_contributor.id}"))
+      expect(page).to have_text("I'm a reply from #{contributor_two.name}")
+      click_link('nachfragen', href: contributor_request_path(contributor_two, reply_two.request))
+      expect(page).to have_text('Nachrichtenverlauf')
+      fill_in 'message[text]', with: "This is a chat message from #{coworker.name} to #{contributor_two.name}"
+      click_button 'Absenden'
+
+      Timecop.travel(Time.current + 5.minutes)
+
+      expect(page).to have_text("This is a chat message from #{coworker.name} to #{contributor_two.name}")
+
+      visit dashboard_path(as: user)
       expect(page).to have_text(
-        "#{user.name} hat #{contributor_two.name} und 1 anderen auf die Frage „#{reply_two.request.title}” geantwortet."
+        "#{coworker.name} hat #{contributor_two.name} und 1 anderen auf die Frage „#{reply_by_same_contributor.request.title}” geantwortet."
       )
     end
   end
