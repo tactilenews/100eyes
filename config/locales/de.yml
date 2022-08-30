@@ -46,15 +46,12 @@ de:
     request_metrics:
       contributors:
         one: hat geantwortet
-        two: haben geantwortet
         other: haben geantwortet
       replies:
         one: Nachricht ingesamt
-        two: Nachrichten insgesamt
         other: Nachrichten insgesamt
       photos:
         one: Foto
-        two: Fotos
         other: Fotos
     request_notification:
       action: Neu laden

@@ -28,7 +28,7 @@ class ChatMessageSent < Noticed::Base
     unique_contributors = notifications.map(&:contributor).uniq
     count = unique_contributors.size
 
-    t(".#{chat_message_sent_by_current_user?(notifications.first.recipient_id) ? 'my_' : ''}text_html",
+    t(group_message_key(notifications.first.recipient_id, count),
       contributor_one: unique_contributors.first.name,
       contributor_two: unique_contributors.second&.name,
       request_title: request.title,
@@ -62,7 +62,18 @@ class ChatMessageSent < Noticed::Base
     params[:message]
   end
 
-  def chat_message_sent_by_current_user?(current_user)
-    user.id == current_user
+  def pluralization_key(count)
+    case count
+    when 1
+      :one
+    when 2
+      :two
+    else
+      :other
+    end
+  end
+
+  def group_message_key(current_user_id, count)
+    ".#{user.id == current_user_id ? 'my_' : ''}text_html.#{pluralization_key(count)}"
   end
 end

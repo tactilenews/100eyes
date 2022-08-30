@@ -28,11 +28,10 @@ class MessageReceived < Noticed::Base
     unique_contributors = notifications.map(&:contributor).uniq
     count = unique_contributors.size
 
-    t('.text_html',
+    t(".text_html.#{pluralization_key(count)}",
       contributor_one: unique_contributors.first.name,
       contributor_two: unique_contributors.second&.name,
       request_title: request.title,
-      count: count,
       others_count: count - 1).html_safe
   end
   # rubocop:enable Rails/OutputSafety
@@ -55,5 +54,16 @@ class MessageReceived < Noticed::Base
 
   def message
     params[:message]
+  end
+
+  def pluralization_key(count)
+    case count
+    when 1
+      :one
+    when 2
+      :two
+    else
+      :other
+    end
   end
 end
