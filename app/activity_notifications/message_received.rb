@@ -19,12 +19,21 @@ class MessageReceived < Noticed::Base
 
   # Define helper methods to make rendering easier.
   #
+  def group_key
+    request
+  end
+
   # rubocop:disable Rails/OutputSafety
-  def text
+  def group_message(notifications:)
+    unique_contributors = notifications.map(&:contributor).uniq
+    count = unique_contributors.size
+
     t('.text_html',
-      contributor_name: record.name,
+      contributor_one: unique_contributors.first.name,
+      contributor_two: unique_contributors.second&.name,
       request_title: request.title,
-      count: count).html_safe
+      count: count,
+      others_count: count - 1).html_safe
   end
   # rubocop:enable Rails/OutputSafety
 
@@ -46,18 +55,5 @@ class MessageReceived < Noticed::Base
 
   def message
     params[:message]
-  end
-
-  def count
-    replies_to_request = base_query.where('params @> ?', Noticed::Coder.dump(request: request).to_json)
-    with_contributor = replies_to_request.where('params @> ?', Noticed::Coder.dump(contributor: record).to_json)
-    without_contributor = replies_to_request - with_contributor
-    without_contributor.pluck(:params).pluck(:contributor).pluck(:id).uniq.count
-  end
-
-  def base_query
-    Current.user
-           .notifications
-           .message_received
   end
 end

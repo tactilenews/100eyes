@@ -1,44 +1,24 @@
 # frozen_string_literal: true
 
 class DashboardController < ApplicationController
-  before_action :set_current_user, only: :index
-
   def index
     @activity_notifications = activity_notifications
   end
 
   private
 
-  def set_current_user
-    Current.user = current_user
-  end
-
-  def onboarding_completed
-    current_user
-      .notifications
-      .onboarding_completed
-      .newest_first
-  end
-
-  def message_received
-    current_user
-      .notifications
-      .message_received
-      .newest_first
-  end
-
-  def chat_message_sent
-    current_user
-      .notifications
-      .chat_message_sent
-      .newest_first
-  end
-
   def activity_notifications
-    message_received_grouped = message_received.group_by(&:request)
-    latest_message_received_per_request = message_received_grouped.map { |_key, value| value.first }
-    chat_message_grouped = chat_message_sent.group_by { |message| [message.request, message.user] }
-    last_message_sent_per_user_on_request = chat_message_grouped.map { |_key, value| value.flatten.first }
-    (onboarding_completed + latest_message_received_per_request + last_message_sent_per_user_on_request).sort_by(&:created_at).reverse!
+    grouped = current_user.notifications
+                          .newest_first.limit(100)
+                          .group_by { |notification| notification.to_notification.group_key }
+    grouped.map do |_key, notifications|
+      {
+        record: notifications.first.to_notification.record,
+        group_message: notifications.first.to_notification.group_message(notifications: notifications),
+        created_at: notifications.first.created_at,
+        url: notifications.first.to_notification.url,
+        link_text: notifications.first.to_notification.link_text
+      }
+    end
   end
 end

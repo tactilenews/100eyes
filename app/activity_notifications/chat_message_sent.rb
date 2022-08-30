@@ -19,13 +19,22 @@ class ChatMessageSent < Noticed::Base
 
   # Define helper methods to make rendering easier.
   #
+  def group_key
+    [request, user]
+  end
+
   # rubocop:disable Rails/OutputSafety
-  def text
-    t(".#{chat_message_sent_by_current_user? ? 'my_' : ''}text_html",
-      contributor_name: record.name,
+  def group_message(notifications:)
+    unique_contributors = notifications.map(&:contributor).uniq
+    count = unique_contributors.size
+
+    t(".#{chat_message_sent_by_current_user?(notifications.first.recipient_id) ? 'my_' : ''}text_html",
+      contributor_one: unique_contributors.first.name,
+      contributor_two: unique_contributors.second&.name,
       request_title: request.title,
       user_name: user.name,
-      count: count).html_safe
+      count: count,
+      others_count: count - 1).html_safe
   end
   # rubocop:enable Rails/OutputSafety
 
@@ -53,21 +62,7 @@ class ChatMessageSent < Noticed::Base
     params[:message]
   end
 
-  def chat_message_sent_by_current_user?
-    user == Current.user
-  end
-
-  def count
-    requests_responded_to_by_user = base_query.where('params @> ?', Noticed::Coder.dump(request: request).to_json)
-                                              .where('params @> ?', Noticed::Coder.dump(user: user).to_json)
-    with_contributor = requests_responded_to_by_user.where('params @> ?', Noticed::Coder.dump(contributor: record).to_json)
-    without_contributor = requests_responded_to_by_user - with_contributor
-    without_contributor.pluck(:params).pluck(:contributor).pluck(:id).uniq.count
-  end
-
-  def base_query
-    Current.user
-           .notifications
-           .chat_message_sent
+  def chat_message_sent_by_current_user?(current_user)
+    user.id == current_user
   end
 end
