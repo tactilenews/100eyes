@@ -118,6 +118,7 @@ de:
       members_count_message:
         one: Es gibt <strong>ein Mitglied</strong> mit diesen Tags.
         other: Es gibt <strong>%{count} Mitglieder</strong> mit diesen Tags.
+      insert_placeholder_button: Vornamen einfügen
     chat_preview:
       status: jetzt online
       alt: >
