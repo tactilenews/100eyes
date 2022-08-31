@@ -1,10 +1,8 @@
 <div class="<%= class_attr %>">
   <%= c 'flex', style: :equal do %>
     <% metrics.each do |metric| %>
-      <%= c 'card' do %>
-        <%= c 'box', style: :small do %>
-          <%= c 'metric', style: :large, **metric %>
-        <% end %>
+      <%= c 'card', style: :small do %>
+        <%= c 'metric', style: :large, **metric %>
       <% end %>
     <% end %>
   <% end %>

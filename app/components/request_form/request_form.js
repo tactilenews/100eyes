@@ -1,11 +1,7 @@
 import { Controller } from '@hotwired/stimulus';
 import Rails from '@rails/ujs';
 import sanitize from '../../assets/javascript/helpers/sanitize.js';
-
-const template = ({ message, fallback }) => {
-  message = sanitize(message) || fallback;
-  return message;
-};
+import replacePlaceholder from '../../assets/javascript/helpers/replace-placeholder.js';
 
 export default class extends Controller {
   static targets = ['preview', 'message', 'membersCount'];
@@ -19,11 +15,23 @@ export default class extends Controller {
     this.updateMembersCount();
   }
 
+  insertPlaceholderAtCursor() {
+    const placeholder = '{{VORNAME}}';
+    const [start, end] = [
+      this.messageTarget.selectionStart,
+      this.messageTarget.selectionEnd,
+    ];
+    this.messageTarget.setRangeText(placeholder, start, end, 'end');
+    const event = new Event('input', { bubbles: true });
+    this.messageTarget.dispatchEvent(event);
+    this.messageTarget.focus();
+  }
+
   updatePreview() {
-    this.previewTarget.innerHTML = template({
-      message: this.messageTarget.value,
-      fallback: this.previewFallbackValue,
-    });
+    let message = sanitize(this.messageTarget.value);
+    message = message || this.previewFallbackValue;
+    message = replacePlaceholder(message, 'VORNAME', 'Max');
+    this.previewTarget.innerHTML = message;
   }
 
   updateMembersCount(event) {

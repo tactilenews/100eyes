@@ -1,5 +1,23 @@
-<div <%= attrs.slice(:class) %>>
-  <textarea <%= attrs.except(:class).merge(class: 'Textarea-input') %>><%= value %></textarea>
+<div
+  <%= attrs.slice(:class) %>
+  data-controller="textarea"
+  data-action="input->textarea#resize input->textarea#highlightPlaceholders"
+>
+  <div class="Textarea-wrapper">
+    <% if highlight_placeholders? %>
+      <div
+        class="Textarea-highlights"
+        data-textarea-target="highlights"
+        aria-hidden="true"
+      ></div>
+    <% end %>
+
+    <textarea
+      class="Textarea-input"
+      data-textarea-target="input"
+      <%= attrs.except(:class) %>
+    ><%= value %></textarea>
+  </div>
 
   <% if show_emoji_picker_hint? && emoji_picker_supported? %>
     <p class="Textarea-emojiPickerHint text-small text-light">

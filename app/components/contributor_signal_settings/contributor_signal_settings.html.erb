@@ -18,6 +18,7 @@
             name: contributor.name,
             first_name: contributor.first_name,
             date: l(contributor.created_at.to_date),
+            phone_number: contributor.signal_phone_number.phony_formatted,
           ) %>
         </p>
 

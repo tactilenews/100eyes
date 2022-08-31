@@ -14,9 +14,24 @@
         <% end %>
 
         <%= c 'field', object: @request, attr: :text do |field| %>
+          <div
+            class='RequestForm-messageTextAreaToolbar'
+            role='toolbar'
+            aria-label='Symbolleiste'
+            aria-control='request[text]'
+          >
+            <%= c 'button',
+              style: :secondary,
+              class: 'RequestForm-insertPlaceholderButton',
+              type: 'button',
+              label: t('components.request_form.insert_placeholder_button'),
+              data: { action: 'click->request-form#insertPlaceholderAtCursor' }
+            %>
+          </div>
           <%= c 'textarea', field.input_defaults.merge(
             required: true,
             show_emoji_picker_hint: true,
+            highlight_placeholders: true,
             data: { request_form_target: 'message' }
           ) %>
         <% end %>

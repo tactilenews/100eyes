@@ -150,7 +150,7 @@ RSpec.describe '/contributors', type: :request do
                 contributor_request_path(
                   contributor_id: contributor.id,
                   id: the_request.id,
-                  anchor: "chat-row-#{newest_message.id}"
+                  anchor: "message-#{newest_message.id}"
                 )
               )
           end

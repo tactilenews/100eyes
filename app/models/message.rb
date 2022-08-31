@@ -13,6 +13,7 @@ class Message < ApplicationRecord
   belongs_to :request
   has_many :photos, dependent: :destroy
   has_many :files, dependent: :destroy, class_name: 'Message::File'
+  has_noticed_notifications model_name: 'ActivityNotification'
 
   counter_culture :request, column_name: proc { |model| model.reply? ? 'replies_count' : nil }
 
@@ -58,15 +59,17 @@ class Message < ApplicationRecord
     Rails.application.routes.url_helpers.contributor_request_path(
       contributor,
       request,
-      anchor: "chat-row-#{id}"
+      anchor: "message-#{id}"
     )
   end
 
   private
 
   def notify_recipient
-    return unless reply?
-
-    MessageReceived.with(contributor: sender, request: request).deliver_later(User.all)
+    if reply?
+      MessageReceived.with(contributor: sender, request: request, message: self).deliver_later(User.all)
+    elsif !broadcasted?
+      ChatMessageSent.with(contributor: recipient, request: request, user: Current.user, message: self).deliver_later(User.all)
+    end
   end
 end

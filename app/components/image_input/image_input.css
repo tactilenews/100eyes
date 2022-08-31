@@ -1,0 +1,41 @@
+.ImageInput {
+  padding: var(--spacing-unit-xs);
+  background-color: var(--color-gray-lightest);
+  border-radius: var(--border-radius);
+}
+
+.ImageInput--dragging {
+  outline: 2px dashed var(--color-border);
+}
+
+.ImageInput--active {
+  outline-color: var(--color-accent);
+}
+
+.ImageInput-selectedImage:not([hidden]),
+.ImageInput-emptyState:not([hidden]) {
+  display: flex;
+  align-items: center;
+}
+
+.ImageInput-selectedImage {
+  gap: var(--spacing-unit-xs);
+}
+
+.ImageInput-icon,
+.ImageInput-thumbnail {
+  display: block;
+  width: calc(2 * var(--spacing-unit));
+  height: calc(2 * var(--spacing-unit));
+}
+
+.ImageInput-thumbnail {
+  object-fit: contain;
+  background-color: #fff;
+  border-radius: var(--border-radius-s);
+}
+
+.ImageInput-icon {
+  padding: var(--spacing-unit-s);
+  color: var(--text-color-light);
+}

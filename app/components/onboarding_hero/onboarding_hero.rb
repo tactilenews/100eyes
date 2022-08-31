@@ -2,14 +2,16 @@
 
 module OnboardingHero
   class OnboardingHero < ApplicationComponent
-    def initialize(image:, **)
-      super
-
-      @image = image
-    end
-
     private
 
-    attr_reader :image
+    def hero
+      blob = Setting.onboarding_hero
+
+      blob.variant(resize_to_fill: [900, 450], quality: 65, convert: 'jpeg') if blob.present? && blob.variable?
+    end
+
+    def hero?
+      hero.present?
+    end
   end
 end

@@ -165,7 +165,6 @@ ActiveRecord::Schema.define(version: 2022_06_07_120142) do
     t.string "text"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "hints", default: [], array: true
     t.integer "replies_count"
   end
 

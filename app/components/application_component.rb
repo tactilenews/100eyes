@@ -13,7 +13,7 @@ class ApplicationComponent < ViewComponent::Base
     @styles << style if style
 
     params = self.class.instance_method(:initialize).parameters.map(&:last)
-    @attrs = attrs.except(*params)
+    @attrs = attrs.except(*params, :style, :styles)
   end
 
   private

@@ -39,6 +39,7 @@ rescue ActiveRecord::PendingMigrationError => e
   puts e.to_s.strip
   exit 1
 end
+
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -82,7 +83,5 @@ RSpec.configure do |config|
   config.include Capybara::RSpecMatchers, type: :component
   config.include FactoryBot::Syntax::Methods
 
-  config.before(:each, type: :system) do
-    driven_by :rack_test
-  end
+  config.include Helpers
 end

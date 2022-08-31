@@ -1,3 +1,5 @@
-<div class="<%= class_attr %>">
-  <img src="<%= image %>" alt="" />
-</div>
+<% if hero? %>
+  <div <%= attrs %>>
+    <img src="<%= url_for(hero) %>" alt="" />
+  </div>
+<% end %>

@@ -118,6 +118,7 @@ de:
       members_count_message:
         one: Es gibt <strong>ein Mitglied</strong> mit diesen Tags.
         other: Es gibt <strong>%{count} Mitglieder</strong> mit diesen Tags.
+      insert_placeholder_button: Vornamen einfügen
     chat_preview:
       status: jetzt online
       alt: >
@@ -200,7 +201,7 @@ de:
           %{name} hat sich mit der Handynummer %{phone_number} angemeldet.
       incomplete:
         text: |
-          %{name} hat sich am %{date} via Signal angemeldet, die Anmeldung aber noch nicht abgeschlossen.
+          %{name} hat sich am %{date} via Signal mit der Handynummer %{phone_number} angemeldet, die Anmeldung aber noch nicht abgeschlossen.
           Sende %{first_name} einen Link mit Hinweisen zum Abschließen der Anmeldung.
         action: Link kopieren
     contributor_header:
@@ -251,6 +252,12 @@ de:
       heading: Datenschutz
       text: Für die technische Unterstützung der Webseitenfunktionen benötigen wir Tools, deren Nutzung auf Grundlage unseres Interesses an einer sicheren und effizienten Bereitstellung, Analyse sowie Optimierung unseres Onlineangebotes erfolgt. Nähere Informationen, auch zur Datenverarbeitung außerhalb der EU, finden Sie in <a class="Link" href="%{link}" target="_blank" rel="noreferrer noopener">unserer Datenschutzerklärung</a>.
       accept: Alles klar!
+    image_input:
+      thumbnail_alt_text: Vorschau des aktuell hochgeladenen Bilds
+      no_image: Kein Bild ausgewählt
+      replace_image: Bild ersetzen
+      select_image: Bild auswählen
+      input_label: Bild
 
   mailer:
     unsubscribe:
@@ -270,38 +277,13 @@ de:
   skip_to_content: Zum Hauptinhalt springen
 
   dashboard:
-    how_it_works: So funktioniert 100eyes
-    become_a_pioneer: Werden Sie Dialog-Pionier:in.
-    provided_technology: Wir stellen die Technologie.
-    how_it_works_list:
-      - icon: community
-        title: Community aufbauen
-        text: Finden Sie Ihr Mini Public. Laden Sie 50 Menschen oder mehr zum Dialog ein.
-      - icon: mail
-        title: Nachrichten versenden
-        text: Stellen Sie eine Frage und senden Sie diese mit einem Klick an viele Menschen gleichzeitig – direkt auf den Lieblingsmessenger.
-      - icon: chat-history
-        title: Antworten empfangen
-        text: 100eyes sammelt alle Antworten und stellt sie übersichtlich als Chatverlauf zur Verfügung.
-      - icon: user-connection
-        title: Antworten auswerten
-        text: Werten Sie die Antworten aus und machen Sie Programm am Puls der Nutzer:innen.
-      - icon: new-formats
-        title: Neue Formate entwickeln
-        text: Entwickeln Sie neue Formate dialog-getrieben, maßgeschneidert für neue Zielgruppen.
-    selling_points_list:
-      - icon: dsgvo
-        text: DSGVO konform
-      - icon: data-protection
-        text: Deutscher Datenschutz
-      - icon: billing
-        text: Faires modulares Preissystem
-      - icon: community
-        text: Kontakte & Inhalte  gehören Ihnen
-      - icon: support
-        text: Fixer persönlicher Support
-      - icon: download
-        text: Neue Features als Erste testen
+    activity_notifications:
+        heading: "Hallo, %{first_name}!"
+        heading_morning: "Guten Morgen, %{first_name}!"
+        heading_afternoon: "Guten Tag, %{first_name}!"
+        heading_evening: "Guten Abend, %{first_name}!"
+        card_heading: Letzte Aktivität
+        empty_state: "Du hast im Moment keine neuen Benachrichtigungen."
 
   setting:
     setting:
@@ -342,14 +324,14 @@ de:
       onboarding_unauthorized_text:
         label: Text
       onboarding_logo:
-        label: Logo (URL)
-        help: Das Logo sollte eine Bilddatei im SVG-, PNG-Format sein und ca. 90 Pixel hoch sein. Es wird während des Onboardings angezeigt.
+        label: Logo
+        help: Bilddatei im SVG- oder PNG-Format
       onboarding_byline:
         label: Unterzeile
         help: Wird unter dem Projekttitel bzw. Logo angezeigt.
       onboarding_hero:
-        label: Header-Bild (URL)
-        help: Das Header-Bild sollte eine Bilddatei im JPEG-Format sein. Es sollte ein Seitenverhältnis von 2:1 haben und ca. 900 Pixel breit sein. Es wird während des Onboardings angezeigt.
+        label: Header-Bild
+        help: Bilddatei im JPEG-Format, Seitenverhältnis 2:1
       onboarding_data_protection_link:
         label: Link zur Datenschutzerklärung
         help: Der Link wird während des Onboardings in der Fußzeile angezeigt. Vor der Anmeldung müssen neue Mitglieder der Erklärung außerdem explizit zustimmen.
@@ -443,44 +425,6 @@ de:
       other: Deine Frage wurde erfolgreich an %{count} Mitglieder in der Community gesendet
     replies: Alle Antworten
     created_at: Frage gestellt %{created_at}
-    hints:
-      photo:
-        label: Fotos
-        text: >
-          Schick uns doch auch ein Foto (oder mehrere). Bitte schick uns
-          nur Fotos, die du selber gemacht hast. Mit der Zusendung von Fotos
-          gibst du gleichzeitig dein Einverständnis für eine mögliche
-          Veröffentlichung. Bei Veröffentlichung nennen wir dich als Urheber
-          (Foto: Max Mustermann/100eyes).
-      address:
-        label: Adressen
-        text: >
-          Schick uns doch eine Adresse oder genaue Koordinaten. Wir nutzen
-          die Geodaten für unsere Recherchen und werden sie eventuell in einem
-          Text verarbeiten oder als Datenpunkt auf einer Karte verwenden.
-      contact:
-        label: Kontaktdaten
-        text: >
-          Schick uns gerne Kontaktdaten. Wir nutzen die Kontaktdaten für
-          unsere Recherchen und werden die Person eventuell kontaktieren, aber
-          keine Kontaktdaten veröffentlichen.
-      medicalInfo:
-        label: Medizinische Informationen
-        text: >
-          Du stellst uns hier möglicherweise sensible medizinische
-          Informationen bereit. Wir sind uns dessen bewusst und behandeln deine
-          Daten mit aller gebotenen Vorsicht. Wenn du uns Daten schickst,
-          helfen uns diese Informationen für unsere weiteren Recherchen. Deine
-          Daten werden wir nur intern auswerten, aber nicht veröffentlichen. Es
-          sei denn, du gibst uns dein ausdrückliches Einverständnis, nachdem wir
-          dich separat darum gebeten haben.
-      confidential:
-        label: Vertrauliche Informationen
-        text: >
-          Du stellst uns hier möglicherweise vertrauliche Informationen bereit.
-          Wir sind uns dessen bewusst und behandeln diese Informationen mit
-          aller gebotenen Vorsicht. Wir werden deine Informationen nur intern
-          auswerten, aber nicht ungefragt veröffentlichen.
     no_replies: Bisher hat noch niemand auf diese Frage geantwortet. Schau doch später noch einmal rein!
     form:
       title:
@@ -628,7 +572,7 @@ de:
         one: eine Minute
         other: "%{count} Minuten"
       x_days:
-        one: ein Tag
+        one: einem Tag
         other: "%{count} Tage"
       x_months:
         one: ein Monat
@@ -703,6 +647,7 @@ de:
         separator: ","
         significant: false
         strip_insignificant_zeros: false
+    distance_in_words:
         unit: "€"
     format:
       delimiter: "."
@@ -764,3 +709,24 @@ de:
       time_only: "%H:%M Uhr"
       today: "heute, %H:%M"
     pm: nachmittags
+
+  notifications:
+    onboarding_completed:
+      text_html: "<strong>%{contributor_name}</strong> hat sich via %{contributor_channel} angemeldet."
+      link_text: "Zum Profil"
+    message_received:
+      text_html:
+        one: "<strong>%{contributor_one}</strong> hat auf die Frage <strong>„%{request_title}”</strong> geantwortet."
+        two: "<strong>%{contributor_one}</strong> und %{contributor_two} haben auf die Frage <strong>„%{request_title}”</strong> geantwortet."
+        other: "<strong>%{contributor_one}</strong> und %{others_count} andere haben auf die Frage <strong>„%{request_title}”</strong> geantwortet."
+      link_text: "Zur Antwort"
+    chat_message_sent:
+      text_html:
+        one: "<strong>%{user_name}</strong> hat <strong>%{contributor_one}</strong> auf <strong>„%{request_title}”</strong> geantwortet."
+        two: "<strong>%{user_name}</strong> hat <strong>%{contributor_one}</strong> und <strong>%{contributor_two}</strong> auf die Frage <strong>„%{request_title}”</strong> geantwortet."
+        other: "<strong>%{user_name}</strong> hat <strong>%{contributor_one}</strong> und %{others_count} anderen auf die Frage <strong>„%{request_title}”</strong> geantwortet."
+      my_text_html:
+        one: "<strong>Du</strong> hast <strong>%{contributor_one}</strong> auf <strong>„%{request_title}”</strong> geantwortet."
+        two: "<strong>Du</strong> hast <strong>%{contributor_one}</strong> und <strong>%{contributor_two}</strong> auf die Frage <strong>„%{request_title}”</strong> geantwortet."
+        other: "<strong>Du</strong> hast <strong>%{contributor_one}</strong> und %{others_count} anderen auf die Frage <strong>„%{request_title}”</strong> geantwortet."
+      link_text: "Zur Nachricht"

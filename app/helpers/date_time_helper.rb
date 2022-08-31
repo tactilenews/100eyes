@@ -8,4 +8,23 @@ module DateTimeHelper
 
     I18n.l(date, format: :short)
   end
+
+  def time_based_heading
+    current_time = Time.current
+    midnight = current_time.beginning_of_day
+    noon = current_time.noon
+    evening = current_time.change(hour: 17)
+    end_of_day = current_time.end_of_day
+
+    case current_time
+    when midnight..noon
+      '_morning'
+    when noon..evening
+      '_afternoon'
+    when evening..end_of_day
+      '_evening'
+    else
+      ''
+    end
+  end
 end
