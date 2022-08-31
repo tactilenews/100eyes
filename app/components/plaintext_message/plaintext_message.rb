@@ -25,7 +25,7 @@ module PlaintextMessage
       rendered = simple_format(rendered)
 
       if highlight_placeholders?
-        replace_placeholder(rendered, 'FIRST_NAME', component('placeholder') { '{{FIRST_NAME}}' }.strip)
+        replace_placeholder(rendered, 'VORNAME', component('placeholder') { '{{VORNAME}}' }.strip)
       else
         rendered
       end
