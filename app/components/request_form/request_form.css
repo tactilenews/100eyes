@@ -21,6 +21,7 @@
 
 .RequestForm-insertPlaceholderButton {
   background-color: #fff;
+  font-size: 1rem;
 }
 
 [data-request-form-target='preview'] {
