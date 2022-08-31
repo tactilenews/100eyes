@@ -33,7 +33,7 @@ RSpec.describe RepliesMailbox, type: :mailbox do
 
     describe 'given an active request' do
       let(:request) { create(:request, title: 'Wie geht es euren Haustieren in Corona-Zeiten?') }
-      before(:each) { create(:message, request: request, sender: nil, recipient: contributor) }
+      before(:each) { create(:message, request: request, sender: nil, recipient: contributor, broadcasted: true) }
 
       it { should(change { Message.count }.from(1).to(2)) }
 

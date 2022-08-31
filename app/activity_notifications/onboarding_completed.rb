@@ -19,23 +19,27 @@ class OnboardingCompleted < Noticed::Base
 
   # Define helper methods to make rendering easier.
   #
+  def group_key
+    record
+  end
+
   # rubocop:disable Rails/OutputSafety
-  def message
-    t('.message_html',
-      contributor_name: contributor.name,
-      contributor_channel: contributor.channels.first.to_s.capitalize).html_safe
+  def group_message(notifications:)
+    t('.text_html',
+      contributor_name: notifications.first.contributor.name,
+      contributor_channel: record.channels.first.to_s.capitalize).html_safe
   end
   # rubocop:enable Rails/OutputSafety
 
   def url
-    contributor_path(contributor.id)
+    contributor_path(record)
   end
 
   def link_text
     t('.link_text')
   end
 
-  def contributor
+  def record
     params[:contributor]
   end
 end

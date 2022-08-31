@@ -2,7 +2,7 @@
   <%= c 'wrapper', style: :wide, class: 'Dashboard-wrapper' do %>
     <header class='Dashboard-header'>
       <%= c 'heading' do %>
-        <%= t 'dashboard.activity_notifications.heading', first_name: current_user.first_name %>
+        <%= t "dashboard.activity_notifications.heading#{time_based_heading}", first_name: current_user.first_name %>
       <% end %>
       <%= c 'button',
         label: I18n.t('request.create'),

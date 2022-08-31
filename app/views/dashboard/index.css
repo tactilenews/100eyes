@@ -5,7 +5,7 @@
 }
 
 .Dashboard-wrapper {
-  padding: var(--spacing-unit-xl) 0;
+  padding: var(--spacing-unit-xl) var(--spacing-unit);
 }
 
 .Dashboard-header {

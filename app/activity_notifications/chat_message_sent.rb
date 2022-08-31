@@ -2,10 +2,10 @@
 
 # To deliver this notification:
 #
-# MessageReceived.with(contributor: @contributor, request: @request, message: @message).deliver_later(current_user)
-# MessageReceived.with(contributor: @contributor, request: @request, message: @message).deliver(current_user)
+# ChatMessageSent.with(contributor: @contributor, request: @request, user: @user, message: @message).deliver_later(current_user)
+# ChatMessageSent.with(contributor: @contributor, request: @request, user: @user, message: @message).deliver(current_user)
 
-class MessageReceived < Noticed::Base
+class ChatMessageSent < Noticed::Base
   # Add your delivery methods
   #
   deliver_by :database
@@ -15,12 +15,12 @@ class MessageReceived < Noticed::Base
 
   # Add required params
   #
-  param :contributor, :request, :message
+  param :contributor, :request, :user, :message
 
   # Define helper methods to make rendering easier.
   #
   def group_key
-    request
+    [request, user]
   end
 
   # rubocop:disable Rails/OutputSafety
@@ -28,10 +28,12 @@ class MessageReceived < Noticed::Base
     unique_contributors = notifications.map(&:contributor).uniq
     count = unique_contributors.size
 
-    t(".text_html.#{pluralization_key(count)}",
+    t(group_message_key(notifications.first.recipient_id, count),
       contributor_one: unique_contributors.first.name,
       contributor_two: unique_contributors.second&.name,
       request_title: request.title,
+      user_name: user.name,
+      count: count,
       others_count: count - 1).html_safe
   end
   # rubocop:enable Rails/OutputSafety
@@ -52,6 +54,10 @@ class MessageReceived < Noticed::Base
     params[:request]
   end
 
+  def user
+    params[:user]
+  end
+
   def message
     params[:message]
   end
@@ -65,5 +71,9 @@ class MessageReceived < Noticed::Base
     else
       :other
     end
+  end
+
+  def group_message_key(current_user_id, count)
+    ".#{user.id == current_user_id ? 'my_' : ''}text_html.#{pluralization_key(count)}"
   end
 end
