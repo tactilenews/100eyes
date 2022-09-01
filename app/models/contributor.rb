@@ -14,7 +14,7 @@ class Contributor < ApplicationRecord
   has_many :received_messages, class_name: 'Message', inverse_of: :recipient, foreign_key: 'recipient_id', dependent: :destroy
   has_many :replied_to_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :replies
   has_many :received_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :received_messages
-  has_noticed_notifications model_name: 'ActivityNotification'
+  has_many :notifications, class_name: 'ActivityNotification', dependent: :destroy
 
   has_one_attached :avatar
   has_one :json_web_token, dependent: :destroy
@@ -188,7 +188,7 @@ class Contributor < ApplicationRecord
   private
 
   def notify_recipient
-    OnboardingCompleted.with(contributor: self).deliver_later(User.all)
+    OnboardingCompleted.with(contributor_id: id).deliver_later(User.all)
   end
 end
 # rubocop:enable Metrics/ClassLength

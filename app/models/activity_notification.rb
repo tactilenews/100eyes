@@ -3,5 +3,8 @@
 class ActivityNotification < ApplicationRecord
   include Noticed::Model
   belongs_to :recipient, polymorphic: true
-  store_accessor :params, :request, :contributor, :user
+  belongs_to :contributor, optional: true
+  belongs_to :request, optional: true
+  belongs_to :message, optional: true
+  belongs_to :user, optional: true
 end

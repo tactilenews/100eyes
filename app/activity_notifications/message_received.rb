@@ -1,12 +1,25 @@
 # frozen_string_literal: true
 
 class MessageReceived < Noticed::Base
-  deliver_by :database
+  deliver_by :database, format: :to_database, association: :activity_notifications
 
-  param :contributor, :request, :message
+  param :contributor_id, :request_id, :message_id
+
+  def to_database
+    {
+      type: self.class.name,
+      contributor_id: params[:contributor_id],
+      request_id: params[:request_id],
+      message_id: params[:message_id]
+    }
+  end
 
   def group_key
-    request
+    record.request_id
+  end
+
+  def record_for_avatar
+    record.contributor
   end
 
   # rubocop:disable Rails/OutputSafety
@@ -17,29 +30,17 @@ class MessageReceived < Noticed::Base
     t(".text_html.#{pluralization_key(count)}",
       contributor_one: unique_contributors.first.name,
       contributor_two: unique_contributors.second&.name,
-      request_title: request.title,
+      request_title: record.request.title,
       others_count: count - 1).html_safe
   end
   # rubocop:enable Rails/OutputSafety
 
   def url
-    request_path(request, anchor: "message-#{message.id}")
+    request_path(record.request, anchor: "message-#{record.message.id}")
   end
 
   def link_text
     t('.link_text')
-  end
-
-  def record
-    params[:contributor]
-  end
-
-  def request
-    params[:request]
-  end
-
-  def message
-    params[:message]
   end
 
   def pluralization_key(count)

@@ -13,7 +13,7 @@ class Message < ApplicationRecord
   belongs_to :request
   has_many :photos, dependent: :destroy
   has_many :files, dependent: :destroy, class_name: 'Message::File'
-  has_noticed_notifications model_name: 'ActivityNotification'
+  has_many :notifications, class_name: 'ActivityNotification', dependent: :destroy
 
   counter_culture :request, column_name: proc { |model| model.reply? ? 'replies_count' : nil }
 
@@ -67,9 +67,10 @@ class Message < ApplicationRecord
 
   def notify_recipient
     if reply?
-      MessageReceived.with(contributor: sender, request: request, message: self).deliver_later(User.all)
+      MessageReceived.with(contributor_id: sender.id, request_id: request.id, message_id: id).deliver_later(User.all)
     elsif !broadcasted?
-      ChatMessageSent.with(contributor: recipient, request: request, user: Current.user, message: self).deliver_later(User.all)
+      ChatMessageSent.with(contributor_id: recipient.id, request_id: request.id, user_id: Current.user.id,
+                           message_id: id).deliver_later(User.all)
     end
   end
 end

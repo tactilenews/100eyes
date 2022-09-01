@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_07_120142) do
+ActiveRecord::Schema.define(version: 2022_08_31_095246) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -61,8 +61,16 @@ ActiveRecord::Schema.define(version: 2022_06_07_120142) do
     t.datetime "read_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "contributor_id"
+    t.bigint "message_id"
+    t.bigint "request_id"
+    t.bigint "user_id"
+    t.index ["contributor_id"], name: "index_activity_notifications_on_contributor_id"
+    t.index ["message_id"], name: "index_activity_notifications_on_message_id"
     t.index ["read_at"], name: "index_activity_notifications_on_read_at"
     t.index ["recipient_type", "recipient_id"], name: "index_activity_notifications_on_recipient"
+    t.index ["request_id"], name: "index_activity_notifications_on_request_id"
+    t.index ["user_id"], name: "index_activity_notifications_on_user_id"
   end
 
   create_table "contributors", force: :cascade do |t|
@@ -221,6 +229,10 @@ ActiveRecord::Schema.define(version: 2022_06_07_120142) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "activity_notifications", "contributors"
+  add_foreign_key "activity_notifications", "messages"
+  add_foreign_key "activity_notifications", "requests"
+  add_foreign_key "activity_notifications", "users"
   add_foreign_key "json_web_tokens", "contributors"
   add_foreign_key "message_files", "messages"
   add_foreign_key "messages", "contributors", column: "recipient_id"
