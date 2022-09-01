@@ -1,6 +1,9 @@
 de:
   application_name: 100eyes
   components:
+    activity_notifications:
+      card_heading: Letzte Aktivität
+      empty_state: Du hast im Moment keine neuen Benachrichtigungen.
     chat:
       outdated_request: Du hast diesem Mitglied bereits eine neue Frage gestellt. Nachfragen zu dieser Frage sind deshalb nicht mehr möglich.
       link_to_active_request: Zur aktuellen Frage
@@ -277,13 +280,10 @@ de:
   skip_to_content: Zum Hauptinhalt springen
 
   dashboard:
-    activity_notifications:
-        heading: "Hallo, %{first_name}!"
-        heading_morning: "Guten Morgen, %{first_name}!"
-        heading_afternoon: "Guten Tag, %{first_name}!"
-        heading_evening: "Guten Abend, %{first_name}!"
-        card_heading: Letzte Aktivität
-        empty_state: "Du hast im Moment keine neuen Benachrichtigungen."
+    heading: "Hallo, %{first_name}!"
+    heading_morning: "Guten Morgen, %{first_name}!"
+    heading_afternoon: "Guten Tag, %{first_name}!"
+    heading_evening: "Guten Abend, %{first_name}!"
 
   setting:
     setting:
