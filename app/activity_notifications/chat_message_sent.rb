@@ -1,24 +1,10 @@
 # frozen_string_literal: true
 
-# To deliver this notification:
-#
-# ChatMessageSent.with(contributor: @contributor, request: @request, user: @user, message: @message).deliver_later(current_user)
-# ChatMessageSent.with(contributor: @contributor, request: @request, user: @user, message: @message).deliver(current_user)
-
 class ChatMessageSent < Noticed::Base
-  # Add your delivery methods
-  #
   deliver_by :database
-  # deliver_by :email, mailer: "UserMailer"
-  # deliver_by :slack
-  # deliver_by :custom, class: "MyDeliveryMethod"
 
-  # Add required params
-  #
   param :contributor, :request, :user, :message
 
-  # Define helper methods to make rendering easier.
-  #
   def group_key
     [request, user]
   end
