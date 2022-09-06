@@ -468,7 +468,8 @@ de:
       hints:
         label: Hinweise anhängen
         help: Erinnere die Community, welche Inhalte du benötigst und wofür du sie verwendest. Hierfür gibt es die folgenden Textbausteine.
-
+    personalization:
+      first_name: VORNAME
   conversation:
     conversation:
       one: Nachrichtenverlauf

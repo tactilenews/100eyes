@@ -15,7 +15,7 @@ class Request < ApplicationRecord
   delegate :replies, to: :messages
 
   def personalized_text(contributor)
-    replace_placeholder(text, 'VORNAME', contributor.first_name.strip)
+    replace_placeholder(text, I18n.t('request.personalization.first_name'), contributor.first_name.strip)
   end
 
   def stats
