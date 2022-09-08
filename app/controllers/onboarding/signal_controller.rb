@@ -17,6 +17,10 @@ module Onboarding
       redirect_to onboarding_signal_link_path(jwt: nil)
     end
 
+    def complete_onboarding(contributor)
+      SignalAdapter::CreateContactJob.perform_later(contributor)
+    end
+
     def ensure_signal_is_set_up
       return if Setting.signal_server_phone_number.present?
 
