@@ -47,7 +47,6 @@ module SignalAdapter
 
     def initialize_sender(signal_message)
       signal_phone_number = signal_message.dig(:envelope, :source)
-
       sender = Contributor.find_by(signal_phone_number: signal_phone_number)
 
       unless sender
