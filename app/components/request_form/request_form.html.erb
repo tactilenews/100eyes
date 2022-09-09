@@ -14,6 +14,15 @@
         <% end %>
 
         <%= c 'field', object: @request, attr: :text do |field| %>
+          <%= c 'toolbar', 'aria-controls': 'request[text]' do %>
+            <%= c 'button',
+              style: :secondary,
+              class: 'RequestForm-insertPlaceholderButton',
+              type: 'button',
+              label: t('.insert_placeholder_button'),
+              data: { action: 'click->request-form#insertPlaceholderAtCursor' }
+            %>
+          <% end %>
           <%= c 'textarea', field.input_defaults.merge(
             required: true,
             show_emoji_picker_hint: true,

@@ -118,6 +118,7 @@ de:
       members_count_message:
         one: Es gibt <strong>ein Mitglied</strong> mit diesen Tags.
         other: Es gibt <strong>%{count} Mitglieder</strong> mit diesen Tags.
+      insert_placeholder_button: Vornamen einfügen
     chat_preview:
       status: jetzt online
       alt: >
@@ -257,6 +258,8 @@ de:
       replace_image: Bild ersetzen
       select_image: Bild auswählen
       input_label: Bild
+    toolbar:
+      toolbar: Toolbar
 
   mailer:
     unsubscribe:
@@ -467,7 +470,8 @@ de:
       hints:
         label: Hinweise anhängen
         help: Erinnere die Community, welche Inhalte du benötigst und wofür du sie verwendest. Hierfür gibt es die folgenden Textbausteine.
-
+    personalization:
+      first_name: VORNAME
   conversation:
     conversation:
       one: Nachrichtenverlauf
