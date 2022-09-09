@@ -28,9 +28,10 @@ export default class extends Controller {
   }
 
   updatePreview() {
+    const placeholder = 'VORNAME';
     let message = sanitize(this.messageTarget.value);
     message = message || this.previewFallbackValue;
-    message = replacePlaceholder(message, 'VORNAME', 'Max');
+    message = replacePlaceholder(message, placeholder, 'Max');
     this.previewTarget.innerHTML = message;
   }
 

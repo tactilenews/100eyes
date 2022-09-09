@@ -258,6 +258,8 @@ de:
       replace_image: Bild ersetzen
       select_image: Bild auswählen
       input_label: Bild
+    toolbar:
+      toolbar: Toolbar
 
   mailer:
     unsubscribe:
