@@ -165,6 +165,46 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
           }
         )
       end
+
+      context 'with an inactive recipient' do
+        let(:action_mailer) { instance_double(ActionMailer::MessageDelivery) }
+        let(:action_mailer_parameterized) { double(ActionMailer::Parameterized::Mailer) }
+        let(:error_message) do
+          "You tried to send to recipient(s) that have been marked as inactive.\n" \
+            "Found inactive addresses: #{contributor.email}.\n" \
+            'Inactive recipients are ones that have generated a hard bounce, a spam complaint, or a manual suppression.'
+        end
+        let(:parsed_body) { { 'ErrorCode' => 406, 'Message' => error_message } }
+        let(:body) { Postmark::Json.encode(parsed_body) }
+        let(:postmark_inactive_recipient_error) { Postmark::InactiveRecipientError.new(parsed_body['ErrorCode'], body, parsed_body) }
+
+        before do
+          allow(PostmarkAdapter::Outbound).to receive(:with).with({ message: message }).and_return(action_mailer_parameterized)
+          allow(action_mailer_parameterized).to receive(:message_email).and_return(action_mailer)
+          allow(action_mailer).to receive(:deliver_later).and_raise(postmark_inactive_recipient_error)
+        end
+
+        describe 'calls ErrorNotifier' do
+          before { allow(ErrorNotifier).to receive(:report) }
+
+          it 'with context and tags' do
+            subject
+
+            expect(ErrorNotifier).to have_received(:report).with(postmark_inactive_recipient_error,
+                                                                 context: { recipients: [contributor.email] }, tags: { type: 'support' })
+          end
+        end
+
+        describe 'reports error to Sentry' do
+          before { allow(Sentry).to receive(:capture_exception) }
+
+          it 'capture_exception' do
+            subject
+
+            expect(Sentry).to have_received(:capture_exception).with(postmark_inactive_recipient_error)
+          end
+        end
+      end
     end
   end
 end

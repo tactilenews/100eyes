@@ -10,7 +10,11 @@ module PostmarkAdapter
     def self.send!(message)
       return unless message.recipient&.email
 
-      with(message: message).message_email.deliver_later
+      begin
+        with(message: message).message_email.deliver_later
+      rescue Postmark::InactiveRecipientError => e
+        ErrorNotifier.report(e, context: { recipients: e.recipients }, tags: { type: 'support' })
+      end
     end
 
     def self.send_welcome_message!(contributor)
