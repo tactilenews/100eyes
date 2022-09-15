@@ -1,3 +1,7 @@
+.ActivityNotifications {
+  padding: var(--spacing-unit);
+}
+
 .ActivityNotifications-list {
   margin-top: var(--spacing-unit-s);
   list-style: none;

@@ -6,11 +6,12 @@ class ApplicationComponent < ViewComponent::Base
   include SvgHelper
   include ColorHelper
 
-  def initialize(styles: [], style: nil, **attrs)
+  def initialize(styles: [], style: nil, append_class: [], **attrs)
     super
 
     @styles = styles
     @styles << style if style
+    @append_class = append_class
 
     params = self.class.instance_method(:initialize).parameters.map(&:last)
     @attrs = attrs.except(*params, :style, :styles)
@@ -18,7 +19,7 @@ class ApplicationComponent < ViewComponent::Base
 
   private
 
-  attr_reader :styles
+  attr_reader :styles, :append_class
 
   def attrs
     AttributeBag.new(class: class_attr).merge(@attrs)
@@ -29,7 +30,7 @@ class ApplicationComponent < ViewComponent::Base
   end
 
   def class_names
-    [block_name] + styles.map { |style| "#{block_name}--#{style.to_s.camelize(:lower)}" }
+    [block_name] + styles.map { |style| "#{block_name}--#{style.to_s.camelize(:lower)}" } + [append_class]
   end
 
   def class_attr
