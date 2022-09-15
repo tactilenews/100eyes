@@ -2,8 +2,10 @@
   <%= c 'wrapper', style: size do %>
     <% if styles.include?(:stripes) %>
 
-     <%= c 'card', style: :large do %>
-       <%= content %>
+     <%= c 'card' do %>
+       <%= c 'box', style: :large do %>
+         <%= content %>
+       <% end %>
      <% end %>
 
     <% else %>
