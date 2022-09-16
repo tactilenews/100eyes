@@ -2,7 +2,11 @@
 
 <section>
   <%= c 'box', style: :large do %>
-    <%= c 'wrapper', style: :narrow do %>
+    <%= c 'wrapper', style: :wide do %>
+      <%= c 'heading', tag: :h2 do %>
+        <%= "Wann deine Community antwortet" %>
+      <% end %>
+      <%= line_chart @time_based_activity, height: "48rem", xtitle: "Time", ytitle: "Number of responses" %>
       <%= c 'stack', space: :large do %>
       
         <%= c 'heading', tag: :h2 do %>

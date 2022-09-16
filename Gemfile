@@ -81,3 +81,9 @@ gem 'sentry-ruby'
 # Admin
 gem 'administrate'
 gem 'administrate_exportable'
+
+
+# Charts
+gem 'chartkick'
+gem 'groupdate'
+# gem 'apexcharts'

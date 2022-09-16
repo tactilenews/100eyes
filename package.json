@@ -12,6 +12,9 @@
     "@hotwired/turbo": "^7.1.0",
     "@rails/ujs": "^6.1.5",
     "@yaireo/tagify": "^3.25.0",
+    "apexcharts": "^3.35.5",
+    "chart.js": "^3.9.1",
+    "chartkick": "^4.2.0",
     "clipboard-polyfill": "^3.0.3",
     "dialog-polyfill": "^0.5.6"
   },
