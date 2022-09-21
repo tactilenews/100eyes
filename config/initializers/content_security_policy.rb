@@ -11,21 +11,30 @@ Rails.application.config.content_security_policy do |policy|
   policy.font_src    :self
   policy.img_src     :self, :blob, :data
   policy.object_src  :none
-  policy.script_src  :self
-
+  if Rails.env.development?
+    policy.script_src :self, :https, :unsafe_eval, :unsafe_inline
+  else
+    policy.script_src :self, :https
+  end
+  Rails.application.config.content_security_policy_nonce_generator = -> (request) do
+    # use the same csp nonce for turbo requests
+    if request.env['HTTP_TURBO_REFERRER'].present?
+      request.env['HTTP_X_TURBO_NONCE']
+    else
+      SecureRandom.base64(16)
+    end
+  end
   # TODO: `unsafe_inline` can be removed once this PR lands in the next
   # Turbo release: https://github.com/hotwired/turbo/pull/501
-  policy.style_src   :self, :unsafe_inline
+  policy.style_src :self, :unsafe_inline
 
   # Specify URI for violation reports
   # policy.report_uri "/csp-violation-report-endpoint"
 end
 
-# If you are using UJS then enable automatic nonce generation
-Rails.application.config.content_security_policy_nonce_generator = ->(_request) { SecureRandom.base64(16) }
 
 # Set the nonce only to specific directives
-Rails.application.config.content_security_policy_nonce_directives = %w[script-src]
+Rails.application.config.content_security_policy_nonce_directives = []
 
 # Report CSP violations to a specified URI
 # For further information see the following documentation:

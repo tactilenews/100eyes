@@ -96,6 +96,7 @@ GEM
       administrate (>= 0.17.0)
       rails (>= 4.2)
       railties (>= 5.2.2.1)
+    apexcharts (0.2.0)
     argon2 (2.1.1)
       ffi (~> 1.14)
       ffi-compiler (~> 1.0)
@@ -176,6 +177,8 @@ GEM
       rake
     globalid (1.0.0)
       activesupport (>= 5.0)
+    groupdate (6.1.0)
+      activesupport (>= 5.2)
     hashdiff (1.0.1)
     http (5.1.0)
       addressable (~> 2.8)
@@ -425,6 +428,7 @@ DEPENDENCIES
   acts-as-taggable-on
   administrate
   administrate_exportable
+  apexcharts
   bootsnap (>= 1.4.2)
   browser
   byebug
@@ -437,6 +441,7 @@ DEPENDENCIES
   dotenv-rails
   factory_bot_rails
   faker
+  groupdate
   image_processing (~> 1.12)
   jwt
   kramdown (~> 2.4)

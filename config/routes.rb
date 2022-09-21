@@ -93,4 +93,8 @@ Rails.application.routes.draw do
 
   resource :otp_setup, controller: :otp_setup, only: %i[show create]
   resource :otp_auth, controller: :otp_auth, only: %i[show create]
+
+  namespace :charts do
+    get 'time-based-activity'
+  end
 end

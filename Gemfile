@@ -84,3 +84,7 @@ gem 'administrate'
 gem 'administrate_exportable'
 
 gem 'noticed', '~> 1.6'
+
+# Charts
+gem 'groupdate'
+gem 'apexcharts'
