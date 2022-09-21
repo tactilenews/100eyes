@@ -52,27 +52,27 @@ RSpec.describe Request, type: :model do
     subject { request.personalized_text(contributor) }
 
     context 'with uppercase placeholder' do
-      let(:text) { 'Hi {{FIRST_NAME}}, how are you?' }
+      let(:text) { 'Hi {{VORNAME}}, how are you?' }
       it { should eq('Hi Zora, how are you?') }
     end
 
     context 'with lowercase placeholder' do
-      let(:text) { 'Hi {{first_name}}, how are you?' }
+      let(:text) { 'Hi {{vorname}}, how are you?' }
       it { should eq('Hi Zora, how are you?') }
     end
 
     context 'with mixed-cased placeholder' do
-      let(:text) { 'Hi {{First_Name}}, how are you?' }
+      let(:text) { 'Hi {{Vorname}}, how are you?' }
       it { should eq('Hi Zora, how are you?') }
     end
 
     context 'with optional whitespace in placeholder' do
-      let(:text) { 'Hi {{ FIRST_NAME }}, how are you?' }
+      let(:text) { 'Hi {{ VORNAME }}, how are you?' }
       it { should eq('Hi Zora, how are you?') }
     end
 
     context 'with multiple placeholders' do
-      let(:text) { '{{FIRST_NAME}}! {{FIRST_NAME}}! {{FIRST_NAME}}!' }
+      let(:text) { '{{VORNAME}}! {{VORNAME}}! {{VORNAME}}!' }
       it { should eq('Zora! Zora! Zora!') }
     end
 
@@ -82,7 +82,7 @@ RSpec.describe Request, type: :model do
     end
 
     context 'if name contains leading/trailing whitespace' do
-      let(:text) { 'Hi {{FIRST_NAME}}, how are you?' }
+      let(:text) { 'Hi {{VORNAME}}, how are you?' }
       let(:contributor) { build(:contributor, first_name: ' Zora ') }
       it { should eq('Hi Zora, how are you?') }
     end
@@ -119,7 +119,7 @@ RSpec.describe Request, type: :model do
     describe 'given a number of requests, replies and photos' do
       before(:each) do
         create_list(:message, 2)
-        delivered_messages = create_list(:message, 7, :with_recipient, request: request)
+        delivered_messages = create_list(:message, 7, :with_recipient, request: request, broadcasted: true)
         # _ is some unresponsive recipient
         responsive_recipient, _, *other_recipients = delivered_messages.map(&:recipient)
         create_list(:message, 3, request: request, sender: responsive_recipient)
@@ -134,7 +134,7 @@ RSpec.describe Request, type: :model do
 
         describe 'messages from us' do
           before(:each) do
-            create(:message, request: request, sender: nil)
+            create(:message, request: request, sender: nil, broadcasted: true)
           end
 
           it 'are excluded' do
@@ -149,7 +149,7 @@ RSpec.describe Request, type: :model do
 
         describe 'messages from us' do
           before(:each) do
-            create(:message, request: request, sender: nil)
+            create(:message, request: request, sender: nil, broadcasted: true)
           end
 
           it 'are excluded' do

@@ -17,13 +17,14 @@ export default class extends Controller {
   }
 
   highlightPlaceholders() {
+    const placeholder = 'VORNAME';
     if (!this.hasHighlightsTarget) {
       return;
     }
 
     const highlightedText = replacePlaceholder(
       this.inputTarget.value,
-      'FIRST_NAME',
+      placeholder,
       '<span class="Placeholder">$1</span>'
     );
 

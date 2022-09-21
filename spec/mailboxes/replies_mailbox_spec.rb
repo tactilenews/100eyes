@@ -33,7 +33,7 @@ RSpec.describe RepliesMailbox, type: :mailbox do
 
     describe 'given an active request' do
       let(:request) { create(:request, title: 'Wie geht es euren Haustieren in Corona-Zeiten?') }
-      before(:each) { create(:message, request: request, sender: nil, recipient: contributor) }
+      before(:each) { create(:message, request: request, sender: nil, recipient: contributor, broadcasted: true) }
 
       it { should(change { Message.count }.from(1).to(2)) }
 
@@ -43,6 +43,12 @@ RSpec.describe RepliesMailbox, type: :mailbox do
         before(:each) { subject.call }
 
         it { should(change { Message.count }.from(2).to(3)) }
+
+        describe 'MessageReceived ActivityNotification' do
+          context 'creates an ActivityNotification' do
+            it_behaves_like 'an ActivityNotification', 'MessageReceived'
+          end
+        end
 
         describe 'with matching from address' do
           let(:from_address) { 'zora@example.org' }

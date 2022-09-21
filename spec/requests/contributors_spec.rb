@@ -67,7 +67,7 @@ RSpec.describe '/contributors', type: :request do
       expect(contributor.note).to eq('11 Jahre alt')
       expect(contributor.email).to eq('zora@example.org')
       expect(contributor.additional_email).to eq('zora@zimmermann.de')
-      expect(contributor.tag_list).to eq(%w[programmer student])
+      expect(contributor.tag_list).to match_array(%w[programmer student])
     end
 
     context 'removing tags' do
