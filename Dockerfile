@@ -1,4 +1,4 @@
-FROM ruby:3.0.2-alpine3.14
+FROM ruby:3.0.2-alpine3.12
 
 ARG git_commit_sha
 ARG git_commit_date
@@ -10,17 +10,14 @@ RUN apk --update add \
     git \
     nodejs \
     npm \
+    postgresql-dev=~12 \
+    postgresql-client=~12 \
     tzdata \
     libxslt-dev \
     libxml2-dev \
     imagemagick \
     less \
     libsodium
-
-RUN apk --update add \
-    postgresql-dev=~12 \
-    postgresql-client=~12 \
-    --repository=http://dl-cdn.alpinelinux.org/alpine/v3.12/main
 
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
