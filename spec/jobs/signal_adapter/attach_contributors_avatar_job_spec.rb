@@ -2,18 +2,18 @@
 
 require 'rails_helper'
 
-RSpec.describe SignalAdapter::AttachContributorsAvatar do
+RSpec.describe SignalAdapter::AttachContributorsAvatarJob do
   describe '#perform_later(contributor)' do
     subject { -> { described_class.new.perform(contributor) } }
     let(:contributor) { create(:contributor, signal_phone_number: '+491212343434') }
 
     context 'with avatar on file system' do
-      let(:avatar) { file_fixture('profile-+491212343434') }
+      let(:avatar) { file_fixture("profile-#{contributor.signal_phone_number}") }
       before do
         allow(File).to receive(:file?).with("/app/signal-cli-config/avatars/profile-#{contributor.signal_phone_number}").and_return(true)
         allow(File).to receive(:open).and_call_original
         allow(File).to receive(:open)
-          .with('/app/signal-cli-config/avatars/profile-+491212343434')
+          .with("/app/signal-cli-config/avatars/profile-#{contributor.signal_phone_number}")
           .and_return(avatar.open)
       end
 

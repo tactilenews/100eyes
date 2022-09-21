@@ -82,7 +82,6 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         before do
           allow(Setting).to receive(:onboarding_success_heading).and_return('Welcome!')
           allow(Setting).to receive(:onboarding_success_text).and_return('')
-          allow(SignalAdapter::AttachContributorsAvatar).to receive(:perform_later)
         end
 
         it { should_not(change { Message.count }) }
@@ -100,9 +99,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         end
 
         it 'enqueues a job to attach contributors avatar' do
-          expect(SignalAdapter::AttachContributorsAvatar).to receive(:perform_later).with(contributor)
-
-          subject.call
+          expect { subject.call }.to have_enqueued_job(SignalAdapter::AttachContributorsAvatarJob).with(contributor)
         end
       end
 

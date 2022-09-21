@@ -19,7 +19,7 @@ module SignalAdapter
       adapter.on(SignalAdapter::CONNECT) do |contributor|
         contributor.update!(signal_onboarding_completed_at: Time.zone.now)
         SignalAdapter::Outbound.send_welcome_message!(contributor)
-        SignalAdapter::AttachContributorsAvatar.perform_later(contributor)
+        SignalAdapter::AttachContributorsAvatarJob.perform_later(contributor)
       end
 
       adapter.on(SignalAdapter::UNKNOWN_CONTRIBUTOR) do |signal_phone_number|
