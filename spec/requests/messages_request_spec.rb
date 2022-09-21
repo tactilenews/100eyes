@@ -58,7 +58,7 @@ RSpec.describe 'Messages', type: :request do
     end
 
     context 'given an outbound message' do
-      let(:message) { create(:message, sender: nil, recipient: contributor) }
+      let(:message) { create(:message, sender: nil, recipient: contributor, broadcasted: true) }
 
       it 'renders successfully' do
         expect(response).to be_successful

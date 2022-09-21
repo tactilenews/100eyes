@@ -2,6 +2,7 @@
 
 FactoryBot.define do
   factory :request do
+    title { 'I need a title' }
     text { 'I am a request' }
 
     trait :with_interlapping_messages_from_two_contributors do

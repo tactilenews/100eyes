@@ -82,6 +82,10 @@ RSpec.describe 'Onboarding::Signal', type: :request do
       expect(json_web_token).to exist
     end
 
+    context 'creates an ActivityNotification' do
+      it_behaves_like 'an ActivityNotification', 'OnboardingCompleted'
+    end
+
     context 'given invalid phone number' do
       let(:signal_phone_number) { 'invalid-phone-number' }
 

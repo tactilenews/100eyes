@@ -119,7 +119,7 @@ RSpec.describe Request, type: :model do
     describe 'given a number of requests, replies and photos' do
       before(:each) do
         create_list(:message, 2)
-        delivered_messages = create_list(:message, 7, :with_recipient, request: request)
+        delivered_messages = create_list(:message, 7, :with_recipient, request: request, broadcasted: true)
         # _ is some unresponsive recipient
         responsive_recipient, _, *other_recipients = delivered_messages.map(&:recipient)
         create_list(:message, 3, request: request, sender: responsive_recipient)
@@ -134,7 +134,7 @@ RSpec.describe Request, type: :model do
 
         describe 'messages from us' do
           before(:each) do
-            create(:message, request: request, sender: nil)
+            create(:message, request: request, sender: nil, broadcasted: true)
           end
 
           it 'are excluded' do
@@ -149,7 +149,7 @@ RSpec.describe Request, type: :model do
 
         describe 'messages from us' do
           before(:each) do
-            create(:message, request: request, sender: nil)
+            create(:message, request: request, sender: nil, broadcasted: true)
           end
 
           it 'are excluded' do

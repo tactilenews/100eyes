@@ -1,38 +1,14 @@
-<%= c 'hero' %>
-
-<section>
-  <%= c 'box', style: :large do %>
-    <%= c 'wrapper', style: :narrow do %>
-      <%= c 'stack', space: :large do %>
-      
-        <%= c 'heading', tag: :h2 do %>
-          <%= I18n.t 'dashboard.how_it_works' %>
-        <% end %>
-        
-        <%= c 'icon_list',
-          elements: I18n.t('dashboard.how_it_works_list'),
-          styles: [:vertical, :alternating]
-        %>
-
+<div class='Dashboard'>
+  <%= c 'wrapper', style: :wide, class: 'Dashboard-wrapper' do %>
+    <header class='Dashboard-header'>
+      <%= c 'heading' do %>
+        <%= t "dashboard.heading#{time_based_heading}", first_name: current_user.first_name %>
       <% end %>
-    <% end %>
-  <% end %>
-</section>
-
-<section>
-  <%= c 'box', style: :large do %>
-    <%= c 'wrapper' do %>
-
-      <%= c 'heading', tag: :h2 do %>
-        <%= I18n.t 'dashboard.become_a_pioneer' %>
-        <%= I18n.t 'dashboard.provided_technology' %>
-      <% end %>
-
-      <%= c 'icon_list',
-        elements: I18n.t('dashboard.selling_points_list'),
-        styles: [:bordered, :bold, :'row-3']
+      <%= c 'button',
+        label: I18n.t('request.create'),
+        link: new_request_path
       %>
-
-    <% end %>
+    </header>
+    <%= c 'activity_notifications', activity_notifications: @activity_notifications %>
   <% end %>
-</section>
+</div>
