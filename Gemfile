@@ -81,3 +81,5 @@ gem 'sentry-ruby'
 # Admin
 gem 'administrate'
 gem 'administrate_exportable'
+
+gem 'noticed', '~> 1.5'

@@ -1,0 +1,27 @@
+.ActivityNotifications {
+  padding: var(--spacing-unit);
+}
+
+.ActivityNotifications-list {
+  margin-top: var(--spacing-unit-s);
+  list-style: none;
+}
+
+.ActivityNotifications-listItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--spacing-unit-s);
+}
+
+.ActivityNotifications-listItemRelativeTime {
+  color: var(--color-text-light);
+}
+
+.ActivityNotifications-listItemRelativeTime::after {
+  content: '\2027';
+}
+
+.ActivityNotifications-listItemHeader {
+  margin-left: var(--spacing-unit-s);
+  width: 90%;
+}

@@ -111,6 +111,7 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
           before { create(:request) }
           it { should(change { Message.count }.from(0).to(1)) }
           it { should_not respond_with_message }
+          it_behaves_like 'an ActivityNotification', 'MessageReceived'
         end
 
         context ' message has a document' do
