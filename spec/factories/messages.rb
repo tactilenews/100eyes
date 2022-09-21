@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :message do
     created_at { Time.zone.now }
     unknown_content { false }
-    text { 'Am I an incoming message?' }
+    text { Faker::Lorem.sentence }
     association :sender, factory: :contributor
     association :request
     with_sender

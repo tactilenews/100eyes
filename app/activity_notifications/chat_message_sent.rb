@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ChatMessageSent < Noticed::Base
-  deliver_by :database, format: :to_database, association: :activity_notifications
+  deliver_by :database, format: :to_database, association: :notifications_as_recipient
 
   param :contributor_id, :request_id, :user_id, :message_id
 

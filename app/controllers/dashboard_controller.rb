@@ -8,7 +8,7 @@ class DashboardController < ApplicationController
   private
 
   def activity_notifications
-    grouped = current_user.activity_notifications
+    grouped = current_user.notifications_as_recipient
                           .newest_first
                           .includes(:contributor, :request, :message, :user)
                           .limit(100)

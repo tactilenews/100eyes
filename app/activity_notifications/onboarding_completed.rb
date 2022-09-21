@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class OnboardingCompleted < Noticed::Base
-  deliver_by :database, format: :to_database, association: :activity_notifications
+  deliver_by :database, format: :to_database, association: :notifications_as_recipient
 
   param :contributor_id
 
@@ -24,7 +24,7 @@ class OnboardingCompleted < Noticed::Base
   def group_message(notifications:)
     t('.text_html',
       contributor_name: notifications.first.contributor.name,
-      contributor_channel: record.contributor.channels.first.to_s.capitalize).html_safe
+      contributor_channel: contributor_channel).html_safe
   end
   # rubocop:enable Rails/OutputSafety
 
@@ -34,5 +34,9 @@ class OnboardingCompleted < Noticed::Base
 
   def link_text
     t('.link_text')
+  end
+
+  def contributor_channel
+    record.contributor.channels.first.to_s.capitalize
   end
 end
