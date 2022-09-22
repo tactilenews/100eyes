@@ -6,12 +6,15 @@ class Contributor < ApplicationRecord
 
   attr_accessor :editor_guarantees_data_consent
 
+  after_create_commit :notify_recipient
+
   multisearchable against: %i[first_name last_name username note]
 
   has_many :replies, class_name: 'Message', inverse_of: :sender, foreign_key: 'sender_id', dependent: :destroy
   has_many :received_messages, class_name: 'Message', inverse_of: :recipient, foreign_key: 'recipient_id', dependent: :destroy
   has_many :replied_to_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :replies
   has_many :received_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :received_messages
+  has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
 
   has_one_attached :avatar
   has_one :json_web_token, dependent: :destroy
@@ -184,6 +187,12 @@ class Contributor < ApplicationRecord
 
   def localization_tags
     tag_list.select { |tag| I18n.available_locales.include?(tag.to_sym) }
+  end
+  
+  private
+
+  def notify_recipient
+    OnboardingCompleted.with(contributor_id: id).deliver_later(User.all)
   end
 end
 # rubocop:enable Metrics/ClassLength

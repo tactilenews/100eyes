@@ -101,6 +101,10 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
           subject.call
           expect(contributor.reload.signal_onboarding_completed_at).to be_present
         end
+
+        it 'enqueues a job to attach contributors avatar' do
+          expect { subject.call }.to have_enqueued_job(SignalAdapter::AttachContributorsAvatarJob).with(contributor)
+        end
       end
 
       describe 'given a message from a contributor with completed onboarding' do
@@ -117,6 +121,8 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
           subject.call
           expect(Message.first.contributor.signal_phone_number).to eq('+4915112345789')
         end
+
+        it_behaves_like 'an ActivityNotification', 'MessageReceived'
       end
 
       describe 'given multiple messages from known and unknown contributors', vcr: { cassette_name: :receive_multiple_signal_messages } do

@@ -1,0 +1,7 @@
+.Toolbar {
+  width: 100%;
+  border-radius: var(--border-radius);
+  padding: var(--spacing-unit-xs);
+  background-color: var(--color-gray-light);
+  margin: var(--spacing-unit-s) 0;
+}

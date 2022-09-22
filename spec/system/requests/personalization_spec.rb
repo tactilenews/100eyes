@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.feature 'Request personalization', type: :feature do
+RSpec.describe 'Request personalization' do
   let(:user) { create(:user) }
 
   context 'given two contributors'
@@ -14,7 +14,7 @@ RSpec.feature 'Request personalization', type: :feature do
     create(:contributor, first_name: 'Zora', last_name: 'Zimmermann', email: 'zora@example.org')
   end
 
-  scenario 'sending a request with placeholders' do
+  it 'sending a request with placeholders' do
     visit new_request_path(as: user)
 
     fill_in 'Interner Titel', with: 'Personalizes request'

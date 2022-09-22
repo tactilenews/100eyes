@@ -3,6 +3,7 @@
 class ContributorsController < ApplicationController
   before_action :set_contributor, only: %i[update destroy show edit message]
   before_action :count_params, only: :count
+  before_action :set_current_user, only: :message
 
   def message
     request = contributor.active_request
@@ -64,6 +65,10 @@ class ContributorsController < ApplicationController
 
   def set_contributor
     @contributor = Contributor.find(params[:id])
+  end
+
+  def set_current_user
+    Current.user = current_user
   end
 
   def contributor_params

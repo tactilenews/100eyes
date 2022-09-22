@@ -67,6 +67,10 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
       expect(json_web_token).to exist
     end
 
+    context 'creates an ActivityNotification' do
+      it_behaves_like 'an ActivityNotification', 'OnboardingCompleted'
+    end
+
     context 'without data processing consent' do
       let(:data_processing_consent) { false }
 

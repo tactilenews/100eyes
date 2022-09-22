@@ -49,7 +49,7 @@ class OnboardingController < ApplicationController
   def redirect_if_contributor_exists
     # We handle an onboarding request for a contributor that
     # already exists in the exact same way as a successful
-    # onboarding so that we don't disclose wether someone
+    # onboarding so that we don't disclose whether someone
     # is a contributor.
 
     return unless contributor_exists?

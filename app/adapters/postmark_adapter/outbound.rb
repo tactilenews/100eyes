@@ -5,6 +5,10 @@ module PostmarkAdapter
     default template_name: :mailer
     default from: -> { default_from }
 
+    rescue_from Postmark::InactiveRecipientError do |exception|
+      ErrorNotifier.report(exception, context: { recipients: exception.recipients }, tags: { support: 'yes' })
+    end
+
     attr_reader :msg
 
     def self.send!(message)

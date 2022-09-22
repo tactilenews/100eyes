@@ -13,6 +13,7 @@ class Message < ApplicationRecord
   belongs_to :request
   has_many :photos, dependent: :destroy
   has_many :files, dependent: :destroy, class_name: 'Message::File'
+  has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
 
   counter_culture :request, column_name: proc { |model| model.reply? ? 'replies_count' : nil }
 
@@ -29,6 +30,8 @@ class Message < ApplicationRecord
       adapter.send!(self)
     end
   end
+
+  after_create_commit :notify_recipient
 
   def reply?
     sender_id.present?
@@ -58,5 +61,16 @@ class Message < ApplicationRecord
       request,
       anchor: "chat-row-#{id}"
     )
+  end
+
+  private
+
+  def notify_recipient
+    if reply?
+      MessageReceived.with(contributor_id: sender.id, request_id: request.id, message_id: id).deliver_later(User.all)
+    elsif !broadcasted?
+      ChatMessageSent.with(contributor_id: recipient.id, request_id: request.id, user_id: Current.user.id,
+                           message_id: id).deliver_later(User.all)
+    end
   end
 end

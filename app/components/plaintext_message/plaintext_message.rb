@@ -25,7 +25,7 @@ module PlaintextMessage
       rendered = simple_format(rendered)
 
       if highlight_placeholders?
-        replace_placeholder(rendered, 'VORNAME', component('placeholder') { '{{VORNAME}}' }.strip)
+        replace_placeholder(rendered, t('request.personalization.first_name'), component('placeholder') { "{{#{t('request.personalization.first_name')}}}" }.strip)
       else
         rendered
       end

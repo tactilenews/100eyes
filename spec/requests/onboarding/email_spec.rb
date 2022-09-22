@@ -64,6 +64,10 @@ RSpec.describe 'Onboarding::Email', type: :request do
       expect(json_web_token).to exist
     end
 
+    context 'creates an ActivityNotification' do
+      it_behaves_like 'an ActivityNotification', 'OnboardingCompleted'
+    end
+
     context 'given invalid email address' do
       let(:email) { 'invalid-email' }
 
