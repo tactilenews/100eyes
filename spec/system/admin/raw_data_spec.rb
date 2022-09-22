@@ -11,9 +11,7 @@ RSpec.describe 'Raw data' do
     click_on 'text.json'
 
     switch_to_window(windows.last)
-
+    
     expect(page.body).to have_text('{"text":"Hello"}')
-    # expect(page.response_headers['Content-Type']).to eq('application/json')
-    # expect(page.response_headers['Content-Disposition']).to start_with('inline;')
   end
 end
