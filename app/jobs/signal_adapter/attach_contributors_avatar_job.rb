@@ -8,10 +8,7 @@ module SignalAdapter
       avatar = "/app/signal-cli-config/avatars/profile-#{contributor.signal_phone_number}"
       return unless File.file?(avatar)
 
-      transliterated_filename = "#{ActiveSupport::Inflector.transliterate(contributor.name.strip).gsub(' ', '-')}-profile-pic"
-      sanitized_filename = ActiveStorage::Filename.new(transliterated_filename).sanitized
-
-      contributor.avatar.attach(io: File.open(avatar), filename: sanitized_filename)
+      contributor.avatar.attach(io: File.open(avatar), filename: contributor.id)
     end
   end
 end
