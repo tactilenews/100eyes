@@ -17,7 +17,7 @@ RSpec.describe 'Activity Notifications' do
     let(:contributor_without_avatar) { create(:contributor) }
     let(:another_contributor) { create(:contributor) }
 
-    it 'displays the activity notifications on dashboard' do
+    fit 'displays the activity notifications on dashboard' do
       visit dashboard_path(as: user)
 
       expect(page).to have_text('Letzte Aktivität')
@@ -65,7 +65,8 @@ RSpec.describe 'Activity Notifications' do
       # ChatMessageSent
       click_link('Zur Antwort', href: request_path(request, anchor: "message-#{reply.id}"))
       expect(page).to have_text("I'm a reply to #{request.title}")
-      click_link('nachfragen', href: contributor_request_path(contributor_without_avatar, request))
+      find("a[href='#{contributor_request_path(contributor_without_avatar, request)}']", text: 'nachfragen').trigger('click')
+
       expect(page).to have_text('Nachrichtenverlauf')
       fill_in 'message[text]', with: "Thanks for your reply #{contributor_without_avatar.name}!"
       click_button 'Absenden'
@@ -114,7 +115,8 @@ RSpec.describe 'Activity Notifications' do
 
       click_link('Zur Antwort', href: request_path(request, anchor: "message-#{reply_by_same_contributor.id}"))
       expect(page).to have_text("I'm a reply from the same contributor: #{contributor_two.name}")
-      click_link('nachfragen', href: contributor_request_path(contributor_two, request))
+      find("a[href='#{contributor_request_path(contributor_two, request)}']", text: 'nachfragen').trigger('click')
+
       expect(page).to have_text('Nachrichtenverlauf')
       fill_in 'message[text]', with: "Thanks for your reply #{contributor_two.name}!"
       click_button 'Absenden'
@@ -137,7 +139,8 @@ RSpec.describe 'Activity Notifications' do
 
       click_link('Zur Antwort', href: request_path(request, anchor: "message-#{reply_by_same_contributor.id}"))
       expect(page).to have_text("I'm a reply from #{contributor_two.name}")
-      click_link('nachfragen', href: contributor_request_path(contributor_two, request))
+      find("a[href='#{contributor_request_path(contributor_two, request)}']", text: 'nachfragen').trigger('click')
+
       expect(page).to have_text('Nachrichtenverlauf')
       fill_in 'message[text]', with: "This is another chat message to #{contributor_two.name}, but it doesn't count in the dashboard!"
       click_button 'Absenden'
@@ -165,7 +168,8 @@ RSpec.describe 'Activity Notifications' do
 
       click_link('Zur Antwort', href: request_path(request, anchor: "message-#{reply_by_same_contributor.id}"))
       expect(page).to have_text("I'm a reply from #{contributor_two.name}")
-      click_link('nachfragen', href: contributor_request_path(contributor_two, request))
+      find("a[href='#{contributor_request_path(contributor_two, request)}']", text: 'nachfragen').trigger('click')
+
       expect(page).to have_text('Nachrichtenverlauf')
       fill_in 'message[text]', with: "This is a chat message from #{coworker.name} to #{contributor_two.name}"
       click_button 'Absenden'

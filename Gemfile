@@ -35,7 +35,7 @@ group :development do
 end
 
 group :test do
-  # Adds support for Capybara system testing and selenium driver
+  # Adds support for Capybara system testing
   gem 'capybara', '>= 2.15'
   gem 'cuprite'
   gem 'db-query-matchers'

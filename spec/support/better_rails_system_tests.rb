@@ -8,6 +8,11 @@ module BetterRailsSystemTests
 
     Capybara.using_session(Capybara.last_used_session) { super }
   end
+
+  # Use relative path in screenshot message
+  def image_path
+    Pathname.new(absolute_image_path).relative_path_from(Rails.root).to_s
+  end
 end
 
 RSpec.configure do |config|

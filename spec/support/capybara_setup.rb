@@ -24,3 +24,8 @@ Capybara.singleton_class.prepend(Module.new do
     self.last_used_session = nil
   end
 end)
+
+# Make server accessible from the outside world
+Capybara.server_host = '0.0.0.0'
+# Use a hostname that could be resolved in the internal Docker network
+Capybara.app_host = "http://#{Socket.gethostname}:#{Capybara.server_port}"

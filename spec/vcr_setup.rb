@@ -15,5 +15,5 @@ VCR.configure do |c|
   c.configure_rspec_metadata!
 
   # Capybara.server_host default
-  c.ignore_hosts '127.0.0.1'
+  c.ignore_hosts '0.0.0.0', 'chrome', '127.0.0.1'
 end
