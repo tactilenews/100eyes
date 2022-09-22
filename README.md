@@ -75,6 +75,15 @@ bundle config local.threema .
 
 See this [blog post](https://rossta.net/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html) for more information.
 
+### Testing
+
+To run tests in a Docker container, you can run:
+
+```bash
+$ docker compose exec -it app bash
+$ RAILS_ENV=test rspec
+```
+
 ### Production
 `100eyes` is a relatively simple Ruby on Rails (RoR) application and consists of the application server and a background worker to receive incoming Telegram messages.
 

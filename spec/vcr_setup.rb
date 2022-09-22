@@ -13,4 +13,7 @@ VCR.configure do |c|
   c.filter_sensitive_data('SIGNAL_SERVER_PHONE_NUMBER') { ENV['SIGNAL_SERVER_PHONE_NUMBER'] }
 
   c.configure_rspec_metadata!
+
+  # Capybara.server_host default
+  c.ignore_hosts '0.0.0.0', 'chrome', '127.0.0.1'
 end

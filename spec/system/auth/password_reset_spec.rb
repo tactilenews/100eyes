@@ -2,16 +2,16 @@
 
 require 'rails_helper'
 
-RSpec.feature 'Password Reset', type: :feature do
+RSpec.describe 'Password Reset' do
   let(:email) { Faker::Internet.safe_email }
   let(:password) { Faker::Internet.password(min_length: 8, max_length: 128) }
   let(:new_password) { Faker::Internet.password(min_length: 8, max_length: 128) }
   let!(:user) { create(:user, email: email, password: password, otp_enabled: otp_enabled) }
 
-  context 'without 2FA set up' do
+  describe 'without 2FA set up' do
     let(:otp_enabled) { false }
 
-    scenario 'editor resets password' do
+    it 'editor resets password' do
       visit new_password_path
 
       fill_in 'E-Mail', with: email
@@ -27,10 +27,10 @@ RSpec.feature 'Password Reset', type: :feature do
     end
   end
 
-  context 'with 2FA set up' do
+  describe 'with 2FA set up' do
     let(:otp_enabled) { true }
 
-    scenario 'editor resets password' do
+    it 'editor resets password' do
       visit new_password_path
 
       fill_in 'E-Mail', with: email

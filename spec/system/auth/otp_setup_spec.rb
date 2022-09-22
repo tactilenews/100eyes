@@ -2,17 +2,17 @@
 
 require 'rails_helper'
 
-RSpec.feature 'OTP Setup', type: :feature do
+RSpec.describe 'OTP Setup' do
   let(:email) { Faker::Internet.safe_email }
   let(:password) { Faker::Internet.password(min_length: 8, max_length: 128) }
   let(:new_password) { Faker::Internet.password(min_length: 8, max_length: 128) }
   let(:otp_enabled) { true }
   let(:user) { create(:user, email: email, password: password, otp_enabled: otp_enabled) }
 
-  context 'without 2FA set up' do
+  describe 'without 2FA set up' do
     let(:otp_enabled) { false }
 
-    scenario 'editor tries to access any page' do
+    it 'editor tries to access any page' do
       visit dashboard_path(as: user)
 
       expect(page).to have_current_path(otp_setup_path)
@@ -32,7 +32,7 @@ RSpec.feature 'OTP Setup', type: :feature do
       expect(page).to have_current_path(dashboard_path)
     end
 
-    scenario 'editor cancels setup' do
+    it 'editor cancels setup' do
       visit dashboard_path(as: user)
 
       expect(page).to have_current_path(otp_setup_path)
@@ -44,17 +44,17 @@ RSpec.feature 'OTP Setup', type: :feature do
     end
   end
 
-  context 'with 2FA set up' do
+  describe 'with 2FA set up' do
     let(:otp_enabled) { true }
 
-    scenario 'editor tries to access any page' do
+    it 'editor tries to access any page' do
       visit dashboard_path(as: user)
 
       # Editor is not redirected
-      expect(page).to have_current_path(dashboard_path)
+      expect(page).to have_current_path(dashboard_path, ignore_query: true)
     end
 
-    scenario 'editor tries to access setup page' do
+    it 'editor tries to access setup page' do
       visit otp_setup_path(as: user)
 
       expect(page).to have_current_path(dashboard_path)
