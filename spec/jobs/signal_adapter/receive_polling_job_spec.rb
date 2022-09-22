@@ -97,6 +97,10 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
           subject.call
           expect(contributor.reload.signal_onboarding_completed_at).to be_present
         end
+
+        it 'enqueues a job to attach contributors avatar' do
+          expect { subject.call }.to have_enqueued_job(SignalAdapter::AttachContributorsAvatarJob).with(contributor)
+        end
       end
 
       describe 'given a message from a contributor with completed onboarding' do
