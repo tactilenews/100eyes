@@ -11,7 +11,7 @@ RSpec.describe 'Raw data' do
     click_on 'text.json'
 
     switch_to_window(windows.last)
-    
+
     expect(page.body).to have_text('{"text":"Hello"}')
   end
 end
