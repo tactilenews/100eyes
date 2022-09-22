@@ -2,12 +2,12 @@
 
 require 'rails_helper'
 
-RSpec.feature 'Contributors', type: :feature do
+RSpec.describe 'Contributors' do
   context 'as admin' do
     let(:user) { create(:user, first_name: 'Max', last_name: 'Mustermann', admin: true, password: '12345678') }
     let!(:contributor) { create(:contributor, first_name: 'Zora', last_name: 'Zimmermann') }
 
-    scenario 'admin edits contributor' do
+    it 'admin edits contributor' do
       visit admin_contributors_path(as: user)
 
       click_on 'Edit'
