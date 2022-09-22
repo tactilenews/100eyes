@@ -1,15 +1,5 @@
 .Placeholder {
-  padding: 0.25em;
+  background-color: var(--color-blue-lightest);
   border-radius: var(--border-radius);
-  font-weight: 500;
-  color: var(--color-text-light);
-  background-color: rgba(0, 0, 0, 0.05);
-}
-
-.Placeholder::before {
-  content: '{{';
-}
-
-.Placeholder::after {
-  content: '}}';
+  color: var(--color-blue);
 }

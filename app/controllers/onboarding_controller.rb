@@ -25,6 +25,7 @@ class OnboardingController < ApplicationController
     @contributor = Contributor.new(contributor_params.merge(json_web_token_attributes: { invalidated_jwt: jwt_param }))
 
     if @contributor.save
+      complete_onboarding(@contributor)
       @contributor.send_welcome_message!
       redirect_to_success
     else
@@ -45,7 +46,7 @@ class OnboardingController < ApplicationController
   def redirect_if_contributor_exists
     # We handle an onboarding request for a contributor that
     # already exists in the exact same way as a successful
-    # onboarding so that we don't disclose wether someone
+    # onboarding so that we don't disclose whether someone
     # is a contributor.
 
     return unless contributor_exists?
@@ -82,6 +83,8 @@ class OnboardingController < ApplicationController
     return unless jwt
     raise ActionController::BadRequest unless resume_telegram_onboarding?
   end
+
+  def complete_onboarding(contributor); end
 
   def resume_telegram_onboarding
     return unless resume_telegram_onboarding?

@@ -4,28 +4,29 @@ require 'browser'
 
 module Textarea
   class Textarea < ApplicationComponent
-    def initialize(id: nil, value: nil, show_emoji_picker_hint: false, **)
+    def initialize(id: nil, value: nil, show_emoji_picker_hint: false, highlight_placeholders: false, **)
       super
 
       @id = id
       @value = value
       @show_emoji_picker_hint = show_emoji_picker_hint
+      @highlight_placeholders = highlight_placeholders
     end
 
     private
 
-    attr_reader :id, :value, :show_emoji_picker_hint
+    attr_reader :id, :value, :show_emoji_picker_hint, :highlight_placeholders
     alias show_emoji_picker_hint? show_emoji_picker_hint
+    alias highlight_placeholders? highlight_placeholders
+
+    def styles
+      return super unless highlight_placeholders
+
+      super << :highlighted
+    end
 
     def attrs
-      super.defaults(
-        id: id,
-        name: id,
-        data: {
-          controller: 'textarea',
-          action: 'input->textarea#resize'
-        }
-      )
+      super.defaults(id: id, name: id)
     end
 
     def emoji_picker_supported?

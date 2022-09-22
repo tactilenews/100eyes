@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
 class Request < ApplicationRecord
+  include PlaceholderHelper
+
   has_many :messages, dependent: :destroy
   has_many :contributors, through: :messages
   has_many :photos, through: :messages
-  attribute :hints, :string, array: true, default: []
   default_scope { order(created_at: :desc) }
+  has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
 
   acts_as_taggable_on :tags
 
@@ -13,19 +15,8 @@ class Request < ApplicationRecord
 
   delegate :replies, to: :messages
 
-  HINT_TEXTS = {
-    photo: (I18n.t 'request.hints.photo.text'),
-    address: (I18n.t 'request.hints.address.text'),
-    contact: (I18n.t 'request.hints.contact.text'),
-    medicalInfo: (I18n.t 'request.hints.medicalInfo.text'),
-    confidential: (I18n.t 'request.hints.confidential.text')
-  }.freeze
-
-  def plaintext
-    parts = []
-    parts << text
-    parts += hints.map { |hint| HINT_TEXTS[hint.to_sym] }
-    parts.join("\n\n")
+  def personalized_text(contributor)
+    replace_placeholder(text, I18n.t('request.personalization.first_name'), contributor.first_name.strip)
   end
 
   def stats
@@ -51,7 +42,7 @@ class Request < ApplicationRecord
       Message.create!(
         sender: nil,
         recipient: contributor,
-        text: request.plaintext,
+        text: request.personalized_text(contributor),
         request: request,
         broadcasted: true
       )

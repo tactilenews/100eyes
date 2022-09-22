@@ -10,6 +10,11 @@
   top: calc(3.5 * var(--spacing-unit));
 }
 
+.RequestForm-insertPlaceholderButton {
+  background-color: #fff;
+  font-size: var(--font-size-s);
+}
+
 [data-request-form-target='preview'] {
   white-space: pre-wrap;
 }

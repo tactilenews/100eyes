@@ -22,7 +22,10 @@
             </div>
           <% end %>
 
-          <%= c 'plaintext_message', message: request.text %>
+          <%= c 'plaintext_message',
+            message: request.text,
+            highlight_placeholders: true
+          %>
         <% end %>
 
       <% end %>

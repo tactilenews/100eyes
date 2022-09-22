@@ -6,6 +6,8 @@ RSpec.describe ChatMessage::ChatMessage, type: :component do
   subject(:component) { render_inline(described_class.new(**params)) }
   let(:params) { { message: message } }
 
+  before { Current.user = create(:user) }
+
   describe '[class]' do
     subject { component.css('.ChatMessage')[0][:class] }
 
