@@ -17,12 +17,12 @@ class Message < ApplicationRecord
 
   counter_culture :request, column_name: proc { |model| model.reply? ? 'replies_count' : nil }
 
-  scope :replies, -> { where(sender_type: 'Contributor') }
+  scope :replies, -> { where(sender_type: Contributor.name) }
 
   delegate :name, to: :creator, allow_nil: true, prefix: true
 
   has_many_attached :raw_data
-  validates :raw_data, presence: true, if: -> { sender_type.eql?('Contributor') }
+  validates :raw_data, presence: true, if: -> { sent_from_contributor? }
   validates :unknown_content, inclusion: { in: [true, false] }
 
   after_commit(on: :create, unless: :manually_created?) do
