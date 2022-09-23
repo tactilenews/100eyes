@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_31_095246) do
+ActiveRecord::Schema.define(version: 2022_09_23_071335) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -132,7 +132,7 @@ ActiveRecord::Schema.define(version: 2022_08_31_095246) do
   end
 
   create_table "messages", force: :cascade do |t|
-    t.integer "sender_id"
+    t.bigint "sender_id"
     t.bigint "request_id", null: false
     t.string "text"
     t.datetime "created_at", precision: 6, null: false
@@ -145,10 +145,11 @@ ActiveRecord::Schema.define(version: 2022_08_31_095246) do
     t.boolean "blocked", default: false
     t.boolean "highlighted", default: false
     t.bigint "creator_id"
+    t.string "sender_type"
     t.index ["creator_id"], name: "index_messages_on_creator_id"
     t.index ["recipient_id"], name: "index_messages_on_recipient_id"
     t.index ["request_id"], name: "index_messages_on_request_id"
-    t.index ["sender_id"], name: "index_messages_on_sender_id"
+    t.index ["sender_id", "sender_type"], name: "index_messages_on_sender_id_and_sender_type"
     t.index ["telegram_media_group_id"], name: "index_messages_on_telegram_media_group_id", unique: true
   end
 
@@ -174,6 +175,8 @@ ActiveRecord::Schema.define(version: 2022_08_31_095246) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "replies_count"
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_requests_on_user_id"
   end
 
   create_table "settings", force: :cascade do |t|
@@ -236,8 +239,8 @@ ActiveRecord::Schema.define(version: 2022_08_31_095246) do
   add_foreign_key "json_web_tokens", "contributors"
   add_foreign_key "message_files", "messages"
   add_foreign_key "messages", "contributors", column: "recipient_id"
-  add_foreign_key "messages", "contributors", column: "sender_id"
   add_foreign_key "messages", "requests"
   add_foreign_key "photos", "messages"
+  add_foreign_key "requests", "users"
   add_foreign_key "taggings", "tags"
 end

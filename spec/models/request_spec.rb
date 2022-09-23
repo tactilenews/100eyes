@@ -4,18 +4,20 @@ require 'rails_helper'
 
 RSpec.describe Request, type: :model do
   let(:contributor) { create(:contributor) }
+  let(:user) { create(:user) }
 
   let(:request) do
     Request.new(
       title: 'Hitchhiker’s Guide',
-      text: 'What is the answer to life, the universe, and everything?'
+      text: 'What is the answer to life, the universe, and everything?',
+      user: user
     )
   end
 
   subject { request }
 
-  it 'has title and text' do
-    expect(subject.attributes.keys).to include('title', 'text')
+  it 'has title, text, and user_id' do
+    expect(subject.attributes.keys).to include('title', 'text', 'user_id')
   end
 
   it 'is by default sorted in reverse chronological order' do
@@ -119,7 +121,7 @@ RSpec.describe Request, type: :model do
     describe 'given a number of requests, replies and photos' do
       before(:each) do
         create_list(:message, 2)
-        delivered_messages = create_list(:message, 7, :with_recipient, request: request, broadcasted: true)
+        delivered_messages = create_list(:message, 7, :outbound, request: request, broadcasted: true)
         # _ is some unresponsive recipient
         responsive_recipient, _, *other_recipients = delivered_messages.map(&:recipient)
         create_list(:message, 3, request: request, sender: responsive_recipient)
@@ -170,11 +172,11 @@ RSpec.describe Request, type: :model do
 
       describe 'iterating through a list' do
         subject { -> { Request.find_each.map(&:stats) } }
-        it { should make_database_queries(count: 4) }
+        it { should make_database_queries(count: 21) }
 
-        describe 'eager_load(:messages)' do
-          subject { -> { Request.eager_load(:messages).find_each.map(&:stats) } }
-          it { should make_database_queries(count: 2) } # better
+        describe 'preload(messages: :sender).eager_load(:messages)' do
+          subject { -> { Request.preload(messages: :sender).eager_load(:messages).find_each.map(&:stats) } }
+          it { should make_database_queries(count: 4) } # better
         end
       end
     end
@@ -191,7 +193,7 @@ RSpec.describe Request, type: :model do
 
       it { should change { Message.count }.from(0).to(2) }
       it { should change { Message.pluck(:recipient_id) }.from([]).to([2, 1]) }
-      it { should change { Message.pluck(:sender_id) }.from([]).to([nil, nil]) }
+      it { should change { Message.pluck(:sender_id) }.from([]).to([request.user.id, request.user.id]) }
       it { should change { Message.pluck(:broadcasted) }.from([]).to([true, true]) }
     end
 
@@ -200,7 +202,8 @@ RSpec.describe Request, type: :model do
         Request.new(
           title: 'Hitchhiker’s Guide',
           text: 'What is the answer to life, the universe, and everything?',
-          tag_list: 'programmer'
+          tag_list: 'programmer',
+          user: user
         )
       end
       before(:each) do
@@ -210,7 +213,7 @@ RSpec.describe Request, type: :model do
 
       it { should change { Message.count }.from(0).to(1) }
       it { should change { Message.pluck(:recipient_id) }.from([]).to([1]) }
-      it { should change { Message.pluck(:sender_id) }.from([]).to([nil]) }
+      it { should change { Message.pluck(:sender_id) }.from([]).to([request.user.id]) }
       it { should change { Message.pluck(:broadcasted) }.from([]).to([true]) }
     end
 
@@ -223,7 +226,7 @@ RSpec.describe Request, type: :model do
 
       it { should change { Message.count }.from(0).to(1) }
       it { should change { Message.pluck(:recipient_id) }.from([]).to([4]) }
-      it { should change { Message.pluck(:sender_id) }.from([]).to([nil]) }
+      it { should change { Message.pluck(:sender_id) }.from([]).to([request.user.id]) }
       it { should change { Message.pluck(:broadcasted) }.from([]).to([true]) }
     end
   end

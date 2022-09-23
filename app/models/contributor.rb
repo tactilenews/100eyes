@@ -10,7 +10,7 @@ class Contributor < ApplicationRecord
 
   multisearchable against: %i[first_name last_name username note]
 
-  has_many :replies, class_name: 'Message', inverse_of: :sender, foreign_key: 'sender_id', dependent: :destroy
+  has_many :replies, class_name: 'Message', as: :sender, dependent: :destroy
   has_many :received_messages, class_name: 'Message', inverse_of: :recipient, foreign_key: 'recipient_id', dependent: :destroy
   has_many :replied_to_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :replies
   has_many :received_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :received_messages
