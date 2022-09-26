@@ -1,4 +1,4 @@
 <%= @text %>
 
 --
-<%= t 'mailer.unsubscribe.text' %>
+<%= I18n.with_locale(@locale) { t 'mailer.unsubscribe.text' } %>

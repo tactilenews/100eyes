@@ -1,4 +1,11 @@
 fr:
+  adapter:
+    postmark:
+      contributor_not_found_email:
+        subject: Nous ne pouvons pas attribuer votre adresse e-mail
+        text: Nous vous remercions pour votre message. Malheureusement, nous n'avons pas pu attribuer votre adresse e-mail. Il se peut que nous ayons fait une erreur ou que vous nous ayez écrit depuis une autre adresse e-mail. N'hésitez pas à nous contacter à l'adresse support@tactile.news, nous résoudrons rapidement le problème. Merci beaucoup.
+      new_message_email:
+        subject: La rédaction a une nouvelle question
   components:
     onboarding_header:
       byline: une recherche de dialogue de <a class="Link" href="https://tactile.news" target="_blank">tactile.news</a>
@@ -47,7 +54,9 @@ fr:
       first_name:
         label: Premier nom
       last_name:
-        label: Dernier nom 
+        label: Dernier nom
+      email:
+        label: Adresse e-mail
       signal_phone_number:
         label: Numéro de téléphone portable
       data_processing_consent:
@@ -57,3 +66,7 @@ fr:
         label: Threema ID
         help: 6 caractères de long, composés uniquement de chiffres et de lettres majuscules
         placeholder: par ex. A12BC345
+  mailer:
+    unsubscribe:
+      text: "Si vous ne souhaitez plus recevoir d'e-mails de notre part, vous pouvez vous désabonner en cliquant sur ce lien: {{{ pm:unsubscribe }}}"
+      html: "Si vous ne souhaitez plus recevoir d'e-mails de notre part, vous pouvez vous désabonner <a href=\"{{{ pm:unsubscribe }}}\">en cliquant sur ce lien</a>."

@@ -11,7 +11,7 @@
       <br>
       --
       <br>
-      <%= t 'mailer.unsubscribe.html'.html_safe %>
+      <%= I18n.with_locale(@locale) { t 'mailer.unsubscribe.html'.html_safe }  %>
     </div>
   </body>
 </html>

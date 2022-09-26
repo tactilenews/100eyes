@@ -7,7 +7,7 @@ class SettingsController < ApplicationController
     settings_params.each do |key, value|
       if value.respond_to? :keys
         value.each_key do |locale_value|
-          setting_record = Setting.find_by(var: key)
+          setting_record = Setting.create_or_find_by(var: key)
           setting_record.update!(locale_value.to_sym => value[locale_value].strip)
         end
       else

@@ -36,12 +36,14 @@ module PostmarkAdapter
       @text = [subject,
                Setting.find_by(var: :onboarding_success_text)
                       .send("value_#{contributor.localization_tags.first}").to_sym].join("\n")
+      @locale = contributor.localization_tags.first.to_sym
       mail(to: contributor.email, subject: subject, message_stream: message_stream)
     end
 
     def message_email
       @msg = params[:message]
       @text = msg.text
+      @locale = @msg.recipient.localization_tags&.first&.to_sym
       if @msg.broadcasted?
         broadcasted_message_email
       else
@@ -53,7 +55,7 @@ module PostmarkAdapter
 
     def broadcasted_message_email
       headers({ 'message-id': "request/#{msg.request.id}@#{Setting.application_host}" })
-      email_subject = I18n.t('adapter.postmark.new_message_email.subject')
+      email_subject = localized_email_subject(msg.recipient.localization_tags&.first&.to_sym)
       message_stream = Setting.postmark_broadcasts_stream
       mail(to: msg.recipient.email, subject: email_subject, message_stream: message_stream)
     end
@@ -63,13 +65,20 @@ module PostmarkAdapter
                 'message-id': "request/#{msg.request.id}/message/#{msg.id}@#{Setting.application_host}",
                 references: "request/#{msg.request.id}@#{Setting.application_host}"
               })
-      email_subject = "Re: #{I18n.t('adapter.postmark.new_message_email.subject')}"
+      email_subject = "Re: #{localized_email_subject(msg.recipient.localization_tags&.first&.to_sym,
+                                                     I18n.t('adapter.postmark.new_message_email.subject'))}"
       message_stream = Setting.postmark_transactional_stream
       mail(to: msg.recipient.email, subject: email_subject, message_stream: message_stream)
     end
 
     def default_from
       "\"#{Setting.project_name}\" <#{Setting.email_from_address}>"
+    end
+
+    def localized_email_subject(locale)
+      I18n.with_locale(locale) do
+        I18n.t('adapter.postmark.new_message_email.subject')
+      end
     end
   end
 end

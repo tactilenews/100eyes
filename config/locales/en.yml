@@ -1,4 +1,11 @@
 en:
+  adapter:
+    postmark:
+      contributor_not_found_email:
+        subject: We can not match your email address
+        text: Thank you for your message. Unfortunately, we could not match your email address. This could be because we made a mistake or you are writing to us from a different email address. Please contact us at support@tactile.news and we will solve the problem quickly. Thank you very much.
+      new_message_email:
+        subject: The editorial team has a new question
   components:
     onboarding_header:
       byline: a dialogue research of <a class="Link" href="https://tactile.news" target="_blank">tactile.news</a>
@@ -48,6 +55,8 @@ en:
         label: First name
       last_name:
         label: Last name
+      email:
+        label: E-mail address
       signal_phone_number:
         label: Cell phone number
       data_processing_consent:
@@ -57,3 +66,7 @@ en:
         label: Threema ID
         help: 6 characters long, consists only of numbers and capital letters
         placeholder: e.g. A12BC345
+  mailer:
+    unsubscribe:
+      text: "If you no longer wish to receive e-mails from us, you can unsubscribe by following this link: {{{ pm:unsubscribe }}}"
+      html: "If you no longer wish to receive e-mails from us, you can unsubscribe <a href=\"{{{ pm:unsubscribe }}}\">by following this link</a>."
