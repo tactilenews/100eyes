@@ -82,16 +82,13 @@
 
   --nav-bar-height: calc(2.5 * var(--spacing-unit));
 
-  --limit-max-inner-width: max(
-    var(--spacing-unit),
-    (100% - var(--grid-max-width)) / 2
+  --limit-max-inner-width: calc(
+    max(var(--spacing-unit), (100% - var(--grid-max-width)) / 2)
   );
-  --limit-max-inner-width-l: max(
-    var(--spacing-unit),
-    (100% - var(--grid-max-width-l)) / 2
+  --limit-max-inner-width-l: calc(
+    max(var(--spacing-unit), (100% - var(--grid-max-width-l)) / 2)
   );
-  --limit-max-inner-width-xs: max(
-    var(--spacing-unit),
-    (100% - var(--grid-max-width-xs)) / 2
+  --limit-max-inner-width-xs: calc(
+    max(var(--spacing-unit), (100% - var(--grid-max-width-xs)) / 2)
   );
 }
