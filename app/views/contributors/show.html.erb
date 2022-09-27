@@ -1,40 +1,41 @@
-<%= c 'two_column_layout', id: :contributors do |layout| %>
+<%= c 'main' do %>
+  <%= c 'two_column_layout', id: :contributors do |layout| %>
 
-  <% layout.sidebar do %>
-    <a class="skip-link" href="#profile" data-turbo="false">
-      <%= t 'contributor.skip_to_profile' %>
-    </a>
+    <% layout.sidebar do %>
+      <a class="skip-link" href="#profile" data-turbo="false">
+        <%= t 'contributor.skip_to_profile' %>
+      </a>
 
-    <% @contributors.each do |contributor| %>
+      <% @contributors.each do |contributor| %>
 
-      <%= c 'sidebar_item', active: contributor == @contributor do %>
-        <%= c 'contributor_row', contributor: contributor, style: :compact %>
-      <% end %>
+        <%= c 'sidebar_item', active: contributor == @contributor do %>
+          <%= c 'contributor_row', contributor: contributor, style: :compact %>
+        <% end %>
 
-    <% end %>
-  <% end %>
-
-  <%= c 'box', style: :large do %>
-    <%= c 'wrapper', style: :narrow do %>
-      <%= c 'stack', space: :xlarge do %>
-
-        <%= c 'contributor_header', contributor: @contributor %>
-
-        <%= c 'contributor_quick_edit_form', contributor: @contributor %>
-
-        <hr>
-
-        <%= c 'contributor_channel_settings', contributor: @contributor %>
-
-        <hr>
-
-        <%= c 'requests_feed', contributor: @contributor %>
-
-        <hr>
-
-        <%= c 'contributor_status_toggle', contributor: @contributor %>
       <% end %>
     <% end %>
-  <% end %>
 
+    <%= c 'box', style: :large do %>
+      <%= c 'wrapper', style: :narrow do %>
+        <%= c 'stack', space: :xlarge do %>
+
+          <%= c 'contributor_header', contributor: @contributor %>
+
+          <%= c 'contributor_quick_edit_form', contributor: @contributor %>
+
+          <hr>
+
+          <%= c 'contributor_channel_settings', contributor: @contributor %>
+
+          <hr>
+
+          <%= c 'requests_feed', contributor: @contributor %>
+
+          <hr>
+
+          <%= c 'contributor_status_toggle', contributor: @contributor %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
 <% end %>

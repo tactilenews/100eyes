@@ -1,19 +1,15 @@
 <header <%= attrs %>>
-  <%= c 'wrapper', class: 'PageHeader-wrapper' do %>
-    <div>
-      <%= content %>
-    </div>
+  <div class="PageHeader-flexbox">
+    <%= content %>
 
     <% if actions %>
       <div class="PageHeader-actions">
         <%= actions %>
       </div>
     <% end %>
-  <% end %>
+  </div>
 
   <% if tab_bar %>
-    <%= c 'wrapper', class: 'PageHeader-tabBar' do %>
-      <%= tab_bar %>
-    <% end %>
+    <%= tab_bar %>
   <% end %>
 </header>

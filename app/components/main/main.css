@@ -1,0 +1,7 @@
+.Main {
+  background-color: inherit;
+}
+
+.Main--lightestGrayBackground {
+  background-color: var(--color-gray-lightest);
+}

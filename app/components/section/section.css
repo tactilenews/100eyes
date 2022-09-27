@@ -1,0 +1,17 @@
+.Section {
+  padding-left: var(--limit-max-inner-width);
+  padding-right: var(--limit-max-inner-width);
+}
+
+.Section--xnarrow {
+  padding-left: var(--limit-max-inner-width-xs);
+  padding-right: var(--limit-max-inner-width-xs);
+}
+
+.Section > * + * {
+  margin-top: var(--spacing-unit);
+}
+
+.Section--xlargeMarginTop > * + * {
+  margin-top: var(--spacing-unit-xl);
+}

@@ -1,15 +1,13 @@
-<%= c 'page_header' do %>
-  <%= c 'heading' do %>
-    <%= I18n.t 'search.result', count: :many %>
+<%= c 'main' do %>
+  <%= c 'page_header' do %>
+    <%= c 'heading' do %>
+      <%= I18n.t 'search.result', count: :many %>
+    <% end %>
   <% end %>
-<% end %>
 
-<%= c 'box' do %>
-  <%= c 'wrapper' do %>
-    <%= c 'stack', space: :xlarge do %>
-      <% @results.each do |result| %>
-        <%= c 'search_result', result: result %>
-      <% end %>
+  <%= c 'section', style: :xlargeMarginTop do %>
+    <% @results.each do |result| %>
+      <%= c 'search_result', result: result %>
     <% end %>
   <% end %>
 <% end %>

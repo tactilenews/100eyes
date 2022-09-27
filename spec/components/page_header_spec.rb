@@ -30,6 +30,6 @@ RSpec.describe PageHeader::PageHeader, type: :component do
     end
 
     it { should have_css('.PageHeader--tabBar') }
-    it { should have_css('.PageHeader-tabBar', text: 'Tab Bar') }
+    it { should have_css('.TabBar', text: 'Tab Bar') }
   end
 end

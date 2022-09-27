@@ -1,38 +1,36 @@
-<%= c 'page_header' do |header| %>
-  <%= c 'heading' do %>
-    <%= I18n.t 'contributor.contributor', count: :other %>
+<%= c 'main' do %>
+  <%= c 'page_header', style: :lightGrayBackground do |header| %>
+    <%= c 'heading' do %>
+      <%= I18n.t 'contributor.contributor', count: :other %>
+    <% end %>
+
+    <% header.actions do %>
+      <%= c 'copy_button',
+        label: I18n.t('contributor.actions.copy_invite'),
+        url: invites_url,
+        key: 'url'
+      %>
+    <% end %>
+
+    <% header.tab_bar do %>
+      <%= c('tab_bar', items: {
+        contributors_path => {
+          label: "Aktiv",
+          active: @filter == :active,
+          count: @active_count,
+        },
+        contributors_path(filter: :inactive) => {
+          label: "Inaktiv",
+          active: @filter == :inactive,
+          count: @inactive_count,
+        },
+      }) %>
+    <% end %>
   <% end %>
 
-  <% header.actions do %>
-    <%= c 'copy_button',
-      label: I18n.t('contributor.actions.copy_invite'),
-      url: invites_url,
-      key: 'url'
-    %>
-  <% end %>
-
-  <% header.tab_bar do %>
-    <%= c('tab_bar', items: {
-      contributors_path => {
-        label: "Aktiv",
-        active: @filter == :active,
-        count: @active_count,
-      },
-      contributors_path(filter: :inactive) => {
-        label: "Inaktiv",
-        active: @filter == :inactive,
-        count: @inactive_count,
-      },
-    }) %>
-  <% end %>
-<% end %>
-
-<%= c 'box', style: :large do %>
-  <%= c 'wrapper' do %>
-    <%= c 'stack' do %>
-      <% @contributors.each do |contributor| %>
-        <%= c 'contributor_row', contributor: contributor %>
-      <% end %>
+  <%= c 'section' do %>
+    <% @contributors.each do |contributor| %>
+      <%= c 'contributor_row', contributor: contributor %>
     <% end %>
   <% end %>
 <% end %>

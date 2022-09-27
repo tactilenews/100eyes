@@ -1,11 +1,11 @@
-<%= c 'page_header' do %>
-  <%= c 'heading', style: :alpha do %>
-    <%= I18n.t 'request.create' %>
+<%= c 'main' do %>
+  <%= c 'page_header', style: :largeMarginBottom do %>
+    <%= c 'heading', style: :alpha do %>
+      <%= I18n.t 'request.create' %>
+    <% end %>
   <% end %>
-<% end %>
 
-<%= c 'box', style: :large do %>
-  <%= c 'wrapper' do %>
+  <%= c 'section' do %>
     <%= c 'request_form', request: @request %>
   <% end %>
 <% end %>
