@@ -151,9 +151,9 @@ GEM
     diff-lcs (1.5.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    dotenv (2.7.6)
-    dotenv-rails (2.7.6)
-      dotenv (= 2.7.6)
+    dotenv (2.8.1)
+    dotenv-rails (2.8.1)
+      dotenv (= 2.8.1)
       railties (>= 3.2)
     email_validator (2.2.3)
       activemodel
@@ -177,7 +177,7 @@ GEM
     globalid (1.0.0)
       activesupport (>= 5.0)
     hashdiff (1.0.1)
-    http (5.0.4)
+    http (5.1.0)
       addressable (~> 2.8)
       http-cookie (~> 1.0)
       http-form_data (~> 2.2)
@@ -240,7 +240,7 @@ GEM
     nokogiri (1.13.8)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
-    noticed (1.5.9)
+    noticed (1.6.0)
       http (>= 4.0.0)
       rails (>= 5.2.0)
     parallel (1.21.0)
@@ -441,7 +441,7 @@ DEPENDENCIES
   jwt
   kramdown (~> 2.4)
   listen (>= 3.0.5, < 3.8)
-  noticed (~> 1.5)
+  noticed (~> 1.6)
   pg (>= 0.18, < 2.0)
   pg_search
   phony_rails
