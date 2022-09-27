@@ -4,14 +4,14 @@
       <%= t 'contributor.skip_to_profile' %>
     </a>
 
-    <% @contributors.each do |contributor| %>
+      <% @contributors.each do |contributor| %>
 
-      <%= c 'sidebar_item', active: contributor == @contributor do %>
-        <%= c 'contributor_row', contributor: contributor, style: :compact %>
+        <%= c 'sidebar_item', active: contributor == @contributor do %>
+          <%= c 'contributor_row', contributor: contributor, style: :compact %>
+        <% end %>
+
       <% end %>
-
     <% end %>
-  <% end %>
 
   <%= c 'section', styles: [:wide, :xlargeSpaceBetween, :noMargin] do %>
     <%= c 'contributor_header', contributor: @contributor %>
