@@ -163,7 +163,7 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
-    faker (2.21.0)
+    faker (2.23.0)
       i18n (>= 1.8.11, < 2)
     ferrum (0.11)
       addressable (~> 2.5)
@@ -177,7 +177,7 @@ GEM
     globalid (1.0.0)
       activesupport (>= 5.0)
     hashdiff (1.0.1)
-    http (5.0.4)
+    http (5.1.0)
       addressable (~> 2.8)
       http-cookie (~> 1.0)
       http-form_data (~> 2.2)
@@ -240,7 +240,7 @@ GEM
     nokogiri (1.13.8)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
-    noticed (1.5.9)
+    noticed (1.6.0)
       http (>= 4.0.0)
       rails (>= 5.2.0)
     parallel (1.21.0)
@@ -441,7 +441,7 @@ DEPENDENCIES
   jwt
   kramdown (~> 2.4)
   listen (>= 3.0.5, < 3.8)
-  noticed (~> 1.5)
+  noticed (~> 1.6)
   pg (>= 0.18, < 2.0)
   pg_search
   phony_rails
