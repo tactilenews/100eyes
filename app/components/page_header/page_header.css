@@ -16,6 +16,10 @@
   padding-bottom: 0;
 }
 
+.PageHeader-tabBar {
+  margin-top: var(--spacing-unit-s);
+}
+
 .PageHeader--inheritBackgroundColor {
   background-color: inherit;
   padding-bottom: 0;
