@@ -397,7 +397,7 @@ GEM
       unf_ext
     unf_ext (0.0.8.2)
     unicode-display_width (2.1.0)
-    valid_email2 (4.0.3)
+    valid_email2 (4.0.4)
       activemodel (>= 3.2)
       mail (~> 2.5)
     vcr (6.1.0)
