@@ -388,6 +388,7 @@ de:
     has_replied_to: hat auf „%{title}” geantwortet
     saved: Informationen zu %{name} gespeichert
     invalid: Informationen zu %{name} sind ungültig
+    destroyed: Contributor %{name} wurde erfolgreich gelöscht.
     message-send: Nachricht an %{name} wurde verschickt
     skip_to_profile: Zum Profil springen
     form:

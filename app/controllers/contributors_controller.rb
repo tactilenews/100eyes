@@ -53,7 +53,7 @@ class ContributorsController < ApplicationController
 
   def destroy
     @contributor.destroy
-    redirect_to contributors_url, notice: 'Contributor was successfully destroyed.'
+    redirect_to contributors_url, notice: I18n.t('contributor.destroyed', name: @contributor.name)
   end
 
   def count

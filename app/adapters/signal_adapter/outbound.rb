@@ -35,7 +35,7 @@ module SignalAdapter
         http.request(req)
       end
       res.value # may raise exception
-    rescue Net::HTTPServerException => e
+    rescue Net::HTTPClientException => e
       ErrorNotifier.report(e, context: {
                              code: e.response.code,
                              message: e.response.message,

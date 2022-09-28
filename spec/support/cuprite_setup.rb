@@ -3,10 +3,10 @@
 # First, load Cuprite Capybara integration
 require 'capybara/cuprite'
 
-REMOTE_CHROME_URL = ENV['CHROME_URL']
+REMOTE_CHROME_URL = ENV.fetch('CHROME_URL', nil)
 REMOTE_CHROME_HOST, REMOTE_CHROME_PORT =
   if REMOTE_CHROME_URL
-    URI.parse(REMOTE_CHROME_URL).yield_self do |uri|
+    URI.parse(REMOTE_CHROME_URL).then do |uri|
       [uri.host, uri.port]
     end
   end

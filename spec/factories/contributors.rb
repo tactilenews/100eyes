@@ -12,7 +12,7 @@ FactoryBot.define do
     trait :with_an_avatar do
       after(:build) do |contributor|
         contributor.avatar.attach(
-          io: File.open(Rails.root.join('example-image.png')),
+          io: Rails.root.join('example-image.png').open,
           filename: 'example-image.png'
         )
       end
