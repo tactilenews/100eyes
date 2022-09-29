@@ -8,6 +8,11 @@
   padding-right: var(--limit-max-inner-width-xs);
 }
 
+.Section--wide {
+  padding-left: var(--limit-max-inner-width-l);
+  padding-right: var(--limit-max-inner-width-l);
+}
+
 .Section > * + * {
   margin-top: var(--spacing-unit);
 }

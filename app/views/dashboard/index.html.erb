@@ -1,5 +1,5 @@
 <%= c 'main', style: :lightestGrayBackground do %>
-  <%= c 'page_header', styles: [:wide, :inheritBackgroundColor] do %>
+  <%= c 'page_header', styles: [:wide, :inheritBackgroundColor, :xlargePaddingTop] do %>
     <%= c 'heading' do %>
       <%= t "dashboard.heading#{time_based_heading}", first_name: current_user.first_name %>
     <% end %>
@@ -8,5 +8,7 @@
       link: new_request_path
     %>
   <% end %>
-  <%= c 'activity_notifications', activity_notifications: @activity_notifications %>
+  <%= c 'section', style: :wide do %>
+    <%= c 'activity_notifications', activity_notifications: @activity_notifications %>
+  <% end %>
 <% end %>

@@ -1,5 +1,5 @@
 .Main {
-  background-color: inherit;
+  background-color: var(--color-bg);
 }
 
 .Main--lightestGrayBackground {

@@ -12,17 +12,31 @@
   font-size: var(--font-size-s);
 }
 
-.PageHeader--tabBar {
-  padding-bottom: 0;
-}
-
 .PageHeader-tabBar {
   margin-top: var(--spacing-unit-s);
+}
+
+.PageHeader > .PageHeader-flexbox {
+  --gap: var(--spacing-unit);
+
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.PageHeader--tabBar {
+  padding-bottom: 0;
 }
 
 .PageHeader--inheritBackgroundColor {
   background-color: inherit;
   padding-bottom: 0;
+}
+
+.PageHeader--xnarrow {
+  padding-left: var(--limit-max-inner-width-xs);
+  padding-right: var(--limit-max-inner-width-xs);
 }
 
 .PageHeader--wide {
@@ -34,25 +48,15 @@
   margin-bottom: var(--spacing-unit-l);
 }
 
-.PageHeader--xnarrow {
-  padding-left: var(--limit-max-inner-width-xs);
-  padding-right: var(--limit-max-inner-width-xs);
+.PageHeader--xlargePaddingTop {
+  padding-top: var(--spacing-unit-xl);
 }
 
-.PageHeader .PageHeader-flexbox {
-  --gap: var(--spacing-unit);
-
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.PageHeader--flexboxColumn .PageHeader-flexbox {
+.PageHeader--flexboxColumn > .PageHeader-flexbox {
   flex-direction: column;
   align-items: flex-start;
 }
 
-.PageHeader--flexboxColumn .PageHeader-flexbox > * + * {
+.PageHeader--flexboxColumn > .PageHeader-flexbox > * + * {
   margin-top: var(--spacing-unit-s);
 }
