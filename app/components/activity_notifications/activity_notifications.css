@@ -4,10 +4,6 @@
 
 .ActivityNotifications-card {
   padding: var(--spacing-unit);
-  width: 100%;
-  max-width: var(--grid-max-width-l);
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .ActivityNotifications-list {
