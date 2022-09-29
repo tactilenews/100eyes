@@ -43,7 +43,7 @@ module PostmarkAdapter
     def message_email
       @msg = params[:message]
       @text = msg.text
-      @locale = @msg.recipient.localization_tags&.first&.to_sym
+      @locale = @msg.request.localization_tags&.first&.to_sym
       if @msg.broadcasted?
         broadcasted_message_email
       else
@@ -55,7 +55,7 @@ module PostmarkAdapter
 
     def broadcasted_message_email
       headers({ 'message-id': "request/#{msg.request.id}@#{Setting.application_host}" })
-      email_subject = localized_email_subject(msg.recipient.localization_tags&.first&.to_sym)
+      email_subject = localized_email_subject(msg.request.localization_tags&.first&.to_sym)
       message_stream = Setting.postmark_broadcasts_stream
       mail(to: msg.recipient.email, subject: email_subject, message_stream: message_stream)
     end
@@ -65,7 +65,7 @@ module PostmarkAdapter
                 'message-id': "request/#{msg.request.id}/message/#{msg.id}@#{Setting.application_host}",
                 references: "request/#{msg.request.id}@#{Setting.application_host}"
               })
-      email_subject = "Re: #{localized_email_subject(msg.recipient.localization_tags&.first&.to_sym)}"
+      email_subject = "Re: #{localized_email_subject(msg.request.localization_tags&.first&.to_sym)}"
       message_stream = Setting.postmark_transactional_stream
       mail(to: msg.recipient.email, subject: email_subject, message_stream: message_stream)
     end

@@ -48,4 +48,8 @@ class Request < ApplicationRecord
       )
     end
   end
+
+  def localization_tags
+    tag_list.select { |tag| I18n.available_locales.include?(tag.to_sym) }
+  end
 end
