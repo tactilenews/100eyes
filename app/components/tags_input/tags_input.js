@@ -1,9 +1,37 @@
 import { Controller } from '@hotwired/stimulus';
 import Tagify from '@yaireo/tagify';
+import sanitize from '../../assets/javascript/helpers/sanitize.js';
 
 const tagColor = tagData => {
   return tagData.color ? tagData.color : 'var(--color-text)';
 };
+
+function tagTemplate(tagData) {
+  const color = tagColor(tagData);
+
+  // This is a simplified copy of the default template that ships with
+  // Tagify. The main difference is that tag names are sanitized before
+  // being rendered.
+  return `
+    <tag
+      tabIndex="-1"
+      class="tagify__tag"
+      style="--tag-color:${tagColor(tagData)}"
+    >
+      <x
+        title=""
+        class="tagify__tag__removeBtn"
+        role="button"
+        aria-label="remove tag"
+      ></x>
+      <div>
+        <span class="tagify__tag-text">${
+          sanitize(tagData.name) || sanitize(tagData.value)
+        }</span>
+      </div>
+    </tag>
+  `;
+}
 
 function dropdownItemTemplate(tagData) {
   const { one, other } = this.settings.labels.members;
@@ -11,25 +39,19 @@ function dropdownItemTemplate(tagData) {
   const color = tagColor(tagData);
 
   return `
-    <div ${this.getAttributes(tagData)}
+    <div
       class="${this.settings.classNames.dropdownItem} TagsInput-dropdownItem"
       tabindex="0"
       role="option"
     >
       <span class="tagify__tag" style="--tag-color: ${color}">
         <div>
-          <span class="tagify__tag-text">${tagData.name}</span>
+          <span class="tagify__tag-text">${sanitize(tagData.name)}</span>
         </div>
       </span>
       <span class="TagsInput-count">${tagData.count} ${membersLabel}<span>
     </div>
   `;
-}
-
-function transformTag(tagData) {
-  const color = tagColor(tagData);
-
-  tagData.style = `--tag-color: ${color}`;
 }
 
 export default class extends Controller {
@@ -60,9 +82,9 @@ export default class extends Controller {
 
       templates: {
         dropdownItem: dropdownItemTemplate,
+        tag: tagTemplate,
       },
 
-      transformTag,
       labels: {
         members: JSON.parse(this.membersLabelValue),
       },
