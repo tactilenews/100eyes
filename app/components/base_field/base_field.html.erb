@@ -9,11 +9,7 @@
     </label>
 
     <% if help %>
-      <small class="BaseField-helpText"><%= help %></small>
-    <% end %>
-
-    <% if help_md %>
-      <%= c 'markdown', raw: help_md, class: 'BaseField-helpAdditionalText rich-content' %>
+      <p class="BaseField-helpText"><%= help %></p>
     <% end %>
 
     <% if errors.any? %>
