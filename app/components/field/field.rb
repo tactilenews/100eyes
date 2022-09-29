@@ -2,12 +2,13 @@
 
 module Field
   class Field < ApplicationComponent
-    def initialize(object:, attr:, value: nil, **)
+    def initialize(object:, attr:, help_md: nil, value: nil, **)
       super
 
       @object = object
       @attr = attr
       @value = value
+      @help_md = help_md
     end
 
     def call
@@ -15,6 +16,7 @@ module Field
           id: id,
           label: label,
           help: help,
+          help_md: help_md,
           errors: errors,
           styles: styles,
           **attrs
@@ -34,7 +36,7 @@ module Field
 
     private
 
-    attr_reader :object, :attr
+    attr_reader :object, :attr, :help_md
 
     def id
       "#{model_name}[#{attr}]"

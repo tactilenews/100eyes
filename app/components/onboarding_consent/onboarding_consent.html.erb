@@ -3,7 +3,8 @@
     object: contributor,
     attr: :data_processing_consent,
     style: :leftAligned,
-    help: data_processing_consent_help.html_safe
+    help: data_processing_consent_help,
+    help_md: Setting.onboarding_data_processing_consent_additional_info,
   ) do |field| %>
     <%= c 'checkbox', **field.input_defaults, required: true %>
   <% end %>

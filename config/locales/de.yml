@@ -308,6 +308,8 @@ de:
         label: Überschrift
       onboarding_additional_consent_text:
         label: Text
+      onboarding_data_processing_consent_additional_info:
+        label: Zusätzlicher Kontext für den Datenschutz
       project_name:
         label: Projekt-Name
         help: Der Projekt-Name wird Community-Mitgliedern z.B. während des Onboardings und als Absender von E-Mails angezeigt.

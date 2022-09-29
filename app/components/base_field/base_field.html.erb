@@ -12,6 +12,10 @@
       <small class="BaseField-helpText"><%= help %></small>
     <% end %>
 
+    <% if help_md %>
+      <%= c 'markdown', raw: help_md, class: 'BaseField-helpAdditionalText rich-content' %>
+    <% end %>
+
     <% if errors.any? %>
       <% errors.each do |error| %>
         <strong class="BaseField-errorText">

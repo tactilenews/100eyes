@@ -33,6 +33,7 @@ class SettingsController < ApplicationController
       :onboarding_ask_for_additional_consent,
       :onboarding_additional_consent_heading,
       :onboarding_additional_consent_text,
+      :onboarding_data_processing_consent_additional_info,
       :project_name,
       :onboarding_title,
       :onboarding_byline,

@@ -9,13 +9,19 @@
 }
 
 .BaseField-helpText,
-.BaseField-errorText {
+.BaseField-errorText,
+.BaseField-helpAdditionalText {
   font-size: var(--font-size-s);
   display: block;
 }
 
-.BaseField-helpText {
+.BaseField-helpText,
+.BaseField-helpAdditionalText {
   color: var(--color-text-light);
+}
+
+.BaseField-helpAdditionalText {
+  margin-top: var(--spacing-unit);
 }
 
 .BaseField-errorText {
