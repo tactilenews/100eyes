@@ -9,14 +9,12 @@
 }
 
 .BaseField-helpText,
-.BaseField-errorText,
-.BaseField-helpAdditionalText {
+.BaseField-errorText {
   font-size: var(--font-size-s);
   display: block;
 }
 
-.BaseField-helpText,
-.BaseField-helpAdditionalText {
+.BaseField-helpText {
   color: var(--color-text-light);
 }
 
