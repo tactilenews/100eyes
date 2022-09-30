@@ -15,6 +15,9 @@ jobs:
       - name: Update file watchers because of rails settings cached
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
+      - name: Create and run database migrations
+        run: docker compose run -it app bin/rails db:create db:migrate
+
       - name: Build and start containers
         run: docker compose up --build
 
