@@ -18,6 +18,12 @@
   color: var(--color-text-light);
 }
 
+.BaseField-helpText > .OnboardingConsent-dataProcessingHelp {
+  display: block;
+  font-size: inherit;
+  margin-bottom: var(--spacing-unit-s);
+}
+
 .BaseField-errorText {
   color: var(--color-red);
 }
