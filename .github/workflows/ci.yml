@@ -61,5 +61,8 @@ jobs:
       - name: Run rubocop
         run: bundle exec rubocop
 
+      - name: Start chrome service in background daemon
+        run: docker-compose up chrome -d
+
       - name: Run tests
-        run: bin/rake spec
+        run: docker compose run -it app bin/rake spec
