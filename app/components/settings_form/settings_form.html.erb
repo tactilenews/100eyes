@@ -13,24 +13,28 @@
       <%= c('settings_field', type: :image_input, attr: :onboarding_hero) %>
       <%= c('settings_field', type: :input, attr: :onboarding_title) %>
       <%= c('settings_field', type: :textarea, attr: :onboarding_page) %>
-      <%= c('settings_field', type: :textarea, attr: :onboarding_data_processing_consent_additional_info) %>
-      <%= c('settings_field', type: :url_input, attr: :onboarding_data_protection_link) %>
-      <%= c('settings_field', type: :url_input, attr: :onboarding_imprint_link) %>
+      <% if current_user.admin? %>
+        <%= c('settings_field', type: :url_input, attr: :onboarding_data_protection_link) %>
+        <%= c('settings_field', type: :textarea, attr: :onboarding_data_processing_consent_additional_info) %>
+        <%= c('settings_field', type: :url_input, attr: :onboarding_imprint_link) %>
+      <% end %>
     <% end %>
 
-    <%= c 'stack' do %>
-      <%= c('heading', tag: :h2) { t 'setting.form.groups.onboarding_additional_consent' } %>
+    <% if current_user.admin? %>
+      <%= c 'stack' do %>
+        <%= c('heading', tag: :h2) { t 'setting.form.groups.onboarding_additional_consent' } %>
 
-      <%= c('field',
-        object: Setting.new,
-        attr: :onboarding_ask_for_additional_consent,
-        styles: [:horizontal, :leftAligned],
-      ) do |field| %>
-        <%= c 'checkbox', **field.input_defaults, checked: Setting.onboarding_ask_for_additional_consent %>
+        <%= c('field',
+          object: Setting.new,
+          attr: :onboarding_ask_for_additional_consent,
+          styles: [:horizontal, :leftAligned],
+        ) do |field| %>
+          <%= c 'checkbox', **field.input_defaults, checked: Setting.onboarding_ask_for_additional_consent %>
+        <% end %>
+
+        <%= c('settings_field', type: :input, attr: :onboarding_additional_consent_heading) %>
+        <%= c('settings_field', type: :input, attr: :onboarding_additional_consent_text) %>
       <% end %>
-
-      <%= c('settings_field', type: :input, attr: :onboarding_additional_consent_heading) %>
-      <%= c('settings_field', type: :input, attr: :onboarding_additional_consent_text) %>
     <% end %>
 
     <%= c 'stack' do %>

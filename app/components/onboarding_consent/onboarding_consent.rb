@@ -14,8 +14,8 @@ module OnboardingConsent
 
     # rubocop:disable Rails/OutputSafety
     def data_processing_consent_help
-      simple_format([I18n.t('contributor.form.data_processing_consent.help', link: Setting.onboarding_data_protection_link).html_safe,
-                     Setting.onboarding_data_processing_consent_additional_info].join("\n\n"), { class: 'OnboardingConsent-dataProcessingHelp' }, wrapper_tag: 'small')
+      simple_format([Setting.onboarding_data_processing_consent_additional_info,
+                     I18n.t('contributor.form.data_processing_consent.help', link: Setting.onboarding_data_protection_link).html_safe].join("\n\n"), { class: 'OnboardingConsent-dataProcessingHelp' }, wrapper_tag: 'small')
     end
     # rubocop:enable Rails/OutputSafety
 
