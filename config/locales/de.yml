@@ -312,6 +312,8 @@ de:
         label_de: Text (DE)
         label_en: Text (EN)
         label_fr: Text (FR)
+      onboarding_data_processing_consent_additional_info:
+        label: Platz für zusätzliche Erklärung zum Datenschutz
       project_name:
         label: Projekt-Name
         help: Der Projekt-Name wird Community-Mitgliedern z.B. während des Onboardings und als Absender von E-Mails angezeigt.

@@ -38,6 +38,9 @@ class SettingsController < ApplicationController
   def settings_params
     params.require(:setting).permit(
       :onboarding_ask_for_additional_consent,
+      :onboarding_additional_consent_heading,
+      :onboarding_additional_consent_text,
+      :onboarding_data_processing_consent_additional_info,
       :project_name,
       :onboarding_byline,
       :signal_unknown_content_message,

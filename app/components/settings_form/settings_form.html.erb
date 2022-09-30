@@ -15,22 +15,26 @@
         <%= c('settings_field', type: :textarea, attr: :onboarding_title, locale: locale) %>
         <%= c('settings_field', type: :textarea, attr: :onboarding_page, locale: locale) %>
       <% end %>
-      <% I18n.available_locales.each do |locale| %>
-        <%= c('settings_field', type: :url_input, attr: :onboarding_data_protection_link, locale: locale) %>
-        <%= c('settings_field', type: :url_input, attr: :onboarding_imprint_link, locale: locale) %>
+      <% if current_user.admin? %>
+        <% I18n.available_locales.each do |locale| %>
+          <%= c('settings_field', type: :url_input, attr: :onboarding_data_protection_link, locale: locale) %>
+          <%= c('settings_field', type: :url_input, attr: :onboarding_imprint_link, locale: locale) %>
+        <% end %>
+        <%= c('settings_field', type: :textarea, attr: :onboarding_data_processing_consent_additional_info) %>
       <% end %>
-
     <% end %>
 
-    <%= c 'stack' do %>
-      <%= c('heading', tag: :h2) { t 'setting.form.groups.onboarding_additional_consent' } %>
+    <% if current_user.admin? %>
+      <%= c 'stack' do %>
+        <%= c('heading', tag: :h2) { t 'setting.form.groups.onboarding_additional_consent' } %>
 
-      <%= c('field',
-        object: Setting.new,
-        attr: :onboarding_ask_for_additional_consent,
-        styles: [:horizontal, :leftAligned],
-      ) do |field| %>
-        <%= c 'checkbox', **field.input_defaults, checked: Setting.onboarding_ask_for_additional_consent %>
+        <%= c('field',
+          object: Setting.new,
+          attr: :onboarding_ask_for_additional_consent,
+          styles: [:horizontal, :leftAligned],
+        ) do |field| %>
+          <%= c 'checkbox', **field.input_defaults, checked: Setting.onboarding_ask_for_additional_consent %>
+        <% end %>
       <% end %>
       
       <% I18n.available_locales.each do |locale| %>

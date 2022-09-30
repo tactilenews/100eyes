@@ -12,9 +12,12 @@ module OnboardingConsent
 
     attr_reader :contributor
 
+    # rubocop:disable Rails/OutputSafety
     def data_processing_consent_help
-      I18n.t('contributor.form.data_processing_consent.help', link: Setting.onboarding_data_protection_link)
+      simple_format([Setting.onboarding_data_processing_consent_additional_info,
+                     I18n.t('contributor.form.data_processing_consent.help', link: Setting.onboarding_data_protection_link).html_safe].join("\n\n"), { class: 'OnboardingConsent-dataProcessingHelp' }, wrapper_tag: 'small')
     end
+    # rubocop:enable Rails/OutputSafety
 
     def display_additional_consent_checkbox?
       Setting.onboarding_ask_for_additional_consent? && Setting.find_by(var: :onboarding_additional_consent_heading).send("value_#{I18n.locale}".to_sym).strip.present?

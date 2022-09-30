@@ -1,2 +1,3 @@
 ruby 3.0.0
 nodejs lts-erbium
+postgres 12.2

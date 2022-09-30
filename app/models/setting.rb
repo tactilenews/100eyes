@@ -37,6 +37,7 @@ class Setting < RailsSettings::Base
   field :onboarding_hero_blob_id, type: :integer
   field :onboarding_title, default: 'Hallo und herzlich willkommen!'
   field :onboarding_byline, default: ''
+  field :onboarding_data_processing_consent_additional_info, default: ''
   field :onboarding_page, default: File.read(File.join('config', 'locales', 'onboarding', 'page.md'))
   field :onboarding_success_heading, default: File.read(File.join('config', 'locales', 'onboarding', 'success_heading.txt'))
   field :onboarding_success_text, default: File.read(File.join('config', 'locales', 'onboarding', 'success_text.txt'))
