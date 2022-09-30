@@ -88,6 +88,9 @@
   --limit-max-inner-width-l: calc(
     max(var(--spacing-unit), (100% - var(--grid-max-width-l)) / 2)
   );
+  --limit-max-inner-width-s: calc(
+    max(var(--spacing-unit), (100% - var(--grid-max-width-s)) / 2)
+  );
   --limit-max-inner-width-xs: calc(
     max(var(--spacing-unit), (100% - var(--grid-max-width-xs)) / 2)
   );

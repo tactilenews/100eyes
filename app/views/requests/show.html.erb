@@ -20,7 +20,7 @@
     <%= c 'plaintext_message', message: @request.text, highlight_placeholders: true %>
   <% end %>
 
-  <%= c 'section', style: :xlargeMarginTop do %>
+  <%= c 'section', style: :xlargeSpaceBetween do %>
     <%= c 'request_metrics', request: @request, style: :cards %>
 
     <% if @message_groups.blank? %>

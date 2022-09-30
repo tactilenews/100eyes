@@ -37,6 +37,11 @@
   padding-bottom: 0;
 }
 
+.PageHeader--narrow {
+  padding-left: var(--limit-max-inner-width-s);
+  padding-right: var(--limit-max-inner-width-s);
+}
+
 .PageHeader--xnarrow {
   padding-left: var(--limit-max-inner-width-xs);
   padding-right: var(--limit-max-inner-width-xs);
@@ -65,7 +70,3 @@
   flex-direction: column;
   gap: var(--spacing-unit-s);
 }
-
-/* .PageHeader--flexboxColumn > .PageHeader-flexbox > * + * {
-  margin-top: var(--spacing-unit-s);
-} */
