@@ -12,5 +12,5 @@ RSpec.describe TwoColumnLayout::TwoColumnLayout, type: :component do
 
   it { should have_css('.TwoColumnLayout') }
   it { should have_css('.TwoColumnLayout-sidebar', text: 'Sidebar') }
-  it { should have_css('.TwoColumnLayout-content', text: 'Content') }
+  it { should have_text('Content') }
 end

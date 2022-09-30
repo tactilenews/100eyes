@@ -38,8 +38,3 @@
     var(--color-gray-lightest) 90%
   );
 }
-
-.TwoColumnLayout-content {
-  flex-grow: 1;
-  flex-shrink: 1;
-}
