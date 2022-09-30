@@ -17,12 +17,15 @@
 }
 
 .PageHeader > .PageHeader-flexbox {
-  --gap: var(--spacing-unit);
+  gap: var(--spacing-unit);
 
   align-items: center;
   display: flex;
-  justify-content: space-between;
   width: 100%;
+}
+
+.PageHeader--spaceBetween > .PageHeader-flexbox {
+  justify-content: space-between;
 }
 
 .PageHeader--tabBar {
@@ -52,11 +55,17 @@
   padding-top: var(--spacing-unit-xl);
 }
 
-.PageHeader--flexboxColumn > .PageHeader-flexbox {
-  flex-direction: column;
-  align-items: flex-start;
+.PageHeader--noPaddingLeftRight {
+  padding-left: 0;
+  padding-right: 0;
 }
 
-.PageHeader--flexboxColumn > .PageHeader-flexbox > * + * {
-  margin-top: var(--spacing-unit-s);
+.PageHeader--flexboxColumn > .PageHeader-flexbox {
+  align-items: flex-start;
+  flex-direction: column;
+  gap: var(--spacing-unit-s);
 }
+
+/* .PageHeader--flexboxColumn > .PageHeader-flexbox > * + * {
+  margin-top: var(--spacing-unit-s);
+} */

@@ -1,5 +1,5 @@
 <%= c 'main', style: :lightestGrayBackground do %>
-  <%= c 'page_header', styles: [:wide, :inheritBackgroundColor, :xlargePaddingTop] do %>
+  <%= c 'page_header', styles: [:wide, :inheritBackgroundColor, :xlargePaddingTop, :spaceBetween] do %>
     <%= c 'heading' do %>
       <%= t "dashboard.heading#{time_based_heading}", first_name: current_user.first_name %>
     <% end %>

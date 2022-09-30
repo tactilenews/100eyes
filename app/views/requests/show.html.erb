@@ -3,7 +3,7 @@
     <%= c 'request_notification', request: @request %>
   <% end %>
 
-  <%= c 'page_header', style: :largeMarginBottom do %>
+  <%= c 'page_header', styles: [:largeMarginBottom, :flexboxColumn] do %>
     <%= c 'heading', style: :alpha do %>
       <%= @request.title %>
     <% end %>

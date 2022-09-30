@@ -1,5 +1,5 @@
 <%= c 'main' do %>
-  <%= c 'page_header', style: :lightGrayBackground do |header| %>
+  <%= c 'page_header', styles: [:lightGrayBackground, :spaceBetween] do |header| %>
     <%= c 'heading' do %>
       <%= I18n.t 'contributor.contributor', count: :other %>
     <% end %>
