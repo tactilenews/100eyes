@@ -30,39 +30,11 @@ jobs:
       - name: Update file watchers because of rails settings cached
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
-      - name: Install ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.0.0
-          bundler-cache: true
-
-      - name: Cache NPM dependencies
-        uses: actions/cache@v3.0.8
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: ${{ runner.os }}-npm-
-
-      - name: Install NPM dependencies
-        run: npm install
-
-      - name: Run prettier
-        run: npm run prettier
-
-      - name: Build JS
-        run: npm run build:js
-
-      - name: Build CSS
-        run: npm run build:css
-
-      - name: Run database migrations
-        run: bin/rails db:migrate
+      - name: Build and start containers
+        run: docker compose up --build
 
       - name: Run rubocop
-        run: bundle exec rubocop
-
-      - name: Start chrome service in background daemon
-        run: docker-compose up chrome -d
+        run: docker compose exec -it app bundle exec rubocop
 
       - name: Run tests
-        run: docker compose run -it app bin/rake spec
+        run: docker compose exec -it app bin/rails spec
