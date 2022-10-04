@@ -3,6 +3,9 @@
 class DashboardController < ApplicationController
   def index
     @activity_notifications = activity_notifications
+    @active_contributors_count = Contributor.active.count
+    @requests_count = Request.count
+    @replies_count = Message.replies.count
   end
 
   private

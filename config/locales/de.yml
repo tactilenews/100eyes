@@ -263,6 +263,16 @@ de:
       input_label: Bild
     toolbar:
       toolbar: Toolbar
+    community_metrics:
+      contributors:
+        one: aktives Mitglied
+        other: aktive Mitglieder
+      requests:
+        one: Frage gestellt
+        other: Fragen gestellt
+      replies:
+        one: empfangene Nachricht
+        other: empfangene Nachrichten
 
   mailer:
     unsubscribe:

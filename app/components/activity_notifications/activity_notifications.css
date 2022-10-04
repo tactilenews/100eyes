@@ -1,4 +1,8 @@
 .ActivityNotifications {
+  margin-bottom: var(--spacing-unit-l);
+}
+
+.ActivityNotifications-card {
   padding: var(--spacing-unit);
 }
 
