@@ -14,6 +14,7 @@ class DashboardController < ApplicationController
     grouped = current_user.notifications_as_recipient
                           .newest_first
                           .includes(:contributor, :request, :message, :user)
+                          .last_two_weeks
                           .limit(100)
                           .group_by { |notification| notification.to_notification.group_key }
     grouped.map do |_key, notifications|
