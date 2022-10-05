@@ -68,13 +68,13 @@ export default class extends Controller {
               {
                 from: 101,
                 to: 200,
-                color: '#c11361',
+                color: '#FF1493',
                 name: 'Extrem',
               },
               {
                 from: 201,
                 to: 1000,
-                color: '#770737',
+                color: '#C71585',
                 name: 'Höchste',
               },
             ],
