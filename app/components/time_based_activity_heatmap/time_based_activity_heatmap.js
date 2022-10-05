@@ -1,5 +1,4 @@
 import { Controller } from "@hotwired/stimulus";
-import Rails from '@rails/ujs';
 
 export default class extends Controller {
   static targets = ['heatmap'];
@@ -12,22 +11,21 @@ export default class extends Controller {
   async fetchTimeBasedActivityData() {
     const response = await fetch('charts/time-based-activity');
     const jsonResponse = await response.json();
-    const options = this.setUpChart(jsonResponse)
-    this.renderChart(options)
+    const options = this.setUpChart(jsonResponse);
+    this.renderChart(options);
   }
 
   setUpChart(jsonResponse) {
-    var dataArray = [];
+    let series = ["Sonntag", "Samstag", "Freitag", "Donnerstag", "Mittwoch", "Dienstag", "Montag"].map(day => ({ name: day, data: [] }))
     for (const [key, value] of Object.entries(jsonResponse)) {
-      dataArray.push({ x: key, y: value })
+        series.forEach(object => {
+        if (JSON.parse(key)[0] == object.name) {
+            console.log('hour', )
+          object.data.push({ x: JSON.parse(key)[1], y: value });
+        }
+      })
     }
 
-    const series = ["Sonntag", "Montag", "Dientsag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"].map(day => {
-      return {
-        name: day,
-        data: dataArray,
-      }
-    })
     return {
       chart: {
         type: 'heatmap'
@@ -39,20 +37,38 @@ export default class extends Controller {
             ranges: [{
                 from: 0,
                 to: 5,
-                color: '#00A100',
-                name: 'low',
+                color: '#F8C8DC',
+                name: 'Keine oder wenig',
               },
               {
                 from: 6,
                 to: 20,
-                color: '#128FD9',
-                name: 'medium',
+                color: '#FFB6C1',
+                name: 'Leicht',
               },
               {
                 from: 21,
                 to: 45,
-                color: '#FFB200',
-                name: 'high',
+                color: '#FF00A0',
+                name: 'Mittel',
+              },
+              {
+                from: 46,
+                to: 100,
+                color: '#f4177a',
+                name: 'Hoch',
+              },
+              {
+                from: 101,
+                to: 200,
+                color: '#c11361',
+                name: 'Extrem',
+              },
+              {
+                from: 201,
+                to: 1000,
+                color: '#770737',
+                name: 'Höchste',
               }
             ]
           }
