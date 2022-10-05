@@ -1,4 +1,4 @@
-import { Controller } from "@hotwired/stimulus";
+import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
   static targets = ['heatmap'];
@@ -15,24 +15,33 @@ export default class extends Controller {
   }
 
   setUpChart(jsonResponse) {
-    const series = ["Sonntag", "Samstag", "Freitag", "Donnerstag", "Mittwoch", "Dienstag", "Montag"].map(day => ({ name: day, data: [] }));
+    const series = [
+      'Sonntag',
+      'Samstag',
+      'Freitag',
+      'Donnerstag',
+      'Mittwoch',
+      'Dienstag',
+      'Montag',
+    ].map(day => ({ name: day, data: [] }));
     Object.entries(jsonResponse).map(([key, value]) => {
       series.map(object => {
         if (JSON.parse(key)[0] == object.name) {
           object.data.push({ x: JSON.parse(key)[1], y: value });
         }
-      })
+      });
     });
 
     return {
       chart: {
-        type: 'heatmap'
+        type: 'heatmap',
       },
       series: series,
       plotOptions: {
         heatmap: {
           colorScale: {
-            ranges: [{
+            ranges: [
+              {
                 from: 0,
                 to: 5,
                 color: '#F8C8DC',
@@ -67,12 +76,12 @@ export default class extends Controller {
                 to: 1000,
                 color: '#770737',
                 name: 'Höchste',
-              }
-            ]
-          }
-        }
-      }
-    }
+              },
+            ],
+          },
+        },
+      },
+    };
   }
 
   renderChart(options) {

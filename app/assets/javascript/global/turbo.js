@@ -29,13 +29,15 @@ const restoreScrollPositions = () => {
 
 addEventListener('turbo:click', () => storeScrollPositions());
 addEventListener('turbo:render', () => restoreScrollPositions());
-addEventListener('turbo:before-fetch-request', (event) => {
+addEventListener('turbo:before-fetch-request', event => {
   // Turbo Drive does not send a referrer like turbolinks used to, so let's simulate it here
-  event.detail.fetchOptions.headers['Turbo-Referrer'] = window.location.href
-  event.detail.fetchOptions.headers['X-Turbo-Nonce'] = $("meta[name='csp-nonce']").prop('content')
+  event.detail.fetchOptions.headers['Turbo-Referrer'] = window.location.href;
+  event.detail.fetchOptions.headers['X-Turbo-Nonce'] = $(
+    "meta[name='csp-nonce']"
+  ).prop('content');
 });
-addEventListener("turbo:before-cache", function() {
-  let scriptTagsToAddNonces = document.querySelectorAll("script[nonce]");
+addEventListener('turbo:before-cache', function () {
+  let scriptTagsToAddNonces = document.querySelectorAll('script[nonce]');
   for (var element of scriptTagsToAddNonces) {
     element.setAttribute('nonce', element.nonce);
   }
