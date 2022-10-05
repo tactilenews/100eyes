@@ -5,7 +5,6 @@ export default class extends Controller {
 
   connect() {
     this.fetchTimeBasedActivityData();
-    console.log('connected', this.heatmapTarget);
   }
 
   async fetchTimeBasedActivityData() {
@@ -16,15 +15,14 @@ export default class extends Controller {
   }
 
   setUpChart(jsonResponse) {
-    let series = ["Sonntag", "Samstag", "Freitag", "Donnerstag", "Mittwoch", "Dienstag", "Montag"].map(day => ({ name: day, data: [] }))
-    for (const [key, value] of Object.entries(jsonResponse)) {
-        series.forEach(object => {
+    const series = ["Sonntag", "Samstag", "Freitag", "Donnerstag", "Mittwoch", "Dienstag", "Montag"].map(day => ({ name: day, data: [] }));
+    Object.entries(jsonResponse).map(([key, value]) => {
+      series.map(object => {
         if (JSON.parse(key)[0] == object.name) {
-            console.log('hour', )
           object.data.push({ x: JSON.parse(key)[1], y: value });
         }
       })
-    }
+    });
 
     return {
       chart: {
