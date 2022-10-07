@@ -297,7 +297,7 @@ de:
     heading_afternoon: "Guten Tag, %{first_name}!"
     heading_evening: "Guten Abend, %{first_name}!"
     time_based_activity_heatmap:
-      heading: Aufschlüsselung der eingegangenen Nachrichten nach Tag und Uhrzeit
+      heading: Eingegangene Nachrichten nach Tag und Uhrzeit
 
   setting:
     setting:
