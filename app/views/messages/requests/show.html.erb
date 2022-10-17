@@ -1,29 +1,25 @@
-<%= c 'box', style: :large do %>
-  <%= c 'wrapper', style: :xnarrow do %>
-    <%= c 'stack' do %>
-
-      <%= c 'stack', space: :small do %>
-        <%= c 'heading', tag: :h1 do %>
-          <%= t('message.move.heading') %>
-        <% end %>
-
-        <p>
-          <%= t(
-            'message.move.text',
-            name: @message.contributor.name,
-            title: @message.request.title
-          ).html_safe %>
-        </p>
-      <% end %>
-
-      <%= c 'chat_message',
-        style: :compact,
-        hide_actions: true,
-        message: @message
-      %>
-
-      <%= c 'move_message_form', message: @message %>
-
+<%= c 'main' do %>
+  <%= c 'page_header', styles: [:xnarrow, :inheritBackgroundColor, :flexboxColumn] do %>
+    <%= c 'heading', tag: :h1 do %>
+      <%= t('message.move.heading') %>
     <% end %>
+
+    <p>
+      <%= t(
+        'message.move.text',
+        name: @message.contributor.name,
+        title: @message.request.title
+      ).html_safe %>
+    </p>
+  <% end %>
+
+  <%= c 'section', style: :xnarrow do %>
+    <%= c 'chat_message',
+      style: :compact,
+      hide_actions: true,
+      message: @message
+    %>
+
+    <%= c 'move_message_form', message: @message %>
   <% end %>
 <% end %>

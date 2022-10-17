@@ -1,14 +1,14 @@
-<div class='Dashboard'>
-  <%= c 'wrapper', style: :wide, class: 'Dashboard-wrapper' do %>
-    <header class='Dashboard-header'>
-      <%= c 'heading' do %>
-        <%= t "dashboard.heading#{time_based_heading}", first_name: current_user.first_name %>
-      <% end %>
-      <%= c 'button',
-        label: I18n.t('request.create'),
-        link: new_request_path
-      %>
-    </header>
+<%= c 'main', style: :lightestGrayBackground do %>
+  <%= c 'page_header', styles: [:wide, :inheritBackgroundColor, :xlargePaddingTop, :spaceBetween] do %>
+    <%= c 'heading' do %>
+      <%= t "dashboard.heading#{time_based_heading}", first_name: current_user.first_name %>
+    <% end %>
+    <%= c 'button',
+      label: I18n.t('request.create'),
+      link: new_request_path
+    %>
+  <% end %>
+  <%= c 'section', style: :wide do %>
     <%= c 'activity_notifications', activity_notifications: @activity_notifications %>
   <% end %>
-</div>
+<% end %>

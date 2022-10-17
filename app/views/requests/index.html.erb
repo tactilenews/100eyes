@@ -1,22 +1,20 @@
-<%= c 'page_header' do |header| %>
-  <%= c 'heading', style: :alpha do %>
-    <%= I18n.t 'request.request', count: :many %>
+<%= c 'main' do %>
+  <%= c 'page_header', styles: [:largeMarginBottom, :spaceBetween]  do |header| %>
+    <%= c 'heading', style: :alpha do %>
+      <%= I18n.t 'request.request', count: :many %>
+    <% end %>
+
+    <% header.actions do %>
+      <%= c 'button',
+        label: I18n.t('request.create'),
+        link: new_request_path
+      %>
+    <% end %>
   <% end %>
 
-  <% header.actions do %>
-    <%= c 'button',
-      label: I18n.t('request.create'),
-      link: new_request_path
-    %>
-  <% end %>
-<% end %>
-
-<%= c 'box', style: :large do %>
-  <%= c 'wrapper' do %>
-    <%= c 'stack' do %>
-      <% @requests.each do |request| %>
-        <%= c 'request_row', request: request %>
-      <% end %>
+  <%= c 'section' do %>
+    <% @requests.each do |request| %>
+      <%= c 'request_row', request: request %>
     <% end %>
   <% end %>
 <% end %>

@@ -1,11 +1,11 @@
-<%= c 'page_header' do %>
-  <% c 'heading' do %>
-    <%= I18n.t 'conversation.conversation', count: 1 %>
+<%= c 'main' do %>
+  <%= c 'page_header' do %>
+    <% c 'heading' do %>
+      <%= I18n.t 'conversation.conversation', count: 1 %>
+    <% end %>
   <% end %>
-<% end %>
 
-<%= c 'box' do %>
-  <%= c 'wrapper' do %>
+  <%= c 'section' do %>
     <%= c 'chat', contributor: @contributor, messages: @chat_messages, request: @request %>
   <% end %>
 <% end %>

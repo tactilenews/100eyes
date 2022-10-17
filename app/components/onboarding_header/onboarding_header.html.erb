@@ -1,4 +1,4 @@
-<header class="<%= class_attr %>">
+<%= c 'page_header', styles: [:inheritBackgroundColor, :narrow], class: 'OnboardingHeader' do %>
   <% if logo? %>
     <img src="<%= url_for(logo) %>" alt="<%= project_name %>" />
   <% else %>
@@ -12,4 +12,4 @@
       <%= byline %>
     </span>
   <% end %>
-</header>
+<% end %>
