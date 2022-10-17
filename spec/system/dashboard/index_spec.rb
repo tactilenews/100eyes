@@ -20,5 +20,8 @@ RSpec.describe 'Dashboard' do
 
     # CommunityMetrics section
     expect(page).to have_css('section.CommunityMetrics')
+
+    # TimeBasedActivityHeatmap section
+    expect(page).to have_css('section .TimeBasedActivityHeatmap')
   end
 end
