@@ -1,27 +1,12 @@
 .CardMetrics {
-  --gap: var(--spacing-unit-s);
-
-  display: flex;
+  gap: var(--spacing-unit-s);
+  display: grid;
   width: 100%;
-  flex-direction: column;
-  flex-basis: 100%;
-  flex-grow: 1;
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
 }
 
-.CardMetrics > * + * {
-  margin-top: var(--gap);
-}
-
-@media screen and (min-width: 51rem) {
+@media screen and (min-width: 48rem) {
   .CardMetrics {
-    --gap: var(--spacing-unit);
-
-    flex-direction: row;
-    align-items: center;
-  }
-
-  .CardMetrics > * + * {
-    margin: 0;
-    margin-left: var(--gap);
+    gap: var(--spacing-unit);
   }
 }

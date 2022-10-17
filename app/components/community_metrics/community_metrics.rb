@@ -11,7 +11,7 @@ module CommunityMetrics
     end
 
     def call
-      render Metrics::Metrics.new(metrics: metrics, styles: styles)
+      render CardMetrics::CardMetrics.new(metrics: metrics)
     end
 
     private
