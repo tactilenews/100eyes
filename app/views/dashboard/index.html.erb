@@ -22,10 +22,10 @@
     %>
   <% end %>
 
-  <section>
+  <%= c 'section', style: :wide do %>
     <%= c 'heading', style: :beta do %>
       <%= t 'dashboard.time_based_activity_heatmap.heading' %>
     <% end %>
     <%= c 'time_based_activity_heatmap' %>
-  </section>
+  <% end %>
 <% end %>

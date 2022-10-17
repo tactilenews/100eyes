@@ -96,7 +96,6 @@ GEM
       administrate (>= 0.17.0)
       rails (>= 4.2)
       railties (>= 5.2.2.1)
-    apexcharts (0.2.0)
     argon2 (2.1.1)
       ffi (~> 1.14)
       ffi-compiler (~> 1.0)
@@ -428,7 +427,6 @@ DEPENDENCIES
   acts-as-taggable-on
   administrate
   administrate_exportable
-  apexcharts
   bootsnap (>= 1.4.2)
   browser
   byebug
