@@ -3,14 +3,13 @@
 class ContributorsController < ApplicationController
   before_action :set_contributor, only: %i[update destroy show edit message]
   before_action :count_params, only: :count
-  before_action :set_current_user, only: :message
 
   def message
     request = contributor.active_request
     render(plain: 'No active request for this contributor', status: :bad_request) and return unless request
 
     text = message_params[:text]
-    message = Message.create!(text: text, request: request, recipient: contributor, sender: nil)
+    message = Message.create!(text: text, request: request, recipient: contributor, sender: current_user)
     redirect_to message.chat_message_link, flash: { success: I18n.t('contributor.message-send', name: contributor.name) }
   end
 
@@ -65,10 +64,6 @@ class ContributorsController < ApplicationController
 
   def set_contributor
     @contributor = Contributor.find(params[:id])
-  end
-
-  def set_current_user
-    Current.user = current_user
   end
 
   def contributor_params

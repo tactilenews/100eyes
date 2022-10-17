@@ -50,7 +50,7 @@ RSpec.describe 'Activity Notifications' do
       expect(page).to have_link('Zum Profil', href: contributor_path(contributor_two))
 
       # MessageReceived
-      reply = create(:message, :with_sender, text: "I'm a reply to #{request.title}", request: request, sender: contributor_without_avatar)
+      reply = create(:message, :inbound, text: "I'm a reply to #{request.title}", request: request, sender: contributor_without_avatar)
 
       Timecop.travel(Time.current + 1.day)
       visit dashboard_path(as: user)
@@ -93,8 +93,8 @@ RSpec.describe 'Activity Notifications' do
       )
 
       # I should be grouped
-      reply_two = create(:message, :with_sender, request: request, sender: contributor_two,
-                                                 text: "I'm a reply from #{contributor_two.name}")
+      reply_two = create(:message, :inbound, request: request, sender: contributor_two,
+                                             text: "I'm a reply from #{contributor_two.name}")
 
       visit dashboard_path(as: user)
       expect(page).to have_text(
@@ -103,8 +103,8 @@ RSpec.describe 'Activity Notifications' do
       expect(page).to have_text('vor weniger als eine Minute')
       expect(page).to have_link('Zur Antwort', href: request_path(request, anchor: "message-#{reply_two.id}"))
 
-      reply_by_same_contributor = create(:message, :with_sender, request: request, sender: contributor_two,
-                                                                 text: "I'm a reply from the same contributor: #{contributor_two.name}")
+      reply_by_same_contributor = create(:message, :inbound, request: request, sender: contributor_two,
+                                                             text: "I'm a reply from the same contributor: #{contributor_two.name}")
 
       visit dashboard_path(as: user)
       expect(page).to have_text(
@@ -185,7 +185,7 @@ RSpec.describe 'Activity Notifications' do
         "#{coworker.name} hat #{contributor_two.name} auf „#{request.title}” geantwortet."
       )
 
-      create(:message, :with_sender, request: request, sender: another_contributor)
+      create(:message, :inbound, request: request, sender: another_contributor)
       visit dashboard_path(as: user)
       expect(page).to have_text(
         "#{another_contributor.name} und 2 andere haben auf die Frage „#{request.title}” geantwortet."

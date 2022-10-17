@@ -5,7 +5,9 @@ require 'administrate/base_dashboard'
 class MessageDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     id: Field::Number,
-    sender: Field::BelongsTo,
+    sender: Field::Polymorphic.with_options(
+      classes: [Contributor, User]
+    ),
     recipient: Field::BelongsTo,
     request: Field::BelongsTo,
     created_at: Field::DateTime,

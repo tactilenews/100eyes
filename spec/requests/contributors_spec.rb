@@ -137,7 +137,7 @@ RSpec.describe '/contributors', type: :request do
       end
 
       describe 'given an active request' do
-        before(:each) { create(:message, request: the_request, recipient: contributor) }
+        before(:each) { create(:message, :outbound, request: the_request, recipient: contributor) }
 
         it { is_expected.to change(Message, :count).by(1) }
 
