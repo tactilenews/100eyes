@@ -148,14 +148,13 @@ RSpec.describe 'Activity Notifications' do
       expect(page).to have_current_path(contributor_request_path(contributor_two, request))
       expect(page).to have_text("Nachricht an #{contributor_two.name} wurde verschickt")
 
-      Timecop.travel(Time.current + 1.month)
       expect(page).to have_text("This is another chat message to #{contributor_two.name}, but it doesn't count in the dashboard!")
 
       visit dashboard_path(as: user)
+
       expect(page).to have_text(
         "Du hast #{contributor_two.name} und #{contributor_without_avatar.name} auf die Frage „#{request.title}” geantwortet."
       )
-      expect(page).to have_text('vor etwa ein Monat')
       expect(page).to have_link(
         'Zur Nachricht',
         href: request_path(request, anchor: "message-#{Message.first.id}")
@@ -190,6 +189,12 @@ RSpec.describe 'Activity Notifications' do
       expect(page).to have_text(
         "#{another_contributor.name} und 2 andere haben auf die Frage „#{request.title}” geantwortet."
       )
+
+      Timecop.travel(Time.current + 4.weeks)
+      visit dashboard_path(as: user)
+
+      # Empty State
+      expect(page).to have_text('Du hast im Moment keine neuen Benachrichtigungen.')
     end
   end
 end
