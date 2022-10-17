@@ -1,0 +1,27 @@
+.CardMetrics {
+  --gap: var(--spacing-unit-s);
+
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex-grow: 1;
+}
+
+.CardMetrics > * + * {
+  margin-top: var(--gap);
+}
+
+@media screen and (min-width: 51rem) {
+  .CardMetrics {
+    --gap: var(--spacing-unit);
+
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .CardMetrics > * + * {
+    margin: 0;
+    margin-left: var(--gap);
+  }
+}
