@@ -6,7 +6,7 @@ class RequestsController < ApplicationController
   before_action :notifications_params, only: :notifications
 
   def index
-    @requests = Request.eager_load(:messages)
+    @requests = Request.preload(messages: :sender).eager_load(:messages)
   end
 
   def show
@@ -15,6 +15,7 @@ class RequestsController < ApplicationController
 
   def create
     @request = Request.new(request_params)
+    @request.user = current_user
     if @request.save
       redirect_to @request, flash: { success: I18n.t('request.success', count: @request.stats[:counts][:recipients]) }
     else

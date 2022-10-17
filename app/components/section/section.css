@@ -1,0 +1,32 @@
+.Section {
+  padding-left: var(--limit-max-inner-width);
+  padding-right: var(--limit-max-inner-width);
+}
+
+.Section--narrow {
+  padding-left: var(--limit-max-inner-width-s);
+  padding-right: var(--limit-max-inner-width-s);
+}
+
+.Section--xnarrow {
+  padding-left: var(--limit-max-inner-width-xs);
+  padding-right: var(--limit-max-inner-width-xs);
+}
+
+.Section--wide {
+  padding-left: var(--limit-max-inner-width-l);
+  padding-right: var(--limit-max-inner-width-l);
+}
+
+.Section,
+.Section > * + * {
+  margin-top: var(--spacing-unit);
+}
+
+.Section--xlargeSpaceBetween > * + * {
+  margin-top: var(--spacing-unit-xl);
+}
+
+.Section--noMargin {
+  margin: 0;
+}

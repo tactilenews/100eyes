@@ -6,8 +6,6 @@ RSpec.describe ChatMessage::ChatMessage, type: :component do
   subject(:component) { render_inline(described_class.new(**params)) }
   let(:params) { { message: message } }
 
-  before { Current.user = create(:user) }
-
   describe '[class]' do
     subject { component.css('.ChatMessage')[0][:class] }
 
@@ -33,7 +31,7 @@ RSpec.describe ChatMessage::ChatMessage, type: :component do
 
   describe 'move action' do
     context 'given an inbound message' do
-      let(:message) { create(:message, :with_sender) }
+      let(:message) { create(:message, :inbound) }
 
       it 'is present' do
         expect(subject).to have_css('a', text: I18n.t('components.chat_message.move'))
@@ -42,7 +40,7 @@ RSpec.describe ChatMessage::ChatMessage, type: :component do
 
     context 'given an outbound message' do
       context 'with a direct enquiry to a contributor from a user' do
-        let(:message) { create(:message, :with_recipient) }
+        let(:message) { create(:message, :outbound) }
 
         it 'is present' do
           expect(subject).to have_css('a', text: I18n.t('components.chat_message.move'))
@@ -50,7 +48,7 @@ RSpec.describe ChatMessage::ChatMessage, type: :component do
       end
 
       context 'with a broadcasted message' do
-        let(:message) { create(:message, :with_recipient, broadcasted: true) }
+        let(:message) { create(:message, :outbound, broadcasted: true) }
 
         it 'is hidden' do
           expect(subject).to_not have_css('a', text: I18n.t('components.chat_message.move'))

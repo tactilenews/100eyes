@@ -1,33 +1,37 @@
 version: 2
 updates:
-- package-ecosystem: bundler
-  directory: "/"
-  schedule:
-    interval: monthly
-  ignore:
-    - dependency-name: "*"
-        update-types: ["version-update:semver-patch"]
+  - package-ecosystem: bundler
+    directory: /
+    schedule:
+      interval: monthly
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-patch'
 
-- package-ecosystem: npm
-  directory: "/"
-  schedule:
-    interval: monthly
-  ignore:
-    - dependency-name: "*"
-        update-types: ["version-update:semver-patch"]
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-patch'
 
-- package-ecosystem: docker
-  directory: "/"
-  schedule:
-    interval: monthly
-  ignore:
-    - dependency-name: "*"
-        update-types: ["version-update:semver-patch"]
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: monthly
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-patch'
 
-- package-ecosystem: github-actions
-  directory: "/"
-  schedule:
-    interval: monthly
-  ignore:
-    - dependency-name: "*"
-        update-types: ["version-update:semver-patch"]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-patch'

@@ -5,9 +5,8 @@ FactoryBot.define do
     created_at { Time.zone.now }
     unknown_content { false }
     text { Faker::Lorem.sentence }
-    association :sender, factory: :contributor
-    association :request
-    with_sender
+    request
+    inbound
 
     after(:build) do |message|
       message.raw_data.attach(
@@ -17,13 +16,13 @@ FactoryBot.define do
       )
     end
 
-    trait :with_sender do
+    trait :inbound do
       recipient { nil }
       association :sender, factory: :contributor
     end
 
-    trait :with_recipient do
-      sender { nil }
+    trait :outbound do
+      association :sender, factory: :user
       association :recipient, factory: :contributor
     end
 

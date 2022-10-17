@@ -1,5 +1,4 @@
 <%= c 'two_column_layout', id: :contributors do |layout| %>
-
   <% layout.sidebar do %>
     <a class="skip-link" href="#profile" data-turbo="false">
       <%= t 'contributor.skip_to_profile' %>
@@ -14,27 +13,21 @@
     <% end %>
   <% end %>
 
-  <%= c 'box', style: :large do %>
-    <%= c 'wrapper', style: :narrow do %>
-      <%= c 'stack', space: :xlarge do %>
+  <%= c 'section', styles: [:wide, :xlargeSpaceBetween, :noMargin] do %>
+    <%= c 'contributor_header', contributor: @contributor %>
 
-        <%= c 'contributor_header', contributor: @contributor %>
+    <%= c 'contributor_quick_edit_form', contributor: @contributor %>
 
-        <%= c 'contributor_quick_edit_form', contributor: @contributor %>
+    <hr>
 
-        <hr>
+    <%= c 'contributor_channel_settings', contributor: @contributor %>
 
-        <%= c 'contributor_channel_settings', contributor: @contributor %>
+    <hr>
 
-        <hr>
+    <%= c 'requests_feed', contributor: @contributor %>
 
-        <%= c 'requests_feed', contributor: @contributor %>
+    <hr>
 
-        <hr>
-
-        <%= c 'contributor_status_toggle', contributor: @contributor %>
-      <% end %>
-    <% end %>
+    <%= c 'contributor_status_toggle', contributor: @contributor %>
   <% end %>
-
 <% end %>
