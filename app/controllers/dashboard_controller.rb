@@ -3,6 +3,9 @@
 class DashboardController < ApplicationController
   def index
     @activity_notifications = activity_notifications
+    @active_contributors_count = Contributor.active.count
+    @requests_count = Request.count
+    @replies_count = Message.replies.count
   end
 
   private
@@ -11,6 +14,7 @@ class DashboardController < ApplicationController
     grouped = current_user.notifications_as_recipient
                           .newest_first
                           .includes(:contributor, :request, :message, :user)
+                          .last_four_weeks
                           .limit(100)
                           .group_by { |notification| notification.to_notification.group_key }
     grouped.map do |_key, notifications|
