@@ -427,7 +427,7 @@ de:
         label: Aktiv
       data_processing_consent:
         label: Einwilligung zur Datenverarbeitung
-        help: Ich habe die <a class="Link" href=%{link} target="_blank">Datenschutzerklärung</a> zur Kenntnis genommen und bin mit deren Geltung einverstanden. In unserer Datenschutzerklärung ist erklärt, welche Tools wir nutzen und mit welchen Firmen wir zusammenarbeiten.
+        help: In unserer <a class="Link" href=%{link} target="_blank">Datenschutzerklärung</a> ist erklärt, welche Tools wir nutzen und mit welchen Firmen wir zusammenarbeiten. Ich habe die Datenschutzerklärung zur Kenntnis genommen und bin mit deren Geltung einverstanden.
   request:
     request:
       one: Frage
