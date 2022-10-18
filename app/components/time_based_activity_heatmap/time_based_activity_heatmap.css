@@ -1,4 +1,32 @@
-.TimeBasedActivityHeatmap {
+.TimeBasedActivityHeatmap-tabBar {
+  margin-left: var(--spacing-unit);
+}
+
+.TimeBasedActivityHeatmap-tabBarItem {
+  display: inline-block;
+  background-color: inherit;
+
+  padding: var(--spacing-unit-xs) 0;
+  margin-right: var(--spacing-unit-s);
+
+  border: 0;
+  border-bottom: 2px solid transparent;
+
+  color: var(--color-text-light);
+  font-weight: 500;
+  transition: 0.1s all ease-out;
+}
+
+.TimeBasedActivityHeatmap-tabBarItem--active {
+  border-bottom-color: var(--color-blue);
+  color: var(--color-text);
+}
+
+.TimeBasedActivityHeatmap-tabBarItem:not(.TimeBasedActivityHeatmap-tabBarItem--active):hover {
+  border-bottom-color: var(--color-gray);
+  color: var(--color-text);
+}
+
+.TimeBasedActivityHeatmap-chart {
   height: 37rem;
-  padding-top: var(--spacing-unit);
 }

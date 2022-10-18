@@ -1,14 +1,19 @@
 import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
-  static targets = ['heatmap'];
+  static targets = ['heatmap', 'repliesButton', 'requestsButton'];
+  static classes = ['active'];
+  static values = {
+    repliesChartUrl: String,
+    requestsChartUrl: String,
+  };
 
   connect() {
-    this.fetchTimeBasedActivityData();
+    this.renderRepliesChart();
   }
 
-  async fetchTimeBasedActivityData() {
-    const response = await fetch('charts/time-based-activity');
+  async fetchTimeBasedActivityData(endpoint) {
+    const response = await fetch(endpoint);
     const jsonResponse = await response.json();
     const options = this.setUpChart(jsonResponse);
     this.renderChart(options);
@@ -87,7 +92,20 @@ export default class extends Controller {
   renderChart(options) {
     const chart = new window.ApexCharts(this.heatmapTarget, options);
     if (chart) {
+      this.heatmapTarget.innerHTML = '';
       chart.render();
     }
+  }
+
+  renderRepliesChart() {
+    this.requestsButtonTarget.classList.remove(this.activeClass);
+    this.repliesButtonTarget.classList.add(this.activeClass);
+    this.fetchTimeBasedActivityData(this.repliesChartUrlValue);
+  }
+
+  renderRequestsChart() {
+    this.repliesButtonTarget.classList.remove(this.activeClass);
+    this.requestsButtonTarget.classList.add(this.activeClass);
+    this.fetchTimeBasedActivityData(this.requestsChartUrlValue);
   }
 }

@@ -273,6 +273,11 @@ de:
       replies:
         one: empfangene Nachricht
         other: empfangene Nachrichten
+    time_based_activity_heatmap:
+      heading: Nachrichten nach Tag und Uhrzeit
+      tab_bar:
+        inbound: Eingegangene
+        outbound: Fragen
 
   mailer:
     unsubscribe:
@@ -296,8 +301,6 @@ de:
     heading_morning: "Guten Morgen, %{first_name}!"
     heading_afternoon: "Guten Tag, %{first_name}!"
     heading_evening: "Guten Abend, %{first_name}!"
-    time_based_activity_heatmap:
-      heading: Eingegangene Nachrichten nach Tag und Uhrzeit
 
   setting:
     setting:

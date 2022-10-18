@@ -1,5 +1,33 @@
-<div
-  <%= attrs %>
-  data-controller="time-based-activity-heatmap"
-  data-time-based-activity-heatmap-target="heatmap"
-></div>
+<%= c 'section',
+   style: :wide,
+   **attrs,
+   data: { controller: 'time-based-activity-heatmap',
+           time_based_activity_heatmap_replies_chart_url_value: 'charts/time-based-replies',
+           time_based_activity_heatmap_requests_chart_url_value: 'charts/time-based-requests',
+           time_based_activity_heatmap_active_class: 'TimeBasedActivityHeatmap-tabBarItem--active'
+         } do %>
+  <%= c 'heading', style: :beta do %>
+    <%= t '.heading' %>
+  <% end %>
+
+  <div class="TimeBasedActivityHeatmap-tabBar">
+    <button
+      data-action="time-based-activity-heatmap#renderRepliesChart"
+      data-time-based-activity-heatmap-target="repliesButton"
+      class="TimeBasedActivityHeatmap-tabBarItem"
+    >
+      <%= t '.tab_bar.inbound' %>
+    </button>
+    <button
+      data-action="time-based-activity-heatmap#renderRequestsChart"
+      data-time-based-activity-heatmap-target="requestsButton"
+      class="TimeBasedActivityHeatmap-tabBarItem"
+    >
+      <%= t '.tab_bar.outbound' %>
+    </button>
+  </div>
+  <div
+    data-time-based-activity-heatmap-target="heatmap"
+    class="TimeBasedActivityHeatmap-chart"
+  ></div>
+<% end %>
