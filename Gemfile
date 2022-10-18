@@ -83,12 +83,9 @@ gem 'sentry-ruby'
 gem 'administrate'
 gem 'administrate_exportable'
 
-<<<<<<< HEAD
+# Notifications
+gem 'noticed', '~> 1.6'
 
 # Charts
 gem 'chartkick'
 gem 'groupdate'
-# gem 'apexcharts'
-=======
-gem 'noticed', '~> 1.6'
->>>>>>> main

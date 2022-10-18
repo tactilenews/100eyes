@@ -21,4 +21,8 @@
       style: :cards
     %>
   <% end %>
+
+  <%= c 'section', style: :wide do %>
+    <%= line_chart charts_time_based_activity_path, height: "48rem", xtitle: "Time", ytitle: "Number of responses" %>
+  <% end %>
 <% end %>
