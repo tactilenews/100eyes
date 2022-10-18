@@ -7,6 +7,13 @@ RSpec.describe ThreemaAdapter::Outbound do
   let(:threema_id) { 'V5EA564T' }
   let(:contributor) { create(:contributor, threema_id: threema_id, email: nil) }
   let(:message) { create(:message, recipient: contributor) }
+  let(:threema) { instance_double(Threema) }
+  let(:threema_lookup_double) { instance_double(Threema::Lookup) }
+  before do
+    allow(Threema).to receive(:new).and_return(threema)
+    allow(Threema::Lookup).to receive(:new).and_return(threema_lookup_double)
+    allow(threema_lookup_double).to receive(:key).and_return('PUBLIC_KEY_HEX_ENCODED')
+  end
 
   describe '::send!' do
     before { message } # we don't count the extra ::send here
@@ -34,19 +41,11 @@ RSpec.describe ThreemaAdapter::Outbound do
 
   describe '#perform' do
     subject { -> { adapter.perform(text: message.text, recipient: message.recipient) } }
+    let(:threema_id) { 'v5ea564t' }
 
-    it 'sends the message' do
-      expect_any_instance_of(Threema).to receive(:send).with(type: :text, threema_id: 'V5EA564T', text: message.text)
+    it 'sends the message upcased' do
+      expect(threema).to receive(:send).with(type: :text, threema_id: 'V5EA564T', text: message.text)
       subject.call
-    end
-
-    context 'with lowercase Threema ID' do
-      let(:threema_id) { 'v5ea564t' }
-
-      it 'converts ID to uppercase' do
-        expect_any_instance_of(Threema).to receive(:send).with(type: :text, threema_id: 'V5EA564T', text: message.text)
-        subject.call
-      end
     end
   end
 

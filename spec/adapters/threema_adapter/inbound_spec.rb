@@ -4,6 +4,17 @@ require 'rails_helper'
 
 RSpec.describe ThreemaAdapter::Inbound do
   let(:threema_id) { 'V5EA564T' }
+  let(:threema_mock) { instance_double(Threema::Receive::Text, content: 'Hello World!') }
+  let(:threema) { instance_double(Threema) }
+  let(:threema_lookup_double) { instance_double(Threema::Lookup) }
+
+  before do
+    allow(Threema).to receive(:new).and_return(threema)
+    allow(threema).to receive(:receive).with({ payload: message }).and_return(threema_mock)
+    allow(threema_mock).to receive(:instance_of?) { false }
+    allow(Threema::Lookup).to receive(:new).with({ threema: threema }).and_return(threema_lookup_double)
+    allow(threema_lookup_double).to receive(:key).and_return('PUBLIC_KEY_HEX_ENCODED')
+  end
   let!(:contributor) { create(:contributor, threema_id: threema_id) }
 
   let(:threema_message) { described_class.new(message) }
@@ -18,14 +29,6 @@ RSpec.describe ThreemaAdapter::Inbound do
                                        'mac' => '8c58e9d4d9ad1aa960a58a1f11bcf712e9fcd50319778762824d8259dcbdc639',
                                        'nickname' => 'matt.rider'
                                      })
-  end
-  let(:threema_mock) { instance_double(Threema::Receive::Text, content: 'Hello World!') }
-  let(:threema) { instance_double(Threema) }
-
-  before do
-    allow(Threema).to receive(:new).and_return(threema)
-    allow(threema).to receive(:receive).with({ payload: message }).and_return(threema_mock)
-    allow(threema_mock).to receive(:instance_of?) { false }
   end
 
   describe 'DeliveryReceipt' do

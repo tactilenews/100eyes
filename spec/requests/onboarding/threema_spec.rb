@@ -8,6 +8,13 @@ RSpec.describe 'Onboarding::Threema', type: :request do
   let(:additional_consent) { true }
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
   let(:params) { { jwt: jwt } }
+  let(:threema) { instance_double(Threema) }
+  let(:threema_lookup_double) { instance_double(Threema::Lookup) }
+  before do
+    allow(Threema).to receive(:new).and_return(threema)
+    allow(Threema::Lookup).to receive(:new).with({ threema: threema }).and_return(threema_lookup_double)
+    allow(threema_lookup_double).to receive(:key).and_return('PUBLIC_KEY_HEX_ENCODED')
+  end
 
   describe 'POST /onboarding/threema' do
     let(:attrs) do
