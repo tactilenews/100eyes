@@ -9,7 +9,7 @@ class ContributorsController < ApplicationController
     render(plain: 'No active request for this contributor', status: :bad_request) and return unless request
 
     text = message_params[:text]
-    message = Message.create!(text: text, request: request, recipient: contributor, sender: nil)
+    message = Message.create!(text: text, request: request, recipient: contributor, sender: current_user)
     redirect_to message.chat_message_link, flash: { success: I18n.t('contributor.message-send', name: contributor.name) }
   end
 

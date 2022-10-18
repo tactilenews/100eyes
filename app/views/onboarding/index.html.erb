@@ -1,35 +1,22 @@
-<%= c 'wrapper', style: :narrow do %>
-  <%= c 'box' do %>
-    <%= c 'onboarding_header' %>
-  <% end %>
-<% end %>
+<%= c 'onboarding_header' %>
 
-<main>
+<%= c 'main' do %>
   <%= c 'wrapper' do %>
     <%= c 'onboarding_hero' %>
   <% end %>
 
-  <%= c 'wrapper', style: :narrow do %>
-    <%= c 'box' do %>
-      <%= c 'stack' do %>
-
-        <%= c 'heading', styles: [:alpha, :serif], tag: :h1 do %>
-          <%= Setting.onboarding_title %>
-        <% end %>
-
-        <div class="text-serif">
-          <%= c 'markdown', raw: Setting.onboarding_page %>
-        </div>
-
-        <%= c 'onboarding_channel_buttons' %>
-
-      <% end %>
+  <%= c 'section', styles: [:narrow, :marginTop] do %>
+    <%= c 'heading', styles: [:alpha, :serif], tag: :h1 do %>
+      <%= Setting.onboarding_title %>
     <% end %>
-  <% end %>
-</main>
 
-<%= c 'wrapper', style: :narrow do %>
-  <%= c 'box' do %>
-    <%= c 'onboarding_footer' %>
+    <div class="text-serif">
+      <%= c 'markdown', raw: Setting.onboarding_page %>
+    </div>
+
+    <%= c 'onboarding_channel_buttons' %>
+
   <% end %>
 <% end %>
+
+<%= c 'onboarding_footer' %>

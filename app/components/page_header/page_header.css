@@ -1,13 +1,9 @@
 .PageHeader {
   background-color: var(--color-gray-light);
+  margin-bottom: var(--spacing-unit);
   padding: var(--spacing-unit-l);
-}
-
-.PageHeader-wrapper {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  align-items: center;
+  padding-left: var(--limit-max-inner-width);
+  padding-right: var(--limit-max-inner-width);
 }
 
 .PageHeader-actions {
@@ -20,6 +16,57 @@
   margin-top: var(--spacing-unit-s);
 }
 
+.PageHeader > .PageHeader-flexbox {
+  gap: var(--spacing-unit);
+
+  align-items: center;
+  display: flex;
+  width: 100%;
+}
+
+.PageHeader--spaceBetween > .PageHeader-flexbox {
+  justify-content: space-between;
+}
+
 .PageHeader--tabBar {
   padding-bottom: 0;
+}
+
+.PageHeader--inheritBackgroundColor {
+  background-color: inherit;
+  padding-bottom: 0;
+}
+
+.PageHeader--narrow {
+  padding-left: var(--limit-max-inner-width-s);
+  padding-right: var(--limit-max-inner-width-s);
+}
+
+.PageHeader--xnarrow {
+  padding-left: var(--limit-max-inner-width-xs);
+  padding-right: var(--limit-max-inner-width-xs);
+}
+
+.PageHeader--wide {
+  padding-left: var(--limit-max-inner-width-l);
+  padding-right: var(--limit-max-inner-width-l);
+}
+
+.PageHeader--largeMarginBottom {
+  margin-bottom: var(--spacing-unit-l);
+}
+
+.PageHeader--xlargePaddingTop {
+  padding-top: var(--spacing-unit-xl);
+}
+
+.PageHeader--noPaddingLeftRight {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.PageHeader--flexboxColumn > .PageHeader-flexbox {
+  align-items: flex-start;
+  flex-direction: column;
+  gap: var(--spacing-unit-s);
 }

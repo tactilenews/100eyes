@@ -81,4 +81,17 @@
   --soft-shadow: 0 0 3px -3px rgba(0, 0, 0, 0.1), 0 3px 15px rgba(0, 0, 0, 0.1);
 
   --nav-bar-height: calc(2.5 * var(--spacing-unit));
+
+  --limit-max-inner-width: calc(
+    max(var(--spacing-unit), (100% - var(--grid-max-width)) / 2)
+  );
+  --limit-max-inner-width-l: calc(
+    max(var(--spacing-unit), (100% - var(--grid-max-width-l)) / 2)
+  );
+  --limit-max-inner-width-s: calc(
+    max(var(--spacing-unit), (100% - var(--grid-max-width-s)) / 2)
+  );
+  --limit-max-inner-width-xs: calc(
+    max(var(--spacing-unit), (100% - var(--grid-max-width-xs)) / 2)
+  );
 }

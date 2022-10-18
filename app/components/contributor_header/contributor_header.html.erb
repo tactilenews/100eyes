@@ -1,6 +1,6 @@
-<header <%= attrs %>>
+<%= c 'page_header', class: 'ContributorHeader', styles: [:inheritBackgroundColor, :noPaddingLeftRight] do %>
   <%= c 'avatar',
-    contributor: contributor,
+    record: contributor,
     expandable: true,
     style: :large,
     class: 'ContributorHeader-avatar'
@@ -37,4 +37,4 @@
       <% end %>
     </div>
   </div>
-</header>
+<% end %>

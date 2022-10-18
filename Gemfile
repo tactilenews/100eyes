@@ -35,8 +35,9 @@ group :development do
 end
 
 group :test do
-  # Adds support for Capybara system testing and selenium driver
+  # Adds support for Capybara system testing
   gem 'capybara', '>= 2.15'
+  gem 'cuprite'
   gem 'db-query-matchers'
   gem 'faker'
   gem 'timecop'
@@ -47,7 +48,7 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
-gem 'activestorage-validator', '~> 0.2.0'
+gem 'activestorage-validator', '~> 0.2.2'
 gem 'acts-as-taggable-on'
 gem 'browser'
 gem 'counter_culture', '~> 3.2'
@@ -82,8 +83,12 @@ gem 'sentry-ruby'
 gem 'administrate'
 gem 'administrate_exportable'
 
+<<<<<<< HEAD
 
 # Charts
 gem 'chartkick'
 gem 'groupdate'
 # gem 'apexcharts'
+=======
+gem 'noticed', '~> 1.6'
+>>>>>>> main

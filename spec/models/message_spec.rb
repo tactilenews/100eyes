@@ -15,26 +15,34 @@ RSpec.describe Message, type: :model do
     let(:contributor) { create(:contributor) }
     subject { message.contributor }
 
-    describe 'with sender' do
+    describe 'inbound message' do
       let(:message) { create(:message, sender: contributor) }
       it { should eql(contributor) }
     end
 
-    context 'with recipient' do
-      let(:message) { create(:message, :with_recipient, recipient: contributor) }
+    context 'outbound' do
+      let(:message) do
+        create(:message, :outbound, recipient: contributor, broadcasted: true)
+      end
       it { should eql(contributor) }
     end
   end
 
   describe '#reply?' do
     subject { message.reply? }
-    describe 'message has a sender' do
+    describe 'inbound message' do
       let(:message) { create(:message, sender: create(:contributor)) }
       it { should be(true) }
     end
 
+    # legacy, sender should not be nil in the future, but was before we had User's as senders
     describe 'message has no sender' do
-      let(:message) { create(:message, sender: nil) }
+      let(:message) { create(:message, sender: nil, broadcasted: true) }
+      it { should be(false) }
+    end
+
+    describe 'outbound message' do
+      let(:message) { create(:message, :outbound) }
       it { should be(false) }
     end
   end
@@ -61,11 +69,11 @@ RSpec.describe Message, type: :model do
       subject { message.conversation_link }
 
       describe 'given a recipient' do
-        let(:params) { { sender: nil, recipient: contributor } }
+        let(:params) { { sender: nil, recipient: contributor, broadcasted: true } }
         it { should eq('/contributors/7/requests/6') }
       end
 
-      describe 'given a sender' do
+      describe 'given an inbound message' do
         let(:params) { { recipient: nil, sender: contributor } }
         it { should eq('/contributors/7/requests/6') }
       end
@@ -94,10 +102,15 @@ RSpec.describe Message, type: :model do
   end
 
   describe '#after_commit(on: :commit)' do
-    let(:message) { create(:message, sender: nil, recipient: recipient) }
+    let!(:user) { create(:user) }
+    let(:request) { create(:request, user: user) }
+    let(:message) { create(:message, sender: user, recipient: recipient, broadcasted: true, request: request) }
+    let(:recipient) { create(:contributor) }
 
     describe 'given a recipient with telegram' do
-      let(:recipient) { create(:contributor, telegram_id: 11) }
+      before do
+        recipient.update(telegram_id: 11)
+      end
 
       describe '#blocked' do
         subject do
@@ -112,6 +125,16 @@ RSpec.describe Message, type: :model do
           it { should be(true) }
         end
       end
+    end
+
+    describe 'ActivityNotification' do
+      subject { create(:message, request: request) }
+
+      it 'Message Received is not created for outbound messages' do
+        expect { message }.not_to(change { ActivityNotification.where(type: 'MessageReceived').count })
+      end
+
+      it_behaves_like 'an ActivityNotification', 'MessageReceived'
     end
   end
 end

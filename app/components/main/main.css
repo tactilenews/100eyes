@@ -1,0 +1,7 @@
+.Main {
+  background-color: var(--color-bg);
+}
+
+.Main--lightestGrayBackground {
+  background-color: var(--color-gray-lightest);
+}

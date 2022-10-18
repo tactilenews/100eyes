@@ -39,6 +39,7 @@ rescue ActiveRecord::PendingMigrationError => e
   puts e.to_s.strip
   exit 1
 end
+
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -71,8 +72,9 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
-  config.after { Telegram.bots.each_value(&:reset) }
   # or for multiple bots:
+  config.after { Telegram.bots.each_value(&:reset) }
+
   config.include ActionMailbox::TestHelper, type: :mailbox
   config.include ActiveJob::TestHelper
 
@@ -81,10 +83,6 @@ RSpec.configure do |config|
   config.include ViewComponent::TestHelpers, type: :component
   config.include Capybara::RSpecMatchers, type: :component
   config.include FactoryBot::Syntax::Methods
-
-  config.before(:each, type: :system) do
-    driven_by :rack_test
-  end
 
   config.include Helpers
 end

@@ -1,0 +1,12 @@
+.CardMetrics {
+  gap: var(--spacing-unit-s);
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+}
+
+@media screen and (min-width: 48rem) {
+  .CardMetrics {
+    gap: var(--spacing-unit);
+  }
+}

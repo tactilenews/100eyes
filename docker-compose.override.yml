@@ -11,6 +11,8 @@ x-dev-defaults: &x-dev-defaults
     MAILSERVER_PORT: 1025
     POSTGRES_HOST: db
     WEBPACKER_DEV_SERVER_HOST: 0.0.0.0
+    CHROME_URL: "http://chrome:3333"
+
   stdin_open: true
   tty: true
   volumes:
@@ -45,3 +47,19 @@ services:
   mailserver:
     image: maildev/maildev:2.0.2
     ports: [ '1080:1080', '1025:1025' ]
+
+  chrome:
+    image: browserless/chrome:1.31-chrome-stable
+    ports:
+      - "3333:3333"
+    # Mount application source code to support file uploading
+    # (otherwise Chrome won't be able to find files).
+    # NOTE: Make sure you use absolute paths in `#attach_file`.
+    volumes:
+      - .:/app:cached
+    environment:
+      # By default, it uses 3000, which is typically used by Rails.
+      PORT: 3333
+      # Set connection timeout to avoid timeout exception during debugging
+      # https://docs.browserless.io/docs/docker.html#connection-timeout
+      CONNECTION_TIMEOUT: 600000
