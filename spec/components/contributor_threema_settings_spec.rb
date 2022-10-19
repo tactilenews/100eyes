@@ -6,20 +6,12 @@ RSpec.describe ContributorThreemaSettings::ContributorThreemaSettings, type: :co
   subject { render_inline(described_class.new(**params)) }
 
   let(:contributor) do
-    create(:contributor,
-           first_name: 'Max',
-           last_name: 'Mustermann',
-           threema_id: '12345678',
-           created_at: '2021-01-01')
+    build(:contributor,
+          first_name: 'Max',
+          last_name: 'Mustermann',
+          threema_id: '12345678',
+          created_at: '2021-01-01').tap { |contributor| contributor.save(validate: false) }
   end
-  let(:threema) { instance_double(Threema) }
-  let(:threema_lookup_double) { instance_double(Threema::Lookup) }
-  before do
-    allow(Threema).to receive(:new).and_return(threema)
-    allow(Threema::Lookup).to receive(:new).with({ threema: threema }).and_return(threema_lookup_double)
-    allow(threema_lookup_double).to receive(:key).and_return('PUBLIC_KEY_HEX_ENCODED')
-  end
-
   let(:params) { { contributor: contributor } }
 
   it { should have_css('h2', text: 'Threema') }

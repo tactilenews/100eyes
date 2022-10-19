@@ -18,13 +18,10 @@ RSpec.describe Threema::WebhookController do
   let(:message) { create(:message) }
   let(:threema_mock) { instance_double(Threema::Receive::Text, content: 'Hello World!') }
   let(:threema) { instance_double(Threema) }
-  let(:threema_lookup_double) { instance_double(Threema::Lookup) }
 
   before do
     allow(Threema).to receive(:new).and_return(threema)
-    allow(Threema::Lookup).to receive(:new).with({ threema: threema }).and_return(threema_lookup_double)
     allow(threema).to receive(:receive).and_return(threema_mock)
-    allow(threema_lookup_double).to receive(:key).and_return('PUBLIC_KEY_HEX_ENCODED')
   end
 
   describe '#message' do
@@ -37,7 +34,7 @@ RSpec.describe Threema::WebhookController do
     end
 
     context 'With known contributor' do
-      let!(:contributor) { create(:contributor, threema_id: 'V5EA564T') }
+      let!(:contributor) { build(:contributor, threema_id: 'V5EA564T').tap { |contributor| contributor.save(validate: false) } }
       let!(:request) { create(:request) }
 
       before do
