@@ -126,14 +126,6 @@ RSpec.describe Contributor, type: :model do
   end
 
   describe '#threema_id' do
-    let(:threema) { instance_double(Threema) }
-    let(:threema_lookup_double) { instance_double(Threema::Lookup) }
-    before do
-      allow(Threema).to receive(:new).and_return(threema)
-      allow(Threema::Lookup).to receive(:new).with({ threema: threema }).and_return(threema_lookup_double)
-      allow(threema_lookup_double).to receive(:key).and_return(nil)
-    end
-
     it 'can be nil' do
       contributor = build(:contributor, threema_id: nil)
       expect(contributor).to be_valid
@@ -161,22 +153,44 @@ RSpec.describe Contributor, type: :model do
       end
     end
 
-    context 'Threema ID passes lookup' do
+    describe 'Looking up Threema ID with Threema servers' do
+      let(:threema) { instance_double(Threema) }
+      let(:threema_lookup_double) { instance_double(Threema::Lookup) }
+
       before do
-        allow(threema_lookup_double).to receive(:key).and_return('PUBLIC_KEY_HEX_ENCODED')
+        allow(Threema).to receive(:new).and_return(threema)
+        allow(Threema::Lookup).to receive(:new).with({ threema: threema }).and_return(threema_lookup_double)
       end
 
-      it 'must be unique' do
-        create(:contributor, threema_id: 'ABCD1234')
-        contributor = build(:contributor, threema_id: 'ABCD1234')
-        expect(contributor).not_to be_valid
-        expect { contributor.save!(validate: false) }.to raise_error(ActiveRecord::RecordNotUnique)
+      context 'given an invalid Threema ID' do
+        before do
+          allow(threema_lookup_double).to receive(:key).and_return(nil)
+        end
+
+        it 'it raises an error' do
+          expect do
+            create(:contributor, threema_id: '12345678')
+          end.to raise_error(ActiveRecord::RecordInvalid, /Threema ID ist ungültig, bitte überprüfen./)
+        end
       end
 
-      it 'must be unique, ignoring case' do
-        create(:contributor, threema_id: 'abcd1234')
-        contributor = build(:contributor, threema_id: 'ABCD1234')
-        expect(contributor).not_to be_valid
+      context 'given a vaild Threema ID' do
+        before do
+          allow(threema_lookup_double).to receive(:key).and_return('PUBLIC_KEY_HEX_ENCODED')
+        end
+
+        it 'must be unique' do
+          create(:contributor, threema_id: 'ABCD1234')
+          contributor = build(:contributor, threema_id: 'ABCD1234')
+          expect(contributor).not_to be_valid
+          expect { contributor.save!(validate: false) }.to raise_error(ActiveRecord::RecordNotUnique)
+        end
+
+        it 'must be unique, ignoring case' do
+          create(:contributor, threema_id: 'abcd1234')
+          contributor = build(:contributor, threema_id: 'ABCD1234')
+          expect(contributor).not_to be_valid
+        end
       end
     end
   end

@@ -65,6 +65,29 @@ RSpec.describe 'Onboarding::Threema', type: :request do
       it_behaves_like 'an ActivityNotification', 'OnboardingCompleted'
     end
 
+    context 'given an invalid Threema ID' do
+      before do
+        allow(threema_lookup_double).to receive(:key).and_return(nil)
+      end
+
+      it 'displays validation errors' do
+        subject.call
+        parsed = Capybara::Node::Simple.new(response.body)
+        fields = parsed.all('.Field')
+        threema_id_field = fields.find { |f| f.has_text? 'Threema ID' }
+        expect(threema_id_field).to have_text('Threema ID ist ungültig, bitte überprüfen.')
+      end
+
+      it 'does not create new contributor' do
+        expect { subject.call }.not_to change(Contributor, :count)
+      end
+
+      it 'has 422 status code' do
+        subject.call
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+
     describe 'given an existing threema ID' do
       let!(:contributor) { create(:contributor, **attrs) }
 
