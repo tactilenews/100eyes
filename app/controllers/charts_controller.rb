@@ -8,7 +8,7 @@ class ChartsController < ApplicationController
   def time_based_requests
     grouped_requests = group_messages(Request.unscoped).count
     grouped_messages = group_messages(Message.unscoped.where(sender_type: [User.name, nil], broadcasted: false)).count
-    joined_groups = grouped_requests.merge(grouped_messages) { |key, oldval, newval| oldval + newval }
+    joined_groups = grouped_requests.merge(grouped_messages) { |_key, oldval, newval| oldval + newval }
     render json: joined_groups
   end
 
