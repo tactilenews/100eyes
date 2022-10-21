@@ -29,6 +29,8 @@ export default class extends Controller {
       'Dienstag',
       'Montag',
     ].map(day => ({ name: day, data: [] }));
+    const maxValue = Math.max(...Object.values(jsonResponse));
+    const maxValueDividedByColorSegments = maxValue / 6;
     Object.entries(jsonResponse).map(([key, value]) => {
       series.map(object => {
         if (JSON.parse(key)[0] == object.name) {
@@ -48,37 +50,37 @@ export default class extends Controller {
             ranges: [
               {
                 from: 0,
-                to: 5,
+                to: maxValueDividedByColorSegments,
                 color: '#F8C8DC',
                 name: 'Keine oder wenig',
               },
               {
-                from: 6,
-                to: 20,
+                from: maxValueDividedByColorSegments,
+                to: 2 * maxValueDividedByColorSegments,
                 color: '#FFB6C1',
                 name: 'Leicht',
               },
               {
-                from: 21,
-                to: 45,
+                from: 2 * maxValueDividedByColorSegments,
+                to: 3 * maxValueDividedByColorSegments,
                 color: '#FF00A0',
                 name: 'Mittel',
               },
               {
-                from: 46,
-                to: 100,
+                from: 3 * maxValueDividedByColorSegments,
+                to: 4 * maxValueDividedByColorSegments,
                 color: '#f4177a',
                 name: 'Hoch',
               },
               {
-                from: 101,
-                to: 200,
+                from: 4 * maxValueDividedByColorSegments,
+                to: 5 * maxValueDividedByColorSegments,
                 color: '#FF1493',
                 name: 'Extrem',
               },
               {
-                from: 201,
-                to: 1000,
+                from: 5 * maxValueDividedByColorSegments,
+                to: 6 * maxValueDividedByColorSegments,
                 color: '#C71585',
                 name: 'Höchste',
               },
