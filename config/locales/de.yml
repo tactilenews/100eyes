@@ -276,8 +276,8 @@ de:
     time_based_activity_heatmap:
       heading: Aktivität deiner Community
       tab_bar:
-        inbound: Antworten
-        outbound: Fragen
+        inbound: Community
+        outbound: Redaktion
     day_activity_linechart:
       heading: Deine besten Dialogtage
 
