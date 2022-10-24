@@ -1,0 +1,15 @@
+<%= c 'section',
+   style: :wide,
+   **attrs,
+   data: { controller: 'day-activity-linechart',
+           day_activity_linechart_url_value: 'charts/day-requests-replies',
+         } do %>
+  <%= c 'heading', style: :beta do %>
+    <%= t '.heading' %>
+  <% end %>
+
+  <div
+    data-day-activity-linechart-target="linechart"
+    class="DayActivityLinechart-chart"
+  ></div>
+<% end %>

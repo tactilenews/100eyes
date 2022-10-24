@@ -97,5 +97,6 @@ Rails.application.routes.draw do
   namespace :charts do
     get 'time-based-replies'
     get 'time-based-requests'
+    get 'day-requests-replies'
   end
 end

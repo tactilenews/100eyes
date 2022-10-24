@@ -274,10 +274,12 @@ de:
         one: empfangene Nachricht
         other: empfangene Nachrichten
     time_based_activity_heatmap:
-      heading: Nachrichten nach Tag und Uhrzeit
+      heading: Aktivität deiner Community
       tab_bar:
         inbound: Eingegangene
         outbound: Fragen
+    day_activity_linechart:
+      heading: Deine besten Dialogtage
 
   mailer:
     unsubscribe:
