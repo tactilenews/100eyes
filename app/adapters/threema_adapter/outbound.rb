@@ -4,6 +4,11 @@ module ThreemaAdapter
   class Outbound < ApplicationJob
     queue_as :default
 
+    rescue_from RuntimeError do |exception|
+      tags = exception.message.match?(/Can't find public key for Threema ID/) ? { support: 'yes' } : {}
+      ErrorNotifier.report(exception, tags: tags)
+    end
+
     def self.threema_instance
       @threema_instance ||= Threema.new
     end
