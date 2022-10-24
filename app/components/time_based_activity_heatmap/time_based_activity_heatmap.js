@@ -74,7 +74,7 @@ export default class extends Controller {
               {
                 from: 3 * maxValueDividedByColorSegments,
                 to: 4 * maxValueDividedByColorSegments,
-                color: '#f4177a',
+                color: '#F4177A',
                 name: 'Hoch',
               },
               {
