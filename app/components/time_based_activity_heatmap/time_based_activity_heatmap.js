@@ -9,17 +9,22 @@ export default class extends Controller {
   };
 
   connect() {
-    this.renderRepliesChart();
+    this.renderRepliesHeatmap();
   }
 
-  async fetchTimeBasedActivityData(endpoint) {
+  async fetchData(endpoint) {
+    const response = await fetch(endpoint);
+    return response.json();
+  }
+
+  async fetchHeatmapData(endpoint) {
     const response = await fetch(endpoint);
     const jsonResponse = await response.json();
-    const options = this.setUpChart(jsonResponse);
+    const options = this.setupHeatmap(jsonResponse);
     this.renderChart(options);
   }
 
-  setUpChart(jsonResponse) {
+  setupHeatmap(jsonResponse) {
     const series = [
       'Sonntag',
       'Samstag',
@@ -99,15 +104,15 @@ export default class extends Controller {
     }
   }
 
-  renderRepliesChart() {
+  renderRepliesHeatmap() {
     this.requestsButtonTarget.classList.remove(this.activeClass);
     this.repliesButtonTarget.classList.add(this.activeClass);
-    this.fetchTimeBasedActivityData(this.repliesChartUrlValue);
+    this.fetchHeatmapData(this.repliesChartUrlValue);
   }
 
-  renderRequestsChart() {
+  renderRequestsHeatmap() {
     this.repliesButtonTarget.classList.remove(this.activeClass);
     this.requestsButtonTarget.classList.add(this.activeClass);
-    this.fetchTimeBasedActivityData(this.requestsChartUrlValue);
+    this.fetchHeatmapData(this.requestsChartUrlValue);
   }
 }
