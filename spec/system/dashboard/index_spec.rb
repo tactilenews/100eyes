@@ -23,5 +23,8 @@ RSpec.describe 'Dashboard' do
 
     # TimeBasedActivityHeatmap section
     expect(page).to have_css('section.TimeBasedActivityHeatmap')
+
+    # DayActivityLinechart section
+    expect(page).to have_css('section.DayActivityLinechart')
   end
 end
