@@ -43,12 +43,14 @@ export default class extends Controller {
         }
       });
     });
-    const labelConfig = { labels: {
-      style: {
+    const labelConfig = {
+      labels: {
+        style: {
           fontSize: '16px',
           fontFamily: 'Inter, Helvetica Neue, Helvetica, sans-serif',
+        },
       },
-    } }
+    };
 
     return {
       chart: {
@@ -63,12 +65,12 @@ export default class extends Controller {
         fontSize: '16px',
         fontFamily: 'Inter, Helvetica Neue, Helvetica, sans-serif',
         markers: {
-            width: 16,
-            height: 16,
-            radius: 16,
+          width: 16,
+          height: 16,
+          radius: 16,
         },
         itemMargin: {
-            horizontal: 10,
+          horizontal: 10,
         },
       },
       plotOptions: {
