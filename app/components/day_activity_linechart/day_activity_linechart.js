@@ -24,18 +24,36 @@ export default class extends Controller {
         y: value,
       }));
     });
+    const labelConfig = { labels: {
+      style: {
+          fontSize: '16px',
+          fontFamily: 'Inter, Helvetica Neue, Helvetica, sans-serif',
+      },
+    } }
     return {
       chart: {
         type: 'line',
       },
       series: jsonResponse,
-      xaxis: {
-        type: 'category',
-      },
+      xaxis: labelConfig,
+      yaxis: labelConfig,
       stroke: {
         curve: 'smooth',
       },
-      colors: ['#67D881', '#F4177A']
+      colors: ['#67D881', '#F4177A'],
+      legend: {
+        position: 'bottom',
+        fontSize: '16px',
+        fontFamily: 'Inter, Helvetica Neue, Helvetica, sans-serif',
+        markers: {
+            width: 16,
+            height: 16,
+            radius: 16,
+        },
+        itemMargin: {
+            horizontal: 10,
+        },
+      }
     };
   }
 

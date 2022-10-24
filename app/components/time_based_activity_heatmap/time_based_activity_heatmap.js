@@ -43,12 +43,34 @@ export default class extends Controller {
         }
       });
     });
+    const labelConfig = { labels: {
+      style: {
+          fontSize: '16px',
+          fontFamily: 'Inter, Helvetica Neue, Helvetica, sans-serif',
+      },
+    } }
 
     return {
       chart: {
         type: 'heatmap',
       },
       series: series,
+      xaxis: labelConfig,
+      yaxis: labelConfig,
+      legend: {
+        show: true,
+        position: 'bottom',
+        fontSize: '16px',
+        fontFamily: 'Inter, Helvetica Neue, Helvetica, sans-serif',
+        markers: {
+            width: 16,
+            height: 16,
+            radius: 16,
+        },
+        itemMargin: {
+            horizontal: 10,
+        },
+      },
       plotOptions: {
         heatmap: {
           colorScale: {
@@ -57,37 +79,37 @@ export default class extends Controller {
                 from: 0,
                 to: maxValueDividedByColorSegments,
                 color: '#F8C8DC',
-                name: 'Keine oder wenig',
+                name: 'keine oder geringe',
               },
               {
-                from: maxValueDividedByColorSegments,
+                from: maxValueDividedByColorSegments + 1,
                 to: 2 * maxValueDividedByColorSegments,
                 color: '#FFB6C1',
-                name: 'Leicht',
+                name: 'kaum',
               },
               {
-                from: 2 * maxValueDividedByColorSegments,
+                from: 2 * maxValueDividedByColorSegments + 1,
                 to: 3 * maxValueDividedByColorSegments,
                 color: '#FF00A0',
-                name: 'Mittel',
+                name: 'mittlere',
               },
               {
-                from: 3 * maxValueDividedByColorSegments,
+                from: 3 * maxValueDividedByColorSegments + 1,
                 to: 4 * maxValueDividedByColorSegments,
                 color: '#F4177A',
-                name: 'Hoch',
+                name: 'starke',
               },
               {
-                from: 4 * maxValueDividedByColorSegments,
+                from: 4 * maxValueDividedByColorSegments + 1,
                 to: 5 * maxValueDividedByColorSegments,
                 color: '#FF1493',
                 name: 'Extrem',
               },
               {
-                from: 5 * maxValueDividedByColorSegments,
+                from: 5 * maxValueDividedByColorSegments + 1,
                 to: 6 * maxValueDividedByColorSegments,
                 color: '#C71585',
-                name: 'Höchste',
+                name: 'stärkste [Aktivität]',
               },
             ],
           },
