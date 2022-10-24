@@ -32,6 +32,10 @@ export default class extends Controller {
       xaxis: {
         type: 'category',
       },
+      stroke: {
+        curve: 'smooth',
+      },
+      colors: ['#67D881', '#F4177A']
     };
   }
 

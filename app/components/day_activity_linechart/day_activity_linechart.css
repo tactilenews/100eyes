@@ -1,3 +1,7 @@
+.DayActivityLinechart {
+  margin-bottom: var(--spacing-unit-l);
+}
+
 .DayActivityLinechart-chart {
   height: 37rem;
 }
