@@ -9,6 +9,26 @@
   id="<%= id %>"
 >
     <div class="ChatMessage-text">
+      <section class="ChatMessage-senderSection">
+        <% if message.sender %>
+          <%= c 'avatar', record: message.sender, style: :small %>
+          <header class="ChatMessage-senderSectionHeader">
+            <%= c 'heading', tag: :h3, class: 'ChatMessage-senderSectionHeading' do %>
+              <%= message.sender.name %>
+            <% end %>
+            <time class="ChatMessage-updatedAt"><%= date_time(message.updated_at) %></time>
+          </header>
+        <% else %>
+          <%= c 'avatar', style: :small %>
+          <header class="ChatMessage-senderSectionHeader">
+            <%= c 'heading', tag: :h3, class: 'ChatMessage-senderSectionHeading' do %>
+              <%= Setting.project_name %>
+            <% end %>
+            <time class="ChatMessage-updatedAt"><%= date_time(message.updated_at) %></time>
+          </header>
+        <% end %>
+      </section>
+
       <%= c 'plaintext_message',
         message: message.text,
         data: { chat_message_target: :text }
@@ -47,8 +67,6 @@
     <% end %>
 
     <div class="ChatMessage-meta">
-      <a href="#<%= id %>"><%= date_time(message.updated_at) %></a>
-
       <% unless hide_actions %>
         <%= c 'copy_button',
           label: I18n.t('components.chat_message.copy'),

@@ -6,7 +6,8 @@ module Avatar
 
     def initialize(record: nil, expandable: false, **)
       super
-      @record = record
+
+      @record = record || User.new
       @expandable = expandable
     end
 

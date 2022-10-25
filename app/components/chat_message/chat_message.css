@@ -15,6 +15,27 @@
   position: relative;
 }
 
+.ChatMessage-senderSection {
+  display: flex;
+  margin-bottom: var(--spacing-unit-s);
+  margin-top: var(--spacing-unit-xs);
+}
+
+.ChatMessage-senderSection > * + * {
+  margin-left: var(--spacing-unit-xs);
+  margin-top: calc(-1 * var(--spacing-unit-xs) / 2);
+}
+
+.ChatMessage-senderSectionHeader {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.ChatMessage-senderSectionHeading {
+  line-height: initial;
+}
+
 .ChatMessage--compact:not(.ChatMessage--expanded) .ChatMessage-text {
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -55,6 +76,7 @@
   width: 5em;
 }
 
+.ChatMessage-updatedAt,
 .ChatMessage-meta {
   color: var(--color-text-light);
   font-size: var(--font-size-s);
