@@ -18,18 +18,10 @@ export default class extends Controller {
   }
 
   setupLinechart(jsonResponse) {
-    const series = jsonResponse.map(response => {
-      response.data = Object.entries(response.data).map(([key, value]) => ({
-        x: key,
-        y: value,
-      }));
-    });
-    const labelConfig = {
-      labels: {
-        style: {
-          fontSize: '16px',
-          fontFamily: 'Inter, Helvetica Neue, Helvetica, sans-serif',
-        },
+    const fontStyles = {
+      style: {
+        fontSize: '16px',
+        fontFamily: 'Inter, Helvetica Neue, Helvetica, sans-serif',
       },
     };
 
@@ -38,16 +30,27 @@ export default class extends Controller {
         type: 'line',
       },
       series: jsonResponse,
-      xaxis: labelConfig,
-      yaxis: labelConfig,
+      xaxis: {
+        labels: {
+          ...fontStyles,
+        },
+      },
+      yaxis: {
+        labels: {
+          ...fontStyles,
+        },
+        title: {
+          ...fontStyles,
+          text: 'Interaktionen',
+        },
+      },
       stroke: {
         curve: 'smooth',
       },
       colors: ['#67D881', '#F4177A'],
       legend: {
+        ...fontStyles.style,
         position: 'bottom',
-        fontSize: '16px',
-        fontFamily: 'Inter, Helvetica Neue, Helvetica, sans-serif',
         markers: {
           width: 16,
           height: 16,

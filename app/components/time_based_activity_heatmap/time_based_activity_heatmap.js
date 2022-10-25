@@ -25,30 +25,16 @@ export default class extends Controller {
   }
 
   setupHeatmap(jsonResponse) {
-    const series = [
-      'Sonntag',
-      'Samstag',
-      'Freitag',
-      'Donnerstag',
-      'Mittwoch',
-      'Dienstag',
-      'Montag',
-    ].map(day => ({ name: day, data: [] }));
-    const maxValue = Math.max(...Object.values(jsonResponse));
-    const maxValueDividedByColorSegments = maxValue / 6;
-    Object.entries(jsonResponse).map(([key, value]) => {
-      series.map(object => {
-        if (JSON.parse(key)[0] == object.name) {
-          object.data.push({ x: JSON.parse(key)[1], y: value });
-        }
-      });
-    });
-    const labelConfig = {
-      labels: {
-        style: {
-          fontSize: '16px',
-          fontFamily: 'Inter, Helvetica Neue, Helvetica, sans-serif',
-        },
+    const values = jsonResponse.reduce(
+      (acc, object) => [...acc, ...Object.values(object.data.map(o => o.y))],
+      []
+    );
+    const maxValue = Math.max(...values);
+    const maxValueDividedByColorSegments = Math.round(maxValue / 6);
+    const fontStyles = {
+      style: {
+        fontSize: '16px',
+        fontFamily: 'Inter, Helvetica Neue, Helvetica, sans-serif',
       },
     };
 
@@ -56,14 +42,20 @@ export default class extends Controller {
       chart: {
         type: 'heatmap',
       },
-      series: series,
-      xaxis: labelConfig,
-      yaxis: labelConfig,
+      series: jsonResponse,
+      xaxis: {
+        labels: {
+          ...fontStyles,
+        },
+      },
+      yaxis: {
+        labels: {
+          ...fontStyles,
+        },
+      },
       legend: {
-        show: true,
+        ...fontStyles.style,
         position: 'bottom',
-        fontSize: '16px',
-        fontFamily: 'Inter, Helvetica Neue, Helvetica, sans-serif',
         markers: {
           width: 16,
           height: 16,
@@ -93,25 +85,25 @@ export default class extends Controller {
                 from: 2 * maxValueDividedByColorSegments + 1,
                 to: 3 * maxValueDividedByColorSegments,
                 color: '#FF00A0',
-                name: 'mittlere',
+                name: 'mäßige',
               },
               {
                 from: 3 * maxValueDividedByColorSegments + 1,
                 to: 4 * maxValueDividedByColorSegments,
                 color: '#F4177A',
-                name: 'starke',
+                name: 'mittlere',
               },
               {
                 from: 4 * maxValueDividedByColorSegments + 1,
                 to: 5 * maxValueDividedByColorSegments,
                 color: '#FF1493',
-                name: 'Extrem',
+                name: 'starke',
               },
               {
                 from: 5 * maxValueDividedByColorSegments + 1,
-                to: 6 * maxValueDividedByColorSegments,
+                to: maxValue,
                 color: '#C71585',
-                name: 'stärkste [Aktivität]',
+                name: 'stärkste Aktivität',
               },
             ],
           },

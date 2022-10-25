@@ -95,8 +95,8 @@ Rails.application.routes.draw do
   resource :otp_auth, controller: :otp_auth, only: %i[show create]
 
   namespace :charts do
-    get 'time-based-replies'
-    get 'time-based-requests'
+    get 'day-and-time-replies'
+    get 'day-and-time-requests'
     get 'day-requests-replies'
   end
 end
