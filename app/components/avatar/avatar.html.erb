@@ -8,6 +8,14 @@
       target: '_blank',
       aria: { label: t('.expand') },
     ) %>
+  <% elsif editorial_logo? %>
+    <%= link_to_if(
+      expandable?,
+      image_tag(url, alt: '', loading: 'lazy'),
+      editorial_logo,
+      target: '_blank',
+      aria: { label: t('.expand') },
+    ) %>
   <% else %>
     <svg
       class="Avatar-initials"
