@@ -1,8 +1,8 @@
-.TimeBasedActivityHeatmap-tabBar {
+.DayAndTimeActivityHeatmap-tabBar {
   margin-left: var(--spacing-unit);
 }
 
-.TimeBasedActivityHeatmap-tabBarItem {
+.DayAndTimeActivityHeatmap-tabBarItem {
   display: inline-block;
   background-color: inherit;
 
@@ -17,16 +17,16 @@
   transition: 0.1s all ease-out;
 }
 
-.TimeBasedActivityHeatmap-tabBarItem--active {
+.DayAndTimeActivityHeatmap-tabBarItem--active {
   border-bottom-color: var(--color-blue);
   color: var(--color-text);
 }
 
-.TimeBasedActivityHeatmap-tabBarItem:not(.TimeBasedActivityHeatmap-tabBarItem--active):hover {
+.DayAndTimeActivityHeatmap-tabBarItem:not(.DayAndTimeActivityHeatmap-tabBarItem--active):hover {
   border-bottom-color: var(--color-gray);
   color: var(--color-text);
 }
 
-.TimeBasedActivityHeatmap-chart {
-  height: 37rem;
+.DayAndTimeActivityHeatmap-chart {
+  height: 39rem;
 }

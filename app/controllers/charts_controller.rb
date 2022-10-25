@@ -2,14 +2,14 @@
 
 class ChartsController < ApplicationController
   def day_and_time_replies
-    series = I18n.t('date.day_names').reverse.map do |day|
+    series = t('date.day_names').reverse.map do |day|
       { name: day, data: day_and_time_data(joined_inbound(%i[day_of_week hour_of_day]), day) }
     end
     render json: series
   end
 
   def day_and_time_requests
-    series = I18n.t('date.day_names').reverse.map do |day|
+    series = t('date.day_names').reverse.map do |day|
       { name: day, data: day_and_time_data(joined_outbound(%i[day_of_week hour_of_day]), day) }
     end
     render json: series
@@ -17,11 +17,11 @@ class ChartsController < ApplicationController
 
   def day_requests_replies
     render json: [{
-      name: 'Community', data: joined_inbound([:day_of_week]).map do |key, value|
+      name: t('shared.community'), data: joined_inbound([:day_of_week]).map do |key, value|
                                  { x: key, y: value }
                                end
     },
-                  { name: 'Redaktion', data: joined_outbound([:day_of_week]).map { |key, value| { x: key, y: value } } }]
+                  { name: t('shared.editorial'), data: joined_outbound([:day_of_week]).map { |key, value| { x: key, y: value } } }]
   end
 
   private
