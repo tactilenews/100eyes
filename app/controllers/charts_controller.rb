@@ -18,8 +18,8 @@ class ChartsController < ApplicationController
   def day_requests_replies
     render json: [{
       name: t('shared.community'), data: joined_inbound([:day_of_week]).map do |key, value|
-                                 { x: key, y: value }
-                               end
+                                           { x: key, y: value }
+                                         end
     },
                   { name: t('shared.editorial'), data: joined_outbound([:day_of_week]).map { |key, value| { x: key, y: value } } }]
   end
