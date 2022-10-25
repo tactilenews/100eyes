@@ -20,6 +20,13 @@ module SignalAdapter
         http.request(req)
       end
       res.value
+    rescue Net::HTTPServerException => e
+      ErrorNotifier.report(e, context: {
+                             code: e.response.code,
+                             message: e.response.message,
+                             headers: e.response.to_hash,
+                             body: e.response.body
+                           })
     end
   end
 end

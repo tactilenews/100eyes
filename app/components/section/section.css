@@ -1,7 +1,7 @@
 .Section {
   padding-left: var(--limit-max-inner-width);
   padding-right: var(--limit-max-inner-width);
-  margin: var(--spacing-unit) 0;
+  margin-bottom: var(--spacing-unit);
 }
 
 .Section--narrow {
@@ -27,8 +27,8 @@
   margin-top: var(--spacing-unit-xl);
 }
 
-.Section--noMargin {
-  margin: 0;
+.Section--noMarginTop {
+  margin-top: 0;
 }
 
 .Section--largeBottomMargin {
