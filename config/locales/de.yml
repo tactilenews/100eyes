@@ -410,8 +410,9 @@ de:
         label: Handynummer
       threema_id:
         label: Threema ID
-        help: 6 Zeichen lang, besteht nur aus Zahlen und Großbuchstaben
+        help: 8 Zeichen lang, besteht nur aus Zahlen und Großbuchstaben
         placeholder: z.B. A12BC345
+        invalid: Threema ID ist ungültig, bitte überprüfen.
       username:
         label: Telegram
         placeholder: Kein Telegram-Nutzername hinterlegt

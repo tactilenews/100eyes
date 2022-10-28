@@ -5,7 +5,9 @@ require 'rails_helper'
 RSpec.describe ThreemaAdapter::Outbound do
   let(:adapter) { described_class.new }
   let(:threema_id) { 'V5EA564T' }
-  let(:contributor) { create(:contributor, threema_id: threema_id, email: nil) }
+  let(:contributor) do
+    build(:contributor, threema_id: threema_id, email: nil).tap { |contributor| contributor.save(validate: false) }
+  end
   let(:message) { create(:message, recipient: contributor) }
 
   describe '::send!' do

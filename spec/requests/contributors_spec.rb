@@ -118,6 +118,35 @@ RSpec.describe '/contributors', type: :request do
         expect(parsed).to have_css('.Notification', text: text)
       end
     end
+
+    context 'given a Threema contributor' do
+      let(:threema) { instance_double(Threema) }
+      let(:threema_lookup_double) { instance_double(Threema::Lookup) }
+      let(:contributor) { build(:contributor, threema_id: 'VALID123').tap { |contributor| contributor.save(validate: false) } }
+      let(:new_attrs) { { threema_id: 'INVALID!' } }
+
+      before do
+        allow(Threema).to receive(:new).and_return(threema)
+        allow(Threema::Lookup).to receive(:new).with({ threema: threema }).and_return(threema_lookup_double)
+        allow(threema_lookup_double).to receive(:key).and_return(nil)
+      end
+
+      it 'displays validation errors' do
+        subject.call
+        parsed = Capybara::Node::Simple.new(response.body)
+        threema_id_field = parsed.find('#contributor-threema-settings')
+        expect(threema_id_field).to have_text('Threema ID ist ungültig, bitte überprüfen.')
+      end
+
+      it 'does not update the contributor' do
+        expect { subject.call }.not_to change(contributor, :threema_id)
+      end
+
+      it 'has 422 status code' do
+        subject.call
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
   end
 
   describe 'POST /message', telegram_bot: :rails do

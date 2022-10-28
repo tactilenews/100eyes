@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe ThreemaAdapter::Inbound do
   let(:threema_id) { 'V5EA564T' }
-  let!(:contributor) { create(:contributor, threema_id: threema_id) }
+  let!(:contributor) { build(:contributor, threema_id: threema_id).tap { |contributor| contributor.save(validate: false) } }
 
   let(:threema_message) { described_class.new(message) }
   let(:message) do
@@ -21,7 +21,6 @@ RSpec.describe ThreemaAdapter::Inbound do
   end
   let(:threema_mock) { instance_double(Threema::Receive::Text, content: 'Hello World!') }
   let(:threema) { instance_double(Threema) }
-
   before do
     allow(Threema).to receive(:new).and_return(threema)
     allow(threema).to receive(:receive).with({ payload: message }).and_return(threema_mock)

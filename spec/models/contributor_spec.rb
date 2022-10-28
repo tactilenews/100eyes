@@ -153,32 +153,79 @@ RSpec.describe Contributor, type: :model do
       end
     end
 
-    it 'must be unique' do
-      create(:contributor, threema_id: 'ABCD1234')
-      contributor = build(:contributor, threema_id: 'ABCD1234')
-      expect(contributor).not_to be_valid
-      expect { contributor.save!(validate: false) }.to raise_error(ActiveRecord::RecordNotUnique)
+    describe 'invalid format' do
+      context 'unsupported characters' do
+        subject { -> { build(:contributor, threema_id: '%!$12345').save! } }
+
+        it 'raises an error' do
+          expect do
+            subject.call
+          end.to raise_error(ActiveRecord::RecordInvalid, /Threema ID ist ungültig, bitte überprüfen./)
+        end
+
+        it 'does not lookup Threema ID, as it is not valid' do
+          subject.call
+        rescue ActiveRecord::RecordInvalid
+          expect(Threema::Lookup).not_to receive(:new)
+        end
+      end
+
+      context 'invalid length' do
+        subject { -> { build(:contributor, threema_id: 'invalidLength').save! } }
+
+        it 'raises an error' do
+          expect do
+            subject.call
+          end.to raise_error(ActiveRecord::RecordInvalid, /Threema ID ist ungültig, bitte überprüfen./)
+        end
+
+        it 'does not lookup Threema ID, as it is not valid' do
+          subject.call
+        rescue ActiveRecord::RecordInvalid
+          expect(Threema::Lookup).not_to receive(:new)
+        end
+      end
     end
 
-    it 'must be unique, ignoring case' do
-      create(:contributor, threema_id: 'abcd1234')
-      contributor = build(:contributor, threema_id: 'ABCD1234')
-      expect(contributor).not_to be_valid
-    end
+    describe 'Looking up Threema ID with Threema servers' do
+      let(:threema) { instance_double(Threema) }
+      let(:threema_lookup_double) { instance_double(Threema::Lookup) }
 
-    it 'must contain alphanumeric chars only' do
-      contributor = build(:contributor, threema_id: 'ABCD@!?#')
-      expect(contributor).not_to be_valid
-    end
+      before do
+        allow(Threema).to receive(:new).and_return(threema)
+        allow(Threema::Lookup).to receive(:new).with({ threema: threema }).and_return(threema_lookup_double)
+      end
 
-    it 'must not be longer than 8 chars' do
-      contributor = build(:contributor, threema_id: '123456789')
-      expect(contributor).not_to be_valid
-    end
+      context 'given an invalid Threema ID' do
+        before do
+          allow(threema_lookup_double).to receive(:key).and_return(nil)
+        end
 
-    it 'must not be shorter than 8 chars' do
-      contributor = build(:contributor, threema_id: '1234567')
-      expect(contributor).not_to be_valid
+        it 'it raises an error' do
+          expect do
+            create(:contributor, threema_id: '12345678')
+          end.to raise_error(ActiveRecord::RecordInvalid, /Threema ID ist ungültig, bitte überprüfen./)
+        end
+      end
+
+      context 'given a vaild Threema ID' do
+        before do
+          allow(threema_lookup_double).to receive(:key).and_return('PUBLIC_KEY_HEX_ENCODED')
+        end
+
+        it 'must be unique' do
+          create(:contributor, threema_id: 'ABCD1234')
+          contributor = build(:contributor, threema_id: 'ABCD1234')
+          expect(contributor).not_to be_valid
+          expect { contributor.save!(validate: false) }.to raise_error(ActiveRecord::RecordNotUnique)
+        end
+
+        it 'must be unique, ignoring case' do
+          create(:contributor, threema_id: 'abcd1234')
+          contributor = build(:contributor, threema_id: 'ABCD1234')
+          expect(contributor).not_to be_valid
+        end
+      end
     end
   end
 
@@ -398,8 +445,11 @@ RSpec.describe Contributor, type: :model do
                                          })
       end
       let(:threema_id) { 'V5EA564T' }
-      let(:contributor) { create(:contributor, threema_id: threema_id) }
+      let(:contributor) do
+        build(:contributor, threema_id: threema_id).tap { |contributor| contributor.save(validate: false) }
+      end
       let(:message_inbound_adapter) { ThreemaAdapter::Inbound.new(threema_message) }
+
       before do
         allow(Threema).to receive(:new).and_return(threema)
         allow(threema).to receive(:receive).with({ payload: threema_message }).and_return(threema_mock)
@@ -754,7 +804,9 @@ RSpec.describe Contributor, type: :model do
 
     context 'signed up via threema' do
       let(:expected_job_args) { { recipient: contributor, text: "*Welcome new contributor!*\nYou onboarded successfully." } }
-      let(:contributor) { create(:contributor, threema_id: 'AAAAAAAA', email: nil, telegram_id: nil) }
+      let(:contributor) do
+        build(:contributor, threema_id: 'AAAAAAAA', email: nil, telegram_id: nil).tap { |contributor| contributor.save(validate: false) }
+      end
       it { should enqueue_job(ThreemaAdapter::Outbound).with(expected_job_args) }
     end
 
