@@ -28,7 +28,7 @@ For development purposes, you can set up `100eyes` using Docker. To perform the 
 
     ```bash
     $ cd ~/100eyes
-    $ docker-compose build
+    $ docker compose build
     ```
 
 3. #### Configuration
@@ -40,28 +40,31 @@ For development purposes, you can set up `100eyes` using Docker. To perform the 
 
    Edit the new `.env` file and add API keys and other secrets there. This file `.env` is ignored by `git`.
 
-4. #### Start container
+
+4. #### Create, migrate, seed database
+
+   The database is not set up in the steps above because it is a one-time task, whereas building and starting the services should be reproducible. Setup the database with:
+
+   ```bash
+   $ docker compose run app rails db:setup
+   ```
+
+5. #### Start container
     You can start all containers with a single command. `100eyes` can then be viewed in your browser at http://localhost:3000.
 
     ```bash
-    $ docker-compose up
+    $ docker compose up
     ```
 
-5. #### Seed database
+#### Run the tests
 
-   One user has been created to use in development, since registration is disabled. You can create your own user in the `rails console` if you want, or you can run:
+In Github Actions, we run the tests with the local environment because setting up the containers and running them there is more expensive in terms of time. You can run the tests in the containers, if you don't want to get set up locally with:
 
-   ```bash
-   $ docker-compose exec app rails db:seed
-   ```
+```bash
+$ docker compose exec app bundle exec rspec
+```
 
-  ##### Webpack Development Server
-
-  With this command you can speed up the compilation of the assets for development purposes (e.g. for many changes to CSS files):
-
-  ```bash
-  $ docker-compose exec app bin/webpack-dev-server
-  ```
+NOTE: You should expect the `spec/jobs/signal_adapter` to have failures since we recorded [VCR cassettes](https://github.com/vcr/vcr) from a local env not a containerized one.
 
 #### Messengers
 
