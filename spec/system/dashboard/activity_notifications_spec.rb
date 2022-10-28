@@ -28,7 +28,7 @@ RSpec.describe 'Activity Notifications' do
       # OnboardingCompleted
       contributor = create(:contributor, :with_an_avatar)
 
-      Timecop.travel(Time.current + 1.minute)
+      Timecop.travel(1.minute.from_now)
       visit dashboard_path(as: user)
 
       expect(page).to have_css("img[src*='example-image.png']")
@@ -52,7 +52,7 @@ RSpec.describe 'Activity Notifications' do
       # MessageReceived
       reply = create(:message, :inbound, text: "I'm a reply to #{request.title}", request: request, sender: contributor_without_avatar)
 
-      Timecop.travel(Time.current + 1.day)
+      Timecop.travel(1.day.from_now)
       visit dashboard_path(as: user)
 
       expect(page).to have_css('svg.Avatar-initials')
@@ -75,7 +75,7 @@ RSpec.describe 'Activity Notifications' do
       expect(page).to have_text("Nachricht an #{contributor_without_avatar.name} wurde verschickt")
       expect(page).to have_text("Thanks for your reply #{contributor_without_avatar.name}!")
 
-      Timecop.travel(Time.current + 5.hours)
+      Timecop.travel(5.hours.from_now)
       visit dashboard_path(as: user)
 
       expect(page).to have_text(
@@ -125,7 +125,7 @@ RSpec.describe 'Activity Notifications' do
       expect(page).to have_text("Nachricht an #{contributor_two.name} wurde verschickt")
       expect(page).to have_text("Thanks for your reply #{contributor_two.name}!")
 
-      Timecop.travel(Time.current + 1.week)
+      Timecop.travel(1.week.from_now)
       visit dashboard_path(as: user)
 
       expect(page).to have_text(
@@ -147,7 +147,6 @@ RSpec.describe 'Activity Notifications' do
 
       expect(page).to have_current_path(contributor_request_path(contributor_two, request))
       expect(page).to have_text("Nachricht an #{contributor_two.name} wurde verschickt")
-
       expect(page).to have_text("This is another chat message to #{contributor_two.name}, but it doesn't count in the dashboard!")
 
       visit dashboard_path(as: user)
@@ -176,7 +175,7 @@ RSpec.describe 'Activity Notifications' do
       expect(page).to have_current_path(contributor_request_path(contributor_two, request))
       expect(page).to have_text("Nachricht an #{contributor_two.name} wurde verschickt")
 
-      Timecop.travel(Time.current + 5.minutes)
+      Timecop.travel(5.minutes.from_now)
       expect(page).to have_text("This is a chat message from #{coworker.name} to #{contributor_two.name}")
 
       visit dashboard_path(as: user)
@@ -190,7 +189,7 @@ RSpec.describe 'Activity Notifications' do
         "#{another_contributor.name} und 2 andere haben auf die Frage „#{request.title}” geantwortet."
       )
 
-      Timecop.travel(Time.current + 4.weeks)
+      Timecop.travel(4.weeks.from_now)
       visit dashboard_path(as: user)
 
       # Empty State
