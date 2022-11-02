@@ -86,4 +86,3 @@ gem 'administrate_exportable'
 gem 'noticed', '~> 1.6'
 
 gem 'shrine', '~> 3.4'
-gem 'trix'

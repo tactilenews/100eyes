@@ -391,8 +391,6 @@ GEM
     thor (1.2.1)
     tilt (2.0.11)
     timecop (0.9.5)
-    trix (0.10.1)
-      rails
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
     unf (0.1.4)
@@ -465,7 +463,6 @@ DEPENDENCIES
   telegram-bot
   threema!
   timecop
-  trix
   tzinfo-data
   valid_email2 (~> 4.0)
   vcr
