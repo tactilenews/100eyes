@@ -6,7 +6,7 @@
 >
 
   <div class="RequestForm-column" data-action="input->request-form#updatePreview">
-    <%= form_with(scope: :request, url: requests_path, local: true) do %>
+    <%= form_with(scope: :request, url: requests_path, local: true, multipart: true) do %>
       <%= c 'stack', space: :large do %>
 
         <%= c 'field', object: @request, attr: :title do |field| %>
@@ -22,6 +22,14 @@
               label: t('.insert_placeholder_button'),
               data: { action: 'click->request-form#insertPlaceholderAtCursor' }
             %>
+            <%= c 'button',
+              style: :secondary,
+              class: 'RequestForm-insertPlaceholderButton',
+              type: 'button',
+              data: { action: 'request-form#insertImage' } do %>
+              <%= field.file_field(:request, :image, data: { request_form_target: 'imageInput', action: 'request-form#showPreview' }) %>
+              Insert image
+            <% end %>
           <% end %>
           <%= c 'textarea', field.input_defaults.merge(
             required: true,
@@ -29,6 +37,7 @@
             highlight_placeholders: true,
             data: { request_form_target: 'message' }
           ) %>
+          <img data-request-form-target="imagePreview" src="#"  hidden width="100" height="100"/>
         <% end %>
 
         <%= c 'field', object: @request, attr: :tag_list do |field| %>

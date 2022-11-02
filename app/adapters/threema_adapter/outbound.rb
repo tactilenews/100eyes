@@ -18,6 +18,7 @@ module ThreemaAdapter
       return unless message.recipient&.threema_id
 
       perform_later(recipient: recipient, text: message.text)
+      perform_later(recipient: recipient, image: "public/#{message.request.image_url}") if message.request.image
     end
 
     def self.welcome_message
@@ -30,8 +31,9 @@ module ThreemaAdapter
       perform_later(text: welcome_message, recipient: contributor)
     end
 
-    def perform(recipient:, text:)
-      self.class.threema_instance.send(type: :text, threema_id: recipient.threema_id.upcase, text: text)
+    def perform(recipient:, text: nil, image: nil)
+      self.class.threema_instance.send(type: :text, threema_id: recipient.threema_id.upcase, text: text) if text
+      self.class.threema_instance.send(type: :image, threema_id: recipient.threema_id.upcase, image: image) if image
     end
   end
 end

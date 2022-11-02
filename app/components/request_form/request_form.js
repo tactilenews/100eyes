@@ -4,7 +4,13 @@ import sanitize from '../../assets/javascript/helpers/sanitize.js';
 import replacePlaceholder from '../../assets/javascript/helpers/replace-placeholder.js';
 
 export default class extends Controller {
-  static targets = ['preview', 'message', 'membersCount'];
+  static targets = [
+    'preview',
+    'message',
+    'membersCount',
+    'imageInput',
+    'imagePreview',
+  ];
   static values = {
     membersCountMessage: String,
     previewFallback: String,
@@ -13,6 +19,7 @@ export default class extends Controller {
   connect() {
     this.updatePreview();
     this.updateMembersCount();
+    this.imageInputTarget.classList.add('hidden');
   }
 
   insertPlaceholderAtCursor() {
@@ -60,5 +67,17 @@ export default class extends Controller {
         this.membersCountTarget.innerHTML = message;
       },
     });
+  }
+
+  insertImage() {
+    console.log('helloo', this.imageInputTarget);
+    this.imageInputTarget.click();
+  }
+
+  showPreview(e) {
+    const file = e.target.files[0];
+    console.log('value', this.imageInputTarget.value);
+    this.imagePreviewTarget.src = URL.createObjectURL(file);
+    this.imagePreviewTarget.hidden = false;
   }
 }

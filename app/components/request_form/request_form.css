@@ -18,3 +18,7 @@
 [data-request-form-target='preview'] {
   white-space: pre-wrap;
 }
+
+input.hidden {
+  display: none;
+}

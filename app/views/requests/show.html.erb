@@ -18,6 +18,9 @@
       <% end %>
     <% end %>
     <%= c 'plaintext_message', message: @request.text, highlight_placeholders: true %>
+    <% if @request.image %>
+      <%= image_tag @request.image_url %>
+    <% end %>
   <% end %>
 
   <%= c 'section', style: :xlargeSpaceBetween do %>
@@ -28,7 +31,6 @@
       <%= c 'empty_state' do %>
         <%= I18n.t 'request.no_replies' %>
       <% end %>
-
     <% else %>
 
       <%= c 'stack' do %>

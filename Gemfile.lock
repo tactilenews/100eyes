@@ -127,6 +127,7 @@ GEM
     cliver (0.3.2)
     coderay (1.1.3)
     concurrent-ruby (1.1.10)
+    content_disposition (1.0.0)
     counter_culture (3.2.1)
       activerecord (>= 4.2)
       activesupport (>= 4.2)
@@ -151,6 +152,8 @@ GEM
     dotenv-rails (2.8.1)
       dotenv (= 2.8.1)
       railties (>= 3.2)
+    down (5.3.1)
+      addressable (~> 2.8)
     email_validator (2.2.3)
       activemodel
     erubi (1.11.0)
@@ -368,6 +371,9 @@ GEM
       sentry-ruby-core (= 5.3.1)
     sentry-ruby-core (5.3.1)
       concurrent-ruby
+    shrine (3.4.0)
+      content_disposition (~> 1.0)
+      down (~> 5.1)
     spring (4.1.0)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
@@ -385,6 +391,8 @@ GEM
     thor (1.2.1)
     tilt (2.0.11)
     timecop (0.9.5)
+    trix (0.10.1)
+      rails
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
     unf (0.1.4)
@@ -451,11 +459,13 @@ DEPENDENCIES
   sentry-delayed_job
   sentry-rails
   sentry-ruby
+  shrine (~> 3.4)
   spring
   spring-commands-rspec
   telegram-bot
   threema!
   timecop
+  trix
   tzinfo-data
   valid_email2 (~> 4.0)
   vcr

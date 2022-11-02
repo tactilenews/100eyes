@@ -13,6 +13,7 @@ class Request < ApplicationRecord
   acts_as_taggable_on :tags
 
   after_create { Request.broadcast!(self) }
+  include ImageUploader::Attachment(:image)
 
   delegate :replies, to: :messages
 
