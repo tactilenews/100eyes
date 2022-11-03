@@ -22,9 +22,26 @@ module TelegramAdapter
       perform_later(text: welcome_message, recipient: contributor)
     end
 
-    def perform(text:, recipient:, message: nil) # rubocop:disable Lint/UnusedMethodArgument
+    def perform(text:, recipient:, message: nil)
+      if message.request.image
+        send_photo(text, recipient.telegram_id, File.open("public/#{message.request.image_url}"))
+      else
+        send_message(recipient.telegram_id, text)
+      end
+    end
+
+    def send_photo(caption, telegram_id, photo)
+      Telegram.bot.send_photo(
+        chat_id: telegram_id,
+        photo: photo,
+        caption: caption,
+        parse_mode: :HTML
+      )
+    end
+
+    def send_message(telegram_id, text)
       Telegram.bot.send_message(
-        chat_id: recipient.telegram_id,
+        chat_id: telegram_id,
         text: text,
         parse_mode: :HTML
       )
