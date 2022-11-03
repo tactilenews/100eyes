@@ -8,7 +8,7 @@ module SignalAdapter
       recipient = message&.recipient
       return unless contributor_can_receive_messages?(recipient)
 
-      perform_later(text: message.text, recipient: recipient)
+      perform_later(message: message, recipient: recipient)
     end
 
     def self.send_welcome_message!(contributor)
@@ -18,7 +18,7 @@ module SignalAdapter
       perform_later(text: welcome_message, recipient: contributor)
     end
 
-    def perform(text:, recipient:)
+    def perform(message:, recipient:)
       url = URI.parse("#{Setting.signal_cli_rest_api_endpoint}/v2/send")
       header = {
         Accept: 'application/json',
@@ -27,8 +27,9 @@ module SignalAdapter
       data = {
         number: Setting.signal_server_phone_number,
         recipients: [recipient.signal_phone_number],
-        message: text
+        message: message.text
       }
+      data.merge!(base64_attachments: [message.request.image.data_uri]) if message.request.image
       req = Net::HTTP::Post.new(url.to_s, header)
       req.body = data.to_json
       res = Net::HTTP.start(url.host, url.port) do |http|
