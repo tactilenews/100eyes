@@ -18,7 +18,7 @@ module ThreemaAdapter
       return unless message.recipient&.threema_id
 
       perform_later(recipient: recipient, text: message.text)
-      perform_later(recipient: recipient, image: "public/#{message.request.image_url}") if message.request.image
+      perform_later(recipient: recipient, image: "storage#{message.request.image_url}") if message.request.image
     end
 
     def self.welcome_message

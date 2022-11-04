@@ -41,7 +41,7 @@ module PostmarkAdapter
       @text = msg.text
       if @msg.request.image
         attachments.inline[@msg.request.image.metadata['filename']] =
-          File.read("public/#{@msg.request.image_url}")
+          File.read("storage#{@msg.request.image_url}")
       end
       if @msg.broadcasted?
         broadcasted_message_email

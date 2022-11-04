@@ -24,7 +24,7 @@ module TelegramAdapter
 
     def perform(text:, recipient:, message: nil)
       if message.request.image
-        send_photo(text, recipient.telegram_id, File.open("public/#{message.request.image_url}"))
+        send_photo(text, recipient.telegram_id, File.open("storage#{message.request.image_url}"))
       else
         send_message(recipient.telegram_id, text)
       end

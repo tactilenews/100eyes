@@ -10,8 +10,8 @@ Shrine.storages = if Rails.env.test?
                     }
                   else
                     {
-                      cache: Shrine::Storage::FileSystem.new('public', prefix: 'uploads/cache'), # temporary
-                      store: Shrine::Storage::FileSystem.new('public', prefix: 'uploads') # permanent
+                      cache: Shrine::Storage::FileSystem.new('storage', prefix: 'uploads/cache'), # temporary
+                      store: Shrine::Storage::FileSystem.new('storage', prefix: 'uploads') # permanent
                     }
                   end
 Shrine.plugin :activerecord # loads Active Record integration
