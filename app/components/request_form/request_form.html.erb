@@ -27,8 +27,8 @@
               class: 'RequestForm-insertPlaceholderButton',
               type: 'button',
               data: { action: 'request-form#insertImage' } do %>
-              <%= field.file_field(:request, :image, data: { request_form_target: 'imageInput', action: 'request-form#showPreview' }) %>
-              Insert image
+              <%= field.file_field(:request, :image, data: { request_form_target: 'imageInput', action: 'request-form#updatePreview' }) %>
+              <%= t('.attach_image_to_message') %>
             <% end %>
           <% end %>
           <%= c 'textarea', field.input_defaults.merge(
@@ -37,7 +37,6 @@
             highlight_placeholders: true,
             data: { request_form_target: 'message' }
           ) %>
-          <img data-request-form-target="imagePreview" src="#"  hidden width="100" height="100"/>
         <% end %>
 
         <%= c 'field', object: @request, attr: :tag_list do |field| %>

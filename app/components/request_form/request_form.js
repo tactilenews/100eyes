@@ -34,12 +34,22 @@ export default class extends Controller {
     this.messageTarget.focus();
   }
 
-  updatePreview() {
+  updatePreview(event) {
     const placeholder = 'VORNAME';
     let message = sanitize(this.messageTarget.value);
     message = message || this.previewFallbackValue;
     message = replacePlaceholder(message, placeholder, 'Max');
     this.previewTarget.innerHTML = message;
+    if(event && event.target.files) {
+      const file = event.target.files[0];
+      const img = document.createElement('img');
+      img.setAttribute('src', URL.createObjectURL(file));
+      img.setAttribute('width', 75);
+      img.setAttribute('width', 75);
+      img.setAttribute('id', 'preview-image')
+      const previewImage = document.getElementById('preview-image')
+      if (!previewImage) this.previewTarget.parentNode.parentNode.appendChild(img)
+    }
   }
 
   updateMembersCount(event) {
@@ -70,13 +80,11 @@ export default class extends Controller {
   }
 
   insertImage() {
-    console.log('helloo', this.imageInputTarget);
     this.imageInputTarget.click();
   }
 
-  showPreview(e) {
-    const file = e.target.files[0];
-    console.log('value', this.imageInputTarget.value);
+  showPreview(event) {
+    const file = event.target.files[0];
     this.imagePreviewTarget.src = URL.createObjectURL(file);
     this.imagePreviewTarget.hidden = false;
   }
