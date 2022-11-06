@@ -11,29 +11,15 @@
   box-shadow: var(--input-focus-shadow);
 }
 
-.ChatMessage-text {
+.ChatMessage-header {
+  display: flex;
+  margin-bottom: var(--spacing-unit-s);
   position: relative;
 }
 
-.ChatMessage-senderSection {
-  display: flex;
-  margin-bottom: var(--spacing-unit-s);
-  margin-top: var(--spacing-unit-xs);
-}
-
-.ChatMessage-senderSection > * + * {
-  margin-left: var(--spacing-unit-xs);
-  margin-top: calc(-1 * var(--spacing-unit-xs) / 2);
-}
-
-.ChatMessage-senderSectionHeader {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-
-.ChatMessage-senderSectionHeading {
-  line-height: initial;
+.ChatMessage-avatar {
+  flex-shrink: 0;
+  margin-right: var(--spacing-unit-s);
 }
 
 .ChatMessage--compact:not(.ChatMessage--expanded) .ChatMessage-text {
@@ -76,14 +62,17 @@
   width: 5em;
 }
 
-.ChatMessage-updatedAt,
+.ChatMessage-senderNameMessageUpdatedAt,
 .ChatMessage-meta {
   color: var(--color-text-light);
-  font-size: var(--font-size-s);
 }
 
 .ChatMessage-meta > * + * {
   display: inline-block;
+  margin-left: var(--spacing-unit-s);
+}
+
+.ChatMessage-senderNameMessageUpdatedAt {
   margin-left: var(--spacing-unit-s);
 }
 

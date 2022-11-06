@@ -16,11 +16,15 @@ export default class extends Controller {
       this.collapse();
     }
 
-    this.setCopyValue();
+    if (!this.hasTextTarget) {
+      this.setCopyValue();
+    }
   }
 
   isTruncated() {
-    return this.textTarget.clientHeight < this.textTarget.scrollHeight;
+    if (this.hasTextTarget) {
+      return this.textTarget.clientHeight < this.textTarget.scrollHeight;
+    }
   }
 
   isExpanded() {
@@ -55,7 +59,8 @@ export default class extends Controller {
       copyValue = text;
     }
 
-    this.copyButtonTarget.dataset.copyButtonCopyValue = copyValue;
+    if (this.hasCopyButtonTarget)
+      this.copyButtonTarget.dataset.copyButtonCopyValue = copyValue;
   }
 
   isHighlighted() {

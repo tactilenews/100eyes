@@ -19,6 +19,7 @@ de:
       blocked_by_contributor: wurde von diesem Mitglied blockiert
       created_by: Manuell hinzugefügt von %{name}
       anonymous_creator: anonymer User
+      sent_by_x_at: "%{name} am <time>%{date}</time>"
     chat_messages_group:
       reply: nachfragen
       add_message: Antwort manuell hinzufügen

@@ -1,4 +1,4 @@
-<div
+<article
   class="<%= class_attr %>"
   data-controller="chat-message"
   data-chat-message-id-value="<%= message.id %>"
@@ -8,66 +8,79 @@
   data-chat-message-highlighted-class="ChatMessage--highlighted"
   id="<%= id %>"
 >
-    <div class="ChatMessage-text">
-      <section class="ChatMessage-senderSection">
+    <% if message.text.present? %>
+      <header class="ChatMessage-header">
         <% if message.sender %>
-          <%= c 'avatar', record: message.sender, style: :small %>
-          <header class="ChatMessage-senderSectionHeader">
-            <%= c 'heading', tag: :h3, class: 'ChatMessage-senderSectionHeading' do %>
-              <%= message.sender.name %>
-            <% end %>
-            <time class="ChatMessage-updatedAt"><%= date_time(message.updated_at) %></time>
-          </header>
+          <%= c 'avatar', record: message.sender, style: :small, class: "ChatMessage-avatar" %>
         <% else %>
-          <%= c 'avatar', style: :small %>
-          <header class="ChatMessage-senderSectionHeader">
-            <%= c 'heading', tag: :h3, class: 'ChatMessage-senderSectionHeading' do %>
-              <%= Setting.project_name %>
+          <%= c 'avatar', style: :small, class: "ChatMessage-avatar" %>
+        <% end %>
+        <div class="ChatMessage-text">
+          <%= c 'plaintext_message',
+            message: message.text,
+            data: { chat_message_target: :text }
+          %>
+
+          <div class="ChatMessage-toggleExpanded">
+            <%= c('button',
+              styles: [:inline],
+              data: {
+                action: 'click->chat-message#toggleExpanded',
+                chat_message_target: 'toggleExpanded',
+              }
+            ) do %>
+              <span class="ChatMessage-expand">
+                <%= I18n.t('components.chat_message.expand') %>
+                <%= c 'icon', icon: 'small-down', styles: [:inline] %>
+              </span>
+              <span class="ChatMessage-collapse">
+                <%= I18n.t('components.chat_message.collapse') %>
+                <%= c 'icon', icon: 'small-up', styles: [:inline] %>
+              </span>
             <% end %>
-            <time class="ChatMessage-updatedAt"><%= date_time(message.updated_at) %></time>
-          </header>
-        <% end %>
-      </section>
-
-      <%= c 'plaintext_message',
-        message: message.text,
-        data: { chat_message_target: :text }
-      %>
-
-      <div class="ChatMessage-toggleExpanded">
-        <%= c('button',
-          styles: [:inline],
-          data: {
-            action: 'click->chat-message#toggleExpanded',
-            chat_message_target: 'toggleExpanded',
-          }
-        ) do %>
-          <span class="ChatMessage-expand">
-            <%= I18n.t('components.chat_message.expand') %>
-            <%= c 'icon', icon: 'small-down', styles: [:inline] %>
-          </span>
-          <span class="ChatMessage-collapse">
-            <%= I18n.t('components.chat_message.collapse') %>
-            <%= c 'icon', icon: 'small-up', styles: [:inline] %>
-          </span>
-        <% end %>
-      </div>
-    </div>
+          </div>
+        </div>
+      </header>
+    <% end %>
 
     <% unless photos.empty? %>
-      <%= c 'chat_message_photos', photos: photos %>
+      <header class="ChatMessage-header">
+        <% if message.sender %>
+          <%= c 'avatar', record: message.sender, style: :small, class: "ChatMessage-avatar" %>
+        <% else %>
+          <%= c 'avatar', style: :small, class: "ChatMessage-avatar" %>
+        <% end %>
+        <%= c 'chat_message_photos', photos: photos %>
+      </header>
     <% end %>
 
     <% if image? %>
-      <%= c 'chat_message_photos', photos: files %>
+      <header class="ChatMessage-header">
+        <% if message.sender %>
+          <%= c 'avatar', record: message.sender, style: :small, class: "ChatMessage-avatar" %>
+        <% else %>
+          <%= c 'avatar', style: :small, class: "ChatMessage-avatar" %>
+        <% end %>
+        <%= c 'chat_message_photos', photos: files %>
+      </header>
     <% end %>
 
     <% if audio? %>
-      <%= c 'chat_message_audio', audio: audio %>
+      <header class="ChatMessage-header">
+        <% if message.sender %>
+          <%= c 'avatar', record: message.sender, style: :small, class: "ChatMessage-avatar" %>
+        <% else %>
+          <%= c 'avatar', style: :small, class: "ChatMessage-avatar" %>
+        <% end %>
+        <%= c 'chat_message_audio', audio: audio %>
+      </header>
     <% end %>
 
-    <div class="ChatMessage-meta">
-      <% unless hide_actions %>
+    <footer class="ChatMessage-meta">
+      <p class="ChatMessage-senderNameMessageUpdatedAt">
+        <%= t('.sent_by_x_at', name: message.sender ? message.sender.first_name : Setting.project_name, date: date_time(message.updated_at)).html_safe %>
+      </p>
+      <% unless hide_actions || !message.reply? %>
         <%= c 'copy_button',
           label: I18n.t('components.chat_message.copy'),
           style: :inline,
@@ -94,7 +107,7 @@
         <% end %>
         
       <% end %>
-    </div>
+    </footer>
 
     <div class="ChatMessage-meta">
       <% if message.manually_created? %>
@@ -116,4 +129,4 @@
         <% end %>
       </div>
     <% end %>
-</div>
+</article>
