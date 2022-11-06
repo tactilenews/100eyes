@@ -20,5 +20,11 @@ RSpec.describe 'Dashboard' do
 
     # CommunityMetrics section
     expect(page).to have_css('section.CommunityMetrics')
+
+    # DayAndTimeActivityHeatmap section
+    expect(page).to have_css('section.DayAndTimeActivityHeatmap')
+
+    # DayActivityLinechart section
+    expect(page).to have_css('section.DayActivityLinechart')
   end
 end

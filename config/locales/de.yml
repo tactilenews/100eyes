@@ -273,6 +273,10 @@ de:
       replies:
         one: empfangene Nachricht
         other: empfangene Nachrichten
+    day_and_time_activity_heatmap:
+      heading: Aktivität deiner Community
+    day_activity_linechart:
+      heading: Deine besten Dialogtage
 
   mailer:
     unsubscribe:
@@ -746,3 +750,6 @@ de:
         two: "<strong>Du</strong> hast <strong>%{contributor_one}</strong> und <strong>%{contributor_two}</strong> auf die Frage <strong>„%{request_title}”</strong> geantwortet."
         other: "<strong>Du</strong> hast <strong>%{contributor_one}</strong> und %{others_count} anderen auf die Frage <strong>„%{request_title}”</strong> geantwortet."
       link_text: "Zur Nachricht"
+  shared:
+    community: Community
+    editorial: Redaktion

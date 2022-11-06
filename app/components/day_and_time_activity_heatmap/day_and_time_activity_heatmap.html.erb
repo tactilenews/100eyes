@@ -1,0 +1,33 @@
+<%= c 'section',
+   styles: [:wide, :largeBottomMargin],
+   **attrs,
+   data: { controller: 'day-and-time-activity-heatmap',
+           day_and_time_activity_heatmap_replies_chart_url_value: 'charts/day-and-time-replies',
+           day_and_time_activity_heatmap_requests_chart_url_value: 'charts/day-and-time-requests',
+           day_and_time_activity_heatmap_active_class: 'DayAndTimeActivityHeatmap-tabBarItem--active'
+         } do %>
+  <%= c 'heading', style: :beta do %>
+    <%= t '.heading' %>
+  <% end %>
+
+  <div class="DayAndTimeActivityHeatmap-tabBar">
+    <button
+      data-action="day-and-time-activity-heatmap#renderRepliesHeatmap"
+      data-day-and-time-activity-heatmap-target="repliesButton"
+      class="DayAndTimeActivityHeatmap-tabBarItem"
+    >
+      <%= t 'shared.community' %>
+    </button>
+    <button
+      data-action="day-and-time-activity-heatmap#renderRequestsHeatmap"
+      data-day-and-time-activity-heatmap-target="requestsButton"
+      class="DayAndTimeActivityHeatmap-tabBarItem"
+    >
+      <%= t 'shared.editorial' %>
+    </button>
+  </div>
+  <div
+    data-day-and-time-activity-heatmap-target="heatmap"
+    class="DayAndTimeActivityHeatmap-chart"
+  ></div>
+<% end %>
