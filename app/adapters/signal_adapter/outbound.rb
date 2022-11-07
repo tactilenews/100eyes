@@ -29,7 +29,10 @@ module SignalAdapter
         recipients: [recipient.signal_phone_number],
         message: message.text
       }
-      data.merge!(base64_attachments: [message.request.image.data_uri]) if message.request.image
+      if message.request.image.attached?
+        data.merge!(base64_attachments: [Base64.encode64(File.open(ActiveStorage::Blob.service.path_for(message.request.image.blob.key),
+                                                                   'rb').read)])
+      end
       req = Net::HTTP::Post.new(url.to_s, header)
       req.body = data.to_json
       res = Net::HTTP.start(url.host, url.port) do |http|

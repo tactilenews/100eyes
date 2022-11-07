@@ -39,9 +39,9 @@ module PostmarkAdapter
     def message_email
       @msg = params[:message]
       @text = msg.text
-      if @msg.request.image
-        attachments.inline[@msg.request.image.metadata['filename']] =
-          File.read("storage#{@msg.request.image_url}")
+      if @msg.request.image.attached?
+        attachments.inline[@msg.request.image.filename.to_s] =
+          File.read(ActiveStorage::Blob.service.path_for(@msg.request.image.blob.key))
       end
       if @msg.broadcasted?
         broadcasted_message_email

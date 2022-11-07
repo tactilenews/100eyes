@@ -23,8 +23,8 @@ module TelegramAdapter
     end
 
     def perform(text:, recipient:, message: nil)
-      if message.request.image
-        send_photo(text, recipient.telegram_id, File.open("storage#{message.request.image_url}"))
+      if message.request.image.attached?
+        send_photo(text, recipient.telegram_id, File.open(ActiveStorage::Blob.service.path_for(message.request.image.blob.key)))
       else
         send_message(recipient.telegram_id, text)
       end

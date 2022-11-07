@@ -67,7 +67,7 @@ gem 'rack-attack', '~> 6.6'
 # Channel adapters
 gem 'postmark-rails'
 gem 'telegram-bot'
-gem 'threema', git: 'https://github.com/threemarb/threema.git', branch: 'master'
+gem 'threema', github: 'tactilenews/threema', branch: 'avoid_detecting_mime_type_by_extenstion'
 
 # User management
 gem 'active_model_otp'
@@ -84,5 +84,3 @@ gem 'administrate'
 gem 'administrate_exportable'
 
 gem 'noticed', '~> 1.6'
-
-gem 'shrine', '~> 3.4'

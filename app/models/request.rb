@@ -9,11 +9,11 @@ class Request < ApplicationRecord
   has_many :photos, through: :messages
   default_scope { order(created_at: :desc) }
   has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
+  has_one_attached :image
 
   acts_as_taggable_on :tags
 
   after_create { Request.broadcast!(self) }
-  include ImageUploader::Attachment(:image)
 
   delegate :replies, to: :messages
 

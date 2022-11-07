@@ -18,7 +18,11 @@ module ThreemaAdapter
       return unless message.recipient&.threema_id
 
       perform_later(recipient: recipient, text: message.text)
-      perform_later(recipient: recipient, image: "storage#{message.request.image_url}") if message.request.image
+
+      return unless message.request.image.attached?
+
+      perform_later(recipient: recipient,
+                    image: ActiveStorage::Blob.service.path_for(message.request.image.blob.key))
     end
 
     def self.welcome_message
