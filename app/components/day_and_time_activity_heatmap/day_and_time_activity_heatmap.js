@@ -43,6 +43,27 @@ export default class extends Controller {
         type: 'heatmap',
       },
       series: jsonResponse,
+      tooltip: {
+        custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+          return (
+            '<div>' +
+            '<span>' +
+            w.globals.seriesNames[seriesIndex] +
+            ', ' +
+            w.globals.labels[dataPointIndex].slice(0, 2) +
+            '-' +
+            (Number(w.globals.labels[dataPointIndex].slice(0, 2)) + 1 == 24
+              ? 0
+              : Number(w.globals.labels[dataPointIndex].slice(0, 2)) + 1
+            ).toLocaleString('de', { minimumIntegerDigits: 2 }) +
+            ' Uhr: ' +
+            series[seriesIndex][dataPointIndex] +
+            ' Interaktionen' +
+            '</span>' +
+            '</div>'
+          );
+        },
+      },
       xaxis: {
         labels: {
           ...fontStyles,
