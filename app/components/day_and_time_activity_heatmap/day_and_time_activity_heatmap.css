@@ -30,3 +30,8 @@
 .DayAndTimeActivityHeatmap-chart {
   height: 39rem;
 }
+
+.DayAndTimeActivityHeatmap-chart .apexcharts-tooltip {
+  font-size: var(--font-size-s);
+  padding: var(--spacing-unit-xs);
+}
