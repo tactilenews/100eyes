@@ -1,7 +1,3 @@
-.ChatMessages-item {
-  display: flex;
-}
-
 .ChatMessages-item--left {
   padding-right: 20%;
 }

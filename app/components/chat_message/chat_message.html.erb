@@ -44,25 +44,33 @@
     <% end %>
 
     <% unless photos.empty? %>
-      <header class="ChatMessage-header">
-        <% if message.sender %>
-          <%= c 'avatar', record: message.sender, style: :small, class: "ChatMessage-avatar" %>
-        <% else %>
-          <%= c 'avatar', style: :small, class: "ChatMessage-avatar" %>
-        <% end %>
-        <%= c 'chat_message_photos', photos: photos %>
-      </header>
+      <% if message.text.blank? %>
+        <header class="ChatMessage-header">
+          <% if message.sender %>
+            <%= c 'avatar', record: message.sender, style: :small, class: "ChatMessage-avatar" %>
+          <% else %>
+            <%= c 'avatar', style: :small, class: "ChatMessage-avatar" %>
+          <% end %>
+          <%= c 'chat_message_photos', photos: photos %>
+        </header>
+      <% else %>
+          <%= c 'chat_message_photos', photos: photos %>
+      <% end %>
     <% end %>
 
     <% if image? %>
-      <header class="ChatMessage-header">
-        <% if message.sender %>
-          <%= c 'avatar', record: message.sender, style: :small, class: "ChatMessage-avatar" %>
-        <% else %>
-          <%= c 'avatar', style: :small, class: "ChatMessage-avatar" %>
-        <% end %>
+      <% if message.text.blank? %>
+        <header class="ChatMessage-header">
+          <% if message.sender %>
+            <%= c 'avatar', record: message.sender, style: :small, class: "ChatMessage-avatar" %>
+          <% else %>
+            <%= c 'avatar', style: :small, class: "ChatMessage-avatar" %>
+          <% end %>
+          <%= c 'chat_message_photos', photos: files %>
+        </header>
+      <% else %>
         <%= c 'chat_message_photos', photos: files %>
-      </header>
+      <% end %>
     <% end %>
 
     <% if audio? %>
@@ -76,7 +84,7 @@
       </header>
     <% end %>
 
-    <footer class="ChatMessage-meta">
+    <footer class="ChatMessage-footer">
       <p class="ChatMessage-senderNameMessageUpdatedAt">
         <%= t('.sent_by_x_at', name: message.sender ? message.sender.first_name : Setting.project_name, date: date_time(message.updated_at)).html_safe %>
       </p>
@@ -109,18 +117,18 @@
       <% end %>
     </footer>
 
-    <div class="ChatMessage-meta">
-      <% if message.manually_created? %>
+    <% if message.manually_created? %>
+      <div class="ChatMessage-footer">
         <%= I18n.t('components.chat_message.created_by', name: creator_name) %>
         ·
         <span class="ChatMessage-edit">
           <%= link_to I18n.t('components.chat_message.edit'), edit_message_path(message) %>
         </span>
-      <% end %>
-    </div>
+      </div>
+    <% end %>
 
     <% if warnings.any? %>
-      <div class="ChatMessage-meta ChatMessage-warnings">
+      <div class="ChatMessage-footer ChatMessage-warnings">
         <% warnings.each do |warning| %>
           <span>
             <%= c 'icon', icon: 't-warning', style: :inline %>

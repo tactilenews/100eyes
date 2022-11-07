@@ -365,6 +365,8 @@ de:
       threema_unknown_content_message:
         label: Fehler-Nachricht bei unbekannten Inhalten
         help: Wenn ein Mitglied via Threema Nachrichten versendet, die von 100eyes noch nicht unterstützt werden, erhält es diese Nachricht.
+      channel_image:
+        label: Avatar für Messenger
   settings:
     header: Einstellungen
     success: Einstellungen erfolgreich gespeichert!

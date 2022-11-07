@@ -65,6 +65,12 @@
       <%= c('settings_field', type: :textarea, attr: :threema_unknown_content_message) %>
     <% end %>
 
+    <% if current_user.admin? %>
+      <%= c 'stack' do %>
+        <%= c('settings_field', type: :image_input, attr: :channel_image) %>
+      <% end %>
+    <% end %>
+
     <%= c 'submit_button', label: t('save') %>
   <% end %>
 <% end %>

@@ -24,7 +24,8 @@ class SettingsController < ApplicationController
   def settings_files_params
     params.require(:setting).permit(
       :onboarding_logo,
-      :onboarding_hero
+      :onboarding_hero,
+      :channel_image
     )
   end
 
@@ -47,7 +48,7 @@ class SettingsController < ApplicationController
       :signal_unknown_content_message,
       :telegram_unknown_content_message,
       :telegram_contributor_not_found_message,
-      :threema_unknown_content_message
+      :threema_unknown_content_message,
     )
   end
 end

@@ -20,18 +20,16 @@ module Avatar
     end
 
     def editorial_logo?
-      record.is_a?(User) && Setting.onboarding_logo.present?
+      record.is_a?(User) && Setting.channel_image.present?
     end
 
     def editorial_logo
-      Setting.onboarding_logo
+      Setting.channel_image
     end
 
     def url
       thumbnail = if record_avatar?
                     record_avatar.variant(resize_to_fit: [200, 200])
-                  elsif editorial_logo.image? && editorial_logo.variable?
-                    editorial_logo.variant(resize_to_fit: [200, 200])
                   else
                     editorial_logo
                   end
