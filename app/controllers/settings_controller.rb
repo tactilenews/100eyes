@@ -48,7 +48,7 @@ class SettingsController < ApplicationController
       :signal_unknown_content_message,
       :telegram_unknown_content_message,
       :telegram_contributor_not_found_message,
-      :threema_unknown_content_message,
+      :threema_unknown_content_message
     )
   end
 end
