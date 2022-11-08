@@ -9,11 +9,11 @@
     %>
   <% end %>
 
-  <%= c 'section', style: :wide, class: 'ActivityNotifications' do %>
+  <%= c 'section', styles: [:wide, :largeBottomMargin], class: 'ActivityNotifications' do %>
     <%= c 'activity_notifications', activity_notifications: @activity_notifications %>
   <% end %>
 
-  <%= c 'section', style: :wide, class: 'CommunityMetrics' do %>
+  <%= c 'section', styles: [:wide, :largeBottomMargin], class: 'CommunityMetrics' do %>
     <%= c 'community_metrics',
       active_contributors_count: @active_contributors_count,
       requests_count: @requests_count,
@@ -21,4 +21,7 @@
       style: :cards
     %>
   <% end %>
+
+  <%= c 'day_and_time_activity_heatmap' %>
+  <%= c 'day_activity_linechart' %>
 <% end %>

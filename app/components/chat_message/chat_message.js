@@ -66,7 +66,7 @@ export default class extends Controller {
   }
 
   setCopyUrlValue() {
-    this.copyButtonTarget.dataset.copyButtonCopyValue = this.copyUrlValue
+    this.copyButtonTarget.dataset.copyButtonCopyValue = this.copyUrlValue;
   }
 
   isHighlighted() {

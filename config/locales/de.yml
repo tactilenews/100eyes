@@ -274,6 +274,10 @@ de:
       replies:
         one: empfangene Nachricht
         other: empfangene Nachrichten
+    day_and_time_activity_heatmap:
+      heading: Aktivität deiner Community
+    day_activity_linechart:
+      heading: Deine besten Dialogtage
 
   mailer:
     unsubscribe:
@@ -391,6 +395,7 @@ de:
     has_replied_to: hat auf „%{title}” geantwortet
     saved: Informationen zu %{name} gespeichert
     invalid: Informationen zu %{name} sind ungültig
+    destroyed: Contributor %{name} wurde erfolgreich gelöscht.
     message-send: Nachricht an %{name} wurde verschickt
     skip_to_profile: Zum Profil springen
     form:
@@ -412,8 +417,9 @@ de:
         label: Handynummer
       threema_id:
         label: Threema ID
-        help: 6 Zeichen lang, besteht nur aus Zahlen und Großbuchstaben
+        help: 8 Zeichen lang, besteht nur aus Zahlen und Großbuchstaben
         placeholder: z.B. A12BC345
+        invalid: Threema ID ist ungültig, bitte überprüfen.
       username:
         label: Telegram
         placeholder: Kein Telegram-Nutzername hinterlegt
@@ -530,13 +536,13 @@ de:
     - Nov
     - Dez
     day_names:
-    - Sonntag
     - Montag
     - Dienstag
     - Mittwoch
     - Donnerstag
     - Freitag
     - Samstag
+    - Sonntag
     formats:
       default: "%d.%m.%Y"
       long: "%e. %B %Y"
@@ -747,3 +753,6 @@ de:
         two: "<strong>Du</strong> hast <strong>%{contributor_one}</strong> und <strong>%{contributor_two}</strong> auf die Frage <strong>„%{request_title}”</strong> geantwortet."
         other: "<strong>Du</strong> hast <strong>%{contributor_one}</strong> und %{others_count} anderen auf die Frage <strong>„%{request_title}”</strong> geantwortet."
       link_text: "Zur Nachricht"
+  shared:
+    community: Community
+    editorial: Redaktion

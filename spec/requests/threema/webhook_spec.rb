@@ -34,7 +34,7 @@ RSpec.describe Threema::WebhookController do
     end
 
     context 'With known contributor' do
-      let!(:contributor) { create(:contributor, threema_id: 'V5EA564T') }
+      let!(:contributor) { build(:contributor, threema_id: 'V5EA564T').tap { |contributor| contributor.save(validate: false) } }
       let!(:request) { create(:request) }
 
       before do

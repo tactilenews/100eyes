@@ -8,6 +8,13 @@ RSpec.describe 'Onboarding::Threema', type: :request do
   let(:additional_consent) { true }
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
   let(:params) { { jwt: jwt } }
+  let(:threema) { instance_double(Threema) }
+  let(:threema_lookup_double) { instance_double(Threema::Lookup) }
+  before do
+    allow(Threema).to receive(:new).and_return(threema)
+    allow(Threema::Lookup).to receive(:new).with({ threema: threema }).and_return(threema_lookup_double)
+    allow(threema_lookup_double).to receive(:key).and_return('PUBLIC_KEY_HEX_ENCODED')
+  end
 
   describe 'POST /onboarding/threema' do
     let(:attrs) do
@@ -56,6 +63,29 @@ RSpec.describe 'Onboarding::Threema', type: :request do
 
     context 'creates an ActivityNotification' do
       it_behaves_like 'an ActivityNotification', 'OnboardingCompleted'
+    end
+
+    context 'given an invalid Threema ID' do
+      before do
+        allow(threema_lookup_double).to receive(:key).and_return(nil)
+      end
+
+      it 'displays validation errors' do
+        subject.call
+        parsed = Capybara::Node::Simple.new(response.body)
+        fields = parsed.all('.Field')
+        threema_id_field = fields.find { |f| f.has_text? 'Threema ID' }
+        expect(threema_id_field).to have_text('Threema ID ist ungültig, bitte überprüfen.')
+      end
+
+      it 'does not create new contributor' do
+        expect { subject.call }.not_to change(Contributor, :count)
+      end
+
+      it 'has 422 status code' do
+        subject.call
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
     end
 
     describe 'given an existing threema ID' do

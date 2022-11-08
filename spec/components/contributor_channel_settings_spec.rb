@@ -5,7 +5,9 @@ require 'rails_helper'
 RSpec.describe ContributorChannelSettings::ContributorChannelSettings, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
-  let(:contributor) { create(:contributor, email: nil, **attrs) }
+  let(:contributor) do
+    build(:contributor, email: nil, **attrs).tap { |contributor| contributor.save(validate: false) }
+  end
   let(:attrs) { {} }
   let(:params) { { contributor: contributor } }
 

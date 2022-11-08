@@ -9,9 +9,10 @@
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.1.0",
-    "@hotwired/turbo": "^7.1.0",
+    "@hotwired/turbo": "^7.2.2",
     "@rails/ujs": "^6.1.5",
     "@yaireo/tagify": "^3.25.0",
+    "apexcharts": "^3.35.5",
     "clipboard-polyfill": "^3.0.3",
     "dialog-polyfill": "^0.5.6"
   },
