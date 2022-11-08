@@ -6,6 +6,7 @@
   data-chat-message-truncated-class="ChatMessage--truncated"
   data-chat-message-expanded-class="ChatMessage--expanded"
   data-chat-message-highlighted-class="ChatMessage--highlighted"
+  data-chat-message-copy-url-value="<%= request_url(message.request, anchor: id) %>"
   id="<%= id %>"
 >
     <% if message.text.present? %>
@@ -88,7 +89,7 @@
       <p class="ChatMessage-senderNameMessageUpdatedAt">
         <%= t('.sent_by_x_at', name: message.sender ? message.sender.first_name : Setting.project_name, date: date_time(message.updated_at)).html_safe %>
       </p>
-      <% unless hide_actions || !message.reply? %>
+      <% unless hide_actions %>
         <%= c 'copy_button',
           label: I18n.t('components.chat_message.copy'),
           style: :inline,

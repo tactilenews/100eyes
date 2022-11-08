@@ -8,6 +8,7 @@ export default class extends Controller {
   static values = {
     senderName: String,
     id: String,
+    copyUrl: String,
   };
 
   connect() {
@@ -16,8 +17,10 @@ export default class extends Controller {
       this.collapse();
     }
 
-    if (!this.hasTextTarget) {
+    if (this.hasTextTarget) {
       this.setCopyValue();
+    } else {
+      this.setCopyUrlValue();
     }
   }
 
@@ -59,8 +62,11 @@ export default class extends Controller {
       copyValue = text;
     }
 
-    if (this.hasCopyButtonTarget)
-      this.copyButtonTarget.dataset.copyButtonCopyValue = copyValue;
+    this.copyButtonTarget.dataset.copyButtonCopyValue = copyValue;
+  }
+
+  setCopyUrlValue() {
+    this.copyButtonTarget.dataset.copyButtonCopyValue = this.copyUrlValue
   }
 
   isHighlighted() {
