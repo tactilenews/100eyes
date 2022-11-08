@@ -75,4 +75,5 @@ class Setting < RailsSettings::Base
 
   field :mailserver_host, readonly: true, default: ENV['MAILSERVER_HOST'] || 'localhost'
   field :mailserver_port, readonly: true, default: ENV['MAILSERVER_PORT'] || 1025
+  field :channel_image
 end

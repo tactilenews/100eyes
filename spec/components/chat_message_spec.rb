@@ -58,7 +58,7 @@ RSpec.describe ChatMessage::ChatMessage, type: :component do
   end
 
   describe '.creator_name' do
-    subject { component.css('.ChatMessage-meta') }
+    subject { component.css('.ChatMessage-footer') }
 
     context 'given a manually created message' do
       let(:message) { create(:message, creator: create(:user, first_name: 'Princess', last_name: 'Mononoke')) }

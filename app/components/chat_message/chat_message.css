@@ -1,7 +1,7 @@
 .ChatMessage {
   --background: var(--color-gray-light);
   background-color: var(--background);
-  padding: calc(1 / 3 * var(--spacing-unit)) var(--spacing-unit-s);
+  padding: var(--spacing-unit-s);
   border-radius: var(--border-radius-l);
   border: 1px solid transparent;
 }
@@ -11,8 +11,14 @@
   box-shadow: var(--input-focus-shadow);
 }
 
-.ChatMessage-text {
+.ChatMessage-header {
+  display: flex;
   position: relative;
+}
+
+.ChatMessage-avatar {
+  flex-shrink: 0;
+  margin-right: var(--spacing-unit-s);
 }
 
 .ChatMessage--compact:not(.ChatMessage--expanded) .ChatMessage-text {
@@ -55,17 +61,17 @@
   width: 5em;
 }
 
-.ChatMessage-meta {
+.ChatMessage-footer {
+  margin-top: var(--spacing-unit-s);
   color: var(--color-text-light);
-  font-size: var(--font-size-s);
 }
 
-.ChatMessage-meta > * + * {
+.ChatMessage-footer .Button:nth-child(n + 3) {
   display: inline-block;
   margin-left: var(--spacing-unit-s);
 }
 
-.ChatMessage-meta .ChatMessage-edit:hover {
+.ChatMessage-footer .ChatMessage-edit:hover {
   text-decoration: underline;
 }
 
@@ -79,7 +85,7 @@
   border-color: var(--color-yellow-light);
 }
 
-.ChatMessage--highlighted .ChatMessage-meta:not(.ChatMessage-warnings) {
+.ChatMessage--highlighted .ChatMessage-footer:not(.ChatMessage-warnings) {
   color: var(--color-yellow-dark);
 }
 

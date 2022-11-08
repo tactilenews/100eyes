@@ -59,7 +59,7 @@ class Message < ApplicationRecord
     Rails.application.routes.url_helpers.contributor_request_path(
       contributor,
       request,
-      anchor: "chat-row-#{id}"
+      anchor: "message-#{id}"
     )
   end
 

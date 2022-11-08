@@ -9,7 +9,6 @@
 
 .ActivityNotifications-listItem {
   display: flex;
-  align-items: center;
   margin-bottom: var(--spacing-unit-s);
 }
 
