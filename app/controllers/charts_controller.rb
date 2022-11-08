@@ -2,14 +2,14 @@
 
 class ChartsController < ApplicationController
   def day_and_time_replies
-    series = t('date.day_names').reverse.map do |day|
+    series = t('date.day_names').reverse.rotate(-1).map do |day|
       { name: day, data: day_and_time_data(joined_inbound(%i[day_of_week hour_of_day]), day) }
     end
     render json: series
   end
 
   def day_and_time_requests
-    series = t('date.day_names').reverse.map do |day|
+    series = t('date.day_names').rotate(-1).reverse.map do |day|
       { name: day, data: day_and_time_data(joined_outbound(%i[day_of_week hour_of_day]), day) }
     end
     render json: series
@@ -38,7 +38,7 @@ class ChartsController < ApplicationController
   end
 
   def group_messages(messages, group_keys)
-    messages = messages.group_by_day_of_week(:created_at, format: '%A') if group_keys.include?(:day_of_week)
+    messages = messages.group_by_day_of_week(:created_at, format: '%A', week_start: :monday) if group_keys.include?(:day_of_week)
     return messages unless group_keys.include?(:hour_of_day)
 
     messages.group_by_hour_of_day(:created_at, format: '%H:%M')
