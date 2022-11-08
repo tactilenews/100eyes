@@ -47,7 +47,7 @@ export default class extends Controller {
       stroke: {
         curve: 'smooth',
       },
-      colors: ['#67D881', '#F4177A'],
+      colors: ['#0898FF', '#F4177A'],
       legend: {
         ...fontStyles.style,
         position: 'bottom',
