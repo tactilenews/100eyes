@@ -7,11 +7,17 @@ const tagColor = tagData => {
 };
 
 function tagTemplate(tagData) {
-  const color = tagColor(tagData);
-
   // This is a simplified copy of the default template that ships with
   // Tagify. The main difference is that tag names are sanitized before
   // being rendered.
+
+  const color = tagColor(tagData);
+
+  // `tagData.name` is an unsanitized tag name from our database.
+  // `tagData.value` is provided by Tagify and has already been sanitized.
+  // https://github.com/yairEO/tagify/blob/8a9efbd680dc05f3f398bf91025f949a69551fbf/src/tagify.js#L1443
+  const label = sanitize(tagData.name) || tagData.value;
+
   return `
     <tag
       tabIndex="-1"
@@ -25,9 +31,7 @@ function tagTemplate(tagData) {
         aria-label="remove tag"
       ></x>
       <div>
-        <span class="tagify__tag-text">${
-          sanitize(tagData.name) || sanitize(tagData.value)
-        }</span>
+        <span class="tagify__tag-text">${label}</span>
       </div>
     </tag>
   `;
