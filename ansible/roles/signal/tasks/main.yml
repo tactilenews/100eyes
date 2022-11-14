@@ -32,7 +32,7 @@
         body_format: json
         body:
           captcha: "{{ captcha }}"
-          use_voice: true
+          # use_voice: true
 
     - name: Ask for verification token
       pause:

@@ -9,20 +9,18 @@ module ThreemaAdapter
       ErrorNotifier.report(exception, tags: tags)
     end
 
-    def self.threema_instance
-      @threema_instance ||= Threema.new
-    end
-
     def self.send!(message)
       recipient = message.recipient
       return unless message.recipient&.threema_id
 
-      perform_later(recipient: recipient, text: message.text)
-
-      return unless message.request.image.attached?
-
-      perform_later(recipient: recipient,
-                    image: ActiveStorage::Blob.service.path_for(message.request.image.blob.key))
+      if message.request.image.attached?
+        ThreemaAdapter::Outbound::File.perform_later(recipient: recipient,
+                                                     file_path: ActiveStorage::Blob.service.path_for(message.request.image.blob.key),
+                                                     file_name: message.request.image.blob.filename.to_s,
+                                                     caption: message.text)
+      else
+        ThreemaAdapter::Outbound::Text.perform_later(recipient: recipient, text: message.text)
+      end
     end
 
     def self.welcome_message
@@ -35,9 +33,8 @@ module ThreemaAdapter
       perform_later(text: welcome_message, recipient: contributor)
     end
 
-    def perform(recipient:, text: nil, image: nil)
-      self.class.threema_instance.send(type: :text, threema_id: recipient.threema_id.upcase, text: text) if text
-      self.class.threema_instance.send(type: :image, threema_id: recipient.threema_id.upcase, image: image) if image
+    def perform(recipient:, text: nil, file_path: nil, file_name: nil, caption: nil)
+      self.class.threema_instance.send(type: :text, threema_id: recipient.threema_id.upcase, text: text)
     end
   end
 end

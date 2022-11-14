@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/tactilenews/threema.git
-  revision: fcad0d97e620c42207e077c7dc555d11f17d0bee
+  revision: 617888e145242621e4677a3319722db2859ce1ce
   branch: avoid_detecting_mime_type_by_extenstion
   specs:
     threema (0.1.0)
