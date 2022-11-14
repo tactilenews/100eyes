@@ -13,13 +13,16 @@ module ThreemaAdapter
       recipient = message.recipient
       return unless message.recipient&.threema_id
 
-      if message.request.image.attached?
+      image = message.request.image
+
+      if image.attached?
         ThreemaAdapter::Outbound::File.perform_later(recipient: recipient,
-                                                     file_path: ActiveStorage::Blob.service.path_for(message.request.image.blob.key),
-                                                     file_name: message.request.image.blob.filename.to_s,
-                                                     caption: message.text)
+                      file_path: ActiveStorage::Blob.service.path_for(image.blob.key),
+                      file_name: image.blob.filename.to_s,
+                      caption: message.text,
+                      thumbnail: ActiveStorage::Blob.service.path_for(image.blob.key) if image.blob.variable?)
       else
-        ThreemaAdapter::Outbound::Text.perform_later(recipient: recipient, text: message.text)
+        perform_later(recipient: recipient, text: message.text)
       end
     end
 

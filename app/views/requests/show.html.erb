@@ -19,7 +19,11 @@
     <% end %>
     <%= c 'plaintext_message', message: @request.text, highlight_placeholders: true %>
     <% if @request.image.attached? %>
-      <%= image_tag url_for(@request.image.variant(resize_to_fit: [200, 200])) %>
+      <% if @request.image.blob.variable? %>
+        <%= image_tag url_for(@request.image.variant(resize_to_fit: [200, 200])) %>
+      <% elsif @request.image.previewable? %>
+        <%= image_tag url_for(@request.image.blob.preview(resize_to_fit: [200, 200])) %>
+      <% end %>
     <% end %>
   <% end %>
 

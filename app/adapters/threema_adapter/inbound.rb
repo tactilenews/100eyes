@@ -55,6 +55,7 @@ module ThreemaAdapter
 
     def initialize_files(decrypted_message)
       return [] unless decrypted_message.instance_of? Threema::Receive::File
+
       file = Message::File.new
       file.attachment.attach(
         io: StringIO.new(decrypted_message.content),
