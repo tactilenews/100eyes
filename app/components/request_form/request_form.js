@@ -39,16 +39,16 @@ export default class extends Controller {
     let message = sanitize(this.messageTarget.value);
     message = message || this.previewFallbackValue;
     message = replacePlaceholder(message, placeholder, 'Max');
-    this.previewTarget.innerHTML = message;
-    if(event && event.target.files) {
-      const file = event.target.files[0];
-      const img = document.createElement('img');
-      img.setAttribute('src', URL.createObjectURL(file));
-      img.setAttribute('width', 75);
-      img.setAttribute('width', 75);
-      img.setAttribute('id', 'preview-image')
-      const previewImage = document.getElementById('preview-image')
-      if (!previewImage) this.previewTarget.parentNode.parentNode.appendChild(img)
+    const imagePreviewCaption = document.getElementById('caption');
+    if (imagePreviewCaption) {
+      imagePreviewCaption.innerHTML = message;
+    } else {
+      this.previewTarget.innerHTML = message;
+    }
+
+    if (event && event.target.files) {
+      this.previewTarget.innerHTML = '';
+      this.addImagePreview(event.target.files, message);
     }
   }
 
@@ -83,9 +83,28 @@ export default class extends Controller {
     this.imageInputTarget.click();
   }
 
-  showPreview(event) {
-    const file = event.target.files[0];
-    this.imagePreviewTarget.src = URL.createObjectURL(file);
-    this.imagePreviewTarget.hidden = false;
+  addImagePreview(files, message) {
+    const file = files.length > 1 ? files.item(-1) : files.item(0);
+    const figure = document.createElement('figure');
+    const img = document.createElement('img');
+    const figcaption = document.createElement('figcaption');
+    figure.appendChild(img);
+    figure.appendChild(figcaption);
+    figure.setAttribute('id', 'image-preview');
+
+    img.setAttribute('src', URL.createObjectURL(file));
+    img.setAttribute('width', 75);
+    img.setAttribute('width', 75);
+
+    figcaption.setAttribute('id', 'caption');
+    figcaption.innerHTML = message;
+
+    const imagePreview = document.getElementById('image-preview');
+
+    if (imagePreview) {
+      imagePreview.replaceWith(figure);
+    } else {
+      this.previewTarget.parentNode.appendChild(figure);
+    }
   }
 }

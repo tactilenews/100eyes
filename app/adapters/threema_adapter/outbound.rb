@@ -16,11 +16,14 @@ module ThreemaAdapter
       image = message.request.image
 
       if image.attached?
-        ThreemaAdapter::Outbound::File.perform_later(recipient: recipient,
-                      file_path: ActiveStorage::Blob.service.path_for(image.blob.key),
-                      file_name: image.blob.filename.to_s,
-                      caption: message.text,
-                      thumbnail: ActiveStorage::Blob.service.path_for(image.blob.key) if image.blob.variable?)
+        params = {
+          recipient: recipient,
+          file_path: ActiveStorage::Blob.service.path_for(image.blob.key),
+          file_name: image.blob.filename.to_s,
+          caption: message.text
+        }
+        params.merge!(thumbnail: ActiveStorage::Blob.service.path_for(image.blob.key)) if image.blob.variable?
+        ThreemaAdapter::Outbound::File.perform_later(params)
       else
         perform_later(recipient: recipient, text: message.text)
       end
@@ -36,7 +39,7 @@ module ThreemaAdapter
       perform_later(text: welcome_message, recipient: contributor)
     end
 
-    def perform(recipient:, text: nil, file_path: nil, file_name: nil, caption: nil)
+    def perform(recipient:, text: nil)
       self.class.threema_instance.send(type: :text, threema_id: recipient.threema_id.upcase, text: text)
     end
   end

@@ -14,13 +14,15 @@ module ThreemaAdapter
         @threema_instance ||= Threema.new
       end
 
-      def perform(recipient:, file_path:, file_name: nil, caption: nil, thumbnail: nil)
+      def perform(args)
+        return unless args[:recipient] && args[:file_path]
+
         self.class.threema_instance.send(type: :file,
-                                         threema_id: recipient.threema_id.upcase,
-                                         file: file_path,
-                                         thumbnail: thumbnail,
-                                         file_name: file_name,
-                                         caption: caption)
+                                         threema_id: args[:recipient].threema_id.upcase,
+                                         file: args[:file_path],
+                                         thumbnail: args[:thumbnail],
+                                         file_name: args[:file_name],
+                                         caption: args[:caption])
       end
     end
   end

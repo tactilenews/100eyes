@@ -19,6 +19,6 @@
   white-space: pre-wrap;
 }
 
-input.hidden {
+.hidden {
   display: none;
 }
