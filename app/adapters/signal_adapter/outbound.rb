@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/AbcSize
 module SignalAdapter
   class Outbound < ApplicationJob
     queue_as :default
+
+    URL = URI.parse("#{Setting.signal_cli_rest_api_endpoint}/v2/send")
 
     def self.send!(message)
       recipient = message&.recipient
@@ -19,11 +22,6 @@ module SignalAdapter
     end
 
     def perform(message:, recipient:)
-      url = URI.parse("#{Setting.signal_cli_rest_api_endpoint}/v2/send")
-      header = {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
       data = {
         number: Setting.signal_server_phone_number,
         recipients: [recipient.signal_phone_number],
@@ -33,9 +31,12 @@ module SignalAdapter
         data.merge!(base64_attachments: [Base64.encode64(File.open(ActiveStorage::Blob.service.path_for(message.request.image.blob.key),
                                                                    'rb').read)])
       end
-      req = Net::HTTP::Post.new(url.to_s, header)
+      req = Net::HTTP::Post.new(URL.to_s, {
+                                  Accept: 'application/json',
+                                  'Content-Type': 'application/json'
+                                })
       req.body = data.to_json
-      res = Net::HTTP.start(url.host, url.port) do |http|
+      res = Net::HTTP.start(URL.host, URL.port) do |http|
         http.request(req)
       end
       res.value # may raise exception
@@ -53,3 +54,4 @@ module SignalAdapter
     end
   end
 end
+# rubocop:enable Metrics/AbcSize
