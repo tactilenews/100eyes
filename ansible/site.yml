@@ -12,6 +12,13 @@
     - devsec.hardening
   roles:
     - role: devsec.hardening.ssh_hardening
+      vars:
+        ssh_kex:
+          - sntrup761x25519-sha512@openssh.com
+          - curve25519-sha256@libssh.org
+          - diffie-hellman-group-exchange-sha256
+      ansible.builtin.import_role:
+        name: devsec.hardening.ssh_hardening
     - role: devsec.hardening.os_hardening
       vars:
         ufw_enable_ipv6: false
