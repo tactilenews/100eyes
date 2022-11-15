@@ -63,7 +63,7 @@ RSpec.describe SignalAdapter::Outbound do
   describe 'perform' do
     let(:adapter) { described_class.new }
     let(:contributor) { create(:contributor, signal_phone_number: '+4915112345678', email: nil) }
-    let(:perform) { -> { adapter.perform(text: 'Hello Signal', recipient: contributor) } }
+    let(:perform) { -> { adapter.perform(message: build(:message, text: 'Hello Signal'), recipient: contributor) } }
     subject { perform }
     before do
       allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
