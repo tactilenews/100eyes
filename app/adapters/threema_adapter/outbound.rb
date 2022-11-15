@@ -9,6 +9,10 @@ module ThreemaAdapter
       ErrorNotifier.report(exception, tags: tags)
     end
 
+    def self.threema_instance
+      @threema_instance ||= Threema.new
+    end
+
     def self.send!(message)
       recipient = message.recipient
       return unless message.recipient&.threema_id
