@@ -20,14 +20,13 @@ module ThreemaAdapter
       image = message.request.image
 
       if image.attached?
-        params = {
+        ThreemaAdapter::Outbound::File.perform_later(
           recipient: recipient,
           file_path: ActiveStorage::Blob.service.path_for(image.blob.key),
           file_name: image.blob.filename.to_s,
-          caption: message.text
-        }
-        params.merge!(thumbnail: ActiveStorage::Blob.service.path_for(image.blob.key)) if image.blob.variable?
-        ThreemaAdapter::Outbound::File.perform_later(params)
+          caption: message.text,
+          thumbnail: ActiveStorage::Blob.service.path_for(image.blob.key)
+        )
       else
         perform_later(recipient: recipient, text: message.text)
       end
