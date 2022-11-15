@@ -39,10 +39,6 @@ module PostmarkAdapter
     def message_email
       @msg = params[:message]
       @text = msg.text
-      if @msg.request.image.attached?
-        attachments.inline[@msg.request.image.filename.to_s] =
-          File.read(ActiveStorage::Blob.service.path_for(@msg.request.image.blob.key))
-      end
       if @msg.broadcasted?
         broadcasted_message_email
       else
@@ -56,6 +52,10 @@ module PostmarkAdapter
       headers({ 'message-id': "request/#{msg.request.id}@#{Setting.application_host}" })
       email_subject = I18n.t('adapter.postmark.new_message_email.subject')
       message_stream = Setting.postmark_broadcasts_stream
+      if msg.request.image.attached?
+        attachments.inline[@msg.request.image.filename.to_s] =
+          File.read(ActiveStorage::Blob.service.path_for(msg.request.image.blob.key))
+      end
       mail(to: msg.recipient.email, subject: email_subject, message_stream: message_stream)
     end
 
