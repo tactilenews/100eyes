@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 module TelegramAdapter
-  class Outbound 
+  class Outbound
     class Photo < ApplicationJob
       queue_as :default
       discard_on Telegram::Bot::Forbidden do |job|

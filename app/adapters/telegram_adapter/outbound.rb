@@ -13,7 +13,8 @@ module TelegramAdapter
       return unless recipient&.telegram_id
 
       if message.request.image.attached?
-        TelegramAdapter::Outbound::Photo.perform_later(text, recipient.telegram_id, File.open(ActiveStorage::Blob.service.path_for(message.request.image.blob.key)))
+        TelegramAdapter::Outbound::Photo.perform_later(text, recipient.telegram_id,
+                                                       File.open(ActiveStorage::Blob.service.path_for(message.request.image.blob.key)))
       else
         perform_later(text: message.text, recipient: recipient, message: message)
       end
