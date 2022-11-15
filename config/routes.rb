@@ -93,4 +93,10 @@ Rails.application.routes.draw do
 
   resource :otp_setup, controller: :otp_setup, only: %i[show create]
   resource :otp_auth, controller: :otp_auth, only: %i[show create]
+
+  namespace :charts do
+    get 'day-and-time-replies'
+    get 'day-and-time-requests'
+    get 'day-requests-replies'
+  end
 end

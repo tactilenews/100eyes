@@ -1,0 +1,37 @@
+.DayAndTimeActivityHeatmap-tabBar {
+  margin-left: var(--spacing-unit);
+}
+
+.DayAndTimeActivityHeatmap-tabBarItem {
+  display: inline-block;
+  background-color: inherit;
+
+  padding: var(--spacing-unit-xs) 0;
+  margin-right: var(--spacing-unit-s);
+
+  border: 0;
+  border-bottom: 2px solid transparent;
+
+  color: var(--color-text-light);
+  font-weight: 500;
+  transition: 0.1s all ease-out;
+}
+
+.DayAndTimeActivityHeatmap-tabBarItem--active {
+  border-bottom-color: var(--color-blue);
+  color: var(--color-text);
+}
+
+.DayAndTimeActivityHeatmap-tabBarItem:not(.DayAndTimeActivityHeatmap-tabBarItem--active):hover {
+  border-bottom-color: var(--color-gray);
+  color: var(--color-text);
+}
+
+.DayAndTimeActivityHeatmap-chart {
+  height: 39rem;
+}
+
+.DayAndTimeActivityHeatmap-chart .apexcharts-tooltip {
+  font-size: var(--font-size-s);
+  padding: var(--spacing-unit-xs);
+}

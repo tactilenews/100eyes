@@ -6,7 +6,8 @@ module Avatar
 
     def initialize(record: nil, expandable: false, **)
       super
-      @record = record
+
+      @record = record || User.new
       @expandable = expandable
     end
 
@@ -18,8 +19,20 @@ module Avatar
       record&.id
     end
 
+    def editorial_logo?
+      record.is_a?(User) && Setting.channel_image.present?
+    end
+
+    def editorial_logo
+      Setting.channel_image
+    end
+
     def url
-      thumbnail = record_avatar.variant(resize_to_fit: [200, 200])
+      thumbnail = if record_avatar?
+                    record_avatar.variant(resize_to_fit: [200, 200])
+                  else
+                    editorial_logo
+                  end
       url_for(thumbnail)
     end
 

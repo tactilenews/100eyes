@@ -173,6 +173,8 @@ GEM
       rake
     globalid (1.0.0)
       activesupport (>= 5.0)
+    groupdate (6.1.0)
+      activesupport (>= 5.2)
     hashdiff (1.0.1)
     http (5.1.0)
       addressable (~> 2.8)
@@ -435,6 +437,7 @@ DEPENDENCIES
   dotenv-rails
   factory_bot_rails
   faker
+  groupdate
   image_processing (~> 1.12)
   jwt
   kramdown (~> 2.4)

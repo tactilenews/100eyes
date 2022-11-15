@@ -8,6 +8,7 @@ export default class extends Controller {
   static values = {
     senderName: String,
     id: String,
+    copyUrl: String,
   };
 
   connect() {
@@ -16,11 +17,17 @@ export default class extends Controller {
       this.collapse();
     }
 
-    this.setCopyValue();
+    if (this.hasTextTarget) {
+      this.setCopyValue();
+    } else {
+      this.setCopyUrlValue();
+    }
   }
 
   isTruncated() {
-    return this.textTarget.clientHeight < this.textTarget.scrollHeight;
+    if (this.hasTextTarget) {
+      return this.textTarget.clientHeight < this.textTarget.scrollHeight;
+    }
   }
 
   isExpanded() {
@@ -56,6 +63,10 @@ export default class extends Controller {
     }
 
     this.copyButtonTarget.dataset.copyButtonCopyValue = copyValue;
+  }
+
+  setCopyUrlValue() {
+    this.copyButtonTarget.dataset.copyButtonCopyValue = this.copyUrlValue;
   }
 
   isHighlighted() {

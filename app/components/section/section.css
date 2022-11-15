@@ -19,7 +19,6 @@
   padding-right: var(--limit-max-inner-width-l);
 }
 
-.Section,
 .Section > * + * {
   margin-top: var(--spacing-unit);
 }
@@ -30,4 +29,8 @@
 
 .Section--noMarginTop {
   margin-top: 0;
+}
+
+.Section--largeBottomMargin {
+  margin-bottom: var(--spacing-unit-l);
 }
