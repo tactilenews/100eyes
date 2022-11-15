@@ -12,7 +12,11 @@ module TelegramAdapter
       recipient = message.recipient
       return unless recipient&.telegram_id
 
-      perform_later(text: message.text, recipient: recipient, message: message)
+      if message.request.image.attached?
+        TelegramAdapter::Outbound::Photo.perform_later(text, recipient.telegram_id, File.open(ActiveStorage::Blob.service.path_for(message.request.image.blob.key)))
+      else
+        perform_later(text: message.text, recipient: recipient, message: message)
+      end
     end
 
     def self.send_welcome_message!(contributor)
@@ -23,25 +27,8 @@ module TelegramAdapter
     end
 
     def perform(text:, recipient:, message: nil)
-      if message.request.image.attached?
-        send_photo(text, recipient.telegram_id, File.open(ActiveStorage::Blob.service.path_for(message.request.image.blob.key)))
-      else
-        send_message(recipient.telegram_id, text)
-      end
-    end
-
-    def send_photo(caption, telegram_id, photo)
-      Telegram.bot.send_photo(
-        chat_id: telegram_id,
-        photo: photo,
-        caption: caption,
-        parse_mode: :HTML
-      )
-    end
-
-    def send_message(telegram_id, text)
       Telegram.bot.send_message(
-        chat_id: telegram_id,
+        chat_id: recipient.telegram_id,
         text: text,
         parse_mode: :HTML
       )
