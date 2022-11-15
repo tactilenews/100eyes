@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/AbcSize
 module SignalAdapter
   class Outbound < ApplicationJob
     queue_as :default
+
+    attr_reader :message, :recipient, :data
 
     URL = URI.parse("#{Setting.signal_cli_rest_api_endpoint}/v2/send")
 
@@ -22,15 +23,10 @@ module SignalAdapter
     end
 
     def perform(message:, recipient:)
-      data = {
-        number: Setting.signal_server_phone_number,
-        recipients: [recipient.signal_phone_number],
-        message: message.text
-      }
-      if message.request.image.attached?
-        data.merge!(base64_attachments: [Base64.encode64(File.open(ActiveStorage::Blob.service.path_for(message.request.image.blob.key),
-                                                                   'rb').read)])
-      end
+      @message = message
+      @recipient = recipient
+      @data = default_data
+      merge_attachment if message.request.image.attached?
       req = Net::HTTP::Post.new(URL.to_s, {
                                   Accept: 'application/json',
                                   'Content-Type': 'application/json'
@@ -52,6 +48,18 @@ module SignalAdapter
     def self.contributor_can_receive_messages?(recipient)
       recipient&.signal_phone_number.present? && recipient.signal_onboarding_completed_at.present?
     end
+
+    def default_data
+      {
+        number: Setting.signal_server_phone_number,
+        recipients: [recipient.signal_phone_number],
+        message: message.text
+      }
+    end
+
+    def merge_attachment
+      data.merge!(base64_attachments: [Base64.encode64(File.open(ActiveStorage::Blob.service.path_for(message.request.image.blob.key),
+                                                                 'rb').read)])
+    end
   end
 end
-# rubocop:enable Metrics/AbcSize
