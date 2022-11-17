@@ -16,7 +16,8 @@ class ChatMessageSent < Noticed::Base
   end
 
   def group_key
-    [record.request_id, record.user_id]
+    [{ "#{self.class.to_s.underscore}_request_id".to_sym => record.request_id },
+     { "#{self.class.to_s.underscore}_user_id".to_sym => record.user_id }]
   end
 
   def record_for_avatar
