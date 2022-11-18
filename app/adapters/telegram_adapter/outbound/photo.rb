@@ -9,12 +9,12 @@ module TelegramAdapter
         message&.update(blocked: true)
       end
 
-      def perform(telegram_id:, media:, caption: nil)
+      def perform(telegram_id:, media:, message: nil)
         media_array = media.map.with_index do |photo, index|
           {
             type: 'photo',
             media: File.open(photo),
-            caption: index.zero? ? caption : '',
+            caption: index.zero? ? message.text : ''
           }
         end
         Telegram.bot.send_media_group(

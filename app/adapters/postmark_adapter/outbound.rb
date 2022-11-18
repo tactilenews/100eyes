@@ -52,12 +52,7 @@ module PostmarkAdapter
       headers({ 'message-id': "request/#{msg.request.id}@#{Setting.application_host}" })
       email_subject = I18n.t('adapter.postmark.new_message_email.subject')
       message_stream = Setting.postmark_broadcasts_stream
-      if msg.files.present?
-        msg.files.each do |file|
-          attachments.inline[file.attachment.filename.to_s] =
-            File.read(ActiveStorage::Blob.service.path_for(file.attachment.blob.key))
-        end
-      end
+      attach_files if msg.files.present?
       mail(to: msg.recipient.email, subject: email_subject, message_stream: message_stream)
     end
 
@@ -73,6 +68,13 @@ module PostmarkAdapter
 
     def default_from
       "\"#{Setting.project_name}\" <#{Setting.email_from_address}>"
+    end
+
+    def attach_files
+      msg.files.each do |file|
+        attachments.inline[file.attachment.filename.to_s] =
+          File.read(ActiveStorage::Blob.service.path_for(file.attachment.blob.key))
+      end
     end
   end
 end

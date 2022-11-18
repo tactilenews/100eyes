@@ -8,12 +8,12 @@ module TelegramAdapter
 
       files = message.files
       if files.present?
-          media = files.map { |file| ActiveStorage::Blob.service.path_for(file.attachment.blob.key) }
-          TelegramAdapter::Outbound::Photo.perform_later(telegram_id: recipient.telegram_id,
-                                                         media: media,
-                                                         caption: message.text)
+        media = files.map { |file| ActiveStorage::Blob.service.path_for(file.attachment.blob.key) }
+        TelegramAdapter::Outbound::Photo.perform_later(telegram_id: recipient.telegram_id,
+                                                       media: media,
+                                                       message: message)
       else
-        TelegramAdapter::Outbound::Text.perform_later(text: message.text, recipient: recipient)
+        TelegramAdapter::Outbound::Text.perform_later(text: message.text, recipient: recipient, message: message)
       end
     end
 

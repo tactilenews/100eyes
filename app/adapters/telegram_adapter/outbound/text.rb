@@ -9,7 +9,7 @@ module TelegramAdapter
         message&.update(blocked: true)
       end
 
-      def perform(text:, recipient:)
+      def perform(text:, recipient:, message: nil)  # rubocop:disable Lint/UnusedMethodArgument
         Telegram.bot.send_message(
           chat_id: recipient.telegram_id,
           text: text,

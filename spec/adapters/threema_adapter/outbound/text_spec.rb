@@ -9,7 +9,7 @@ RSpec.describe ThreemaAdapter::Outbound::Text do
     build(:contributor, threema_id: threema_id, email: nil).tap { |contributor| contributor.save(validate: false) }
   end
   let(:message) { create(:message, recipient: contributor) }
-  
+
   describe 'ThreemaAdapter::Outbound::Text#perform' do
     subject { -> { adapter.perform(text: message.text, recipient: message.recipient) } }
 

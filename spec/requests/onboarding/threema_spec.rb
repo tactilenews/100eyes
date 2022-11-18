@@ -47,7 +47,7 @@ RSpec.describe 'Onboarding::Threema', type: :request do
       )
     end
 
-    it { should enqueue_job(ThreemaAdapter::Outbound) }
+    it { should enqueue_job(ThreemaAdapter::Outbound::Text) }
 
     it 'redirects to success page' do
       subject.call

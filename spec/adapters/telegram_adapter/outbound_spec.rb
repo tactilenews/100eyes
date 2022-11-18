@@ -9,7 +9,7 @@ RSpec.describe TelegramAdapter::Outbound do
   describe '::send!' do
     before { message } # we don't count the extra ::send here
     subject { -> { described_class.send!(message) } }
-   
+
     it { should enqueue_job(described_class::Text) }
 
     context 'contributor has no telegram_id' do
