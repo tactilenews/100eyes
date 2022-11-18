@@ -9,7 +9,7 @@ class ChartsController < ApplicationController
   end
 
   def day_and_time_requests
-    series = t('date.day_names').rotate(-1).reverse.map do |day|
+    series = t('date.day_names').reverse.rotate(-1).map do |day|
       { name: day, data: day_and_time_data(joined_outbound(%i[day_of_week hour_of_day]), day) }
     end
     render json: series
