@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TelegramAdapter
   class Outbound
     class Text < ApplicationJob
@@ -6,7 +8,7 @@ module TelegramAdapter
         message = job.arguments.first[:message]
         message&.update(blocked: true)
       end
-      
+
       def perform(text:, recipient:)
         Telegram.bot.send_message(
           chat_id: recipient.telegram_id,

@@ -26,7 +26,7 @@ module SignalAdapter
       @message = message
       @recipient = recipient
       @data = default_data
-      merge_attachment if message.request.image.attached?
+      merge_attachment if message.files.present?
       req = Net::HTTP::Post.new(URL.to_s, {
                                   Accept: 'application/json',
                                   'Content-Type': 'application/json'
@@ -58,8 +58,10 @@ module SignalAdapter
     end
 
     def merge_attachment
-      data.merge!(base64_attachments: [Base64.encode64(File.open(ActiveStorage::Blob.service.path_for(message.request.image.blob.key),
-                                                                 'rb').read)])
+      base64_files = message.files.map do |file|
+        Base64.encode64(File.open(ActiveStorage::Blob.service.path_for(file.attachment.blob.key), 'rb').read)
+      end
+      data.merge!(base64_attachments: base64_files)
     end
   end
 end

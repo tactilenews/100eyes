@@ -84,27 +84,61 @@ export default class extends Controller {
   }
 
   addImagePreview(files, message) {
-    const file = files.length > 1 ? files.item(-1) : files.item(0);
     const figure = document.createElement('figure');
-    const img = document.createElement('img');
-    const figcaption = document.createElement('figcaption');
-    figure.appendChild(img);
-    figure.appendChild(figcaption);
-    figure.setAttribute('id', 'image-preview');
+    this.removeExistingPreview();
 
-    img.setAttribute('src', URL.createObjectURL(file));
-    img.setAttribute('width', 75);
-    img.setAttribute('width', 75);
+    for (let i = 0; i < files.length; i++) {
+      let file = files.item(i);
+      const img = document.createElement('img');
+      if (i === 0) {
+        this.addImageWithCaption(figure, img);
+      } else {
+        this.addAdditionalChatPreviewBubbles(img);
+      }
 
-    figcaption.setAttribute('id', 'caption');
-    figcaption.innerHTML = message;
+      this.setImageAttributes(img, file);
+    }
 
-    const imagePreview = document.getElementById('image-preview');
-
-    if (imagePreview) {
-      imagePreview.replaceWith(figure);
+    figure.setAttribute('id', 'file-preview');
+    const existingFigure = document.getElementById('file-preview');
+    if (existingFigure) {
+      existingFigure.replaceWith(figure);
     } else {
       this.previewTarget.parentNode.appendChild(figure);
     }
+    const firstFigcaption = figure.querySelector('figcaption');
+    firstFigcaption.innerHTML = message;
+  }
+
+  removeExistingPreview() {
+    const chatPreviewBubbles = document.querySelectorAll(
+      '.ChatPreview-bubble--preview'
+    );
+    chatPreviewBubbles.forEach((element, index) => {
+      if (index > 0) {
+        element.remove();
+      }
+    });
+  }
+
+  addImageWithCaption(figure, img) {
+    const figcaption = document.createElement('figcaption');
+    figcaption.setAttribute('id', 'caption');
+    figure.appendChild(img);
+    figure.appendChild(figcaption);
+  }
+
+  addAdditionalChatPreviewBubbles(img) {
+    const chatPreviewBubble = document.createElement('div');
+    chatPreviewBubble.classList.add('ChatPreview-bubble');
+    chatPreviewBubble.classList.add('ChatPreview-bubble--preview');
+    chatPreviewBubble.appendChild(img);
+    this.previewTarget.parentNode.parentNode.appendChild(chatPreviewBubble);
+  }
+
+  setImageAttributes(img, file) {
+    img.setAttribute('src', URL.createObjectURL(file));
+    img.setAttribute('width', 100);
+    img.setAttribute('width', 100);
   }
 }

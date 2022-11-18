@@ -27,6 +27,10 @@
   margin-top: var(--spacing-unit-xl);
 }
 
+.Section--smallSpaceBetween > * + * {
+  margin-top: var(--spacing-unit-s);
+}
+
 .Section--noMarginTop {
   margin-top: 0;
 }

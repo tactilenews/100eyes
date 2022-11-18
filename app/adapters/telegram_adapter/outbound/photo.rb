@@ -9,13 +9,17 @@ module TelegramAdapter
         message&.update(blocked: true)
       end
 
-      def perform(telegram_id:, photo:, caption: nil)
-        return unless telegram_id && photo
-
-        Telegram.bot.send_photo(
+      def perform(telegram_id:, media:, caption: nil)
+        media_array = media.map.with_index do |photo, index|
+          {
+            type: 'photo',
+            media: File.open(photo),
+            caption: index.zero? ? caption : '',
+          }
+        end
+        Telegram.bot.send_media_group(
           chat_id: telegram_id,
-          photo: photo,
-          caption: caption,
+          media: media_array,
           parse_mode: :HTML
         )
       end

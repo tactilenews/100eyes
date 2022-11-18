@@ -6,9 +6,12 @@ module TelegramAdapter
       recipient = message.recipient
       return unless recipient&.telegram_id
 
-      if message.request.image.attached?
-        TelegramAdapter::Outbound::Photo.perform_later(text, recipient.telegram_id,
-                                                       File.open(ActiveStorage::Blob.service.path_for(message.request.image.blob.key)))
+      files = message.files
+      if files.present?
+          media = files.map { |file| ActiveStorage::Blob.service.path_for(file.attachment.blob.key) }
+          TelegramAdapter::Outbound::Photo.perform_later(telegram_id: recipient.telegram_id,
+                                                         media: media,
+                                                         caption: message.text)
       else
         TelegramAdapter::Outbound::Text.perform_later(text: message.text, recipient: recipient)
       end

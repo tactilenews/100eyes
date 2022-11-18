@@ -1,0 +1,5 @@
+<%= c 'section', style: :smallSpaceBetween do %>
+  <% files.each do |file| %>
+    <%= image_tag url_for(file.variant(resize_to_fit: [200, 200])) %>
+  <% end %>
+<% end %>

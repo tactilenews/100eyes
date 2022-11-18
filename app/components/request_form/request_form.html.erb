@@ -27,7 +27,7 @@
               class: 'RequestForm-insertPlaceholderButton',
               type: 'button',
               data: { action: 'request-form#insertImage' } do %>
-              <%= field.file_field(:request, :image, data: { request_form_target: 'imageInput' }) %>
+              <%= field.file_field(:request, :files, data: { request_form_target: 'imageInput' }, multiple: true) %>
               <%= t('.attach_image_to_message') %>
             <% end %>
           <% end %>
