@@ -6,8 +6,6 @@ module SignalAdapter
 
     attr_reader :message, :recipient, :data
 
-    URL = URI.parse("#{Setting.signal_cli_rest_api_endpoint}/v2/send")
-
     def self.send!(message)
       recipient = message&.recipient
       return unless contributor_can_receive_messages?(recipient)
@@ -23,16 +21,17 @@ module SignalAdapter
     end
 
     def perform(message:, recipient:)
+      url = URI.parse("#{Setting.signal_cli_rest_api_endpoint}/v2/send")
       @message = message
       @recipient = recipient
       @data = default_data
       merge_attachment if message.files.present?
-      req = Net::HTTP::Post.new(URL.to_s, {
+      req = Net::HTTP::Post.new(url.to_s, {
                                   Accept: 'application/json',
                                   'Content-Type': 'application/json'
                                 })
       req.body = data.to_json
-      res = Net::HTTP.start(URL.host, URL.port) do |http|
+      res = Net::HTTP.start(url.host, url.port) do |http|
         http.request(req)
       end
       res.value # may raise exception
