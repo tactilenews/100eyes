@@ -13,7 +13,7 @@ class OnboardingCompleted < Noticed::Base
   end
 
   def group_key
-    record.contributor_id
+    { "#{self.class.to_s.underscore}_contributor_id".to_sym => record.contributor_id }
   end
 
   def record_for_avatar
