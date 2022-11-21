@@ -31,6 +31,43 @@ RSpec.describe 'Requests', telegram_bot: :rails do
     describe 'without contributors' do
       it { should_not raise_error }
     end
+
+    context 'with image file(s)' do
+      let(:params) do
+        { request: { title: 'Message with files', text: 'Did you get this image?', files: [fixture_file_upload('profile_picture.jpg')] } }
+      end
+
+      describe 'an image file' do
+        it 'redirects to requests#show' do
+          response = subject.call
+          request = Request.last
+          expect(response).to redirect_to request
+        end
+
+        it 'shows success notification' do
+          subject.call
+          expect(flash[:success]).not_to be_empty
+        end
+      end
+
+      describe 'multiple image files' do
+        let(:params) do
+          { request: { title: 'Message with files', text: 'Did you get this image?',
+                       files: [fixture_file_upload('profile_picture.jpg'), fixture_file_upload('example-image.png')] } }
+        end
+
+        it 'redirects to requests#show' do
+          response = subject.call
+          request = Request.last
+          expect(response).to redirect_to request
+        end
+
+        it 'shows success notification' do
+          subject.call
+          expect(flash[:success]).not_to be_empty
+        end
+      end
+    end
   end
 
   describe 'GET /notifications' do
