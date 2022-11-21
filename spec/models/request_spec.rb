@@ -10,7 +10,8 @@ RSpec.describe Request, type: :model do
     Request.new(
       title: 'Hitchhiker’s Guide',
       text: 'What is the answer to life, the universe, and everything?',
-      user: user
+      user: user,
+      files: [fixture_file_upload('example-image.png')]
     )
   end
 
@@ -18,6 +19,10 @@ RSpec.describe Request, type: :model do
 
   it 'has title, text, and user_id' do
     expect(subject.attributes.keys).to include('title', 'text', 'user_id')
+  end
+
+  it 'has files attached' do
+    expect(subject.files).to be_attached
   end
 
   it 'is by default sorted in reverse chronological order' do
@@ -195,6 +200,7 @@ RSpec.describe Request, type: :model do
       it { should change { Message.pluck(:recipient_id) }.from([]).to([2, 1]) }
       it { should change { Message.pluck(:sender_id) }.from([]).to([request.user.id, request.user.id]) }
       it { should change { Message.pluck(:broadcasted) }.from([]).to([true, true]) }
+      it { should change { Message::File.count }.from(0).to(2) }
     end
 
     describe 'creates message only for contributors tagged with tag_list' do
