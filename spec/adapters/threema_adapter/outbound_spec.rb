@@ -20,6 +20,13 @@ RSpec.describe ThreemaAdapter::Outbound do
       let(:contributor) { create(:contributor, threema_id: nil, email: nil) }
       it { should_not enqueue_job(described_class) }
     end
+
+    context 'message has files attached' do
+      before { message.reload }
+      let(:message) { create(:message, :with_file, broadcasted: true, recipient: contributor) }
+
+      it { should enqueue_job(described_class::File) }
+    end
   end
 
   describe '::send_welcome_message!' do

@@ -10,7 +10,7 @@ RSpec.describe ThreemaAdapter::Outbound::Text do
   end
   let(:message) { create(:message, recipient: contributor) }
 
-  describe 'ThreemaAdapter::Outbound::Text#perform' do
+  describe '#perform' do
     subject { -> { adapter.perform(text: message.text, recipient: message.recipient) } }
 
     it 'sends the message' do
