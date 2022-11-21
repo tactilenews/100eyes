@@ -31,9 +31,11 @@ module ThreemaAdapter
     end
 
     def initialize_text(decrypted_message)
-      return nil unless decrypted_message.instance_of? Threema::Receive::Text
-
-      decrypted_message.content
+      if decrypted_message.instance_of? Threema::Receive::Text
+        decrypted_message.content
+      elsif decrypted_message.instance_of?(Threema::Receive::File) && decrypted_message.caption
+        decrypted_message.caption
+      end
     end
 
     def initialize_unknown_content(decrypted_message)
@@ -59,7 +61,8 @@ module ThreemaAdapter
         io: StringIO.new(decrypted_message.content),
         filename: decrypted_message.name,
         content_type: decrypted_message.mime_type,
-        identify: false
+        identify: false,
+        metadata: { caption: decrypted_message.caption }
       )
       [file]
     end
