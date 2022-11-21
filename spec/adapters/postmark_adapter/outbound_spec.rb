@@ -147,6 +147,32 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
           it { is_expected.to eq(nil) }
         end
       end
+
+      describe '#attachments' do
+        let(:message) { create(:message, :with_file, text: text, recipient: recipient, broadcasted: broadcasted, request: request) }
+
+        context 'if message is broadcast' do
+          let(:broadcasted) { true }
+          subject { message_email.attachments }
+
+          it { is_expected.not_to be_empty }
+
+          it 'attaches file with its filename' do
+            expect(subject.first.filename).to eq(message.files.first.attachment.filename.to_s)
+          end
+
+          it 'is attached inline' do
+            expect(subject.first).to be_inline
+          end
+        end
+
+        context 'if message is not broadcast, ie a reply message' do
+          let(:broadcasted) { false }
+          subject { message_email.attachments }
+
+          it { is_expected.to be_empty }
+        end
+      end
     end
 
     describe '::send!' do
