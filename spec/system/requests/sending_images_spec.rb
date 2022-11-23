@@ -22,7 +22,7 @@ RSpec.describe 'Sending image files' do
     fill_in 'Interner Titel', with: 'Message with files'
     fill_in 'Was möchtest du wissen?', with: 'Did you get my image?'
 
-    click_button 'Bild anhängen'
+    click_button 'Bilder anhängen'
     image_file = File.expand_path('../../fixtures/files/example-image.png', __dir__)
     find_field('request_files', visible: :all).attach_file(image_file)
 

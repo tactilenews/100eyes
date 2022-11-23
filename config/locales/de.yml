@@ -123,7 +123,7 @@ de:
         one: Es gibt <strong>ein Mitglied</strong> mit diesen Tags.
         other: Es gibt <strong>%{count} Mitglieder</strong> mit diesen Tags.
       insert_placeholder_button: Vornamen einfügen
-      attach_image_to_message: Bild anhängen
+      attach_image_to_message: Bilder anhängen
       attached_images: Angehängte Bilder
     chat_preview:
       status: jetzt online

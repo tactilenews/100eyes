@@ -34,7 +34,7 @@
 }
 
 .RequestForm-filenamesWrapper {
-  margin-top: var(--spacing-unit-s);
+  margin-top: var(--spacing-unit-l);
 }
 
 .RequestForm-filename {
@@ -42,6 +42,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: var(--color-text-light);
 }
 
 .RequestForm-removeListItemButton {
