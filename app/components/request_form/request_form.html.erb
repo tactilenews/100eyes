@@ -37,6 +37,15 @@
             highlight_placeholders: true,
             data: { request_form_target: 'message' }
           ) %>
+          <div class="RequestForm-filenamesWrapper RequestForm-filenamesWrapper--hidden">
+            <%= c 'heading', style: :gamma do %>
+              <%= t('.attached_images') %>
+            <% end %>
+            <ul
+              data-request-form-target="filenames"
+              class="RequestForm-filenamesList"
+            ></ul>
+          </div>
         <% end %>
 
         <%= c 'field', object: @request, attr: :tag_list do |field| %>

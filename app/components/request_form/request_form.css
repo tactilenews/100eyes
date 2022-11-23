@@ -19,6 +19,33 @@
   white-space: pre-wrap;
 }
 
+.RequestForm-filenamesWrapper--hidden,
 .hidden {
   display: none;
+}
+
+.RequestForm-filenamesList {
+  list-style: none;
+}
+
+.RequestForm-filenamesListItem {
+  display: flex;
+  margin-bottom: var(--spacing-unit-xs);
+}
+
+.RequestForm-filenamesWrapper {
+  margin-top: var(--spacing-unit-s);
+}
+
+.RequestForm-filename {
+  width: 60%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.RequestForm-removeListItemButton {
+  margin-left: var(--spacing-unit-s);
+  padding: 0 0.65rem;
+  background-color: var(--color-red-lightest);
+  color: var(--color-red-light);
 }

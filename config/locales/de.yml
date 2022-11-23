@@ -124,6 +124,7 @@ de:
         other: Es gibt <strong>%{count} Mitglieder</strong> mit diesen Tags.
       insert_placeholder_button: Vornamen einfügen
       attach_image_to_message: Bild anhängen
+      attached_images: Angehängte Bilder
     chat_preview:
       status: jetzt online
       alt: >
