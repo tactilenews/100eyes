@@ -38,3 +38,8 @@
 .Section--largeBottomMargin {
   margin-bottom: var(--spacing-unit-l);
 }
+
+.Section--noHorizontalPadding {
+  padding-left: 0;
+  padding-right: 0;
+}
