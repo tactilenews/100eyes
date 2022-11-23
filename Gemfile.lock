@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/threemarb/threema.git
-  revision: 6f79c9afd57bb704d0879ce82a33998a27346bdb
+  revision: ddc8b954a9f1d20c9880736a60f33046a6fe2109
   branch: 36_add_caption_formatting_options_to_outgoing_files
   specs:
     threema (0.1.0)

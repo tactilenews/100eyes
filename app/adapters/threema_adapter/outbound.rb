@@ -15,7 +15,7 @@ module ThreemaAdapter
             file_path: ActiveStorage::Blob.service.path_for(file.attachment.blob.key),
             file_name: file.attachment.blob.filename.to_s,
             caption: index.zero? ? message.text : nil,
-            thumbnail: ActiveStorage::Blob.service.path_for(file.attachment.blob.key)
+            render_type: :media
           )
         end
       else

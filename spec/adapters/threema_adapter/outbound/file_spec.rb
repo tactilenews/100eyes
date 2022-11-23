@@ -16,7 +16,7 @@ RSpec.describe ThreemaAdapter::Outbound::File do
       type: :file,
       threema_id: threema_id,
       file: file_path,
-      thumbnail: file_path,
+      render_type: :media,
       file_name: message.files.first.attachment.blob.filename.to_s,
       caption: message.text
     }
@@ -33,7 +33,7 @@ RSpec.describe ThreemaAdapter::Outbound::File do
                         file_path: file_path,
                         file_name: message.files.first.attachment.blob.filename.to_s,
                         caption: message.text,
-                        thumbnail: file_path)
+                        render_type: :media)
       }
     end
 
