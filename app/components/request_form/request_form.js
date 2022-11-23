@@ -44,7 +44,7 @@ export default class extends Controller {
       this.previewTarget.innerHTML = message;
     }
 
-    if (event && event.target.files) {
+    if (event?.target?.files?.length) {
       this.previewTarget.innerHTML = '';
       this.addImagePreview(event.target.files, message);
     }
