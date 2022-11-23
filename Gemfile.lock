@@ -1,7 +1,7 @@
 GIT
-  remote: https://github.com/tactilenews/threema.git
-  revision: 6df40a481908616f71d89bd829fb5c69ecb39c5c
-  branch: avoid_detecting_mime_type_by_extenstion
+  remote: https://github.com/threemarb/threema.git
+  revision: 6f79c9afd57bb704d0879ce82a33998a27346bdb
+  branch: 36_add_caption_formatting_options_to_outgoing_files
   specs:
     threema (0.1.0)
       case_transform
