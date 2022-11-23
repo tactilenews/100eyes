@@ -50,3 +50,17 @@
   background-color: var(--color-red-lightest);
   color: var(--color-red-light);
 }
+
+.RequestForm-imagePreviewWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+.RequestForm-imagePreview {
+  width: calc(50% - 1px);
+}
+
+.RequestForm-firstImageInOddNumber {
+  width: 100%;
+}

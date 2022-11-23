@@ -11,7 +11,7 @@
 
 .DeviceFrame-screen {
   position: absolute;
-  overflow: hidden;
+  overflow: scroll;
   top: 0;
   left: 0;
 

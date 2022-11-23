@@ -83,22 +83,27 @@ export default class extends Controller {
 
   addImagePreview(files, message) {
     const figure = document.createElement('figure');
+    const div = document.createElement('div');
+    div.classList.add('RequestForm-imagePreviewWrapper');
     this.removeExistingPreview();
 
     for (let i = 0; i < files.length; i++) {
       let file = files.item(i);
       const img = document.createElement('img');
+      img.classList.add('RequestForm-imagePreview');
       this.updateFilesname(i, file);
-      if (i === 0) {
-        this.addImageWithCaption(figure, img);
-      } else {
-        this.addAdditionalChatPreviewBubbles(img);
+      if (files.length % 2 == 1 && i == 0) {
+        img.classList.add('RequestForm-firstImageInOddNumber');
       }
-
+      div.appendChild(img);
       this.setImageAttributes(img, file);
     }
-
+    figure.appendChild(div);
+    const figcaption = document.createElement('figcaption');
+    figcaption.setAttribute('id', 'caption');
     figure.setAttribute('id', 'file-preview');
+    figure.appendChild(figcaption);
+
     this.previewTarget.parentNode.appendChild(figure);
     const firstFigcaption = figure.querySelector('figcaption');
     firstFigcaption.innerHTML = message;
@@ -115,23 +120,10 @@ export default class extends Controller {
         element.remove();
       }
     });
-    const listItems = document.querySelectorAll('.RequestForm-filenamesListItem');
+    const listItems = document.querySelectorAll(
+      '.RequestForm-filenamesListItem'
+    );
     listItems.forEach(listItem => listItem.remove());
-  }
-
-  addImageWithCaption(figure, img) {
-    const figcaption = document.createElement('figcaption');
-    figcaption.setAttribute('id', 'caption');
-    figure.appendChild(img);
-    figure.appendChild(figcaption);
-  }
-
-  addAdditionalChatPreviewBubbles(img) {
-    const chatPreviewBubble = document.createElement('div');
-    chatPreviewBubble.classList.add('ChatPreview-bubble');
-    chatPreviewBubble.classList.add('ChatPreview-bubble--preview');
-    chatPreviewBubble.appendChild(img);
-    this.previewTarget.parentNode.parentNode.appendChild(chatPreviewBubble);
   }
 
   setImageAttributes(img, file) {
