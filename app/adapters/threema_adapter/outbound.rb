@@ -2,22 +2,25 @@
 
 module ThreemaAdapter
   class Outbound < ApplicationJob
-    queue_as :default
-
-    rescue_from RuntimeError do |exception|
-      tags = exception.message.match?(/Can't find public key for Threema ID/) ? { support: 'yes' } : {}
-      ErrorNotifier.report(exception, tags: tags)
-    end
-
-    def self.threema_instance
-      @threema_instance ||= Threema.new
-    end
-
     def self.send!(message)
       recipient = message.recipient
       return unless message.recipient&.threema_id
 
-      perform_later(recipient: recipient, text: message.text)
+      files = message.files
+
+      if files.present?
+        files.each_with_index do |file, index|
+          ThreemaAdapter::Outbound::File.perform_later(
+            recipient: recipient,
+            file_path: ActiveStorage::Blob.service.path_for(file.attachment.blob.key),
+            file_name: file.attachment.blob.filename.to_s,
+            caption: index.zero? ? message.text : nil,
+            render_type: :media
+          )
+        end
+      else
+        ThreemaAdapter::Outbound::Text.perform_later(recipient: recipient, text: message.text)
+      end
     end
 
     def self.welcome_message
@@ -27,11 +30,7 @@ module ThreemaAdapter
     def self.send_welcome_message!(contributor)
       return unless contributor&.threema_id
 
-      perform_later(text: welcome_message, recipient: contributor)
-    end
-
-    def perform(recipient:, text:)
-      self.class.threema_instance.send(type: :text, threema_id: recipient.threema_id.upcase, text: text)
+      ThreemaAdapter::Outbound::Text.perform_later(text: welcome_message, recipient: contributor)
     end
   end
 end

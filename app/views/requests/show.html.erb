@@ -17,7 +17,11 @@
         <%= I18n.t('request.created_at', created_at: date_time(@request.created_at)) %>
       <% end %>
     <% end %>
+
     <%= c 'plaintext_message', message: @request.text, highlight_placeholders: true %>
+    <% if @request.files.attached? %>
+      <%= c 'request_files', files: @request.files %>
+    <% end %>
   <% end %>
 
   <%= c 'section', style: :xlargeSpaceBetween do %>
@@ -28,7 +32,6 @@
       <%= c 'empty_state' do %>
         <%= I18n.t 'request.no_replies' %>
       <% end %>
-
     <% else %>
 
       <%= c 'stack' do %>

@@ -18,3 +18,55 @@
 [data-request-form-target='preview'] {
   white-space: pre-wrap;
 }
+
+.RequestForm-filenamesWrapper--hidden,
+.hidden {
+  display: none;
+}
+
+.RequestForm-filenamesList {
+  list-style: none;
+}
+
+.RequestForm-filenamesListItem {
+  display: flex;
+  margin-bottom: var(--spacing-unit-xs);
+}
+
+.RequestForm-filenamesWrapper {
+  margin-top: var(--spacing-unit-l);
+}
+
+.RequestForm-filename {
+  width: 60%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-text-light);
+}
+
+.RequestForm-removeListItemButton {
+  margin-left: var(--spacing-unit-s);
+  padding: 0 0.65rem;
+  background-color: var(--color-red-lightest);
+  color: var(--color-red-light);
+}
+
+.RequestForm-imagePreviewWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+.RequestForm-imagePreview {
+  width: calc(50% - 1px);
+}
+
+.RequestForm-firstImageInOddNumber {
+  width: 100%;
+}
+
+.RequestForm-imageErrorMessage {
+  font-size: var(--font-size-xs);
+  color: var(--color-red);
+}

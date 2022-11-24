@@ -4,11 +4,13 @@ module SignalAdapter
   class Outbound < ApplicationJob
     queue_as :default
 
+    attr_reader :message, :recipient, :data
+
     def self.send!(message)
       recipient = message&.recipient
       return unless contributor_can_receive_messages?(recipient)
 
-      perform_later(text: message.text, recipient: recipient)
+      perform_later(message: message, recipient: recipient)
     end
 
     def self.send_welcome_message!(contributor)
@@ -18,18 +20,16 @@ module SignalAdapter
       perform_later(text: welcome_message, recipient: contributor)
     end
 
-    def perform(text:, recipient:)
+    def perform(message:, recipient:)
       url = URI.parse("#{Setting.signal_cli_rest_api_endpoint}/v2/send")
-      header = {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
-      data = {
-        number: Setting.signal_server_phone_number,
-        recipients: [recipient.signal_phone_number],
-        message: text
-      }
-      req = Net::HTTP::Post.new(url.to_s, header)
+      @message = message
+      @recipient = recipient
+      @data = default_data
+      merge_attachment if message.files.present?
+      req = Net::HTTP::Post.new(url.to_s, {
+                                  Accept: 'application/json',
+                                  'Content-Type': 'application/json'
+                                })
       req.body = data.to_json
       res = Net::HTTP.start(url.host, url.port) do |http|
         http.request(req)
@@ -46,6 +46,21 @@ module SignalAdapter
 
     def self.contributor_can_receive_messages?(recipient)
       recipient&.signal_phone_number.present? && recipient.signal_onboarding_completed_at.present?
+    end
+
+    def default_data
+      {
+        number: Setting.signal_server_phone_number,
+        recipients: [recipient.signal_phone_number],
+        message: message.text
+      }
+    end
+
+    def merge_attachment
+      base64_files = message.files.map do |file|
+        Base64.encode64(File.open(ActiveStorage::Blob.service.path_for(file.attachment.blob.key), 'rb').read)
+      end
+      data.merge!(base64_attachments: base64_files)
     end
   end
 end

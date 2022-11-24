@@ -24,7 +24,7 @@
 .ChatPreview-bubble {
   display: inline-block;
   align-self: flex-end;
-  max-width: 80%;
+  max-width: 70%;
   padding: var(--spacing-unit-xs);
   border-radius: var(--border-radius-l);
   background-color: var(--color-gray-light);

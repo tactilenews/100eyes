@@ -16,12 +16,11 @@ class RequestsController < ApplicationController
   end
 
   def create
-    @request = Request.new(request_params)
-    @request.user = current_user
+    @request = Request.new(request_params.merge(user: current_user))
     if @request.save
       redirect_to @request, flash: { success: I18n.t('request.success', count: @request.stats[:counts][:recipients]) }
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -50,7 +49,7 @@ class RequestsController < ApplicationController
   end
 
   def request_params
-    params.require(:request).permit(:title, :text, :tag_list)
+    params.require(:request).permit(:title, :text, :tag_list, files: [])
   end
 
   def notifications_params

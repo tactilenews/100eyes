@@ -1,0 +1,9 @@
+<%= c 'section', styles: [:smallSpaceBetween, :noHorizontalPadding, :noMarginBottom] do %>
+  <% files.each do |file| %>
+    <%= link_to(
+      image_tag(url_for(file.variant(resize_to_fit: [150, 150]))),
+      url_for(file),
+      target: '_blank'
+    ) %>
+  <% end %>
+<% end %>

@@ -63,7 +63,8 @@ RSpec.describe SignalAdapter::Outbound do
   describe 'perform' do
     let(:adapter) { described_class.new }
     let(:contributor) { create(:contributor, signal_phone_number: '+4915112345678', email: nil) }
-    let(:perform) { -> { adapter.perform(text: 'Hello Signal', recipient: contributor) } }
+    let(:message) { create(:message, :with_file, text: 'Hello Signal') }
+    let(:perform) { -> { adapter.perform(message: message, recipient: contributor) } }
     subject { perform }
     before do
       allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
@@ -95,6 +96,17 @@ RSpec.describe SignalAdapter::Outbound do
       it { should have_requested(:post, 'http://signal:8080/v2/send').with(body: hash_including({ message: 'Hello Signal' })) }
       it { should have_requested(:post, 'http://signal:8080/v2/send').with(body: hash_including({ recipients: ['+4915112345678'] })) }
       it { should have_requested(:post, 'http://signal:8080/v2/send').with(body: hash_including({ number: 'SIGNAL_SERVER_PHONE_NUMBER' })) }
+      it {
+        should have_requested(:post, 'http://signal:8080/v2/send').with(body: hash_including({
+                                                                                               base64_attachments: [
+                                                                                                 Base64.encode64(File.open(
+                                                                                                   ActiveStorage::Blob.service.path_for(
+                                                                                                     message.files.first.attachment.blob.key
+                                                                                                   ), 'rb'
+                                                                                                 ).read)
+                                                                                               ]
+                                                                                             }))
+      }
     end
   end
 end

@@ -122,7 +122,10 @@ RSpec.describe Message, type: :model do
         it { should be(false) }
         describe 'but if contributor blocked the telegram bot' do
           before(:each) { allow(Telegram.bot).to receive(:send_message).and_raise(Telegram::Bot::Forbidden) }
-          it { should be(true) }
+          it '' do
+            # binding.pry
+            should be(true)
+          end
         end
       end
     end

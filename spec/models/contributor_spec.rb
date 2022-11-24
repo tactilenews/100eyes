@@ -798,7 +798,7 @@ RSpec.describe Contributor, type: :model do
 
       context 'and connected' do
         let(:contributor) { create(:contributor, telegram_id: 4711, telegram_onboarding_token: 'ABCDEF', email: nil) }
-        it { should enqueue_job(TelegramAdapter::Outbound).with(expected_job_args) }
+        it { should enqueue_job(TelegramAdapter::Outbound::Text).with(expected_job_args) }
       end
     end
 
@@ -807,7 +807,7 @@ RSpec.describe Contributor, type: :model do
       let(:contributor) do
         build(:contributor, threema_id: 'AAAAAAAA', email: nil, telegram_id: nil).tap { |contributor| contributor.save(validate: false) }
       end
-      it { should enqueue_job(ThreemaAdapter::Outbound).with(expected_job_args) }
+      it { should enqueue_job(ThreemaAdapter::Outbound::Text).with(expected_job_args) }
     end
 
     context 'signed up via email' do
