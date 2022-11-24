@@ -127,12 +127,13 @@ RSpec.describe Request, type: :model do
         create_list(:message, 3, request: request, sender: responsive_recipient)
         other_recipients.each do |recipient|
           create(:message, :with_a_photo, sender: recipient, request: request)
+          create(:message, :with_file, sender: recipient, request: request, attachment: fixture_file_upload('example-image.png'))
         end
       end
 
       describe '[:counts][:replies]' do
         subject { stats[:counts][:replies] }
-        it { should eq(8) } # unique contributors
+        it { should eq(13) } # unique contributors
 
         describe 'messages from us' do
           before(:each) do
@@ -140,7 +141,7 @@ RSpec.describe Request, type: :model do
           end
 
           it 'are excluded' do
-            should eq(8)
+            should eq(13)
           end
         end
       end
@@ -167,16 +168,16 @@ RSpec.describe Request, type: :model do
 
       describe '[:counts][:photos]' do
         subject { stats[:counts][:photos] }
-        it { should eq(5) } # unique photos
+        it { should eq(10) } # unique photos
       end
 
-      describe 'iterating through a list' do # skipping this for now to get a temp fix for photo counter deployed
+      describe 'iterating through a list' do
         subject { -> { Request.find_each.map(&:stats) } }
-        it { should make_database_queries(count: 31) }
+        it { should make_database_queries(count: 39) }
 
         describe 'preload(messages: :sender).eager_load(:messages)' do
           subject { -> { Request.preload(messages: :sender).includes(messages: :files).eager_load(:messages).find_each.map(&:stats) } }
-          it { should make_database_queries(count: 12) } # better
+          it { should make_database_queries(count: 17) } # better
         end
       end
     end
