@@ -99,7 +99,7 @@ export default class extends Controller {
         label.classList.add('RequestForm-imageErrorMessage');
         this.filenamesTarget.appendChild(label);
         this.previewTarget.innerHTML = this.setMessage();
-        return;
+        continue;
       }
       const img = document.createElement('img');
       img.classList.add('RequestForm-imagePreview');

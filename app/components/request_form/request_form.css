@@ -67,6 +67,6 @@
 }
 
 .RequestForm-imageErrorMessage {
-  font-size: var(--font-size-s);
+  font-size: var(--font-size-xs);
   color: var(--color-red);
 }
