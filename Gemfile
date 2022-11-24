@@ -67,7 +67,7 @@ gem 'rack-attack', '~> 6.6'
 # Channel adapters
 gem 'postmark-rails'
 gem 'telegram-bot'
-gem 'threema', github: 'threemarb/threema', branch: '36_add_caption_formatting_options_to_outgoing_files'
+gem 'threema', git: 'https://github.com/threemarb/threema.git', branch: 'master'
 
 # User management
 gem 'active_model_otp'
