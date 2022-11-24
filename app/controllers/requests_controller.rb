@@ -6,7 +6,9 @@ class RequestsController < ApplicationController
   before_action :notifications_params, only: :notifications
 
   def index
-    @requests = Request.preload(messages: :sender).eager_load(:messages)
+    @requests = Request.preload(messages: :sender)
+                       .includes(messages: :files)
+                       .eager_load(:messages)
   end
 
   def show
