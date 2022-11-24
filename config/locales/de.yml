@@ -151,7 +151,7 @@ de:
     request_password_reset_confirmation:
       heading: Wir haben dir eine E-Mail gesendet.
       text: Klicke auf den Link in der E-Mail, um ein neues Passwort zu vergeben.
-      no_email: <strong>Keine E-Mail erhalten?</strong> Warte noch fünf Minuten ab – der Versand dauert manchmal etwas länger.
+      no_email: <strong>Keine active_E-Mail erhalten?</strong> Warte noch fünf Minuten ab – der Versand dauert manchmal etwas länger.
     password_reset_form:
       heading: Passwort ändern
       password:
@@ -511,9 +511,13 @@ de:
           has_one: Datensatz kann nicht gelöscht werden, da ein abhängiger %{record}-Datensatz
             existiert.
           has_many: Datensatz kann nicht gelöscht werden, da abhängige %{record} existieren.
+
     attributes:
       contributor:
         signal_phone_number: Handynummer
+  activestorage:
+    blob:
+      disallowed_image_content_type: Kein gültiges Bildformat. Bitte senden Sie Bilder als jpg, png oder gif.
   date:
     abbr_day_names:
     - So
