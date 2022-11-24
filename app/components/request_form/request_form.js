@@ -11,6 +11,7 @@ export default class extends Controller {
     'imageInput',
     'imagePreview',
     'filenames',
+    'submitButton',
   ];
   static values = {
     membersCountMessage: String,
@@ -89,6 +90,17 @@ export default class extends Controller {
 
     for (let i = 0; i < files.length; i++) {
       let file = files.item(i);
+
+      if (file.type.split('/')[0] !== 'image') {
+        this.updateFilesname(i, file);
+        const label = document.createElement('label');
+        label.innerText =
+          'Kein gültiges Bildformat. Bitte senden Sie Bilder als jpg, png oder gif.';
+        label.classList.add('RequestForm-imageErrorMessage');
+        this.filenamesTarget.appendChild(label);
+        this.previewTarget.innerHTML = this.setMessage();
+        return;
+      }
       const img = document.createElement('img');
       img.classList.add('RequestForm-imagePreview');
       this.updateFilesname(i, file);

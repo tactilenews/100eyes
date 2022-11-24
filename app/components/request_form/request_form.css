@@ -65,3 +65,8 @@
 .RequestForm-firstImageInOddNumber {
   width: 100%;
 }
+
+.RequestForm-imageErrorMessage {
+  font-size: var(--font-size-s);
+  color: var(--color-red);
+}

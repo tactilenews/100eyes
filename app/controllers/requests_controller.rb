@@ -18,7 +18,7 @@ class RequestsController < ApplicationController
     if @request.save
       redirect_to @request, flash: { success: I18n.t('request.success', count: @request.stats[:counts][:recipients]) }
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 

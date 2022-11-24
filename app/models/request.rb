@@ -11,6 +11,8 @@ class Request < ApplicationRecord
   has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
   has_many_attached :files
 
+  validates :files, blob: { content_type: :image }
+
   acts_as_taggable_on :tags
 
   after_create { Request.broadcast!(self) }

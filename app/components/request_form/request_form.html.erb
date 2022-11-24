@@ -27,7 +27,13 @@
               class: 'RequestForm-insertPlaceholderButton',
               type: 'button',
               data: { action: 'request-form#insertImage' } do %>
-              <%= field.file_field(:request, :files, data: { request_form_target: 'imageInput' }, multiple: true) %>
+              <%= field.file_field(:request,
+                                   :files,
+                                   data: { request_form_target: 'imageInput' },
+                                   multiple: true,
+                                   accept: 'image/*'
+
+              ) %>
               <%= t('.attach_image_to_message') %>
             <% end %>
           <% end %>
@@ -37,6 +43,11 @@
             highlight_placeholders: true,
             data: { request_form_target: 'message' }
           ) %>
+          <% if @request.errors[:files].any? %>
+            <strong class="RequestForm-imageErrorMessage">
+              <%= t('activestorage.blob.disallowed_image_content_type') %>
+            </strong>
+          <% end %>
           <div class="RequestForm-filenamesWrapper RequestForm-filenamesWrapper--hidden">
             <%= c 'heading', style: :gamma do %>
               <%= t('.attached_images') %>
