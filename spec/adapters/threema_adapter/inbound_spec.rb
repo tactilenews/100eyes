@@ -63,7 +63,9 @@ RSpec.describe ThreemaAdapter::Inbound do
   end
 
   describe 'Threema::Receive::File' do
-    let(:threema_mock) { instance_double(Threema::Receive::File, name: 'my voice', content: 'x\00x\\0', mime_type: 'audio/aac') }
+    let(:threema_mock) do
+      instance_double(Threema::Receive::File, name: 'my voice', content: 'x\00x\\0', mime_type: 'audio/aac', caption: 'some caption')
+    end
     before { allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::File).and_return(true) }
 
     describe '#file' do
@@ -80,7 +82,9 @@ RSpec.describe ThreemaAdapter::Inbound do
         end
 
         context 'image' do
-          let(:threema_mock) { instance_double(Threema::Receive::File, name: 'my image', content: 'x\00x\\0', mime_type: 'image/jpeg') }
+          let(:threema_mock) do
+            instance_double(Threema::Receive::File, name: 'my image', content: 'x\00x\\0', mime_type: 'image/jpeg', caption: nil)
+          end
 
           it { should be_attached }
           it 'preserves the content_type' do
@@ -88,6 +92,12 @@ RSpec.describe ThreemaAdapter::Inbound do
           end
         end
       end
+    end
+
+    describe 'saving the caption' do
+      subject { threema_message.message.text }
+
+      it { is_expected.to eq('some caption') }
     end
 
     describe 'saving the message' do
@@ -118,20 +128,26 @@ RSpec.describe ThreemaAdapter::Inbound do
       end
 
       context 'Video files' do
-        let(:threema_mock) { instance_double(Threema::Receive::File, name: 'my video', content: 'x\00x\\0', mime_type: 'video/mp4') }
+        let(:threema_mock) do
+          instance_double(Threema::Receive::File, name: 'my video', content: 'x\00x\\0', mime_type: 'video/mp4',
+                                                  caption: 'look at this cool video')
+        end
 
         it { is_expected.to be(true) }
       end
 
       context 'Pdf files' do
-        let(:threema_mock) { instance_double(Threema::Receive::File, name: 'my pdf', content: 'x\00x\\0', mime_type: 'application/pdf') }
+        let(:threema_mock) do
+          instance_double(Threema::Receive::File, name: 'my pdf', content: 'x\00x\\0', mime_type: 'application/pdf',
+                                                  caption: 'do you accept pdf?')
+        end
 
         it { is_expected.to be(true) }
       end
 
       context 'Contact' do
         let(:threema_mock) do
-          instance_double(Threema::Receive::File, name: "my friend's contact", content: 'x\00x\\0', mime_type: 'text/x-vcard')
+          instance_double(Threema::Receive::File, name: "my friend's contact", content: 'x\00x\\0', mime_type: 'text/x-vcard', caption: nil)
         end
 
         it { is_expected.to be(true) }
@@ -139,7 +155,8 @@ RSpec.describe ThreemaAdapter::Inbound do
 
       context 'Word doc' do
         let(:threema_mock) do
-          instance_double(Threema::Receive::File, name: "my friend's contact", content: 'x\00x\\0', mime_type: 'application/msword')
+          instance_double(Threema::Receive::File, name: "my friend's contact", content: 'x\00x\\0', mime_type: 'application/msword',
+                                                  caption: nil)
         end
 
         it { is_expected.to be(true) }
