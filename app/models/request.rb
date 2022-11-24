@@ -25,7 +25,12 @@ class Request < ApplicationRecord
       counts: {
         recipients: messages.map(&:recipient_id).compact.uniq.size,
         contributors: messages.select(&:reply?).map(&:sender_id).compact.uniq.size,
-        photos: messages.map { |message| message.photos_count || 0 }.sum,
+        photos: messages.replies.map do |message|
+          message.photos_count ||
+            message.files.joins(:attachment_blob).where(active_storage_blobs: { content_type: %w[image/jpg image/jpeg
+                                                                                                 image/png image/gif] }).size ||
+            0
+        end.sum,
         replies: messages.count(&:reply?)
       }
     }

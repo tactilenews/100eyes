@@ -27,8 +27,11 @@ FactoryBot.define do
     end
 
     trait :with_file do
-      after(:create) do |message|
-        create(:file, message: message)
+      transient do
+        attachment { Rack::Test::UploadedFile.new(Rails.root.join('example-audio.oga'), 'audio/ogg') }
+      end
+      after(:create) do |message, evaluator|
+        create(:file, message: message, attachment: evaluator.attachment)
       end
     end
 
