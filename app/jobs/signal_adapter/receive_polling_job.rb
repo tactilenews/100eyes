@@ -28,7 +28,7 @@ module SignalAdapter
       end
 
       adapter.on(SignalAdapter::UNKNOWN_CONTENT) do |contributor|
-        SignalAdapter::Outbound.perform_later(recipient: contributor, text: Setting.signal_unknown_content_message)
+        SignalAdapter::Outbound.send_unknown_content_message!(contributor)
       end
 
       signal_messages.each do |raw_message|
