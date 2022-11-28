@@ -2,8 +2,6 @@
 
 module SignalAdapter
   class Outbound
-    SEND_URL = URI.parse("#{Setting.signal_cli_rest_api_endpoint}/v2/send")
-
     def self.send!(message)
       recipient = message&.recipient
       return unless contributor_can_receive_messages?(recipient)

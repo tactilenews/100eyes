@@ -10,12 +10,13 @@ module SignalAdapter
       def perform(recipient:, text:)
         @recipient = recipient
         @text = text
-        request = Net::HTTP::Post.new(SignalAdapter::Outbound::SEND_URL.to_s, {
+        url = URI.parse("#{Setting.signal_cli_rest_api_endpoint}/v2/send")
+        request = Net::HTTP::Post.new(url.to_s, {
                                         Accept: 'application/json',
                                         'Content-Type': 'application/json'
                                       })
         request.body = data.to_json
-        response = Net::HTTP.start(SignalAdapter::Outbound::SEND_URL.host, SignalAdapter::Outbound::SEND_URL.port) do |http|
+        response = Net::HTTP.start(url.host, url.port) do |http|
           http.request(request)
         end
         response.value # may raise exception
