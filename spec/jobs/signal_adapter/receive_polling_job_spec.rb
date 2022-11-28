@@ -87,7 +87,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         it { should_not(change { Message.count }) }
 
         it 'sends welcome message' do
-          should have_enqueued_job(SignalAdapter::Outbound).with do |text, recipient|
+          should have_enqueued_job(SignalAdapter::Outbound::Text).with do |text, recipient|
             expect(text).to eq("Welcome!\n")
             expect(recipient.id).to eq(contributor.id)
           end
@@ -163,9 +163,9 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
           end
 
           it 'bounces a warning to the contributor' do
-            should have_enqueued_job(SignalAdapter::Outbound).with(
-              message: Message.new(text: 'We cannot process this content'),
-              recipient: contributor
+            should have_enqueued_job(SignalAdapter::Outbound::Text).with(
+              recipient: contributor,
+              text: 'We cannot process this content'
             )
           end
         end
