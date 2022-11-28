@@ -67,7 +67,7 @@ RSpec.describe 'Onboarding::Signal', type: :request do
     end
 
     it 'does not send welcome message' do
-      should_not enqueue_job(SignalAdapter::Outbound).with(text: anything, recipient: anything)
+      should_not enqueue_job(SignalAdapter::Outbound).with(message: Message.new(text: anything), recipient: anything)
     end
 
     it 'redirects to onboarding signal link page' do
