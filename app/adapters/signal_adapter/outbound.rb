@@ -17,7 +17,7 @@ module SignalAdapter
       return unless contributor_can_receive_messages?(contributor)
 
       welcome_message = [Setting.onboarding_success_heading, Setting.onboarding_success_text].join("\n")
-      perform_later(text: welcome_message, recipient: contributor)
+      perform_later(message: Message.new(text: welcome_message), recipient: contributor)
     end
 
     def perform(message:, recipient:)
