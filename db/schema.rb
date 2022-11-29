@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_02_094139) do
+ActiveRecord::Schema.define(version: 2022_11_29_190313) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -71,6 +71,18 @@ ActiveRecord::Schema.define(version: 2022_11_02_094139) do
     t.index ["recipient_type", "recipient_id"], name: "index_activity_notifications_on_recipient"
     t.index ["request_id"], name: "index_activity_notifications_on_request_id"
     t.index ["user_id"], name: "index_activity_notifications_on_user_id"
+  end
+
+  create_table "business_plans", force: :cascade do |t|
+    t.string "name"
+    t.integer "price_per_month"
+    t.integer "setup_cost"
+    t.integer "hours_of_included_support"
+    t.integer "number_of_users"
+    t.integer "number_of_contributors"
+    t.integer "number_of_communities"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "contributors", force: :cascade do |t|
@@ -153,6 +165,14 @@ ActiveRecord::Schema.define(version: 2022_11_02_094139) do
     t.index ["telegram_media_group_id"], name: "index_messages_on_telegram_media_group_id", unique: true
   end
 
+  create_table "organizations", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "business_plan_id", null: false
+    t.index ["business_plan_id"], name: "index_organizations_on_business_plan_id"
+  end
+
   create_table "pg_search_documents", force: :cascade do |t|
     t.text "content"
     t.string "searchable_type"
@@ -227,7 +247,9 @@ ActiveRecord::Schema.define(version: 2022_11_02_094139) do
     t.string "first_name"
     t.string "last_name"
     t.boolean "admin", default: false
+    t.bigint "organization_id"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["organization_id"], name: "index_users_on_organization_id"
     t.index ["remember_token"], name: "index_users_on_remember_token"
   end
 
@@ -241,7 +263,9 @@ ActiveRecord::Schema.define(version: 2022_11_02_094139) do
   add_foreign_key "message_files", "messages"
   add_foreign_key "messages", "contributors", column: "recipient_id"
   add_foreign_key "messages", "requests"
+  add_foreign_key "organizations", "business_plans"
   add_foreign_key "photos", "messages"
   add_foreign_key "requests", "users"
   add_foreign_key "taggings", "tags"
+  add_foreign_key "users", "organizations"
 end

@@ -7,5 +7,6 @@ FactoryBot.define do
     end
     password { Faker::Internet.password(min_length: 20, max_length: 128) }
     otp_enabled { true }
+    organization
   end
 end

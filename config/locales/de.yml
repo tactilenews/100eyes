@@ -499,6 +499,9 @@ de:
       error: Die bearbeitete Antwort konnte nicht gespeichet werden
     only_manually_created: Diese Aktion kann nur auf manuell erstellten Nachrichten ausgeführt werden.
 
+  profile:
+    main_heading: 'Dein 100eyes Plan: "%{business_plan_name}"'
+
   sessions:
     errors:
       otp_incorrect: "Der 6-stellige Anmeldecode ist nicht korrekt."
