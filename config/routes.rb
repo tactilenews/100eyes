@@ -99,4 +99,6 @@ Rails.application.routes.draw do
     get 'day-and-time-requests'
     get 'day-requests-replies'
   end
+
+  get '/profile', to: 'profile#index'
 end
