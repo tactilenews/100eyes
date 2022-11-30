@@ -16,6 +16,7 @@ class RequestsController < ApplicationController
   end
 
   def create
+    resize_image_files if request_params[:files].present?
     @request = Request.new(request_params.merge(user: current_user))
     if @request.save
       redirect_to @request, flash: { success: I18n.t('request.success', count: @request.stats[:counts][:recipients]) }
@@ -54,5 +55,14 @@ class RequestsController < ApplicationController
 
   def notifications_params
     params.require(:last_updated_at)
+  end
+
+  def resize_image_files
+    paths = request_params[:files].map { |file| file.tempfile.path }
+    paths.each do |path|
+      ImageProcessing::MiniMagick.source(path)
+        .resize_to_limit(1200, 1200)
+        .call(destination: path)
+    end
   end
 end
