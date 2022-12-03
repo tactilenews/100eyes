@@ -58,6 +58,8 @@ class RequestsController < ApplicationController
   end
 
   def resize_image_files
+    return if Rails.env.test?
+
     paths = request_params[:files].map { |file| file.tempfile.path }
     paths.each do |path|
       ImageProcessing::MiniMagick.source(path)
