@@ -61,8 +61,8 @@ class RequestsController < ApplicationController
     paths = request_params[:files].map { |file| file.tempfile.path }
     paths.each do |path|
       ImageProcessing::MiniMagick.source(path)
-        .resize_to_limit(1200, 1200)
-        .call(destination: path)
+                                 .resize_to_limit(1200, 1200)
+                                 .call(destination: path)
     end
   end
 end
