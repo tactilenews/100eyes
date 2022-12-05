@@ -19,5 +19,6 @@ RSpec.describe 'Profile' do
 
     expect(page).to have_content("Dein 100eyes Plan: \"#{business_plan.name}\"")
     expect(page).to have_content("Auftraggeber:in #{organization.contact_person.name}, #{organization.contact_person.email}")
+    expect(page).to have_content("Preis: #{number_to_currency(business_plan.price_per_month)}/Monat")
   end
 end
