@@ -81,6 +81,8 @@ ActiveRecord::Schema.define(version: 2022_11_29_190313) do
     t.integer "number_of_users"
     t.integer "number_of_contributors"
     t.integer "number_of_communities"
+    t.datetime "vaild_from"
+    t.datetime "valid_until"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

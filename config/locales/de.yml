@@ -503,7 +503,9 @@ de:
     main_heading: 'Dein 100eyes Plan: "%{business_plan_name}"'
     sub_heading:
       contact_person: "Auftraggeber:in %{contact_person_name}, %{contact_person_email}"
-      business_plan_price_per_month: "Preis: %{price_per_month}/Monat"
+      business_plan:
+        price_per_month: "Preis: %{price_per_month}/Monat"
+        valid_until: "Mindeslaufzeit: bis %{valid_until}"
 
   sessions:
     errors:

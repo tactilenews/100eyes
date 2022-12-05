@@ -10,6 +10,8 @@ class CreateBusinessPlans < ActiveRecord::Migration[6.1]
       t.integer :number_of_users
       t.integer :number_of_contributors
       t.integer :number_of_communities
+      t.datetime :vaild_from
+      t.datetime :valid_until
 
       t.timestamps
     end

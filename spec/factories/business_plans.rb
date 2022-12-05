@@ -9,5 +9,7 @@ FactoryBot.define do
     number_of_users { 5 }
     number_of_contributors { 150 }
     number_of_communities { 1 }
+    vaild_from { Time.current }
+    valid_until { Time.current + 6.months }
   end
 end
