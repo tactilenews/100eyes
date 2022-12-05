@@ -510,6 +510,9 @@ de:
       additional_info:
         channels: "Dialogkanäle: Signal, Threema, Telegram, E-mail"
         security: "Sicherheit: Community abgesichert über Zwei-Faktor-Authentifizierung, Cloudflare"
+    user_section:
+      main_heading: Deine Redakteur:Innen
+      number_of_users_of_business_plan_used: "%{users_count} von %{allocated_users} Seats genutzt"
 
   sessions:
     errors:

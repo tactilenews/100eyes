@@ -1,21 +1,36 @@
 <%= c 'main' do %>
-  <% c 'page_header' do %>
+  <%= c 'page_header' do %>
     <%= c 'heading' do %>
       <%= t('profile.header.main_heading', business_plan_name: @organization.business_plan.name) %>
     <% end %>
 
-    <%= c 'heading', style: :beta do %>
+    <%= c 'heading', style: :gamma do %>
       <%= t('profile.header.sub_heading.contact_person', contact_person_name: @organization.contact_person.name, contact_person_email: @organization.contact_person.email) %>
     <% end %>
 
-    <%= c 'heading', style: :beta do %>
+    <%= c 'heading', style: :gamma do %>
       <%= t('profile.header.sub_heading.business_plan.price_per_month', price_per_month: number_to_currency(@organization.business_plan.price_per_month)) %>
     <% end %>
 
-    <%= c 'heading', style: :beta do %>
+    <%= c 'heading', style: :gamma do %>
       <%= t('profile.header.sub_heading.business_plan.valid_until', valid_until: @organization.business_plan.valid_until.strftime('%m/%Y')) %>
     <% end %>
+
     <p><%= t('profile.header.additional_info.channels') %></p>
     <p><%= t('profile.header.additional_info.security') %></p>
+  <% end %>
+
+  <%= c 'section' do %>
+    <%= c 'heading', style: :beta do %>
+      <%= t('profile.user_section.main_heading') %>
+    <% end %>
+    <p><%= t('profile.user_section.number_of_users_of_business_plan_used', users_count: @organization.users.count, allocated_users: @organization.business_plan.number_of_users) %>
+    <ul>
+      <% @organization.users.each do |user| %>
+        <li>
+          <%= user.name %>
+        </li>
+      <% end %>
+    </ul>
   <% end %>
 <% end %>
