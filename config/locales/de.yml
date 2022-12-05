@@ -500,12 +500,16 @@ de:
     only_manually_created: Diese Aktion kann nur auf manuell erstellten Nachrichten ausgeführt werden.
 
   profile:
-    main_heading: 'Dein 100eyes Plan: "%{business_plan_name}"'
-    sub_heading:
-      contact_person: "Auftraggeber:in %{contact_person_name}, %{contact_person_email}"
-      business_plan:
-        price_per_month: "Preis: %{price_per_month}/Monat"
-        valid_until: "Mindeslaufzeit: bis %{valid_until}"
+    header:
+      main_heading: 'Dein 100eyes Plan: "%{business_plan_name}"'
+      sub_heading:
+        contact_person: "Auftraggeber:in %{contact_person_name}, %{contact_person_email}"
+        business_plan:
+          price_per_month: "Preis: %{price_per_month}/Monat"
+          valid_until: "Mindeslaufzeit: bis %{valid_until}"
+      additional_info:
+        channels: "Dialogkanäle: Signal, Threema, Telegram, E-mail"
+        security: "Sicherheit: Community abgesichert über Zwei-Faktor-Authentifizierung, Cloudflare"
 
   sessions:
     errors:

@@ -21,5 +21,7 @@ RSpec.describe 'Profile' do
     expect(page).to have_content("Auftraggeber:in #{organization.contact_person.name}, #{organization.contact_person.email}")
     expect(page).to have_content("Preis: #{number_to_currency(business_plan.price_per_month)}/Monat")
     expect(page).to have_content("Mindeslaufzeit: bis #{business_plan.valid_until.strftime('%m/%Y')}")
+    expect(page).to have_content('Dialogkanäle: Signal, Threema, Telegram, E-mail')
+    expect(page).to have_content('Sicherheit: Community abgesichert über Zwei-Faktor-Authentifizierung, Cloudflare')
   end
 end
