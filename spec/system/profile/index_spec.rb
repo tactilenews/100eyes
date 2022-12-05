@@ -11,11 +11,13 @@ RSpec.describe 'Profile' do
                   organization: organization)
   end
   let(:business_plan) { create(:business_plan) }
-  let(:organization) { create(:organization, business_plan: business_plan) }
+  let(:contact_person) { create(:user, first_name: 'Isaac', last_name: 'Bonga') }
+  let(:organization) { create(:organization, business_plan: business_plan, contact_person: contact_person) }
 
   it 'allows viewing/updating business plan' do
     visit profile_path(as: user)
 
     expect(page).to have_content("Dein 100eyes Plan: \"#{business_plan.name}\"")
+    expect(page).to have_content("Auftraggeber:in #{organization.contact_person.name}, #{organization.contact_person.email}")
   end
 end

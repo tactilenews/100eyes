@@ -2,5 +2,6 @@
 
 class Organization < ApplicationRecord
   belongs_to :business_plan
-  has_many :users, dependent: :destroy
+  belongs_to :contact_person, class_name: 'User', optional: true
+  has_many :users, class_name: 'User', dependent: :destroy
 end

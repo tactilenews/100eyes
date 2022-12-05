@@ -170,7 +170,9 @@ ActiveRecord::Schema.define(version: 2022_11_29_190313) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "business_plan_id", null: false
+    t.bigint "contact_person_id"
     t.index ["business_plan_id"], name: "index_organizations_on_business_plan_id"
+    t.index ["contact_person_id"], name: "index_organizations_on_contact_person_id"
   end
 
   create_table "pg_search_documents", force: :cascade do |t|
@@ -264,6 +266,7 @@ ActiveRecord::Schema.define(version: 2022_11_29_190313) do
   add_foreign_key "messages", "contributors", column: "recipient_id"
   add_foreign_key "messages", "requests"
   add_foreign_key "organizations", "business_plans"
+  add_foreign_key "organizations", "users", column: "contact_person_id"
   add_foreign_key "photos", "messages"
   add_foreign_key "requests", "users"
   add_foreign_key "taggings", "tags"

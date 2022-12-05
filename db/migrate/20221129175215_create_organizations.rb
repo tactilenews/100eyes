@@ -7,6 +7,7 @@ class CreateOrganizations < ActiveRecord::Migration[6.1]
 
       t.timestamps
       t.references :business_plan, null: false, foreign_key: true
+      t.references :contact_person, foreign_key: { to_table: 'users' }
     end
   end
 end

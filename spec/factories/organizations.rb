@@ -2,7 +2,16 @@
 
 FactoryBot.define do
   factory :organization do
-    name { '100eyes' }
     business_plan
+
+    name { '100eyes' }
+
+    transient do
+      users_count { 5 }
+    end
+
+    users do
+      Array.new(users_count) { association(:user, organization: instance) }
+    end
   end
 end

@@ -2,6 +2,6 @@
 
 class ProfileController < ApplicationController
   def index
-    @current_business_plan = current_user.organization.business_plan
+    @organization = current_user.organization
   end
 end

@@ -501,6 +501,8 @@ de:
 
   profile:
     main_heading: 'Dein 100eyes Plan: "%{business_plan_name}"'
+    sub_heading:
+      contact_person: "Auftraggeber:in %{contact_person_name}, %{contact_person_email}"
 
   sessions:
     errors:

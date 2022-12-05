@@ -1,5 +1,10 @@
 <%= c 'main' do %>
-  <%= c 'heading' do %>
-    <%= t('profile.main_heading', business_plan_name: @current_business_plan.name) %>
+  <% c 'page_header' do %>
+    <%= c 'heading' do %>
+      <%= t('profile.main_heading', business_plan_name: @organization.business_plan.name) %>
+    <% end %>
+    <%= c 'heading', style: :beta do %>
+      <%= t('profile.sub_heading.contact_person', contact_person_name: @organization.contact_person.name, contact_person_email: @organization.contact_person.email) %>
+    <% end %>
   <% end %>
 <% end %>
