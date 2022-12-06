@@ -22,9 +22,9 @@
 
   <%= c 'section' do %>
     <%= c 'heading', style: :beta do %>
-      <%= t('profile.user_section.main_heading') %>
+      <%= t('profile.users_section.main_heading') %>
     <% end %>
-    <p><%= t('profile.user_section.number_of_users_of_business_plan_used', users_count: @organization.users.count, allocated_users: @organization.business_plan.number_of_users) %>
+    <p><%= t('profile.users_section.number_of_users_of_business_plan_used', users_count: @organization.users.count, allocated_users: @organization.business_plan.number_of_users) %>
     <ul>
       <% @organization.users.each do |user| %>
         <li>
@@ -32,5 +32,13 @@
         </li>
       <% end %>
     </ul>
+  <% end %>
+
+  <%= c 'section' do %>
+    <%= c 'heading', style: :beta do %>
+      <%= t('profile.contributors_section.main_heading') %>
+    <% end %>
+    <p><%= t('profile.contributors_section.number_of_contributors_of_business_plan_used', contributors_count: @organization.contributors.active.count, allocated_contributors: @organization.business_plan.number_of_contributors) %>
+    <%= c 'contributors_status_bar', organization: @organization %>
   <% end %>
 <% end %>

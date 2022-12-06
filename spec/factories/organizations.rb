@@ -7,11 +7,16 @@ FactoryBot.define do
     name { '100eyes' }
 
     transient do
-      users_count { 5 }
+      users_count { 0 }
+      contributors_count { 0 }
     end
 
     users do
       Array.new(users_count) { association(:user, organization: instance) }
+    end
+
+    contributors do
+      Array.new(contributors_count) { association(:contributor, organization: instance) }
     end
   end
 end
