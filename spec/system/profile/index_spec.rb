@@ -30,10 +30,24 @@ RSpec.describe 'Profile' do
 
     # users section
     expect(page).to have_content('Deine Redakteur:Innen')
-    expect(page).to have_content("#{organization.users.count} von #{organization.business_plan.number_of_users} Seats genutzt")
+    expect(page).to have_content("3 von #{organization.business_plan.number_of_users} Seats genutzt")
     organization.users.each do |user|
       expect(page).to have_content(user.name)
     end
+    click_button 'Redakteur:in hinzufügen'
+    expect(page).to have_css('.Modal')
+
+    within('.Modal') do
+      fill_in 'Vorname', with: 'New'
+      fill_in 'Nachname', with: 'Editor'
+      fill_in 'E-Mail-Adresse', with: 'new-editor@example.org'
+      click_button 'Redakteur:in hinzufügen'
+    end
+
+    expect(page).to have_no_css('.Modal')
+    expect(page).to have_content('Redakteur:in erfolgreich erstellt')
+    expect(page).to have_content("4 von #{organization.business_plan.number_of_users} Seats genutzt")
+    expect(page).to have_content('New Editor')
 
     # contributors section
     expect(page).to have_content('Deine Community')

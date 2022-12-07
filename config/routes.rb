@@ -101,4 +101,5 @@ Rails.application.routes.draw do
   end
 
   get '/profile', to: 'profile#index'
+  post '/profile/user', to: 'profile#create_user'
 end

@@ -1,0 +1,37 @@
+<%= c 'section', data: { controller: 'user-management' } do %>
+  <%= c 'heading', style: :beta do %>
+    <%= t('.main_heading') %>
+  <% end %>
+  <p><%= t('.number_of_users_of_business_plan_used', users_count: organization.users.count, allocated_users: organization.business_plan.number_of_users) %>
+  <ul>
+    <% organization.users.each do |user| %>
+      <li>
+        <%= user.name %>
+      </li>
+    <% end %>
+  </ul>
+  <button data-action="user-management#openModal">
+    <%= t('.add_users_button') %>
+  </button>
+  <%= c 'modal', data: { controller: 'modal', user_management_target: 'modal' } do %>
+    <%= form_with(url: profile_user_path) do %>
+      <%= c 'base_field', id: 'profile[user][first_name]', label: t('.form.first_name.label') do %>
+        <%= c 'input', id: 'profile[user][first_name]', required: true %>
+      <% end %>
+
+      <%= c 'base_field', id: 'profile[user][last_name]', label: t('.form.last_name.label') do %>
+        <%= c 'input', id: 'profile[user][last_name]', required: true %>
+      <% end %>
+
+      <%= c 'base_field', id: 'profile[user][email]', label: t('.form.email.label') do %>
+        <%= c 'input', id: 'profile[user][email]', required: true, type: :email %>
+      <% end %>
+
+      <%= c 'button',
+        type: 'submit',
+        label: t('.form.submit_button'),
+        styles: [:primary, :block]
+      %>
+    <% end %>
+  <% end %>
+<% end %>

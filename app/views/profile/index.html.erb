@@ -20,20 +20,7 @@
     <p><%= t('profile.header.additional_info.security') %></p>
   <% end %>
 
-  <%= c 'section' do %>
-    <%= c 'heading', style: :beta do %>
-      <%= t('profile.users_section.main_heading') %>
-    <% end %>
-    <p><%= t('profile.users_section.number_of_users_of_business_plan_used', users_count: @organization.users.count, allocated_users: @organization.business_plan.number_of_users) %>
-    <ul>
-      <% @organization.users.each do |user| %>
-        <li>
-          <%= user.name %>
-        </li>
-      <% end %>
-    </ul>
-  <% end %>
-
+  <%= c 'user_management', organization: @organization %>
   <%= c 'section' do %>
     <%= c 'heading', style: :beta do %>
       <%= t('profile.contributors_section.main_heading') %>
