@@ -27,6 +27,7 @@ RSpec.describe 'Profile' do
     expect(page).to have_content("Mindeslaufzeit: bis #{business_plan.valid_until.strftime('%m/%Y')}")
     expect(page).to have_content('Dialogkanäle: Signal, Threema, Telegram, E-mail')
     expect(page).to have_content('Sicherheit: Community abgesichert über Zwei-Faktor-Authentifizierung, Cloudflare')
+    click_button('Plan jetzt upgraden')
 
     # user management section
     expect(page).to have_content('Deine Redakteur:Innen')

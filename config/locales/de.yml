@@ -523,6 +523,7 @@ de:
       additional_info:
         channels: "Dialogkanäle: Signal, Threema, Telegram, E-mail"
         security: "Sicherheit: Community abgesichert über Zwei-Faktor-Authentifizierung, Cloudflare"
+      upgrade_business_plan_button: Plan jetzt upgraden
     contributors_section:
       main_heading: Deine Community
       number_of_contributors_of_business_plan_used: "%{contributors_count} von %{allocated_contributors} Community-Mitglieder aktiv"
