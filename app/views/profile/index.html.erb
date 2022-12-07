@@ -27,5 +27,10 @@
     <% end %>
     <p><%= t('profile.contributors_section.number_of_contributors_of_business_plan_used', contributors_count: @organization.contributors.active.count, allocated_contributors: @organization.business_plan.number_of_contributors) %>
     <%= c 'contributors_status_bar', organization: @organization %>
+    <%= c 'copy_button',
+      label: I18n.t('profile.contributors_section.copy_invite'),
+      url: invites_url,
+      key: 'url'
+    %>
   <% end %>
 <% end %>

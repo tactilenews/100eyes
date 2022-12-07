@@ -526,6 +526,7 @@ de:
     contributors_section:
       main_heading: Deine Community
       number_of_contributors_of_business_plan_used: "%{contributors_count} von %{allocated_contributors} Community-Mitglieder aktiv"
+      copy_invite: Einladungslink generieren
     user:
       created_successfully: "Redakteur:in erfolgreich erstellt"
 

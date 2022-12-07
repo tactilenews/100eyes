@@ -63,5 +63,6 @@ RSpec.describe 'Profile' do
       organization.contributors.active.count / organization.business_plan.number_of_contributors.to_f, locale: :en
     )}']")
     expect(page).to have_css("span[style='width: 3.3%;']")
+    click_button('Einladungslink generieren')
   end
 end
