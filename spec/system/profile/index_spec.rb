@@ -28,12 +28,18 @@ RSpec.describe 'Profile' do
     expect(page).to have_content('Dialogkanäle: Signal, Threema, Telegram, E-mail')
     expect(page).to have_content('Sicherheit: Community abgesichert über Zwei-Faktor-Authentifizierung, Cloudflare')
 
-    # users section
+    # user management section
     expect(page).to have_content('Deine Redakteur:Innen')
     expect(page).to have_content("3 von #{organization.business_plan.number_of_users} Seats genutzt")
     organization.users.each do |user|
       expect(page).to have_content(user.name)
     end
+    click_button 'Redakteur:in hinzufügen'
+    expect(page).to have_css('.Modal')
+
+    click_button 'Modal schließen'
+    expect(page).to have_no_css('.Modal')
+
     click_button 'Redakteur:in hinzufügen'
     expect(page).to have_css('.Modal')
 

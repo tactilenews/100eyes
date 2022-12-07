@@ -292,6 +292,7 @@ de:
         email:
           label: E-Mail-Adresse
         submit_button: "Redakteur:in hinzufügen"
+        close_modal: Modal schließen
 
   mailer:
     unsubscribe:

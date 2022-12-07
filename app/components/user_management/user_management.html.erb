@@ -15,6 +15,13 @@
   </button>
   <%= c 'modal', data: { controller: 'modal', user_management_target: 'modal' } do %>
     <%= form_with(url: profile_user_path) do %>
+      <button
+        type="button"
+        data-action="user-management#closeModal"
+        title="<%= t('.form.close_modal') %>"
+      >
+        <%= c 'icon', icon: 'i-remove', style: :inline %>
+      </button>
       <%= c 'base_field', id: 'profile[user][first_name]', label: t('.form.first_name.label') do %>
         <%= c 'input', id: 'profile[user][first_name]', required: true %>
       <% end %>
