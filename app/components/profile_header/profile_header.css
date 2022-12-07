@@ -1,0 +1,18 @@
+.ProfileHeader .PageHeader-flexbox {
+  gap: 0;
+}
+
+.ProfileHeader-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.Section > .ProfileHeader-upgradeBusinessPlanButton {
+  flex-shrink: 0;
+  padding: var(--spacing-unit-s);
+  margin-top: 0;
+  border: 0;
+  background-color: inherit;
+  font-size: calc(1.25 * var(--font-size));
+}
