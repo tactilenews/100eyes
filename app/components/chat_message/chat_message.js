@@ -26,7 +26,7 @@ export default class extends Controller {
 
   isTruncated() {
     if (this.hasTextTarget) {
-      return this.textTarget.clientHeight < this.textTarget.scrollHeight;
+      return this.textTarget.parentNode.clientHeight < this.textTarget.parentNode.scrollHeight;
     }
   }
 
