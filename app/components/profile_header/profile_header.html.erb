@@ -15,8 +15,8 @@
     <%= t('profile.header.sub_heading.business_plan.valid_until', valid_until: organization.business_plan.valid_until.strftime('%m/%Y')) %>
   <% end %>
 
-  <%= c 'section', styles: [:noHorizontalPadding], class: 'ProfileHeader-section' do %>
-    <div>
+  <%= c 'flex' do %>
+    <div class="ProfileHeader-additionalInfo">
       <p><%= t('profile.header.additional_info.channels') %></p>
       <p><%= t('profile.header.additional_info.security') %></p>
     </div>

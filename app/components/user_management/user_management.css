@@ -1,12 +1,13 @@
-.ProfileHeader .PageHeader-flexbox {
-  gap: 0;
+.UserManagement.Section > * + * {
+  margin-top: 0;
 }
 
-.ProfileHeader-additionalInfo {
+.UserManagement-usersList {
+  list-style: none;
   flex-basis: 50%;
 }
 
-.Flex > .ProfileHeader-upgradeBusinessPlanButton {
+.UserManagement-openModalButton {
   flex-shrink: 0;
   padding: var(--spacing-unit-s);
   margin-top: 0;

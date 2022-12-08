@@ -1,18 +1,25 @@
-<%= c 'section', data: { controller: 'user-management' } do %>
+<%= c 'section', **attrs.merge(styles: [:wide, :noMarginTop], data: { controller: 'user-management' }) do %>
   <%= c 'heading', style: :beta do %>
     <%= t('.main_heading') %>
   <% end %>
   <p><%= t('.number_of_users_of_business_plan_used', users_count: organization.users.count, allocated_users: organization.business_plan.number_of_users) %>
-  <ul>
-    <% organization.users.each do |user| %>
-      <li>
-        <%= user.name %>
-      </li>
-    <% end %>
-  </ul>
-  <button data-action="user-management#openModal">
-    <%= t('.add_users_button') %>
-  </button>
+
+  <%= c 'flex' do %>
+    <ul class="UserManagement-usersList">
+      <% organization.users.each do |user| %>
+        <li>
+          <%= user.name %>
+        </li>
+      <% end %>
+    </ul>
+    <button
+      class="UserManagement-openModalButton"
+      data-action="user-management#openModal"
+    >
+      <%= c 'icon', icon: 'add', styles: [:inline] %>
+      <%= t('.add_users_button') %>
+    </button>
+  <% end %>
   <%= c 'modal', data: { controller: 'modal', user_management_target: 'modal' } do %>
     <%= form_with(url: profile_user_path) do %>
       <button
