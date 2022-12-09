@@ -2,7 +2,7 @@
 
 module PostmarkAdapter
   class Inbound
-    attr_reader :sender, :text, :message, :photos, :unknown_content, :file
+    attr_reader :sender, :text, :message, :photos, :unknown_content, :file, :request
 
     def self.bounce!(mail)
       mailer_params = {
@@ -58,11 +58,23 @@ module PostmarkAdapter
 
     def initialize_photos_and_unknown_content(mail)
       photos = mail.attachments.map do |attachment|
+        message_ids = Message.where(recipient_id: sender&.id).pluck(:id)
+        outbound_attachment = Message::File.joins(:attachment_blob).where(
+          message_id: message_ids,
+          active_storage_blobs: {
+            filename: attachment.filename,
+            content_type: attachment.mime_type,
+            byte_size: attachment.decoded.length
+          }
+        ).first
+        next if outbound_attachment
+
         photo = Photo.new
         photo.message = message
         photo.attachment.attach(io: StringIO.new(attachment.decoded), filename: attachment.filename)
         photo
       end
+      photos = photos.compact
       unknown_content = photos.any?(&:invalid?)
       photos = photos.select(&:valid?) # this might not be an image
       [photos, unknown_content]

@@ -184,5 +184,29 @@ RSpec.describe PostmarkAdapter::Inbound do
       it { should_not be_empty }
       it { should all be_a(Photo) }
     end
+
+    describe 'given the image attachment was sent in the request' do
+      let(:file) { create(:file, attachment: fixture_file_upload('example-image.png')) }
+      let(:contributor) { create(:contributor) }
+      let!(:message) { create(:message, recipient: contributor, files: [file]) }
+      let(:mail) do
+        mail = Mail.new
+        mail.from contributor.email
+        mail.add_file Rails.root.join('example-image.png').to_s
+        mail
+      end
+      it { should be_empty }
+
+      context 'given an image attachment is sent as a reply' do
+        let(:mail) do
+          mail = Mail.new
+          mail.from contributor.email
+          mail.add_file Rails.root.join('spec/fixtures/files/profile_picture.jpg').to_s
+          mail
+        end
+        it { should_not be_empty }
+        it { should all be_a(Photo) }
+      end
+    end
   end
 end
