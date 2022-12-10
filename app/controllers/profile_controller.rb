@@ -2,7 +2,7 @@
 
 class ProfileController < ApplicationController
   def index
-    @organization = current_user.organization
+    @organization = current_user.admin? ? Organization.last : current_user.organization
   end
 
   def create_user

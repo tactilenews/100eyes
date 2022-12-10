@@ -9,7 +9,7 @@ class User < ApplicationRecord
            dependent: :destroy
   has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
   has_many :messages, as: :sender, dependent: :destroy
-  belongs_to :organization
+  belongs_to :organization, optional: true
 
   has_one_time_password
   validates :password, length: { in: 8..128 }, unless: :skip_password_validation?
