@@ -1,14 +1,14 @@
-<%= c 'section', **attrs.merge(styles: [:wide, :noMarginTop], data: { controller: 'user-management' }) do %>
+<%= c 'section', **attrs.merge(styles: [:wide], data: { controller: 'user-management' }) do %>
   <%= c 'heading', style: :beta do %>
     <%= t('.main_heading') %>
   <% end %>
   <p><%= t('.number_of_users_of_business_plan_used', users_count: organization.users.count, allocated_users: organization.business_plan.number_of_users) %>
 
-  <%= c 'flex' do %>
+  <%= c 'flex', style: :firstBaseline do %>
     <ul class="UserManagement-usersList">
       <% organization.users.each do |user| %>
-        <li>
-          <%= user.name %>
+        <li class="UserManagement-usersListItem">
+          <strong><%= user.name %></strong>
         </li>
       <% end %>
     </ul>

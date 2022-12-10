@@ -49,6 +49,10 @@
     margin: 0;
     margin-right: var(--gap);
   }
+
+  .Flex--firstBaseline {
+    align-items: first baseline;
+  }
 }
 
 .Flex--smallGap {

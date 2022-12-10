@@ -1,7 +1,7 @@
 .Section {
   padding-left: var(--limit-max-inner-width);
   padding-right: var(--limit-max-inner-width);
-  margin-bottom: var(--spacing-unit);
+  margin: var(--spacing-unit) 0;
 }
 
 .Section--narrow {

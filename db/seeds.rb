@@ -114,7 +114,7 @@ organization = Organization.create_or_find_by(name: '100eyes',
 admin = User.create_or_find_by(email: 'redaktion@tactile.news', first_name: 'Dennis', last_name: 'Schröder', password: password,
                                admin: true, otp_secret_key: otp_secret_key)
 user = User.create_or_find_by(email: 'contact-person@example_organization.org', first_name: 'ConactFor', last_name: 'Organization',
-                              password: password, otp_secret_key: otp_secret_key)
+                              password: password, otp_secret_key: otp_secret_key, organization: organization)
 organization.update(contact_person: user)
 puts 'BusinesPlans:'
 business_plans.pluck(:name).each_with_index do |business_plan_name, index|
