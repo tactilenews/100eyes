@@ -1,11 +1,3 @@
-.UserManagement {
-  margin-top: var(--spacing-unit-xl);
-}
-
-.UserManagement.Section > * + * {
-  margin-top: 0;
-}
-
 .UserManagement-usersList {
   list-style: none;
   flex-basis: 50%;
