@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Sending image files' do
+RSpec.describe 'Sending image files', js: true do
   let(:user) { create(:user) }
 
   context 'given contributors'
@@ -67,6 +67,7 @@ RSpec.describe 'Sending image files' do
 
     click_button 'Frage an die Community senden'
 
+    expect(page).to have_content('Did you get my image?')
     expect(page).to have_current_path(request_path(Request.first))
 
     within('.PageHeader') do
