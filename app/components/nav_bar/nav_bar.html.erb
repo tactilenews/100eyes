@@ -1,6 +1,6 @@
-<header class="NavBar">
-  <nav>
-    <ul>
+<header <%= attrs %>>
+  <nav class="NavBar-nav">
+    <ul class="NavBar-list">
       <li class="NavBar-item">
         <%= link_to dashboard_path, class: 'NavBar-logo' do %>
           <%= t 'application_name' %>
@@ -31,6 +31,11 @@
       <li class="NavBar-item">
         <%= link_to sign_out_path, method: :delete do %>
           <%= t '.sign_out' %>
+        <% end %>
+      </li>
+      <li class="NavBar-item NavBar-profileLink">
+        <%= link_to profile_path, aria: { label: t('.profile_path') } do %>
+          <%= c 'avatar' %>
         <% end %>
       </li>
     </ul>

@@ -43,6 +43,7 @@ de:
         other: Recherchen
       admin: Admin
       sign_out: Abmelden
+      profile_path: Zur Profilseite
     hero:
       title: Willkommen bei 100eyes. Nutze die Intelligenz der Community.
     footer:
@@ -246,6 +247,7 @@ de:
       macos_emoji_picker_hint: Füge Emojis mit <kbd>Control ⌃</kbd> + <kbd>Command ⌘</kbd> + <kbd>Leertaste</kbd> ein.
     avatar:
       expand: In Originalgröße anzeigen
+      editorial_logo: "%{project_name} Logo"
     about:
       heading: Über 100eyes
       version: "Version %{version} (%{date})"

@@ -16,9 +16,18 @@ RSpec.describe 'Profile' do
     create(:organization, business_plan: business_plan, contact_person: contact_person, users_count: 2, contributors_count: 5)
   end
   let!(:inactive_contributor) { create(:contributor, deactivated_at: 1.hour.ago, organization: organization) }
+  before do
+    allow(Setting).to receive(:channel_image).and_return(ActiveStorage::Blob.new(filename: 'channel_image.jpg'))
+  end
 
   it 'allows viewing/updating business plan' do
-    visit profile_path(as: user)
+    visit dashboard_path(as: user)
+
+    within('.NavBar') do
+      find('a[aria-label="Zur Profilseite"]').click
+    end
+
+    expect(page).to have_current_path(profile_path)
 
     # header
     expect(page).to have_content("Dein 100eyes Plan: \"#{business_plan.name}\"")

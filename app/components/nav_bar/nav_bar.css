@@ -12,8 +12,14 @@
   color: rgba(255, 255, 255, 0.8);
 }
 
-.NavBar > ul {
+.NavBar-nav {
+  flex-basis: 90%;
+}
+
+.NavBar .NavBar-list {
   list-style: none;
+  display: flex;
+  align-items: center;
 }
 
 .NavBar-item {
@@ -33,4 +39,12 @@
 .NavBar-logo {
   font-weight: 600;
   color: #fff;
+}
+
+.NavBar-item.NavBar-profileLink {
+  margin: 0 var(--spacing-unit) 0 auto;
+}
+
+.NavBar > form {
+  flex-shrink: 0;
 }
