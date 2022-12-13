@@ -1,3 +1,7 @@
+.UserManagement > .Flex {
+  margin-top: var(--spacing-unit-s);
+}
+
 .UserManagement-usersList {
   list-style: none;
   flex-basis: 50%;
