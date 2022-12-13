@@ -5,6 +5,7 @@ FactoryBot.define do
     business_plan
 
     name { '100eyes' }
+    upgrade_discount { 10 }
 
     transient do
       users_count { 0 }

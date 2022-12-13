@@ -15,6 +15,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
     contact_person: Field::BelongsTo,
     contributors: Field::HasMany,
     name: Field::String,
+    upgrade_discount: Field::Number,
     users: Field::HasMany,
     created_at: Field::DateTime,
     updated_at: Field::DateTime
@@ -29,6 +30,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
     name
     contact_person
     business_plan
+    upgrade_discount
     contributors
     users
   ].freeze
@@ -36,11 +38,11 @@ class OrganizationDashboard < Administrate::BaseDashboard
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
   SHOW_PAGE_ATTRIBUTES = %i[
-    id
-    business_plan
-    contact_person
-    contributors
     name
+    contact_person
+    business_plan
+    upgrade_discount
+    contributors
     users
     created_at
     updated_at
@@ -51,6 +53,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = %i[
     business_plan
+    upgrade_discount
     contact_person
     contributors
     name

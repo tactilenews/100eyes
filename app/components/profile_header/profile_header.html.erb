@@ -23,7 +23,7 @@
     <%= c 'button',
       styles: [:secondary] do %>
       <%= c 'icon', icon: 'add', styles: [:inline] %>
-      <%= t('profile.header.upgrade_business_plan_button') %>
+      <%= t('profile.header.upgrade_business_plan_button', upgrade_discount: organization.upgrade_discount).html_safe %>
     <% end%>
   <% end %>
 <% end %>

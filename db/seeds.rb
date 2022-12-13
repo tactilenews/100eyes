@@ -108,6 +108,7 @@ business_plans = business_plans.each do |business_plan|
   BusinessPlan.create_or_find_by(business_plan)
 end
 organization = Organization.create_or_find_by(name: '100eyes',
+                                              upgrade_discount: 10,
                                               business_plan: BusinessPlan.where.not(
                                                 valid_from: nil, valid_until: nil
                                               ).first)
