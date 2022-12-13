@@ -1,0 +1,19 @@
+<%= c 'section', **attrs.merge(styles: [:wide, :xlargeMarginTop, :noSpaceBetween]) do %>
+  <%= c 'heading', style: :beta do %>
+    <%= t('profile.contributors_section.main_heading') %>
+  <% end %>
+  <p><%= t('profile.contributors_section.number_of_contributors_of_business_plan_used',
+         contributors_count: organization.contributors.active.count,
+         allocated_contributors: organization.business_plan.number_of_contributors)
+     %>
+  <%= c 'flex' do %>
+    <%= c 'contributors_status_bar', organization: organization %>
+    <%= c 'copy_button',
+      class: 'Button--secondary',
+      label: I18n.t('profile.contributors_section.copy_invite'),
+      url: invites_url,
+      key: 'url',
+      icon_name: 'add'
+    %>
+  <% end %>
+<% end %>

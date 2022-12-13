@@ -12,13 +12,12 @@
         </li>
       <% end %>
     </ul>
-    <button
-      class="UserManagement-openModalButton"
-      data-action="user-management#openModal"
-    >
+    <%= c 'button',
+      styles: [:secondary],
+      data: { action: 'user-management#openModal' } do %>
       <%= c 'icon', icon: 'add', styles: [:inline] %>
       <%= t('.add_users_button') %>
-    </button>
+    <% end%>
   <% end %>
   <%= c 'modal', data: { controller: 'modal', user_management_target: 'modal' } do %>
     <%= form_with(url: profile_user_path) do %>

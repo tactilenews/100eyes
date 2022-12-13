@@ -20,9 +20,10 @@
       <p><%= t('profile.header.additional_info.channels') %></p>
       <p><%= t('profile.header.additional_info.security') %></p>
     </div>
-    <button class="ProfileHeader-upgradeBusinessPlanButton">
+    <%= c 'button',
+      styles: [:secondary] do %>
       <%= c 'icon', icon: 'add', styles: [:inline] %>
       <%= t('profile.header.upgrade_business_plan_button') %>
-    </button>
+    <% end%>
   <% end %>
 <% end %>

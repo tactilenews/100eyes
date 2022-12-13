@@ -3,15 +3,6 @@
   flex-basis: 50%;
 }
 
-.UserManagement-openModalButton {
-  flex-shrink: 0;
-  padding: var(--spacing-unit-s);
-  margin-top: 0;
-  border: 0;
-  background-color: inherit;
-  font-size: calc(1.25 * var(--font-size));
-}
-
 .UserManagement-usersListItem {
   margin-bottom: var(--spacing-unit-s);
 }
