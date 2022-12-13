@@ -12,22 +12,20 @@
         </li>
       <% end %>
     </ul>
-    <%= c 'button',
-      styles: [:secondary],
-      data: { action: 'user-management#openModal' } do %>
+    <%= c 'button', styles: [:secondary], data: { action: 'user-management#openModal' } do %>
       <%= c 'icon', icon: 'add', styles: [:inline] %>
       <%= t('.add_users_button') %>
     <% end%>
   <% end %>
-  <%= c 'modal', data: { controller: 'modal', user_management_target: 'modal' } do %>
+  <%= c 'modal', class: 'UserManagement-modal', data: { controller: 'modal', user_management_target: 'modal' } do %>
     <%= form_with(url: profile_user_path) do %>
-      <button
-        type="button"
-        data-action="user-management#closeModal"
-        title="<%= t('.form.close_modal') %>"
-      >
+      <%= c 'button',
+        styles: [:secondary, :circular],
+        type: 'button',
+        title: t('.form.close_modal'),
+        data: { action: 'user-management#closeModal' } do %>
         <%= c 'icon', icon: 'i-remove', style: :inline %>
-      </button>
+      <% end %>
       <%= c 'base_field', id: 'profile[user][first_name]', label: t('.form.first_name.label') do %>
         <%= c 'input', id: 'profile[user][first_name]', required: true %>
       <% end %>

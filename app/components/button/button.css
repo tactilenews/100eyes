@@ -108,6 +108,10 @@
   animation: loading-spinner 0.75s linear infinite;
 }
 
+.Button--circular {
+  padding: var(--input-padding);
+}
+
 @keyframes loading-spinner {
   from {
     transform: rotate(0deg);
