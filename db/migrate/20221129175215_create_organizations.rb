@@ -4,6 +4,7 @@ class CreateOrganizations < ActiveRecord::Migration[6.1]
   def change
     create_table :organizations do |t|
       t.string :name
+      t.integer :upgrade_discount
 
       t.timestamps
       t.references :business_plan, null: false, foreign_key: true

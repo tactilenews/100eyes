@@ -14,3 +14,19 @@
   background-color: inherit;
   font-size: calc(1.25 * var(--font-size));
 }
+
+.ProfileHeader-modal {
+  max-width: var(--grid-max-width-l);
+  display: flex;
+  flex-direction: column;
+}
+
+.ProfileHeader-closeModalButton {
+  align-self: flex-end;
+}
+
+@media screen and (min-width: 720px) {
+  .ProfileHeader-modal {
+    max-width: var(--grid-max-width);
+  }
+}

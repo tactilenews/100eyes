@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_13_152835) do
+ActiveRecord::Schema.define(version: 2022_12_06_153747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -85,6 +85,7 @@ ActiveRecord::Schema.define(version: 2022_12_13_152835) do
     t.datetime "valid_until"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_business_plans_on_name", unique: true
   end
 
   create_table "contributors", force: :cascade do |t|
@@ -171,11 +172,11 @@ ActiveRecord::Schema.define(version: 2022_12_13_152835) do
 
   create_table "organizations", force: :cascade do |t|
     t.string "name"
+    t.integer "upgrade_discount"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "business_plan_id", null: false
     t.bigint "contact_person_id"
-    t.integer "upgrade_discount"
     t.index ["business_plan_id"], name: "index_organizations_on_business_plan_id"
     t.index ["contact_person_id"], name: "index_organizations_on_contact_person_id"
   end
@@ -202,8 +203,8 @@ ActiveRecord::Schema.define(version: 2022_12_13_152835) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "replies_count"
-    t.bigint "user_id"
     t.text "image_data"
+    t.bigint "user_id"
     t.index ["user_id"], name: "index_requests_on_user_id"
   end
 

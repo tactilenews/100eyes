@@ -3,7 +3,7 @@
 class CreateBusinessPlans < ActiveRecord::Migration[6.1]
   def change
     create_table :business_plans do |t|
-      t.string :name
+      t.string :name, index: { unique: true }
       t.integer :price_per_month
       t.integer :setup_cost
       t.integer :hours_of_included_support

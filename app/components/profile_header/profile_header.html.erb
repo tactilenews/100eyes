@@ -1,29 +1,59 @@
-<%= c 'page_header', **attrs.merge(styles: [:inheritBackgroundColor, :flexboxColumn, :wide]) do %>
+<%= c 'page_header', **attrs.merge(styles: [:inheritBackgroundColor, :flexboxColumn, :wide], data: { controller: 'profile-header' }) do %>
   <%= c 'heading' do %>
-    <%= t('profile.header.main_heading', business_plan_name: organization.business_plan.name) %>
+    <%= t('.main_heading', business_plan_name: organization.business_plan.name) %>
   <% end %>
 
   <%= c 'heading', style: :gamma do %>
-    <%= t('profile.header.sub_heading.contact_person', contact_person_name: organization.contact_person.name, contact_person_email: organization.contact_person.email) %>
+    <%= t('.sub_heading.contact_person', contact_person_name: organization.contact_person.name, contact_person_email: organization.contact_person.email) %>
   <% end %>
 
   <%= c 'heading', style: :gamma do %>
-    <%= t('profile.header.sub_heading.business_plan.price_per_month', price_per_month: number_to_currency(organization.business_plan.price_per_month)) %>
+    <%= t('.sub_heading.business_plan.price_per_month', price_per_month: number_to_currency(organization.business_plan.price_per_month)) %>
   <% end %>
 
   <%= c 'heading', style: :gamma do %>
-    <%= t('profile.header.sub_heading.business_plan.valid_until', valid_until: organization.business_plan.valid_until.strftime('%m/%Y')) %>
+    <%= t('.sub_heading.business_plan.valid_until', valid_until: organization.business_plan.valid_until.strftime('%m/%Y')) %>
   <% end %>
 
   <%= c 'flex' do %>
     <div class="ProfileHeader-additionalInfo">
-      <p><%= t('profile.header.additional_info.channels') %></p>
-      <p><%= t('profile.header.additional_info.security') %></p>
+      <p><%= t('.additional_info.channels') %></p>
+      <p><%= t('.additional_info.security') %></p>
     </div>
     <%= c 'button',
-      styles: [:secondary] do %>
+      styles: [:secondary],
+      data: { action: 'profile-header#openModal' } do %>
       <%= c 'icon', icon: 'add', styles: [:inline] %>
-      <%= t('profile.header.upgrade_business_plan_button', upgrade_discount: organization.upgrade_discount).html_safe %>
+      <%= t('.upgrade_business_plan_button', upgrade_discount: organization.upgrade_discount).html_safe %>
     <% end%>
+  <% end %>
+  <%= c 'modal', class: 'ProfileHeader-modal', data: { controller: 'modal', profile_header_target: 'modal' } do %>
+    <%= c 'button',
+      class: 'ProfileHeader-closeModalButton',
+      styles: [:secondary, :circular],
+      type: 'button',
+      title: t('.close_modal'),
+      data: { action: 'profile-header#closeModal' } do %>
+      <%= c 'icon', icon: 'i-remove', style: :inline %>
+    <% end %>
+    <%= form_with(
+      model: organization,
+      url: profile_upgrade_business_plan_path,
+      local: true,
+      method: 'PUT',
+      html: { autocomplete: 'off' }
+    ) do %>
+      <%= c 'business_plan_choices',
+        choices: choices,
+        id: 'profile[business_plan_id]',
+        current_plan: organization.business_plan,
+        discount: organization.upgrade_discount
+      %>
+      <%= c 'button',
+        type: 'submit',
+        label: t('.modal.form.submit_button'),
+        styles: [:primary, :block]
+      %>
+    <% end %>
   <% end %>
 <% end %>
