@@ -55,7 +55,7 @@ de:
         one: empfangene Nachricht
         other: empfangene Nachrichten
       photos:
-        one: empfangene Bild
+        one: empfangenes Bild
         other: empfangene Bilder
     request_notification:
       action: Neu laden
