@@ -24,7 +24,7 @@ RSpec.describe '/contributors' do
 
     context 'unauthenticated' do
       subject { -> { post profile_user_path, params: params } }
-      
+
       it 'does not change user count' do
         expect { subject.call }.not_to(change { User.count })
       end
@@ -32,7 +32,7 @@ RSpec.describe '/contributors' do
 
     context 'authenticated' do
       subject { -> { post profile_user_path(as: user), params: params } }
-      
+
       it 'creates a user' do
         expect { subject.call }.to(change { User.count }.from(2).to(3))
       end
@@ -55,7 +55,7 @@ RSpec.describe '/contributors' do
 
     context 'unauthenticated' do
       subject { -> { put profile_upgrade_business_plan_path, params: params } }
-      
+
       it 'does not change user count' do
         expect { subject.call }.not_to(change { organization.reload.business_plan })
       end
@@ -63,7 +63,7 @@ RSpec.describe '/contributors' do
 
     context 'authenticated' do
       subject { -> { put profile_upgrade_business_plan_path(as: user), params: params } }
-      
+
       it 'updates the organization business_plan' do
         current_business_plan = organization.business_plan
         expect { subject.call }.to(change { organization.reload.business_plan }.from(current_business_plan).to(business_plan))
