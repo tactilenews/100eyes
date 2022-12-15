@@ -78,6 +78,34 @@ RSpec.describe '/contributors' do
         subject.call
         expect(flash[:success]).not_to be_empty
       end
+
+      it 'does not schedule a job for non-admin' do
+        expect { subject.call }.not_to have_enqueued_job.on_queue('default').with(
+          'PostmarkAdapter::Outbound',
+          'business_plan_upgraded',
+          'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
+          {
+            params: { admin: an_instance_of(User), organization: organization },
+            args: []
+          }
+        )
+      end
+
+      context 'schedules PostmarkAdapterJob for admin only' do
+        let!(:admin) { create_list(:user, 3, admin: true) }
+
+        it 'schedules a job to notify admin of the change' do
+          expect { subject.call }.to have_enqueued_job.on_queue('default').with(
+            'PostmarkAdapter::Outbound',
+            'business_plan_upgraded',
+            'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
+            {
+              params: { admin: an_instance_of(User), organization: organization },
+              args: []
+            }
+          ).exactly(3).times
+        end
+      end
     end
   end
 end

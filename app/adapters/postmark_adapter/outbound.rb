@@ -23,6 +23,12 @@ module PostmarkAdapter
       with(contributor: contributor).welcome_email.deliver_later
     end
 
+    def self.send_business_plan_upgraded_message!(admin, organization)
+      return unless admin&.email && admin&.admin? && organization&.id
+
+      with(admin: admin, organization: organization).business_plan_upgraded.deliver_later
+    end
+
     def bounce_email
       @text = params[:text]
       mail(params[:mail])
@@ -34,6 +40,18 @@ module PostmarkAdapter
       message_stream = Setting.postmark_transactional_stream
       @text = [subject, Setting.onboarding_success_text].join("\n")
       mail(to: contributor.email, subject: subject, message_stream: message_stream)
+    end
+
+    def business_plan_upgraded
+      admin = params[:admin]
+      organization = params[:organization]
+      subject = I18n.t('adapter.postmark.business_plan_upgraded.subject',
+                       organization_name: organization.name,
+                       business_plan_name: organization.business_plan.name,
+                       discount: organization.upgrade_discount)
+      message_stream = Setting.postmark_transactional_stream
+      @text = [subject, I18n.t('adapter.postmark.business_plan_upgraded.text', organization_name: organization.name)].join("\n")
+      mail(to: admin.email, subject: subject, message_stream: message_stream)
     end
 
     def message_email
