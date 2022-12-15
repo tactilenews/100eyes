@@ -13,7 +13,7 @@
 }
 
 .NavBar-nav {
-  flex-basis: 90%;
+  flex-grow: 1;
 }
 
 .NavBar .NavBar-list {

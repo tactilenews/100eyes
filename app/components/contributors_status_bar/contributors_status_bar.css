@@ -1,8 +1,8 @@
 .ContributorsStatusBar {
   flex-basis: 50%;
-  height: var(--spacing-unit);
-  border-radius: 5px;
-  border: 1px solid var(--color-border);
+  height: var(--spacing-unit-l);
+  border-radius: --border-radius;
+  border: var(--input-border-width) solid var(--color-border);
   overflow: hidden;
   position: relative;
 }
@@ -11,12 +11,12 @@
   height: 100%;
   display: block;
   width: 0;
-  color: rgb(255, 251, 251);
-  line-height: 30px;
+  color: var(--color-bg);
+  line-height: var(--line-height);
   position: absolute;
   text-align: end;
-  padding-right: 5px;
-  background-color: blue;
+  padding-right: var(--spacing-unit-xs);
+  background-color: var(--color-primary);
   transition-property: width;
   transition-duration: 2s;
   transition-delay: 1s;
