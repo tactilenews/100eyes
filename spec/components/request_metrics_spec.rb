@@ -9,6 +9,6 @@ RSpec.describe RequestMetrics::RequestMetrics, type: :component do
   let(:request) { build(:request) }
 
   it { should have_text('haben geantwortet') }
-  it { should have_text('Nachrichten insgesamt') }
-  it { should have_text('Fotos') }
+  it { should have_text('empfangene Nachrichten') }
+  it { should have_text('empfangene Bilder') }
 end

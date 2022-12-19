@@ -52,11 +52,11 @@ de:
         one: hat geantwortet
         other: haben geantwortet
       replies:
-        one: Nachricht ingesamt
-        other: Nachrichten insgesamt
+        one: empfangene Nachricht
+        other: empfangene Nachrichten
       photos:
-        one: Foto
-        other: Fotos
+        one: empfangenes Bild
+        other: empfangene Bilder
     request_notification:
       action: Neu laden
       message_template:
