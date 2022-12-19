@@ -26,7 +26,7 @@ class Message < ApplicationRecord
   validates :unknown_content, inclusion: { in: [true, false] }
 
   after_commit(on: :create, unless: :manually_created?) do
-    [PostmarkAdapter::Outbound, SignalAdapter::Outbound, TelegramAdapter::Outbound, ThreemaAdapter::Outbound].each do |adapter|
+    [PostmarkAdapter::Outbound, SignalAdapter::Outbound, TelegramAdapter::Outbound, ThreemaAdapter::Outbound, WhatsAppAdapter::Outbound].each do |adapter|
       adapter.send!(self)
     end
   end

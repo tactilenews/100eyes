@@ -75,6 +75,17 @@ de:
       heading: Mit Signal teilnehmen
       text: Geben Sie bitte unten die Handynummer ein, mit der Sie bei Signal registriert sind.
       submit: Anmeldung abschließen
+    onboarding_whats_app_link:
+      heading: Fast geschafft.
+      text: Damit wir Ihnen zukünftig auf WhatsApp schreiben können, müssen Sie uns zuerst kontaktieren.
+      link: Zur WhatsApp-Web
+      copy: Handynummer kopieren
+      help:  Über den Button gelangen Sie direkt zu unserem Kontakt in der WhatsApp-Web. Alternativ können Sie unsere Nummer kopieren.
+
+    onboarding_whats_app_form:
+      heading: Mit WhatsApp teilnehmen
+      text: Geben Sie bitte unten die Handynummer ein, mit der Sie bei WhatsApp registriert sind.
+      submit: Anmeldung abschließen
     onboarding_email_form:
       heading: Per E-Mail teilnehmen
       text: Geben Sie bitte unten Ihre Kontaktdaten ein, um Ihre Anmeldung abzuschließen.
@@ -416,6 +427,8 @@ de:
       email:
         label: E-Mail-Adresse
       signal_phone_number:
+        label: Handynummer
+      whats_app_phone_number:
         label: Handynummer
       threema_id:
         label: Threema ID

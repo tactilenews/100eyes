@@ -28,6 +28,7 @@ class Contributor < ApplicationRecord
   scope :inactive, -> { where.not(deactivated_at: nil) }
 
   phony_normalize :signal_phone_number, default_country_code: 'DE'
+  phony_normalize :whats_app_phone_number, default_country_code: 'DE'
 
   validates :signal_phone_number, phony_plausible: true
   validates :data_processing_consent, acceptance: true, unless: proc { |c| c.editor_guarantees_data_consent }

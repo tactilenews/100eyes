@@ -13,5 +13,9 @@ module OnboardingChannelButtons
     def show_signal?
       Setting.signal_server_phone_number.present?
     end
+
+    def show_whats_app?
+      Setting.whats_app_server_phone_number.present?
+    end
   end
 end
