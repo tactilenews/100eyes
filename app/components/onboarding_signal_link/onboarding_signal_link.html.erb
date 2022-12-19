@@ -2,33 +2,38 @@
 
   <%= c 'stack', class: 'text-serif text-center', space: :xsmall do %>
     <%= c 'heading', tag: :h1 do %>
-      <%= t('.heading') %>
+      <%= t('components.onboarding_signal_link.heading') %>
     <% end %>
 
     <p>
-      <%= t('.text').html_safe %>
+      <%= t('components.onboarding_signal_link.text').html_safe %>
     </p>
 
-    <%= c 'qr_code', url: url %>
+    <p>
+      <%= t('components.onboarding_signal_link.action',
+        number: Setting.signal_server_phone_number.phony_formatted(spaces: ' ')
+      ).html_safe %>
+    </p>
   <% end %>
 
   <%= c 'stack', space: :small do %>
     <%= c 'button',
       styles: [:block, :primary],
-      link: url,
-      label: t('.link'),
+      link: "https://signal.me/#p/#{Setting.signal_server_phone_number}",
+      label: t('components.onboarding_signal_link.link'),
       target: '_blank',
       rel: 'noopener noreferrer'
     %>
 
     <%= c 'copy_button',
       styles: [:block, :secondary],
-      label: t('.copy'),
-      copy: url
+      label: t('components.onboarding_signal_link.copy'),
+      copy: Setting.signal_server_phone_number
     %>
 
     <p class="text-small text-light text-center">
-      <%= t('.help') %>
+      <%= t('components.onboarding_signal_link.help') %>
     </p>
   <% end %>
+
 <% end %>

@@ -3,7 +3,6 @@
 module WhatsAppAdapter
   class Outbound
     def self.send!(message)
-      binding.pry
       recipient = message&.recipient
       return unless contributor_can_receive_messages?(recipient)
 

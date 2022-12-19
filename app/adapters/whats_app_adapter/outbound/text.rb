@@ -11,10 +11,10 @@ module WhatsAppAdapter
 
       def perform(recipient:, text:)
         self.class.twilio_instance.messages.create(
-                             from: "whatsapp:#{Setting.whats_app_server_phone_number}",
-                             body: text,
-                             to: "whatsapp:#{recipient.whats_app_phone_number}"
-                           )
+          from: "whatsapp:#{Setting.whats_app_server_phone_number}",
+          body: text,
+          to: "whatsapp:#{recipient.whats_app_phone_number}"
+        )
       end
     end
   end
