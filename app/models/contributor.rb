@@ -31,12 +31,14 @@ class Contributor < ApplicationRecord
   phony_normalize :whats_app_phone_number, default_country_code: 'DE'
 
   validates :signal_phone_number, phony_plausible: true
+  validates :whats_app_phone_number, phony_plausible: true
   validates :data_processing_consent, acceptance: true, unless: proc { |c| c.editor_guarantees_data_consent }
 
   validates :email, uniqueness: { case_sensitive: false }, allow_nil: true, 'valid_email_2/email': true
   validates :threema_id, uniqueness: { case_sensitive: false }, allow_blank: true
   validates :telegram_id, uniqueness: true, allow_nil: true
   validates :signal_phone_number, uniqueness: true, allow_nil: true
+  validates :whats_app_phone_number, uniqueness: true, allow_nil: true
 
   validates :avatar, blob: { content_type: ['image/png', 'image/jpg', 'image/jpeg'], size_range: 0..(5.megabytes) }
 

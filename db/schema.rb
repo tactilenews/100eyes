@@ -112,12 +112,15 @@ ActiveRecord::Schema.define(version: 2022_12_16_111050) do
     t.bigint "organization_id"
     t.string "whats_app_phone_number"
     t.datetime "whats_app_onboarding_completed_at"
+    t.datetime "whats_app_template_message_sent_at"
+    t.datetime "latest_message_received_at"
     t.index ["email"], name: "index_contributors_on_email", unique: true
     t.index ["organization_id"], name: "index_contributors_on_organization_id"
     t.index ["signal_phone_number"], name: "index_contributors_on_signal_phone_number", unique: true
     t.index ["telegram_chat_id"], name: "index_contributors_on_telegram_chat_id", unique: true
     t.index ["telegram_id"], name: "index_contributors_on_telegram_id", unique: true
     t.index ["threema_id"], name: "index_contributors_on_threema_id", unique: true
+    t.index ["whats_app_phone_number"], name: "index_contributors_on_whats_app_phone_number", unique: true
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
