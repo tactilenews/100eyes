@@ -9,13 +9,13 @@
       <%= t('.text').html_safe %>
     </p>
 
-    <%= c 'qr_code', url: url %>
+    <%= svg('whatsapp-qr-code') %>
   <% end %>
 
   <%= c 'stack', space: :small do %>
     <%= c 'button',
       styles: [:block, :primary],
-      link: url,
+      link: open_app,
       label: t('.link'),
       target: '_blank',
       rel: 'noopener noreferrer'
@@ -24,7 +24,7 @@
     <%= c 'copy_button',
       styles: [:block, :secondary],
       label: t('.copy'),
-      copy: url
+      copy: whats_app_web_url
     %>
 
     <p class="text-small text-light text-center">
