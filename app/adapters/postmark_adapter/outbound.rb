@@ -26,7 +26,13 @@ module PostmarkAdapter
     def self.send_business_plan_upgraded_message!(admin, organization)
       return unless admin&.email && admin&.admin? && organization&.id
 
-      with(admin: admin, organization: organization).business_plan_upgraded.deliver_later
+      with(admin: admin, organization: organization).business_plan_upgraded_email.deliver_later
+    end
+
+    def self.send_user_count_exceeds_plan_limit_message!(admin, organization)
+      return unless admin&.email && admin&.admin? && organization&.id
+
+      with(admin: admin, organization: organization).user_count_exceeds_plan_limit_email.deliver_later
     end
 
     def bounce_email
@@ -42,7 +48,7 @@ module PostmarkAdapter
       mail(to: contributor.email, subject: subject, message_stream: message_stream)
     end
 
-    def business_plan_upgraded
+    def business_plan_upgraded_email
       admin = params[:admin]
       organization = params[:organization]
       subject = I18n.t('adapter.postmark.business_plan_upgraded.subject',
@@ -51,6 +57,18 @@ module PostmarkAdapter
                        discount: organization.upgrade_discount)
       message_stream = Setting.postmark_transactional_stream
       @text = [subject, I18n.t('adapter.postmark.business_plan_upgraded.text', organization_name: organization.name)].join("\n")
+      mail(to: admin.email, subject: subject, message_stream: message_stream)
+    end
+
+    def user_count_exceeds_plan_limit_email
+      admin = params[:admin]
+      organization = params[:organization]
+      subject = I18n.t('adapter.postmark.user_count_exceeds_plan_limit.subject',
+                       organization_name: organization.name,
+                       business_plan_name: organization.business_plan.name,
+                       users_limit: organization.business_plan.number_of_users)
+      message_stream = Setting.postmark_transactional_stream
+      @text = [subject, I18n.t('adapter.postmark.user_count_exceeds_plan_limit.text')]
       mail(to: admin.email, subject: subject, message_stream: message_stream)
     end
 

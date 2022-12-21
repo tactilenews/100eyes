@@ -14,11 +14,25 @@ class User < ApplicationRecord
   has_one_time_password
   validates :password, length: { in: 8..128 }, unless: :skip_password_validation?
 
+  scope :admin, ->(boolean = true) { where(admin: boolean) }
+
+  after_create_commit :notify_admin
+
   def name
     "#{first_name} #{last_name}"
   end
 
   def avatar?
     false
+  end
+
+  private
+
+  def notify_admin
+    return unless organization && User.admin(false).count > organization.business_plan.number_of_users
+
+    User.admin.find_each do |admin|
+      PostmarkAdapter::Outbound.send_user_count_exceeds_plan_limit_message!(admin, organization)
+    end
   end
 end

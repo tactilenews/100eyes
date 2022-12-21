@@ -332,6 +332,9 @@ de:
       business_plan_upgraded:
         subject: "Der Plan von %{organization_name} wurde zu %{business_plan_name} mit einem %{discount}-Rabatt aufgewertet."
         text: "Bitte aktualisieren Sie Ihre Unterlagen und wenden Sie sich an %{organization_name}."
+      user_count_exceeds_plan_limit:
+        subject: "%{organization_name} hat die Höchstzahl der %{business_plan_name} Nutzer seines %{users_limit} Plans überschritten "
+        text: "Bitte setzen Sie sich mit ihnen in Verbindung, um zu erfahren, ob sie ihren Plan aktualisieren möchten."
   save: Speichern
   cancel: Abbrechen
   skip_to_content: Zum Hauptinhalt springen

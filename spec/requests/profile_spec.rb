@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe '/contributors' do
   let!(:user) { create(:user, organization: organization) }
   let(:contact_person) { create(:user) }
-  let(:organization) { create(:organization, contact_person: contact_person) }
+  let(:organization) { create(:organization, contact_person: contact_person, business_plan_name: 'Editorial pro') }
 
   before do
     organization.users << contact_person
@@ -46,6 +46,38 @@ RSpec.describe '/contributors' do
         subject.call
         expect(flash[:success]).not_to be_empty
       end
+
+      describe 'exceeds number of users of plan' do
+        let!(:last_user_allocated_by_plan) { create(:user, organization: organization) }
+        let!(:admin) { create(:user, admin: true) }
+
+        it 'creates a user' do
+          expect(User.admin(false).count).to eq(organization.business_plan.number_of_users)
+          expect { subject.call }.to(change { User.admin(false).count }.from(3).to(4))
+        end
+
+        it 'redirects to profile page' do
+          subject.call
+          expect(response).to redirect_to profile_path
+        end
+
+        it 'shows success notification' do
+          subject.call
+          expect(flash[:success]).not_to be_empty
+        end
+
+        it 'schedules a job to notify only admin of the change' do
+          expect { subject.call }.to have_enqueued_job.on_queue('default').with(
+            'PostmarkAdapter::Outbound',
+            'user_count_exceeds_plan_limit_email',
+            'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
+            {
+              params: { admin: admin, organization: organization },
+              args: []
+            }
+          ).exactly(1).times
+        end
+      end
     end
   end
 
@@ -82,7 +114,7 @@ RSpec.describe '/contributors' do
       it 'does not schedule a job for non-admin' do
         expect { subject.call }.not_to have_enqueued_job.on_queue('default').with(
           'PostmarkAdapter::Outbound',
-          'business_plan_upgraded',
+          'business_plan_upgraded_email',
           'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
           {
             params: { admin: an_instance_of(User), organization: organization },
@@ -97,7 +129,7 @@ RSpec.describe '/contributors' do
         it 'schedules a job to notify admin of the change' do
           expect { subject.call }.to have_enqueued_job.on_queue('default').with(
             'PostmarkAdapter::Outbound',
-            'business_plan_upgraded',
+            'business_plan_upgraded_email',
             'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
             {
               params: { admin: an_instance_of(User), organization: organization },
