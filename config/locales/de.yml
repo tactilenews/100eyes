@@ -334,7 +334,7 @@ de:
         text: "Bitte aktualisieren Sie Ihre Unterlagen und wenden Sie sich an %{organization_name}."
       user_count_exceeds_plan_limit:
         subject: "%{organization_name} hat die Höchstzahl der %{business_plan_name} Nutzer seines %{users_limit} Plans überschritten "
-        text: "Bitte setzen Sie sich mit ihnen in Verbindung, um zu erfahren, ob sie ihren Plan aktualisieren möchten."
+        text: "%{organization_name} hat die zahl der gebuchten Contributors überschritten. Technisch ist das kein problem. Sprich mit der Kund:in doch demnächst über eine Aufstockung des Plans."
   save: Speichern
   cancel: Abbrechen
   skip_to_content: Zum Hauptinhalt springen

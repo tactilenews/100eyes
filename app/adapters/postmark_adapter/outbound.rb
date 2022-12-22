@@ -68,7 +68,7 @@ module PostmarkAdapter
                        business_plan_name: organization.business_plan.name,
                        users_limit: organization.business_plan.number_of_users)
       message_stream = Setting.postmark_transactional_stream
-      @text = [subject, I18n.t('adapter.postmark.user_count_exceeds_plan_limit.text')]
+      @text = [subject, I18n.t('adapter.postmark.user_count_exceeds_plan_limit.text', organization_name: organization.name)]
       mail(to: admin.email, subject: subject, message_stream: message_stream)
     end
 
