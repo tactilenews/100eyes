@@ -26,8 +26,8 @@
   display: inline-block;
 }
 
-.NavBar-item + .NavBar-item {
-  margin-left: var(--spacing-unit);
+.NavBar-item {
+  margin-right: var(--spacing-unit);
 }
 
 .NavBar-logo {

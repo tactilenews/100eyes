@@ -12,7 +12,7 @@ esbuild.build({
   logLevel: 'info',
   watch: process.argv.includes('--watch'),
   loader: {
-    '.png': 'file',
+    '.ico': 'file',
   },
   plugins: [
     ImportGlobPlugin(),
