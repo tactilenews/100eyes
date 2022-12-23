@@ -1,24 +1,24 @@
 <header class="NavBar">
-  <nav>
-    <ul>
+  <nav class="NavBar-nav">
+    <ul class="NavBar-list">
+      <li class="NavBar-item NavBar-logo">
+        <%= link_to dashboard_path do %>
+          <%= svg '100eyes-logo' %>
+        <% end %>
+      </li>
       <li class="NavBar-item">
-        <%= link_to dashboard_path, class: 'NavBar-logo' do %>
-          <%= t 'application_name' %>
+        <%= link_to dashboard_path do %>
+          <%= t('.dashboard') %>
         <% end %>
       </li>
       <li class="NavBar-item">
         <%= link_to contributors_path do %>
-          <%= t 'components.nav_bar.community', count: :many %>
+          <%= t('.community', count: :many) %>
         <% end %>
       </li>
       <li class="NavBar-item">
         <%= link_to requests_path do %>
-          <%= t 'components.nav_bar.investigation', count: :many %>
-        <% end %>
-      </li>
-      <li class="NavBar-item">
-        <%= link_to settings_path do %>
-          <%= t 'setting.setting', count: :many %>
+          <%= t('.investigation', count: :many) %>
         <% end %>
       </li>
       <% if current_user.admin? %>
@@ -28,22 +28,29 @@
           <% end %>
         </li>
       <% end %>
-      <li class="NavBar-item">
-        <%= link_to sign_out_path, method: :delete do %>
-          <%= t '.sign_out' %>
+      <li class="NavBar-item NavBar-settings" >
+        <%= link_to settings_path do %>
+          <span class="visually-hidden"><%= t('setting.setting', count: :many) %></span>
+          <%= svg 'settings-wheel' %>
         <% end %>
       </li>
     </ul>
   </nav>
 
   <%= form_with url: search_path, local: true, method: :get do %>
+    <label for="q" aria-label="<%= t('search.placeholder') %>"></label>
     <%= c 'input',
+      class: 'NavBar-search',
       type: :search,
       id: 'q',
       required: true,
       icon: :zoom,
-      styles: [:inverted, :small],
+      styles: [:small],
       placeholder: t('search.placeholder')
     %>
+  <% end %>
+  <%= link_to sign_out_path, method: :delete, class: 'NavBar-logOut' do %>
+    <%= svg 'logout' %>
+    <%= t '.sign_out' %>
   <% end %>
 </header>

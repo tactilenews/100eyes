@@ -69,6 +69,7 @@
   --color-border-light: #dedede;
   --color-focus: var(--color-blue);
   --color-focus-outline: var(--color-blue-light);
+  --color-nav-bar: #002332;
 
   --font-family: Inter, Helvetica Neue, Helvetica, sans-serif;
   --font-family-serif: PT Serif;
