@@ -8,22 +8,22 @@
   padding-right: var(--spacing-unit-s);
 
   font-size: var(--font-size-s);
-  background: var(--color-blue-dark);
+  background: var(--color-nav-bar);
   color: rgba(255, 255, 255, 0.8);
 }
 
-.NavBar > ul {
+.NavBar-nav {
+  flex-grow: 1;
+}
+
+.NavBar-nav > .NavBar-list {
   list-style: none;
+  display: flex;
+  align-items: center;
 }
 
 .NavBar-item {
   display: inline-block;
-}
-
-.NavBar-item:hover,
-.NavBar-item button:hover {
-  color: #fff;
-  text-decoration: underline;
 }
 
 .NavBar-item + .NavBar-item {
@@ -31,6 +31,60 @@
 }
 
 .NavBar-logo {
-  font-weight: 600;
+  width: calc(4 * var(--spacing-unit));
+}
+
+.NavBar-item.NavBar-settings {
+  width: var(--spacing-unit);
+  margin: 0 var(--spacing-unit) 0 auto;
+  position: relative;
+  bottom: 3px;
+}
+
+.NavBar-item.NavBar-logo,
+.NavBar-item.NavBar-item.NavBar-settings {
+  height: var(--line-height);
+}
+
+.NavBar-item.NavBar-settings > a,
+.NavBar-item.NavBar-logo > a {
+  display: inline-block;
+}
+
+.NavBar-search {
+  background-color: var(--color-bg);
+  border-radius: var(--border-radius);
+  color: var(--color-nav-bar);
+}
+
+.NavBar-search > input {
+  padding-left: var(--spacing-unit-l);
+}
+
+.NavBar-search > .Icon {
+  fill: var(--color-primary);
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.NavBar-search > input::placeholder {
+  color: var(--color-nav-bar);
+  text-align: right;
+}
+
+.NavBar-logOut {
+  margin: 0 var(--spacing-unit-s) 0 var(--spacing-unit);
+  color: var(--color-primary);
+  display: flex;
+}
+
+.NavBar-logOut > svg {
+  width: var(--spacing-unit);
+  margin-right: var(--spacing-unit-xs);
+}
+
+.NavBar-item:hover,
+.NavBar-item button:hover {
   color: #fff;
+  text-decoration: underline;
 }
