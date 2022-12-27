@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'webmock/rspec'
 
 RSpec.describe 'Onboarding::Signal', type: :request do
   let(:signal_phone_number) { '+4915112345678' }
@@ -68,6 +69,14 @@ RSpec.describe 'Onboarding::Signal', type: :request do
 
     it 'does not send welcome message' do
       should_not enqueue_job(SignalAdapter::Outbound).with(message: Message.new(text: anything), recipient: anything)
+    end
+
+    describe 'creates a contact for the contributor' do
+      it { should enqueue_job(SignalAdapter::CreateContactJob)}
+      it 'sends a contact creation request to the signal api endpoint' do
+        stub = stub_request(:post, "http://signal:8080/v1/contacts/#{Setting.signal_server_phone_number}").to_return(status: 201)
+        expect(stub).to have_been_requested
+      end
     end
 
     it 'redirects to onboarding signal link page' do
