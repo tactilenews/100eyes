@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require 'webmock/rspec'
 
 RSpec.describe 'Onboarding::Signal', type: :request do
   let(:signal_phone_number) { '+4915112345678' }
