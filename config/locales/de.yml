@@ -1,5 +1,5 @@
 de:
-  application_name: 100eyes
+  application_name: One hundred eyes
   components:
     activity_notifications:
       card_heading: Letzte Aktivität
@@ -36,11 +36,11 @@ de:
     contributor_row:
       via_channels: via %{channels}
     nav_bar:
+      dashboard: Dashboard
       community:
         other: Community
       investigation:
-        one: Recherche
-        other: Recherchen
+        other: Dialog
       admin: Admin
       sign_out: Abmelden
       profile_path: Zur Profilseite
@@ -53,11 +53,11 @@ de:
         one: hat geantwortet
         other: haben geantwortet
       replies:
-        one: Nachricht ingesamt
-        other: Nachrichten insgesamt
+        one: empfangene Nachricht
+        other: empfangene Nachrichten
       photos:
-        one: Foto
-        other: Fotos
+        one: empfangenes Bild
+        other: empfangene Bilder
     request_notification:
       action: Neu laden
       message_template:
