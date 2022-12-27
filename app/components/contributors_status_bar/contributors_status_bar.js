@@ -6,7 +6,6 @@ export default class extends Controller {
 
   connect() {
     this.setStatusBarWidth();
-    console.log('contributorsStatus', this.hasContributorsStatusValue);
   }
 
   setStatusBarWidth() {

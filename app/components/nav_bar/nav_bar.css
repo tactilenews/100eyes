@@ -16,7 +16,7 @@
   flex-grow: 1;
 }
 
-.NavBar .NavBar-list {
+.NavBar-nav > .NavBar-list {
   list-style: none;
   display: flex;
   align-items: center;
