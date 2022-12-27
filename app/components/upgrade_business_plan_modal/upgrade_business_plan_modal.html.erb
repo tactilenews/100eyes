@@ -1,0 +1,30 @@
+<%= c 'modal', **attrs do %>
+  <%= c 'button',
+    class: 'UpgradeBusinessPlanModal-closeModalButton',
+    styles: [:secondary, :circular],
+    type: 'button',
+    title: t('.close_modal'),
+    data: { action: 'profile-header#closeModal' } do %>
+    <%= c 'icon', icon: 'i-remove', style: :inline %>
+  <% end %>
+  <%= form_with(
+    model: organization,
+    url: profile_upgrade_business_plan_path,
+    local: true,
+    method: 'PUT',
+    html: { autocomplete: 'off' }
+  ) do %>
+    <%= c 'business_plan_choices',
+      choices: choices,
+      id: 'profile[business_plan_id]',
+      current_plan: organization.business_plan,
+      discount: organization.upgrade_discount
+    %>
+    <%= c 'button',
+      class: 'UpgradeBusinessPlanModal-submitFormButton',
+      type: 'submit',
+      label: t('.submit_button'),
+      styles: [:primary, :block]
+    %>
+  <% end %>
+<% end %>

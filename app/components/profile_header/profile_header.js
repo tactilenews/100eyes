@@ -8,6 +8,7 @@ export default class extends Controller {
   }
 
   closeModal() {
+    console.log('im closing...');
     this.modalTarget.close();
   }
 }

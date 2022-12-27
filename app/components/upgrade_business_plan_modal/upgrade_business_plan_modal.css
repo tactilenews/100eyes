@@ -1,0 +1,25 @@
+.UpgradeBusinessPlanModal {
+  max-width: var(--grid-max-width-l);
+  display: flex;
+  flex-direction: column;
+}
+
+.UpgradeBusinessPlanModal-closeModalButton {
+  align-self: flex-end;
+}
+
+.UpgradeBusinessPlanModal form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.UpgradeBusinessPlanModal-submitFormButton {
+  width: unset;
+}
+
+@media screen and (min-width: 720px) {
+  .UpgradeBusinessPlanModal {
+    max-width: var(--grid-max-width);
+  }
+}

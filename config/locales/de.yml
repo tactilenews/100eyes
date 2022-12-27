@@ -306,16 +306,15 @@ de:
         channels: "Dialogkanäle: Signal, Threema, Telegram, E-mail"
         security: "Sicherheit: Community abgesichert über Zwei-Faktor-Authentifizierung, Cloudflare"
       upgrade_business_plan_button: "Plan jetzt upgraden und <strong>%{upgrade_discount}%</strong> sparen."
-      close_modal: Modal schließen
-      business_plan:
-        features_info: "%{number_of_communities} Gemeinschaft mit %{number_of_users} Benutzern und %{number_of_contributors} Mitwirkenden."
-        hours_of_included_support: "Inklusive %{hours} Stunden Support"
-      modal:
-        form:
-          submit_button: Upgrade Plan
     business_plan_choices:
       legend: Upgrade Plan
       price_per_month: "%{price_per_month}/Monat"
+    upgrade_business_plan_modal:
+      business_plan:
+        features_info: "%{number_of_communities} Gemeinschaft mit %{number_of_users} Benutzern und %{number_of_contributors} Mitwirkenden."
+        hours_of_included_support: "Inklusive %{hours} Stunden Support"
+      close_modal: Modal schließen
+      submit_button: Upgrade Plan
 
   mailer:
     unsubscribe:

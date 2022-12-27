@@ -27,34 +27,5 @@
       <%= t('.upgrade_business_plan_button', upgrade_discount: organization.upgrade_discount).html_safe %>
     <% end%>
   <% end %>
-  <%= c 'modal', class: 'ProfileHeader-modal', data: { controller: 'modal', profile_header_target: 'modal' } do %>
-    <%= c 'button',
-      class: 'ProfileHeader-closeModalButton',
-      styles: [:secondary, :circular],
-      type: 'button',
-      title: t('.close_modal'),
-      data: { action: 'profile-header#closeModal' } do %>
-      <%= c 'icon', icon: 'i-remove', style: :inline %>
-    <% end %>
-    <%= form_with(
-      model: organization,
-      url: profile_upgrade_business_plan_path,
-      local: true,
-      method: 'PUT',
-      html: { autocomplete: 'off' }
-    ) do %>
-      <%= c 'business_plan_choices',
-        choices: choices,
-        id: 'profile[business_plan_id]',
-        current_plan: organization.business_plan,
-        discount: organization.upgrade_discount
-      %>
-      <%= c 'button',
-        class: 'ProfileHeader-submitFormButton',
-        type: 'submit',
-        label: t('.modal.form.submit_button'),
-        styles: [:primary, :block]
-      %>
-    <% end %>
-  <% end %>
+  <%= c 'upgrade_business_plan_modal', organization: organization, business_plans: business_plans, data: { controller: 'modal', profile_header_target: 'modal' } %>
 <% end %>
