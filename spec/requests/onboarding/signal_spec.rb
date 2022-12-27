@@ -71,12 +71,11 @@ RSpec.describe 'Onboarding::Signal', type: :request do
       should_not enqueue_job(SignalAdapter::Outbound).with(message: Message.new(text: anything), recipient: anything)
     end
 
-    describe 'creates a contact for the contributor' do
-      it { should enqueue_job(SignalAdapter::CreateContactJob)}
-      it 'sends a contact creation request to the signal api endpoint' do
-        stub = stub_request(:post, "http://signal:8080/v1/contacts/#{Setting.signal_server_phone_number}").to_return(status: 201)
-        expect(stub).to have_been_requested
-      end
+    it 'enqueues a job to create a contact for the contributor' do
+      should(enqueue_job(SignalAdapter::CreateContactJob).with do |contributor|
+        expect(contributor.first_name).to eq attrs[:first_name]
+        expect(contributor.signal_phone_number).to eq attrs[:signal_phone_number]
+      end)
     end
 
     it 'redirects to onboarding signal link page' do
