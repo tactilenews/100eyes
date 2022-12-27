@@ -286,15 +286,6 @@ de:
       main_heading: Deine Redakteur:Innen
       number_of_users_of_business_plan_used: "%{users_count} von %{allocated_users} Seats genutzt"
       add_users_button: "Redakteur:in hinzufügen"
-      form:
-        first_name:
-          label: Vorname
-        last_name:
-          label: Nachname
-        email:
-          label: E-Mail-Adresse
-        submit_button: "Redakteur:in hinzufügen"
-        close_modal: Modal schließen
     profile_header:
       main_heading: 'Dein 100eyes Plan: "%{business_plan_name}"'
       sub_heading:
@@ -315,7 +306,15 @@ de:
         hours_of_included_support: "Inklusive %{hours} Stunden Support"
       close_modal: Modal schließen
       submit_button: Upgrade Plan
-
+    create_user_modal:
+      first_name:
+        label: Vorname
+      last_name:
+        label: Nachname
+      email:
+        label: E-Mail-Adresse
+      submit_button: "Redakteur:in hinzufügen"
+      close_modal: Modal schließen
   mailer:
     unsubscribe:
       text: "Sofern Sie keine E-Mails mehr von uns erhalten möchten, können Sie sie unter diesem Link abbestellen: {{{ pm:unsubscribe }}}"

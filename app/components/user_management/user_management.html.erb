@@ -17,32 +17,5 @@
       <%= t('.add_users_button') %>
     <% end%>
   <% end %>
-  <%= c 'modal', class: 'UserManagement-modal', data: { controller: 'modal', user_management_target: 'modal' } do %>
-    <%= form_with(url: profile_user_path) do %>
-      <%= c 'button',
-        styles: [:secondary, :circular],
-        type: 'button',
-        title: t('.form.close_modal'),
-        data: { action: 'user-management#closeModal' } do %>
-        <%= c 'icon', icon: 'i-remove', style: :inline %>
-      <% end %>
-      <%= c 'base_field', id: 'profile[user][first_name]', label: t('.form.first_name.label') do %>
-        <%= c 'input', id: 'profile[user][first_name]', required: true %>
-      <% end %>
-
-      <%= c 'base_field', id: 'profile[user][last_name]', label: t('.form.last_name.label') do %>
-        <%= c 'input', id: 'profile[user][last_name]', required: true %>
-      <% end %>
-
-      <%= c 'base_field', id: 'profile[user][email]', label: t('.form.email.label') do %>
-        <%= c 'input', id: 'profile[user][email]', required: true, type: :email %>
-      <% end %>
-
-      <%= c 'button',
-        type: 'submit',
-        label: t('.form.submit_button'),
-        styles: [:primary, :block]
-      %>
-    <% end %>
-  <% end %>
+  <%= c 'create_user_modal', data: { controller: 'modal', user_management_target: 'modal' } %>
 <% end %>

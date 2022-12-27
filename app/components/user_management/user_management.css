@@ -10,16 +10,3 @@
 .UserManagement-usersListItem {
   margin-bottom: var(--spacing-unit-s);
 }
-
-.UserManagement-modal > form {
-  display: flex;
-  flex-direction: column;
-}
-
-.UserManagement-modal .Button {
-  align-self: flex-end;
-}
-
-.UserManagement-modal .BaseField {
-  margin-bottom: var(--spacing-unit);
-}
