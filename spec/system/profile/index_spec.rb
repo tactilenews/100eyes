@@ -47,10 +47,10 @@ RSpec.describe 'Profile' do
     expect(page).to have_content('Sicherheit: Community abgesichert über Zwei-Faktor-Authentifizierung, Cloudflare')
 
     click_button("Plan jetzt upgraden und #{organization.upgrade_discount}% sparen")
-    expect(page).to have_css('.ProfileHeader-modal')
+    expect(page).to have_css('.UpgradeBusinessPlanModal')
 
     click_button 'Modal schließen'
-    expect(page).to have_no_css('.ProfileHeader-modal')
+    expect(page).to have_no_css('.UpgradeBusinessPlanModal')
 
     # user management section
     expect(page).to have_content('Deine Redakteur:Innen')
@@ -59,10 +59,10 @@ RSpec.describe 'Profile' do
       expect(page).to have_content(user.name)
     end
     click_button 'Redakteur:in hinzufügen'
-    expect(page).to have_css('.UserManagement-modal')
+    expect(page).to have_css('.CreateUserModal')
 
     click_button 'Modal schließen'
-    expect(page).to have_no_css('.UserManagement-modal')
+    expect(page).to have_no_css('.CreateUserModal')
 
     # contributors section
     expect(page).to have_content('Deine Community')
@@ -77,16 +77,16 @@ RSpec.describe 'Profile' do
     # Create users
 
     click_button 'Redakteur:in hinzufügen'
-    expect(page).to have_css('.UserManagement-modal')
+    expect(page).to have_css('.CreateUserModal')
 
-    within('.UserManagement-modal') do
+    within('.CreateUserModal') do
       fill_in 'Vorname', with: 'New'
       fill_in 'Nachname', with: 'Editor'
       fill_in 'E-Mail-Adresse', with: 'new-editor@example.org'
       click_button 'Redakteur:in hinzufügen'
     end
 
-    expect(page).to have_no_css('.UserManagement-modal')
+    expect(page).to have_no_css('.CreateUserModal')
     expect(page).to have_content('Redakteur:in erfolgreich erstellt')
     expect(page).to have_content("4 von #{current_plan.number_of_users} Seats genutzt")
     expect(page).to have_content('New Editor')
@@ -94,9 +94,9 @@ RSpec.describe 'Profile' do
     # Upgrade BusinessPlan
 
     click_button("Plan jetzt upgraden und #{organization.upgrade_discount}% sparen")
-    expect(page).to have_css('.ProfileHeader-modal')
+    expect(page).to have_css('.UpgradeBusinessPlanModal')
 
-    within('.ProfileHeader-modal') do
+    within('.UpgradeBusinessPlanModal') do
       business_plans.each do |bp|
         expect(find("input[id='#{bp.id}'")).to be_disabled if bp.price_per_month < current_plan.price_per_month
         expect(page).to have_content(bp.name)
@@ -110,7 +110,7 @@ RSpec.describe 'Profile' do
       click_button 'Upgrade Plan'
     end
     editorial_enterprise = business_plans[2]
-    expect(page).to have_no_css('.ProfileHeader-modal')
+    expect(page).to have_no_css('.UpgradeBusinessPlanModal')
     expect(page).to have_content('Plan erfolgreich aktualisiert')
     expect(page).to have_content("Dein 100eyes Plan: \"#{editorial_enterprise.name}\"")
     expect(page).to have_content("Preis: #{number_to_currency(editorial_enterprise.price_per_month)}/Monat")
