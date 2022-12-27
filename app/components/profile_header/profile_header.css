@@ -25,6 +25,16 @@
   align-self: flex-end;
 }
 
+.ProfileHeader-modal form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.ProfileHeader-submitFormButton {
+  width: unset;
+}
+
 @media screen and (min-width: 720px) {
   .ProfileHeader-modal {
     max-width: var(--grid-max-width);
