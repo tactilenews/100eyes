@@ -34,9 +34,17 @@
   width: calc(4 * var(--spacing-unit));
 }
 
+.NavBar-item.NavBar-profileLink {
+  margin: 0 var(--spacing-unit) 0 auto;
+}
+
+.NavBar-profileLink .Avatar {
+  width: var(--spacing-unit-l);
+  height: var(--spacing-unit-l);
+}
+
 .NavBar-item.NavBar-settings {
   width: var(--spacing-unit);
-  margin: 0 var(--spacing-unit) 0 auto;
   position: relative;
   bottom: 3px;
 }
@@ -87,12 +95,4 @@
 .NavBar-item button:hover {
   color: #fff;
   text-decoration: underline;
-}
-
-.NavBar-item.NavBar-profileLink {
-  margin: 0 var(--spacing-unit) 0 auto;
-}
-
-.NavBar > form {
-  flex-shrink: 0;
 }

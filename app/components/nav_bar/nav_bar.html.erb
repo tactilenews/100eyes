@@ -28,15 +28,15 @@
           <% end %>
         </li>
       <% end %>
+      <li class="NavBar-item NavBar-profileLink">
+        <%= link_to profile_path, aria: { label: t('.profile_path') } do %>
+          <%= c 'avatar' %>
+        <% end %>
+      </li>
       <li class="NavBar-item NavBar-settings" >
         <%= link_to settings_path do %>
           <span class="visually-hidden"><%= t('setting.setting', count: :many) %></span>
           <%= svg 'settings-wheel' %>
-        <% end %>
-      </li>
-      <li class="NavBar-item NavBar-profileLink">
-        <%= link_to profile_path, aria: { label: t('.profile_path') } do %>
-          <%= c 'avatar' %>
         <% end %>
       </li>
     </ul>
