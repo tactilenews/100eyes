@@ -24,6 +24,7 @@
       class: 'UpgradeBusinessPlanModal-submitFormButton',
       type: 'submit',
       label: t('.submit_button'),
+      disabled: upgrade_available ? nil : true,
       styles: [:primary, :block]
     %>
   <% end %>

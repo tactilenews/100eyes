@@ -36,11 +36,10 @@
 
 .NavBar-item.NavBar-profileLink {
   margin: 0 var(--spacing-unit) 0 auto;
-}
-
-.NavBar-profileLink .Avatar {
-  width: var(--spacing-unit-l);
-  height: var(--spacing-unit-l);
+  width: 1.25rem;
+  position: relative;
+  bottom: 2px;
+  height: var(--line-height);
 }
 
 .NavBar-item.NavBar-settings {
