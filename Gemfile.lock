@@ -265,7 +265,7 @@ GEM
     pry-rails (0.3.9)
       pry (>= 0.10.4)
     public_suffix (5.0.0)
-    puma (5.6.5)
+    puma (6.0.1)
       nio4r (~> 2.0)
     racc (1.6.0)
     rack (2.2.4)
@@ -447,7 +447,7 @@ DEPENDENCIES
   phony_rails
   postmark-rails
   pry-rails
-  puma (~> 5.6)
+  puma (~> 6.0)
   rack-attack (~> 6.6)
   rails (~> 6.1.6.1)
   rails-settings-cached (~> 2.8)
