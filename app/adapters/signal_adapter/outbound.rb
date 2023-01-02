@@ -7,9 +7,9 @@ module SignalAdapter
       return unless contributor_can_receive_messages?(recipient)
 
       if message.files.present?
-        SignalAdapter::Outbound::File.perform_later(message: message)
+        conditionally_schedule(SignalAdapter::Outbound::File, message).perform_later(message: message)
       else
-        SignalAdapter::Outbound::Text.perform_later(recipient: recipient, text: message.text)
+        conditionally_schedule(SignalAdapter::Outbound::Text, message).perform_later(recipient: recipient, text: message.text)
       end
     end
 
@@ -28,6 +28,12 @@ module SignalAdapter
 
     def self.contributor_can_receive_messages?(recipient)
       recipient&.signal_phone_number.present? && recipient.signal_onboarding_completed_at.present?
+    end
+
+    def self.conditionally_schedule(message_type, message)
+      message_type.try do |klass|
+        message.request.schedule_send_for.present? ? klass.set(wait_until: message.request.schedule_send_for) : klass
+      end
     end
   end
 end

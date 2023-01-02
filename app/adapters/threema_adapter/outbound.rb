@@ -10,7 +10,7 @@ module ThreemaAdapter
 
       if files.present?
         files.each_with_index do |file, index|
-          ThreemaAdapter::Outbound::File.perform_later(
+          conditionally_schedule(ThreemaAdapter::Outbound::File, message).perform_later(
             recipient: recipient,
             file_path: ActiveStorage::Blob.service.path_for(file.attachment.blob.key),
             file_name: file.attachment.blob.filename.to_s,
@@ -19,7 +19,7 @@ module ThreemaAdapter
           )
         end
       else
-        ThreemaAdapter::Outbound::Text.perform_later(recipient: recipient, text: message.text)
+        conditionally_schedule(ThreemaAdapter::Outbound::Text, message).perform_later(recipient: recipient, text: message.text)
       end
     end
 
@@ -31,6 +31,12 @@ module ThreemaAdapter
       return unless contributor&.threema_id
 
       ThreemaAdapter::Outbound::Text.perform_later(text: welcome_message, recipient: contributor)
+    end
+
+    def self.conditionally_schedule(message_type, message)
+      message_type.try do |klass|
+        message.request.schedule_send_for.present? ? klass.set(wait_until: message.request.schedule_send_for) : klass
+      end
     end
   end
 end

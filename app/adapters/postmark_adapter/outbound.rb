@@ -14,7 +14,8 @@ module PostmarkAdapter
     def self.send!(message)
       return unless message.recipient&.email
 
-      with(message: message).message_email.deliver_later
+      args = message.request.schedule_send_for.present? ? { wait_until: message.request.schedule_send_for } : {}
+      with(message: message).message_email.deliver_later(args)
     end
 
     def self.send_welcome_message!(contributor)
