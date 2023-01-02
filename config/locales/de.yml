@@ -445,6 +445,9 @@ de:
       other: Fragen
     create: Neue Frage stellen
     send: Frage an die Community senden
+    schedule_request_success:
+      one: "Ihre Frage wurde erfolgreich geplant, um am %{scheduled_datetime} an ein Community-Mitglied gesendet zu werden."
+      other: "Ihre Frage wurde erfolgreich geplant, um am %{scheduled_datetime} an %{count} Community-Mitglieder gesendet zu werden."
     success:
       one: Deine Frage wurde erfolgreich an ein Mitglied in der Community gesendet
       other: Deine Frage wurde erfolgreich an %{count} Mitglieder in der Community gesendet
@@ -468,6 +471,8 @@ de:
       hints:
         label: Hinweise anhängen
         help: Erinnere die Community, welche Inhalte du benötigst und wofür du sie verwendest. Hierfür gibt es die folgenden Textbausteine.
+      schedule_send_for:
+        label: Anfrage für ein zukünftiges Datum und eine Uhrzeit senden
     personalization:
       first_name: VORNAME
   conversation:

@@ -19,7 +19,7 @@ class RequestsController < ApplicationController
     resize_image_files if request_params[:files].present?
     @request = Request.new(request_params.merge(user: current_user))
     if @request.save
-      redirect_to @request, flash: { success: I18n.t('request.success', count: @request.stats[:counts][:recipients]) }
+      redirect_to @request, flash: { success: request_success_message }
     else
       render :new, status: :unprocessable_entity
     end
@@ -50,7 +50,7 @@ class RequestsController < ApplicationController
   end
 
   def request_params
-    params.require(:request).permit(:title, :text, :tag_list, files: [])
+    params.require(:request).permit(:title, :text, :tag_list, :schedule_send_for, files: [])
   end
 
   def notifications_params
@@ -65,6 +65,15 @@ class RequestsController < ApplicationController
       ImageProcessing::MiniMagick.source(path)
                                  .resize_to_limit(1200, 1200)
                                  .call(destination: path)
+    end
+  end
+
+  def request_success_message
+    if @request.schedule_send_for
+      I18n.t('request.schedule_request_success', count: @request.stats[:counts][:recipients],
+                                                 scheduled_datetime: @request.schedule_send_for.to_formatted_s(:long))
+    else
+      I18n.t('request.success', count: @request.stats[:counts][:recipients])
     end
   end
 end

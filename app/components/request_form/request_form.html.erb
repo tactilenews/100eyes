@@ -59,6 +59,10 @@
           </div>
         <% end %>
 
+        <%= c 'field', object: @request, attr: :schedule_send_for do  |field| %>
+          <%= c 'input', field.input_defaults.merge(type: 'datetime-local') %>
+        <% end %>
+
         <%= c 'field', object: @request, attr: :tag_list do |field| %>
           <%= c 'stack', space: :small do %>
             <%= c 'callout', style: :small, data: { request_form_target: 'membersCount' } %>
