@@ -472,7 +472,7 @@ de:
         label: Hinweise anhängen
         help: Erinnere die Community, welche Inhalte du benötigst und wofür du sie verwendest. Hierfür gibt es die folgenden Textbausteine.
       schedule_send_for:
-        label: Anfrage für ein zukünftiges Datum und eine Uhrzeit senden
+        label: Versand planen. Deine Frage wird automatisch zur eingestellten Zeit verschickt.
     personalization:
       first_name: VORNAME
   conversation:

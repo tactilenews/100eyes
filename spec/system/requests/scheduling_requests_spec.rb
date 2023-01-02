@@ -19,7 +19,7 @@ RSpec.describe 'Scheduling requests', js: true do
       fill_in 'Was möchtest du wissen?', with: 'Did you get my scheduled request?'
 
       scheduled_datetime = Time.current.tomorrow.beginning_of_hour
-      fill_in 'Anfrage für ein zukünftiges Datum und eine Uhrzeit senden', with: scheduled_datetime
+      fill_in 'Versand planen. Deine Frage wird automatisch zur eingestellten Zeit verschickt.', with: scheduled_datetime
       click_button 'Frage an die Community senden'
 
       formatted = scheduled_datetime.to_formatted_s(:long)
