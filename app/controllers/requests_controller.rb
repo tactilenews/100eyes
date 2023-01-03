@@ -15,6 +15,7 @@ class RequestsController < ApplicationController
 
   def show
     @message_groups = @request.messages_by_contributor
+    @planned_request = @request.schedule_send_for.present? && @request.schedule_send_for > Time.current
   end
 
   def create
