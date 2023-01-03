@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class RequestsController < ApplicationController
-  before_action :set_request, only: %i[show show_contributor_messages notifications]
+  before_action :set_request, only: %i[show show_contributor_messages edit update notifications]
   before_action :set_contributor, only: %i[show_contributor_messages]
   before_action :notifications_params, only: :notifications
+  before_action :disallow_edit, only: %i[edit update]
 
   def index
     @requests = Request.preload(messages: :sender)
@@ -27,6 +28,16 @@ class RequestsController < ApplicationController
 
   def new
     @request = Request.new
+  end
+
+  def edit; end
+
+  def update
+    if @request.update(request_params)
+      redirect_to @request, flash: { success: request_success_message }
+    else
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   def show_contributor_messages
@@ -75,5 +86,11 @@ class RequestsController < ApplicationController
     else
       I18n.t('request.success', count: @request.stats[:counts][:recipients])
     end
+  end
+
+  def disallow_edit
+    return unless @request.schedule_send_for.blank? || @request.schedule_send_for < 1.hour.from_now
+
+    redirect_to requests_path, flash: { error: I18n.t('request.editing_disallowed') }
   end
 end

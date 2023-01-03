@@ -6,7 +6,7 @@
 >
 
   <div class="RequestForm-column" data-action="input->request-form#updatePreview">
-    <%= form_with(scope: :request, url: requests_path, local: true, multipart: true) do %>
+    <%= form_with(model: @request, local: true, multipart: true) do %>
       <%= c 'stack', space: :large do %>
 
         <%= c 'field', object: @request, attr: :title do |field| %>
