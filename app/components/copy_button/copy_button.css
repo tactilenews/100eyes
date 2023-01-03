@@ -1,5 +1,13 @@
 .CopyButton {
   position: relative;
+  background-color: var(--color-nav-bar);
+  display: flex;
+}
+
+.CopyButton > svg {
+  width: var(--spacing-unit);
+  margin-right: var(--spacing-unit-xs);
+  stroke: var(--color-primary);
 }
 
 .CopyButton-loading,
@@ -17,7 +25,9 @@
 }
 
 .CopyButton[data-state='loading'] .CopyButton-label,
-.CopyButton[data-state='success'] .CopyButton-label {
+.CopyButton[data-state='success'] .CopyButton-label,
+.CopyButton[data-state='loading'] svg:not(.Icon),
+.CopyButton[data-state='success'] svg:not(.Icon) {
   visibility: hidden;
 }
 

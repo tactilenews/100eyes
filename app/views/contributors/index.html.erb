@@ -4,13 +4,11 @@
       <%= I18n.t 'contributor.contributor', count: :other %>
     <% end %>
 
-    <% header.actions do %>
-      <%= c 'copy_button',
-        label: I18n.t('contributor.actions.copy_invite'),
-        url: invites_url,
-        key: 'url'
-      %>
-    <% end %>
+    <%= c 'copy_button',
+      label: I18n.t('contributor.actions.copy_invite'),
+      url: invites_url,
+      key: 'url'
+    %>
 
     <% header.tab_bar do %>
       <%= c('tab_bar', items: {
