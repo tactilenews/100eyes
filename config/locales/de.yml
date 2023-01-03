@@ -453,7 +453,8 @@ de:
       other: Deine Frage wurde erfolgreich an %{count} Mitglieder in der Community gesendet
     editing_disallowed: Sie können eine bereits verschickte Frage nicht mehr bearbeiten.
     replies: Alle Antworten
-    created_at: Frage gestellt %{created_at}
+    created_at: Frage gestellt %{datetime}
+    planned_for: Frage geplant für %{datetime}
     no_replies: Bisher hat noch niemand auf diese Frage geantwortet. Schau doch später noch einmal rein!
     form:
       title:

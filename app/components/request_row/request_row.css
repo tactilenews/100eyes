@@ -4,6 +4,19 @@
   color: var(--color-text-light);
 }
 
-.RequestRow-meta > * + * {
-  margin-left: var(--spacing-unit);
+.RequestRow .PlaintextMessage {
+  margin-bottom: var(--spacing-unit);
+}
+
+.RequestRow .TagsList {
+  max-width: 33%;
+  margin-right: var(--spacing-unit-xs);
+}
+
+.RequestRow .TagsList > li {
+  margin-right: var(--spacing-unit-xs);
+}
+
+.RequestRow .InlineMetrics {
+  margin-left: auto;
 }

@@ -13,6 +13,7 @@ class Request < ApplicationRecord
 
   scope :include_associations, -> { preload(messages: :sender).includes(messages: :files).eager_load(:messages) }
   scope :planned, -> { where.not(schedule_send_for: nil).where('schedule_send_for > ?', Time.current) }
+  scope :sent, -> { where(schedule_send_for: nil).or(where('schedule_send_for < ?', Time.current)) }
 
   validates :files, blob: { content_type: :image }
 

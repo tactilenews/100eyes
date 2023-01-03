@@ -8,9 +8,9 @@ class RequestsController < ApplicationController
 
   def index
     @filter = filter_param
-    @sent_requests_count = Request.include_associations.count
+    @sent_requests_count = Request.include_associations.sent.count
     @planned_requests_count = Request.include_associations.planned.count
-    @requests = @filter == :planned ? Request.include_associations.planned : Request.include_associations
+    @requests = @filter == :planned ? Request.include_associations.planned : Request.include_associations.sent
   end
 
   def show

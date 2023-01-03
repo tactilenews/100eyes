@@ -1,5 +1,5 @@
 <%= c 'main' do %>
-  <%= c 'page_header', styles: [:largeMarginBottom, :spaceBetween]  do |header| %>
+  <%= c 'page_header', styles: [:largeMarginBottom, :spaceBetween, :wide]  do |header| %>
     <%= c 'heading', style: :alpha do %>
       <%= I18n.t 'request.request', count: :many %>
     <% end %>
@@ -27,7 +27,7 @@
     <% end %>
   <% end %>
 
-  <%= c 'section' do %>
+  <%= c 'section', styles: [:wide] do %>
     <% @requests.each do |request| %>
       <%= c 'request_row', request: request %>
     <% end %>
