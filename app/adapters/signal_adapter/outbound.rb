@@ -5,6 +5,7 @@ module SignalAdapter
     def self.send!(message)
       recipient = message&.recipient
       return unless contributor_can_receive_messages?(recipient)
+      return if message.request.schedule_send_for.present? && message.request.schedule_send_for > 1.hour.from_now
 
       if message.files.present?
         conditionally_schedule(SignalAdapter::Outbound::File, message).perform_later(message: message)

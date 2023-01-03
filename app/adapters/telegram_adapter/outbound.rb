@@ -5,6 +5,7 @@ module TelegramAdapter
     def self.send!(message)
       recipient = message.recipient
       return unless recipient&.telegram_id
+      return if message.request.schedule_send_for.present? && message.request.schedule_send_for > 1.hour.from_now
 
       files = message.files
       if files.present?
