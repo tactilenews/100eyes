@@ -1,12 +1,22 @@
 <%= c 'card', **attrs do %>
-  <%= link_to request_path(id: request.id) do %>
+  <%= link_to editable? ? edit_request_path(request) : request_path(id: request.id) do %>
     <%= c 'box' do %>
       <%= c 'stack', space: :small do %>
 
         <%= c 'stack', space: :xsmall do %>
-          <%= c 'heading', tag: :h2 do %>
-            <%= request.title %>
+          <% if editable? %>
+            <div class="RequestRow-editableWrapper">
+              <%= c 'heading', tag: :h2 do %>
+                <%= request.title %>
+              <% end %>
+              <%= c 'icon', icon: 'pen', styles: [:inline] %>
+            </div>
+          <% else %>
+            <%= c 'heading', tag: :h2 do %>
+              <%= request.title %>
+            <% end %>
           <% end %>
+
           <%= c 'plaintext_message',
             message: request.text,
             highlight_placeholders: true

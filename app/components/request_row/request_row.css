@@ -20,3 +20,8 @@
 .RequestRow .InlineMetrics {
   margin-left: auto;
 }
+
+.RequestRow-editableWrapper {
+  display: flex;
+  justify-content: space-between;
+}
