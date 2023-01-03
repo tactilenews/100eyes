@@ -20,12 +20,14 @@
       <p><%= t('.additional_info.channels') %></p>
       <p><%= t('.additional_info.security') %></p>
     </div>
-    <%= c 'button',
-      styles: [:secondary],
-      data: { action: 'profile-header#openModal' } do %>
-      <%= c 'icon', icon: 'add', styles: [:inline] %>
-      <%= t('.upgrade_business_plan_button', upgrade_discount: organization.upgrade_discount).html_safe %>
-    <% end%>
-  <% end %>
-  <%= c 'upgrade_business_plan_modal', organization: organization, business_plans: business_plans, data: { controller: 'modal', profile_header_target: 'modal' } %>
+    <% if upgrade_available? %>
+      <%= c 'button',
+        styles: [:secondary],
+        data: { action: 'profile-header#openModal' } do %>
+        <%= c 'icon', icon: 'add', styles: [:inline] %>
+        <%= t('.upgrade_business_plan_button', upgrade_discount: organization.upgrade_discount).html_safe %>
+      <% end%>
+    <% end %>
+      <%= c 'upgrade_business_plan_modal', organization: organization, business_plans: business_plans, data: { controller: 'modal', profile_header_target: 'modal' } %>
+    <% end %>
 <% end %>

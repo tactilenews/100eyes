@@ -114,6 +114,8 @@ RSpec.describe 'Profile' do
     expect(page).to have_content('Plan erfolgreich aktualisiert')
     expect(page).to have_content("Dein 100eyes Plan: \"#{editorial_enterprise.name}\"")
     expect(page).to have_content("Preis: #{number_to_currency(editorial_enterprise.price_per_month)}/Monat")
+    # no plans to upgrade to
+    expect(page).not_to have_button("Plan jetzt upgraden und #{organization.upgrade_discount}% sparen")
     # takes over the valid_until from current_plan
     expect(page).to have_content("Mindeslaufzeit: bis #{current_plan.valid_until.strftime('%m/%Y')}")
   end
