@@ -60,7 +60,7 @@
         <% end %>
 
         <%= c 'field', object: @request, attr: :schedule_send_for do  |field| %>
-          <%= c 'input', field.input_defaults.merge(type: 'datetime-local', value: Time.current.strftime("%Y-%m-%dT%H:%M")) %>
+          <%= c 'input', field.input_defaults.merge(type: 'datetime-local', value: schedule_send_for_or_default) %>
         <% end %>
 
         <%= c 'field', object: @request, attr: :tag_list do |field| %>
