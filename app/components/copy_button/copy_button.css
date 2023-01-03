@@ -38,7 +38,8 @@
   display: initial;
 }
 
-.Button:not(.Button--primary):not(.CopyButton--colorNavBar) .CopyButton-success {
+.Button:not(.Button--primary):not(.CopyButton--colorNavBar)
+  .CopyButton-success {
   color: var(--color-green-dark);
 }
 
