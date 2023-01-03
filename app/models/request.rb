@@ -11,6 +11,9 @@ class Request < ApplicationRecord
   has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
   has_many_attached :files
 
+  scope :include_associations, -> { preload(messages: :sender).includes(messages: :files).eager_load(:messages) }
+  scope :planned, -> { where.not(schedule_send_for: nil).where('schedule_send_for > ?', Time.current) }
+
   validates :files, blob: { content_type: :image }
 
   acts_as_taggable_on :tags

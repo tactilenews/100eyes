@@ -10,6 +10,21 @@
         link: new_request_path
       %>
     <% end %>
+
+    <% header.tab_bar do %>
+      <%= c('tab_bar', items: {
+        requests_path => {
+          label: "Gestellt",
+          active: @filter == :sent,
+          count: @sent_requests_count
+        },
+        requests_path(filter: :planned) => {
+          label: "Geplant",
+          active: @filter == :planned,
+          count: @planned_requests_count
+        },
+      }) %>
+    <% end %>
   <% end %>
 
   <%= c 'section' do %>

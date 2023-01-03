@@ -7,9 +7,10 @@ class RequestsController < ApplicationController
   before_action :disallow_edit, only: %i[edit update]
 
   def index
-    @requests = Request.preload(messages: :sender)
-                       .includes(messages: :files)
-                       .eager_load(:messages)
+    @filter = filter_param
+    @sent_requests_count = Request.include_associations.count
+    @planned_requests_count = Request.include_associations.planned.count
+    @requests = @filter == :planned ? Request.include_associations.planned : Request.include_associations
   end
 
   def show
@@ -92,5 +93,13 @@ class RequestsController < ApplicationController
     return unless @request.schedule_send_for.blank? || @request.schedule_send_for < 1.hour.from_now
 
     redirect_to requests_path, flash: { error: I18n.t('request.editing_disallowed') }
+  end
+
+  def filter_param
+    value = params.permit(:filter)[:filter]&.to_sym
+
+    return :sent unless %i[sent planned].include?(value)
+
+    value
   end
 end
