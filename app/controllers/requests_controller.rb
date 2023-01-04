@@ -15,14 +15,21 @@ class RequestsController < ApplicationController
 
   def show
     @message_groups = @request.messages_by_contributor
-    @planned_request = @request.schedule_send_for.present? && @request.schedule_send_for > Time.current
   end
 
   def create
     resize_image_files if request_params[:files].present?
     @request = Request.new(request_params.merge(user: current_user))
     if @request.save
-      redirect_to @request, flash: { success: request_success_message }
+      if @request.planned?
+        redirect_to requests_path(filter: :planned), flash: {
+          success: I18n.t('request.schedule_request_success',
+                          count: Contributor.active.with_tags(@request.tag_list).count,
+                          scheduled_datetime: @request.schedule_send_for.to_formatted_s(:long))
+        }
+      else
+        redirect_to @request, flash: { success: I18n.t('request.success', count: @request.stats[:counts][:recipients]) }
+      end
     else
       render :new, status: :unprocessable_entity
     end
@@ -36,7 +43,15 @@ class RequestsController < ApplicationController
 
   def update
     if @request.update(request_params)
-      redirect_to @request, flash: { success: request_success_message }
+      if @request.planned?
+        redirect_to requests_path(filter: :planned), flash: {
+          success: I18n.t('request.schedule_request_success',
+                          count: Contributor.active.with_tags(@request.tag_list).count,
+                          scheduled_datetime: @request.schedule_send_for.to_formatted_s(:long))
+        }
+      else
+        redirect_to @request, flash: { success: I18n.t('request.success', count: @request.stats[:counts][:recipients]) }
+      end
     else
       render :edit, status: :unprocessable_entity
     end
@@ -81,17 +96,8 @@ class RequestsController < ApplicationController
     end
   end
 
-  def request_success_message
-    if @request.schedule_send_for
-      I18n.t('request.schedule_request_success', count: @request.stats[:counts][:recipients],
-                                                 scheduled_datetime: @request.schedule_send_for.to_formatted_s(:long))
-    else
-      I18n.t('request.success', count: @request.stats[:counts][:recipients])
-    end
-  end
-
   def disallow_edit
-    return unless @request.schedule_send_for.blank? || @request.schedule_send_for < 1.hour.from_now
+    return if @request.planned?
 
     redirect_to requests_path, flash: { error: I18n.t('request.editing_disallowed') }
   end

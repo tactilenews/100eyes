@@ -17,7 +17,8 @@ module RequestForm
     end
 
     def schedule_send_for_or_default
-      request.schedule_send_for.present? ? request.schedule_send_for.strftime('%Y-%m-%dT%H:%M') : Time.current.strftime('%Y-%m-%dT%H:%M')
+      datetime = request.planned? ? request.schedule_send_for : Time.current
+      datetime.strftime('%Y-%m-%dT%H:%M')
     end
   end
 end

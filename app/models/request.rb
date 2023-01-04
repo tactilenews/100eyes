@@ -43,6 +43,10 @@ class Request < ApplicationRecord
     }
   end
 
+  def planned?
+    schedule_send_for.present? && schedule_send_for > Time.current
+  end
+
   def messages_by_contributor
     messages
       .where(broadcasted: false)
@@ -51,16 +55,20 @@ class Request < ApplicationRecord
   end
 
   def self.broadcast!(request)
-    Contributor.active.with_tags(request.tag_list).each do |contributor|
-      message = Message.new(
-        sender: request.user,
-        recipient: contributor,
-        text: request.personalized_text(contributor),
-        request: request,
-        broadcasted: true
-      )
-      message.files = attach_files(request.files) if request.files.attached?
-      message.save!
+    if request.planned?
+      BroadcastRequestJob.delay(run_at: request.schedule_send_for).perform_later(request.id)
+    else
+      Contributor.active.with_tags(request.tag_list).each do |contributor|
+        message = Message.new(
+          sender: request.user,
+          recipient: contributor,
+          text: request.personalized_text(contributor),
+          request: request,
+          broadcasted: true
+        )
+        message.files = attach_files(request.files) if request.files.attached?
+        message.save!
+      end
     end
   end
 

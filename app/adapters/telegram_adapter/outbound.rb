@@ -5,17 +5,16 @@ module TelegramAdapter
     def self.send!(message)
       recipient = message.recipient
       return unless recipient&.telegram_id
-      return if message.request.schedule_send_for.present? && message.request.schedule_send_for > 1.hour.from_now
 
       files = message.files
       if files.present?
         media = files.map { |file| ActiveStorage::Blob.service.path_for(file.attachment.blob.key) }
-        conditionally_schedule(TelegramAdapter::Outbound::Photo, message).perform_later(telegram_id: recipient.telegram_id,
-                                                                                        media: media,
-                                                                                        message: message)
+        TelegramAdapter::Outbound::Photo.perform_later(telegram_id: recipient.telegram_id,
+                                                       media: media,
+                                                       message: message)
       else
-        conditionally_schedule(TelegramAdapter::Outbound::Text, message).perform_later(text: message.text, recipient: recipient,
-                                                                                       message: message)
+        TelegramAdapter::Outbound::Text.perform_later(text: message.text, recipient: recipient,
+                                                      message: message)
       end
     end
 
@@ -24,12 +23,6 @@ module TelegramAdapter
 
       welcome_message = ["<b>#{Setting.onboarding_success_heading}</b>", Setting.onboarding_success_text].join("\n")
       TelegramAdapter::Outbound::Text.perform_later(text: welcome_message, recipient: contributor)
-    end
-
-    def self.conditionally_schedule(message_type, message)
-      message_type.try do |klass|
-        message.request.schedule_send_for.present? ? klass.set(wait_until: message.request.schedule_send_for) : klass
-      end
     end
   end
 end

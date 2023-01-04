@@ -73,20 +73,6 @@ ActiveRecord::Schema.define(version: 2023_01_02_062904) do
     t.index ["user_id"], name: "index_activity_notifications_on_user_id"
   end
 
-  create_table "business_plans", force: :cascade do |t|
-    t.string "name"
-    t.integer "price_per_month"
-    t.integer "setup_cost"
-    t.integer "hours_of_included_support"
-    t.integer "number_of_users"
-    t.integer "number_of_contributors"
-    t.integer "number_of_communities"
-    t.datetime "valid_from"
-    t.datetime "valid_until"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "contributors", force: :cascade do |t|
     t.string "email"
     t.bigint "telegram_chat_id"
@@ -108,9 +94,8 @@ ActiveRecord::Schema.define(version: 2023_01_02_062904) do
     t.datetime "signal_onboarding_completed_at"
     t.string "additional_email"
     t.datetime "additional_consent_given_at"
-    t.bigint "organization_id"
+    t.datetime "latest_message_received_at"
     t.index ["email"], name: "index_contributors_on_email", unique: true
-    t.index ["organization_id"], name: "index_contributors_on_organization_id"
     t.index ["signal_phone_number"], name: "index_contributors_on_signal_phone_number", unique: true
     t.index ["telegram_chat_id"], name: "index_contributors_on_telegram_chat_id", unique: true
     t.index ["telegram_id"], name: "index_contributors_on_telegram_id", unique: true
@@ -169,16 +154,6 @@ ActiveRecord::Schema.define(version: 2023_01_02_062904) do
     t.index ["telegram_media_group_id"], name: "index_messages_on_telegram_media_group_id", unique: true
   end
 
-  create_table "organizations", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.bigint "business_plan_id", null: false
-    t.bigint "contact_person_id"
-    t.index ["business_plan_id"], name: "index_organizations_on_business_plan_id"
-    t.index ["contact_person_id"], name: "index_organizations_on_contact_person_id"
-  end
-
   create_table "pg_search_documents", force: :cascade do |t|
     t.text "content"
     t.string "searchable_type"
@@ -201,8 +176,8 @@ ActiveRecord::Schema.define(version: 2023_01_02_062904) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "replies_count"
-    t.bigint "user_id"
     t.text "image_data"
+    t.bigint "user_id"
     t.datetime "schedule_send_for"
     t.index ["user_id"], name: "index_requests_on_user_id"
   end
@@ -254,9 +229,7 @@ ActiveRecord::Schema.define(version: 2023_01_02_062904) do
     t.string "first_name"
     t.string "last_name"
     t.boolean "admin", default: false
-    t.bigint "organization_id"
     t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["organization_id"], name: "index_users_on_organization_id"
     t.index ["remember_token"], name: "index_users_on_remember_token"
   end
 
@@ -266,15 +239,11 @@ ActiveRecord::Schema.define(version: 2023_01_02_062904) do
   add_foreign_key "activity_notifications", "messages"
   add_foreign_key "activity_notifications", "requests"
   add_foreign_key "activity_notifications", "users"
-  add_foreign_key "contributors", "organizations"
   add_foreign_key "json_web_tokens", "contributors"
   add_foreign_key "message_files", "messages"
   add_foreign_key "messages", "contributors", column: "recipient_id"
   add_foreign_key "messages", "requests"
-  add_foreign_key "organizations", "business_plans"
-  add_foreign_key "organizations", "users", column: "contact_person_id"
   add_foreign_key "photos", "messages"
   add_foreign_key "requests", "users"
   add_foreign_key "taggings", "tags"
-  add_foreign_key "users", "organizations"
 end

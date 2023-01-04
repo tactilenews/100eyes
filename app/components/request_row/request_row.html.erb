@@ -1,10 +1,10 @@
 <%= c 'card', **attrs do %>
-  <%= link_to editable? ? edit_request_path(request) : request_path(id: request.id) do %>
+  <%= link_to request.planned? ? edit_request_path(request) : request_path(id: request.id) do %>
     <%= c 'box' do %>
       <%= c 'stack', space: :small do %>
 
         <%= c 'stack', space: :xsmall do %>
-          <% if editable? %>
+          <% if request.planned? %>
             <div class="RequestRow-editableWrapper">
               <%= c 'heading', tag: :h2 do %>
                 <%= request.title %>
@@ -28,8 +28,8 @@
             <% end %>
 
             <span>
-              <%= I18n.t("request.#{planned_request? ? 'planned_for' : 'created_at'}",
-                         datetime: date_time(planned_request? ? request.schedule_send_for : request.created_at))
+              <%= I18n.t("request.#{request.planned? ? 'planned_for' : 'created_at'}",
+                         datetime: date_time(request.planned? ? request.schedule_send_for : request.created_at))
               %>
             </span>
 

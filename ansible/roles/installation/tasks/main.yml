@@ -72,9 +72,3 @@
   command:
     cmd: docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec app bin/rails telegram:bot:set_webhook
     chdir: /home/ansible
-
-- name: Setup cronjob to send delayed requests
-  ansible.builtin.cron:
-    name: "Check for delayed requests and schedule jobs to send out messages"
-    minute: "0" # job gets run at top of the hour
-    job: "/usr/local/bin/docker-compose -f /home/ansible/docker-compose.yml -f /home/ansible/docker-compose.prod.yml exec -T app bin/rails requests:schedule_delayed_requests"
