@@ -767,7 +767,7 @@ de:
         other: "<strong>Du</strong> hast <strong>%{contributor_one}</strong> und %{others_count} anderen auf die Frage <strong>„%{request_title}”</strong> geantwortet."
       link_text: "Zur Nachricht"
     request_scheduled:
-      text_html: "Die geplante Frage <strong>%{request_title}</strong> wurde am %{date} um %{time} an %{contributors_count} Community-Mitglieder versendet."
+      text_html: "Die Frage <strong>%{request_title}</strong> wurde für den Versand am %{date} um %{time} geplant und wird an %{contributors_count} Community-Mitglieder versendet."
       link_text: Zur Frage
   shared:
     community: Community
