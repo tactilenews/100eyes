@@ -21,7 +21,7 @@ class Request < ApplicationRecord
 
   after_create { Request.broadcast!(self) }
 
-  before_update :notify_recipient
+  after_update_commit :broadcast_updated_request, :notify_recipient
 
   delegate :replies, to: :messages
 
@@ -72,6 +72,7 @@ class Request < ApplicationRecord
         message.files = attach_files(request.files) if request.files.attached?
         message.save!
       end
+      request.update(broadcasted_at: Time.current)
     end
   end
 
@@ -85,8 +86,14 @@ class Request < ApplicationRecord
 
   private
 
+  def broadcast_updated_request
+    return unless planned? && saved_change_to_schedule_send_for?
+
+    Request.broadcast!(self)
+  end
+
   def notify_recipient
-    return unless schedule_send_for_changed?
+    return unless saved_change_to_schedule_send_for?
 
     RequestScheduled.with(request_id: id).deliver_later(User.all)
   end

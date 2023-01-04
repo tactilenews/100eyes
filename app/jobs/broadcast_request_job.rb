@@ -7,7 +7,9 @@ class BroadcastRequestJob < ApplicationJob
 
   def perform(request_id)
     request = Request.find(request_id)
-    if request.schedule_send_for.present? && request.schedule_send_for > Time.current
+    return if request.broadcasted_at.present?
+
+    if request.planned? # rescheduled for future after this job was created
       BroadcastRequestJob.delay(run_at: request.schedule_send_for).perform_later(request.id)
       return
     end
@@ -23,5 +25,6 @@ class BroadcastRequestJob < ApplicationJob
       message.files = Request.attach_files(request.files) if request.files.attached?
       message.save!
     end
+    request.update(broadcasted_at: Time.current)
   end
 end

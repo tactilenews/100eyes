@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_02_062904) do
+ActiveRecord::Schema.define(version: 2023_01_04_102549) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -94,7 +94,6 @@ ActiveRecord::Schema.define(version: 2023_01_02_062904) do
     t.datetime "signal_onboarding_completed_at"
     t.string "additional_email"
     t.datetime "additional_consent_given_at"
-    t.datetime "latest_message_received_at"
     t.index ["email"], name: "index_contributors_on_email", unique: true
     t.index ["signal_phone_number"], name: "index_contributors_on_signal_phone_number", unique: true
     t.index ["telegram_chat_id"], name: "index_contributors_on_telegram_chat_id", unique: true
@@ -176,9 +175,9 @@ ActiveRecord::Schema.define(version: 2023_01_02_062904) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "replies_count"
-    t.text "image_data"
     t.bigint "user_id"
     t.datetime "schedule_send_for"
+    t.datetime "broadcasted_at"
     t.index ["user_id"], name: "index_requests_on_user_id"
   end
 
