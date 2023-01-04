@@ -21,6 +21,8 @@ class Request < ApplicationRecord
 
   after_create { Request.broadcast!(self) }
 
+  before_update :notify_recipient
+
   delegate :replies, to: :messages
 
   def personalized_text(contributor)
@@ -57,6 +59,7 @@ class Request < ApplicationRecord
   def self.broadcast!(request)
     if request.planned?
       BroadcastRequestJob.delay(run_at: request.schedule_send_for).perform_later(request.id)
+      RequestScheduled.with(request_id: request.id).deliver_later(User.all)
     else
       Contributor.active.with_tags(request.tag_list).each do |contributor|
         message = Message.new(
@@ -78,5 +81,13 @@ class Request < ApplicationRecord
       message_file.attachment.attach(file.blob)
       message_file
     end
+  end
+
+  private
+
+  def notify_recipient
+    return unless schedule_send_for_changed?
+
+    RequestScheduled.with(request_id: id).deliver_later(User.all)
   end
 end

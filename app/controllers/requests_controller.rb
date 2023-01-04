@@ -10,7 +10,7 @@ class RequestsController < ApplicationController
     @filter = filter_param
     @sent_requests_count = Request.include_associations.sent.count
     @planned_requests_count = Request.include_associations.planned.count
-    @requests = @filter == :planned ? Request.include_associations.planned : Request.include_associations.sent
+    @requests = filtered_requests
   end
 
   def show
@@ -108,5 +108,9 @@ class RequestsController < ApplicationController
     return :sent unless %i[sent planned].include?(value)
 
     value
+  end
+
+  def filtered_requests
+    @filter == :planned ? Request.reorder(schedule_send_for: :desc).include_associations.planned : Request.include_associations.sent
   end
 end
