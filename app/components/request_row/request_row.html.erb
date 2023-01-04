@@ -1,4 +1,4 @@
-<%= c 'card', **attrs do %>
+<%= c 'card', **attrs.merge(id: "request-#{request.id}") do %>
   <%= link_to request.planned? ? edit_request_path(request) : request_path(id: request.id) do %>
     <%= c 'box' do %>
       <%= c 'stack', space: :small do %>

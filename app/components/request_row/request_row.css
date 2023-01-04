@@ -25,3 +25,8 @@
   display: flex;
   justify-content: space-between;
 }
+
+.RequestRow:target {
+  border-color: var(--color-focus);
+  box-shadow: var(--input-focus-shadow);
+}

@@ -32,7 +32,7 @@ class RequestScheduled < Noticed::Base
   # rubocop:enable Rails/OutputSafety
 
   def url
-    request_path(record.request)
+    requests_path(filter: :planned, anchor: "request-#{record.request_id}")
   end
 
   def link_text
