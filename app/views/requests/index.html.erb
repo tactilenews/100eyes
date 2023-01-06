@@ -13,6 +13,7 @@
   <% end %>
 
   <%= c 'section' do %>
+    <%= paginate @requests %>
     <% @requests.each do |request| %>
       <%= c 'request_row', request: request %>
     <% end %>

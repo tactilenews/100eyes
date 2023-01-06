@@ -8,7 +8,7 @@ class RequestsController < ApplicationController
   def index
     @requests = Request.preload(messages: :sender)
                        .includes(messages: :files)
-                       .eager_load(:messages)
+                       .eager_load(:messages).page(params[:page])
   end
 
   def show
