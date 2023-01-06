@@ -25,7 +25,7 @@ class RequestsController < ApplicationController
         redirect_to requests_path(filter: :planned), flash: {
           success: I18n.t('request.schedule_request_success',
                           count: Contributor.active.with_tags(@request.tag_list).count,
-                          scheduled_datetime: @request.schedule_send_for.to_formatted_s(:long))
+                          scheduled_datetime: I18n.l(@request.schedule_send_for, format: :long))
         }
       else
         redirect_to @request, flash: { success: I18n.t('request.success', count: @request.stats[:counts][:recipients]) }
@@ -47,7 +47,7 @@ class RequestsController < ApplicationController
         redirect_to requests_path(filter: :planned), flash: {
           success: I18n.t('request.schedule_request_success',
                           count: Contributor.active.with_tags(@request.tag_list).count,
-                          scheduled_datetime: @request.schedule_send_for.to_formatted_s(:long))
+                          scheduled_datetime: I18n.l(@request.schedule_send_for, format: :long))
         }
       else
         redirect_to @request, flash: { success: I18n.t('request.success', count: @request.stats[:counts][:recipients]) }

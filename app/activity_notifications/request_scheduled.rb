@@ -25,8 +25,8 @@ class RequestScheduled < Noticed::Base
     request = notifications.first.request
     t('.text_html',
       request_title: request.title,
-      date: request.schedule_send_for.strftime('%A, %-d.%-m.%Y'),
-      time: request.schedule_send_for.strftime('%H:%M'),
+      date: I18n.l(request.schedule_send_for, format: '%A, %-d.%-m.%Y'),
+      time: I18n.l(request.schedule_send_for, format: '%H:%M'),
       contributors_count: Contributor.active.with_tags(request.tag_list).count).html_safe
   end
   # rubocop:enable Rails/OutputSafety
