@@ -77,13 +77,13 @@ RSpec.describe 'Requests', telegram_bot: :rails do
 
       it 'redirects to requests#show' do
         response = subject.call
-        request = Request.last
-        expect(response).to redirect_to request
+        expect(response).to redirect_to requests_path(filter: :planned)
       end
 
       it 'shows success notification' do
         subject.call
-        expect(flash[:success]).to include(scheduled_datetime.to_formatted_s(:long))
+        request = Request.first
+        expect(flash[:success]).to include(I18n.l(request.schedule_send_for, format: :long))
       end
     end
   end

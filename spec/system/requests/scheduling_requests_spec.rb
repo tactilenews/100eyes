@@ -22,7 +22,7 @@ RSpec.describe 'Scheduling requests', js: true do
       fill_in 'Versand planen. Deine Frage wird automatisch zur eingestellten Zeit verschickt.', with: scheduled_datetime
       click_button 'Frage an die Community senden'
 
-      formatted = scheduled_datetime.to_formatted_s(:long)
+      formatted = I18n.l(scheduled_datetime, format: :long)
       success_message = "Ihre Frage wurde erfolgreich geplant, um am #{formatted} an ein Community-Mitglied gesendet zu werden."
       expect(page).to have_content(success_message)
       expect(page).to have_content('Did you get my scheduled request?')
