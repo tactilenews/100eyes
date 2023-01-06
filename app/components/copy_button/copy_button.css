@@ -43,7 +43,8 @@
   color: var(--color-green-dark);
 }
 
-.CopyButton--colorNavBar .CopyButton-success {
+.CopyButton--colorNavBar .CopyButton-success,
+.CopyButton--colorNavBar .CopyButton-loading {
   color: var(--color-primary);
 }
 
