@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_02_094139) do
+ActiveRecord::Schema.define(version: 2023_01_04_102549) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -176,7 +176,8 @@ ActiveRecord::Schema.define(version: 2022_11_02_094139) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "replies_count"
     t.bigint "user_id"
-    t.text "image_data"
+    t.datetime "schedule_send_for"
+    t.datetime "broadcasted_at"
     t.index ["user_id"], name: "index_requests_on_user_id"
   end
 
