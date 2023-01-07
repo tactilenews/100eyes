@@ -13,7 +13,8 @@ module TelegramAdapter
                                                        media: media,
                                                        message: message)
       else
-        TelegramAdapter::Outbound::Text.perform_later(text: message.text, recipient: recipient, message: message)
+        TelegramAdapter::Outbound::Text.perform_later(text: message.text, recipient: recipient,
+                                                      message: message)
       end
     end
 

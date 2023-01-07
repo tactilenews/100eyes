@@ -3,23 +3,14 @@
 module ThreemaAdapter
   class Outbound < ApplicationJob
     def self.send!(message)
-      recipient = message.recipient
       return unless message.recipient&.threema_id
 
       files = message.files
 
       if files.present?
-        files.each_with_index do |file, index|
-          ThreemaAdapter::Outbound::File.perform_later(
-            recipient: recipient,
-            file_path: ActiveStorage::Blob.service.path_for(file.attachment.blob.key),
-            file_name: file.attachment.blob.filename.to_s,
-            caption: index.zero? ? message.text : nil,
-            render_type: :media
-          )
-        end
+        send_files(files, message)
       else
-        ThreemaAdapter::Outbound::Text.perform_later(recipient: recipient, text: message.text)
+        send_text(message)
       end
     end
 
@@ -31,6 +22,22 @@ module ThreemaAdapter
       return unless contributor&.threema_id
 
       ThreemaAdapter::Outbound::Text.perform_later(text: welcome_message, recipient: contributor)
+    end
+
+    def self.send_files(files, message)
+      files.each_with_index do |file, index|
+        ThreemaAdapter::Outbound::File.perform_later(
+          recipient: message.recipient,
+          file_path: ActiveStorage::Blob.service.path_for(file.attachment.blob.key),
+          file_name: file.attachment.blob.filename.to_s,
+          caption: index.zero? ? message.text : nil,
+          render_type: :media
+        )
+      end
+    end
+
+    def self.send_text(message)
+      ThreemaAdapter::Outbound::Text.perform_later(recipient: message.recipient, text: message.text)
     end
   end
 end

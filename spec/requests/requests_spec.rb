@@ -68,6 +68,24 @@ RSpec.describe 'Requests', telegram_bot: :rails do
         end
       end
     end
+
+    context 'scheduled for future datetime' do
+      let(:scheduled_datetime) { Time.current.tomorrow.beginning_of_hour }
+      let(:params) do
+        { request: { title: 'Scheduled request', text: 'Did you get this scheduled request?', schedule_send_for: scheduled_datetime } }
+      end
+
+      it 'redirects to requests#show' do
+        response = subject.call
+        expect(response).to redirect_to requests_path(filter: :planned)
+      end
+
+      it 'shows success notification' do
+        subject.call
+        request = Request.first
+        expect(flash[:success]).to include(I18n.l(request.schedule_send_for, format: :long))
+      end
+    end
   end
 
   describe 'GET /notifications' do

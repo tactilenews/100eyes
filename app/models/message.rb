@@ -25,11 +25,7 @@ class Message < ApplicationRecord
   validates :raw_data, presence: true, if: -> { sent_from_contributor? }
   validates :unknown_content, inclusion: { in: [true, false] }
 
-  after_commit(on: :create, unless: :manually_created?) do
-    [PostmarkAdapter::Outbound, SignalAdapter::Outbound, TelegramAdapter::Outbound, ThreemaAdapter::Outbound].each do |adapter|
-      adapter.send!(self)
-    end
-  end
+  after_create_commit :send_if_outbound
 
   after_create_commit :notify_recipient
 
@@ -75,6 +71,14 @@ class Message < ApplicationRecord
     elsif !broadcasted?
       ChatMessageSent.with(contributor_id: recipient.id, request_id: request.id, user_id: sender_id,
                            message_id: id).deliver_later(User.all)
+    end
+  end
+
+  def send_if_outbound
+    return if manually_created? || reply?
+
+    [PostmarkAdapter::Outbound, SignalAdapter::Outbound, TelegramAdapter::Outbound, ThreemaAdapter::Outbound].each do |adapter|
+      adapter.send!(self)
     end
   end
 end

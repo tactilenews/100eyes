@@ -1,5 +1,5 @@
 <%= c 'main' do %>
-  <%= c 'page_header', styles: [:largeMarginBottom, :spaceBetween]  do |header| %>
+  <%= c 'page_header', styles: [:largeMarginBottom, :spaceBetween, :wide]  do |header| %>
     <%= c 'heading', style: :alpha do %>
       <%= I18n.t 'request.request', count: :many %>
     <% end %>
@@ -10,9 +10,24 @@
         link: new_request_path
       %>
     <% end %>
+
+    <% header.tab_bar do %>
+      <%= c('tab_bar', items: {
+        requests_path => {
+          label: "Gestellt",
+          active: @filter == :sent,
+          count: @sent_requests_count
+        },
+        requests_path(filter: :planned) => {
+          label: "Geplant",
+          active: @filter == :planned,
+          count: @planned_requests_count
+        },
+      }) %>
+    <% end %>
   <% end %>
 
-  <%= c 'section' do %>
+  <%= c 'section', styles: [:wide] do %>
     <% @requests.each do |request| %>
       <%= c 'request_row', request: request %>
     <% end %>
