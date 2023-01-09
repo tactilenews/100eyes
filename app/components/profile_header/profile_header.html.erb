@@ -26,7 +26,7 @@
         styles: [:secondary],
         data: { action: 'profile-header#openModal' } do %>
         <%= svg 'plus-sign' %>
-        <%= t('.upgrade_business_plan_button', upgrade_discount: organization.upgrade_discount).html_safe %>
+        <%= t('.upgrade_business_plan_button_html', upgrade_discount: organization.upgrade_discount) %>
       <% end%>
     <% end %>
       <%= c 'upgrade_business_plan_modal', organization: organization, business_plans: business_plans, data: { controller: 'modal', profile_header_target: 'modal' } %>

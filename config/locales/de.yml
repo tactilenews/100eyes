@@ -296,7 +296,7 @@ de:
       additional_info:
         channels: "Dialogkanäle: Signal, Threema, Telegram, E-mail"
         security: "Sicherheit: Community abgesichert über Zwei-Faktor-Authentifizierung, Cloudflare"
-      upgrade_business_plan_button: "Plan jetzt upgraden und <strong>%{upgrade_discount}%</strong> sparen."
+      upgrade_business_plan_button_html: "<span>Plan jetzt upgraden und <strong>%{upgrade_discount}%</strong> sparen.</span>"
     business_plan_choices:
       legend: Upgrade Plan
       price_per_month: "%{price_per_month}/Monat"
