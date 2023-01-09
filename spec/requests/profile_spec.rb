@@ -20,7 +20,7 @@ RSpec.describe '/contributors' do
   end
 
   describe 'POST /create_user' do
-    let(:params) { { profile: { user: { first_name: 'Daniel', last_name: 'Theis', email: 'daniel-theis@example.org' } } } }
+    let(:params) { { user: { first_name: 'Daniel', last_name: 'Theis', email: 'daniel-theis@example.org' } } }
 
     context 'unauthenticated' do
       subject { -> { post profile_user_path, params: params } }

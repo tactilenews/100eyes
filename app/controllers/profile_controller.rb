@@ -16,8 +16,9 @@ class ProfileController < ApplicationController
   end
 
   def upgrade_business_plan
+    organization.business_plan.update(valid_from: nil, valid_until: nil)
     business_plan = BusinessPlan.find(upgrade_business_plan_params[:business_plan_id])
-    business_plan.update(valid_from: Time.current, valid_until: organization.business_plan.valid_until)
+    business_plan.update(valid_from: Time.current, valid_until: 1.year.from_now)
     organization.business_plan = business_plan
 
     if organization.save

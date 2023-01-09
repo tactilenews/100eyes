@@ -12,7 +12,7 @@
   <% end %>
 
   <%= c 'heading', style: :gamma do %>
-    <%= t('.sub_heading.business_plan.valid_until', valid_until: organization.business_plan.valid_until.strftime('%m/%Y')) %>
+    <%= t('.sub_heading.business_plan.valid_until', valid_until: I18n.l(organization.business_plan.valid_until, format: '%m/%Y')) %>
   <% end %>
 
   <%= c 'flex' do %>

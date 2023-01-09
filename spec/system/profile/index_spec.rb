@@ -43,7 +43,7 @@ RSpec.describe 'Profile' do
     expect(page).to have_content("Dein 100eyes Plan: \"#{current_plan.name}\"")
     expect(page).to have_content("Auftraggeber:in #{organization.contact_person.name}, #{organization.contact_person.email}")
     expect(page).to have_content("Preis: #{number_to_currency(current_plan.price_per_month)}/Monat")
-    expect(page).to have_content("Mindeslaufzeit: bis #{current_plan.valid_until.strftime('%m/%Y')}")
+    expect(page).to have_content("Mindeslaufzeit: bis #{I18n.l(current_plan.valid_until, format: '%m/%Y')}")
     expect(page).to have_content('Dialogkanäle: Signal, Threema, Telegram, E-mail')
     expect(page).to have_content('Sicherheit: Community abgesichert über Zwei-Faktor-Authentifizierung, Cloudflare')
 
@@ -138,7 +138,7 @@ RSpec.describe 'Profile' do
     expect(page).to have_content("Preis: #{number_to_currency(editorial_enterprise.price_per_month)}/Monat")
     # no plans to upgrade to
     expect(page).not_to have_button("Plan jetzt upgraden und #{organization.upgrade_discount}% sparen")
-    # takes over the valid_until from current_plan
-    expect(page).to have_content("Mindeslaufzeit: bis #{current_plan.valid_until.strftime('%m/%Y')}")
+    # valid_until set to 1 year from now
+    expect(page).to have_content("Mindeslaufzeit: bis #{I18n.l(1.year.from_now, format: '%m/%Y')}")
   end
 end
