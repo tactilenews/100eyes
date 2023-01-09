@@ -306,6 +306,7 @@ de:
         hours_of_included_support: "Inklusive %{hours} Stunden Support"
       close_modal: Modal schließen
       submit_button: Upgrade Plan
+      discount_explained: "*10% Bonus bis %{valid_through}"
     create_user_modal:
       first_name:
         label: Vorname

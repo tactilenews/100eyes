@@ -120,8 +120,9 @@ RSpec.describe 'Profile' do
 
         if bp.price_per_month > current_plan.price_per_month
           expect(page).to have_css('.BusinessPlanChoices-priceStrikethrough', text: "#{number_to_currency(bp.price_per_month)}/Monat")
+          expect(page).to have_content("*10% Bonus bis #{I18n.l(6.months.from_now, format: '%m/%Y')}")
           expect(page).to have_content(
-            "#{number_to_currency(bp.price_per_month - (bp.price_per_month * organization.upgrade_discount / 100.to_f))}/Monat"
+            "#{number_to_currency(bp.price_per_month - (bp.price_per_month * organization.upgrade_discount / 100.to_f))}/Monat*"
           )
         else
           expect(page).to have_content("#{number_to_currency(bp.price_per_month)}/Monat")

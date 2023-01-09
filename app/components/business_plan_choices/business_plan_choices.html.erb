@@ -27,7 +27,7 @@
         <div class="BusinessPlanChoices-price">
           <% if choice[:value] > current_plan.id %>
             <p class="BusinessPlanChoices-priceStrikethrough"><%= t('.price_per_month', price_per_month: number_to_currency(choice[:price])) %></p>
-            <strong><%= t('.price_per_month', price_per_month: price_with_discount(choice[:price])) %></strong>
+            <strong><%= t('.price_per_month', price_per_month: price_with_discount(choice[:price])) %>*</strong>
           <% else %>
             <strong><%= t('.price_per_month', price_per_month: number_to_currency(choice[:price])) %></strong>
           <% end %>

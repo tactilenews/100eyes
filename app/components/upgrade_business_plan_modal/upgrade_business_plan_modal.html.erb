@@ -20,11 +20,14 @@
       current_plan: organization.business_plan,
       discount: organization.upgrade_discount
     %>
-    <%= c 'button',
-      class: 'UpgradeBusinessPlanModal-submitFormButton',
-      type: 'submit',
-      label: t('.submit_button'),
-      styles: [:primary, :block]
-    %>
+    <footer class="UpgradeBusinessPlanModal-footer">
+      <p><%= t('.discount_explained', valid_through: I18n.l(6.months.from_now, format: '%m/%Y')) %></p>
+      <%= c 'button',
+        class: 'UpgradeBusinessPlanModal-submitFormButton',
+        type: 'submit',
+        label: t('.submit_button'),
+        styles: [:primary, :block]
+      %>
+    </footer>
   <% end %>
 <% end %>
