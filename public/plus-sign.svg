@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="100%"
+   viewBox="0 0 5.4804177 5.246388"
+   version="1.1"
+   id="svg10947"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
+   sodipodi:docname="plus-sign-white.svg"
+   inkscape:export-filename="/Users/jakobvicari/Dropbox/Arbeit/Journalismus2022/100eyesIcons2023/button_newquestion.png"
+   inkscape:export-xdpi="300"
+   inkscape:export-ydpi="300">
+  <defs
+     id="defs10941" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.8796296"
+     inkscape:cx="103.89205"
+     inkscape:cy="-12.620231"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     inkscape:document-rotation="0"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1248"
+     inkscape:window-height="943"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata10944">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-94.25586,-50.243881)">
+    <path
+       style="fill:currentColor;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.352777"
+       d="m 96.716232,51.854887 c 0.03996,0.606337 0.07717,1.212673 0,1.81901 -0.03168,0.248049 0.358291,0.24529 0.388605,0 0.07717,-0.606337 0.03996,-1.212673 0,-1.81901 -0.01654,-0.249425 -0.40514,-0.250804 -0.388605,0"
+       id="path7194" />
+    <path
+       style="fill:currentColor;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.352777"
+       d="m 96.142968,53.019329 h 1.65778 c 0.250804,0 0.250804,-0.388606 0,-0.388606 h -1.65778 c -0.250804,0 -0.250804,0.388606 0,0.388606"
+       id="path7196" />
+    <path
+       style="fill:currentColor;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.352777"
+       d="m 97.234374,50.245338 c -1.411111,-0.04961 -3.126768,1.17409 -2.968293,2.707845 0.06477,0.62563 0.282497,1.218187 0.687641,1.703257 0.504359,0.603578 1.293978,0.811664 2.049142,0.832333 0.71658,0.0193 1.444184,-0.146071 1.999534,-0.614606 0.453376,-0.381716 0.654568,-0.971515 0.716579,-1.542023 0.1695,-1.553048 -0.924662,-2.95727 -2.484603,-3.086806 -0.249425,-0.02067 -0.248045,0.367937 0,0.388606 1.358745,0.113002 2.178678,1.317406 2.101508,2.622409 -0.07166,1.237477 -1.050064,1.812121 -2.204861,1.843814 -0.653189,0.01792 -1.296734,-0.137805 -1.783183,-0.591178 -0.398251,-0.37345 -0.587043,-0.913641 -0.676613,-1.438673 -0.235645,-1.376659 1.304999,-2.480469 2.563149,-2.436372 0.250804,0.0083 0.249425,-0.380337 0,-0.388606"
+       id="path7198" />
+  </g>
+</svg>

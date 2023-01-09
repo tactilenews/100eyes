@@ -66,6 +66,10 @@
   color: var(--color-text-light);
 }
 
+.ChatMessage-footer .Button {
+  display: inline-block;
+}
+
 .ChatMessage-footer .Button:nth-child(n + 3) {
   display: inline-block;
   margin-left: var(--spacing-unit-s);

@@ -1,5 +1,12 @@
 .CopyButton {
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.CopyButton svg {
+  margin-right: var(--spacing-unit-xs);
 }
 
 .CopyButton-loading,
@@ -17,7 +24,9 @@
 }
 
 .CopyButton[data-state='loading'] .CopyButton-label,
-.CopyButton[data-state='success'] .CopyButton-label {
+.CopyButton[data-state='success'] .CopyButton-label,
+.CopyButton[data-state='loading'] > svg,
+.CopyButton[data-state='success'] > svg {
   visibility: hidden;
 }
 
@@ -29,6 +38,21 @@
   display: initial;
 }
 
-.Button:not(.Button--primary) .CopyButton-success {
+.Button:not(.Button--primary):not(.CopyButton--colorNavBar)
+  .CopyButton-success {
   color: var(--color-green-dark);
+}
+
+.CopyButton--colorNavBar .CopyButton-success,
+.CopyButton--colorNavBar .CopyButton-loading {
+  color: var(--color-primary);
+}
+
+.CopyButton--colorNavBar {
+  background-color: var(--color-nav-bar);
+}
+
+.CopyButton--customIcon > svg {
+  width: var(--spacing-unit);
+  stroke: var(--color-primary);
 }

@@ -6,6 +6,16 @@
   flex-basis: 50%;
 }
 
+.ProfileHeader-openModalButton {
+  display: flex;
+}
+
+.ProfileHeader-openModalButton > svg {
+  margin-right: var(--spacing-unit-xs);
+  width: var(--spacing-unit);
+  color: var(--color-primary);
+}
+
 .Flex > .ProfileHeader-upgradeBusinessPlanButton {
   flex-shrink: 0;
   padding: var(--spacing-unit-s);

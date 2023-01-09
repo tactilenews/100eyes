@@ -1,3 +1,13 @@
 .ProfileContributorsSection .Flex {
   margin-top: var(--spacing-unit);
 }
+
+.ProfileContributorsSection-copyInviteButton {
+  display: flex;
+}
+
+.ProfileContributorsSection-copyInviteButton > svg {
+  color: var(--color-primary);
+  width: var(--spacing-unit);
+  margin-right: var(--spacing-unit-xs);
+}

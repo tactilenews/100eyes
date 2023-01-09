@@ -2,21 +2,21 @@
 
 module CopyButton
   class CopyButton < ApplicationComponent
-    def initialize(copy: nil, url: nil, key: nil, label: nil, loading: nil, success: nil, icon_name: :ungroup, **)
+    def initialize(copy: nil, url: nil, key: nil, label: nil, loading: nil, success: nil, custom_icon: nil, **)
       super
 
       @copy = copy
       @url = url
       @key = key
       @label = label
-      @icon_name = icon_name
+      @custom_icon = custom_icon
       @loading = loading || I18n.t('components.copy_button.loading')
       @success = success || I18n.t('components.copy_button.success')
     end
 
     private
 
-    attr_reader :copy, :url, :key, :label, :loading, :success, :icon_name
+    attr_reader :copy, :url, :key, :label, :loading, :success, :custom_icon
 
     def attrs
       super.defaults(

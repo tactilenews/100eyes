@@ -12,8 +12,11 @@
         </li>
       <% end %>
     </ul>
-    <%= c 'button', styles: [:secondary], data: { action: 'user-management#openModal' } do %>
-      <%= c 'icon', icon: 'add', styles: [:inline] %>
+    <%= c 'button',
+      styles: [:secondary],
+      class: 'UserManagement-openModalButton',
+      data: { action: 'user-management#openModal' } do %>
+      <%= svg 'plus-sign' %>
       <%= t('.add_users_button') %>
     <% end%>
   <% end %>
