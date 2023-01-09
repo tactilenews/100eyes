@@ -12,7 +12,8 @@ RSpec.describe 'Profile' do
   let(:current_plan) { business_plans[1] }
   let(:contact_person) { create(:user, first_name: 'Isaac', last_name: 'Bonga') }
   let(:organization) do
-    create(:organization, business_plan: current_plan, contact_person: contact_person, contributors_count: 5).tap do |org|
+    create(:organization, business_plan: current_plan, contact_person: contact_person, contributors_count: 5,
+                          upgrade_discount: 15).tap do |org|
       users = [user, contact_person, create(:user)]
       org.users << users
       org.save!
@@ -116,7 +117,15 @@ RSpec.describe 'Profile' do
           "#{bp.number_of_communities} Gemeinschaft mit #{bp.number_of_users} Benutzern und #{bp.number_of_contributors} Mitwirkenden."
         )
         expect(page).to have_content("Inklusive #{bp.hours_of_included_support} Stunden Support") if bp.hours_of_included_support > 0
-        expect(page).to have_content("#{number_to_currency(bp.price_per_month)}/Monat")
+
+        if bp.price_per_month > current_plan.price_per_month
+          expect(page).to have_css('.BusinessPlanChoices-priceStrikethrough', text: "#{number_to_currency(bp.price_per_month)}/Monat")
+          expect(page).to have_content(
+            "#{number_to_currency(bp.price_per_month - (bp.price_per_month * organization.upgrade_discount / 100.to_f))}/Monat"
+          )
+        else
+          expect(page).to have_content("#{number_to_currency(bp.price_per_month)}/Monat")
+        end
       end
       find('label[aria-label="Editorial enterprise"]').click
       click_button 'Upgrade Plan'

@@ -23,7 +23,7 @@ module BusinessPlanChoices
     end
 
     def price_with_discount(price)
-      number_to_currency(price - (price / discount.to_f))
+      number_to_currency(price - (price * discount / 100.to_f))
     end
   end
 end
