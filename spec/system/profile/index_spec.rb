@@ -82,6 +82,18 @@ RSpec.describe 'Profile' do
     within('.CreateUserModal') do
       fill_in 'Vorname', with: 'New'
       fill_in 'Nachname', with: 'Editor'
+      fill_in 'E-Mail-Adresse', with: email
+      click_button 'Redakteur:in hinzufügen'
+    end
+
+    expect(page).to have_content('Email ist bereits vergeben')
+
+    click_button 'Redakteur:in hinzufügen'
+    expect(page).to have_css('.CreateUserModal')
+
+    within('.CreateUserModal') do
+      fill_in 'Vorname', with: 'New'
+      fill_in 'Nachname', with: 'Editor'
       fill_in 'E-Mail-Adresse', with: 'new-editor@example.org'
       click_button 'Redakteur:in hinzufügen'
     end

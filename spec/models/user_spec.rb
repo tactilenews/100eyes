@@ -6,6 +6,16 @@ RSpec.describe User do
   let(:organization) { create(:organization, business_plan_name: 'Editorial pro') }
   let!(:users) { create_list(:user, 3, organization: organization) }
 
+  describe 'validations' do
+    describe '#email' do
+      it 'must be unique' do
+        create(:user, email: 'user@example.org')
+        expect { create(:user, email: 'user@example.org') }.to raise_error(ActiveRecord::RecordInvalid)
+        expect { create(:user, email: 'USER@example.org') }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+  end
+
   describe '#notify_admin' do
     subject { create(:user, organization: organization) }
 
