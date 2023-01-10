@@ -1,0 +1,13 @@
+.Pagination {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.Pagination > span {
+  border: 1px solid var(--color-turquiose);
+  padding: var(--spacing-unit-xs) var(--spacing-unit-s);
+}
+
+span.Pagination-current {
+  border-color: var(--color-primary);
+}

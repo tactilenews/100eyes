@@ -88,4 +88,4 @@ gem 'noticed', '~> 1.6'
 # Charts
 gem 'groupdate'
 
-gem "kaminari", "~> 1.2"
+gem 'kaminari', '~> 1.2'

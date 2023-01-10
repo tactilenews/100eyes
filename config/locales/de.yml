@@ -280,6 +280,12 @@ de:
       heading: Aktivität deiner Community
     day_activity_linechart:
       heading: Deine besten Dialogtage
+    pagination:
+      first: Erste
+      previous: Vorherige
+      truncate: ...
+      next: Nächste
+      last: Letzte
 
   mailer:
     unsubscribe:

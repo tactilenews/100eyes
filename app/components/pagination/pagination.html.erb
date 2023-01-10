@@ -1,0 +1,39 @@
+<nav <%= attrs.merge(role: "navigation", aria_label: "pager") %>>
+  <% unless current_page.first? %>
+    <span class="Pagination-first">
+      <%= link_to requests_path(page: 1), remote: remote do %>
+        <%= t('.first') %>
+      <% end %>
+    </span>
+    <span class="Pagination-prev">
+      <%= link_to requests_path(page: current_page.instance_variable_get(:@page) - 1), rel: 'prev', remote: remote do %>
+        <%= t('.previous') %>
+      <% end %>
+    </span>
+  <% end %>
+  <% page_links.each do |hash| -%>
+    <% if hash[:display] -%>
+      <span class="Pagination-page<%= ' Pagination-current' if hash[:page_number].current? %>">
+        <%= link_to requests_path(page: hash[:page_number]), {remote: remote, rel: hash[:page_number].rel} do %>
+          <%= hash[:page_number] %>
+        <% end %>
+      </span>
+    <% elsif !hash[:truncated] -%>
+      <span class="Pagination-page Pagination-gap"><%= t('.truncate') %></span>
+    <% end -%>
+  <% end -%>
+  <% unless current_page.out_of_range? %>
+    <% unless current_page.last? %>
+      <span class="Pagination-next">
+        <%= link_to requests_path(page: current_page.instance_variable_get(:@page) + 1), rel: 'next', remote: remote  do %>
+          <%= t('.next') %>
+        <% end %>
+      </span>
+      <span class="Pagination-last">
+        <%= link_to requests_path(page: current_page.instance_variable_get(:@options)[:total_pages]), remote: remote do %>
+          <%= t('.last') %>
+        <% end %>
+      </span>
+    <% end %>
+  <% end %>
+</nav>
