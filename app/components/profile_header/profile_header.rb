@@ -16,7 +16,7 @@ module ProfileHeader
     end
 
     def price_per_month
-      if organization.upgraded_business_plan_at.present? && organization.upgrade_discount.present?
+      if organization.upgraded_business_plan_at.present? && organization.upgrade_discount.present? && organization.upgraded_business_plan_at > 6.months.ago
         number_to_currency(organization.business_plan.price_per_month - (organization.business_plan.price_per_month * organization.upgrade_discount / 100.to_f))
       else
         number_to_currency(organization.business_plan.price_per_month)

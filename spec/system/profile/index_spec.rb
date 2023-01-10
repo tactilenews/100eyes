@@ -143,5 +143,9 @@ RSpec.describe 'Profile' do
     expect(page).not_to have_button("Plan jetzt upgraden und #{organization.upgrade_discount}% sparen")
     # valid_until set to 1 year from now
     expect(page).to have_content("Mindeslaufzeit: bis #{I18n.l(1.year.from_now, format: '%m/%Y')}")
+
+    Timecop.travel(6.months.from_now + 1.minute)
+    visit profile_path(as: user)
+    expect(page).to have_content("Preis: #{number_to_currency(editorial_enterprise.price_per_month)}/Monat")
   end
 end
