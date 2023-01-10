@@ -132,10 +132,13 @@ RSpec.describe 'Profile' do
       click_button 'Upgrade Plan'
     end
     editorial_enterprise = business_plans[2]
+    price_per_month_with_discount = number_to_currency(
+      editorial_enterprise.price_per_month - (editorial_enterprise.price_per_month * organization.upgrade_discount / 100.to_f)
+    )
     expect(page).to have_no_css('.UpgradeBusinessPlanModal')
     expect(page).to have_content('Plan erfolgreich aktualisiert')
     expect(page).to have_content("Dein 100eyes Plan: \"#{editorial_enterprise.name}\"")
-    expect(page).to have_content("Preis: #{number_to_currency(editorial_enterprise.price_per_month)}/Monat")
+    expect(page).to have_content("Preis: #{price_per_month_with_discount}/Monat")
     # no plans to upgrade to
     expect(page).not_to have_button("Plan jetzt upgraden und #{organization.upgrade_discount}% sparen")
     # valid_until set to 1 year from now
