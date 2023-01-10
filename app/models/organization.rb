@@ -11,7 +11,7 @@ class Organization < ApplicationRecord
   private
 
   def notify_admin
-    return unless business_plan_id_changed?
+    return unless business_plan_id_changed? && upgraded_business_plan_at.present?
 
     User.admin.find_each do |admin|
       PostmarkAdapter::Outbound.send_business_plan_upgraded_message!(admin, self)
