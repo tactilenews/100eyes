@@ -283,7 +283,7 @@ de:
     day_activity_linechart:
       heading: Deine besten Dialogtage
     user_management:
-      main_heading: Deine Redakteur:Innen
+      main_heading: Deine Redakteur:innen
       number_of_users_of_business_plan_used: "%{users_count} von %{allocated_users} Seats genutzt"
       add_users_button: "Redakteur:in hinzufügen"
     profile_header:
@@ -294,7 +294,7 @@ de:
           price_per_month: "Preis: %{price_per_month}/Monat"
           valid_until: "Mindeslaufzeit: bis %{valid_until}"
       additional_info:
-        channels: "Dialogkanäle: Signal, Threema, Telegram, E-mail"
+        channels: "Dialogkanäle: Signal, Threema, Telegram, E-Mail"
         security: "Sicherheit: Community abgesichert über Zwei-Faktor-Authentifizierung, Cloudflare"
       upgrade_business_plan_button_html: "<span>Plan jetzt upgraden und <strong>%{upgrade_discount}%</strong> sparen.</span>"
     business_plan_choices:
@@ -549,7 +549,7 @@ de:
   profile:
     contributors_section:
       main_heading: Deine Community
-      number_of_contributors_of_business_plan_used: "%{contributors_count} von %{allocated_contributors} Community-Mitglieder aktiv"
+      number_of_contributors_of_business_plan_used: "%{contributors_count} von %{allocated_contributors} Community-Mitgliedern aktiv"
       copy_invite: Einladungslink generieren
     user:
       created_successfully: "Redakteur:in erfolgreich erstellt"
@@ -817,7 +817,7 @@ de:
         other: "<strong>Du</strong> hast <strong>%{contributor_one}</strong> und %{others_count} anderen auf die Frage <strong>„%{request_title}”</strong> geantwortet."
       link_text: "Zur Nachricht"
     request_scheduled:
-      text_html: "Die Frage <strong>%{request_title}</strong> wurde für den Versand am %{date} um %{time} geplant und wird an %{contributors_count} Community-Mitglieder versendet."
+      text_html: "Die Frage <strong>%{request_title}</strong> wurde für den Versand am %{date} um %{time} geplant und wird an %{contributors_count} Community-Mitgliedern versendet."
       link_text: Zur Frage
   shared:
     community: Community
