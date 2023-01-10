@@ -26,7 +26,15 @@ module PostmarkAdapter
     def self.send_business_plan_upgraded_message!(admin, organization)
       return unless admin&.email && admin&.admin? && organization&.id
 
-      with(admin: admin, organization: organization).business_plan_upgraded_email.deliver_later
+      price_per_month_with_discount = ActionController::Base.helpers.number_to_currency(
+        organization.business_plan.price_per_month - (
+          organization.business_plan.price_per_month * organization.upgrade_discount / 100.to_f
+        ),
+        locale: :de
+      )
+
+      with(admin: admin, organization: organization,
+           price_per_month_with_discount: price_per_month_with_discount).business_plan_upgraded_email.deliver_later
     end
 
     def self.send_user_count_exceeds_plan_limit_message!(admin, organization)
@@ -51,12 +59,17 @@ module PostmarkAdapter
     def business_plan_upgraded_email
       admin = params[:admin]
       organization = params[:organization]
+      price_per_month_with_discount = params[:price_per_month_with_discount]
       subject = I18n.t('adapter.postmark.business_plan_upgraded.subject',
                        organization_name: organization.name,
                        business_plan_name: organization.business_plan.name,
                        discount: organization.upgrade_discount)
+      text = I18n.t('adapter.postmark.business_plan_upgraded.text',
+                    organization_name: organization.name,
+                    price_per_month_with_discount: price_per_month_with_discount,
+                    valid_through: I18n.l(organization.upgraded_business_plan_at + 6.months, format: '%m/%Y'))
       message_stream = Setting.postmark_transactional_stream
-      @text = [subject, I18n.t('adapter.postmark.business_plan_upgraded.text', organization_name: organization.name)].join("\n")
+      @text = [subject, text].join("\n")
       mail(to: admin.email, subject: subject, message_stream: message_stream)
     end
 
