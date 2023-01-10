@@ -18,7 +18,7 @@ module BusinessPlanChoices
     def class_list(choice)
       base_class = ['BusinessPlanChoices-label']
       base_class << 'BusinessPlanChoices-checked' if choice[:value] == current_plan.id
-      base_class << 'BusinessPlanChoices-disabled' if choice[:value] < current_plan.id
+      base_class << 'BusinessPlanChoices-disabled' if choice[:value] < current_plan.price_per_month
       base_class.join(' ')
     end
 
