@@ -2,6 +2,8 @@
   max-width: var(--grid-max-width-l);
   display: flex;
   flex-direction: column;
+  max-height: 100vh;
+  overflow: scroll;
 }
 
 .UpgradeBusinessPlanModal-closeModalButton {
@@ -13,8 +15,13 @@
   flex-direction: column;
 }
 
+.UpgradeBusinessPlanModal-discountExplained {
+  flex-basis: 60%;
+}
+
 .UpgradeBusinessPlanModal-submitFormButton {
   width: unset;
+  flex-shrink: 0;
 }
 
 .UpgradeBusinessPlanModal-footer {
