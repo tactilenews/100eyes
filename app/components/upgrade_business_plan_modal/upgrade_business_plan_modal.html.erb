@@ -21,7 +21,7 @@
       discount: organization.upgrade_discount
     %>
     <footer class="UpgradeBusinessPlanModal-footer">
-      <p><%= t('.discount_explained', valid_through: I18n.l(6.months.from_now, format: '%m/%Y')) %></p>
+      <p class="UpgradeBusinessPlanModal-discountExplained"><%= t('.discount_explained_html', discount: organization.upgrade_discount, valid_through: I18n.l(6.months.from_now, format: '%m/%Y')) %></p>
       <%= c 'button',
         class: 'UpgradeBusinessPlanModal-submitFormButton',
         type: 'submit',
