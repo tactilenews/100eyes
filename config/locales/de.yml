@@ -329,7 +329,7 @@ de:
       new_message_email:
         subject: Die Redaktion hat eine neue Frage
       business_plan_upgraded:
-        subject: "Der Plan von %{organization_name} wurde zu %{business_plan_name} mit einem %{discount}-Rabatt aufgewertet."
+        subject: "Der Plan von %{organization_name} wurde zu %{business_plan_name} mit einem %{discount}%-Rabatt aufgewertet."
         text: "Der monatliche Preis mit Rabatt beträgt jetzt bis zum %{valid_through} %{price_per_month_with_discount}. Bitte aktualisieren Sie Ihre Aufzeichnungen und wenden Sie sich an %{organization_name}."
       user_count_exceeds_plan_limit:
         subject: "%{organization_name} hat die Höchstzahl der %{business_plan_name} Nutzer seines %{users_limit} Plans überschritten "
