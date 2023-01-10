@@ -12,7 +12,8 @@ class OrganizationDashboard < Administrate::BaseDashboard
     upgrade_discount: Field::Number,
     users: Field::HasMany,
     created_at: Field::DateTime,
-    updated_at: Field::DateTime
+    updated_at: Field::DateTime,
+    upgraded_business_plan_at: Field::DateTime
   }.freeze
 
   COLLECTION_ATTRIBUTES = %i[
@@ -22,6 +23,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
     upgrade_discount
     contributors
     users
+    upgraded_business_plan_at
   ].freeze
 
   SHOW_PAGE_ATTRIBUTES = %i[
@@ -33,6 +35,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
     users
     created_at
     updated_at
+    upgraded_business_plan_at
   ].freeze
 
   FORM_ATTRIBUTES = %i[
