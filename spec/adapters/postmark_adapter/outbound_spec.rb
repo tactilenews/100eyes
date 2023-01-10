@@ -233,7 +233,7 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
             'business_plan_upgraded_email',
             'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
             {
-              params: { admin: admin, organization: organization },
+              params: { admin: admin, organization: organization, price_per_month_with_discount: kind_of(String) },
               args: []
             }
           )

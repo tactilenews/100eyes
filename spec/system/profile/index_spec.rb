@@ -44,7 +44,7 @@ RSpec.describe 'Profile' do
     expect(page).to have_content("Auftraggeber:in #{organization.contact_person.name}, #{organization.contact_person.email}")
     expect(page).to have_content("Preis: #{number_to_currency(current_plan.price_per_month)}/Monat")
     expect(page).to have_content("Mindeslaufzeit: bis #{I18n.l(current_plan.valid_until, format: '%m/%Y')}")
-    expect(page).to have_content('Dialogkanäle: Signal, Threema, Telegram, E-mail')
+    expect(page).to have_content('Dialogkanäle: Signal, Threema, Telegram, E-Mail')
     expect(page).to have_content('Sicherheit: Community abgesichert über Zwei-Faktor-Authentifizierung, Cloudflare')
 
     click_button("Plan jetzt upgraden und #{organization.upgrade_discount}% sparen")
@@ -54,7 +54,7 @@ RSpec.describe 'Profile' do
     expect(page).to have_no_css('.UpgradeBusinessPlanModal')
 
     # user management section
-    expect(page).to have_content('Deine Redakteur:Innen')
+    expect(page).to have_content('Deine Redakteur:innen')
     expect(page).to have_content("3 von #{current_plan.number_of_users} Seats genutzt")
     organization.users.each do |user|
       expect(page).to have_content(user.name)
@@ -67,7 +67,7 @@ RSpec.describe 'Profile' do
 
     # contributors section
     expect(page).to have_content('Deine Community')
-    expect(page).to have_content("5 von #{current_plan.number_of_contributors} Community-Mitglieder aktiv")
+    expect(page).to have_content("5 von #{current_plan.number_of_contributors} Community-Mitgliedern aktiv")
     expect(page).to have_css('.ContributorsStatusBar')
     expect(page).to have_css("article[data-contributors-status-bar-contributors-status-value='#{number_with_precision(
       organization.contributors.active.count / current_plan.number_of_contributors.to_f, locale: :en
@@ -120,7 +120,11 @@ RSpec.describe 'Profile' do
 
         if bp.price_per_month > current_plan.price_per_month
           expect(page).to have_css('.BusinessPlanChoices-priceStrikethrough', text: "#{number_to_currency(bp.price_per_month)}/Monat")
-          expect(page).to have_content("*10% Bonus bis #{I18n.l(6.months.from_now, format: '%m/%Y')}")
+          expect(page).to have_content(
+            "*Wir gewähren dir #{organization.upgrade_discount}% Bonus auf den regulären Preis für die Vertragslaufzeit bis #{I18n.l(
+              6.months.from_now, format: '%m/%Y'
+            )}, danach gelten die gültigen Preise laut Preistabelle."
+          )
           expect(page).to have_content(
             "#{number_to_currency(bp.price_per_month - (bp.price_per_month * organization.upgrade_discount / 100.to_f))}/Monat*"
           )

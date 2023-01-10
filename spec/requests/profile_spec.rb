@@ -117,7 +117,7 @@ RSpec.describe '/contributors' do
           'business_plan_upgraded_email',
           'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
           {
-            params: { admin: an_instance_of(User), organization: organization },
+            params: { admin: an_instance_of(User), organization: organization, price_per_month_with_discount: anything },
             args: []
           }
         )
@@ -132,7 +132,7 @@ RSpec.describe '/contributors' do
             'business_plan_upgraded_email',
             'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
             {
-              params: { admin: an_instance_of(User), organization: organization },
+              params: { admin: an_instance_of(User), organization: organization, price_per_month_with_discount: kind_of(String) },
               args: []
             }
           ).exactly(3).times

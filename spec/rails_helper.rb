@@ -84,6 +84,7 @@ RSpec.configure do |config|
   config.include Capybara::RSpecMatchers, type: :component
   config.include FactoryBot::Syntax::Methods
   config.include ActionView::Helpers::NumberHelper, type: :system
+  config.include ActionView::Helpers::NumberHelper, type: :requests
 
   config.include Helpers
 end
