@@ -4,6 +4,16 @@
   grid-template-columns: 1fr;
 }
 
+.OnboardingChannelButtons > .Button {
+  display: flex;
+  justify-content: center;
+}
+
+.OnboardingChannelButtons svg {
+  width: var(--spacing-unit);
+  margin-right: var(--spacing-unit-xs);
+}
+
 @media screen and (min-width: 640px) {
   .OnboardingChannelButtons {
     grid-template-columns: repeat(3, 1fr);

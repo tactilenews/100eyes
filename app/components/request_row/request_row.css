@@ -4,6 +4,29 @@
   color: var(--color-text-light);
 }
 
-.RequestRow-meta > * + * {
-  margin-left: var(--spacing-unit);
+.RequestRow .PlaintextMessage {
+  margin-bottom: var(--spacing-unit);
+}
+
+.RequestRow .TagsList {
+  max-width: 33%;
+  margin-right: var(--spacing-unit-xs);
+}
+
+.RequestRow .TagsList > li {
+  margin-right: var(--spacing-unit-xs);
+}
+
+.RequestRow .InlineMetrics {
+  margin-left: auto;
+}
+
+.RequestRow-editableWrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.RequestRow:target {
+  border-color: var(--color-focus);
+  box-shadow: var(--input-focus-shadow);
 }

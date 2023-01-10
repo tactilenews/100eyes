@@ -11,11 +11,17 @@ class Request < ApplicationRecord
   has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
   has_many_attached :files
 
+  scope :include_associations, -> { preload(messages: :sender).includes(messages: :files).eager_load(:messages) }
+  scope :planned, -> { where.not(schedule_send_for: nil).where('schedule_send_for > ?', Time.current) }
+  scope :sent, -> { where(schedule_send_for: nil).or(where('schedule_send_for < ?', Time.current)) }
+
   validates :files, blob: { content_type: :image }
 
   acts_as_taggable_on :tags
 
   after_create { Request.broadcast!(self) }
+
+  after_update_commit :broadcast_updated_request, :notify_recipient
 
   delegate :replies, to: :messages
 
@@ -39,6 +45,10 @@ class Request < ApplicationRecord
     }
   end
 
+  def planned?
+    schedule_send_for.present? && schedule_send_for > Time.current
+  end
+
   def messages_by_contributor
     messages
       .where(broadcasted: false)
@@ -47,16 +57,22 @@ class Request < ApplicationRecord
   end
 
   def self.broadcast!(request)
-    Contributor.active.with_tags(request.tag_list).each do |contributor|
-      message = Message.new(
-        sender: request.user,
-        recipient: contributor,
-        text: request.personalized_text(contributor),
-        request: request,
-        broadcasted: true
-      )
-      message.files = attach_files(request.files) if request.files.attached?
-      message.save!
+    if request.planned?
+      BroadcastRequestJob.delay(run_at: request.schedule_send_for).perform_later(request.id)
+      RequestScheduled.with(request_id: request.id).deliver_later(User.all)
+    else
+      Contributor.active.with_tags(request.tag_list).each do |contributor|
+        message = Message.new(
+          sender: request.user,
+          recipient: contributor,
+          text: request.personalized_text(contributor),
+          request: request,
+          broadcasted: true
+        )
+        message.files = attach_files(request.files) if request.files.attached?
+        message.save!
+      end
+      request.update(broadcasted_at: Time.current)
     end
   end
 
@@ -66,5 +82,19 @@ class Request < ApplicationRecord
       message_file.attachment.attach(file.blob)
       message_file
     end
+  end
+
+  private
+
+  def broadcast_updated_request
+    return unless planned? && saved_change_to_schedule_send_for?
+
+    Request.broadcast!(self)
+  end
+
+  def notify_recipient
+    return unless saved_change_to_schedule_send_for?
+
+    RequestScheduled.with(request_id: id).deliver_later(User.all)
   end
 end

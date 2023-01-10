@@ -6,7 +6,7 @@
 >
 
   <div class="RequestForm-column" data-action="input->request-form#updatePreview">
-    <%= form_with(scope: :request, url: requests_path, local: true, multipart: true) do %>
+    <%= form_with(model: @request, local: true, multipart: true) do %>
       <%= c 'stack', space: :large do %>
 
         <%= c 'field', object: @request, attr: :title do |field| %>
@@ -57,6 +57,10 @@
               class="RequestForm-filenamesList"
             ></ul>
           </div>
+        <% end %>
+
+        <%= c 'field', object: @request, attr: :schedule_send_for do  |field| %>
+          <%= c 'input', field.input_defaults.merge(type: 'datetime-local', value: schedule_send_for_or_default) %>
         <% end %>
 
         <%= c 'field', object: @request, attr: :tag_list do |field| %>

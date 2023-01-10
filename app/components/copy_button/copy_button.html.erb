@@ -1,9 +1,13 @@
 <%= c 'button', styles: styles, **attrs do %>
+  <% if custom_icon %>
+    <%= svg custom_icon %>
+  <% else %>
+    <%= c 'icon', icon: :ungroup, style: :inline %>
+  <% end %>
   <span
     class="CopyButton-label"
     data-copy-button-target="label"
   >
-    <%= c 'icon', icon: :ungroup, style: :inline %>
     <%= label %>
   </span>
   <span
