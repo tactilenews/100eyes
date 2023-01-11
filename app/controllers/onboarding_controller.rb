@@ -13,6 +13,9 @@ class OnboardingController < ApplicationController
 
   def index
     @jwt = jwt_param
+    @channels = %w[threema telegram email]
+    @channels << 'signal' if Setting.signal_server_phone_number.present?
+    @channels << 'whats_app' if Setting.whats_app_server_phone_number.present?
   end
 
   def success; end

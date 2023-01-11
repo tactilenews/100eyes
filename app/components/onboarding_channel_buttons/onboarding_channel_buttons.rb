@@ -4,18 +4,19 @@ module OnboardingChannelButtons
   class OnboardingChannelButtons < ApplicationComponent
     private
 
+    def initialize(channels:)
+      super
+
+      @channels = channels
+    end
+
+    attr_reader :channels
+
     def styles
-      return super unless show_signal?
+      return super if (channels.length % 3).zero?
+      return super + [:twoColumn] if channels.length.even?
 
-      super + [:even]
-    end
-
-    def show_signal?
-      Setting.signal_server_phone_number.present?
-    end
-
-    def show_whats_app?
-      Setting.whats_app_server_phone_number.present?
+      super + [:threeColumn]
     end
   end
 end

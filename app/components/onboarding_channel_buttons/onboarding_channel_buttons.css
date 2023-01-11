@@ -19,7 +19,25 @@
     grid-template-columns: repeat(3, 1fr);
   }
 
-  .OnboardingChannelButtons--even {
+  .OnboardingChannelButtons--twoColumn {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .OnboardingChannelButtons--threeColumn {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .OnboardingChannelButtons--threeColumn > .Button {
+    grid-column: span 2;
+  }
+
+  .OnboardingChannelButtons--threeColumn
+    > .Button:last-child:nth-child(3n - 1) {
+    grid-column-end: -2;
+  }
+
+  .OnboardingChannelButtons--threeColumn
+    > .Button:nth-last-child(2):nth-child(3n + 1) {
+    grid-column-end: 4;
   }
 }

@@ -285,6 +285,12 @@ de:
       heading: Aktivität deiner Community
     day_activity_linechart:
       heading: Deine besten Dialogtage
+    onboarding_channel_buttons:
+      threema: Threema
+      telegram: Telegram
+      email: E-Mail
+      signal: Signal
+      whats_app: WhatsApp
 
   mailer:
     unsubscribe:

@@ -28,7 +28,6 @@ Rails.application.routes.draw do
       post '/telegram/', to: 'telegram#create'
 
       get '/whats-app/', to: 'whats_app#show'
-      get '/whats-app/link/', to: 'whats_app#link'
       post '/whats-app/', to: 'whats_app#create'
     end
   end
