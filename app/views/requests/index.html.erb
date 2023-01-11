@@ -27,5 +27,6 @@
     <% @requests.each do |request| %>
       <%= c 'request_row', request: request %>
     <% end %>
+    <%= paginate @requests %>
   <% end %>
 <% end %>
