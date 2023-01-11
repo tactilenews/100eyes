@@ -2,7 +2,6 @@
 
 module PageHeader
   class PageHeader < ApplicationComponent
-    renders_one :actions
     renders_one :tab_bar
 
     private

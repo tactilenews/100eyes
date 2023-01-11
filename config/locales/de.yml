@@ -118,6 +118,7 @@ de:
       loading: lade…
       success: kopiert
     request_form:
+      subheading: Finde heraus, was deine Community bewegt
       preview_fallback: "Sobald du eine Frage eingegeben hast, siehst du hier eine Vorschau deiner Nachricht."
       members_count_message:
         one: Es gibt <strong>ein Mitglied</strong> mit diesen Tags.
@@ -375,6 +376,7 @@ de:
         label: Avatar für Messenger
   settings:
     header: Einstellungen
+    subheading: Passe dein 100eyes System nach deinen Vorstellungen an
     success: Einstellungen erfolgreich gespeichert!
 
   search:
@@ -400,6 +402,7 @@ de:
     destroyed: Contributor %{name} wurde erfolgreich gelöscht.
     message-send: Nachricht an %{name} wurde verschickt
     skip_to_profile: Zum Profil springen
+    subheading: Das sind die Mitglieder deiner Community
     form:
       first_name:
         label: Vorname
@@ -477,6 +480,7 @@ de:
         label: Versand planen. Deine Frage wird automatisch zur eingestellten Zeit verschickt.
     personalization:
       first_name: VORNAME
+    subheading: Die besten Fragen an deine Community
   conversation:
     conversation:
       one: Nachrichtenverlauf

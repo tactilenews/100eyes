@@ -1,8 +1,11 @@
 <%= c 'main' do %>
   <%= c 'page_header', styles: [:largeMarginBottom, :spaceBetween, :wide]  do |header| %>
-    <%= c 'heading', style: :alpha do %>
-      <%= I18n.t 'request.request', count: :many %>
-    <% end %>
+    <div>
+      <%= c 'heading', style: :alpha do %>
+        <%= I18n.t 'request.request', count: :many %>
+      <% end %>
+      <p><%= t('request.subheading') %></p>
+    </div>
 
     <%= c 'new_request_link' %>
 
