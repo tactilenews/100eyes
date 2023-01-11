@@ -30,8 +30,8 @@
   justify-content: space-between;
 }
 
-@media screen and (min-width: 720px) {
+@media screen and (min-width: 56rem) {
   .UpgradeBusinessPlanModal {
-    max-width: var(--grid-max-width);
+    max-width: var(--grid-max-width-l);
   }
 }

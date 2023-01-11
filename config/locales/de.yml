@@ -302,8 +302,8 @@ de:
       price_per_month: "%{price_per_month}/Monat"
     upgrade_business_plan_modal:
       business_plan:
-        features_info: "%{number_of_communities} Gemeinschaft mit %{number_of_users} Benutzern und %{number_of_contributors} Mitwirkenden."
-        hours_of_included_support: "Inklusive %{hours} Stunden Support"
+        features_info: "%{number_of_communities} Community mit %{number_of_users} Redakteur:innen und %{number_of_contributors} Mitgliedern."
+        hours_of_included_support: "Inklusive %{hours} Stunden technischer Support"
       close_modal: Modal schließen
       submit_button: Upgrade Plan
       discount_explained_html: "*Wir gewähren dir <strong>%{discount}%</strong> Bonus auf den regulären Preis für die Vertragslaufzeit bis <strong>%{valid_through}</strong>, danach gelten die gültigen Preise laut Preistabelle."

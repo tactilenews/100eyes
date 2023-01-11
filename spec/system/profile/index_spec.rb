@@ -114,9 +114,11 @@ RSpec.describe 'Profile' do
         expect(find("input[id='#{bp.id}'")).to be_disabled if bp.price_per_month < current_plan.price_per_month
         expect(page).to have_content(bp.name)
         expect(page).to have_content(
-          "#{bp.number_of_communities} Gemeinschaft mit #{bp.number_of_users} Benutzern und #{bp.number_of_contributors} Mitwirkenden."
+          "#{bp.number_of_communities} Community mit #{bp.number_of_users} Redakteur:innen und #{bp.number_of_contributors} Mitgliedern."
         )
-        expect(page).to have_content("Inklusive #{bp.hours_of_included_support} Stunden Support") if bp.hours_of_included_support > 0
+        if bp.hours_of_included_support > 0
+          expect(page).to have_content("Inklusive #{bp.hours_of_included_support} Stunden technischer Support")
+        end
 
         if bp.price_per_month > current_plan.price_per_month
           expect(page).to have_css('.BusinessPlanChoices-priceStrikethrough', text: "#{number_to_currency(bp.price_per_month)}/Monat")
