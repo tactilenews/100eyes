@@ -75,12 +75,6 @@ de:
       heading: Mit Signal teilnehmen
       text: Geben Sie bitte unten die Handynummer ein, mit der Sie bei Signal registriert sind.
       submit: Anmeldung abschließen
-    onboarding_whats_app_link:
-      heading: Fast geschafft.
-      text: Damit wir Ihnen zukünftig auf WhatsApp schreiben können, müssen Sie uns zuerst kontaktieren.
-      link: Zur WhatsApp
-      copy: Link zu WhatsApp Web kopieren
-      help:  Über den Button gelangen Sie direkt zu unserem Kontakt in der WhatsApp. Alternativ können Sie unsere Nummer kopieren.
 
     onboarding_whats_app_form:
       heading: Mit WhatsApp teilnehmen
@@ -304,7 +298,9 @@ de:
         text: Vielen Dank für Ihre Nachricht. Leider konnten wir Ihre E-Mail-Adresse nicht zuordnen. Das könnte daran liegen, dass wir einen Fehler gemacht haben oder Sie uns von einer anderen E-Mail-Adresse schreiben. Melden Sie sich gern unter support@tactile.news, dann lösen wir das Problem schnell. Vielen Dank.
       new_message_email:
         subject: Die Redaktion hat eine neue Frage
-
+    whats_app:
+      welcome_message: Willkommen in unserer Community! Wir freuen uns auf Deine Beiträge
+      request_template: "Hallo %{first_name}, wir haben eine neue Frage für dich: %{text}. Vielen Dank für Ihren Beitrag."
   save: Speichern
   cancel: Abbrechen
   skip_to_content: Zum Hauptinhalt springen
