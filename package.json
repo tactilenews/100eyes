@@ -8,18 +8,18 @@
     "prettier:fix": "prettier --write 'app/**/!(build)/*.{js,css}'"
   },
   "dependencies": {
-    "@hotwired/stimulus": "^3.1.0",
+    "@hotwired/stimulus": "^3.2.1",
     "@hotwired/turbo": "^7.2.2",
     "@rails/ujs": "^6.1.5",
     "@yaireo/tagify": "^3.25.0",
-    "apexcharts": "^3.35.5",
+    "apexcharts": "^3.36.3",
     "clipboard-polyfill": "^3.0.3",
     "dialog-polyfill": "^0.5.6"
   },
   "devDependencies": {
     "@arkweid/lefthook": "^0.7.7",
     "cssnano": "^5.1.13",
-    "esbuild": "^0.15.10",
+    "esbuild": "^0.16.10",
     "esbuild-plugin-import-glob": "^0.1.1",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.4.17",

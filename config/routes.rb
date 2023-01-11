@@ -46,7 +46,7 @@ Rails.application.routes.draw do
 
   telegram_webhook Telegram::WebhookController
 
-  resources :requests, only: %i[index show new create] do
+  resources :requests, only: %i[index show new create edit update] do
     member do
       get 'notifications', format: /json/
     end

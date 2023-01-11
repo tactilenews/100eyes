@@ -1,16 +1,20 @@
 <div <%= attrs %>>
   <%= c 'button',
     link: onboarding_threema_path,
-    label: 'Threema',
-    styles: [:block, :primary, :threema]
+    styles: [:primary] do
   %>
+    <%= svg 'channel_threema' %>
+    Threema
+  <% end %>
 
   <% if show_signal? %>
     <%= c 'button',
       link: onboarding_signal_path,
-      label: 'Signal',
-      styles: [:block, :primary, :signal]
+      styles: [:primary] do
     %>
+      <%= svg 'channel_signal' %>
+      Signal
+    <% end %>
   <% end %>
 
   <% if show_whats_app? %>
@@ -23,13 +27,17 @@
 
   <%= c 'button',
     link: onboarding_telegram_path,
-    label: 'Telegram',
-    styles: [:block, :primary, :telegram]
+    styles: [:primary] do
   %>
+    <%= svg 'channel_telegram' %>
+    Telegram
+  <% end %>
 
   <%= c 'button',
     link: onboarding_email_path,
-    label: 'E-Mail',
-    styles: [:block, :primary, :email]
+    styles: [:primary] do
   %>
+    <%= svg 'channel_mail' %>
+    E-Mail
+  <% end %>
 </div>

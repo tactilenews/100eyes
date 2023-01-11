@@ -14,7 +14,9 @@
       <% end %>
 
       <%= c 'text', styles: [:small, :light] do %>
-        <%= I18n.t('request.created_at', created_at: date_time(@request.created_at)) %>
+        <%= I18n.t("request.#{@request.planned? ? 'planned_for' : 'created_at'}",
+                    datetime: date_time(@request.planned? ? @request.schedule_send_for : (@request.broadcasted_at || @request.created_at)))
+        %>
       <% end %>
     <% end %>
 

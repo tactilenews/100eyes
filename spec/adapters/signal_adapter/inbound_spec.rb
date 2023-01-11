@@ -71,18 +71,20 @@ RSpec.describe SignalAdapter::Inbound do
           message: 'Hello 100eyes',
           expiresInSeconds: 0,
           viewOnce: false,
-          attachments: [{
-            contentType: 'image/jpeg',
-            filename: 'signal-2021-09.jpeg',
-            id: 'zuNhdpIHpRU_9Du-B4oG',
-            size: 145_078
-          },
-                        {
-                          contentType: 'image/jpeg',
-                          filename: 'signal-2021-09.jpeg',
-                          id: 'zuNhdpIHpRU_9Du-B4oG',
-                          size: 115_809
-                        }]
+          attachments: [
+            {
+              contentType: 'image/jpeg',
+              filename: 'signal-2021-09.jpeg',
+              id: 'zuNhdpIHpRU_9Du-B4oG',
+              size: 145_078
+            },
+            {
+              contentType: 'image/jpeg',
+              filename: 'signal-2021-09.jpeg',
+              id: 'zuNhdpIHpRU_9Du-B4oG',
+              size: 115_809
+            }
+          ]
         }
       }
     }
@@ -288,6 +290,16 @@ RSpec.describe SignalAdapter::Inbound do
 
           it 'preserves the content_type' do
             expect(subject.blob.content_type).to eq('audio/aac')
+          end
+        end
+
+        context 'given an audio/mpeg file' do
+          before { signal_message[:envelope][:dataMessage][:attachments][0][:contentType] = 'audio/mpeg' }
+
+          it { should be_attached }
+
+          it 'preserves the content_type' do
+            expect(subject.blob.content_type).to eq('audio/mpeg')
           end
         end
 
