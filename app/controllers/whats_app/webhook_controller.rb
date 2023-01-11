@@ -12,11 +12,11 @@ module WhatsApp
         ErrorNotifier.report(exception)
       end
 
-      # adapter.on(WhatsAppAdapter::RESPONDING_TO_TEMPLATE_MESSAGE) do |contributor|
-      #   contributor.update!(latest_message_received_at: Time.current, whats_app_template_message_sent_at: nil)
-      #   message = contributor.received_messages.first
-      #   WhatsAppAdapter::Outbound.send!(message)
-      # end
+      adapter.on(WhatsAppAdapter::RESPONDING_TO_TEMPLATE_MESSAGE) do |contributor|
+        contributor.update!(latest_message_received_at: Time.current, whats_app_template_message_sent_at: nil)
+        message = contributor.received_messages.first
+        WhatsAppAdapter::Outbound.send!(message)
+      end
 
       whats_app_webhook_params = webhook_params.to_h.transform_keys(&:underscore)
       adapter.consume(whats_app_webhook_params) { |message| message.contributor.reply(adapter) }

@@ -2,7 +2,7 @@
 
 module WhatsAppAdapter
   UNKNOWN_CONTRIBUTOR = :unknown_contributor
-  # RESPONDING_TO_TEMPLATE_MESSAGE = :responding_to_template_message
+  RESPONDING_TO_TEMPLATE_MESSAGE = :responding_to_template_message
 
   class Inbound
     attr_reader :sender, :text, :message
@@ -51,10 +51,10 @@ module WhatsAppAdapter
     end
 
     def initialize_message(whats_app_message)
-      # if sender.whats_app_template_message_sent_at.present?
-      #   trigger(RESPONDING_TO_TEMPLATE_MESSAGE, sender)
-      #   nil
-      # end
+      if sender.whats_app_template_message_sent_at.present?
+        trigger(RESPONDING_TO_TEMPLATE_MESSAGE, sender)
+        nil
+      end
 
       message_text = whats_app_message[:body]
       message = Message.new(text: message_text, sender: sender)

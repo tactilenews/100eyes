@@ -299,8 +299,8 @@ de:
       new_message_email:
         subject: Die Redaktion hat eine neue Frage
     whats_app:
-      welcome_message: Willkommen in unserer Community! Wir freuen uns auf Deine Beiträge
-      request_template: "Hallo %{first_name}, wir haben eine neue Frage für dich: %{text}. Vielen Dank für Ihren Beitrag."
+      welcome_message: "Vielen Dank für Ihre Anmeldung bei %{project_name}. Unsere Dialog-Recherche startet bald. Wir melden uns dann bei Ihnen."
+      request_template: "Hallo %{first_name}, wir haben eine neue Frage zum Thema %{request_title}. Sind Sie daran interessiert, Ihre Meinung zu äußern?"
   save: Speichern
   cancel: Abbrechen
   skip_to_content: Zum Hauptinhalt springen

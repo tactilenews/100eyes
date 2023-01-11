@@ -9,7 +9,7 @@ module WhatsAppAdapter
       latest_message_received_at = recipient.latest_message_received_at
       text = if latest_message_received_at.blank? || latest_message_received_at < 24.hours.ago
                recipient.update(whats_app_template_message_sent_at: Time.current)
-               I18n.t('adapter.whats_app.request_template', first_name: recipient.first_name, text: message.text)
+               I18n.t('adapter.whats_app.request_template', first_name: recipient.first_name, request_title: message.request.title)
              else
                message.text
              end
@@ -23,7 +23,7 @@ module WhatsAppAdapter
     def self.send_welcome_message!(contributor)
       return unless contributor_can_receive_messages?(contributor)
 
-      welcome_message = I18n.t('adapter.whats_app.welcome_message')
+      welcome_message = I18n.t('adapter.whats_app.welcome_message', project_name: Setting.project_name)
       WhatsAppAdapter::Outbound::Text.perform_later(recipient: contributor, text: welcome_message)
     end
 
