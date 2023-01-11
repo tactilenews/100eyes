@@ -48,6 +48,9 @@
     SIGNAL_MONITORING_URL: "{{ rails.signal.monitoring_url | default('') }}"
     SENTRY_DSN: "{{ rails.sentry.dsn }}"
     ONBOARDING_SHOW_GDPR_MODAL: "{{ rails.onboarding.show_gdpr_modal | default('') | string | lower }}"
+    WHATS_APP_SERVER_PHONE_NUMBER: "{{ rails.whats_app.server_phone_number | default('') }}"
+    TWILIO_ACCOUNT_SID: "{{ rails.twilio.account_sid }}"
+    TWILIO_AUTH_TOKEN: "{{ rails.twilio.auth_token }}"
   community.general.docker_compose:
     project_src: /home/ansible
     build: no
