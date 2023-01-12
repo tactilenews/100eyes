@@ -215,6 +215,10 @@ de:
           %{name} hat sich am %{date} via Signal mit der Handynummer %{phone_number} angemeldet, die Anmeldung aber noch nicht abgeschlossen.
           Sende %{first_name} einen Link mit Hinweisen zum Abschließen der Anmeldung.
         action: Link kopieren
+    contributor_whats_app_settings:
+      heading: "Ausgewählter Kanal: WhatsApp"
+      text: |
+        %{name} hat sich mit der Handynummer %{phone_number} angemeldet.
     contributor_header:
       created_at: Mitglied seit %{date}
       deactivated_at: deaktiviert am %{date}
