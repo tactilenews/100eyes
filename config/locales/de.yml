@@ -477,8 +477,8 @@ de:
     no_replies: Bisher hat noch niemand auf diese Frage geantwortet. Schau doch später noch einmal rein!
     form:
       title:
-        label: Interner Titel
-        help: Damit du zwischen all deinen Fragen den Überblick behältst. Der Titel wird nicht an die Community gesandt.
+        label: Titel
+        help: Damit du zwischen all deinen Fragen den Überblick behältst. Der Titel wird auf manchen Kanälen zur Information an Community-Mitglieder mitgeschickt.
         placeholder: z.B. Thema der Frage
       text:
         label: Was möchtest du wissen?
