@@ -37,6 +37,6 @@ class OnboardingCompleted < Noticed::Base
   end
 
   def contributor_channel
-    record.contributor.channels.first.to_s.capitalize
+    record.contributor.channels.first.to_s.camelize
   end
 end
