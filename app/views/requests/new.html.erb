@@ -1,8 +1,9 @@
 <%= c 'main' do %>
-  <%= c 'page_header', style: :largeMarginBottom do %>
+  <%= c 'page_header', styles: [:largeMarginBottom, :flexboxColumn, :noGap] do %>
     <%= c 'heading', style: :alpha do %>
       <%= I18n.t 'request.create' %>
     <% end %>
+    <p><%= t('components.request_form.subheading') %></p>
   <% end %>
 
   <%= c 'section' do %>

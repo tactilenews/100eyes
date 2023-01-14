@@ -1,8 +1,11 @@
 <%= c 'main' do %>
   <%= c 'page_header', styles: [:lightGrayBackground, :spaceBetween, :largeMarginBottom] do |header| %>
-    <%= c 'heading' do %>
-      <%= I18n.t 'contributor.contributor', count: :other %>
-    <% end %>
+    <div>
+      <%= c 'heading' do %>
+        <%= I18n.t 'contributor.contributor', count: :other %>
+      <% end %>
+      <p><%= t('contributor.subheading') %></p>
+    </div>
 
     <%= c 'copy_button',
       label: I18n.t('contributor.actions.copy_invite'),
