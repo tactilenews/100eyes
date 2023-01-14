@@ -9,7 +9,7 @@ export default class extends Controller {
   }
 
   setStatusBarWidth() {
-    const width = new Intl.NumberFormat('default', {
+    const width = new Intl.NumberFormat('en', {
       style: 'percent',
       minimumFractionDigits: 0,
       maximumFractionDigits: 2,
