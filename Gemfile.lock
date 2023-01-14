@@ -439,6 +439,7 @@ DEPENDENCIES
   groupdate
   image_processing (~> 1.12)
   jwt
+  kaminari (~> 1.2)
   kramdown (~> 2.4)
   listen (>= 3.0.5, < 3.8)
   noticed (~> 1.6)
