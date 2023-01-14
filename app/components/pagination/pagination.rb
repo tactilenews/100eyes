@@ -2,15 +2,14 @@
 
 module Pagination
   class Pagination < ApplicationComponent
-    def initialize(current_page:, remote:, page_links:)
+    def initialize(current_page:, remote:, pages:)
       super
 
       @current_page = current_page
       @remote = remote
-      @page_links = page_links
-      # binding.pry
+      @pages = pages
     end
 
-    attr_reader :current_page, :remote, :page_links
+    attr_reader :current_page, :remote, :pages
   end
 end

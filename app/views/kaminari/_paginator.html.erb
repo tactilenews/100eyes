@@ -7,5 +7,5 @@
     paginator:     the paginator that renders the pagination tags inside
 -%>
 <%= paginator.render do -%>
-  <%= c 'pagination', current_page: current_page, remote: remote, page_links: each_page.map { |page| { page_number: page, display: page.display_tag?, truncated: page.was_truncated? } } %>
+  <%= c 'pagination', current_page: current_page, remote: remote, pages: each_page %>
 <% end -%>
