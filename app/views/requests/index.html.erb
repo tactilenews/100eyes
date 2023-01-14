@@ -23,10 +23,10 @@
   <% end %>
 
   <%= c 'section', styles: [:wide] do %>
-    <%= paginate @requests %>
+    <%= paginate @requests, params: { path: requests_path } %>
     <% @requests.each do |request| %>
       <%= c 'request_row', request: request %>
     <% end %>
-    <%= paginate @requests %>
+    <%= paginate @requests, params: { path: requests_path } %>
   <% end %>
 <% end %>
