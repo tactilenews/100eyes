@@ -5,9 +5,10 @@
   list-style: none;
 }
 
-.Pagination-listItem {
+.Pagination-listItem > a {
   border: 1px solid var(--color-turquiose);
   padding: var(--spacing-unit-xs) var(--spacing-unit-s);
+  display: inline-block;
 }
 
 .Pagination-listItem--current {
