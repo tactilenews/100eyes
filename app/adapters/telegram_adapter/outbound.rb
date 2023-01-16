@@ -13,7 +13,7 @@ module TelegramAdapter
                                                        media: media,
                                                        message: message)
       else
-        TelegramAdapter::Outbound::Text.perform_later(text: message.text, recipient: recipient,
+        TelegramAdapter::Outbound::Text.perform_later(text: message.text, telegram_id: recipient.telegram_id,
                                                       message: message)
       end
     end
@@ -22,7 +22,7 @@ module TelegramAdapter
       return unless contributor&.telegram_id
 
       welcome_message = ["<b>#{Setting.onboarding_success_heading}</b>", Setting.onboarding_success_text].join("\n")
-      TelegramAdapter::Outbound::Text.perform_later(text: welcome_message, recipient: contributor)
+      TelegramAdapter::Outbound::Text.perform_later(text: welcome_message, telegram_id: contributor.telegram_id)
     end
   end
 end
