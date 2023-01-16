@@ -6,6 +6,27 @@
     remote:        data-remote
     paginator:     the paginator that renders the pagination tags inside
 -%>
-<%= paginator.render do -%>
-  <%= c 'pagination', current_page: current_page, remote: remote, pages: each_page, path: params[:path] %>
-<% end -%>
+<% if params[:path] %>
+  <%= paginator.render do -%>
+    <%= c 'pagination', current_page: current_page, remote: remote, pages: each_page, path: params[:path] %>
+  <% end -%>
+<% else %>
+  <%# administrate gem uses kaminari under the hood and trying to render our component results in an error: undefined method `c' for #<Kaminari::Helpers::Paginator %>
+  <%= paginator.render do -%>
+    <nav class="pagination" role="navigation" aria-label="pager">
+      <%= first_page_tag unless current_page.first? %>
+      <%= prev_page_tag unless current_page.first? %>
+      <% each_page do |page| -%>
+        <% if page.display_tag? -%>
+          <%= page_tag page %>
+        <% elsif !page.was_truncated? -%>
+          <%= gap_tag %>
+        <% end -%>
+      <% end -%>
+      <% unless current_page.out_of_range? %>
+        <%= next_page_tag unless current_page.last? %>
+        <%= last_page_tag unless current_page.last? %>
+      <% end %>
+    </nav>
+  <% end -%>
+<% end %>
