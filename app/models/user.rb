@@ -13,11 +13,21 @@ class User < ApplicationRecord
   has_one_time_password
   validates :password, length: { in: 8..128 }, unless: :skip_password_validation?
 
+  after_update_commit :reset_otp
+
   def name
     "#{first_name} #{last_name}"
   end
 
   def avatar?
     false
+  end
+
+  private
+
+  def reset_otp
+    return unless saved_change_to_otp_enabled?
+
+    update(otp_secret_key: User.otp_random_secret)
   end
 end
