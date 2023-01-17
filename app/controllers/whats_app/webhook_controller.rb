@@ -3,13 +3,12 @@
 module WhatsApp
   class WebhookController < ApplicationController
     skip_before_action :require_login, :verify_authenticity_token
-    before_action :verify_webhook_origin
 
     def message
       adapter = WhatsAppAdapter::Inbound.new
 
-      adapter.on(WhatsAppAdapter::UNKNOWN_CONTRIBUTOR) do |signal_phone_number|
-        exception = WhatsAppAdapter::UnknownContributorError.new(signal_phone_number: signal_phone_number)
+      adapter.on(WhatsAppAdapter::UNKNOWN_CONTRIBUTOR) do |whats_app_phone_number|
+        exception = WhatsAppAdapter::UnknownContributorError.new(whats_app_phone_number: whats_app_phone_number)
         ErrorNotifier.report(exception)
       end
 
@@ -29,15 +28,6 @@ module WhatsApp
       params.permit(:AccountSid, :ApiVersion, :Body, :From, :Level, :MessageSid, :NumMedia, :NumSegments, :ParentAccountSid,
                     :Payload, :PayloadType, :ProfileName, :ReferralNumMedia, :Sid, :SmsMessageSid, :SmsSid, :SmsStatus,
                     :Timestamp, :To, :WaId)
-    end
-
-    def verify_webhook_origin
-      auth_token = Setting.twilio_auth_token
-      validator = Twilio::Security::RequestValidator.new(auth_token)
-      url = "https://#{Setting.application_host}/whats_app/webhook"
-      params = webhook_params.to_h
-      twilio_signature = request.headers['X-Twilio-Signature']
-      raise ActionController::BadRequest unless validator.validate(url, params, twilio_signature)
     end
   end
 end
