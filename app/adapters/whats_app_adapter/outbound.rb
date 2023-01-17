@@ -13,10 +13,12 @@ module WhatsAppAdapter
              else
                message.text
              end
-      if message.files.present?
-        # implement in 2nd step
+      files = message.files
+
+      if files.present?
+        send_files(files, recipient, text)
       else
-        WhatsAppAdapter::Outbound::Text.perform_later(recipient: recipient, text: text)
+        send_text(recipient, text)
       end
     end
 
@@ -29,6 +31,16 @@ module WhatsAppAdapter
 
     def self.contributor_can_receive_messages?(recipient)
       recipient&.whats_app_phone_number.present?
+    end
+
+    def self.send_files(files, recipient, text)
+      files.each_with_index do |file, index|
+        WhatsAppAdapter::Outbound::File.perform_later(recipient: recipient, text: index.zero? ? text : '', file: file)
+      end
+    end
+
+    def self.send_text(recipient, text)
+      WhatsAppAdapter::Outbound::Text.perform_later(recipient: recipient, text: text)
     end
   end
 end
