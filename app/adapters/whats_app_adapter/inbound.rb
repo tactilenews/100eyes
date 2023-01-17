@@ -5,6 +5,8 @@ module WhatsAppAdapter
   RESPONDING_TO_TEMPLATE_MESSAGE = :responding_to_template_message
 
   class Inbound
+    SUPPORTED_ATTACHMENT_TYPES = %w[image/jpg image/jpeg image/png image/gif audio/ogg video/mp4].freeze
+
     attr_reader :sender, :text, :message
 
     def initialize
@@ -23,6 +25,9 @@ module WhatsAppAdapter
 
       @message = initialize_message(whats_app_message)
       return unless @message
+
+      files = initialize_files(whats_app_message)
+      @message.files = files
 
       has_content = @message.text
       return unless has_content
@@ -60,10 +65,38 @@ module WhatsAppAdapter
       message = Message.new(text: message_text, sender: sender)
       message.raw_data.attach(
         io: StringIO.new(JSON.generate(whats_app_message)),
-        filename: 'signal_message.json',
+        filename: 'whats_app_message.json',
         content_type: 'application/json'
       )
       message
+    end
+
+    def initialize_files(whats_app_message)
+      indeces_of_media = whats_app_message[:num_media].to_i
+      attachments = indeces_of_media.times.collect do |index|
+        { content_type: whats_app_message["media_content_type#{index}".to_sym], media_url: whats_app_message["media_url#{index}".to_sym] }
+      end
+
+      return [] unless attachments&.any?
+
+      attachments = attachments.select { |attachment| SUPPORTED_ATTACHMENT_TYPES.include?(attachment[:content_type]) }
+      attachments.map { |attachment| initialize_file(attachment) }
+    end
+
+    def initialize_file(attachment)
+      file = Message::File.new
+
+      content_type = attachment[:content_type]
+      filename = attachment[:media_url].split('/Media/').last
+
+      file.attachment.attach(
+        io: URI.parse(attachment[:media_url]).open,
+        filename: filename,
+        content_type: content_type,
+        identify: false
+      )
+
+      file
     end
   end
 end
