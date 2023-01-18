@@ -9,7 +9,8 @@ module WhatsAppAdapter
       latest_message_received_at = recipient.latest_message_received_at
       text = if latest_message_received_at.blank? || latest_message_received_at < 24.hours.ago
                recipient.update(whats_app_template_message_sent_at: Time.current)
-               I18n.t('adapter.whats_app.request_template', first_name: recipient.first_name, request_title: message.request.title)
+               I18n.t("adapter.whats_app.request_template.new_request_#{time_of_day}_#{rand(1..3)}", first_name: recipient.first_name,
+                                                                                                     request_title: message.request.title)
              else
                message.text
              end
@@ -41,6 +42,25 @@ module WhatsAppAdapter
 
     def self.send_text(recipient, text)
       WhatsAppAdapter::Outbound::Text.perform_later(recipient: recipient, text: text)
+    end
+
+    def self.time_of_day
+      current_time = Time.current
+      morning = current_time.change(hour: 6)
+      day = current_time.change(hour: 11)
+      evening = current_time.change(hour: 17)
+      night = current_time.change(hour: 23)
+
+      case current_time
+      when morning..day
+        'morning'
+      when day..evening
+        'day'
+      when evening..night
+        'evening'
+      when night..morning
+        'night'
+      end
     end
   end
 end
