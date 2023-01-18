@@ -8,7 +8,7 @@ RSpec.describe TelegramAdapter::Outbound::Text do
   let(:message) { create(:message, text: 'Forgot to ask: How are you?', broadcasted: true, recipient: contributor) }
 
   describe '#perform' do
-    subject { adapter.perform(text: message.text, recipient: message.recipient) }
+    subject { adapter.perform(text: message.text, telegram_id: message.recipient.telegram_id) }
     let(:expected_message) { { chat_id: 4, text: 'Forgot to ask: How are you?', parse_mode: :HTML } }
 
     it 'sends the message with TelegramBot' do

@@ -10,7 +10,7 @@ class RequestsController < ApplicationController
     @filter = filter_param
     @sent_requests_count = Request.include_associations.sent.count
     @planned_requests_count = Request.include_associations.planned.count
-    @requests = filtered_requests
+    @requests = filtered_requests.page(params[:page])
   end
 
   def show

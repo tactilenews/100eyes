@@ -2,6 +2,11 @@
 
 Rails.application.routes.draw do
   root to: redirect('/dashboard')
+
+  concern :paginatable do
+    get '(page/:page)', action: :index, on: :collection, as: ''
+  end
+
   get '/dashboard', to: 'dashboard#index'
   get '/search', to: 'search#index'
   get '/health', to: 'health#index'
@@ -45,7 +50,7 @@ Rails.application.routes.draw do
 
   telegram_webhook Telegram::WebhookController
 
-  resources :requests, only: %i[index show new create edit update] do
+  resources :requests, only: %i[index show new create edit update], concerns: :paginatable do
     member do
       get 'notifications', format: /json/
     end

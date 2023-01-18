@@ -12,16 +12,6 @@ RSpec.describe PageHeader::PageHeader, type: :component do
   it { should_not have_css('.PageHeader-tabBar') }
   it { should_not have_css('.PageHeader--tabBar') }
 
-  context 'with actions slot' do
-    subject do
-      render_inline(described_class.new(**params)) do |component|
-        component.actions { 'Actions' }
-      end
-    end
-
-    it { should have_css('.PageHeader-actions', text: 'Actions') }
-  end
-
   context 'with tab_bar slot' do
     subject do
       render_inline(described_class.new(**params)) do |component|

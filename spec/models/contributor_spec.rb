@@ -787,12 +787,14 @@ RSpec.describe Contributor, type: :model do
       allow(Setting).to receive(:onboarding_success_text).and_return('You onboarded successfully.')
     end
     subject { -> { contributor.send_welcome_message! } }
-    let(:expected_job_args) { { recipient: contributor, text: "Welcome new contributor!\nYou onboarded successfully." } }
+    let(:expected_job_args) { { telegram_id: contributor.telegram_id, text: "Welcome new contributor!\nYou onboarded successfully." } }
 
     it { should_not have_enqueued_job }
 
     context 'signed up via telegram' do
-      let(:expected_job_args) { { recipient: contributor, text: "<b>Welcome new contributor!</b>\nYou onboarded successfully." } }
+      let(:expected_job_args) do
+        { telegram_id: contributor.telegram_id, text: "<b>Welcome new contributor!</b>\nYou onboarded successfully." }
+      end
       let(:contributor) { create(:contributor, telegram_id: nil, telegram_onboarding_token: 'ABCDEF', email: nil) }
       it { should_not have_enqueued_job }
 
