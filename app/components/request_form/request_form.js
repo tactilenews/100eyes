@@ -12,6 +12,7 @@ export default class extends Controller {
     'imagePreview',
     'filenames',
     'submitButton',
+    'characterCounter',
   ];
   static values = {
     membersCountMessage: String,
@@ -22,6 +23,7 @@ export default class extends Controller {
     this.updatePreview();
     this.updateMembersCount();
     this.imageInputTarget.classList.add('hidden');
+    this.updateCharacterCounter();
   }
 
   insertPlaceholderAtCursor() {
@@ -196,6 +198,22 @@ export default class extends Controller {
     this.filenamesTarget.appendChild(listItem);
     this.filenamesTarget.parentNode.classList.remove(
       'RequestForm-filenamesWrapper--hidden'
+    );
+  }
+
+  updateCharacterCounter() {
+    const characters = this.messageTarget.value.length;
+    const maxLength = 1500;
+    this.characterCounterTarget.innerText = `${characters} / ${maxLength} Zeichen`;
+    const hideCharacterCounter = characters < (maxLength * 75) / 100;
+    this.characterCounterTarget.classList.toggle(
+      'hidden',
+      hideCharacterCounter
+    );
+    const isInvalid = characters >= maxLength;
+    this.characterCounterTarget.classList.toggle(
+      'CharacterCounter--invalidText',
+      isInvalid
     );
   }
 }

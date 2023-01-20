@@ -1,0 +1,11 @@
+.CharacterCounter {
+  display: block;
+  width: 100%;
+  text-align: right;
+  font-size: var(--font-size);
+  margin-top: var(--spacing-unit-xs);
+}
+
+.CharacterCounter--invalidText {
+  color: var(--color-red);
+}
