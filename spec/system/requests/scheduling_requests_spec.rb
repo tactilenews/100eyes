@@ -15,7 +15,7 @@ RSpec.describe 'Scheduling requests', js: true do
     it 'schedules a future job' do
       visit new_request_path(as: user)
 
-      fill_in 'Interner Titel', with: 'Scheduled request'
+      fill_in 'Titel', with: 'Scheduled request'
       fill_in 'Was möchtest du wissen?', with: 'Did you get my scheduled request?'
 
       scheduled_datetime = Time.current.tomorrow.beginning_of_hour

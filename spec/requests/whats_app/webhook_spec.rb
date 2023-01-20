@@ -61,7 +61,7 @@ RSpec.describe WhatsApp::WebhookController do
 
       it 'raises an error' do
         expect(Sentry).to receive(:capture_exception).with(
-          WhatsAppAdapter::UnknownContributorError.new(whats_app_phone_number: '49151123456')
+          WhatsAppAdapter::UnknownContributorError.new(whats_app_phone_number: '+491511234567')
         )
 
         subject.call
