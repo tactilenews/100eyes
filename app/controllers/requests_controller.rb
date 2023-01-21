@@ -88,7 +88,7 @@ class RequestsController < ApplicationController
   def resize_image_files
     return if Rails.env.test?
 
-    paths = request_params[:files].map { |file| file.tempfile.path }
+    paths = request_params[:files].reject { |file| file.content_type.match?(%r{image/svg}) }.map { |file| file.tempfile.path }
     paths.each do |path|
       ImageProcessing::MiniMagick.source(path)
                                  .resize_to_limit(1200, 1200)
