@@ -7,6 +7,10 @@ module PostmarkAdapter
 
     rescue_from Postmark::InactiveRecipientError do |exception|
       ErrorNotifier.report(exception, context: { recipients: exception.recipients }, tags: { support: 'yes' })
+      exception.recipients.find_each do |recipient|
+        recipient.update(active: false)
+        ContributorMarkedInactive.with(contributor_id: recipient.id).deliver_later(User.all)
+      end
     end
 
     attr_reader :msg

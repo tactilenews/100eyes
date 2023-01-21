@@ -779,6 +779,9 @@ de:
     request_scheduled:
       text_html: "Die Frage <strong>%{request_title}</strong> wurde für den Versand am %{date} um %{time} geplant und wird an %{contributors_count} Community-Mitglieder versendet."
       link_text: Zur Frage
+    contributor_marked_inactive:
+      text_html: "<strong>%{contributor_name}</strong> wurde als inaktiv markiert, weil sie keine Fragen mehr zu %{contributor_channel} erhalten können."
+      link_text: "Zum Profil"
   shared:
     community: Community
     editorial: Redaktion
