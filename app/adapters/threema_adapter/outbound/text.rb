@@ -6,7 +6,16 @@ module ThreemaAdapter
       queue_as :default
 
       rescue_from RuntimeError do |exception|
-        tags = exception.message.match?(/Can't find public key for Threema ID/) ? { support: 'yes' } : {}
+        tags = {}
+        if exception.message.match?(/Can't find public key for Threema ID/)
+          tags = { support: 'yes' }
+          threema_id = exception.message.split('Threema ID').last.strip
+          contributor = Contributor.where('lower(threema_id) = ?', threema_id.downcase).first
+          return unless contributor
+
+          contributor.update(active: false)
+          ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
+        end
         ErrorNotifier.report(exception, tags: tags)
       end
 
