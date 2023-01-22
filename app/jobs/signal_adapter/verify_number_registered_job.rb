@@ -14,7 +14,7 @@ module SignalAdapter
         http.request(request)
       end
 
-      case response.code
+      case response.code.to_i
       when 200
         mark_contributor_as_inactive(response, contributor)
       when 400..499
