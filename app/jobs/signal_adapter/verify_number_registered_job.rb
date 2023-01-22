@@ -13,29 +13,20 @@ module SignalAdapter
       response = Net::HTTP.start(url.host, url.port) do |http|
         http.request(request)
       end
-
       case response.code.to_i
       when 200
-        mark_contributor_as_inactive(response, contributor)
+        return if JSON.parse(response.body).first['registered']
+
+        contributor.update(deactivated_at: Time.current)
+        ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
       when 400..499
-        report_error(response)
+        ErrorNotifier.report(Net::HTTPServerException, context: {
+                               code: response.code,
+                               message: response.message,
+                               headers: response.to_hash,
+                               body: response.body
+                             })
       end
     end
-  end
-
-  def self.mark_contributor_as_inactive(response, contributor)
-    return if JSON.parse(response.body).first['registered']
-
-    contributor.update(deactivated_at: Time.current)
-    ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
-  end
-
-  def self.report_error(response)
-    ErrorNotifier.report(Net::HTTPServerException, context: {
-                           code: response.code,
-                           message: response.message,
-                           headers: response.to_hash,
-                           body: response.body
-                         })
   end
 end
