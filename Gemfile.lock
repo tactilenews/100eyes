@@ -254,7 +254,7 @@ GEM
     phony_rails (0.15.0)
       activesupport (>= 3.0)
       phony (>= 2.18.12)
-    postmark (1.22.1)
+    postmark (1.22.3)
       json
     postmark-rails (0.22.1)
       actionmailer (>= 3.0.0)

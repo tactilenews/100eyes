@@ -24,7 +24,7 @@ module SignalAdapter
   end
 
   def self.mark_contributor_as_inactive(response, contributor)
-    return unless JSON.parse(response.body).first['registered']
+    return if JSON.parse(response.body).first['registered']
 
     contributor.update(deactivated_at: Time.current)
     ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
