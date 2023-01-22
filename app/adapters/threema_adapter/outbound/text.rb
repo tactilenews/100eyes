@@ -13,7 +13,7 @@ module ThreemaAdapter
           contributor = Contributor.where('lower(threema_id) = ?', threema_id.downcase).first
           return unless contributor
 
-          contributor.update(active: false)
+          contributor.update(deactivated_at: Time.current)
           ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
         end
         ErrorNotifier.report(exception, tags: tags)
