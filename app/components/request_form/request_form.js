@@ -210,5 +210,8 @@ export default class extends Controller {
       'CharacterCounter--invalidText',
       isInvalid
     );
+    isInvalid
+      ? this.submitButtonTarget.setAttribute('disabled', isInvalid)
+      : this.submitButtonTarget.removeAttribute('disabled');
   }
 }

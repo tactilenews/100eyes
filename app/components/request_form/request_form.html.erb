@@ -82,7 +82,8 @@
         <%= c 'button',
           type: 'submit',
           styles: [:block, :primary],
-          label: I18n.t('request.send')
+          label: I18n.t('request.send'),
+          data: { request_form_target: 'submitButton' }
         %>
 
       <% end %>
