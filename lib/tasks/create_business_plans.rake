@@ -53,8 +53,8 @@ BUSINESS_PLANS = [
     number_of_users: 3,
     number_of_contributors: 150,
     number_of_communities: 1,
-    valid_from: Time.current,
-    valid_until: Time.current + 6.months
+    valid_from: nil,
+    valid_until: nil
   },
   {
     name: 'Editorial enterprise',
