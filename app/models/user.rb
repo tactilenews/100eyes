@@ -13,6 +13,8 @@ class User < ApplicationRecord
   has_one_time_password
   validates :password, length: { in: 8..128 }, unless: :skip_password_validation?
 
+  scope :admin, ->(boolean = true) { where(admin: boolean) }
+
   after_update_commit :reset_otp
 
   def name

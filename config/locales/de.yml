@@ -300,7 +300,13 @@ de:
         text: Vielen Dank für Ihre Nachricht. Leider konnten wir Ihre E-Mail-Adresse nicht zuordnen. Das könnte daran liegen, dass wir einen Fehler gemacht haben oder Sie uns von einer anderen E-Mail-Adresse schreiben. Melden Sie sich gern unter support@tactile.news, dann lösen wir das Problem schnell. Vielen Dank.
       new_message_email:
         subject: Die Redaktion hat eine neue Frage
-
+    shared:
+      contributor_marked_as_inactive_email:
+        subject: "%{contributor_name} wurde bei %{channel} als inaktiv markiert, weil er keine Nachrichten mehr von %{project_name} empfangen kann."
+  jobs:
+    signal_adapter:
+      verify_number_registered_job:
+        unregistered: "Die Nummer %{phone_number} ist derzeit nicht bei Signal registriert."
   save: Speichern
   cancel: Abbrechen
   skip_to_content: Zum Hauptinhalt springen

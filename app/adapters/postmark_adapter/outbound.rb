@@ -13,6 +13,9 @@ module PostmarkAdapter
 
         contributor.update(deactivated_at: Time.current)
         ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
+        User.admin.find_each do |admin|
+          PostmarkAdapter::Outbound.contributor_marked_as_inactive!(admin, contributor, exception.message)
+        end
       end
     end
 
@@ -28,6 +31,12 @@ module PostmarkAdapter
       return unless contributor&.email
 
       with(contributor: contributor).welcome_email.deliver_later
+    end
+
+    def self.contributor_marked_as_inactive!(admin, contributor, text)
+      return unless admin&.email && admin&.admin? && contributor&.id
+
+      with(admin: admin, contributor: contributor, text: text).contributor_marked_as_inactive_email.deliver_later
     end
 
     def bounce_email
@@ -51,6 +60,18 @@ module PostmarkAdapter
       else
         reply_message_email
       end
+    end
+
+    def contributor_marked_as_inactive_email
+      contributor = params[:contributor]
+      admin = params[:admin]
+      subject = I18n.t('adapter.shared.contributor_marked_as_inactive_email.subject', project_name: Setting.project_name,
+                                                                                      contributor_name: contributor.name,
+                                                                                      channel: contributor.channels.first.to_s.camelize)
+      text = params[:text]
+      message_stream = Setting.postmark_transactional_stream
+      @text = [subject, text].join("\n")
+      mail(to: admin.email, subject: subject, message_stream: message_stream)
     end
 
     private
