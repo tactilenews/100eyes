@@ -93,7 +93,10 @@ export default class extends Controller {
     for (let i = 0; i < files.length; i++) {
       let file = files.item(i);
 
-      if (file.type.split('/')[0] !== 'image') {
+      if (
+        file.type.split('/')[0] !== 'image' ||
+        file.type.split('/')[1].includes('svg')
+      ) {
         this.updateFilesname(i, file);
         const label = document.createElement('label');
         label.innerText =

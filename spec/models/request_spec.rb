@@ -43,6 +43,30 @@ RSpec.describe Request, type: :model do
 
       it { is_expected.not_to be_valid }
     end
+
+    context 'jpg' do
+      before { request.files = [fixture_file_upload('profile_picture.jpg')] }
+
+      it { is_expected.to be_valid }
+    end
+
+    context 'jpeg' do
+      before { request.files = [fixture_file_upload('matt.jpeg')] }
+
+      it { is_expected.to be_valid }
+    end
+
+    context 'gif' do
+      before { request.files = [fixture_file_upload('thinking-cat.gif')] }
+
+      it { is_expected.to be_valid }
+    end
+
+    context 'svg' do
+      before { request.files = [fixture_file_upload('channel_mail.svg')] }
+
+      it { is_expected.not_to be_valid }
+    end
   end
 
   it 'has title, text, and user_id' do
