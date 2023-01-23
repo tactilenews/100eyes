@@ -205,12 +205,7 @@ export default class extends Controller {
     const characters = this.messageTarget.value.length;
     const maxLength = 1500;
     this.characterCounterTarget.innerText = `${characters} / ${maxLength} Zeichen`;
-    const hideCharacterCounter = characters < (maxLength * 75) / 100;
-    this.characterCounterTarget.classList.toggle(
-      'hidden',
-      hideCharacterCounter
-    );
-    const isInvalid = characters >= maxLength;
+    const isInvalid = characters > maxLength;
     this.characterCounterTarget.classList.toggle(
       'CharacterCounter--invalidText',
       isInvalid
