@@ -11,8 +11,10 @@
     <%= t('.sub_heading.business_plan.price_per_month', price_per_month: price_per_month) %>
   <% end %>
 
-  <%= c 'heading', style: :gamma do %>
-    <%= t('.sub_heading.business_plan.valid_until', valid_until: I18n.l(organization.business_plan.valid_until, format: '%m/%Y')) %>
+  <% if organization.business_plan.valid_until.present? %>
+    <%= c 'heading', style: :gamma do %>
+      <%= t('.sub_heading.business_plan.valid_until', valid_until: I18n.l(organization.business_plan.valid_until, format: '%m/%Y')) %>
+    <% end %>
   <% end %>
 
   <%= c 'flex' do %>
