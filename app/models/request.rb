@@ -15,7 +15,9 @@ class Request < ApplicationRecord
   scope :planned, -> { where.not(schedule_send_for: nil).where('schedule_send_for > ?', Time.current) }
   scope :sent, -> { where(schedule_send_for: nil).or(where('schedule_send_for < ?', Time.current)) }
 
-  validates :files, blob: { content_type: :image }
+  validates :files, blob: { content_type: ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'] }
+  validates :title, presence: true
+  validates :text, length: { maximum: 1500 }, presence: true
 
   acts_as_taggable_on :tags
 

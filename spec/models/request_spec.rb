@@ -17,6 +17,58 @@ RSpec.describe Request, type: :model do
 
   subject { request }
 
+  describe 'validations' do
+    it { is_expected.to be_valid }
+
+    context 'no title' do
+      before { request.title = '' }
+
+      it { is_expected.not_to be_valid }
+    end
+
+    context 'no text' do
+      before { request.text = '' }
+
+      it { is_expected.not_to be_valid }
+    end
+
+    context 'text shorter than or equal to 1500 chars' do
+      before { request.text = Faker::Lorem.characters(number: 1_500) }
+
+      it { is_expected.to be_valid }
+    end
+
+    context 'text longer than 1500 chars' do
+      before { request.text = Faker::Lorem.characters(number: 1_501) }
+
+      it { is_expected.not_to be_valid }
+    end
+
+    context 'jpg' do
+      before { request.files = [fixture_file_upload('profile_picture.jpg')] }
+
+      it { is_expected.to be_valid }
+    end
+
+    context 'jpeg' do
+      before { request.files = [fixture_file_upload('matt.jpeg')] }
+
+      it { is_expected.to be_valid }
+    end
+
+    context 'gif' do
+      before { request.files = [fixture_file_upload('thinking-cat.gif')] }
+
+      it { is_expected.to be_valid }
+    end
+
+    context 'svg' do
+      before { request.files = [fixture_file_upload('channel_mail.svg')] }
+
+      it { is_expected.not_to be_valid }
+    end
+  end
+
   it 'has title, text, and user_id' do
     expect(subject.attributes.keys).to include('title', 'text', 'user_id')
   end
