@@ -179,11 +179,10 @@ de:
         action: Mitglied deaktivieren
       inactive:
         heading: Mitglied reaktivieren
-        text: |
-          %{name} ist ein <strong>inaktives Mitglied</strong> deiner Community und erhält aktuell keine Recherchefragen über 100eyes.
-          Direkte Nachfragen kannst du jedoch weiterhin stellen.
-          Du kannst das Konto reaktivieren.
-          %{first_name} erhält dann wieder alle Recherchefragen.
+        text: %{name} ist ein <strong>inaktives Mitglied</strong> deiner Community und erhält aktuell keine Recherchefragen über 100eyes.
+        possible_reason_signal: Die Rufnummer wurde möglicherweise nicht bei Signal registriert. Bitte überprüfen Sie dies mit dem Anbieter.
+        possible_reason_threema: Diese Threema-ID könnte von Threema als ungültig gemeldet worden sein. Bitte überprüfen Sie die Threema-ID mit dem Beitragszahler.
+        possible_reason_email: Diese E-Mail könnte als inaktiv gemeldet worden sein. Inaktive Empfänger sind solche, die einen Hard Bounce, eine Spam-Beschwerde oder eine manuelle Unterdrückung erzeugt haben.
         action: Mitglied reaktivieren
     contributor_email_settings:
       heading: "Ausgewählter Kanal: E-Mail"

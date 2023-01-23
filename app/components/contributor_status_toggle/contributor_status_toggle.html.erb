@@ -26,6 +26,12 @@
         ).html_safe %>
       </p>
 
+      <% if contributor.channels.includes?(:email, :threema, :signal) %>
+        <p>
+          <%= t("inactive.#{contributor.channels.first.to_s}") %>
+        </p>
+      <% end %>
+
     <% end %>
 
     <%= c 'form', model: contributor do %>
