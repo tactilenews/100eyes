@@ -16,7 +16,7 @@ class Contributor < ApplicationRecord
   has_many :replied_to_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :replies
   has_many :received_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :received_messages
   has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
-  belongs_to :organization
+  belongs_to :organization, optional: true
 
   has_one_attached :avatar
   has_one :json_web_token, dependent: :destroy

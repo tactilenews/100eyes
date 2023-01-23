@@ -19,7 +19,8 @@ module Admin
     private
 
     def update_params
-      params.permit(:id, organization: %i[business_plan_id upgrade_discount contact_person_id name])
+      params.permit(:id,
+                    organization: %i[id business_plan_id upgrade_discount contact_person_id name])
     end
   end
 end

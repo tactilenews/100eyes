@@ -31,7 +31,6 @@ class OrganizationDashboard < Administrate::BaseDashboard
     contact_person
     business_plan
     upgrade_discount
-    contributors
     users
     created_at
     updated_at
@@ -42,9 +41,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
     business_plan
     upgrade_discount
     contact_person
-    contributors
     name
-    users
   ].freeze
 
   COLLECTION_FILTERS = {}.freeze
