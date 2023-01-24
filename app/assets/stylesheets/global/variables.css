@@ -24,6 +24,7 @@
   --color-blue-dark: #1a2d3a;
   --color-blue-light: #7ac8ff;
   --color-blue-lightest: #dbefff;
+  --color-turquiose: #a1e1cf;
 
   --color-blue-gray: #5c9fcb;
   --color-blue-gray-dark: #3d5464;
@@ -52,7 +53,7 @@
   --color-gray-lightest: #f5f6f9;
   --color-gray-dark: #333;
 
-  --color-pink: #f4177a;
+  --color-pink: #ff00a0;
   --color-pink-dark: #c11361;
 
   --color-email: var(--color-gray-dark);

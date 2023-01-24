@@ -10,7 +10,7 @@ class RequestsController < ApplicationController
     @filter = filter_param
     @sent_requests_count = Request.include_associations.sent.count
     @planned_requests_count = Request.include_associations.planned.count
-    @requests = filtered_requests
+    @requests = filtered_requests.page(params[:page])
   end
 
   def show
@@ -88,7 +88,7 @@ class RequestsController < ApplicationController
   def resize_image_files
     return if Rails.env.test?
 
-    paths = request_params[:files].map { |file| file.tempfile.path }
+    paths = request_params[:files].reject { |file| file.content_type.match?(%r{image/svg}) }.map { |file| file.tempfile.path }
     paths.each do |path|
       ImageProcessing::MiniMagick.source(path)
                                  .resize_to_limit(1200, 1200)

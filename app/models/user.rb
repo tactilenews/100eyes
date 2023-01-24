@@ -17,6 +17,7 @@ class User < ApplicationRecord
   scope :admin, ->(boolean = true) { where(admin: boolean) }
 
   after_create_commit :notify_admin
+  after_update_commit :reset_otp
 
   def name
     "#{first_name} #{last_name}"
@@ -34,5 +35,11 @@ class User < ApplicationRecord
     User.admin.find_each do |admin|
       PostmarkAdapter::Outbound.send_user_count_exceeds_plan_limit_message!(admin, organization)
     end
+  end
+
+  def reset_otp
+    return unless saved_change_to_otp_enabled?
+
+    update(otp_secret_key: User.otp_random_secret)
   end
 end

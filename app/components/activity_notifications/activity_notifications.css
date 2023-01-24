@@ -1,5 +1,7 @@
-.ActivityNotifications-card {
+.ActivityNotifications-card.Card {
   padding: var(--spacing-unit);
+  max-height: 50vh;
+  overflow-y: scroll;
 }
 
 .ActivityNotifications-list {
