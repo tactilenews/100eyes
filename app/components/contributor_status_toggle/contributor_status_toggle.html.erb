@@ -26,9 +26,9 @@
         ).html_safe %>
       </p>
 
-      <% if contributor.channels.includes?(:email, :threema, :signal) %>
+      <% if [:email, :threema, :signal].include?(contributor.channels.first) %>
         <p>
-          <%= t("inactive.#{contributor.channels.first.to_s}") %>
+          <%= t(".inactive.possible_reason_#{contributor.channels.first.to_s}") %>
         </p>
       <% end %>
 
