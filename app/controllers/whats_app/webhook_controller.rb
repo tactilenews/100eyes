@@ -13,7 +13,7 @@ module WhatsApp
       end
 
       adapter.on(WhatsAppAdapter::RESPONDING_TO_TEMPLATE_MESSAGE) do |contributor|
-        contributor.update!(whats_app_template_message_sent_at: nil)
+        contributor.update!(whats_app_message_template_responded_at: Time.current, whats_app_template_message_sent_at: nil)
         message = contributor.received_messages.first
         WhatsAppAdapter::Outbound.send!(message)
       end
