@@ -70,13 +70,14 @@ RSpec.describe WhatsApp::WebhookController do
 
     describe 'given a contributor' do
       let!(:contributor) { create(:contributor, whats_app_phone_number: whats_app_phone_number) }
+      let(:request) { create(:request) }
 
       before do
         allow(mock_twilio_security_request_validator).to receive(:validate).and_return(true)
-        create(:message, request: create(:request), recipient: contributor)
+        create(:message, request: request, recipient: contributor)
       end
 
-      context 'no message template set' do
+      context 'no message template sent' do
         it 'creates a messsage' do
           expect { subject.call }.to change(Message, :count).from(1).to(2)
         end
