@@ -6,7 +6,7 @@ module WhatsAppAdapter
       recipient = message&.recipient
       return unless contributor_can_receive_messages?(recipient)
 
-      latest_message_received_at = recipient.latest_message_received_at
+      latest_message_received_at = recipient.replies.first&.created_at
       text = if latest_message_received_at.blank? || latest_message_received_at < 24.hours.ago
                recipient.update(whats_app_template_message_sent_at: Time.current)
                I18n.t("adapter.whats_app.request_template.new_request_#{time_of_day}_#{rand(1..3)}", first_name: recipient.first_name,

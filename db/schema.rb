@@ -96,7 +96,6 @@ ActiveRecord::Schema.define(version: 2023_01_04_102549) do
     t.datetime "additional_consent_given_at"
     t.string "whats_app_phone_number"
     t.datetime "whats_app_template_message_sent_at"
-    t.datetime "latest_message_received_at"
     t.index ["email"], name: "index_contributors_on_email", unique: true
     t.index ["signal_phone_number"], name: "index_contributors_on_signal_phone_number", unique: true
     t.index ["telegram_chat_id"], name: "index_contributors_on_telegram_chat_id", unique: true

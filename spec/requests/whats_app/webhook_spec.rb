@@ -86,10 +86,6 @@ RSpec.describe WhatsApp::WebhookController do
         before { contributor.update(whats_app_template_message_sent_at: Time.current) }
         let(:expected_job_args) { { recipient: contributor, text: contributor.received_messages.first.text } }
 
-        it 'sets `latest_message_received_at` to open 24-hour window of free-form messages' do
-          expect { subject.call }.to change { contributor.reload.latest_message_received_at }.from(nil).to(kind_of(Time))
-        end
-
         it 'set `whats_app_template_message_sent_at` to nil' do
           expect { subject.call }.to change { contributor.reload.whats_app_template_message_sent_at }.from(kind_of(Time)).to(nil)
         end
