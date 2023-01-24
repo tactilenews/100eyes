@@ -46,6 +46,7 @@ Rails.application.routes.draw do
 
   namespace :whats_app do
     post '/webhook', to: 'webhook#message'
+    post '/errors', to: 'webhook#errors'
   end
 
   telegram_webhook Telegram::WebhookController

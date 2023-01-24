@@ -22,6 +22,18 @@ module WhatsApp
       adapter.consume(whats_app_webhook_params) { |message| message.contributor.reply(adapter) }
     end
 
+    def errors
+      return unless webhook_params['Level'] == 'ERROR' && JSON.parse(params['Payload'])['error_code'].to_i == 21_617
+
+      payload = JSON.parse(webhook_params['Payload'])
+      more_info = payload['more_info']
+      parameters = payload['webhook']['request']['parameters']
+      error_text = more_info['Msg'].gsub(Setting.twilio_account_sid, '<ACCOUNT_SID>')
+      exception = WhatsAppAdapter::MaximumMessageLengthExceededError.new(text: error_text,
+                                                                         server_phone_number: parameters['channelToAddress'])
+      ErrorNotifier.report(exception, context: { error_sid: webhook_params['Sid'], message_sid: parameters['messageSid'] })
+    end
+
     private
 
     def webhook_params
