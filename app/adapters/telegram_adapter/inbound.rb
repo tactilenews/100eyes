@@ -7,7 +7,7 @@ module TelegramAdapter
 
   class Inbound
     UNKNOWN_CONTENT_KEYS = %w[
-      animation audio document sticker video video_note
+      animation audio document sticker
       contact dice game poll venue location
       invoice successful_payment passport_data
     ].freeze

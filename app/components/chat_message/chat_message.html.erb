@@ -85,6 +85,10 @@
       </header>
     <% end %>
 
+    <% if video? %>
+      <%= c 'chat_message_video', video: video %>
+    <% end %>
+
     <footer class="ChatMessage-footer">
       <p class="ChatMessage-senderNameMessageUpdatedAt">
         <%= t('.sent_by_x_at', name: message.sender ? message.sender.first_name : Setting.project_name, date: date_time(message.updated_at)).html_safe %>

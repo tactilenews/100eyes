@@ -91,6 +91,18 @@ RSpec.describe ThreemaAdapter::Inbound do
             expect(subject.blob.content_type).to eq('image/jpeg')
           end
         end
+
+        context 'video' do
+          let(:threema_mock) do
+            instance_double(Threema::Receive::File, name: 'my video', content: 'x\00x\\0', mime_type: 'video/mp4',
+                                                    caption: 'look at this cool video')
+          end
+
+          it { should be_attached }
+          it 'preserves the content_type' do
+            expect(subject.blob.content_type).to eq('video/mp4')
+          end
+        end
       end
     end
 
@@ -125,15 +137,6 @@ RSpec.describe ThreemaAdapter::Inbound do
       before do
         allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::File).and_return(true)
         allow(threema_mock).to receive(:respond_to?).with(:mime_type).and_return(true)
-      end
-
-      context 'Video files' do
-        let(:threema_mock) do
-          instance_double(Threema::Receive::File, name: 'my video', content: 'x\00x\\0', mime_type: 'video/mp4',
-                                                  caption: 'look at this cool video')
-        end
-
-        it { is_expected.to be(true) }
       end
 
       context 'Pdf files' do
