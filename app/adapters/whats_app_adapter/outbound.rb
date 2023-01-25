@@ -6,8 +6,7 @@ module WhatsAppAdapter
       recipient = message&.recipient
       return unless contributor_can_receive_messages?(recipient)
 
-      latest_message_received_at = recipient.whats_app_message_template_responded_at || recipient.replies.first&.created_at
-      text = if latest_message_received_at.blank? || latest_message_received_at < 24.hours.ago
+      text = if send_message_template?(recipient)
                recipient.update(whats_app_template_message_sent_at: Time.current)
                I18n.t("adapter.whats_app.request_template.new_request_#{time_of_day}_#{rand(1..3)}", first_name: recipient.first_name,
                                                                                                      request_title: message.request.title)
@@ -61,6 +60,16 @@ module WhatsAppAdapter
       when night..morning
         'night'
       end
+    end
+
+    def self.send_message_template?(recipient)
+      responded_to_template_message_at = recipient.whats_app_message_template_responded_at
+      latest_message_received_at = recipient.replies.first&.created_at
+
+      return false if latest_message_received_at.present? && latest_message_received_at > 24.hours.ago
+      return false if responded_to_template_message_at.present? && responded_to_template_message_at > 24.hours.ago
+
+      true
     end
   end
 end
