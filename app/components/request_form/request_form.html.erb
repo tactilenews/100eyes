@@ -41,13 +41,16 @@
             required: true,
             show_emoji_picker_hint: true,
             highlight_placeholders: true,
-            data: { request_form_target: 'message' }
-          ) %>
-          <% if @request.errors[:files].any? %>
-            <strong class="RequestForm-imageErrorMessage">
-              <%= t('activestorage.blob.disallowed_image_content_type') %>
-            </strong>
+            data: { request_form_target: 'message', action: 'request-form#updateCharacterCounter' }
+          ) do %>
+            <% if @request.errors[:files].any? %>
+              <strong class="RequestForm-imageErrorMessage">
+                <%= t('activestorage.blob.disallowed_image_content_type') %>
+              </strong>
+            <% end %>
+            <%= c 'character_counter', data: { request_form_target: 'characterCounter' } %>
           <% end %>
+
           <div class="RequestForm-filenamesWrapper RequestForm-filenamesWrapper--hidden">
             <%= c 'heading', style: :gamma do %>
               <%= t('.attached_images') %>
@@ -79,7 +82,8 @@
         <%= c 'button',
           type: 'submit',
           styles: [:block, :primary],
-          label: I18n.t('request.send')
+          label: I18n.t('request.send'),
+          data: { request_form_target: 'submitButton' }
         %>
 
       <% end %>

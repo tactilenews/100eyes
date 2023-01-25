@@ -12,6 +12,7 @@ export default class extends Controller {
     'imagePreview',
     'filenames',
     'submitButton',
+    'characterCounter',
   ];
   static values = {
     membersCountMessage: String,
@@ -22,6 +23,7 @@ export default class extends Controller {
     this.updatePreview();
     this.updateMembersCount();
     this.imageInputTarget.classList.add('hidden');
+    this.updateCharacterCounter();
   }
 
   insertPlaceholderAtCursor() {
@@ -91,7 +93,10 @@ export default class extends Controller {
     for (let i = 0; i < files.length; i++) {
       let file = files.item(i);
 
-      if (file.type.split('/')[0] !== 'image') {
+      if (
+        file.type.split('/')[0] !== 'image' ||
+        file.type.split('/')[1].includes('svg')
+      ) {
         this.updateFilesname(i, file);
         const label = document.createElement('label');
         label.innerText =
@@ -197,5 +202,19 @@ export default class extends Controller {
     this.filenamesTarget.parentNode.classList.remove(
       'RequestForm-filenamesWrapper--hidden'
     );
+  }
+
+  updateCharacterCounter() {
+    const characters = this.messageTarget.value.length;
+    const maxLength = 1500;
+    this.characterCounterTarget.innerText = `${characters} / ${maxLength} Zeichen`;
+    const isInvalid = characters > maxLength;
+    this.characterCounterTarget.classList.toggle(
+      'CharacterCounter--invalidText',
+      isInvalid
+    );
+    isInvalid
+      ? this.submitButtonTarget.setAttribute('disabled', isInvalid)
+      : this.submitButtonTarget.removeAttribute('disabled');
   }
 }
