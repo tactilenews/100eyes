@@ -330,7 +330,7 @@ de:
         new_request_night_1: "Hallo %{first_name}, heute Nacht ist mir etwas zum Thema %{request_title} eingefallen. Antworten Sie mir?"
         new_request_night_2: "Hallo %{first_name}, ich weiß, es ist spät. Aber ich möchte gern mehr zum Thema %{request_title} erfahren. Möchten Sie auf meine Frage antworten?"
         new_request_night_3: "Hallo %{first_name}, zum Thema %{request_title} möchte ich heute Nacht gern mehr erfahren. Beantworten Sie mir eine kurze Frage?"
-
+      unknown_content_template: "Tut mir leid %{first_name}, leider ist unsere Software kann derzeit Textnachrichten, Sprachnachrichten, Bilder und Reaktionen auf Nachrichten verarbeiten, jedoch noch keine weiteren Inhalte wie z.B. Sticker oder Kontakte. In der Zwischenzeit senden Sie bitte Nachrichten mit solchen Inhalten an %{contact_person}. Herzlichen Dank!"
   save: Speichern
   cancel: Abbrechen
   skip_to_content: Zum Hauptinhalt springen

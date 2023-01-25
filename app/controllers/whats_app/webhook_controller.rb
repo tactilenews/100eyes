@@ -18,6 +18,10 @@ module WhatsApp
         WhatsAppAdapter::Outbound.send!(message)
       end
 
+      adapter.on(WhatsAppAdapter::UNKNOWN_CONTENT) do |contributor|
+        WhatsAppAdapter::Outbound.send_unknown_content_message!(contributor)
+      end
+
       whats_app_webhook_params = webhook_params.to_h.transform_keys(&:underscore)
       adapter.consume(whats_app_webhook_params) { |message| message.contributor.reply(adapter) }
     end
@@ -37,7 +41,7 @@ module WhatsApp
     private
 
     def webhook_params
-      params.permit(:AccountSid, :ApiVersion, :Body, :From, :Level, :MessageSid, :NumMedia, :NumSegments, :ParentAccountSid,
+      params.permit(:AccountSid, :ApiVersion, :Body, :From, :Level, :Latitude, :Longitude, :MessageSid, :NumMedia, :NumSegments, :ParentAccountSid,
                     :Payload, :PayloadType, :ProfileName, :ReferralNumMedia, :Sid, :SmsMessageSid, :SmsSid, :SmsStatus,
                     :Timestamp, :To, :WaId, *media_params)
     end

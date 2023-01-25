@@ -2,10 +2,12 @@
 
 module WhatsAppAdapter
   UNKNOWN_CONTRIBUTOR = :unknown_contributor
+  UNKNOWN_CONTENT = :unknown_content
   RESPONDING_TO_TEMPLATE_MESSAGE = :responding_to_template_message
 
   class Inbound
     SUPPORTED_ATTACHMENT_TYPES = %w[image/jpg image/jpeg image/png image/gif audio/ogg video/mp4].freeze
+    UNSUPPORTED_CONTENT_TYPES = %w[application text/vcard latitude longitude].freeze
 
     attr_reader :sender, :text, :message
 
@@ -26,10 +28,12 @@ module WhatsAppAdapter
       @message = initialize_message(whats_app_message)
       return unless @message
 
+      @unknown_content = initialize_unknown_content(whats_app_message)
+
       files = initialize_files(whats_app_message)
       @message.files = files
 
-      has_content = @message.text
+      has_content = @message.text || @message.files.any? || @message.unknown_content
       return unless has_content
 
       yield(@message) if block_given?
@@ -68,6 +72,13 @@ module WhatsAppAdapter
       message
     end
 
+    def initialize_unknown_content(whats_app_message)
+      return unless unsupported_content?(whats_app_message)
+
+      message.unknown_content = true
+      trigger(UNKNOWN_CONTENT, sender)
+    end
+
     def initialize_files(whats_app_message)
       indeces_of_media = whats_app_message[:num_media].to_i
       attachments = indeces_of_media.times.collect do |index|
@@ -94,6 +105,12 @@ module WhatsAppAdapter
       )
 
       file
+    end
+
+    def unsupported_content?(whats_app_message)
+      whats_app_message.keys.any? { |key| UNSUPPORTED_CONTENT_TYPES.include?(key) } || whats_app_message.any? do |key, value|
+        key.match?(/media_content_type/) && UNSUPPORTED_CONTENT_TYPES.any? { |content_type| value.match?(/#{content_type}/) }
+      end
     end
   end
 end
