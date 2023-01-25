@@ -78,6 +78,20 @@ RSpec.describe WhatsAppAdapter::Outbound do
           end)
         end
       end
+
+      describe 'message with files' do
+        let(:file) { create(:file) }
+        before { message.update(files: [file]) }
+
+        it 'enqueues a File job with file, contributor, text' do
+          expect { subject.call }.to(have_enqueued_job(described_class::File).on_queue('default').with do |params|
+            expect(params[:file]).to eq(message.files.first)
+            expect(params[:recipient]).to eq(contributor)
+            expect(params[:text]).to include(contributor.first_name)
+            expect(params[:text]).to include(message.request.title)
+          end)
+        end
+      end
     end
   end
 end
