@@ -41,9 +41,9 @@ module WhatsApp
     private
 
     def webhook_params
-      params.permit(:AccountSid, :ApiVersion, :Body, :From, :Level, :Latitude, :Longitude, :MessageSid, :NumMedia, :NumSegments, :ParentAccountSid,
-                    :Payload, :PayloadType, :ProfileName, :ReferralNumMedia, :Sid, :SmsMessageSid, :SmsSid, :SmsStatus,
-                    :Timestamp, :To, :WaId, *media_params)
+      params.permit(:AccountSid, :ApiVersion, :Body, :From, :Level, :Latitude, :Longitude, :MessageSid, :NumMedia, :NumSegments,
+                    :ParentAccountSid, :Payload, :PayloadType, :ProfileName, :ReferralNumMedia, :Sid, :SmsMessageSid, :SmsSid,
+                    :SmsStatus, :Timestamp, :To, :WaId, *media_params)
     end
 
     def media_params
