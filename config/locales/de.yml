@@ -284,11 +284,11 @@ de:
     day_activity_linechart:
       heading: Deine besten Dialogtage
     user_management:
-      main_heading: Deine Redakteur:innen
+      main_heading: Dein 100eyes Team
       number_of_users_of_business_plan_used: "%{users_count} von %{allocated_users} Seats genutzt"
-      add_users_button: "Redakteur:in hinzufügen"
+      add_users_button: "Teammitglied hinzufügen"
     profile_header:
-      main_heading: 'Dein 100eyes Plan: "%{business_plan_name}"'
+      main_heading: 'Dein 100eyes Plan: %{business_plan_name}'
       sub_heading:
         contact_person: "Auftraggeber:in %{contact_person_name}, %{contact_person_email}"
         business_plan:
@@ -297,7 +297,7 @@ de:
       additional_info:
         channels: "Dialogkanäle: Signal, Threema, Telegram, E-Mail"
         security: "Sicherheit: Community abgesichert über Zwei-Faktor-Authentifizierung, Cloudflare"
-      upgrade_business_plan_button_html: "<span>Plan jetzt upgraden und <strong>%{upgrade_discount}%</strong> sparen.</span>"
+      upgrade_business_plan_button_html: "<span>Plan jetzt upgraden und <strong>%{upgrade_discount}%</strong> sparen</span>"
     business_plan_choices:
       legend: Upgrade Plan
       price_per_month: "%{price_per_month}/Monat"
@@ -315,7 +315,7 @@ de:
         label: Nachname
       email:
         label: E-Mail-Adresse
-      submit_button: "Redakteur:in hinzufügen"
+      submit_button: "Teammitglied hinzufügen"
       close_modal: Modal schließen
     pagination:
       first: Erste

@@ -40,7 +40,7 @@ RSpec.describe 'Profile' do
     expect(page).to have_current_path(profile_path)
 
     # header
-    expect(page).to have_content("Dein 100eyes Plan: \"#{current_plan.name}\"")
+    expect(page).to have_content("Dein 100eyes Plan: #{current_plan.name}")
     expect(page).to have_content("Auftraggeber:in #{organization.contact_person.name}, #{organization.contact_person.email}")
     expect(page).to have_content("Preis: #{number_to_currency(current_plan.price_per_month)}/Monat")
     expect(page).to have_content("Mindeslaufzeit: bis #{I18n.l(current_plan.valid_until, format: '%m/%Y')}")
@@ -54,12 +54,12 @@ RSpec.describe 'Profile' do
     expect(page).to have_no_css('.UpgradeBusinessPlanModal')
 
     # user management section
-    expect(page).to have_content('Deine Redakteur:innen')
+    expect(page).to have_content('Dein 100eyes Team')
     expect(page).to have_content("3 von #{current_plan.number_of_users} Seats genutzt")
     organization.users.each do |user|
       expect(page).to have_content(user.name)
     end
-    click_button 'Redakteur:in hinzufügen'
+    click_button 'Teammitglied hinzufügen'
     expect(page).to have_css('.CreateUserModal')
 
     click_button 'Modal schließen'
@@ -77,26 +77,26 @@ RSpec.describe 'Profile' do
 
     # Create users
 
-    click_button 'Redakteur:in hinzufügen'
+    click_button 'Teammitglied hinzufügen'
     expect(page).to have_css('.CreateUserModal')
 
     within('.CreateUserModal') do
       fill_in 'Vorname', with: 'New'
       fill_in 'Nachname', with: 'Editor'
       fill_in 'E-Mail-Adresse', with: email
-      click_button 'Redakteur:in hinzufügen'
+      click_button 'Teammitglied hinzufügen'
     end
 
     expect(page).to have_content('Email ist bereits vergeben')
 
-    click_button 'Redakteur:in hinzufügen'
+    click_button 'Teammitglied hinzufügen'
     expect(page).to have_css('.CreateUserModal')
 
     within('.CreateUserModal') do
       fill_in 'Vorname', with: 'New'
       fill_in 'Nachname', with: 'Editor'
       fill_in 'E-Mail-Adresse', with: 'new-editor@example.org'
-      click_button 'Redakteur:in hinzufügen'
+      click_button 'Teammitglied hinzufügen'
     end
 
     expect(page).to have_no_css('.CreateUserModal')

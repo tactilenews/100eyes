@@ -13,7 +13,7 @@ BUSINESS_PLANS = [
     valid_until: nil
   },
   {
-    name: 'NGO basic',
+    name: 'NGO Basic',
     price_per_month: 195,
     setup_cost: 0,
     hours_of_included_support: 0,
@@ -24,7 +24,7 @@ BUSINESS_PLANS = [
     valid_until: nil
   },
   {
-    name: 'Startup basic',
+    name: 'Startup Basic',
     price_per_month: 195,
     setup_cost: 995,
     hours_of_included_support: 0,
@@ -35,7 +35,7 @@ BUSINESS_PLANS = [
     valid_until: nil
   },
   {
-    name: 'Editorial basic',
+    name: 'Editorial Basic',
     price_per_month: 395,
     setup_cost: 2_195,
     hours_of_included_support: 0,
@@ -46,7 +46,7 @@ BUSINESS_PLANS = [
     valid_until: nil
   },
   {
-    name: 'Editorial pro',
+    name: 'Editorial Pro',
     price_per_month: 495,
     setup_cost: 2_195,
     hours_of_included_support: 5,
@@ -57,7 +57,7 @@ BUSINESS_PLANS = [
     valid_until: nil
   },
   {
-    name: 'Editorial enterprise',
+    name: 'Editorial Enterprise',
     price_per_month: 995,
     setup_cost: 2_195,
     hours_of_included_support: 10,
@@ -68,7 +68,7 @@ BUSINESS_PLANS = [
     valid_until: nil
   },
   {
-    name: 'Corporate basic',
+    name: 'Corporate Basic',
     price_per_month: 395,
     setup_cost: 2_195,
     hours_of_included_support: 0,
@@ -79,7 +79,7 @@ BUSINESS_PLANS = [
     valid_until: nil
   },
   {
-    name: 'Corporate pro',
+    name: 'Corporate Pro',
     price_per_month: 495,
     setup_cost: 2_195,
     hours_of_included_support: 5,
@@ -90,7 +90,7 @@ BUSINESS_PLANS = [
     valid_until: nil
   },
   {
-    name: 'Corporate enterprise',
+    name: 'Corporate Enterprise',
     price_per_month: 995,
     setup_cost: 2_195,
     hours_of_included_support: 10,
