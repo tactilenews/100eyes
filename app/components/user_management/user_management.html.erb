@@ -1,0 +1,24 @@
+<%= c 'section', **attrs.merge(styles: [:wide, :xlargeMarginTop, :noSpaceBetween], data: { controller: 'user-management' }) do %>
+  <%= c 'heading', style: :beta do %>
+    <%= t('.main_heading') %>
+  <% end %>
+  <p><%= t('.number_of_users_of_business_plan_used', users_count: organization.users.count, allocated_users: organization.business_plan.number_of_users) %>
+
+  <%= c 'flex', style: :firstBaseline do %>
+    <ul class="UserManagement-usersList">
+      <% organization.users.each do |user| %>
+        <li class="UserManagement-usersListItem">
+          <strong><%= user.name %></strong>
+        </li>
+      <% end %>
+    </ul>
+    <%= c 'button',
+      styles: [:secondary],
+      class: 'UserManagement-openModalButton',
+      data: { action: 'user-management#openModal' } do %>
+      <%= svg 'plus-sign' %>
+      <%= t('.add_users_button') %>
+    <% end%>
+  <% end %>
+  <%= c 'create_user_modal', data: { controller: 'modal', user_management_target: 'modal' } %>
+<% end %>

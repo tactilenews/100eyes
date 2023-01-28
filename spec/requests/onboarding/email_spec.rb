@@ -6,7 +6,7 @@ RSpec.describe 'Onboarding::Email', type: :request do
   let(:email) { 'zora@example.org' }
   let(:data_processing_consent) { true }
   let(:additional_consent) { true }
-  let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
+  let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding', organization_id: create(:organization).id }) }
   let(:params) { { jwt: jwt } }
 
   describe 'POST /onboarding/email' do

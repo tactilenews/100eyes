@@ -83,6 +83,8 @@ Rails.application.routes.draw do
       resources :requests, only: %i[index show destroy]
       resources :messages, only: %i[index show destroy]
       resources :delayed_jobs, only: %i[index show destroy]
+      resources :business_plans, only: %i[index show edit update]
+      resources :organizations, only: %i[index show edit update]
     end
   end
 
@@ -104,4 +106,8 @@ Rails.application.routes.draw do
     get 'day-and-time-requests'
     get 'day-requests-replies'
   end
+
+  get '/profile', to: 'profile#index'
+  post '/profile/user', to: 'profile#create_user'
+  put '/profile/upgrade_business_plan', to: 'profile#upgrade_business_plan'
 end

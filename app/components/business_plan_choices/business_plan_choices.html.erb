@@ -1,0 +1,38 @@
+<fieldset <%= attrs %>>
+  <legend class="BusinessPlanChoices-legend Heading--alpha"><%= t('.legend') %></legend>
+  <div class="BusinessPlanChoices-radioGroup">
+    <% choices.each do |choice| %>
+      <label
+        for="<%= choice[:value] %>"
+        class="<%= class_list(choice) %>"
+        aria-label="<%= choice[:name] %>"
+      >
+        <input
+          class="BusinessPlanChoices-radio"
+          name="<%= id %>"
+          id="<%= choice[:value] %>"
+          value="<%= choice[:value] %>"
+          type="radio"
+          <%= 'checked' if choice[:value] == current_plan.id %>
+          <%= 'disabled' if choice[:price] < current_plan.price_per_month %>
+        />
+        <div class="BusinessPlanChoices-name">
+          <%= c 'heading', style: :gamma do %>
+            <%= choice[:name] %>
+          <% end %>  
+        </div>
+        <div class="BusinessPlanChoices-features">
+          <p><%= choice[:features] %>
+        </div>
+        <div class="BusinessPlanChoices-price">
+          <% if choice[:value] > current_plan.id %>
+            <p class="BusinessPlanChoices-priceStrikethrough"><%= t('.price_per_month', price_per_month: number_to_currency(choice[:price])) %></p>
+            <strong><%= t('.price_per_month', price_per_month: price_with_discount(choice[:price])) %>*</strong>
+          <% else %>
+            <strong><%= t('.price_per_month', price_per_month: number_to_currency(choice[:price])) %></strong>
+          <% end %>
+        </div>
+      </label>
+    <% end %>
+  </div>
+</fieldset>

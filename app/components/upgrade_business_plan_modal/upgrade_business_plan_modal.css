@@ -1,0 +1,37 @@
+.UpgradeBusinessPlanModal {
+  max-width: var(--grid-max-width-l);
+  display: flex;
+  flex-direction: column;
+  max-height: 100vh;
+  overflow: scroll;
+}
+
+.UpgradeBusinessPlanModal-closeModalButton {
+  align-self: flex-end;
+}
+
+.UpgradeBusinessPlanModal form {
+  display: flex;
+  flex-direction: column;
+}
+
+.UpgradeBusinessPlanModal-discountExplained {
+  flex-basis: 60%;
+}
+
+.UpgradeBusinessPlanModal-submitFormButton {
+  width: unset;
+  flex-shrink: 0;
+}
+
+.UpgradeBusinessPlanModal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@media screen and (min-width: 56rem) {
+  .UpgradeBusinessPlanModal {
+    max-width: var(--grid-max-width-l);
+  }
+}
