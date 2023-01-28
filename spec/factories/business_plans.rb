@@ -14,7 +14,7 @@ FactoryBot.define do
     valid_until { Time.current + 6.months }
 
     trait :ngo_basic do
-      name { 'NGO basic' }
+      name { 'NGO Basic' }
       price_per_month { 195 }
       setup_cost { 0 }
       hours_of_included_support { 0 }
@@ -26,7 +26,7 @@ FactoryBot.define do
     end
 
     trait :startup_basic do
-      name { 'Startup basic' }
+      name { 'Startup Basic' }
       price_per_month { 195 }
       setup_cost { 0 }
       hours_of_included_support { 0 }
@@ -38,7 +38,7 @@ FactoryBot.define do
     end
 
     trait :editorial_basic do
-      name { 'Editorial basic' }
+      name { 'Editorial Basic' }
       price_per_month { 395 }
       setup_cost { 2_195 }
       hours_of_included_support { 0 }
@@ -50,7 +50,7 @@ FactoryBot.define do
     end
 
     trait :editorial_pro do
-      name { 'Editorial pro' }
+      name { 'Editorial Pro' }
       price_per_month { 495 }
       setup_cost { 2_195 }
       hours_of_included_support { 5 }
@@ -62,7 +62,7 @@ FactoryBot.define do
     end
 
     trait :editorial_enterprise do
-      name { 'Editorial enterprise' }
+      name { 'Editorial Enterprise' }
       price_per_month { 995 }
       setup_cost { 2_195 }
       hours_of_included_support { 10 }
@@ -74,7 +74,7 @@ FactoryBot.define do
     end
 
     trait :corporate_basic do
-      name { 'Corporate basic' }
+      name { 'Corporate Basic' }
       price_per_month { 395 }
       setup_cost { 2_195 }
       hours_of_included_support { 0 }
@@ -86,7 +86,7 @@ FactoryBot.define do
     end
 
     trait :corporate_pro do
-      name { 'Corporate pro' }
+      name { 'Corporate Pro' }
       price_per_month { 495 }
       setup_cost { 2_195 }
       hours_of_included_support { 5 }
@@ -98,7 +98,7 @@ FactoryBot.define do
     end
 
     trait :corporate_enterprise do
-      name { 'Corporate enterprise' }
+      name { 'Corporate Enterprise' }
       price_per_month { 995 }
       setup_cost { 2_195 }
       hours_of_included_support { 10 }

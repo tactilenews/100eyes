@@ -8,7 +8,7 @@ FactoryBot.define do
     transient do
       users_count { 0 }
       contributors_count { 0 }
-      business_plan_name { 'Editorial basic' }
+      business_plan_name { 'Editorial Basic' }
     end
 
     users do

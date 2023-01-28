@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Organization do
-  let(:organization) { create(:organization, business_plan_name: 'Editorial basic') }
+  let(:organization) { create(:organization, business_plan_name: 'Editorial Basic') }
 
   describe '#notify_admin' do
     subject { organization.update(params) }
