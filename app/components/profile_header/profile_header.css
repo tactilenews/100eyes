@@ -1,0 +1,26 @@
+.ProfileHeader .PageHeader-flexbox {
+  gap: 0;
+}
+
+.ProfileHeader-additionalInfo {
+  flex-basis: 50%;
+}
+
+.ProfileHeader-openModalButton {
+  display: flex;
+}
+
+.ProfileHeader-openModalButton > svg {
+  margin-right: var(--spacing-unit-xs);
+  width: var(--spacing-unit);
+  color: var(--color-primary);
+}
+
+.Flex > .ProfileHeader-upgradeBusinessPlanButton {
+  flex-shrink: 0;
+  padding: var(--spacing-unit-s);
+  margin-top: 0;
+  border: 0;
+  background-color: inherit;
+  font-size: calc(1.25 * var(--font-size));
+}

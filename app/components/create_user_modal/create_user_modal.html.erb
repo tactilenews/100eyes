@@ -1,0 +1,28 @@
+<%= c 'modal', **attrs do %>
+    <%= form_with(url: profile_user_path) do %>
+      <%= c 'button',
+        styles: [:secondary, :circular],
+        type: 'button',
+        title: t('.close_modal'),
+        data: { action: 'user-management#closeModal' } do %>
+        <%= c 'icon', icon: 'i-remove', style: :inline %>
+      <% end %>
+      <%= c 'base_field', id: 'user[first_name]', label: t('.first_name.label') do %>
+        <%= c 'input', id: 'user[first_name]', required: true %>
+      <% end %>
+
+      <%= c 'base_field', id: 'user[last_name]', label: t('.last_name.label') do %>
+        <%= c 'input', id: 'user[last_name]', required: true %>
+      <% end %>
+
+      <%= c 'base_field', id: 'user[email]', label: t('.email.label')  do %>
+        <%= c 'input', id: 'user[email]', required: true, type: :email %>
+      <% end %>
+
+      <%= c 'button',
+        type: 'submit',
+        label: t('.submit_button'),
+        styles: [:primary, :block]
+      %>
+    <% end %>
+  <% end %>

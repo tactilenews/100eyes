@@ -192,5 +192,101 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
         )
       end
     end
+
+    describe '::send_business_plan_upgraded_message!' do
+      subject { described_class.send_business_plan_upgraded_message!(admin, organization) }
+
+      context 'no admin' do
+        let(:admin) { nil }
+        let(:organization) { build(:organization) }
+
+        it 'does not enqueue a Mailer' do
+          expect { subject }.not_to have_enqueued_job
+        end
+      end
+
+      context 'no organization' do
+        let(:admin) { build(:user, admin: true) }
+        let(:organization) { nil }
+
+        it 'does not enqueue a Mailer' do
+          expect { subject }.not_to have_enqueued_job
+        end
+      end
+
+      context 'user, not admin' do
+        let(:admin) { build(:user) }
+        let(:organization) { build(:organization) }
+
+        it 'does not enqueue a Mailer' do
+          expect { subject }.not_to have_enqueued_job
+        end
+      end
+
+      context 'with an admin and organization' do
+        let(:admin) { create(:user, admin: true) }
+        let(:organization) { create(:organization) }
+
+        it 'enqueues a Mailer' do
+          expect { subject }.to have_enqueued_job.on_queue('default').with(
+            'PostmarkAdapter::Outbound',
+            'business_plan_upgraded_email',
+            'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
+            {
+              params: { admin: admin, organization: organization, price_per_month_with_discount: kind_of(String) },
+              args: []
+            }
+          )
+        end
+      end
+    end
+
+    describe '::send_user_count_exceeds_plan_limit_message!' do
+      subject { described_class.send_user_count_exceeds_plan_limit_message!(admin, organization) }
+
+      context 'no admin' do
+        let(:admin) { nil }
+        let(:organization) { build(:organization) }
+
+        it 'does not enqueue a Mailer' do
+          expect { subject }.not_to have_enqueued_job
+        end
+      end
+
+      context 'no organization' do
+        let(:admin) { build(:user, admin: true) }
+        let(:organization) { nil }
+
+        it 'does not enqueue a Mailer' do
+          expect { subject }.not_to have_enqueued_job
+        end
+      end
+
+      context 'user, not admin' do
+        let(:admin) { build(:user) }
+        let(:organization) { build(:organization) }
+
+        it 'does not enqueue a Mailer' do
+          expect { subject }.not_to have_enqueued_job
+        end
+      end
+
+      context 'with an admin and organization' do
+        let(:admin) { create(:user, admin: true) }
+        let(:organization) { create(:organization) }
+
+        it 'enqueues a Mailer' do
+          expect { subject }.to have_enqueued_job.on_queue('default').with(
+            'PostmarkAdapter::Outbound',
+            'user_count_exceeds_plan_limit_email',
+            'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
+            {
+              params: { admin: admin, organization: organization },
+              args: []
+            }
+          )
+        end
+      end
+    end
   end
 end
