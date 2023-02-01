@@ -3,6 +3,7 @@
 module WhatsApp
   class WebhookController < ApplicationController
     skip_before_action :require_login, :verify_authenticity_token
+    UNSUCCESSFUL_DELIVERY = %w[undelivered failed].freeze
 
     def message
       adapter = WhatsAppAdapter::Inbound.new
@@ -38,12 +39,25 @@ module WhatsApp
       ErrorNotifier.report(exception, context: { error_sid: webhook_params['Sid'], message_sid: parameters['messageSid'] })
     end
 
+    def status
+      return unless status_params['MessageStatus'].in?(UNSUCCESSFUL_DELIVERY)
+
+      exception = WhatsAppAdapter::MessageDeliveryUnsuccessfulError.new(status: status_params['MessageStatus'],
+                                                                        whats_app_phone_number: status_params['To'].split('whatsapp:').last)
+      ErrorNotifier.report(exception, context: { message_sid: status_params['MessageSid'] })
+    end
+
     private
 
     def webhook_params
       params.permit(:AccountSid, :ApiVersion, :Body, :From, :Level, :Latitude, :Longitude, :MessageSid, :NumMedia, :NumSegments,
                     :ParentAccountSid, :Payload, :PayloadType, :ProfileName, :ReferralNumMedia, :Sid, :SmsMessageSid, :SmsSid,
                     :SmsStatus, :Timestamp, :To, :WaId, *media_params)
+    end
+
+    def status_params
+      params.permit(:AccountSid, :ApiVersion, :ChannelInstallSid, :ChannelPrefix, :ChannelToAddress, :ErrorCode, :EventType,
+                    :From, :MessageSid, :MessageStatus, :SmsSid, :SmsStatus, :To)
     end
 
     def media_params
