@@ -360,8 +360,8 @@ de:
     whats_app:
       welcome_message: "Vielen Dank für Ihre Anmeldung bei %{project_name}. Unsere Dialog-Recherche startet bald. Wir melden uns dann bei Ihnen."
       request_template:
-        new_request_morning_1: "Guten Morgen %{first_name}, wir haben eine neue Frage zum Thema %{request_title}. Möchten Sie darauf antworten?"
-        new_request_morning_2: "Guten Morgen %{first_name}, wir haben eine neue Frage zum Thema %{request_title}. Möchten Sie jetzt antworten?"
+        new_request_morning_1: "Guten Morgen %{first_name},  zum Thema %{request_title} haben wir eine neue Frage. Möchten Sie darauf antworten?"
+        new_request_morning_2: "Guten Morgen %{first_name},  zum Thema %{request_title} haben wir eine neue Frage. Möchten Sie darauf antworten?"
         new_request_morning_3: "Guten Morgen %{first_name},  zum Thema %{request_title} haben wir eine neue Frage. Möchten Sie darauf antworten?"
         new_request_day_1: "Guten Tag %{first_name}, wir haben eine neue Frage zum Thema %{request_title}. Möchten Sie darauf antworten?"
         new_request_day_2: "Hallo %{first_name}, ich möchte gern mehr zum Thema %{request_title} erfahren. Möchten Sie auf die heutige Frage antworten?"

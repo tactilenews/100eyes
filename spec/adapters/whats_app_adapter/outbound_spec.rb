@@ -83,13 +83,25 @@ RSpec.describe WhatsAppAdapter::Outbound do
         let(:file) { create(:file) }
         before { message.update(files: [file]) }
 
-        it 'enqueues a File job with file, contributor, text' do
-          expect { subject.call }.to(have_enqueued_job(described_class::File).on_queue('default').with do |params|
-            expect(params[:file]).to eq(message.files.first)
-            expect(params[:recipient]).to eq(contributor)
-            expect(params[:text]).to include(contributor.first_name)
-            expect(params[:text]).to include(message.request.title)
-          end)
+        context 'contributor has not sent a message within 24 hours' do
+          it 'enqueues the Text job with WhatsApp template' do
+            expect { subject.call }.to(have_enqueued_job(described_class::Text).on_queue('default').with do |params|
+              expect(params[:recipient]).to eq(contributor)
+              expect(params[:text]).to include(contributor.first_name)
+              expect(params[:text]).to include(message.request.title)
+            end)
+          end
+        end
+
+        context 'contributor has sent a reply within 24 hours' do
+          before { create(:message, sender: contributor) }
+          it 'enqueues a File job with file, contributor, text' do
+            expect { subject.call }.to(have_enqueued_job(described_class::File).on_queue('default').with do |params|
+              expect(params[:file]).to eq(message.files.first)
+              expect(params[:recipient]).to eq(contributor)
+              expect(params[:text]).to eq(message.text)
+            end)
+          end
         end
       end
     end

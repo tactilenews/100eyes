@@ -6,19 +6,19 @@ module WhatsAppAdapter
       recipient = message&.recipient
       return unless contributor_can_receive_messages?(recipient)
 
-      text = if send_message_template?(recipient)
-               recipient.update(whats_app_template_message_sent_at: Time.current)
-               I18n.t("adapter.whats_app.request_template.new_request_#{time_of_day}_#{rand(1..3)}", first_name: recipient.first_name,
+      if send_message_template?(recipient)
+        recipient.update(whats_app_template_message_sent_at: Time.current)
+
+        text = I18n.t("adapter.whats_app.request_template.new_request_#{time_of_day}_#{rand(1..3)}", first_name: recipient.first_name,
                                                                                                      request_title: message.request.title)
-             else
-               message.text
-             end
+        send_text(recipient, text) and return
+      end
       files = message.files
 
       if files.present?
-        send_files(files, recipient, text)
+        send_files(files, recipient, message.text)
       else
-        send_text(recipient, text)
+        send_text(recipient, message.text)
       end
     end
 
