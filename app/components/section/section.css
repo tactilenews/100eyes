@@ -31,6 +31,10 @@
   margin-top: var(--spacing-unit-s);
 }
 
+.Section--noSpaceBetween > * + * {
+  margin-top: 0;
+}
+
 .Section--noMarginTop {
   margin-top: 0;
 }
@@ -46,4 +50,8 @@
 
 .Section--noMarginBottom {
   margin-bottom: 0;
+}
+
+.Section--xlargeMarginTop {
+  margin-top: var(--spacing-unit-xl);
 }

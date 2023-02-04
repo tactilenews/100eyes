@@ -1,0 +1,36 @@
+<%= c 'page_header', **attrs.merge(styles: [:inheritBackgroundColor, :flexboxColumn, :wide, :xlargePaddingTop], data: { controller: 'profile-header' }) do %>
+  <%= c 'heading' do %>
+    <%= t('.main_heading', business_plan_name: organization.business_plan.name) %>
+  <% end %>
+
+  <%= c 'heading', style: :gamma do %>
+    <%= t('.sub_heading.contact_person', contact_person_name: organization.contact_person.name, contact_person_email: organization.contact_person.email) %>
+  <% end %>
+
+  <%= c 'heading', style: :gamma do %>
+    <%= t('.sub_heading.business_plan.price_per_month', price_per_month: price_per_month) %>
+  <% end %>
+
+  <% if organization.business_plan.valid_until.present? %>
+    <%= c 'heading', style: :gamma do %>
+      <%= t('.sub_heading.business_plan.valid_until', valid_until: I18n.l(organization.business_plan.valid_until, format: '%m/%Y')) %>
+    <% end %>
+  <% end %>
+
+  <%= c 'flex' do %>
+    <div class="ProfileHeader-additionalInfo">
+      <p><%= t('.additional_info.channels') %></p>
+      <p><%= t('.additional_info.security') %></p>
+    </div>
+    <% if upgrade_available? %>
+      <%= c 'button',
+        class: 'ProfileHeader-openModalButton',
+        styles: [:secondary],
+        data: { action: 'profile-header#openModal' } do %>
+        <%= svg 'plus-sign' %>
+        <%= t('.upgrade_business_plan_button_html', upgrade_discount: organization.upgrade_discount) %>
+      <% end%>
+    <% end %>
+      <%= c 'upgrade_business_plan_modal', organization: organization, business_plans: business_plans, data: { controller: 'modal', profile_header_target: 'modal' } %>
+    <% end %>
+<% end %>

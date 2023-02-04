@@ -17,8 +17,6 @@
             <%= page %>
           <% end %>
         </li>
-      <% elsif !page.was_truncated? -%>
-        <li class="Pagination-listItem Pagination-gap"><%= t('.truncate') %></li>
       <% end -%>
     <% end -%>
     <li class="Pagination-listItem <%= current_page.last? ? 'Pagination-listItem--disabled' : '' %>">

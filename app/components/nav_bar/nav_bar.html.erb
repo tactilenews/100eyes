@@ -1,4 +1,4 @@
-<header class="NavBar">
+<header <%= attrs %>>
   <nav class="NavBar-nav">
     <ul class="NavBar-list">
       <li class="NavBar-item NavBar-logo">
@@ -28,6 +28,11 @@
           <% end %>
         </li>
       <% end %>
+      <li class="NavBar-item NavBar-profileLink">
+        <%= link_to profile_path, aria: { label: t('.profile_path') } do %>
+          <%= svg 'profile-fig' %>
+        <% end %>
+      </li>
       <li class="NavBar-item NavBar-settings" >
         <%= link_to settings_path do %>
           <span class="visually-hidden"><%= t('setting.setting', count: :many) %></span>

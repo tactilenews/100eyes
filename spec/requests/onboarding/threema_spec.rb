@@ -6,7 +6,7 @@ RSpec.describe 'Onboarding::Threema', type: :request do
   let(:data_processing_consent) { true }
   let(:contributor) { create(:contributor) }
   let(:additional_consent) { true }
-  let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
+  let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding', organization_id: create(:organization).id }) }
   let(:params) { { jwt: jwt } }
   let(:threema) { instance_double(Threema) }
   let(:threema_lookup_double) { instance_double(Threema::Lookup) }
