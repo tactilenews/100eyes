@@ -115,12 +115,19 @@ module TelegramAdapter
     end
 
     def initialize_files(telegram_message)
-      return [] unless telegram_message[:voice]
+      return [] unless telegram_message[:voice] || telegram_message[:video]
 
+      files = []
+      files << initialize_file(telegram_message[:voice]) if telegram_message[:voice]
+      files << initialize_file(telegram_message[:video]) if telegram_message[:video]
+      files
+    end
+
+    def initialize_file(telegram_file)
       file = Message::File.new
-      remote_file_location = file_url(telegram_message[:voice])
+      remote_file_location = file_url(telegram_file)
       file.attachment.attach(io: remote_file_location.open, filename: File.basename(remote_file_location.path))
-      [file]
+      file
     end
 
     def file_url(telegram_file)
