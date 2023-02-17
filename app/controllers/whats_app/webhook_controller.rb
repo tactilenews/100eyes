@@ -28,7 +28,7 @@ module WhatsApp
     end
 
     def errors
-      return unless webhook_params['Level'] == 'ERROR' && JSON.parse(params['Payload'])['error_code'].to_i == 21_617
+      return unless webhook_params['Level'] == 'ERROR' && JSON.parse(webhook_params['Payload'])['error_code'].to_i == 21_617
 
       payload = JSON.parse(webhook_params['Payload'])
       more_info = payload['more_info']
@@ -50,9 +50,9 @@ module WhatsApp
     private
 
     def webhook_params
-      params.permit(:AccountSid, :ApiVersion, :Body, :From, :Level, :Latitude, :Longitude, :MessageSid, :NumMedia, :NumSegments,
-                    :ParentAccountSid, :Payload, :PayloadType, :ProfileName, :ReferralNumMedia, :Sid, :SmsMessageSid, :SmsSid,
-                    :SmsStatus, :Timestamp, :To, :WaId, *media_params)
+      params.permit(:AccountSid, :ApiVersion, :Body, :ButtonText, :ButtonPayload, :From, :Level, :Latitude, :Longitude, :MessageSid,
+                    :NumMedia, :NumSegments, :ParentAccountSid, :Payload, :PayloadType, :ProfileName, :ReferralNumMedia, :Sid,
+                    :SmsMessageSid, :SmsSid, :SmsStatus, :Timestamp, :To, :WaId, *media_params)
     end
 
     def status_params
