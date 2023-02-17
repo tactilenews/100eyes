@@ -28,16 +28,12 @@ module TelegramAdapter
 
     def consume(telegram_message)
       telegram_message = telegram_message.with_indifferent_access
-      @text = telegram_message[:text] || telegram_message[:caption] || ''
+      @text = telegram_message[:text] || telegram_message[:caption]
       @sender = initialize_sender(telegram_message)
       return unless @sender
 
       @sender.avatar_url = avatar_url(@sender) unless @sender.avatar.attached?
       @message = initialize_message(telegram_message)
-      if telegram_message.keys.any? { |key| UNKNOWN_CONTENT_KEYS.include?(key) }
-        @message.unknown_content = true
-        trigger(UNKNOWN_CONTENT)
-      end
 
       @photos = initialize_photos(telegram_message)
       @photos.each do |photo|
@@ -45,7 +41,10 @@ module TelegramAdapter
       end
 
       files = initialize_files(telegram_message)
-      @message.files = files
+      @message.files += files
+
+      has_content = @message.text || @message.files.any? || @message.unknown_content
+      return unless has_content
 
       yield(@message) if block_given?
     end
@@ -99,6 +98,12 @@ module TelegramAdapter
         filename: 'telegram_api.json',
         content_type: 'application/json'
       )
+
+      if telegram_message.keys.any? { |key| UNKNOWN_CONTENT_KEYS.include?(key) }
+        @message.unknown_content = true
+        trigger(UNKNOWN_CONTENT)
+      end
+
       message
     end
 
@@ -120,20 +125,29 @@ module TelegramAdapter
       files = []
       files << initialize_file(telegram_message[:voice]) if telegram_message[:voice]
       files << initialize_file(telegram_message[:video]) if telegram_message[:video]
-      files
+      files.compact
     end
 
     def initialize_file(telegram_file)
       file = Message::File.new
       remote_file_location = file_url(telegram_file)
+      return unless remote_file_location
+
       file.attachment.attach(io: remote_file_location.open, filename: File.basename(remote_file_location.path))
       file
     end
 
     def file_url(telegram_file)
-      file = Telegram.bot.get_file(file_id: telegram_file[:file_id]).with_indifferent_access
-      file_path = file.dig(:result, :file_path)
-      URI("https://api.telegram.org/file/bot#{Telegram.bot.token}/#{file_path}")
+      file_size = telegram_file[:file_size]
+      if file_size > 20_000_000
+        exception = TelegramAdapter::FileTooLargeError.new(contributor_name: sender.name)
+        ErrorNotifier.report(exception)
+        nil
+      else
+        file = Telegram.bot.get_file(file_id: telegram_file[:file_id]).with_indifferent_access
+        file_path = file.dig(:result, :file_path)
+        URI("https://api.telegram.org/file/bot#{Telegram.bot.token}/#{file_path}")
+      end
     end
   end
 end

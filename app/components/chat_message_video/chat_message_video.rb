@@ -2,12 +2,12 @@
 
 module ChatMessageVideo
   class ChatMessageVideo < ApplicationComponent
-    def initialize(video:)
+    def initialize(videos:)
       super
 
-      @video = video
+      @videos = videos
     end
 
-    attr_reader :video
+    attr_reader :videos
   end
 end

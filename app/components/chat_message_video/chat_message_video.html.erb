@@ -1,4 +1,8 @@
-<video <%= attrs.merge(controls: true) %>>
-  <source src="<%= rails_blob_url(video) %>" type="video/mp4">
-    <%= t '.no_video_support' %>
-</video>
+<div class="ChatMessagePhotos">
+  <% videos.each do |video| %>
+    <video <%= attrs.merge(controls: true) %>>
+      <source src="<%= rails_blob_url(video.attachment) %>" type="video/mp4">
+        <%= t '.no_video_support' %>
+    </video>
+  <% end %>
+</div>

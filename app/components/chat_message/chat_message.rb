@@ -47,10 +47,6 @@ module ChatMessage
       files.first unless files.empty?
     end
 
-    def video
-      files.first.attachment.blob unless files.empty?
-    end
-
     def creator_name
       message.creator_name.presence || I18n.t('components.chat_message.anonymous_creator')
     end
