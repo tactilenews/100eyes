@@ -106,4 +106,32 @@ RSpec.describe WhatsAppAdapter::Outbound do
       end
     end
   end
+
+  describe '::freeform_message_permitted?(recipient)' do
+    subject { described_class.freeform_message_permitted?(contributor) }
+
+    describe 'template message' do
+      context  'contributor has responded' do
+        before { contributor.update(whats_app_message_template_responded_at: 1.second.ago) }
+
+        it { is_expected.to eq(true) }
+      end
+
+      context 'contributor has not responded' do
+        it { is_expected.to eq(false) }
+      end
+    end
+
+    describe 'message from contributor within 24 hours' do
+      context 'has been received' do
+        before { create(:message, sender: contributor) }
+
+        it { is_expected.to eq(true) }
+      end
+
+      context 'has not been received' do
+        it { is_expected.to eq(false) }
+      end
+    end
+  end
 end
