@@ -31,10 +31,6 @@ module ChatMessage
       files.first.attachment.blob.image? unless files.empty?
     end
 
-    def video?
-      files.first.attachment.blob.video? unless files.empty?
-    end
-
     def photos
       message.photos
     end
@@ -45,10 +41,6 @@ module ChatMessage
 
     def audio
       files.first unless files.empty?
-    end
-
-    def video
-      files.first.attachment.blob unless files.empty?
     end
 
     def creator_name

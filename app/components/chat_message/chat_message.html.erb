@@ -85,13 +85,6 @@
       </header>
     <% end %>
 
-    <% if video? %>
-      <video width="320" height="240" controls>
-        <source src="<%= rails_blob_url(video) %>" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-    <% end %>
-
     <footer class="ChatMessage-footer">
       <p class="ChatMessage-senderNameMessageUpdatedAt">
         <%= t('.sent_by_x_at', name: message.sender ? message.sender.first_name : Setting.project_name, date: date_time(message.updated_at)).html_safe %>
