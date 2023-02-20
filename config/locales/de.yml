@@ -153,7 +153,7 @@ de:
     request_password_reset_confirmation:
       heading: Wir haben dir eine E-Mail gesendet.
       text: Klicke auf den Link in der E-Mail, um ein neues Passwort zu vergeben.
-      no_email: <strong>Keine active_E-Mail erhalten?</strong> Warte noch fünf Minuten ab – der Versand dauert manchmal etwas länger.
+      no_email: <strong>Keine E-Mail erhalten?</strong> Warte noch fünf Minuten ab – der Versand dauert manchmal etwas länger.
     password_reset_form:
       heading: Passwort ändern
       password:
