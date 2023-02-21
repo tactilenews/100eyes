@@ -23,21 +23,21 @@ module WhatsApp
         WhatsAppAdapter::Outbound.send_unknown_content_message!(contributor)
       end
 
-      whats_app_webhook_params = webhook_params.to_h.transform_keys(&:underscore)
-      adapter.consume(whats_app_webhook_params) { |message| message.contributor.reply(adapter) }
+      whats_app_message_params = message_params.to_h.transform_keys(&:underscore)
+      adapter.consume(whats_app_message_params) { |message| message.contributor.reply(adapter) }
     end
 
     def errors
-      return unless webhook_params['Level'] == 'ERROR'
+      return unless error_params['Level'] == 'ERROR'
 
-      payload = JSON.parse(webhook_params['Payload'])
+      payload = JSON.parse(error_params['Payload'])
       parameters = payload.with_indifferent_access.dig(:webhook, :request, :parameters)
       exception = WhatsAppAdapter::TwilioError.new(error_code: payload['error_code'])
       ErrorNotifier.report(exception,
                            context: {
                              channel_to_address: parameters&.dig(:channelToAddress),
                              more_info: payload['more_info'],
-                             error_sid: webhook_params['Sid'],
+                             error_sid: error_params['Sid'],
                              message_sid: parameters&.dig(:messageSid)
                            })
     end
@@ -52,11 +52,14 @@ module WhatsApp
 
     private
 
-    def webhook_params
-      params.permit(:AccountSid, :ApiVersion, :Body, :ButtonText, :ButtonPayload, :From, :Level, :Latitude, :Longitude,
-                    :MediaContentType0, :MediaUrl0, :MessageSid, :NumMedia, :NumSegments, :ParentAccountSid, :Payload,
-                    :PayloadType, :ProfileName, :ReferralNumMedia, :Sid, :SmsMessageSid, :SmsSid, :SmsStatus, :Timestamp,
-                    :To, :WaId)
+    def message_params
+      params.permit(:AccountSid, :ApiVersion, :Body, :ButtonText, :ButtonPayload, :From, :Latitude, :Longitude,
+                    :MediaContentType0, :MediaUrl0, :MessageSid, :NumMedia, :NumSegments, :ProfileName,
+                    :ReferralNumMedia, :SmsMessageSid, :SmsSid, :SmsStatus, :To, :WaId)
+    end
+
+    def error_params
+      params.permit(:AccountSid, :Level, :ParentAccountSid, :Payload, :PayloadType, :Sid, :Timestamp)
     end
 
     def status_params

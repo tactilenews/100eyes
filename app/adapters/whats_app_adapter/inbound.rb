@@ -79,11 +79,13 @@ module WhatsAppAdapter
       trigger(UNKNOWN_CONTENT, sender)
     end
 
-    def initialize_file(attachment)
+    def initialize_file(whats_app_message)
+      return [] unless whats_app_message[:media_content_type0] && whats_app_message[:media_url0]
+
       file = Message::File.new
 
-      content_type = attachment[:media_content_type0]
-      media_url = attachment[:media_url0]
+      content_type = whats_app_message[:media_content_type0]
+      media_url = whats_app_message[:media_url0]
       filename = media_url.split('/Media/').last
 
       file.attachment.attach(
