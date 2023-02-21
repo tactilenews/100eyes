@@ -30,7 +30,7 @@ module WhatsAppAdapter
 
       @unknown_content = initialize_unknown_content(whats_app_message)
 
-      files = initialize_files(whats_app_message)
+      files = initialize_file(whats_app_message)
       @message.files = files
 
       has_content = @message.text || @message.files.any? || @message.unknown_content
@@ -79,32 +79,21 @@ module WhatsAppAdapter
       trigger(UNKNOWN_CONTENT, sender)
     end
 
-    def initialize_files(whats_app_message)
-      indeces_of_media = whats_app_message[:num_media].to_i
-      attachments = indeces_of_media.times.collect do |index|
-        { content_type: whats_app_message["media_content_type#{index}".to_sym], media_url: whats_app_message["media_url#{index}".to_sym] }
-      end
-
-      return [] unless attachments&.any?
-
-      attachments = attachments.select { |attachment| SUPPORTED_ATTACHMENT_TYPES.include?(attachment[:content_type]) }
-      attachments.map { |attachment| initialize_file(attachment) }
-    end
-
     def initialize_file(attachment)
       file = Message::File.new
 
-      content_type = attachment[:content_type]
-      filename = attachment[:media_url].split('/Media/').last
+      content_type = attachment[:media_content_type0]
+      media_url = attachment[:media_url0]
+      filename = media_url.split('/Media/').last
 
       file.attachment.attach(
-        io: URI.parse(attachment[:media_url]).open,
+        io: URI.parse(media_url).open,
         filename: filename,
         content_type: content_type,
         identify: false
       )
 
-      file
+      [file]
     end
 
     def unsupported_content?(whats_app_message)

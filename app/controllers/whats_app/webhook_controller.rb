@@ -53,21 +53,15 @@ module WhatsApp
     private
 
     def webhook_params
-      params.permit(:AccountSid, :ApiVersion, :Body, :ButtonText, :ButtonPayload, :From, :Level, :Latitude, :Longitude, :MessageSid,
-                    :NumMedia, :NumSegments, :ParentAccountSid, :Payload, :PayloadType, :ProfileName, :ReferralNumMedia, :Sid,
-                    :SmsMessageSid, :SmsSid, :SmsStatus, :Timestamp, :To, :WaId, *media_params)
+      params.permit(:AccountSid, :ApiVersion, :Body, :ButtonText, :ButtonPayload, :From, :Level, :Latitude, :Longitude,
+                    :MediaContentType0, :MediaUrl0, :MessageSid, :NumMedia, :NumSegments, :ParentAccountSid, :Payload,
+                    :PayloadType, :ProfileName, :ReferralNumMedia, :Sid, :SmsMessageSid, :SmsSid, :SmsStatus, :Timestamp,
+                    :To, :WaId)
     end
 
     def status_params
       params.permit(:AccountSid, :ApiVersion, :ChannelInstallSid, :ChannelPrefix, :ChannelToAddress, :ErrorCode, :EventType,
                     :From, :MessageSid, :MessageStatus, :SmsSid, :SmsStatus, :To)
-    end
-
-    def media_params
-      indeces_of_media = params[:NumMedia].to_i
-      indeces_of_media.times.collect do |index|
-        ["MediaContentType#{index}".to_sym, "MediaUrl#{index}".to_sym]
-      end.flatten
     end
   end
 end
