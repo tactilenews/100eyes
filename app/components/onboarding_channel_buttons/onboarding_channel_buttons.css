@@ -17,28 +17,23 @@
 
 @media screen and (min-width: 640px) {
   .OnboardingChannelButtons {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .OnboardingChannelButtons > .Button:last-child:nth-child(3n - 1) {
+    grid-column-end: -2;
+  }
+
+  .OnboardingChannelButtons > .Button:nth-last-child(2):nth-child(3n + 1) {
+    grid-column-end: 4;
+  }
+
+  .OnboardingChannelButtons:not(.OnboardingChannelButtons--twoColumn)
+    > .Button {
+    grid-column: span 2;
   }
 
   .OnboardingChannelButtons--twoColumn {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  .OnboardingChannelButtons--threeColumn {
-    grid-template-columns: repeat(6, 1fr);
-  }
-
-  .OnboardingChannelButtons--threeColumn > .Button {
-    grid-column: span 2;
-  }
-
-  .OnboardingChannelButtons--threeColumn
-    > .Button:last-child:nth-child(3n - 1) {
-    grid-column-end: -2;
-  }
-
-  .OnboardingChannelButtons--threeColumn
-    > .Button:nth-last-child(2):nth-child(3n + 1) {
-    grid-column-end: 4;
   }
 }

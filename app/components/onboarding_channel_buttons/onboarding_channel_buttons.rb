@@ -13,10 +13,9 @@ module OnboardingChannelButtons
     attr_reader :channels
 
     def styles
-      return super if (channels.length % 3).zero?
       return super + [:twoColumn] if channels.length.even?
 
-      super + [:threeColumn]
+      super
     end
   end
 end
