@@ -38,7 +38,7 @@ class User < ApplicationRecord
   end
 
   def reset_otp
-    return unless saved_change_to_otp_enabled?
+    return unless saved_change_to_otp_enabled? && otp_enabled_was == false
 
     update(otp_secret_key: User.otp_random_secret)
   end
