@@ -19,8 +19,8 @@ module WhatsApp
         WhatsAppAdapter::Outbound.send!(message)
       end
 
-      adapter.on(WhatsAppAdapter::UNKNOWN_CONTENT) do |contributor|
-        WhatsAppAdapter::Outbound.send_unknown_content_message!(contributor)
+      adapter.on(WhatsAppAdapter::UNSUPPORTED_CONTENT) do |contributor|
+        WhatsAppAdapter::Outbound.send_unsupported_content_message!(contributor)
       end
 
       whats_app_message_params = message_params.to_h.transform_keys(&:underscore)

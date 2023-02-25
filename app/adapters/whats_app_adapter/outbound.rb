@@ -21,11 +21,11 @@ module WhatsAppAdapter
         WhatsAppAdapter::Outbound::Text.perform_later(recipient: contributor, text: welcome_message)
       end
 
-      def send_unknown_content_message!(contributor)
+      def send_unsupported_content_message!(contributor)
         return unless contributor_can_receive_messages?(contributor)
 
         WhatsAppAdapter::Outbound::Text.perform_later(recipient: contributor,
-                                                      text: I18n.t('adapter.whats_app.unknown_content_template',
+                                                      text: I18n.t('adapter.whats_app.unsupported_content_template',
                                                                    first_name: contributor.first_name,
                                                                    contact_person: User.last.name))
       end

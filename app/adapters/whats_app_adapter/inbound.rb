@@ -2,7 +2,7 @@
 
 module WhatsAppAdapter
   UNKNOWN_CONTRIBUTOR = :unknown_contributor
-  UNKNOWN_CONTENT = :unknown_content
+  UNSUPPORTED_CONTENT = :unsupported_content
   RESPONDING_TO_TEMPLATE_MESSAGE = :responding_to_template_message
 
   class Inbound
@@ -28,7 +28,7 @@ module WhatsAppAdapter
       @message = initialize_message(whats_app_message)
       return unless @message
 
-      @unknown_content = initialize_unknown_content(whats_app_message)
+      @unsupported_content = initialize_unsupported_content(whats_app_message)
 
       files = initialize_file(whats_app_message)
       @message.files = files
@@ -72,11 +72,11 @@ module WhatsAppAdapter
       message
     end
 
-    def initialize_unknown_content(whats_app_message)
+    def initialize_unsupported_content(whats_app_message)
       return unless unsupported_content?(whats_app_message)
 
       message.unknown_content = true
-      trigger(UNKNOWN_CONTENT, sender)
+      trigger(UNSUPPORTED_CONTENT, sender)
     end
 
     def initialize_file(whats_app_message)

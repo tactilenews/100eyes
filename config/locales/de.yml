@@ -71,7 +71,7 @@ de:
       action: Senden Sie uns hierzu eine Nachricht auf Signal. Ein kurzes „Hallo” reicht aus! Unsere Nummer ist <strong>%{number}</strong>.
       link: Zur Signal-App
       copy: Handynummer kopieren
-      help:  Über den Button gelangen Sie direkt zu unserem Kontakt in der Signal-App. Alternativ können Sie auch einen Link kopieren, um ihn in WhatsApp Web zu öffnen.
+      help:  Über den Button gelangen Sie direkt zu unserem Kontakt in der Signal-App. Alternativ können Sie unsere Nummer kopieren.
     onboarding_signal_form:
       heading: Mit Signal teilnehmen
       text: Geben Sie bitte unten die Handynummer ein, mit der Sie bei Signal registriert sind.
@@ -360,19 +360,19 @@ de:
     whats_app:
       welcome_message: "Vielen Dank für Ihre Anmeldung bei %{project_name}. Unsere Dialog-Recherche startet bald. Wir melden uns dann bei Ihnen."
       request_template:
-        new_request_morning_1: "Guten Morgen %{first_name},  zum Thema %{request_title} haben wir eine neue Frage. Möchten Sie darauf antworten?"
-        new_request_morning_2: "Guten Morgen %{first_name},  zum Thema %{request_title} haben wir eine neue Frage. Möchten Sie darauf antworten?"
-        new_request_morning_3: "Guten Morgen %{first_name},  zum Thema %{request_title} haben wir eine neue Frage. Möchten Sie darauf antworten?"
-        new_request_day_1: "Guten Tag %{first_name}, wir haben eine neue Frage zum Thema %{request_title}. Möchten Sie darauf antworten?"
-        new_request_day_2: "Hallo %{first_name}, ich möchte gern mehr zum Thema %{request_title} erfahren. Möchten Sie auf die heutige Frage antworten?"
-        new_request_day_3: "Guten Tag %{first_name}, ich habe eine neue Frage zu %{request_title}. Möchten Sie antworten?"
-        new_request_evening_1: "Guten Abend %{first_name}, wir haben eine neue Frage zum Thema %{request_title}. Möchten Sie darauf antworten?"
-        new_request_evening_2: "Guten Abend %{first_name}, zum Thema %{request_title} haben wir eine Frage. Antworten Sie uns darauf?"
-        new_request_evening_3: "Hallo %{first_name}, heute Abend möchte ich gern mehr zum Thema %{request_title} erfahren. Würden Sie meine Frage beantworten?"
-        new_request_night_1: "Hallo %{first_name}, heute Nacht ist mir etwas zum Thema %{request_title} eingefallen. Antworten Sie mir?"
-        new_request_night_2: "Hallo %{first_name}, ich weiß, es ist spät. Aber ich möchte gern mehr zum Thema %{request_title} erfahren. Möchten Sie auf meine Frage antworten?"
-        new_request_night_3: "Hallo %{first_name}, zum Thema %{request_title} möchte ich heute Nacht gern mehr erfahren. Beantworten Sie mir eine kurze Frage?"
-      unknown_content_template: "Tut mir leid %{first_name}, leider ist unsere Software kann derzeit Textnachrichten, Sprachnachrichten, Bilder und Reaktionen auf Nachrichten verarbeiten, jedoch noch keine weiteren Inhalte wie z.B. Sticker oder Kontakte. In der Zwischenzeit senden Sie bitte Nachrichten mit solchen Inhalten an %{contact_person}. Herzlichen Dank!"
+        new_request_morning_1: "Guten Morgen %{first_name}, wir haben eine neue Frage zum Thema %{request_title}. Möchtest du darauf antworten?"
+        new_request_morning_2: "Guten Morgen %{first_name}, zum Thema %{request_title} haben wir eine neue Frage. Möchtest du darauf antworten?"
+        new_request_morning_3: "Guten Morgen %{first_name}, heute haben wir zum Thema %{request_title} eine Frage vorbereitet. Antwortest du uns darauf?"
+        new_request_day_1: "Guten Tag %{first_name}, wir haben eine neue Frage zum Thema %{request_title} für dich. Hast du Lust zu antworten?"
+        new_request_day_2: "Hallo %{first_name}, ich möchte gerne mehr zum Thema %{request_title} erfahren. Möchtest du auf die heutige Frage antworten?"
+        new_request_day_3: "Guten Tag %{first_name}, ich habe eine neue Frage zu %{request_title}. Möchtest du antworten?"
+        new_request_evening_1: "Guten Abend %{first_name}, wir haben eine neue Frage zum Thema %{request_title}. Möchtest du darauf antworten?"
+        new_request_evening_2: "Guten Abend %{first_name}, zum Thema %{request_title} haben wir eine neue Frage. Antwortest du uns darauf?"
+        new_request_evening_3: "Hallo %{first_name}, heute Abend möchte ich gern mehr zum Thema %{request_title} erfahren. Beantwortest du meine Frage?"
+        new_request_night_1: "Hallo %{first_name}, heute Nacht ist mir etwas zum Thema %{request_title} eingefallen. Antwortest du mir?"
+        new_request_night_2: "Hallo %{first_name}, ich weiß, es ist schon spät. Aber ich möchte gern mehr zum Thema %{request_title} erfahren. Möchtest du auf meine Frage antworten?"
+        new_request_night_3: "Hallo %{first_name}, zum Thema %{request_title} möchte ich heute noch gern mehr erfahren. Beantwortest du mir eine kurze Frage?"
+      unsupported_content_template: "Tut mir leid %{first_name}, leider kann unsere Software derzeit nur Textnachrichten, Sprachnachrichten, Bilder und Reaktionen auf Nachrichten verarbeiten, jedoch noch keine weiteren Inhalte wie z.B. Sticker oder Kontakte. In der Zwischenzeit senden Sie bitte Nachrichten mit solchen Inhalten an %{contact_person}. Herzlichen Dank!"
   save: Speichern
   cancel: Abbrechen
   skip_to_content: Zum Hauptinhalt springen
