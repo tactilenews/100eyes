@@ -20,9 +20,18 @@ RSpec.describe 'Users' do
       expect(page).to have_text('User was successfully created.')
     end
 
-    it 'admin updates user' do
-      visit edit_admin_user_path(user, as: user)
-      expect { click_on 'Update User' }.not_to(change { user.reload.encrypted_password })
+    describe 'admin updates user' do
+      it 'updates, without changing encrypted password or otp_secret_key' do
+        visit edit_admin_user_path(user, as: user)
+
+        fill_in 'First name', with: 'UpdatedZora'
+        expect { click_on 'Update User' }.not_to(change { user.reload.encrypted_password })
+
+        visit edit_admin_user_path(user, as: user)
+
+        uncheck 'Otp enabled'
+        expect { click_on 'Update User' }.to(change { user.reload.otp_secret_key })
+      end
     end
   end
 end
