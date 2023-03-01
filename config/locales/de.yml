@@ -45,6 +45,7 @@ de:
         other: Dialog
       admin: Admin
       sign_out: Abmelden
+      profile_path: Zur Profilseite
     hero:
       title: Willkommen bei 100eyes. Nutze die Intelligenz der Community.
     footer:
@@ -154,7 +155,7 @@ de:
     request_password_reset_confirmation:
       heading: Wir haben dir eine E-Mail gesendet.
       text: Klicke auf den Link in der E-Mail, um ein neues Passwort zu vergeben.
-      no_email: <strong>Keine active_E-Mail erhalten?</strong> Warte noch fünf Minuten ab – der Versand dauert manchmal etwas länger.
+      no_email: <strong>Keine E-Mail erhalten?</strong> Warte noch fünf Minuten ab – der Versand dauert manchmal etwas länger.
     password_reset_form:
       heading: Passwort ändern
       password:
@@ -249,6 +250,7 @@ de:
       macos_emoji_picker_hint: Füge Emojis mit <kbd>Control ⌃</kbd> + <kbd>Command ⌘</kbd> + <kbd>Leertaste</kbd> ein.
     avatar:
       expand: In Originalgröße anzeigen
+      editorial_logo: "%{project_name} Logo"
     about:
       heading: Über 100eyes
       version: "Version %{version} (%{date})"
@@ -283,6 +285,40 @@ de:
       heading: Aktivität deiner Community
     day_activity_linechart:
       heading: Deine besten Dialogtage
+    user_management:
+      main_heading: Dein 100eyes Team
+      number_of_users_of_business_plan_used: "%{users_count} von %{allocated_users} Seats genutzt"
+      add_users_button: "Teammitglied hinzufügen"
+    profile_header:
+      main_heading: 'Dein 100eyes Plan: %{business_plan_name}'
+      sub_heading:
+        contact_person: "Auftraggeber:in %{contact_person_name}, %{contact_person_email}"
+        business_plan:
+          price_per_month: "Preis: %{price_per_month}/Monat"
+          valid_until: "Mindeslaufzeit: bis %{valid_until}"
+      additional_info:
+        channels: "Dialogkanäle: Signal, Threema, Telegram, E-Mail"
+        security: "Sicherheit: Community abgesichert über Zwei-Faktor-Authentifizierung, Cloudflare"
+      upgrade_business_plan_button_html: "<span>Plan jetzt upgraden und <strong>%{upgrade_discount}%</strong> sparen</span>"
+    business_plan_choices:
+      legend: Upgrade Plan
+      price_per_month: "%{price_per_month}/Monat"
+    upgrade_business_plan_modal:
+      business_plan:
+        features_info: "%{number_of_communities} Community mit %{number_of_users} Redakteur:innen und %{number_of_contributors} Mitgliedern."
+        hours_of_included_support: "Inklusive %{hours} Stunden technischer Support"
+      close_modal: Modal schließen
+      submit_button: Upgrade Plan
+      discount_explained_html: "*Wir gewähren dir <strong>%{discount}%</strong> Bonus auf den regulären Preis für die Vertragslaufzeit bis <strong>%{valid_through}</strong>, danach gelten die gültigen Preise laut Preistabelle."
+    create_user_modal:
+      first_name:
+        label: Vorname
+      last_name:
+        label: Nachname
+      email:
+        label: E-Mail-Adresse
+      submit_button: "Teammitglied hinzufügen"
+      close_modal: Modal schließen
     pagination:
       first: Erste
       previous: Vorherige
@@ -302,7 +338,12 @@ de:
         text: Vielen Dank für Ihre Nachricht. Leider konnten wir Ihre E-Mail-Adresse nicht zuordnen. Das könnte daran liegen, dass wir einen Fehler gemacht haben oder Sie uns von einer anderen E-Mail-Adresse schreiben. Melden Sie sich gern unter support@tactile.news, dann lösen wir das Problem schnell. Vielen Dank.
       new_message_email:
         subject: Die Redaktion hat eine neue Frage
-
+      business_plan_upgraded:
+        subject: "Der Plan von %{organization_name} wurde zu %{business_plan_name} mit einem %{discount}%-Rabatt aufgewertet."
+        text: "Der monatliche Preis mit Rabatt beträgt jetzt bis zum %{valid_through} %{price_per_month_with_discount}. Bitte aktualisieren Sie Ihre Aufzeichnungen und wenden Sie sich an %{organization_name}."
+      user_count_exceeds_plan_limit:
+        subject: "%{organization_name} hat die Höchstzahl der %{business_plan_name} Nutzer seines %{users_limit} Plans überschritten "
+        text: "%{organization_name} hat die zahl der gebuchten Contributors überschritten. Technisch ist das kein problem. Sprich mit der Kund:in doch demnächst über eine Aufstockung des Plans."
   save: Speichern
   cancel: Abbrechen
   skip_to_content: Zum Hauptinhalt springen
@@ -517,6 +558,16 @@ de:
       success: Die bearbeitete Antwort wurde gespeichert
       error: Die bearbeitete Antwort konnte nicht gespeichet werden
     only_manually_created: Diese Aktion kann nur auf manuell erstellten Nachrichten ausgeführt werden.
+
+  profile:
+    contributors_section:
+      main_heading: Deine Community
+      number_of_contributors_of_business_plan_used: "%{contributors_count} von %{allocated_contributors} Community-Mitgliedern aktiv"
+      copy_invite: Einladungslink generieren
+    user:
+      created_successfully: "Redakteur:in erfolgreich erstellt"
+    business_plan:
+      updated_successfully: Plan erfolgreich aktualisiert
 
   sessions:
     errors:
@@ -779,7 +830,7 @@ de:
         other: "<strong>Du</strong> hast <strong>%{contributor_one}</strong> und %{others_count} anderen auf die Frage <strong>„%{request_title}”</strong> geantwortet."
       link_text: "Zur Nachricht"
     request_scheduled:
-      text_html: "Die Frage <strong>%{request_title}</strong> wurde für den Versand am %{date} um %{time} geplant und wird an %{contributors_count} Community-Mitglieder versendet."
+      text_html: "Die Frage <strong>%{request_title}</strong> wurde für den Versand am %{date} um %{time} geplant und wird an %{contributors_count} Community-Mitgliedern versendet."
       link_text: Zur Frage
   shared:
     community: Community

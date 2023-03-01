@@ -17,5 +17,7 @@ FactoryBot.define do
         )
       end
     end
+
+    organization
   end
 end

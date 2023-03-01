@@ -1,0 +1,22 @@
+.UserManagement > .Flex {
+  margin-top: var(--spacing-unit-s);
+}
+
+.UserManagement-usersList {
+  list-style: none;
+  flex-basis: 50%;
+}
+
+.UserManagement-usersListItem {
+  margin-bottom: var(--spacing-unit-s);
+}
+
+.UserManagement-openModalButton {
+  display: flex;
+}
+
+.UserManagement-openModalButton > svg {
+  margin-right: var(--spacing-unit-xs);
+  width: var(--spacing-unit);
+  color: var(--color-primary);
+}

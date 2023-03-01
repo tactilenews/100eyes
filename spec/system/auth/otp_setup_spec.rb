@@ -26,7 +26,8 @@ RSpec.describe 'OTP Setup' do
 
       # Editor enters correct code
       fill_in 'setup[otp]', with: user.otp_code
-      click_button 'Bestätigen'
+
+      expect { click_button 'Bestätigen' }.not_to(change { user.reload.otp_secret_key })
 
       # Editor is redirected back to the dashboard
       expect(page).to have_current_path(dashboard_path)
