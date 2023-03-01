@@ -43,9 +43,6 @@ module TelegramAdapter
       files = initialize_files(telegram_message)
       @message.files += files
 
-      has_content = @message.text || @message.files.any? || @message.unknown_content
-      return unless has_content
-
       yield(@message) if block_given?
     end
 
@@ -100,7 +97,7 @@ module TelegramAdapter
       )
 
       if telegram_message.keys.any? { |key| UNKNOWN_CONTENT_KEYS.include?(key) }
-        @message.unknown_content = true
+        message.unknown_content = true
         trigger(UNKNOWN_CONTENT)
       end
 
