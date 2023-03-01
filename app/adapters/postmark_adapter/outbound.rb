@@ -43,6 +43,12 @@ module PostmarkAdapter
       with(admin: admin, organization: organization).user_count_exceeds_plan_limit_email.deliver_later
     end
 
+    def self.contributor_marked_as_inactive!(admin, contributor, text)
+      return unless admin&.email && admin&.admin? && contributor&.id
+
+      with(admin: admin, contributor: contributor, text: text).contributor_marked_as_inactive_email.deliver_later
+    end
+
     def bounce_email
       @text = params[:text]
       mail(params[:mail])
@@ -82,6 +88,18 @@ module PostmarkAdapter
                        users_limit: organization.business_plan.number_of_users)
       message_stream = Setting.postmark_transactional_stream
       @text = [subject, I18n.t('adapter.postmark.user_count_exceeds_plan_limit.text', organization_name: organization.name)]
+      mail(to: admin.email, subject: subject, message_stream: message_stream)
+    end
+
+    def contributor_marked_as_inactive_email
+      contributor = params[:contributor]
+      admin = params[:admin]
+      subject = I18n.t('adapter.postmark.contributor_marked_as_inactive_email.subject', project_name: Setting.project_name,
+                                                                                        contributor_name: contributor.name,
+                                                                                        channel: contributor.channels.first.to_s.camelize)
+      text = params[:text]
+      message_stream = Setting.postmark_transactional_stream
+      @text = [subject, text].join("\n")
       mail(to: admin.email, subject: subject, message_stream: message_stream)
     end
 

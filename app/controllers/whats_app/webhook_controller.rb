@@ -5,6 +5,7 @@ module WhatsApp
     skip_before_action :require_login, :verify_authenticity_token
     UNSUCCESSFUL_DELIVERY = %w[undelivered failed].freeze
 
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def message
       adapter = WhatsAppAdapter::Inbound.new
 
@@ -13,19 +14,48 @@ module WhatsApp
         ErrorNotifier.report(exception)
       end
 
-      adapter.on(WhatsAppAdapter::RESPONDING_TO_TEMPLATE_MESSAGE) do |contributor|
+      adapter.on(WhatsAppAdapter::RESPONDING_TO_TEMPLATE_MESSAGE) do |contributor, text|
         contributor.update!(whats_app_message_template_responded_at: Time.current, whats_app_template_message_sent_at: nil)
-        message = contributor.received_messages.first
-        WhatsAppAdapter::Outbound.send!(message)
+        if text.strip.eql?(I18n.t('adapter.whats_app.quick_reply_button_text.more_info'))
+          WhatsAppAdapter::Outbound.send_more_info_message!(contributor)
+        else
+          message = contributor.received_messages.first
+          WhatsAppAdapter::Outbound.send!(message)
+        end
       end
 
       adapter.on(WhatsAppAdapter::UNSUPPORTED_CONTENT) do |contributor|
         WhatsAppAdapter::Outbound.send_unsupported_content_message!(contributor)
       end
 
+      adapter.on(WhatsAppAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
+        contributor.update!(deactivated_at: Time.current)
+        WhatsAppAdapter::Outbound.send_unsubsribed_successfully_message!(contributor)
+        ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
+        User.admin.find_each do |admin|
+          PostmarkAdapter::Outbound.contributor_marked_as_inactive!(admin,
+                                                                    contributor,
+                                                                    I18n.t('adapter.whats_app.unsubscribe.by_request_of_contributor',
+                                                                           contributor_name: contributor.name))
+        end
+      end
+
+      adapter.on(WhatsAppAdapter::SUBSCRIBE_CONTRIBUTOR) do |contributor|
+        contributor.update!(deactivated_at: nil)
+        WhatsAppAdapter::Outbound.send_welcome_message!(contributor)
+        ContributorSubscribed.with(contributor_id: contributor.id).deliver_later(User.all)
+        User.admin.find_each do |admin|
+          PostmarkAdapter::Outbound.contributor_subscribed!(admin,
+                                                            contributor,
+                                                            I18n.t('adapter.whats_app.subscribe.by_request_of_contributor',
+                                                                   contributor_name: contributor.name))
+        end
+      end
+
       whats_app_message_params = message_params.to_h.transform_keys(&:underscore)
       adapter.consume(whats_app_message_params) { |message| message.contributor.reply(adapter) }
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
     def errors
       return unless error_params['Level'] == 'ERROR'

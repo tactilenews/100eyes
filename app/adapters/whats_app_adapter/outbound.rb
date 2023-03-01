@@ -30,6 +30,20 @@ module WhatsAppAdapter
                                                                    contact_person: User.last.name))
       end
 
+      def send_more_info_message!(contributor)
+        return unless contributor_can_receive_messages?(contributor)
+
+        text = [Setting.about, "_#{I18n.t('adapter.whats_app.unsubscribe.instructions')}_"].join("\n\n")
+        WhatsAppAdapter::Outbound::Text.perform_later(recipient: contributor, text: text)
+      end
+
+      def send_unsubsribed_successfully_message!(contributor)
+        return unless contributor_can_receive_messages?(contributor)
+
+        text = [I18n.t('adapter.whats_app.unsubscribe.successful'), "_#{I18n.t('adapter.whats_app.subscribe.instructions')}_"].join("\n\n")
+        WhatsAppAdapter::Outbound::Text.perform_later(recipient: contributor, text: text)
+      end
+
       def contributor_can_receive_messages?(recipient)
         recipient&.whats_app_phone_number.present?
       end

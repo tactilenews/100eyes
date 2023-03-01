@@ -357,6 +357,8 @@ de:
       user_count_exceeds_plan_limit:
         subject: "%{organization_name} hat die Höchstzahl der %{business_plan_name} Nutzer seines %{users_limit} Plans überschritten "
         text: "%{organization_name} hat die zahl der gebuchten Contributors überschritten. Technisch ist das kein problem. Sprich mit der Kund:in doch demnächst über eine Aufstockung des Plans."
+      contributor_marked_as_inactive_email:
+        subject: "%{contributor_name} wurde bei %{channel} als inaktiv markiert, weil er keine Nachrichten mehr von %{project_name} empfangen kann."
     whats_app:
       welcome_message: "Vielen Dank für Ihre Anmeldung bei %{project_name}. Unsere Dialog-Recherche startet bald. Wir melden uns dann bei Ihnen."
       request_template:
@@ -373,6 +375,18 @@ de:
         new_request_night_2: "Hallo %{first_name}, ich weiß, es ist schon spät. Aber ich möchte gern mehr zum Thema %{request_title} erfahren. Möchtest du auf meine Frage antworten?"
         new_request_night_3: "Hallo %{first_name}, zum Thema %{request_title} möchte ich heute noch gern mehr erfahren. Beantwortest du mir eine kurze Frage?"
       unsupported_content_template: "Tut mir leid %{first_name}, leider kann unsere Software derzeit nur Textnachrichten, Sprachnachrichten, Bilder und Reaktionen auf Nachrichten verarbeiten, jedoch noch keine weiteren Inhalte wie z.B. Sticker oder Kontakte. In der Zwischenzeit senden Sie bitte Nachrichten mit solchen Inhalten an %{contact_person}. Herzlichen Dank!"
+      quick_reply_button_text:
+        answer: Antworten
+        more_info: Mehr Infos
+      unsubscribe:
+        instructions: Um unseren Kanal Abzubestellen, schreibe „abbestellen“.
+        text: abbestellen
+        by_request_of_contributor: "Das Mitglied, %{contributor_name}, hat darum gebeten, keine weiteren Nachrichten mit WhatsApp mehr zu erhalten."
+        successful: Du wurdest erfolgreich abgemeldet. Wir danken dir für deinen Beitrag zu diesem Projekt.
+      subscribe:
+        text: bestellen
+        instructions: Um unseren Kanal erneut zu bestellen, schreiben Sie "bestellen".
+        by_request_of_contributor: "Das Mitglied, %{contributor_name}, hat beantragt, erneut Nachrichten per WhatsApp zu bestellen."
   save: Speichern
   cancel: Abbrechen
   skip_to_content: Zum Hauptinhalt springen
@@ -397,6 +411,7 @@ de:
         onboarding_success: Nachricht nach erfolgreichem Onboarding
         onboarding_unauthorized: Nachricht bei abgelaufenem Einladungs-Link
         onboarding_additional_consent: Zusätzliches Einverständnis während des Onboardings
+        all: Alle Kanäle
       onboarding_ask_for_additional_consent:
         label: Nach zusätzlichem Einverständnis fragen
         help: Falls aktiviert, wird neuen Community-Mitgliedern eine zusätzliche, optionale Checkbox angezeigt. Diese kannst du beispielsweise nutzen, um das Einverständnis für den Versand von E-Mail-Newslettern o.ä. einzuholen.
@@ -452,6 +467,8 @@ de:
         help: Wenn ein Mitglied via Threema Nachrichten versendet, die von 100eyes noch nicht unterstützt werden, erhält es diese Nachricht.
       channel_image:
         label: Avatar für Messenger
+      about:
+        label: über Text für Messenger
   settings:
     header: Einstellungen
     subheading: Passe dein 100eyes System nach deinen Vorstellungen an
@@ -863,6 +880,12 @@ de:
     request_scheduled:
       text_html: "Die Frage <strong>%{request_title}</strong> wurde für den Versand am %{date} um %{time} geplant und wird an %{contributors_count} Community-Mitgliedern versendet."
       link_text: Zur Frage
+    contributor_marked_inactive:
+      text_html: "<strong>%{contributor_name}</strong> wurde als inaktiv markiert, weil sie keine Fragen mehr zu %{contributor_channel} erhalten können."
+      link_text: "Zum Profil"
+    contributor_subscribed:
+      text_html: "<strong>%{contributor_name}</strong> hat beantragt, erneut Nachrichten per %{contributor_channel} zu bestellen."
+      link_text: Zum Profil
   shared:
     community: Community
     editorial: Redaktion
