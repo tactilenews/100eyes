@@ -33,10 +33,7 @@ module WhatsApp
         WhatsAppAdapter::Outbound.send_unsubsribed_successfully_message!(contributor)
         ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
         User.admin.find_each do |admin|
-          PostmarkAdapter::Outbound.contributor_marked_as_inactive!(admin,
-                                                                    contributor,
-                                                                    I18n.t('adapter.whats_app.unsubscribe.by_request_of_contributor',
-                                                                           contributor_name: contributor.name))
+          PostmarkAdapter::Outbound.contributor_marked_as_inactive!(admin, contributor)
         end
       end
 
@@ -45,10 +42,7 @@ module WhatsApp
         WhatsAppAdapter::Outbound.send_welcome_message!(contributor)
         ContributorSubscribed.with(contributor_id: contributor.id).deliver_later(User.all)
         User.admin.find_each do |admin|
-          PostmarkAdapter::Outbound.contributor_subscribed!(admin,
-                                                            contributor,
-                                                            I18n.t('adapter.whats_app.subscribe.by_request_of_contributor',
-                                                                   contributor_name: contributor.name))
+          PostmarkAdapter::Outbound.contributor_subscribed!(admin, contributor)
         end
       end
 

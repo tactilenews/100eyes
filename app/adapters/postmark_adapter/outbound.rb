@@ -43,10 +43,16 @@ module PostmarkAdapter
       with(admin: admin, organization: organization).user_count_exceeds_plan_limit_email.deliver_later
     end
 
-    def self.contributor_marked_as_inactive!(admin, contributor, text)
+    def self.contributor_marked_as_inactive!(admin, contributor)
       return unless admin&.email && admin&.admin? && contributor&.id
 
-      with(admin: admin, contributor: contributor, text: text).contributor_marked_as_inactive_email.deliver_later
+      with(admin: admin, contributor: contributor).contributor_marked_as_inactive_email.deliver_later
+    end
+
+    def self.contributor_subscribed!(admin, contributor, _text)
+      return unless admin&.email && admin&.admin? && contributor&.id
+
+      with(admin: admin, contributor: contributor).contributor_subscribed_email.deliver_later
     end
 
     def bounce_email
@@ -97,7 +103,21 @@ module PostmarkAdapter
       subject = I18n.t('adapter.postmark.contributor_marked_as_inactive_email.subject', project_name: Setting.project_name,
                                                                                         contributor_name: contributor.name,
                                                                                         channel: contributor.channels.first.to_s.camelize)
-      text = params[:text]
+      text = I18n.t('adapter.whats_app.unsubscribe.by_request_of_contributor', contributor_name: contributor.name)
+      message_stream = Setting.postmark_transactional_stream
+      @text = [subject, text].join("\n")
+      mail(to: admin.email, subject: subject, message_stream: message_stream)
+    end
+
+    def contributor_subscribed_email
+      contributor = params[:contributor]
+      admin = params[:admin]
+      subject = I18n.t('adapter.postmark.contributor_subscribed_email.subject', project_name: Setting.project_name,
+                                                                                contributor_name: contributor.name,
+                                                                                channel: contributor.channels.first.to_s.camelize)
+      text = I18n.t(
+        'adapter.whats_app.unsubscribe.by_request_of_contributor', contributor_name: contributor.name
+      )
       message_stream = Setting.postmark_transactional_stream
       @text = [subject, text].join("\n")
       mail(to: admin.email, subject: subject, message_stream: message_stream)
