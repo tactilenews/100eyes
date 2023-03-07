@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_24_141312) do
+ActiveRecord::Schema.define(version: 2023_03_01_091224) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -113,6 +113,8 @@ ActiveRecord::Schema.define(version: 2023_01_24_141312) do
     t.string "whats_app_phone_number"
     t.datetime "whats_app_template_message_sent_at"
     t.datetime "whats_app_message_template_responded_at"
+    t.bigint "deactivated_by_user_id"
+    t.boolean "deactivated_by_admin", default: false
     t.index ["email"], name: "index_contributors_on_email", unique: true
     t.index ["organization_id"], name: "index_contributors_on_organization_id"
     t.index ["signal_phone_number"], name: "index_contributors_on_signal_phone_number", unique: true

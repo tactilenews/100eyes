@@ -177,20 +177,23 @@ de:
       active:
         heading: Mitglied deaktivieren
         text: |
-          %{name} ist ein <strong>aktives Mitglied</strong> deiner Community.
+          <strong>%{name}</strong> ist ein <strong>aktives Mitglied</strong> deiner Community.
           Du kannst das Mitgliedskonto deaktivieren.
-          %{first_name} erhält dann keine Recherchefragen mehr.
+          <strong>%{first_name}</strong> erhält dann keine Recherchefragen mehr.
           Direkte Nachfragen kannst du jedoch weiterhin stellen.
           Das Konto kannst du jederzeit reaktivieren.
         action: Mitglied deaktivieren
       inactive:
         heading: Mitglied reaktivieren
         text: |
-          %{name} ist ein <strong>inaktives Mitglied</strong> deiner Community und erhält aktuell keine Recherchefragen über 100eyes.
-          Direkte Nachfragen kannst du jedoch weiterhin stellen.
-          Du kannst das Konto reaktivieren.
-          %{first_name} erhält dann wieder alle Recherchefragen.
+          <strong>%{name}</strong> wurde von <strong>%{user_name}</strong> als <strong>inaktives Mitglied</strong> Ihrer Gemeinschaft markiert und erhält derzeit keine Forschungsfragen zu %{project_name}.
+          Sie können jedoch weiterhin direkte Anfragen stellen.
+          Sie können das Konto reaktivieren.
+          <strong>%{first_name}</strong> wird dann wieder alle Forschungsfragen erhalten.
         action: Mitglied reaktivieren
+      automatically_marked_inactive:
+        text: "<strong>%{name}</strong> ist ein <strong>inaktives Mitglied</strong> deiner Community und erhält aktuell keine Recherchefragen über %{project_name}."
+        possible_reason_whats_app: "<strong>%{first_name}</strong> hat darum gebeten, vom Empfang von Nachrichten über WhatsApp abgemeldet zu werden."
     contributor_email_settings:
       heading: "Ausgewählter Kanal: E-Mail"
       text: "%{name} hat sich via E-Mail angemeldet."
