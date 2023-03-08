@@ -362,6 +362,8 @@ de:
         text: "%{organization_name} hat die zahl der gebuchten Contributors überschritten. Technisch ist das kein problem. Sprich mit der Kund:in doch demnächst über eine Aufstockung des Plans."
       contributor_marked_as_inactive_email:
         subject: "%{contributor_name} wurde bei %{channel} als inaktiv markiert, weil er keine Nachrichten mehr von %{project_name} empfangen kann."
+      contributor_subscribed_email:
+        subject: "%{contributor_name} hat erneut den Empfang von Nachrichten über %{channel} von %{project_name} angefordert."
     whats_app:
       welcome_message: "Vielen Dank für Ihre Anmeldung bei %{project_name}. Unsere Dialog-Recherche startet bald. Wir melden uns dann bei Ihnen."
       request_template:
@@ -389,7 +391,7 @@ de:
       subscribe:
         text: bestellen
         instructions: Um unseren Kanal erneut zu bestellen, schreiben Sie "bestellen".
-        by_request_of_contributor: "Das Mitglied, %{contributor_name}, hat beantragt, erneut Nachrichten per WhatsApp zu bestellen."
+        by_request_of_contributor: "Das Mitglied %{contributor_name} hat darum gebeten, wieder Nachrichten über WhatsApp empfangen zu können."
   save: Speichern
   cancel: Abbrechen
   skip_to_content: Zum Hauptinhalt springen

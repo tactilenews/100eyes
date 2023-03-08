@@ -49,7 +49,7 @@ module PostmarkAdapter
       with(admin: admin, contributor: contributor).contributor_marked_as_inactive_email.deliver_later
     end
 
-    def self.contributor_subscribed!(admin, contributor, _text)
+    def self.contributor_subscribed!(admin, contributor)
       return unless admin&.email && admin&.admin? && contributor&.id
 
       with(admin: admin, contributor: contributor).contributor_subscribed_email.deliver_later
@@ -116,7 +116,7 @@ module PostmarkAdapter
                                                                                 contributor_name: contributor.name,
                                                                                 channel: contributor.channels.first.to_s.camelize)
       text = I18n.t(
-        'adapter.whats_app.unsubscribe.by_request_of_contributor', contributor_name: contributor.name
+        'adapter.whats_app.subscribe.by_request_of_contributor', contributor_name: contributor.name
       )
       message_stream = Setting.postmark_transactional_stream
       @text = [subject, text].join("\n")
