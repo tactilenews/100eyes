@@ -5,23 +5,15 @@ module WhatsApp
     skip_before_action :require_login, :verify_authenticity_token
     UNSUCCESSFUL_DELIVERY = %w[undelivered failed].freeze
 
-    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def message
       adapter = WhatsAppAdapter::Inbound.new
 
       adapter.on(WhatsAppAdapter::UNKNOWN_CONTRIBUTOR) do |whats_app_phone_number|
-        exception = WhatsAppAdapter::UnknownContributorError.new(whats_app_phone_number: whats_app_phone_number)
-        ErrorNotifier.report(exception)
+        handle_unknown_contributor(whats_app_phone_number)
       end
 
       adapter.on(WhatsAppAdapter::RESPONDING_TO_TEMPLATE_MESSAGE) do |contributor, text|
-        contributor.update!(whats_app_message_template_responded_at: Time.current, whats_app_template_message_sent_at: nil)
-        if text.strip.eql?(I18n.t('adapter.whats_app.quick_reply_button_text.more_info'))
-          WhatsAppAdapter::Outbound.send_more_info_message!(contributor)
-        else
-          message = contributor.received_messages.first
-          WhatsAppAdapter::Outbound.send!(message)
-        end
+        handle_respond_to_template_message(contributor, text)
       end
 
       adapter.on(WhatsAppAdapter::UNSUPPORTED_CONTENT) do |contributor|
@@ -29,27 +21,16 @@ module WhatsApp
       end
 
       adapter.on(WhatsAppAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
-        contributor.update!(deactivated_at: Time.current)
-        WhatsAppAdapter::Outbound.send_unsubsribed_successfully_message!(contributor)
-        ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
-        User.admin.find_each do |admin|
-          PostmarkAdapter::Outbound.contributor_marked_as_inactive!(admin, contributor)
-        end
+        handle_unsubsribe_contributor(contributor)
       end
 
       adapter.on(WhatsAppAdapter::SUBSCRIBE_CONTRIBUTOR) do |contributor|
-        contributor.update!(deactivated_at: nil)
-        WhatsAppAdapter::Outbound.send_welcome_message!(contributor)
-        ContributorSubscribed.with(contributor_id: contributor.id).deliver_later(User.all)
-        User.admin.find_each do |admin|
-          PostmarkAdapter::Outbound.contributor_subscribed!(admin, contributor)
-        end
+        handle_subscribe_contributor(contributor)
       end
 
       whats_app_message_params = message_params.to_h.transform_keys(&:underscore)
       adapter.consume(whats_app_message_params) { |message| message.contributor.reply(adapter) }
     end
-    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
     def errors
       return unless error_params['Level'] == 'ERROR'
@@ -89,6 +70,40 @@ module WhatsApp
     def status_params
       params.permit(:AccountSid, :ApiVersion, :ChannelInstallSid, :ChannelPrefix, :ChannelToAddress, :ErrorCode, :EventType,
                     :From, :MessageSid, :MessageStatus, :SmsSid, :SmsStatus, :To)
+    end
+
+    def handle_unknown_contributor(whats_app_phone_number)
+      exception = WhatsAppAdapter::UnknownContributorError.new(whats_app_phone_number: whats_app_phone_number)
+      ErrorNotifier.report(exception)
+    end
+
+    def handle_respond_to_template_message(contributor, text)
+      contributor.update!(whats_app_message_template_responded_at: Time.current, whats_app_template_message_sent_at: nil)
+
+      if text.strip.eql?(I18n.t('adapter.whats_app.quick_reply_button_text.more_info'))
+        WhatsAppAdapter::Outbound.send_more_info_message!(contributor)
+      else
+        message = contributor.received_messages.first
+        WhatsAppAdapter::Outbound.send!(message)
+      end
+    end
+
+    def handle_unsubsribe_contributor(contributor)
+      contributor.update!(deactivated_at: Time.current)
+      WhatsAppAdapter::Outbound.send_unsubsribed_successfully_message!(contributor)
+      ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
+      User.admin.find_each do |admin|
+        PostmarkAdapter::Outbound.contributor_marked_as_inactive!(admin, contributor)
+      end
+    end
+
+    def handle_subscribe_contributor(contributor)
+      contributor.update!(deactivated_at: nil)
+      WhatsAppAdapter::Outbound.send_welcome_message!(contributor)
+      ContributorSubscribed.with(contributor_id: contributor.id).deliver_later(User.all)
+      User.admin.find_each do |admin|
+        PostmarkAdapter::Outbound.contributor_subscribed!(admin, contributor)
+      end
     end
   end
 end
