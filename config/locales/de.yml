@@ -33,6 +33,8 @@ de:
       submit: Speichern
     chat_message_audio:
       no_audio_support: Dein Browser unterstützt das Audio Element nicht
+    chat_message_video:
+      no_video_support: Dein Browser unterstützt das Video Element nicht
     contributor_row:
       via_channels: via %{channels}
     nav_bar:
