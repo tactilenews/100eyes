@@ -62,7 +62,7 @@ module WhatsAppAdapter
           'day'
         when evening..night
           'evening'
-        when night..morning
+        else
           'night'
         end
       end
