@@ -281,6 +281,7 @@ de:
       replies:
         one: empfangene Nachricht
         other: empfangene Nachrichten
+      engagement_metric: Interaktionsquote
     day_and_time_activity_heatmap:
       heading: Aktivität deiner Community
     day_activity_linechart:
