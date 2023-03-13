@@ -6,6 +6,7 @@ class DashboardController < ApplicationController
     @active_contributors_count = Contributor.active.count
     @requests_count = Request.count
     @replies_count = Message.replies.count
+    @engagment_metric = engagment_metric
   end
 
   private
@@ -26,5 +27,9 @@ class DashboardController < ApplicationController
         link_text: notifications.first.to_notification.link_text
       }
     end
+  end
+
+  def engagment_metric
+    (Message.replies.where('created_at >= ?', 7.days.ago).count / Contributor.active.count.to_f * 100)
   end
 end

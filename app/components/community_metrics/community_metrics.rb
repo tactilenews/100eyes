@@ -2,12 +2,13 @@
 
 module CommunityMetrics
   class CommunityMetrics < ApplicationComponent
-    def initialize(active_contributors_count:, requests_count:, replies_count:, **)
+    def initialize(active_contributors_count:, requests_count:, replies_count:, engagment_metric:, **)
       super
 
       @active_contributors_count = active_contributors_count
       @requests_count = requests_count
       @replies_count = replies_count
+      @engagment_metric = engagment_metric
     end
 
     def call
@@ -16,24 +17,29 @@ module CommunityMetrics
 
     private
 
-    attr_reader :active_contributors_count, :requests_count, :replies_count
+    attr_reader :active_contributors_count, :requests_count, :replies_count, :engagment_metric
 
     def metrics
       [
         {
           value: active_contributors_count,
-          label: I18n.t('components.community_metrics.contributors', count: active_contributors_count),
-          icon: 'single-03'
+          label: t('.contributors', count: active_contributors_count),
+          custom_icon: 'bee-turq'
         },
         {
           value: requests_count,
-          label: I18n.t('components.community_metrics.requests', count: requests_count),
-          icon: 'user-connection'
+          label: t('.requests', count: requests_count),
+          custom_icon: 'flyer-turq'
         },
         {
           value: replies_count,
-          label: I18n.t('components.community_metrics.replies', count: replies_count),
-          icon: 'a-chat'
+          label: t('.replies', count: replies_count),
+          custom_icon: 'letter_turq'
+        },
+        {
+          value: number_with_precision(engagment_metric, precision: 1, locale: :de),
+          label: t('.engagement_metric'),
+          custom_icon: 'percent_turq'
         }
       ]
     end

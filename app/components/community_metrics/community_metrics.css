@@ -1,0 +1,31 @@
+.CommunityMetrics > .CardMetrics {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.CommunityMetrics .Card {
+  padding-left: var(--spacing-unit-xl);
+}
+
+.CommunityMetrics .Metric-icon > svg {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -10%;
+}
+
+.CommunityMetrics .Metric--large {
+  flex-wrap: nowrap;
+}
+
+.CommunityMetrics .Metric--large .Metric-icon {
+  order: 3;
+}
+
+.CommunityMetrics .Metric--large .Metric-label {
+  order: 2;
+}
+
+.CommunityMetrics .Metric--large .Metric-value {
+  margin-right: var(--spacing-unit-s);
+}
