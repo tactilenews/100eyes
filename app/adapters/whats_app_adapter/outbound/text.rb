@@ -6,7 +6,7 @@ module WhatsAppAdapter
       queue_as :default
 
       def self.twilio_instance
-        @twilio_instance = Twilio::REST::Client.new(Setting.twilio_account_sid, Setting.twilio_auth_token)
+        @twilio_instance = Twilio::REST::Client.new(Setting.twilio_api_key_sid, Setting.twilio_api_key_secret, Setting.twilio_account_sid)
       end
 
       def perform(recipient:, text:)

@@ -68,7 +68,8 @@ class Setting < RailsSettings::Base
   field :signal_unknown_content_message, default: File.read(File.join('config', 'locales', 'signal', 'unknown_content.txt'))
 
   field :twilio_account_sid, readonly: true, default: ENV.fetch('TWILIO_ACCOUNT_SID', nil)
-  field :twilio_auth_token, readonly: true, default: ENV.fetch('TWILIO_AUTH_TOKEN', nil)
+  field :twilio_api_key_sid, readonly: true, default: ENV.fetch('TWILIO_API_KEY_SID', nil)
+  field :twilio_api_key_secret, readonly: true, default: ENV.fetch('TWILIO_API_KEY_SECRET', nil)
   field :whats_app_server_phone_number, readonly: true, default: ENV.fetch('WHATS_APP_SERVER_PHONE_NUMBER', nil)
 
   field :inbound_email_password, readonly: true, default: ENV.fetch('RAILS_INBOUND_EMAIL_PASSWORD', nil)
