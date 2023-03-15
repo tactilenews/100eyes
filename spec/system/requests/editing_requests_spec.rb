@@ -21,12 +21,12 @@ RSpec.describe 'Editing requests', js: true do
 
     visit edit_request_path(request_scheduled_in_future, as: user)
 
-    expect(page).to have_field('Interner Titel', with: request_scheduled_in_future.title)
+    expect(page).to have_field('Titel', with: request_scheduled_in_future.title)
     expect(page).to have_field('Was möchtest du wissen?', with: request_scheduled_in_future.text)
     expect(page).to have_field('Versand planen. Deine Frage wird automatisch zur eingestellten Zeit verschickt.',
                                with: request_scheduled_in_future.schedule_send_for.strftime('%Y-%m-%dT%H:%M'))
 
-    fill_in 'Interner Titel', with: '[Edited] Scheduled request'
+    fill_in 'Titel', with: '[Edited] Scheduled request'
     fill_in 'Was möchtest du wissen?', with: 'Did you get my scheduled request?'
 
     scheduled_datetime = Time.current.tomorrow.beginning_of_hour

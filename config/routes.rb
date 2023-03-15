@@ -31,6 +31,9 @@ Rails.application.routes.draw do
       get '/telegram/link/:telegram_onboarding_token', to: 'telegram#link', as: 'telegram_link'
       get '/telegram/fallback/:telegram_onboarding_token', to: 'telegram#fallback', as: 'telegram_fallback'
       post '/telegram/', to: 'telegram#create'
+
+      get '/whats-app/', to: 'whats_app#show'
+      post '/whats-app/', to: 'whats_app#create'
     end
   end
 
@@ -39,6 +42,12 @@ Rails.application.routes.draw do
 
   namespace :threema do
     post '/webhook', to: 'webhook#message'
+  end
+
+  namespace :whats_app do
+    post '/webhook', to: 'webhook#message'
+    post '/errors', to: 'webhook#errors'
+    post '/status', to: 'webhook#status'
   end
 
   telegram_webhook Telegram::WebhookController
