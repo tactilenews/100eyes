@@ -2,6 +2,9 @@
 
 class Request < ApplicationRecord
   include PlaceholderHelper
+  include PgSearch::Model
+
+  multisearchable against: %i[title text]
 
   belongs_to :user
   has_many :messages, dependent: :destroy
