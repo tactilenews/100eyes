@@ -3,6 +3,8 @@
     <%= c 'contributor_row', contributor: result %>
   <% when 'Message' %>
     <%= c 'excerpt', title: result.sender_name, text: result.text, link: result.chat_message_link, date: result.created_at %>
+  <% when 'Request' %>
+    <%= c 'excerpt', title: result.title, text: result.text, link: request_path(result), date: result.created_at %>
   <% else %>
     <% raise ArgumentError.new "Unknown search result type #{type}. This should never happen." %>
   <% end %>
