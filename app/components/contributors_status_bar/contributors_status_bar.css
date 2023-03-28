@@ -1,0 +1,23 @@
+.ContributorsStatusBar {
+  flex-basis: 50%;
+  height: var(--spacing-unit-l);
+  border-radius: --border-radius;
+  border: var(--input-border-width) solid var(--color-border);
+  overflow: hidden;
+  position: relative;
+}
+
+.ContributorsStatusBar span {
+  height: 100%;
+  display: block;
+  width: 0;
+  color: var(--color-bg);
+  line-height: var(--line-height);
+  position: absolute;
+  text-align: end;
+  padding-right: var(--spacing-unit-xs);
+  background-color: var(--color-primary);
+  transition-property: width;
+  transition-duration: 2s;
+  transition-delay: 1s;
+}

@@ -7,7 +7,7 @@ module SignalAdapter
 
   class Inbound
     UNKNOWN_CONTENT_KEYS = %w[mentions contacts sticker].freeze
-    SUPPORTED_ATTACHMENT_TYPES = %w[image/jpg image/jpeg image/png image/gif audio/oog audio/aac audio/mp4 audio/mpeg].freeze
+    SUPPORTED_ATTACHMENT_TYPES = %w[image/jpg image/jpeg image/png image/gif audio/oog audio/aac audio/mp4 audio/mpeg video/mp4].freeze
 
     attr_reader :sender, :text, :message
 

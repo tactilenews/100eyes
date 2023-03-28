@@ -17,7 +17,7 @@ RSpec.describe 'Request personalization' do
   it 'sending a request with placeholders' do
     visit new_request_path(as: user)
 
-    fill_in 'Interner Titel', with: 'Personalizes request'
+    fill_in 'Titel', with: 'Personalizes request'
     fill_in 'Was möchtest du wissen?', with: 'Hi {{VORNAME}}, how are you?'
 
     click_button 'Frage an die Community senden'

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/ClassLength
 module PostmarkAdapter
   class Outbound < ApplicationMailer
     default template_name: :mailer
@@ -33,10 +34,36 @@ module PostmarkAdapter
       with(contributor: contributor).welcome_email.deliver_later
     end
 
-    def self.contributor_marked_as_inactive!(admin, contributor, text)
+    def self.send_business_plan_upgraded_message!(admin, organization)
+      return unless admin&.email && admin&.admin? && organization&.id
+
+      price_per_month_with_discount = ActionController::Base.helpers.number_to_currency(
+        organization.business_plan.price_per_month - (
+          organization.business_plan.price_per_month * organization.upgrade_discount / 100.to_f
+        ),
+        locale: :de
+      )
+
+      with(admin: admin, organization: organization,
+           price_per_month_with_discount: price_per_month_with_discount).business_plan_upgraded_email.deliver_later
+    end
+
+    def self.send_user_count_exceeds_plan_limit_message!(admin, organization)
+      return unless admin&.email && admin&.admin? && organization&.id
+
+      with(admin: admin, organization: organization).user_count_exceeds_plan_limit_email.deliver_later
+    end
+
+    def self.contributor_marked_as_inactive!(admin, contributor)
       return unless admin&.email && admin&.admin? && contributor&.id
 
-      with(admin: admin, contributor: contributor, text: text).contributor_marked_as_inactive_email.deliver_later
+      with(admin: admin, contributor: contributor).contributor_marked_as_inactive_email.deliver_later
+    end
+
+    def self.contributor_subscribed!(admin, contributor)
+      return unless admin&.email && admin&.admin? && contributor&.id
+
+      with(admin: admin, contributor: contributor).contributor_subscribed_email.deliver_later
     end
 
     def bounce_email
@@ -52,6 +79,61 @@ module PostmarkAdapter
       mail(to: contributor.email, subject: subject, message_stream: message_stream)
     end
 
+    def business_plan_upgraded_email
+      admin = params[:admin]
+      organization = params[:organization]
+      price_per_month_with_discount = params[:price_per_month_with_discount]
+      subject = I18n.t('adapter.postmark.business_plan_upgraded.subject',
+                       organization_name: organization.name,
+                       business_plan_name: organization.business_plan.name,
+                       discount: organization.upgrade_discount)
+      text = I18n.t('adapter.postmark.business_plan_upgraded.text',
+                    organization_name: organization.name,
+                    price_per_month_with_discount: price_per_month_with_discount,
+                    valid_through: I18n.l(organization.upgraded_business_plan_at + 6.months, format: '%m/%Y'))
+      message_stream = Setting.postmark_transactional_stream
+      @text = [subject, text].join("\n")
+      mail(to: admin.email, subject: subject, message_stream: message_stream)
+    end
+
+    def user_count_exceeds_plan_limit_email
+      admin = params[:admin]
+      organization = params[:organization]
+      subject = I18n.t('adapter.postmark.user_count_exceeds_plan_limit.subject',
+                       organization_name: organization.name,
+                       business_plan_name: organization.business_plan.name,
+                       users_limit: organization.business_plan.number_of_users)
+      message_stream = Setting.postmark_transactional_stream
+      @text = [subject, I18n.t('adapter.postmark.user_count_exceeds_plan_limit.text', organization_name: organization.name)]
+      mail(to: admin.email, subject: subject, message_stream: message_stream)
+    end
+
+    def contributor_marked_as_inactive_email
+      contributor = params[:contributor]
+      admin = params[:admin]
+      subject = I18n.t('adapter.postmark.contributor_marked_as_inactive_email.subject', project_name: Setting.project_name,
+                                                                                        contributor_name: contributor.name,
+                                                                                        channel: contributor.channels.first.to_s.camelize)
+      text = I18n.t('adapter.whats_app.unsubscribe.by_request_of_contributor', contributor_name: contributor.name)
+      message_stream = Setting.postmark_transactional_stream
+      @text = [subject, text].join("\n")
+      mail(to: admin.email, subject: subject, message_stream: message_stream)
+    end
+
+    def contributor_subscribed_email
+      contributor = params[:contributor]
+      admin = params[:admin]
+      subject = I18n.t('adapter.postmark.contributor_subscribed_email.subject', project_name: Setting.project_name,
+                                                                                contributor_name: contributor.name,
+                                                                                channel: contributor.channels.first.to_s.camelize)
+      text = I18n.t(
+        'adapter.whats_app.subscribe.by_request_of_contributor', contributor_name: contributor.name
+      )
+      message_stream = Setting.postmark_transactional_stream
+      @text = [subject, text].join("\n")
+      mail(to: admin.email, subject: subject, message_stream: message_stream)
+    end
+
     def message_email
       @msg = params[:message]
       @text = msg.text
@@ -60,18 +142,6 @@ module PostmarkAdapter
       else
         reply_message_email
       end
-    end
-
-    def contributor_marked_as_inactive_email
-      contributor = params[:contributor]
-      admin = params[:admin]
-      subject = I18n.t('adapter.shared.contributor_marked_as_inactive_email.subject', project_name: Setting.project_name,
-                                                                                      contributor_name: contributor.name,
-                                                                                      channel: contributor.channels.first.to_s.camelize)
-      text = params[:text]
-      message_stream = Setting.postmark_transactional_stream
-      @text = [subject, text].join("\n")
-      mail(to: admin.email, subject: subject, message_stream: message_stream)
     end
 
     private
@@ -106,3 +176,4 @@ module PostmarkAdapter
     end
   end
 end
+# rubocop:enable Metrics/ClassLength

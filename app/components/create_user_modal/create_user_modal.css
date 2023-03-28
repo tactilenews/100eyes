@@ -1,0 +1,12 @@
+.CreateUserModal > form {
+  display: flex;
+  flex-direction: column;
+}
+
+.CreateUserModal .Button {
+  align-self: flex-end;
+}
+
+.CreateUserModal .BaseField {
+  margin-bottom: var(--spacing-unit);
+}

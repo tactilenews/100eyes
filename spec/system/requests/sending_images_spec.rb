@@ -19,7 +19,7 @@ RSpec.describe 'Sending image files', js: true do
     it 'sending a request with image files' do
       visit new_request_path(as: user)
 
-      fill_in 'Interner Titel', with: 'Message with files'
+      fill_in 'Titel', with: 'Message with files'
       fill_in 'Was möchtest du wissen?', with: 'Did you get my image?'
 
       click_button 'Bilder anhängen'

@@ -1,0 +1,12 @@
+<%= c 'stack', space: :small do %>
+  <%= c 'heading', tag: :h2 do %>
+    <%= t('.heading') %>
+  <% end %>
+
+  <p>
+    <%= t('.text',
+      name: contributor.name,
+      phone_number: contributor.whats_app_phone_number.phony_formatted
+    ) %>
+  </p>
+<% end %>

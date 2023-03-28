@@ -65,7 +65,7 @@ RSpec.describe ChatMessage::ChatMessage, type: :component do
       it { should have_text(I18n.t('components.chat_message.created_by', name: 'Princess Mononoke')) }
 
       context 'with a creator with no name' do
-        let(:message) { create(:message, creator: create(:user)) }
+        let(:message) { create(:message, creator: create(:user, first_name: '', last_name: '')) }
         it { should have_text(I18n.t('components.chat_message.created_by', name: I18n.t('components.chat_message.anonymous_creator'))) }
       end
     end

@@ -18,7 +18,7 @@ module ContributorRow
     end
 
     def channels
-      contributor.channels.map(&:capitalize).join(', ')
+      contributor.channels.map(&:to_s).map(&:camelize).join(', ')
     end
 
     def compact?

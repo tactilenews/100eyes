@@ -31,6 +31,9 @@ Rails.application.routes.draw do
       get '/telegram/link/:telegram_onboarding_token', to: 'telegram#link', as: 'telegram_link'
       get '/telegram/fallback/:telegram_onboarding_token', to: 'telegram#fallback', as: 'telegram_fallback'
       post '/telegram/', to: 'telegram#create'
+
+      get '/whats-app/', to: 'whats_app#show'
+      post '/whats-app/', to: 'whats_app#create'
     end
   end
 
@@ -39,6 +42,12 @@ Rails.application.routes.draw do
 
   namespace :threema do
     post '/webhook', to: 'webhook#message'
+  end
+
+  namespace :whats_app do
+    post '/webhook', to: 'webhook#message'
+    post '/errors', to: 'webhook#errors'
+    post '/status', to: 'webhook#status'
   end
 
   telegram_webhook Telegram::WebhookController
@@ -83,6 +92,8 @@ Rails.application.routes.draw do
       resources :requests, only: %i[index show destroy]
       resources :messages, only: %i[index show destroy]
       resources :delayed_jobs, only: %i[index show destroy]
+      resources :business_plans, only: %i[index show edit update]
+      resources :organizations, only: %i[index show edit update]
     end
   end
 
@@ -104,4 +115,8 @@ Rails.application.routes.draw do
     get 'day-and-time-requests'
     get 'day-requests-replies'
   end
+
+  get '/profile', to: 'profile#index'
+  post '/profile/user', to: 'profile#create_user'
+  put '/profile/upgrade_business_plan', to: 'profile#upgrade_business_plan'
 end

@@ -5,6 +5,8 @@ require 'spec_helper'
 require 'vcr_setup'
 
 ENV['RAILS_ENV'] ||= 'test'
+ENV['TWILIO_AUTH_TOKEN'] = 'valid_token'
+
 require File.expand_path('../config/environment', __dir__)
 # Prevent database truncation if the environment is production
 if Rails.env.production?
@@ -83,6 +85,8 @@ RSpec.configure do |config|
   config.include ViewComponent::TestHelpers, type: :component
   config.include Capybara::RSpecMatchers, type: :component
   config.include FactoryBot::Syntax::Methods
+  config.include ActionView::Helpers::NumberHelper, type: :system
+  config.include ActionView::Helpers::NumberHelper, type: :requests
 
   config.include Helpers
 end

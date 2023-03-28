@@ -5,7 +5,7 @@ class Request < ApplicationRecord
 
   belongs_to :user
   has_many :messages, dependent: :destroy
-  has_many :contributors, through: :messages
+  has_many :contributors, through: :messages, source: :recipient
   has_many :photos, through: :messages
   default_scope { order(created_at: :desc) }
   has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
@@ -16,6 +16,8 @@ class Request < ApplicationRecord
   scope :sent, -> { where(schedule_send_for: nil).or(where('schedule_send_for < ?', Time.current)) }
 
   validates :files, blob: { content_type: ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'] }
+  validates :title, presence: true
+  validates :text, length: { maximum: 1500 }, presence: true
 
   acts_as_taggable_on :tags
 
