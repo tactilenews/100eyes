@@ -1,11 +1,23 @@
-<header <%= attrs %>>
+<header
+  <%= attrs %>
+  data-controller="nav-bar"
+  data-nav-bar-responsive-class="NavBar-list--responsive"
+>
   <nav class="NavBar-nav">
-    <ul class="NavBar-list">
-      <li class="NavBar-item NavBar-logo">
-        <%= link_to dashboard_path do %>
-          <%= svg '100eyes-logo' %>
-        <% end %>
-      </li>
+    <%= link_to dashboard_path, class: 'NavBar-logo' do %>
+      <%= svg '100eyes-logo' %>
+    <% end %>
+
+    <ul
+      class="NavBar-list"
+      data-nav-bar-target="navBarList"
+    >
+      <button
+        class="NavBar-item NavBar-hamburgerMenuToggleButton"
+        data-action='nav-bar#toggleMenu'
+      >
+        <%= c 'icon', icon: 'i-remove' %>
+      </button>
       <li class="NavBar-item">
         <%= link_to dashboard_path do %>
           <%= t('.dashboard') %>
@@ -30,16 +42,32 @@
       <% end %>
       <li class="NavBar-item NavBar-profileLink">
         <%= link_to profile_path, aria: { label: t('.profile_path') } do %>
+          <span
+            class="NavBar-profileLinkText"
+            data-nav-bar-target="navBarText"
+          >
+            <%= t '.profile_link' %>
+          </span>
           <%= svg 'profile-fig' %>
         <% end %>
       </li>
       <li class="NavBar-item NavBar-settings" >
         <%= link_to settings_path do %>
-          <span class="visually-hidden"><%= t('setting.setting', count: :many) %></span>
+          <span
+            data-nav-bar-target="navBarText"
+          >
+            <%= t('setting.setting', count: :many) %>
+          </span>
           <%= svg 'settings-wheel' %>
         <% end %>
       </li>
     </ul>
+    <button
+      class="NavBar-hamburgerMenuToggleButton"
+      data-action='nav-bar#toggleMenu'
+    >
+      <%= c 'icon', icon: 'hamburger-menu', styles: [:inline] %>
+    </button>
   </nav>
 
   <%= form_with url: search_path, local: true, method: :get do %>
