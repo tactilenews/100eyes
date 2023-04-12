@@ -40,6 +40,7 @@
 
 .NavBar-item > a {
   display: inline-flex;
+  align-items: center;
 }
 
 .NavBar-item.NavBar-logo,
@@ -75,6 +76,7 @@
   justify-content: flex-start;
   align-items: flex-end;
   font-size: calc(1.5 * var(--font-size));
+  z-index: 9999;
 }
 
 .NavBar-item span {
@@ -83,6 +85,11 @@
 
 .NavBar-search {
   display: none;
+}
+
+.NavBar-logOut svg {
+  width: var(--spacing-unit);
+  margin-right: var(--spacing-unit-xs);
 }
 
 @media screen and (max-width: 52.999rem) {
@@ -96,7 +103,6 @@
 
   .NavBar-list:not(.NavBar-list--responsive),
   .NavBar-search,
-  .NavBar-logOut,
   .NavBar-item:not(.NavBar-hamburgerMenuToggleButton) > svg {
     display: none;
   }
@@ -112,11 +118,17 @@
 
   .NavBar-item svg {
     width: var(--spacing-unit);
+    height: var(--spacing-unit);
     margin-left: var(--spacing-unit-s);
+    margin-right: 0;
   }
 
-  .NavBar-item.NavBar-profileLink svg {
-    width: calc(0.8 * var(--spacing-unit));
+  .NavBar-item.NavBar-logOut {
+    display: flex;
+  }
+
+  .NavBar-logOut svg {
+    order: 1;
   }
 }
 
@@ -129,13 +141,8 @@
     height: var(--line-height);
   }
 
-  .NavBar-logOut > svg {
-    width: var(--spacing-unit);
-    margin-right: var(--spacing-unit-xs);
-  }
-
   .NavBar-logOut {
-    margin: 0 var(--spacing-unit-s) 0 var(--spacing-unit);
+    margin-right: var(--spacing-unit-s);
     color: var(--color-primary);
     display: flex;
   }
@@ -144,6 +151,11 @@
     width: var(--spacing-unit);
     position: relative;
     bottom: 3px;
+  }
+
+  .NavBar-item:not(.NavBar-profileLink):not(.NavBar-settings):not(.NavBar-logOut)
+    svg {
+    display: none;
   }
 }
 
