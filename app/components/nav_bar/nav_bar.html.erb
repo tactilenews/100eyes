@@ -21,31 +21,32 @@
       <li class="NavBar-item">
         <%= link_to dashboard_path do %>
           <%= t('.dashboard') %>
+          <%= svg 'dashboard' %>
         <% end %>
       </li>
       <li class="NavBar-item">
         <%= link_to contributors_path do %>
           <%= t('.community', count: :many) %>
+          <%= svg 'community' %>
         <% end %>
       </li>
       <li class="NavBar-item">
         <%= link_to requests_path do %>
           <%= t('.investigation', count: :many) %>
+          <%= svg 'flyer' %>
         <% end %>
       </li>
       <% if current_user.admin? %>
         <li class="NavBar-item">
           <%= link_to admin_root_path do %>
             <%= t '.admin' %>
+            <%= svg '100' %>
           <% end %>
         </li>
       <% end %>
       <li class="NavBar-item NavBar-profileLink">
         <%= link_to profile_path, aria: { label: t('.profile_path') } do %>
-          <span
-            class="NavBar-profileLinkText"
-            data-nav-bar-target="navBarText"
-          >
+          <span>
             <%= t '.profile_link' %>
           </span>
           <%= svg 'profile-fig' %>
@@ -53,12 +54,29 @@
       </li>
       <li class="NavBar-item NavBar-settings" >
         <%= link_to settings_path do %>
-          <span
-            data-nav-bar-target="navBarText"
-          >
+          <span>
             <%= t('setting.setting', count: :many) %>
           </span>
           <%= svg 'settings-wheel' %>
+        <% end %>
+      </li>
+      <li class="NavBar-item NavBar-search">
+        <%= form_with url: search_path, local: true, method: :get do %>
+          <label for="q" aria-label="<%= t('search.placeholder') %>"></label>
+          <%= c 'input',
+            type: :search,
+            id: 'q',
+            required: true,
+            icon: :zoom,
+            styles: [:small],
+            placeholder: t('search.placeholder')
+          %>
+        <% end %>
+      </li>
+      <li class="NavBar-item NavBar-logOut">
+        <%= link_to sign_out_path, method: :delete do %>
+          <%= svg 'logout' %>
+          <%= t '.sign_out' %>
         <% end %>
       </li>
     </ul>
@@ -69,21 +87,4 @@
       <%= c 'icon', icon: 'hamburger-menu', styles: [:inline] %>
     </button>
   </nav>
-
-  <%= form_with url: search_path, local: true, method: :get do %>
-    <label for="q" aria-label="<%= t('search.placeholder') %>"></label>
-    <%= c 'input',
-      class: 'NavBar-search',
-      type: :search,
-      id: 'q',
-      required: true,
-      icon: :zoom,
-      styles: [:small],
-      placeholder: t('search.placeholder')
-    %>
-  <% end %>
-  <%= link_to sign_out_path, method: :delete, class: 'NavBar-logOut' do %>
-    <%= svg 'logout' %>
-    <%= t '.sign_out' %>
-  <% end %>
 </header>
