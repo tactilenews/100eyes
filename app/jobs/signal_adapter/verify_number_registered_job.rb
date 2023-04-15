@@ -2,7 +2,7 @@
 
 require 'net/http'
 
-# rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+# rubocop:disable Metrics/AbcSize
 module SignalAdapter
   class VerifyNumberRegisteredJob < ApplicationJob
     def perform(contributor)
@@ -34,4 +34,4 @@ module SignalAdapter
     end
   end
 end
-# rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+# rubocop:enable Metrics/AbcSize
