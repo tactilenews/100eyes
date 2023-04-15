@@ -29,7 +29,7 @@ module CommunityMetrics
         {
           value: requests_count,
           label: t('.requests', count: requests_count),
-          icon: 'flyer-turq'
+          custom_icon: 'flyer-turq'
         },
         {
           value: replies_count,
