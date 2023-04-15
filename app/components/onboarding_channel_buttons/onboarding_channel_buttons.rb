@@ -4,14 +4,18 @@ module OnboardingChannelButtons
   class OnboardingChannelButtons < ApplicationComponent
     private
 
-    def styles
-      return super unless show_signal?
+    def initialize(channels:)
+      super
 
-      super + [:even]
+      @channels = channels
     end
 
-    def show_signal?
-      Setting.signal_server_phone_number.present?
+    attr_reader :channels
+
+    def styles
+      return super + [:twoColumn] if channels.length.even?
+
+      super
     end
   end
 end

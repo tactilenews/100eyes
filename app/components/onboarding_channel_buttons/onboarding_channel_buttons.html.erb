@@ -1,35 +1,11 @@
 <div <%= attrs %>>
-  <%= c 'button',
-    link: onboarding_threema_path,
-    styles: [:primary] do
-  %>
-    <%= svg 'channel_threema' %>
-    Threema
-  <% end %>
-
-  <% if show_signal? %>
+  <% channels.each do |channel| %>
     <%= c 'button',
-      link: onboarding_signal_path,
+      link: send("onboarding_#{channel}_path"),
       styles: [:primary] do
     %>
-      <%= svg 'channel_signal' %>
-      Signal
+      <%= svg "channel_#{channel}" %>
+      <%= t(".#{channel}") %>
     <% end %>
-  <% end %>
-
-  <%= c 'button',
-    link: onboarding_telegram_path,
-    styles: [:primary] do
-  %>
-    <%= svg 'channel_telegram' %>
-    Telegram
-  <% end %>
-
-  <%= c 'button',
-    link: onboarding_email_path,
-    styles: [:primary] do
-  %>
-    <%= svg 'channel_mail' %>
-    E-Mail
   <% end %>
 </div>
