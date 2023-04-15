@@ -15,7 +15,7 @@ module PostmarkAdapter
         contributor.update(deactivated_at: Time.current)
         ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
         User.admin.find_each do |admin|
-          PostmarkAdapter::Outbound.contributor_marked_as_inactive!(admin, contributor, exception.message)
+          contributor_marked_as_inactive!(admin, contributor)
         end
       end
     end
