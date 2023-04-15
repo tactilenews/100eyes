@@ -6,7 +6,20 @@ module ThreemaAdapter
       queue_as :default
 
       rescue_from RuntimeError do |exception|
-        tags = exception.message.match?(/Can't find public key for Threema ID/) ? { support: 'yes' } : {}
+        tags = {}
+        if exception.message.match?(/Can't find public key for Threema ID/)
+          tags = { support: 'yes' }
+          threema_id = exception.message.split('Threema ID').last.strip
+          contributor = Contributor.where('lower(threema_id) = ?', threema_id.downcase).first
+          return unless contributor
+
+          contributor.deactivated_at = Time.current
+          contributor.save(validate: false)
+          ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
+          User.admin.find_each do |admin|
+            PostmarkAdapter::Outbound.contributor_marked_as_inactive!(admin, contributor, exception.message)
+          end
+        end
         ErrorNotifier.report(exception, tags: tags)
       end
 

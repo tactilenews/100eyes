@@ -20,6 +20,7 @@ module SignalAdapter
         end
         response.value # may raise exception
       rescue Net::HTTPClientException => e
+        SignalAdapter::VerifyNumberRegisteredJob.perform_later(recipient) if e.response.body.match?(/Failed to send message/)
         ErrorNotifier.report(e, context: {
                                code: e.response.code,
                                message: e.response.message,
