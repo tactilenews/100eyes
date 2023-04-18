@@ -367,6 +367,7 @@ de:
         text: "%{organization_name} hat die zahl der gebuchten Contributors überschritten. Technisch ist das kein problem. Sprich mit der Kund:in doch demnächst über eine Aufstockung des Plans."
       contributor_marked_as_inactive_email:
         subject: "%{contributor_name} wurde bei %{channel} als inaktiv markiert, weil er keine Nachrichten mehr von %{project_name} empfangen kann."
+        text: Wenn Sie der Meinung sind, dass dies nicht korrekt ist, sollten Sie sich mit dem Betreffenden in Verbindung setzen, damit er wieder einen aktiven Beitrag leisten kann.
       contributor_subscribed_email:
         subject: "%{contributor_name} hat erneut den Empfang von Nachrichten über %{channel} von %{project_name} angefordert."
     whats_app:

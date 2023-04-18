@@ -114,7 +114,7 @@ module PostmarkAdapter
       subject = I18n.t('adapter.postmark.contributor_marked_as_inactive_email.subject', project_name: Setting.project_name,
                                                                                         contributor_name: contributor.name,
                                                                                         channel: contributor.channels.first.to_s.camelize)
-      text = I18n.t('adapter.whats_app.unsubscribe.by_request_of_contributor', contributor_name: contributor.name)
+      text = I18n.t('adapter.postmark.contributor_marked_as_inactive_email.text')
       message_stream = Setting.postmark_transactional_stream
       @text = [subject, text].join("\n")
       mail(to: admin.email, subject: subject, message_stream: message_stream)
