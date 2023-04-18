@@ -24,7 +24,8 @@ module SignalAdapter
           PostmarkAdapter::Outbound.contributor_marked_as_inactive!(admin, contributor)
         end
       when 400..499
-        ErrorNotifier.report(Net::HTTPServerException, context: {
+        exception = SignalAdapter::BadRequestError.new(url: url.to_s)
+        ErrorNotifier.report(exception, context: {
                                code: response.code,
                                message: response.message,
                                headers: response.to_hash,
