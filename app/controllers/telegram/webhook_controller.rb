@@ -36,11 +36,26 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
       respond_with :message, text: Setting.telegram_contributor_not_found_message
     end
 
+    adapter.on(TelegramAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
+      handle_unsubsribe_contributor(contributor)
+    end
+
     adapter.consume(msg) do |m|
       unless contributor_connected
         m.contributor.save!
         m.contributor.reply(adapter)
       end
+    end
+  end
+
+  private
+
+  def handle_unsubsribe_contributor(contributor)
+    contributor.update!(deactivated_at: Time.current)
+    TelegramAdapter::Outbound.send_unsubsribed_successfully_message!(contributor)
+    ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
+    User.admin.find_each do |admin|
+      PostmarkAdapter::Outbound.contributor_marked_as_inactive!(admin, contributor)
     end
   end
 end
