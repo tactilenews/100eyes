@@ -28,6 +28,7 @@ class Threema::WebhookController < ApplicationController
 
     adapter.on(ThreemaAdapter::SUBSCRIBE_CONTRIBUTOR) do |contributor|
       handle_subscribe_contributor(contributor)
+      return head :ok
     end
 
     adapter.consume(threema_webhook_params) do |message|
