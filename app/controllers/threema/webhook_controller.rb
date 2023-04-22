@@ -6,18 +6,25 @@ class Threema::WebhookController < ApplicationController
   skip_before_action :require_login, :verify_authenticity_token
 
   def message
-    threema_message = ThreemaAdapter::Inbound.new(threema_webhook_params)
-    return head :ok if threema_message.delivery_receipt
+    adapter = ThreemaAdapter::Inbound.new
 
-    contributor = threema_message.sender
-    return head :ok unless contributor
-
-    if threema_message.unknown_content
-      ThreemaAdapter::Inbound.bounce!(recipient: contributor,
-                                      text: Setting.threema_unknown_content_message)
+    adapter.on(ThreemaAdapter::DELIVERY_RECEIPT_RECEIVED) do
+      return head :ok
     end
 
-    head :ok if contributor.reply(threema_message)
+    adapter.on(ThreemaAdapter::UNKNOWN_CONTRIBUTOR) do |threema_id|
+      handle_unknown_contributor(threema_id)
+      return head :ok
+    end
+
+    adapter.on(ThreemaAdapter::UNSUPPORTED_CONTENT) do |contributor|
+      ThreemaAdapter::Outbound.send_unsupported_content_message!(contributor)
+    end
+
+    adapter.consume(threema_webhook_params) do |message|
+      message.contributor.reply(adapter)
+      return head :ok
+    end
   rescue ActiveRecord::RecordInvalid
     head :service_unavailable
   end
@@ -26,5 +33,10 @@ class Threema::WebhookController < ApplicationController
 
   def threema_webhook_params
     params.permit(:from, :to, :messageId, :date, :nonce, :box, :mac, :nickname)
+  end
+
+  def handle_unknown_contributor(threema_id)
+    exception = ThreemaAdapter::UnknownContributorError.new(threema_id: threema_id)
+    ErrorNotifier.report(exception)
   end
 end
