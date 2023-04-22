@@ -21,7 +21,7 @@ module WhatsApp
       end
 
       adapter.on(WhatsAppAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
-        handle_unsubsribe_contributor(contributor)
+        handle_unsubscribe_contributor(contributor)
       end
 
       adapter.on(WhatsAppAdapter::SUBSCRIBE_CONTRIBUTOR) do |contributor|
@@ -88,7 +88,7 @@ module WhatsApp
       end
     end
 
-    def handle_unsubsribe_contributor(contributor)
+    def handle_unsubscribe_contributor(contributor)
       contributor.update!(deactivated_at: Time.current)
       WhatsAppAdapter::Outbound.send_unsubsribed_successfully_message!(contributor)
       ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)

@@ -22,7 +22,7 @@ class Threema::WebhookController < ApplicationController
     end
 
     adapter.on(ThreemaAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
-      handle_unsubsribe_contributor(contributor)
+      handle_unsubscribe_contributor(contributor)
       return head :ok
     end
 
@@ -50,7 +50,7 @@ class Threema::WebhookController < ApplicationController
     ErrorNotifier.report(exception)
   end
 
-  def handle_unsubsribe_contributor(contributor)
+  def handle_unsubscribe_contributor(contributor)
     contributor.update!(deactivated_at: Time.current)
     ThreemaAdapter::Outbound.send_unsubsribed_successfully_message!(contributor)
     ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
