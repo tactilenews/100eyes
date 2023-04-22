@@ -31,6 +31,13 @@ module ThreemaAdapter
         ThreemaAdapter::Outbound::Text.perform_later(text: Setting.threema_unknown_content_message, recipient: contributor)
       end
 
+      def send_unsubsribed_successfully_message!(contributor)
+        return unless contributor&.threema_id
+
+        text = [I18n.t('adapter.shared.unsubscribe.successful'), "_#{I18n.t('adapter.shared.subscribe.instructions')}_"].join("\n\n")
+        ThreemaAdapter::Outbound::Text.perform_later(text: text, recipient: contributor)
+      end
+
       def send_files(files, message)
         files.each_with_index do |file, index|
           ThreemaAdapter::Outbound::File.perform_later(

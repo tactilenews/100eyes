@@ -21,6 +21,11 @@ class Threema::WebhookController < ApplicationController
       ThreemaAdapter::Outbound.send_unsupported_content_message!(contributor)
     end
 
+    adapter.on(ThreemaAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
+      handle_unsubsribe_contributor(contributor)
+      return head :ok
+    end
+
     adapter.consume(threema_webhook_params) do |message|
       message.contributor.reply(adapter)
       return head :ok
@@ -38,5 +43,14 @@ class Threema::WebhookController < ApplicationController
   def handle_unknown_contributor(threema_id)
     exception = ThreemaAdapter::UnknownContributorError.new(threema_id: threema_id)
     ErrorNotifier.report(exception)
+  end
+
+  def handle_unsubsribe_contributor(contributor)
+    contributor.update!(deactivated_at: Time.current)
+    ThreemaAdapter::Outbound.send_unsubsribed_successfully_message!(contributor)
+    ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
+    User.admin.find_each do |admin|
+      PostmarkAdapter::Outbound.contributor_marked_as_inactive!(admin, contributor)
+    end
   end
 end

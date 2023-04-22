@@ -117,7 +117,7 @@ module WhatsAppAdapter
     end
 
     def unsubscribe_text?(text)
-      text.downcase.strip.eql?(I18n.t('adapter.whats_app.unsubscribe.text'))
+      text.downcase.strip.eql?(I18n.t('adapter.shared.unsubscribe.text'))
     end
 
     def subscribe_text?(text)
