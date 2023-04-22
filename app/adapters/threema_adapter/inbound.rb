@@ -5,6 +5,7 @@ module ThreemaAdapter
   UNSUPPORTED_CONTENT = :unsupported_content
   DELIVERY_RECEIPT_RECEIVED = :delivery_receipt_received
   UNSUBSCRIBE_CONTRIBUTOR = :unsubscribe_contributor
+  SUBSCRIBE_CONTRIBUTOR = :subscribe_contributor
 
   class Inbound
     UNSUPPORTED_CONTENT_TYPES = %w[application text/x-vcard].freeze
@@ -69,6 +70,7 @@ module ThreemaAdapter
       text = initialize_text(decrypted_message)
 
       trigger(UNSUBSCRIBE_CONTRIBUTOR, sender) if unsubscribe_text?(text)
+      trigger(SUBSCRIBE_CONTRIBUTOR, sender) if subscribe_text?(text)
       message = Message.new(text: text, sender: sender)
       message.raw_data.attach(
         io: StringIO.new(decrypted_message.content),
@@ -118,10 +120,14 @@ module ThreemaAdapter
       text.downcase.strip.eql?(I18n.t('adapter.shared.unsubscribe.text'))
     end
 
+    def subscribe_text?(text)
+      text.downcase.strip.eql?(I18n.t('adapter.shared.subscribe.text'))
+    end
+
     def create_message?
       has_non_text_content = message.files.any? || message.unknown_content
       text = message.text
-      has_non_text_content || (text && !unsubscribe_text?(text))
+      has_non_text_content || (text && !unsubscribe_text?(text) && !subscribe_text?(text))
     end
   end
 end
