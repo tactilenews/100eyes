@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 module ThreemaAdapter
-  UNKNOWN_CONTRIBUTOR = :unknown_contributor
-  UNSUPPORTED_CONTENT = :unsupported_content
   DELIVERY_RECEIPT_RECEIVED = :delivery_receipt_received
+  UNKNOWN_CONTRIBUTOR = :unknown_contributor
   UNSUBSCRIBE_CONTRIBUTOR = :unsubscribe_contributor
   SUBSCRIBE_CONTRIBUTOR = :subscribe_contributor
+  UNSUPPORTED_CONTENT = :unsupported_content
 
   class Inbound
     UNSUPPORTED_CONTENT_TYPES = %w[application text/x-vcard].freeze
@@ -81,11 +81,9 @@ module ThreemaAdapter
     end
 
     def initialize_text(decrypted_message)
-      if decrypted_message.instance_of? Threema::Receive::Text
-        decrypted_message.content
-      elsif decrypted_message.instance_of?(Threema::Receive::File) && decrypted_message.caption
-        decrypted_message.caption
-      end
+      return decrypted_message.caption if decrypted_message.instance_of?(Threema::Receive::File) && decrypted_message.caption
+
+      decrypted_message.content
     end
 
     def initialize_unsupported_content(decrypted_message)
@@ -117,11 +115,11 @@ module ThreemaAdapter
     end
 
     def unsubscribe_text?(text)
-      text.downcase.strip.eql?(I18n.t('adapter.shared.unsubscribe.text'))
+      text&.downcase&.strip.eql?(I18n.t('adapter.shared.unsubscribe.text'))
     end
 
     def subscribe_text?(text)
-      text.downcase.strip.eql?(I18n.t('adapter.shared.subscribe.text'))
+      text&.downcase&.strip.eql?(I18n.t('adapter.shared.subscribe.text'))
     end
 
     def create_message?
