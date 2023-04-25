@@ -4,6 +4,7 @@ module SignalAdapter
   UNKNOWN_CONTRIBUTOR = :unknown_contributor
   UNKNOWN_CONTENT = :unknown_content
   CONNECT = :connect
+  UNSUBSCRIBE_CONTRIBUTOR = :unsubscribe_contributor
 
   class Inbound
     UNKNOWN_CONTENT_KEYS = %w[mentions contacts sticker].freeze
@@ -31,8 +32,7 @@ module SignalAdapter
       files = initialize_files(signal_message)
       @message.files = files
 
-      has_content = @message.text || @message.files.any? || @message.unknown_content
-      return unless has_content
+      return unless create_message?
 
       yield(@message) if block_given?
     end
@@ -72,6 +72,7 @@ module SignalAdapter
       reaction = data_message[:reaction]
 
       message_text = reaction ? reaction[:emoji] : data_message[:message]
+      trigger(UNSUBSCRIBE_CONTRIBUTOR, sender) if unsubscribe_text?(message_text)
 
       message = Message.new(text: message_text, sender: sender)
       message.raw_data.attach(
@@ -117,6 +118,16 @@ module SignalAdapter
       )
 
       file
+    end
+
+    def unsubscribe_text?(text)
+      text&.downcase&.strip.eql?(I18n.t('adapter.shared.unsubscribe.text'))
+    end
+
+    def create_message?
+      has_non_text_content = message.files.any? || message.unknown_content
+      text = message.text
+      has_non_text_content || (text && !unsubscribe_text?(text))
     end
   end
 end

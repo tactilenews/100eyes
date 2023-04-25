@@ -31,6 +31,10 @@ module SignalAdapter
         SignalAdapter::Outbound.send_unknown_content_message!(contributor)
       end
 
+      adapter.on(SignalAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
+        handle_unsubscribe_contributor(contributor)
+      end
+
       signal_messages.each do |raw_message|
         adapter.consume(raw_message) { |m| m.contributor.reply(adapter) }
       rescue StandardError => e
@@ -59,6 +63,15 @@ module SignalAdapter
 
     def queue_empty?
       Delayed::Job.where(queue: queue_name, failed_at: nil).none?
+    end
+
+    def handle_unsubscribe_contributor(contributor)
+      contributor.update!(deactivated_at: Time.current)
+      SignalAdapter::Outbound.send_unsubsribed_successfully_message!(contributor)
+      ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
+      User.admin.find_each do |admin|
+        PostmarkAdapter::Outbound.contributor_marked_as_inactive!(admin, contributor)
+      end
     end
   end
 end
