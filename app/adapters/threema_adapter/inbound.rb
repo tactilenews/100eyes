@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module ThreemaAdapter
-  DELIVERY_RECEIPT_RECEIVED = :delivery_receipt_received
   UNKNOWN_CONTRIBUTOR = :unknown_contributor
   UNSUBSCRIBE_CONTRIBUTOR = :unsubscribe_contributor
   SUBSCRIBE_CONTRIBUTOR = :subscribe_contributor
@@ -21,10 +20,7 @@ module ThreemaAdapter
 
     def consume(threema_message)
       decrypted_message = Threema.new.receive(payload: threema_message)
-      if delivery_receipt?(decrypted_message)
-        trigger(DELIVERY_RECEIPT_RECEIVED)
-        return
-      end
+      return if delivery_receipt?(decrypted_message)
 
       @sender = initialize_sender(threema_message)
       return unless @sender

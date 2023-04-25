@@ -8,13 +8,8 @@ class Threema::WebhookController < ApplicationController
   def message
     adapter = ThreemaAdapter::Inbound.new
 
-    adapter.on(ThreemaAdapter::DELIVERY_RECEIPT_RECEIVED) do
-      return head :ok
-    end
-
     adapter.on(ThreemaAdapter::UNKNOWN_CONTRIBUTOR) do |threema_id|
       handle_unknown_contributor(threema_id)
-      return head :ok
     end
 
     adapter.on(ThreemaAdapter::UNSUPPORTED_CONTENT) do |contributor|
@@ -23,18 +18,17 @@ class Threema::WebhookController < ApplicationController
 
     adapter.on(ThreemaAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
       handle_unsubscribe_contributor(contributor)
-      return head :ok
     end
 
     adapter.on(ThreemaAdapter::SUBSCRIBE_CONTRIBUTOR) do |contributor|
       handle_subscribe_contributor(contributor)
-      return head :ok
     end
 
     adapter.consume(threema_webhook_params) do |message|
       message.contributor.reply(adapter)
-      return head :ok
     end
+
+    head :ok
   rescue ActiveRecord::RecordInvalid
     head :service_unavailable
   end
