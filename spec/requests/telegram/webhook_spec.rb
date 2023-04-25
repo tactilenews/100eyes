@@ -104,7 +104,9 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
       end
 
       context 'who is already connected' do
+        subject { -> { dispatch_message message, message_options } }
         let(:contributor) { create(:contributor, :with_an_avatar, telegram_id: 12_345) }
+
         it { should_not(change { Message.count }) }
 
         context 'given a recent request' do
@@ -117,6 +119,87 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
         context ' message has a document' do
           let(:message_options) { { from: { id: 12_345 }, document: 'something' } }
           it { should respond_with_message "Cannot handle this, I'm sorry :(" }
+        end
+
+        context 'who would like to unsubscribe' do
+          let(:message) { 'Abbestellen' }
+          let(:unsubscribed_successfully_text) do
+            [I18n.t('adapter.shared.unsubscribe.successful'), "_#{I18n.t('adapter.shared.subscribe.instructions')}_"].join("\n\n")
+          end
+          let(:admin) { create(:user, admin: true) }
+          before { create(:request) }
+
+          it 'does not create a message' do
+            expect { subject.call }.not_to change(Message, :count)
+          end
+
+          it 'deactivates the contributor' do
+            Timecop.freeze(Time.zone.local(2008, 9, 1, 12, 0, 0)) do
+              expect { subject.call }.to change { contributor.reload.deactivated_at }.from(nil).to(Time.current)
+            end
+          end
+
+          it 'schedules an unsubscribed_successfully message' do
+            expect { subject.call }.to have_enqueued_job(TelegramAdapter::Outbound::Text) do |text, telegram_id|
+              expect(text).to eq(unsubscribed_successfully_text)
+              expect(telegram_id).to eq(contributor.telegram_id)
+            end
+          end
+
+          it_behaves_like 'an ActivityNotification', 'ContributorMarkedInactive'
+
+          it 'sends an email out to all admin' do
+            expect { subject.call }.to have_enqueued_job.on_queue('default').with(
+              'PostmarkAdapter::Outbound',
+              'contributor_marked_as_inactive_email',
+              'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
+              {
+                params: { admin: admin, contributor: contributor },
+                args: []
+              }
+            )
+          end
+        end
+
+        context 'who has unsubsribed, and would like to re-subscribe' do
+          let(:message) { 'Bestellen' }
+          let(:admin) { create(:user, admin: true) }
+          let(:deactivated_at) { Time.zone.local(2023, 0o4, 0o1) }
+
+          before do
+            allow(Setting).to receive(:onboarding_success_heading).and_return('Welcome!')
+            allow(Setting).to receive(:onboarding_success_text).and_return('')
+            contributor.update!(deactivated_at: deactivated_at)
+          end
+
+          it 'does not create a message' do
+            expect { subject.call }.not_to change(Message, :count)
+          end
+
+          it 're-activates the contributor' do
+            expect { subject.call }.to change { contributor.reload.deactivated_at }.from(deactivated_at).to(nil)
+          end
+
+          it 'schedules a welcome message' do
+            expect { subject.call }.to have_enqueued_job(TelegramAdapter::Outbound::Text) do |text, telegram_id|
+              expect(text).to eq('Welcome!/n')
+              expect(telegram_id).to eq(contributor.telegram_id)
+            end
+          end
+
+          it_behaves_like 'an ActivityNotification', 'ContributorSubscribed'
+
+          it 'sends an email out to all admin' do
+            expect { subject.call }.to have_enqueued_job.on_queue('default').with(
+              'PostmarkAdapter::Outbound',
+              'contributor_subscribed_email',
+              'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
+              {
+                params: { admin: admin, contributor: contributor },
+                args: []
+              }
+            )
+          end
         end
       end
     end

@@ -126,7 +126,7 @@ RSpec.describe ThreemaAdapter::Inbound do
       end
     end
 
-    describe 'Unknown content' do
+    describe 'Unsupported content' do
       subject { message.unknown_content }
 
       describe 'Threema::Receive::File' do
@@ -166,31 +166,6 @@ RSpec.describe ThreemaAdapter::Inbound do
   end
 
   describe '#on' do
-    describe '' do
-      let(:delivery_receipt_received_callback) { spy('delivery_receipt_received_callback') }
-
-      before do
-        adapter.on(ThreemaAdapter::DELIVERY_RECEIPT_RECEIVED) do
-          delivery_receipt_received_callback.call
-        end
-      end
-
-      subject do
-        adapter.consume(threema_message)
-        delivery_receipt_received_callback
-      end
-
-      describe 'message other than Threema::Receive::DeliveryReceipt' do
-        it { is_expected.not_to have_received(:call) }
-      end
-
-      describe 'Threema::Receive::DeliveryReceipt' do
-        before { allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::DeliveryReceipt).and_return(true) }
-
-        it { is_expected.to have_received(:call) }
-      end
-    end
-
     describe 'UNKNOWN_CONTRIBUTOR' do
       let(:unknown_contributor_callback) { spy('unknown_contributor_callback') }
 

@@ -434,7 +434,7 @@ RSpec.describe Contributor, type: :model do
       let(:threema) { instance_double(Threema) }
       let(:threema_message) do
         ActionController::Parameters.new({
-                                           'from' => 'V5EA564T',
+                                           'from' => threema_id,
                                            'to' => '*100EYES',
                                            'messageId' => 'dfbe859c44f15125',
                                            'date' => '1612808574',
@@ -444,11 +444,18 @@ RSpec.describe Contributor, type: :model do
                                            'nickname' => 'matt.rider'
                                          })
       end
+      subject do
+        lambda do
+          message_inbound_adapter = ThreemaAdapter::Inbound.new
+          message_inbound_adapter.consume(threema_message) do |message|
+            message.contributor.reply(message_inbound_adapter)
+          end
+        end
+      end
       let(:threema_id) { 'V5EA564T' }
-      let(:contributor) do
+      let!(:contributor) do
         build(:contributor, threema_id: threema_id).tap { |contributor| contributor.save(validate: false) }
       end
-      let(:message_inbound_adapter) { ThreemaAdapter::Inbound.new(threema_message) }
 
       before do
         allow(Threema).to receive(:new).and_return(threema)
