@@ -32,6 +32,6 @@ module TelegramAdapter
         text = [I18n.t('adapter.shared.unsubscribe.successful'), "<em>#{I18n.t('adapter.shared.subscribe.instructions')}</em>"].join("\n\n")
         TelegramAdapter::Outbound::Text.perform_later(text: text, telegram_id: contributor.telegram_id)
       end
-  end
+    end
   end
 end
