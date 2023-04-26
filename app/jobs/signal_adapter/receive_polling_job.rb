@@ -35,6 +35,10 @@ module SignalAdapter
         handle_unsubscribe_contributor(contributor)
       end
 
+      adapter.on(SignalAdapter::SUBSCRIBE_CONTRIBUTOR) do |contributor|
+        handle_subscribe_contributor(contributor)
+      end
+
       signal_messages.each do |raw_message|
         adapter.consume(raw_message) { |m| m.contributor.reply(adapter) }
       rescue StandardError => e
@@ -71,6 +75,16 @@ module SignalAdapter
       ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
       User.admin.find_each do |admin|
         PostmarkAdapter::Outbound.contributor_marked_as_inactive!(admin, contributor)
+      end
+    end
+
+
+    def handle_subscribe_contributor(contributor)
+      contributor.update!(deactivated_at: nil)
+      SignalAdapter::Outbound.send_welcome_message!(contributor)
+      ContributorSubscribed.with(contributor_id: contributor.id).deliver_later(User.all)
+      User.admin.find_each do |admin|
+        PostmarkAdapter::Outbound.contributor_subscribed!(admin, contributor)
       end
     end
   end

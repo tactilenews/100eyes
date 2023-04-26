@@ -488,5 +488,31 @@ RSpec.describe SignalAdapter::Inbound do
         it { is_expected.to have_received(:call) }
       end
     end
+
+    describe 'SUBSCRIBE_CONTRIBUTOR' do
+      let(:subscribe_contributor_callback) { spy('subscribe_contributor_callback') }
+
+      before do
+        contributor.update!(deactivated_at: 1.week.ago)
+        adapter.on(SignalAdapter::SUBSCRIBE_CONTRIBUTOR) do |contributor|
+          subscribe_contributor_callback.call(contributor)
+        end
+      end
+
+      subject do
+        adapter.consume(signal_message)
+        subscribe_contributor_callback
+      end
+
+      context 'any text other than the keyword Bestellen' do
+        it { is_expected.not_to have_received(:call) }
+      end
+
+      context 'with keyword Bestellen' do
+        before { signal_message[:envelope][:dataMessage][:message] = 'Bestellen' }
+
+        it { is_expected.to have_received(:call) }
+      end
+    end
   end
 end
