@@ -196,9 +196,9 @@ de:
       automatically_marked_inactive:
         text: "<strong>%{name}</strong> ist ein <strong>inaktives Mitglied</strong> deiner Community und erhält aktuell keine Recherchefragen über %{project_name}."
         possible_reason_whats_app: "<strong>%{first_name}</strong> hat darum gebeten, vom Empfang von Nachrichten über WhatsApp abgemeldet zu werden."
-        possible_reason_signal: Die Rufnummer wurde möglicherweise nicht bei Signal registriert. Bitte überprüfen Sie dies mit dem Anbieter.
-        possible_reason_threema: Diese Threema-ID könnte von Threema als ungültig gemeldet worden sein. Bitte überprüfen Sie die Threema-ID mit dem Beitragszahler.
-        possible_reason_email: Diese E-Mail könnte als inaktiv gemeldet worden sein. Inaktive Empfänger sind solche, die einen Hard Bounce, eine Spam-Beschwerde oder eine manuelle Unterdrückung erzeugt haben.
+        possible_reason_signal: Die Rufnummer wurde möglicherweise nicht bei Signal registriert. Bitte überprüfen Sie dies mit %{first_name}.
+        possible_reason_threema: Diese Threema-ID könnte von Threema als ungültig gemeldet worden sein. Bitten Sie %{first_name}, die Threema-ID zu überprüfen und schicken Sie %{first_name} einen neuen Einladungslink.
+        possible_reason_email: Diese E-Mail könnte als inaktiv gemeldet worden sein. Inaktive Empfänger sind solche, die einen Hard Bounce oder eine Spam-Beschwerde eingestellt haben. Weisen Sie %{first_name} darauf hin. Wenn %{first_name} sich für einen anderen Kanal anmelden möchte, verschicken Sie einen neuen Einladungslink.
     contributor_email_settings:
       heading: "Ausgewählter Kanal: E-Mail"
       text: "%{name} hat sich via E-Mail angemeldet."
@@ -366,8 +366,8 @@ de:
         subject: "%{organization_name} hat die Höchstzahl der %{business_plan_name} Nutzer seines %{users_limit} Plans überschritten "
         text: "%{organization_name} hat die zahl der gebuchten Contributors überschritten. Technisch ist das kein problem. Sprich mit der Kund:in doch demnächst über eine Aufstockung des Plans."
       contributor_marked_as_inactive_email:
-        subject: "%{contributor_name} wurde bei %{channel} als inaktiv markiert, weil er keine Nachrichten mehr von %{project_name} empfangen kann."
-        text: Wenn Sie der Meinung sind, dass dies nicht korrekt ist, sollten Sie sich mit dem Betreffenden in Verbindung setzen, damit er wieder einen aktiven Beitrag leisten kann.
+        subject: "%{contributor_name} wurde als inaktiv markiert, weil die Person über diesen Kanal keine Fragen mehr zu %{contributor_channel} erhalten können."
+        text: Wenn Sie vermuten, dass es sich um eine versehentliche Abmeldung handelt, setzen Sie sich mit %{contributor_name} in Verbindung. Vielleicht möchte die Person die Nachrichten lieber über einen anderen Kanal empfangen? Dann verschicken Sie einen neuen Anmelde-Link. 
       contributor_subscribed_email:
         subject: "%{contributor_name} hat erneut den Empfang von Nachrichten über %{channel} von %{project_name} angefordert."
     whats_app:
@@ -896,7 +896,7 @@ de:
       text_html: "Die Frage <strong>%{request_title}</strong> wurde für den Versand am %{date} um %{time} geplant und wird an %{contributors_count} Community-Mitgliedern versendet."
       link_text: Zur Frage
     contributor_marked_inactive:
-      text_html: "<strong>%{contributor_name}</strong> wurde als inaktiv markiert, weil sie keine Fragen mehr zu %{contributor_channel} erhalten können."
+      text_html: "<strong>%{contributor_name}</strong> wurde als inaktiv markiert, weil die Person über diesen Kanal keine Fragen mehr zu %{contributor_channel} erhalten können."
       link_text: "Zum Profil"
     contributor_subscribed:
       text_html: "<strong>%{contributor_name}</strong> hat beantragt, erneut Nachrichten per %{contributor_channel} zu bestellen."
