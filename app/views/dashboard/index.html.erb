@@ -3,7 +3,8 @@
     <%= c 'heading' do %>
       <%= t "dashboard.heading#{time_based_heading}", first_name: current_user.first_name %>
     <% end %>
-    <%= c 'new_request_link' %>
+    <%= c 'button', link: "https://hub.360dialog.com/dashboard/app/E7qlilPA/permissions", label: 'Connect to 360dialog' %>
+    <%# <%= c 'new_request_link' %> 
   <% end %>
 
 

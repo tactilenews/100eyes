@@ -78,9 +78,29 @@ module WhatsAppAdapter
       def send_message_template(recipient, message)
         recipient.update(whats_app_template_message_sent_at: Time.current)
 
-        text = I18n.t("adapter.whats_app.request_template.new_request_#{time_of_day}_#{rand(1..3)}", first_name: recipient.first_name,
-                                                                                                     request_title: message.request.title)
-        WhatsAppAdapter::Outbound::Text.perform_later(recipient: recipient, text: text)
+        WhatsAppAdapter::Outbound::Template.perform_later(payload: {
+                                                            to: recipient.whats_app_phone_number.split('+').last,
+                                                            type: 'template',
+                                                            template: {
+                                                              namespace: ENV.fetch('WHATS_APP_MESSAGE_TEMPLATE_NAMESPACE', ''),
+                                                              language: {
+                                                                policy: 'deterministic',
+                                                                code: 'de'
+                                                              },
+                                                              name: "new_request_#{time_of_day}_#{rand(1..3)}",
+                                                              components: [{
+                                                                type: 'body',
+                                                                parameters: [{
+                                                                  type: 'text',
+                                                                  text: recipient.first_name
+                                                                },
+                                                                             {
+                                                                               type: 'text',
+                                                                               text: message.request.title
+                                                                             }]
+                                                              }]
+                                                            }
+                                                          })
       end
 
       def send_message(recipient, message)

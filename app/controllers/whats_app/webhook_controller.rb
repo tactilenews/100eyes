@@ -55,6 +55,11 @@ module WhatsApp
       ErrorNotifier.report(exception, context: { message_sid: status_params['MessageSid'] })
     end
 
+    def three_sixty_dialog_status
+      Rails.logger.debug params
+      head :ok
+    end
+
     private
 
     def message_params
