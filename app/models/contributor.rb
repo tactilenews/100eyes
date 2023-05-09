@@ -14,7 +14,7 @@ class Contributor < ApplicationRecord
   has_many :replies, class_name: 'Message', as: :sender, dependent: :destroy
   has_many :received_messages, class_name: 'Message', inverse_of: :recipient, foreign_key: 'recipient_id', dependent: :destroy
   has_many :replied_to_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :replies
-  has_many :received_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :received_messages
+  has_many :received_requests, -> { reorder(broadcasted_at: :desc).distinct }, source: :request, through: :received_messages
   has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
   belongs_to :organization, optional: true
   belongs_to :deactivated_by_user, class_name: 'User', optional: true
@@ -113,7 +113,7 @@ class Contributor < ApplicationRecord
   end
 
   def active_request
-    received_requests.reorder(created_at: :desc).first || Request.reorder(created_at: :desc).first
+    received_requests.reorder(broadcasted_at: :desc).first || Request.reorder(broadcasted_at: :desc).first
   end
 
   def telegram?

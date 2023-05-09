@@ -540,7 +540,7 @@ RSpec.describe Contributor, type: :model do
 
     describe 'when many requests are sent to the contributor' do
       before(:each) do
-        another_request = create(:request, created_at: 1.day.ago)
+        another_request = create(:request, broadcasted_at: 1.day.ago)
         create(:message, request: the_request, recipient: contributor)
         create(:message, request: another_request, recipient: contributor)
       end
