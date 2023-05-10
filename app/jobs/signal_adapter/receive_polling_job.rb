@@ -17,9 +17,7 @@ module SignalAdapter
       adapter = SignalAdapter::Inbound.new
 
       adapter.on(SignalAdapter::CONNECT) do |contributor|
-        contributor.update!(signal_onboarding_completed_at: Time.zone.now)
-        SignalAdapter::Outbound.send_welcome_message!(contributor)
-        SignalAdapter::AttachContributorsAvatarJob.perform_later(contributor)
+        handle_connect_contributor(contributor)
       end
 
       adapter.on(SignalAdapter::UNKNOWN_CONTRIBUTOR) do |signal_phone_number|
@@ -69,6 +67,12 @@ module SignalAdapter
       Delayed::Job.where(queue: queue_name, failed_at: nil).none?
     end
 
+    def handle_connect_contributor(contributor)
+      contributor.update!(signal_onboarding_completed_at: Time.zone.now)
+      SignalAdapter::Outbound.send_welcome_message!(contributor)
+      SignalAdapter::AttachContributorsAvatarJob.perform_later(contributor)
+    end
+
     def handle_unsubscribe_contributor(contributor)
       contributor.update!(deactivated_at: Time.current)
       SignalAdapter::Outbound.send_unsubsribed_successfully_message!(contributor)
@@ -77,7 +81,6 @@ module SignalAdapter
         PostmarkAdapter::Outbound.contributor_marked_as_inactive!(admin, contributor)
       end
     end
-
 
     def handle_subscribe_contributor(contributor)
       contributor.update!(deactivated_at: nil)
