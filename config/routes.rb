@@ -48,7 +48,8 @@ Rails.application.routes.draw do
     post '/webhook', to: 'webhook#message'
     post '/errors', to: 'webhook#errors'
     post '/status', to: 'webhook#status'
-    post '/360dialog-status', to: 'webhook#three_sixty_dialog_status'
+    post '/three-sixty-dialog-status', to: 'webhook#three_sixty_dialog_status'
+    get '/onboarding-successful', to: 'onboarding#success'
   end
 
   telegram_webhook Telegram::WebhookController

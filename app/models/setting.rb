@@ -72,6 +72,8 @@ class Setting < RailsSettings::Base
   field :twilio_api_key_secret, readonly: true, default: ENV.fetch('TWILIO_API_KEY_SECRET', nil)
   field :whats_app_server_phone_number, readonly: true, default: ENV.fetch('WHATS_APP_SERVER_PHONE_NUMBER', nil)
 
+  field :three_sixty_dialog_api_key
+
   field :inbound_email_password, readonly: true, default: ENV.fetch('RAILS_INBOUND_EMAIL_PASSWORD', nil)
   field :email_from_address, readonly: true, default: ENV['EMAIL_FROM_ADDRESS'] || 'redaktion@localhost'
   field :postmark_api_token, readonly: true, default: ENV.fetch('POSTMARK_API_TOKEN', nil)
