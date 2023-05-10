@@ -98,6 +98,14 @@ module WhatsApp
     end
 
     def handle_subscribe_contributor(contributor)
+      if contributor.deactivated_by_user.present?
+        exception = StandardError.new(
+          "Contributor #{contributor.name} has been deactivated by #{contributor.deactivated_by_user.name} and has tried to re-subscribe"
+        )
+        ErrorNotifier.report(exception)
+        return
+      end
+
       contributor.update!(deactivated_at: nil)
       WhatsAppAdapter::Outbound.send_welcome_message!(contributor)
       ContributorSubscribed.with(contributor_id: contributor.id).deliver_later(User.all)
