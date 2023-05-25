@@ -48,6 +48,7 @@
   position: absolute;
   top: 0;
   left: 0;
+  overflow-wrap: break-word;
   white-space: pre-wrap;
   border-color: transparent;
   color: var(--color-text);
