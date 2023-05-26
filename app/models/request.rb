@@ -7,7 +7,7 @@ class Request < ApplicationRecord
   has_many :messages, dependent: :destroy
   has_many :contributors, through: :messages, source: :recipient
   has_many :photos, through: :messages
-  default_scope { order(created_at: :desc) }
+  default_scope { order(broadcasted_at: :desc) }
   has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
   has_many_attached :files
 
