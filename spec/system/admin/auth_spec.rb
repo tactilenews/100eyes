@@ -33,6 +33,7 @@ RSpec.describe 'Auth' do
       click_link 'Admin'
 
       expect(page).to have_http_status(:ok)
+
       expect(page).to have_link('New user')
     end
   end
