@@ -8,7 +8,7 @@ class RequestsController < ApplicationController
 
   def index
     @filter = filter_param
-    @sent_requests_count = Request.include_associations.broadcasted_at.count
+    @sent_requests_count = Request.include_associations.broadcasted.count
     @planned_requests_count = Request.include_associations.planned.count
     @requests = filtered_requests.page(params[:page])
   end
@@ -114,7 +114,7 @@ class RequestsController < ApplicationController
     if @filter == :planned
       Request.planned.reorder(schedule_send_for: :desc).include_associations
     else
-      Request.broadcasted_at.include_associations
+      Request.broadcasted.include_associations
     end
   end
 end
