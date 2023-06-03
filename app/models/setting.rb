@@ -72,7 +72,29 @@ class Setting < RailsSettings::Base
   field :twilio_api_key_secret, readonly: true, default: ENV.fetch('TWILIO_API_KEY_SECRET', nil)
   field :whats_app_server_phone_number, readonly: true, default: ENV.fetch('WHATS_APP_SERVER_PHONE_NUMBER', nil)
 
+  field :three_sixty_dialog_partner_token
+  field :three_sixty_dialog, type: :hash, readonly: true, default: {
+    partner: {
+      id: ENV.fetch('360_DIALOG_PARTNER_ID', nil),
+      username: ENV.fetch('360_DIALOG_PARTNER_USERNAME', nil),
+      password: ENV.fetch('360_DIALOG_PARTNER_PASSWORD', nil),
+      rest_api_endpoint: ENV.fetch('360_DIALOG_PARTNER_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')
+    },
+    whats_app: {
+      rest_api_endpoint: ENV.fetch('360_DIALOG_WHATS_APP_REST_API_ENDPOINT', 'https://waba-sandbox.360dialog.io'),
+      template_namespace: ENV.fetch('360_DIALOG_WHATS_APP_MESSAGE_TEMPLATE_NAMESPACE', nil)
+    }
+  }
+  # field :three_sixty_dialog_partner_id, readonly: true, default: ENV.fetch('360_DIALOG_PARTNER_ID', nil)
+  # field :three_sixty_dialog_partner_username, readonly: true, default: ENV.fetch('360_DIALOG_PARTNER_USERNAME', nil)
+  # field :three_sixty_dialog_partner_password, readonly: true, default: ENV.fetch('360_DIALOG_PARTNER_PASSWORD', nil)
+  # field :three_sixty_dialog_partner_rest_api_endpoint, readonly: true, default: ENV.fetch('360_DIALOG_PARTNER_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')
+
   field :three_sixty_dialog_api_key
+
+  # field :three_sixty_dialog_whats_app_rest_api_endpoint, readonly: true, default: ENV.fetch('360_DIALOG_WHATS_APP_REST_API_ENDPOINT', 'https://waba-sandbox.360dialog.io')
+  # field :three_sixty_dialog_whats_app_template_namespace, readonly: true,
+  #                                                         default: ENV.fetch('360_DIALOG_WHATS_APP_MESSAGE_TEMPLATE_NAMESPACE', nil)
 
   field :inbound_email_password, readonly: true, default: ENV.fetch('RAILS_INBOUND_EMAIL_PASSWORD', nil)
   field :email_from_address, readonly: true, default: ENV['EMAIL_FROM_ADDRESS'] || 'redaktion@localhost'

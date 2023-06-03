@@ -77,30 +77,7 @@ module WhatsAppAdapter
 
       def send_message_template(recipient, message)
         recipient.update(whats_app_template_message_sent_at: Time.current)
-
-        WhatsAppAdapter::Outbound::Template.perform_later(payload: {
-                                                            to: recipient.whats_app_phone_number.split('+').last,
-                                                            type: 'template',
-                                                            template: {
-                                                              namespace: ENV.fetch('WHATS_APP_MESSAGE_TEMPLATE_NAMESPACE', ''),
-                                                              language: {
-                                                                policy: 'deterministic',
-                                                                code: 'de'
-                                                              },
-                                                              name: "new_request_#{time_of_day}_#{rand(1..3)}",
-                                                              components: [{
-                                                                type: 'body',
-                                                                parameters: [{
-                                                                  type: 'text',
-                                                                  text: recipient.first_name
-                                                                },
-                                                                             {
-                                                                               type: 'text',
-                                                                               text: message.request.title
-                                                                             }]
-                                                              }]
-                                                            }
-                                                          })
+        WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(payload: template_payload(recipient, message))
       end
 
       def send_message(recipient, message)
@@ -113,6 +90,34 @@ module WhatsAppAdapter
             WhatsAppAdapter::Outbound::File.perform_later(recipient: recipient, text: index.zero? ? message.text : '', file: file)
           end
         end
+      end
+
+      def template_payload(recipient, message)
+        template_namespace = Setting.three_sixty_dialog[:whats_app][:template_namespace]
+        {
+          recipient_type: 'individual',
+          to: recipient.whats_app_phone_number.split('+').last,
+          type: 'template',
+          template: {
+            namespace: template_namespace,
+            language: {
+              policy: 'deterministic',
+              code: 'de'
+            },
+            name: "new_request_#{time_of_day}_#{rand(1..3)}",
+            components: [{
+              type: 'body',
+              parameters: [{
+                type: 'text',
+                text: recipient.first_name
+              },
+                           {
+                             type: 'text',
+                             text: message.request.title
+                           }]
+            }]
+          }
+        }
       end
     end
   end
