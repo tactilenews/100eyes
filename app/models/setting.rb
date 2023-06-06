@@ -67,6 +67,11 @@ class Setting < RailsSettings::Base
                                               default: ENV['SIGNAL_CLI_REST_API_ATTACHMENT_PATH'] || 'signal-cli-config/attachments/'
   field :signal_unknown_content_message, default: File.read(File.join('config', 'locales', 'signal', 'unknown_content.txt'))
 
+  field :twilio_account_sid, readonly: true, default: ENV.fetch('TWILIO_ACCOUNT_SID', nil)
+  field :twilio_api_key_sid, readonly: true, default: ENV.fetch('TWILIO_API_KEY_SID', nil)
+  field :twilio_api_key_secret, readonly: true, default: ENV.fetch('TWILIO_API_KEY_SECRET', nil)
+  field :whats_app_server_phone_number, readonly: true, default: ENV.fetch('WHATS_APP_SERVER_PHONE_NUMBER', nil)
+
   field :inbound_email_password, readonly: true, default: ENV.fetch('RAILS_INBOUND_EMAIL_PASSWORD', nil)
   field :email_from_address, readonly: true, default: ENV['EMAIL_FROM_ADDRESS'] || 'redaktion@localhost'
   field :postmark_api_token, readonly: true, default: ENV.fetch('POSTMARK_API_TOKEN', nil)
@@ -75,5 +80,7 @@ class Setting < RailsSettings::Base
 
   field :mailserver_host, readonly: true, default: ENV['MAILSERVER_HOST'] || 'localhost'
   field :mailserver_port, readonly: true, default: ENV['MAILSERVER_PORT'] || 1025
+
   field :channel_image
+  field :about, default: File.read(File.join('config', 'locales', 'about.txt'))
 end

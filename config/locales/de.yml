@@ -33,6 +33,8 @@ de:
       submit: Speichern
     chat_message_audio:
       no_audio_support: Dein Browser unterstützt das Audio Element nicht
+    chat_message_video:
+      no_video_support: Dein Browser unterstützt das Video Element nicht
     contributor_row:
       via_channels: via %{channels}
     nav_bar:
@@ -75,6 +77,11 @@ de:
     onboarding_signal_form:
       heading: Mit Signal teilnehmen
       text: Geben Sie bitte unten die Handynummer ein, mit der Sie bei Signal registriert sind.
+      submit: Anmeldung abschließen
+
+    onboarding_whats_app_form:
+      heading: Mit WhatsApp teilnehmen
+      text: Geben Sie bitte unten die Handynummer ein, mit der Sie bei WhatsApp registriert sind.
       submit: Anmeldung abschließen
     onboarding_email_form:
       heading: Per E-Mail teilnehmen
@@ -172,20 +179,23 @@ de:
       active:
         heading: Mitglied deaktivieren
         text: |
-          %{name} ist ein <strong>aktives Mitglied</strong> deiner Community.
+          <strong>%{name}</strong> ist ein <strong>aktives Mitglied</strong> deiner Community.
           Du kannst das Mitgliedskonto deaktivieren.
-          %{first_name} erhält dann keine Recherchefragen mehr.
+          <strong>%{first_name}</strong> erhält dann keine Recherchefragen mehr.
           Direkte Nachfragen kannst du jedoch weiterhin stellen.
           Das Konto kannst du jederzeit reaktivieren.
         action: Mitglied deaktivieren
       inactive:
         heading: Mitglied reaktivieren
         text: |
-          %{name} ist ein <strong>inaktives Mitglied</strong> deiner Community und erhält aktuell keine Recherchefragen über 100eyes.
-          Direkte Nachfragen kannst du jedoch weiterhin stellen.
-          Du kannst das Konto reaktivieren.
-          %{first_name} erhält dann wieder alle Recherchefragen.
+          <strong>%{name}</strong> wurde von <strong>%{user_name}</strong> als <strong>inaktives Mitglied</strong> Ihrer Gemeinschaft markiert und erhält derzeit keine Forschungsfragen zu %{project_name}.
+          Sie können jedoch weiterhin direkte Anfragen stellen.
+          Sie können das Konto reaktivieren.
+          <strong>%{first_name}</strong> wird dann wieder alle Forschungsfragen erhalten.
         action: Mitglied reaktivieren
+      automatically_marked_inactive:
+        text: "<strong>%{name}</strong> ist ein <strong>inaktives Mitglied</strong> deiner Community und erhält aktuell keine Recherchefragen über %{project_name}."
+        possible_reason_whats_app: "<strong>%{first_name}</strong> hat darum gebeten, vom Empfang von Nachrichten über WhatsApp abgemeldet zu werden."
     contributor_email_settings:
       heading: "Ausgewählter Kanal: E-Mail"
       text: "%{name} hat sich via E-Mail angemeldet."
@@ -212,6 +222,10 @@ de:
           %{name} hat sich am %{date} via Signal mit der Handynummer %{phone_number} angemeldet, die Anmeldung aber noch nicht abgeschlossen.
           Sende %{first_name} einen Link mit Hinweisen zum Abschließen der Anmeldung.
         action: Link kopieren
+    contributor_whats_app_settings:
+      heading: "Ausgewählter Kanal: WhatsApp"
+      text: |
+        %{name} hat sich mit der Handynummer %{phone_number} angemeldet.
     contributor_header:
       created_at: Mitglied seit %{date}
       deactivated_at: deaktiviert am %{date}
@@ -283,6 +297,12 @@ de:
       heading: Aktivität deiner Community
     day_activity_linechart:
       heading: Deine besten Dialogtage
+    onboarding_channel_buttons:
+      threema: Threema
+      telegram: Telegram
+      email: E-Mail
+      signal: Signal
+      whats_app: WhatsApp
     user_management:
       main_heading: Dein 100eyes Team
       number_of_users_of_business_plan_used: "%{users_count} von %{allocated_users} Seats genutzt"
@@ -342,6 +362,38 @@ de:
       user_count_exceeds_plan_limit:
         subject: "%{organization_name} hat die Höchstzahl der %{business_plan_name} Nutzer seines %{users_limit} Plans überschritten "
         text: "%{organization_name} hat die zahl der gebuchten Contributors überschritten. Technisch ist das kein problem. Sprich mit der Kund:in doch demnächst über eine Aufstockung des Plans."
+      contributor_marked_as_inactive_email:
+        subject: "%{contributor_name} wurde bei %{channel} als inaktiv markiert, weil er keine Nachrichten mehr von %{project_name} empfangen kann."
+      contributor_subscribed_email:
+        subject: "%{contributor_name} hat erneut den Empfang von Nachrichten über %{channel} von %{project_name} angefordert."
+    whats_app:
+      welcome_message: "Vielen Dank für deine Anmeldung bei %{project_name}. Unsere Dialog-Recherche startet bald. Wir melden uns dann bei dir."
+      request_template:
+        new_request_morning_1: "Guten Morgen %{first_name}, wir haben eine neue Frage zum Thema %{request_title}. Möchtest du darauf antworten?"
+        new_request_morning_2: "Guten Morgen %{first_name}, zum Thema %{request_title} haben wir eine neue Frage. Möchtest du darauf antworten?"
+        new_request_morning_3: "Guten Morgen %{first_name}, heute haben wir zum Thema %{request_title} eine Frage vorbereitet. Antwortest du uns darauf?"
+        new_request_day_1: "Guten Tag %{first_name}, wir haben eine neue Frage zum Thema %{request_title} für dich. Hast du Lust zu antworten?"
+        new_request_day_2: "Hallo %{first_name}, ich möchte gerne mehr zum Thema %{request_title} erfahren. Möchtest du auf die heutige Frage antworten?"
+        new_request_day_3: "Guten Tag %{first_name}, ich habe eine neue Frage zu %{request_title}. Möchtest du antworten?"
+        new_request_evening_1: "Guten Abend %{first_name}, wir haben eine neue Frage zum Thema %{request_title}. Möchtest du darauf antworten?"
+        new_request_evening_2: "Guten Abend %{first_name}, zum Thema %{request_title} haben wir eine neue Frage. Antwortest du uns darauf?"
+        new_request_evening_3: "Hallo %{first_name}, heute Abend möchte ich gern mehr zum Thema %{request_title} erfahren. Beantwortest du meine Frage?"
+        new_request_night_1: "Hallo %{first_name}, heute Nacht ist mir etwas zum Thema %{request_title} eingefallen. Antwortest du mir?"
+        new_request_night_2: "Hallo %{first_name}, ich weiß, es ist schon spät. Aber ich möchte gern mehr zum Thema %{request_title} erfahren. Möchtest du auf meine Frage antworten?"
+        new_request_night_3: "Hallo %{first_name}, zum Thema %{request_title} möchte ich heute noch gern mehr erfahren. Beantwortest du mir eine kurze Frage?"
+      unsupported_content_template: "Tut mir leid %{first_name}, leider kann unsere Software derzeit nur Textnachrichten, Sprachnachrichten, Bilder und Reaktionen auf Nachrichten verarbeiten, jedoch noch keine weiteren Inhalte wie z.B. Sticker oder Kontakte. In der Zwischenzeit senden Sie bitte Nachrichten mit solchen Inhalten an %{contact_person}. Herzlichen Dank!"
+      quick_reply_button_text:
+        answer: Antworten
+        more_info: Mehr Infos
+      unsubscribe:
+        instructions: Um unseren Kanal Abzubestellen, schreibe „abbestellen“.
+        text: abbestellen
+        by_request_of_contributor: "Das Mitglied, %{contributor_name}, hat darum gebeten, keine weiteren Nachrichten mit WhatsApp mehr zu erhalten."
+        successful: Du wurdest erfolgreich abgemeldet. Wir danken dir für deinen Beitrag zu diesem Projekt.
+      subscribe:
+        text: bestellen
+        instructions: Um unseren Kanal erneut zu bestellen, schreiben Sie "bestellen".
+        by_request_of_contributor: "Das Mitglied %{contributor_name} hat darum gebeten, wieder Nachrichten über WhatsApp empfangen zu können."
   save: Speichern
   cancel: Abbrechen
   skip_to_content: Zum Hauptinhalt springen
@@ -366,6 +418,7 @@ de:
         onboarding_success: Nachricht nach erfolgreichem Onboarding
         onboarding_unauthorized: Nachricht bei abgelaufenem Einladungs-Link
         onboarding_additional_consent: Zusätzliches Einverständnis während des Onboardings
+        all: Alle Kanäle
       onboarding_ask_for_additional_consent:
         label: Nach zusätzlichem Einverständnis fragen
         help: Falls aktiviert, wird neuen Community-Mitgliedern eine zusätzliche, optionale Checkbox angezeigt. Diese kannst du beispielsweise nutzen, um das Einverständnis für den Versand von E-Mail-Newslettern o.ä. einzuholen.
@@ -421,6 +474,8 @@ de:
         help: Wenn ein Mitglied via Threema Nachrichten versendet, die von 100eyes noch nicht unterstützt werden, erhält es diese Nachricht.
       channel_image:
         label: Avatar für Messenger
+      about:
+        label: über Text für Messenger
   settings:
     header: Einstellungen
     subheading: Passe dein 100eyes System nach deinen Vorstellungen an
@@ -467,6 +522,8 @@ de:
         label: E-Mail-Adresse
       signal_phone_number:
         label: Handynummer
+      whats_app_phone_number:
+        label: Handynummer
       threema_id:
         label: Threema ID
         help: 8 Zeichen lang, besteht nur aus Zahlen und Großbuchstaben
@@ -508,8 +565,8 @@ de:
     no_replies: Bisher hat noch niemand auf diese Frage geantwortet. Schau doch später noch einmal rein!
     form:
       title:
-        label: Interner Titel
-        help: Damit du zwischen all deinen Fragen den Überblick behältst. Der Titel wird nicht an die Community gesandt.
+        label: Titel
+        help: Damit du zwischen all deinen Fragen den Überblick behältst. Der Titel wird auf manchen Kanälen zur Information an Community-Mitglieder mitgeschickt.
         placeholder: z.B. Thema der Frage
       text:
         label: Was möchtest du wissen?
@@ -830,6 +887,12 @@ de:
     request_scheduled:
       text_html: "Die Frage <strong>%{request_title}</strong> wurde für den Versand am %{date} um %{time} geplant und wird an %{contributors_count} Community-Mitgliedern versendet."
       link_text: Zur Frage
+    contributor_marked_inactive:
+      text_html: "<strong>%{contributor_name}</strong> wurde als inaktiv markiert, weil sie keine Fragen mehr zu %{contributor_channel} erhalten können."
+      link_text: "Zum Profil"
+    contributor_subscribed:
+      text_html: "<strong>%{contributor_name}</strong> hat beantragt, erneut Nachrichten per %{contributor_channel} zu bestellen."
+      link_text: Zum Profil
   shared:
     community: Community
     editorial: Redaktion

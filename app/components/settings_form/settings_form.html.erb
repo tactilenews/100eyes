@@ -67,7 +67,9 @@
 
     <% if current_user.admin? %>
       <%= c 'stack' do %>
+        <%= c('heading', tag: :h2) { t('setting.form.groups.all') } %>
         <%= c('settings_field', type: :image_input, attr: :channel_image) %>
+        <%= c('settings_field', type: :textarea, attr: :about) %>
       <% end %>
     <% end %>
 

@@ -34,18 +34,12 @@ class ContributorsController < ApplicationController
   def update
     @contributors = Contributor.with_attached_avatar
     @contributor.editor_guarantees_data_consent = true
+    @contributor.deactivated_by_user = current_user unless ActiveModel::Type::Boolean.new.cast(contributor_params[:active])
 
     if @contributor.update(contributor_params)
       redirect_to contributor_url, flash: { success: I18n.t('contributor.saved', name: @contributor.name) }
     else
-      flash.now[:error] = I18n.t('contributor.invalid', name: @contributor.name)
-
-      if @contributor.errors[:avatar].present?
-        # Reset the avatar attachment to it's previous, valid state,
-        # as displaying an invalid avatar will result in rendering errors.
-        old_avatar = Contributor.with_attached_avatar.find(@contributor.id).avatar
-        @contributor.avatar = old_avatar.blob
-      end
+      handle_failed_update
 
       render :show, status: :unprocessable_entity
     end
@@ -85,6 +79,17 @@ class ContributorsController < ApplicationController
     return :active unless %i[active inactive].include?(value)
 
     value
+  end
+
+  def handle_failed_update
+    flash.now[:error] = I18n.t('contributor.invalid', name: contributor.name)
+
+    return if contributor.errors[:avatar].blank?
+
+    # Reset the avatar attachment to it's previous, valid state,
+    # as displaying an invalid avatar will result in rendering errors.
+    old_avatar = Contributor.with_attached_avatar.find(@contributor.id).avatar
+    contributor.avatar = old_avatar.blob
   end
 
   attr_reader :contributor

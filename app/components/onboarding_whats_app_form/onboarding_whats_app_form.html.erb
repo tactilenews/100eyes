@@ -1,0 +1,34 @@
+<%= c 'stack', **attrs do %>
+
+  <%= c 'stack', class: 'text-serif', space: :xsmall do %>
+    <%= c 'heading', tag: :h1 do %>
+      <%= t('.heading') %>
+    <% end %>
+
+    <p><%= t('.text') %></p>
+  <% end %>
+
+  <%= form_with(model: contributor, local: true, url: onboarding_whats_app_path) do %>
+    <%= c 'stack' do %>
+      <%= c 'field', object: contributor, attr: :first_name do |field| %>
+        <%= c 'input', field.input_defaults.merge(required: true) %>
+      <% end %>
+
+      <%= c 'field', object: contributor, attr: :last_name do |field| %>
+        <%= c 'input', field.input_defaults.merge(required: true) %>
+      <% end %>
+
+      <%= c 'field', object: contributor, attr: :whats_app_phone_number do |field| %>
+        <%= c 'input', field.input_defaults.merge(placeholder: '', required: true, type: :tel) %>
+      <% end %>
+
+      <%= c 'onboarding_consent', contributor: contributor %>
+
+      <%= c 'button',
+        type: 'submit',
+        label: t('.submit'),
+        styles: [:primary, :block]
+      %>
+    <% end %>
+  <% end %>
+<% end %>

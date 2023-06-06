@@ -19,13 +19,38 @@
         <%= t('.inactive.heading') %>
       <% end %>
 
-      <p>
-        <%= t('.inactive.text',
-          name: contributor.name,
-          first_name: contributor.first_name
-        ).html_safe %>
-      </p>
-
+      <% if contributor.deactivated_by_user.present? %>
+        <p>
+          <%= t('.inactive.text',
+                 name: contributor.name,
+                 user_name: contributor.deactivated_by_user.name,
+                 project_name: Setting.project_name,
+                 first_name: contributor.first_name
+          ).html_safe %>
+        </p>
+      <% elsif contributor.deactivated_by_admin? %>
+        <p>
+         <%= t('.inactive.text',
+                 name: contributor.name,
+                 user_name: 'Admin',
+                 project_name: Setting.project_name,
+                 first_name: contributor.first_name
+          ).html_safe %>
+        </p>
+      <% else %>
+        <p>
+          <%= t('.automatically_marked_inactive.text',
+                name: contributor.name,
+                project_name: Setting.project_name,
+                first_name: contributor.first_name
+          ).html_safe %>
+        </p>
+        <p>
+          <%= t(".automatically_marked_inactive.possible_reason_#{contributor.channels.first.to_s}",
+                first_name: contributor.first_name
+          ).html_safe %>
+        </p>
+      <% end %>
     <% end %>
 
     <%= c 'form', model: contributor do %>
