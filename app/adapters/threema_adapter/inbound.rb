@@ -2,7 +2,7 @@
 
 module ThreemaAdapter
   class Inbound
-    UNSUPPORTED_CONTENT_TYPES = %w[video application text/x-vcard].freeze
+    UNSUPPORTED_CONTENT_TYPES = %w[application text/x-vcard].freeze
     attr_reader :sender, :text, :unknown_content, :message, :delivery_receipt
 
     def self.bounce!(recipient:, text:)

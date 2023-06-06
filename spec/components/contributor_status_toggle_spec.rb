@@ -7,7 +7,8 @@ RSpec.describe ContributorStatusToggle::ContributorStatusToggle, type: :componen
 
   let(:contributor) { create(:contributor, active: active) }
   let(:active) { true }
-  let(:params) { { contributor: contributor } }
+  let(:deactivated_by) { nil }
+  let(:params) { { contributor: contributor, deactivated_by: deactivated_by } }
 
   it { should have_css("form[action='/contributors/#{contributor.id}']") }
 
@@ -25,5 +26,19 @@ RSpec.describe ContributorStatusToggle::ContributorStatusToggle, type: :componen
     it { should have_css('h2', text: 'Mitglied reaktivieren') }
     it { should have_css('strong', text: 'inaktives Mitglied') }
     it { should have_css('button', text: 'Mitglied reaktivieren') }
+
+    context 'marked inactive by a user' do
+      let(:deactivated_by) { create(:user) }
+      before { contributor.update(deactivated_by_user_id: deactivated_by.id) }
+
+      it { should have_css('strong', text: deactivated_by.name) }
+    end
+
+    context 'through WhatsApp who requested to unsubscribe' do
+      before { contributor.update(whats_app_phone_number: '+49151234567', email: nil) }
+
+      it { should have_css('strong', text: contributor.first_name) }
+      it { should have_content('hat darum gebeten, vom Empfang von Nachrichten über WhatsApp abgemeldet zu werden.') }
+    end
   end
 end

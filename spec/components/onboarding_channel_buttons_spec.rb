@@ -5,18 +5,22 @@ require 'rails_helper'
 RSpec.describe OnboardingChannelButtons::OnboardingChannelButtons, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
-  let(:params) { {} }
-  let(:phone_number) { nil }
+  let(:params) { { channels: %w[threema telegram email] } }
 
-  before(:each) { allow(Setting).to receive(:signal_server_phone_number).and_return(phone_number) }
-
-  it { should_not have_css('.OnboardingChannelButtons--even') }
   it { should have_css('.Button').exactly(3).times }
+  it { should_not have_css('.OnboardingChannelButtons--twoColumn') }
 
   context 'if Signal is set up' do
-    let(:phone_number) { '+491234567890' }
+    let(:params) { { channels: %w[threema telegram email signal] } }
 
     it { should have_css('.Button').exactly(4).times }
-    it { should have_css('.OnboardingChannelButtons--even') }
+    it { should have_css('.OnboardingChannelButtons--twoColumn') }
+  end
+
+  context 'if WhatsApp is set up' do
+    let(:params) { { channels: %w[threema telegram email signal whats_app] } }
+
+    it { should have_css('.Button').exactly(5).times }
+    it { should_not have_css('.OnboardingChannelButtons--twoColumn') }
   end
 end

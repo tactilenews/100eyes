@@ -31,6 +31,10 @@ module ChatMessage
       files.first.attachment.blob.image? unless files.empty?
     end
 
+    def video?
+      files.first.attachment.blob.video? unless files.empty?
+    end
+
     def photos
       message.photos
     end

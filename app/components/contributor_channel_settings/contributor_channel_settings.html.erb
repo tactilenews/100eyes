@@ -14,4 +14,8 @@
   <% if contributor.signal? %>
     <%= c 'contributor_signal_settings', contributor: contributor %>
   <% end %>
+
+  <% if contributor.whats_app? %>
+    <%= c 'contributor_whats_app_settings', contributor: contributor %>
+  <% end %>
 <% end %>
