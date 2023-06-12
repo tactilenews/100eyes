@@ -5,9 +5,9 @@ require 'rails_helper'
 RSpec.describe MoveMessageForm::MoveMessageForm, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
-  let!(:older_request) { create(:request, created_at: 1.hour.ago) }
-  let!(:current_request) { create(:request, created_at: 0.hours.ago) }
-  let!(:newer_request) { create(:request, created_at: 1.hour.from_now) }
+  let!(:older_request) { create(:request, broadcasted_at: 1.hour.ago) }
+  let!(:current_request) { create(:request, broadcasted_at: 0.hours.ago) }
+  let!(:planned_request) { create(:request, broadcasted_at: 1.hour.from_now) }
 
   let(:message) { create(:message, request: current_request) }
 
@@ -30,8 +30,8 @@ RSpec.describe MoveMessageForm::MoveMessageForm, type: :component do
     expect(last[:checked]).to be_nil
   end
 
-  it 'does not show newer request' do
+  it 'does not show planned request' do
     request_ids = subject.css('input[type="radio"]').pluck(:value)
-    expect(request_ids).not_to include(newer_request.id)
+    expect(request_ids).not_to include(planned_request.id)
   end
 end
