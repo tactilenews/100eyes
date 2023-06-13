@@ -37,7 +37,7 @@ module CommunityMetrics
           custom_icon: 'letter_turq'
         },
         {
-          value: number_with_precision(engagment_metric, precision: 1, locale: :de),
+          value: number_to_percentage(engagment_metric, precision: 0, locale: :en),
           label: t('.engagement_metric'),
           custom_icon: 'percent_turq'
         }

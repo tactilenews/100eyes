@@ -24,6 +24,7 @@
 
 .CommunityMetrics .Metric--large .Metric-label {
   order: 2;
+  flex: 1;
 }
 
 .CommunityMetrics .Metric--large .Metric-value {
