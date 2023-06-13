@@ -27,7 +27,7 @@ module WhatsAppAdapter
         WhatsAppAdapter::Outbound::Text.perform_later(recipient: contributor,
                                                       text: I18n.t('adapter.whats_app.unsupported_content_template',
                                                                    first_name: contributor.first_name,
-                                                                   contact_person: User.last.name))
+                                                                   contact_person: contributor.organization.contact_person.name))
       end
 
       def send_more_info_message!(contributor)

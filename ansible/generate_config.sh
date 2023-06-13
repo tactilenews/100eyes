@@ -76,6 +76,14 @@ rails:
   email_from_address: "redaktion@${domain}"
   sentry:
     dsn: # (REQUIRED) Sentry DSN to enable error tracking
+  whats_app:
+    server_phone_number: ""
+  twilio:
+    account_sid: ""
+    auth_token: ""
+    api_key:
+      sid: ""
+      secret: ""
 CONFIGURATION
 
 cat <<- INSTRUCTIONS
