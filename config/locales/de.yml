@@ -46,6 +46,7 @@ de:
       admin: Admin
       sign_out: Abmelden
       profile_path: Zur Profilseite
+      profile_link: Profil
     hero:
       title: Willkommen bei 100eyes. Nutze die Intelligenz der Community.
     footer:
@@ -368,7 +369,7 @@ de:
       contributor_subscribed_email:
         subject: "%{contributor_name} hat erneut den Empfang von Nachrichten über %{channel} von %{project_name} angefordert."
     whats_app:
-      welcome_message: "Vielen Dank für Ihre Anmeldung bei %{project_name}. Unsere Dialog-Recherche startet bald. Wir melden uns dann bei Ihnen."
+      welcome_message: "Vielen Dank für deine Anmeldung bei %{project_name}. Unsere Dialog-Recherche startet bald. Wir melden uns dann bei dir."
       request_template:
         new_request_morning_1: "Guten Morgen %{first_name}, wir haben eine neue Frage zum Thema %{request_title}. Möchtest du darauf antworten?"
         new_request_morning_2: "Guten Morgen %{first_name}, zum Thema %{request_title} haben wir eine neue Frage. Möchtest du darauf antworten?"
