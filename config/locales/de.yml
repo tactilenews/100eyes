@@ -477,7 +477,7 @@ de:
       channel_image:
         label: Avatar für Messenger
       about:
-        label: über Text für Messenger
+        label: WhatsApp-Info-Text
   settings:
     header: Einstellungen
     subheading: Passe dein 100eyes System nach deinen Vorstellungen an
