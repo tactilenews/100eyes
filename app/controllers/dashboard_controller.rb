@@ -30,7 +30,14 @@ class DashboardController < ApplicationController
   end
 
   def engagment_metric
-    activity = (Message.replies.where('created_at >= ?', 7.days.ago).count / Contributor.active.count.to_f * 100).round
-    activity > 100 ? 100 : activity
+    current_weeks_activity = Message.replies.where('created_at >= ?', 7.days.ago).count
+    active_contributors_count = Contributor.active.count
+    return 0 unless active_contributors_count.positive?
+
+    activity = (current_weeks_activity / active_contributors_count.to_f * 100)
+
+    return 100 if activity > 100
+
+    activity
   end
 end
