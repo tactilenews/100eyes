@@ -78,7 +78,7 @@ module WhatsApp
     end
 
     def handle_respond_to_template_message(contributor, text)
-      contributor.update!(whats_app_message_template_responded_at: Time.current, whats_app_template_message_sent_at: nil)
+      contributor.update!(whats_app_message_template_responded_at: Time.current)
 
       if text.strip.eql?(I18n.t('adapter.whats_app.quick_reply_button_text.more_info'))
         WhatsAppAdapter::Outbound.send_more_info_message!(contributor)

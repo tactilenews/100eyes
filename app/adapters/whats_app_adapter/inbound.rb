@@ -63,7 +63,7 @@ module WhatsAppAdapter
     def initialize_message(whats_app_message)
       message_text = whats_app_message[:body]
 
-      trigger(RESPONDING_TO_TEMPLATE_MESSAGE, sender, message_text) if sender.whats_app_template_message_sent_at.present?
+      trigger(RESPONDING_TO_TEMPLATE_MESSAGE, sender, message_text) if quick_reply_response?(message_text)
       trigger(UNSUBSCRIBE_CONTRIBUTOR, sender) if unsubscribe_text?(message_text)
       trigger(SUBSCRIBE_CONTRIBUTOR, sender) if subscribe_text?(message_text)
       message = Message.new(text: message_text, sender: sender)

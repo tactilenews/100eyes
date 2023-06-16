@@ -68,7 +68,7 @@ RSpec.describe WhatsAppAdapter::Outbound do
         end
       end
 
-      describe 'contributor has sent a reply within 24 hours with no template being sent' do
+      describe 'contributor has sent a reply within 24 hours' do
         before { create(:message, sender: contributor) }
 
         it 'enqueues the Text job with the request text' do
@@ -117,7 +117,7 @@ RSpec.describe WhatsAppAdapter::Outbound do
         it { is_expected.to eq(true) }
       end
 
-      context 'contributor has not responded' do
+      context 'contributor has not responded, and has no messages within 24 hours' do
         it { is_expected.to eq(false) }
       end
     end

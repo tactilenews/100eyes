@@ -84,12 +84,8 @@ RSpec.describe WhatsApp::WebhookController do
       end
 
       context 'responding to template' do
-        before { contributor.update(whats_app_template_message_sent_at: Time.current) }
+        before { params['Body'] = 'Antworten' }
         let(:expected_job_args) { { recipient: contributor, text: contributor.received_messages.first.text } }
-
-        it 'set `whats_app_template_message_sent_at` to nil' do
-          expect { subject.call }.to change { contributor.reload.whats_app_template_message_sent_at }.from(kind_of(Time)).to(nil)
-        end
 
         it 'enqueues a job to send the latest received message' do
           expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::Outbound::Text).on_queue('default').with(expected_job_args)
