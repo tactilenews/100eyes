@@ -6,6 +6,7 @@ class DashboardController < ApplicationController
     @active_contributors_count = Contributor.active.count
     @requests_count = Request.count
     @replies_count = Message.replies.count
+    @engagment_metric = engagment_metric
   end
 
   private
@@ -26,5 +27,17 @@ class DashboardController < ApplicationController
         link_text: notifications.first.to_notification.link_text
       }
     end
+  end
+
+  def engagment_metric
+    current_weeks_activity = Message.replies.where('created_at >= ?', 7.days.ago).count
+    active_contributors_count = Contributor.active.count
+    return 0 unless active_contributors_count.positive?
+
+    activity = (current_weeks_activity / active_contributors_count.to_f * 100)
+
+    return 100 if activity > 100
+
+    activity
   end
 end

@@ -7,7 +7,11 @@
   <% end %>
 
   <span class="Metric-icon">
+  <% if custom_icon %>
+    <%= svg custom_icon %>
+  <% else %>
     <%= c 'icon', icon: icon, style: :inline %>
+  <% end %>
   </span>
 
   <span class="Metric-value">
