@@ -14,11 +14,15 @@ class ContributorsController < ApplicationController
   end
 
   def index
-    @filter = filter_param
+    @state = state_params
+    @tag_list = tag_list_params
+
     @active_count = Contributor.active.count
     @inactive_count = Contributor.inactive.count
+    @available_tags = Contributor.all_tags_with_count.to_json
 
-    @contributors = @filter == :inactive ? Contributor.inactive : Contributor.active
+    @contributors = @state == :inactive ? Contributor.inactive : Contributor.active
+    @contributors = @contributors.with_tags(tag_list_params)
     @contributors = @contributors.with_attached_avatar.includes(:tags)
   end
 
@@ -73,12 +77,19 @@ class ContributorsController < ApplicationController
     params.permit(tag_list: [])
   end
 
-  def filter_param
-    value = params.permit(:filter)[:filter]&.to_sym
+  def state_params
+    value = params.permit(:state)[:state]&.to_sym
 
     return :active unless %i[active inactive].include?(value)
 
     value
+  end
+
+  def tag_list_params
+    value = params.permit(tag_list: [])[:tag_list]
+    return [] if value.blank?
+
+    value&.reject(&:empty?)
   end
 
   def handle_failed_update
