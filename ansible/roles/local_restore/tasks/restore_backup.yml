@@ -19,6 +19,10 @@
     src: "{{ backup_host_folder.path }}/tmp/100eyes-storage.tgz"
     dest: "{{ playbook_dir }}/.."
 
+- name: Install docker-compose python package
+  ansible.builtin.pip:
+    name: docker-compose
+
 - name: Run `docker-compose up`
   community.general.docker_compose:
     project_src: "{{ playbook_dir }}/.."
