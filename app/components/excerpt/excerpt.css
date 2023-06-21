@@ -1,9 +1,16 @@
 .Excerpt {
-  display: block;
+  display: flex;
+}
+
+.Excerpt-infoWrapper {
+  flex-direction: column;
+  margin-left: var(--spacing-unit-s);
+  flex: 1;
 }
 
 .Excerpt-header {
   display: flex;
+  align-items: center;
 }
 
 .Excerpt-title {
