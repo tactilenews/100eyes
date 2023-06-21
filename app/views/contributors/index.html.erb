@@ -16,30 +16,36 @@
     %>
 
     <% header.tab_bar do %>
-      <%= c('tab_bar', items: {
-        contributors_path(tag_list: @tag_list.present? ? @tag_list : nil) => {
+      <%= c('tab_bar', items: [
+        {
+          url: contributors_path(tag_list: @tag_list.present? ? @tag_list : nil),
           label: "Aktiv",
           active: @state == :active,
           count: @active_count,
         },
-        contributors_path(state: :inactive, tag_list: @tag_list.present? ? @tag_list : nil) => {
+        {
+          url: contributors_path(state: :inactive, tag_list: @tag_list.present? ? @tag_list : nil),
           label: "Inaktiv",
           active: @state == :inactive,
           count: @inactive_count,
         },
-      }) %>
-    <% end %>
-  <% end %>
+        {
+          icon: "filter-tool",
+          data: { action: 'tab-bar#toggleFilterSection' }
+        }
+      ]) do %>
+        <%= c 'section', data: { tab_bar_target: 'filterSection' }, hidden: true do %>
+          <%= c 'heading' do %>
+            Filter by tag
+          <% end %>
+          <%= c 'form', url: contributors_path, method: 'get', multiple: true do %>
+            <%= hidden_field_tag :state, @state  %>
 
-  <%= c 'section' do %>
-    <%= c 'heading' do %>
-      Filter by tag
-    <% end %>
-    <%= c 'form', url: contributors_path, method: 'get', multiple: true do %>
-      <%= hidden_field_tag :state, @state  %>
-
-      <%= c 'tags_input', available_tags: @available_tags, allow_new: false, name: 'tag_list[]', value: @tag_list %>
-      <%= c 'submit_button', label: 'Filter' %>
+            <%= c 'tags_input', available_tags: @available_tags, allow_new: false, name: 'tag_list[]', value: @tag_list %>
+            <%= c 'submit_button', label: 'Filter' %>
+          <% end %>
+        <% end %>
+      <% end %>
     <% end %>
   <% end %>
 

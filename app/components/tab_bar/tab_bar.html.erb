@@ -1,17 +1,19 @@
-<nav class="TabBar">
+<nav class="TabBar" data-controller="tab-bar">
   <ul>
-    <% items.each do |url, options| %>
+    <% items.each do |options| %>
       <li class="TabBar-item <%= 'TabBar-item--active' if options.dig(:active) %>">
-        <a href="<%= url %>">
-          <%= options.dig(:label) %>
-
+        <%= c 'button', label: options.dig(:label), link: options.dig(:url), styles: [:inline], data: options.dig(:data) do %>
           <% if options.key?(:count) %>
             <span class="TabBar-count">
               <%= options[:count] %>
             </span>
           <% end %>
-        </a>
+          <% if options.key?(:icon) %>
+            <%= c 'icon', icon: options.dig(:icon), styles: [:inline] %>
+          <% end %>
+        <% end %>
       </li>
     <% end %>
   </ul>
+  <%= content %>
 </nav>
