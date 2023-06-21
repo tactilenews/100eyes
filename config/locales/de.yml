@@ -507,6 +507,9 @@ de:
     message-send: Nachricht an %{name} wurde verschickt
     skip_to_profile: Zum Profil springen
     subheading: Das sind die Mitglieder deiner Community
+    filter_section:
+      heading: Nach Tags filtern
+      submit_button: Filter
     form:
       first_name:
         label: Vorname

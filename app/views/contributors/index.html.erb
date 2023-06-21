@@ -34,15 +34,23 @@
           data: { action: 'tab-bar#toggleFilterSection' }
         }
       ]) do %>
-        <%= c 'section', data: { tab_bar_target: 'filterSection' }, hidden: true do %>
-          <%= c 'heading' do %>
-            Filter by tag
+        <%= c('section',
+          class: 'TabBar-filterSection',
+          data: { tab_bar_target: 'filterSection' },
+          hidden: true
+        ) do %>
+          <%= c 'heading', styles: [:beta] do %>
+            <%= t('contributor.filter_section.heading') %>
           <% end %>
-          <%= c 'form', url: contributors_path, method: 'get', multiple: true do %>
+          <%= c('form',
+            url: contributors_path,
+            method: 'get',
+            multiple: true
+          ) do %>
             <%= hidden_field_tag :state, @state  %>
 
             <%= c 'tags_input', available_tags: @available_tags, allow_new: false, name: 'tag_list[]', value: @tag_list %>
-            <%= c 'submit_button', label: 'Filter' %>
+            <%= c 'submit_button', styles: [:secondary], label: t('contributor.filter_section.submit_button') %>
           <% end %>
         <% end %>
       <% end %>
