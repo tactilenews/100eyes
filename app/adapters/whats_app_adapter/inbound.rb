@@ -3,7 +3,8 @@
 module WhatsAppAdapter
   UNKNOWN_CONTRIBUTOR = :unknown_contributor
   UNSUPPORTED_CONTENT = :unsupported_content
-  RESPONDING_TO_TEMPLATE_MESSAGE = :responding_to_template_message
+  REQUEST_FOR_MORE_INFO = :request_for_more_info
+  REQUEST_TO_RECEIVE_LATEST_MESSAGE = :request_to_receive_latest_message
   UNSUBSCRIBE_CONTRIBUTOR = :unsubscribe_contributor
   SUBSCRIBE_CONTRIBUTOR = :subscribe_contributor
 
@@ -63,9 +64,11 @@ module WhatsAppAdapter
     def initialize_message(whats_app_message)
       message_text = whats_app_message[:body]
 
-      trigger(RESPONDING_TO_TEMPLATE_MESSAGE, sender, message_text) if quick_reply_response?(message_text)
+      trigger(REQUEST_FOR_MORE_INFO, sender) if request_for_more_info?(message_text)
       trigger(UNSUBSCRIBE_CONTRIBUTOR, sender) if unsubscribe_text?(message_text)
       trigger(SUBSCRIBE_CONTRIBUTOR, sender) if subscribe_text?(message_text)
+      trigger(REQUEST_TO_RECEIVE_LATEST_MESSAGE, sender) if request_to_receive_latest_message?(sender, message_text)
+
       message = Message.new(text: message_text, sender: sender)
       message.raw_data.attach(
         io: StringIO.new(JSON.generate(whats_app_message)),
@@ -105,6 +108,16 @@ module WhatsAppAdapter
       whats_app_message.keys.any? { |key| UNSUPPORTED_CONTENT_TYPES.include?(key) } || whats_app_message.any? do |key, value|
         key.match?(/media_content_type/) && UNSUPPORTED_CONTENT_TYPES.any? { |content_type| value.match?(/#{content_type}/) }
       end
+    end
+
+    def request_for_more_info?(text)
+      text.strip.eql?(I18n.t('adapter.whats_app.quick_reply_button_text.more_info'))
+    end
+
+    def request_to_receive_latest_message?(contributor, text)
+      return false if request_for_more_info?(text) || unsubscribe_text?(text) || subscribe_text?(text)
+
+      contributor.whats_app_message_template_sent_at.present?
     end
 
     def quick_reply_response?(text)
