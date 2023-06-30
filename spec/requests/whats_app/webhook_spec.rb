@@ -84,11 +84,116 @@ RSpec.describe WhatsApp::WebhookController do
       end
 
       context 'responding to template' do
-        before { params['Body'] = 'Antworten' }
-        let(:expected_job_args) { { recipient: contributor, text: contributor.received_messages.first.text } }
+        before { contributor.update(whats_app_message_template_sent_at: Time.current) }
+        let(:latest_message_job_args) { { recipient: contributor, text: contributor.received_messages.first.text } }
 
-        it 'enqueues a job to send the latest received message' do
-          expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::Outbound::Text).on_queue('default').with(expected_job_args)
+        context 'request to receive latest message' do
+          it 'enqueues a job to send the latest received message' do
+            expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::Outbound::Text).on_queue('default').with(latest_message_job_args)
+          end
+        end
+
+        context 'request for more info' do
+          before { params['Body'] = 'Mehr Infos' }
+          let(:more_info_job_args) do
+            { recipient: contributor, text: [Setting.about, "_#{I18n.t('adapter.whats_app.unsubscribe.instructions')}_"].join("\n\n") }
+          end
+
+          it 'enqueues a job to send more info message' do
+            expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::Outbound::Text).on_queue('default').with(more_info_job_args)
+          end
+
+          it 'does not enqueue a job to send the latest received message' do
+            expect { subject.call }.not_to have_enqueued_job(WhatsAppAdapter::Outbound::Text).with(latest_message_job_args)
+          end
+        end
+
+        context 'request to unsubscribe' do
+          let!(:admin) { create_list(:user, 2, admin: true) }
+          let!(:non_admin_user) { create(:user) }
+
+          before { params['Body'] = 'Abbestellen' }
+          let(:sucessful_unsubscribe_job_args) do
+            { recipient: contributor,
+              text: [I18n.t('adapter.whats_app.unsubscribe.successful'),
+                     "_#{I18n.t('adapter.whats_app.subscribe.instructions')}_"].join("\n\n") }
+          end
+
+          it 'marks contributor as inactive' do
+            expect { subject.call }.to change { contributor.reload.deactivated_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+          end
+
+          it 'enqueues a job to inform the contributor of successful unsubscribe' do
+            expect do
+              subject.call
+            end.to have_enqueued_job(WhatsAppAdapter::Outbound::Text).on_queue('default').with(sucessful_unsubscribe_job_args)
+          end
+
+          it_behaves_like 'an ActivityNotification', 'ContributorMarkedInactive'
+
+          it 'enqueues a job to inform admin' do
+            expect { subject.call }.to have_enqueued_job.on_queue('default').with(
+              'PostmarkAdapter::Outbound',
+              'contributor_marked_as_inactive_email',
+              'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
+              {
+                params: { admin: an_instance_of(User), contributor: contributor },
+                args: []
+              }
+            ).exactly(2).times
+          end
+
+          it 'does not enqueue a job to send the latest received message' do
+            expect { subject.call }.not_to have_enqueued_job(WhatsAppAdapter::Outbound::Text).with(latest_message_job_args)
+          end
+        end
+
+        context 'request to re-subscribe' do
+          let!(:admin) { create_list(:user, 2, admin: true) }
+          let!(:non_admin_user) { create(:user) }
+
+          before do
+            contributor.update(deactivated_at: Time.current)
+            params['Body'] = 'Bestellen'
+          end
+
+          let(:sucessful_subscribe_job_args) do
+            { recipient: contributor, text: I18n.t('adapter.whats_app.welcome_message', project_name: Setting.project_name) }
+          end
+
+          it 'marks contributor as active' do
+            expect { subject.call }.to change { contributor.reload.deactivated_at }.from(kind_of(ActiveSupport::TimeWithZone)).to(nil)
+          end
+
+          it 'marks that contributor has responded to template message' do
+            expect { subject.call }.to change {
+                                         contributor.reload.whats_app_message_template_responded_at
+                                       }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+          end
+
+          it 'enqueues a job to welcome contributor' do
+            expect do
+              subject.call
+            end.to have_enqueued_job(WhatsAppAdapter::Outbound::Text).on_queue('default').with(sucessful_subscribe_job_args)
+          end
+
+          it_behaves_like 'an ActivityNotification', 'ContributorSubscribed'
+
+          it 'enqueues a job to inform admin' do
+            expect { subject.call }.to have_enqueued_job.on_queue('default').with(
+              'PostmarkAdapter::Outbound',
+              'contributor_subscribed_email',
+              'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
+              {
+                params: { admin: an_instance_of(User), contributor: contributor },
+                args: []
+              }
+            ).exactly(2).times
+          end
+
+          it 'does not enqueue a job to send the latest received message' do
+            expect { subject.call }.not_to have_enqueued_job(WhatsAppAdapter::Outbound::Text).with(latest_message_job_args)
+          end
         end
       end
     end
