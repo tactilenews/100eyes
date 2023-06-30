@@ -1,0 +1,75 @@
+<%= c 'main', data: { controller: 'contributors-index' } do %>
+  <%= c 'page_header', styles: [:lightGrayBackground, :spaceBetween, :largeMarginBottom] do |header| %>
+    <div>
+      <%= c 'heading' do %>
+        <%= I18n.t 'contributor.contributor', count: :other %>
+      <% end %>
+      <p><%= t('contributor.subheading') %></p>
+    </div>
+
+    <%= c 'copy_button',
+      label: I18n.t('contributor.actions.copy_invite'),
+      styles: [:colorNavBar, :customIcon],
+      url: invites_url,
+      key: 'url',
+      custom_icon: 'onboarding-ticket'
+    %>
+
+    <% header.tab_bar do %>
+      <%= c('tab_bar', items: [
+        {
+          url: contributors_path(tag_list: tag_list.present? ? @tag_list : nil),
+          label: "Aktiv",
+          active: state == :active,
+          count: active_count,
+        },
+        {
+          url: contributors_path(state: :inactive, tag_list: tag_list.present? ? @tag_list : nil),
+          label: "Inaktiv",
+          active: state == :inactive,
+          count: inactive_count,
+        },
+        {
+          icon: "filter-tool",
+          data: { action: 'contributors-index#toggleFilterSection' }
+        }
+      ]) %>
+    <% end %>
+  <% end %>
+
+  <%= c('section',
+    class: 'ContributorsIndex-filterSection',
+    data: { contributors_index_target: 'filterSection' },
+    hidden: true
+  ) do %>
+    <%= c 'heading', styles: [:beta] do %>
+      <%= t('contributor.filter_section.heading') %>
+    <% end %>
+    <%= c('form',
+      url: contributors_path,
+      method: 'get',
+      multiple: true
+    ) do %>
+      <%= hidden_field_tag :state, state  %>
+
+      <%= c 'tags_input', available_tags: available_tags, allow_new: false, name: 'tag_list[]', value: tag_list %>
+      <%= c 'submit_button', styles: [:secondary], label: t('contributor.filter_section.submit_button') %>
+    <% end %>
+  <% end %>
+
+  <%= c 'section' do %>
+    <% if contributors.present? %>
+      <p
+        data-contributors-index-target="filterActiveText"
+        hidden
+      ><%= t('.filter_active_text', count: tag_list.size).html_safe %>
+      <strong>
+        <% tag_list.map do |tag| %>
+          <%= " (#{tag})" %>
+        <% end %>
+      </strong>
+      </p>
+    <% end %>
+    <%= c 'contributors_list', contributors: contributors, filter_active: tag_list.present? %>
+  <% end %>
+<% end %>

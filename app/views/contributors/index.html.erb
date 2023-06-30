@@ -1,65 +1,7 @@
-<%= c 'main' do %>
-  <%= c 'page_header', styles: [:lightGrayBackground, :spaceBetween, :largeMarginBottom] do |header| %>
-    <div>
-      <%= c 'heading' do %>
-        <%= I18n.t 'contributor.contributor', count: :other %>
-      <% end %>
-      <p><%= t('contributor.subheading') %></p>
-    </div>
-
-    <%= c 'copy_button',
-      label: I18n.t('contributor.actions.copy_invite'),
-      styles: [:colorNavBar, :customIcon],
-      url: invites_url,
-      key: 'url',
-      custom_icon: 'onboarding-ticket'
-    %>
-
-    <% header.tab_bar do %>
-      <%= c('tab_bar', items: [
-        {
-          url: contributors_path(tag_list: @tag_list.present? ? @tag_list : nil),
-          label: "Aktiv",
-          active: @state == :active,
-          count: @active_count,
-        },
-        {
-          url: contributors_path(state: :inactive, tag_list: @tag_list.present? ? @tag_list : nil),
-          label: "Inaktiv",
-          active: @state == :inactive,
-          count: @inactive_count,
-        },
-        {
-          icon: "filter-tool",
-          data: { action: 'tab-bar#toggleFilterSection' }
-        }
-      ]) do %>
-        <%= c('section',
-          class: 'TabBar-filterSection',
-          data: { tab_bar_target: 'filterSection' },
-          hidden: true
-        ) do %>
-          <%= c 'heading', styles: [:beta] do %>
-            <%= t('contributor.filter_section.heading') %>
-          <% end %>
-          <%= c('form',
-            url: contributors_path,
-            method: 'get',
-            multiple: true
-          ) do %>
-            <%= hidden_field_tag :state, @state  %>
-
-            <%= c 'tags_input', available_tags: @available_tags, allow_new: false, name: 'tag_list[]', value: @tag_list %>
-            <%= c 'submit_button', styles: [:secondary], label: t('contributor.filter_section.submit_button') %>
-          <% end %>
-        <% end %>
-      <% end %>
-    <% end %>
-  <% end %>
-
-  <%= c 'section' do %>
-    <% @contributors.each do |contributor| %>
-      <%= c 'contributor_row', contributor: contributor %>
-    <% end %>
-  <% end %>
-<% end %>
+<%= c 'contributors_index',
+  contributors: @contributors,
+  tag_list: @tag_list,
+  state: @state,
+  active_count: @active_count,
+  inactive_count: @inactive_count
+%>

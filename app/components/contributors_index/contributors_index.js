@@ -1,12 +1,16 @@
 import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
-  static targets = ['filterSection'];
+  static targets = ['filterSection', 'filterActiveText'];
 
   connect() {
     const searchParams = new URL(document.location).searchParams;
     const tagList = searchParams.get('tag_list[]');
-    this.filterSectionTarget.hidden = !(tagList && tagList.length > 0);
+    console.log('connected', tagList);
+    const showFilter = !(tagList && tagList.length > 0);
+    this.filterSectionTarget.hidden = showFilter;
+    if (this.hasFilterActiveText)
+      this.filterActiveTextTarget.hidden = showFilter;
   }
 
   toggleFilterSection() {

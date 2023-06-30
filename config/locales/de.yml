@@ -345,6 +345,15 @@ de:
       truncate: ...
       next: Nächste
       last: Letzte
+    contributors_index:
+      filter_active_text:
+        one: "Das sind die Mitglieder deiner Community <strong>gefiltert nach dem Tag</strong>"
+        other: "Das sind die Mitglieder deiner Community <strong>gefiltert nach den Tags</strong>"
+    contributors_list:
+      empty_state:
+        no_contributors: Du hast noch keine Mitglieder, verschick du Einladungslinks.
+        filter_active: Keine Mitglieder mit diesen Filtern gefunden
+
 
   mailer:
     unsubscribe:
@@ -509,7 +518,7 @@ de:
     subheading: Das sind die Mitglieder deiner Community
     filter_section:
       heading: Nach Tags filtern
-      submit_button: Filter
+      submit_button: filtern
     form:
       first_name:
         label: Vorname

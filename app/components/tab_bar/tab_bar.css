@@ -44,11 +44,3 @@
   font-size: var(--font-size-xs);
   border-radius: var(--border-radius-full);
 }
-
-.TabBar-filterSection {
-  padding: 0;
-}
-
-.TabBar-filterSection > .Form > * + * {
-  margin-bottom: var(--spacing-unit-s);
-}

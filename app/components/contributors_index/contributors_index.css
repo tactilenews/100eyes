@@ -1,0 +1,7 @@
+.ContributorsIndex-filterSection {
+  padding: 0;
+}
+
+.ContributorsIndex-filterSection > .Form > * + * {
+  margin-bottom: var(--spacing-unit-s);
+}

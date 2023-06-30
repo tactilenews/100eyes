@@ -3,6 +3,7 @@
 class ContributorsController < ApplicationController
   before_action :set_contributor, only: %i[update destroy show edit message]
   before_action :count_params, only: :count
+  before_action :contributors_params, only: :index
 
   def message
     request = contributor.active_request
@@ -64,6 +65,10 @@ class ContributorsController < ApplicationController
     @contributor = Contributor.find(params[:id])
   end
 
+  def contributors_params
+    params.permit(:state, tag_list: [])
+  end
+
   def contributor_params
     params.require(:contributor).permit(:note, :first_name, :last_name, :avatar, :email, :threema_id, :phone, :zip_code, :city, :tag_list,
                                         :active, :additional_email)
@@ -78,7 +83,7 @@ class ContributorsController < ApplicationController
   end
 
   def state_params
-    value = params.permit(:state)[:state]&.to_sym
+    value = contributors_params[:state]&.to_sym
 
     return :active unless %i[active inactive].include?(value)
 
@@ -86,10 +91,10 @@ class ContributorsController < ApplicationController
   end
 
   def tag_list_params
-    value = params.permit(tag_list: [])[:tag_list]
+    value = contributors_params[:tag_list]
     return [] if value.blank?
 
-    value&.reject(&:empty?)
+    value.reject(&:empty?).first.split(',')
   end
 
   def handle_failed_update
