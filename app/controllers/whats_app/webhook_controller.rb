@@ -12,8 +12,12 @@ module WhatsApp
         handle_unknown_contributor(whats_app_phone_number)
       end
 
-      adapter.on(WhatsAppAdapter::RESPONDING_TO_TEMPLATE_MESSAGE) do |contributor, text|
-        handle_respond_to_template_message(contributor, text)
+      adapter.on(WhatsAppAdapter::REQUEST_FOR_MORE_INFO) do |contributor|
+        handle_request_for_more_info(contributor)
+      end
+
+      adapter.on(WhatsAppAdapter::REQUEST_TO_RECEIVE_LATEST_MESSAGE) do |contributor|
+        handle_request_to_receive_latest_message(contributor)
       end
 
       adapter.on(WhatsAppAdapter::UNSUPPORTED_CONTENT) do |contributor|
@@ -77,19 +81,22 @@ module WhatsApp
       ErrorNotifier.report(exception)
     end
 
-    def handle_respond_to_template_message(contributor, text)
+    def handle_request_for_more_info(contributor)
       contributor.update!(whats_app_message_template_responded_at: Time.current)
 
-      if text.strip.eql?(I18n.t('adapter.whats_app.quick_reply_button_text.more_info'))
-        WhatsAppAdapter::Outbound.send_more_info_message!(contributor)
-      else
-        message = contributor.received_messages.first
-        WhatsAppAdapter::Outbound.send!(message)
-      end
+      WhatsAppAdapter::Outbound.send_more_info_message!(contributor)
+    end
+
+    def handle_request_to_receive_latest_message(contributor)
+      contributor.update!(whats_app_message_template_responded_at: Time.current, whats_app_message_template_sent_at: nil)
+
+      message = contributor.received_messages.first
+      WhatsAppAdapter::Outbound.send!(message)
     end
 
     def handle_unsubsribe_contributor(contributor)
       contributor.update!(deactivated_at: Time.current)
+
       WhatsAppAdapter::Outbound.send_unsubsribed_successfully_message!(contributor)
       ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
       User.admin.find_each do |admin|
@@ -98,7 +105,8 @@ module WhatsApp
     end
 
     def handle_subscribe_contributor(contributor)
-      contributor.update!(deactivated_at: nil)
+      contributor.update!(deactivated_at: nil, whats_app_message_template_responded_at: Time.current)
+
       WhatsAppAdapter::Outbound.send_welcome_message!(contributor)
       ContributorSubscribed.with(contributor_id: contributor.id).deliver_later(User.all)
       User.admin.find_each do |admin|

@@ -70,12 +70,14 @@ module WhatsAppAdapter
       def freeform_message_permitted?(recipient)
         responding_to_template_message = recipient.whats_app_message_template_responded_at.present? &&
                                          recipient.whats_app_message_template_responded_at > 24.hours.ago
-        latest_message_received_within_24_hours_ago = recipient.replies.first&.created_at.present? &&
-                                                      recipient.replies.first.created_at > 24.hours.ago
-        responding_to_template_message || latest_message_received_within_24_hours_ago
+        latest_message_received_within_last_24_hours = recipient.replies.first&.created_at.present? &&
+                                                       recipient.replies.first.created_at > 24.hours.ago
+        responding_to_template_message || latest_message_received_within_last_24_hours
       end
 
       def send_message_template(recipient, message)
+        recipient.update!(whats_app_message_template_sent_at: Time.current)
+
         text = I18n.t("adapter.whats_app.request_template.new_request_#{time_of_day}_#{rand(1..3)}", first_name: recipient.first_name,
                                                                                                      request_title: message.request.title)
         WhatsAppAdapter::Outbound::Text.perform_later(recipient: recipient, text: text)
