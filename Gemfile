@@ -59,7 +59,7 @@ gem 'pg_search'
 gem 'phony_rails'
 gem 'rails-settings-cached', '~> 2.8'
 gem 'valid_email2', '~> 4.0'
-gem 'view_component', '~> 2'
+gem 'view_component', '~> 3'
 
 # Middleware
 gem 'rack-attack', '~> 6.6'
