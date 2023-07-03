@@ -4,7 +4,7 @@ module WhatsAppAdapter
   UNKNOWN_CONTRIBUTOR = :unknown_contributor
   UNSUPPORTED_CONTENT = :unsupported_content
   REQUEST_FOR_MORE_INFO = :request_for_more_info
-  REQUEST_TO_RECEIVE_LATEST_MESSAGE = :request_to_receive_latest_message
+  REQUEST_TO_RECEIVE_MESSAGE = :request_to_receive_message
   UNSUBSCRIBE_CONTRIBUTOR = :unsubscribe_contributor
   SUBSCRIBE_CONTRIBUTOR = :subscribe_contributor
 
@@ -63,11 +63,12 @@ module WhatsAppAdapter
 
     def initialize_message(whats_app_message)
       message_text = whats_app_message[:body]
+      original_replied_message_sid = whats_app_message[:original_replied_message_sid]
 
       trigger(REQUEST_FOR_MORE_INFO, sender) if request_for_more_info?(message_text)
       trigger(UNSUBSCRIBE_CONTRIBUTOR, sender) if unsubscribe_text?(message_text)
       trigger(SUBSCRIBE_CONTRIBUTOR, sender) if subscribe_text?(message_text)
-      trigger(REQUEST_TO_RECEIVE_LATEST_MESSAGE, sender) if request_to_receive_latest_message?(sender, message_text)
+      trigger(REQUEST_TO_RECEIVE_MESSAGE, sender, original_replied_message_sid) if request_to_receive_message?(sender, whats_app_message)
 
       message = Message.new(text: message_text, sender: sender)
       message.raw_data.attach(
@@ -114,10 +115,11 @@ module WhatsAppAdapter
       text.strip.eql?(I18n.t('adapter.whats_app.quick_reply_button_text.more_info'))
     end
 
-    def request_to_receive_latest_message?(contributor, text)
+    def request_to_receive_message?(contributor, whats_app_message)
+      text = whats_app_message[:body]
       return false if request_for_more_info?(text) || unsubscribe_text?(text) || subscribe_text?(text)
 
-      contributor.whats_app_message_template_sent_at.present?
+      contributor.whats_app_message_template_sent_at.present? || whats_app_message[:original_replied_message_sid]
     end
 
     def quick_reply_response?(text)
