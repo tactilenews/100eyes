@@ -77,7 +77,6 @@ module WhatsAppAdapter
 
       def send_message_template(recipient, message)
         recipient.update!(whats_app_message_template_sent_at: Time.current)
-
         text = I18n.t("adapter.whats_app.request_template.new_request_#{time_of_day}_#{rand(1..3)}", first_name: recipient.first_name,
                                                                                                      request_title: message.request.title)
         WhatsAppAdapter::Outbound::Text.perform_later(recipient: recipient, text: text)
