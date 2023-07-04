@@ -32,6 +32,7 @@ RSpec.describe WhatsApp::WebhookController do
       allow(Sentry).to receive(:capture_exception)
       allow(Setting).to receive(:whats_app_server_phone_number).and_return('4915133311445')
       allow(Twilio::Security::RequestValidator).to receive(:new).and_return(mock_twilio_security_request_validator)
+      allow(Request).to receive(:broadcast!).and_call_original
     end
 
     describe 'fails Rack::TwilioWebhookAuthentication' do
@@ -79,7 +80,7 @@ RSpec.describe WhatsApp::WebhookController do
 
       context 'no message template sent' do
         it 'creates a messsage' do
-          expect { subject.call }.to change(Message, :count).from(1).to(2)
+          expect { subject.call }.to change(Message, :count).from(2).to(3)
         end
       end
 
@@ -90,6 +91,64 @@ RSpec.describe WhatsApp::WebhookController do
         context 'request to receive latest message' do
           it 'enqueues a job to send the latest received message' do
             expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::Outbound::Text).on_queue('default').with(latest_message_job_args)
+          end
+
+          describe 'replying to message with quick reply button' do
+            let!(:previous_request) { create(:request, title: 'Previous request', text: 'I have previous text') }
+            let!(:newer_request) { create(:request, title: 'Newer request', text: 'I have newer text') }
+            let(:valid_account_sid) { 'VALID_ACCOUNT_SID' }
+            let(:valid_api_key_sid) { 'VALID_API_KEY_SID' }
+            let(:valid_api_key_secret) { 'VALID_API_KEY_SECRET' }
+            let(:mock_twilio_rest_client) { instance_double(Twilio::REST::Client) }
+            let(:messages_double) { double(Twilio::REST::Api::V2010::AccountContext::MessageInstance, body: body_text) }
+
+            before do
+              subject.call
+              params['OriginalRepliedMessageSid'] = 'someUniqueId'
+              allow(Twilio::REST::Client).to receive(:new).and_return(mock_twilio_rest_client)
+              allow(mock_twilio_rest_client).to receive(:messages).with('someUniqueId').and_return(messages_double)
+              allow(messages_double).to receive(:fetch).and_return(messages_double)
+            end
+
+            describe 'previous request' do
+              let(:requested_message_job_args) do
+                { recipient: contributor, text: previous_request.messages.where(recipient_id: contributor.id).first.text }
+              end
+              let(:body_text) do
+                "Some template message with request title „#{previous_request.title}“. Wenn du antworten möchtest, klicke auf 'Antworten'."
+              end
+
+              it 'enqueues a job to send the requested message' do
+                expect do
+                  subject.call
+                end.to have_enqueued_job(WhatsAppAdapter::Outbound::Text).on_queue('default').with(requested_message_job_args)
+              end
+            end
+
+            describe 'newer request' do
+              let(:requested_message_job_args) do
+                { recipient: contributor, text: newer_request.messages.where(recipient_id: contributor.id).first.text }
+              end
+              let(:body_text) do
+                "Some template message with request title „#{newer_request.title}“. Wenn du antworten möchtest, klicke auf 'Antworten'."
+              end
+
+              it 'enqueues a job to send the requested message' do
+                expect do
+                  subject.call
+                end.to have_enqueued_job(WhatsAppAdapter::Outbound::Text).on_queue('default').with(requested_message_job_args)
+              end
+            end
+
+            describe 'cannot determine request from original message' do
+              let(:body_text) { 'Does not contain German quotes, or request cannot be found by title' }
+
+              it 'enqueues a job to send the latest received message' do
+                expect do
+                  subject.call
+                end.to have_enqueued_job(WhatsAppAdapter::Outbound::Text).on_queue('default').with(latest_message_job_args)
+              end
+            end
           end
         end
 
