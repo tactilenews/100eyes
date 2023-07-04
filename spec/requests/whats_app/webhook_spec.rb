@@ -80,7 +80,7 @@ RSpec.describe WhatsApp::WebhookController do
 
       context 'no message template sent' do
         it 'creates a messsage' do
-          expect { subject.call }.to change(Message, :count).from(1).to(2)
+          expect { subject.call }.to change(Message, :count).from(2).to(3)
         end
       end
 
