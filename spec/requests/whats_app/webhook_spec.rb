@@ -139,6 +139,16 @@ RSpec.describe WhatsApp::WebhookController do
                 end.to have_enqueued_job(WhatsAppAdapter::Outbound::Text).on_queue('default').with(requested_message_job_args)
               end
             end
+
+            describe 'cannot determine request from original message' do
+              let(:body_text) { 'Does not contain German quotes, or request cannot be found by title' }
+
+              it 'enqueues a job to send the latest received message' do
+                expect do
+                  subject.call
+                end.to have_enqueued_job(WhatsAppAdapter::Outbound::Text).on_queue('default').with(latest_message_job_args)
+              end
+            end
           end
         end
 
