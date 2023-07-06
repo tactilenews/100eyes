@@ -24,6 +24,7 @@ class ContributorsController < ApplicationController
 
     @contributors = @state == :inactive ? Contributor.inactive : Contributor.active
     @contributors = @contributors.with_tags(tag_list_params)
+    @filter_count = @contributors.size
     @contributors = @contributors.with_attached_avatar.includes(:tags)
   end
 
@@ -92,7 +93,7 @@ class ContributorsController < ApplicationController
 
   def tag_list_params
     value = contributors_params[:tag_list]
-    return [] if value.blank?
+    return [] if value.blank? || value.all?(&:blank?)
 
     value.reject(&:empty?).first.split(',')
   end

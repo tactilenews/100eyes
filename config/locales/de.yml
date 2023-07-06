@@ -519,6 +519,7 @@ de:
     filter_section:
       heading: Nach Tags filtern
       submit_button: filtern
+      clear_button: löschen
     form:
       first_name:
         label: Vorname

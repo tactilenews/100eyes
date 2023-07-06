@@ -5,3 +5,7 @@
 .ContributorsIndex-filterSection > .Form > * + * {
   margin-bottom: var(--spacing-unit-s);
 }
+
+.ContributorsIndex-filterSection .Button {
+  margin-right: var(--spacing-unit-s);
+}
