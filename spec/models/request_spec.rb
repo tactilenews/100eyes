@@ -69,6 +69,21 @@ RSpec.describe Request, type: :model do
     end
   end
 
+  describe 'scopes' do
+    let!(:request_created_before_broadcasted_at_introduced) do
+      create(:request, created_at: Time.zone.local(2023, 1, 7, 7, 39), broadcasted_at: nil)
+    end
+    let!(:recent_request) { create(:request) }
+
+    context 'broadcasted' do
+      subject { Request.broadcasted }
+      before(:each) { allow(Request).to receive(:broadcast!).and_call_original } # is stubbed for every other test
+
+      it { is_expected.to include(recent_request) }
+      it { is_expected.to include(request_created_before_broadcasted_at_introduced) }
+    end
+  end
+
   it 'has title, text, and user_id' do
     expect(subject.attributes.keys).to include('title', 'text', 'user_id')
   end
