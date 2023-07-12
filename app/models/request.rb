@@ -4,8 +4,6 @@ class Request < ApplicationRecord
   include PlaceholderHelper
   include PgSearch::Model
 
-  SCHEDULE_REQUEST_FEATURE_DEPLOYED_AT = Time.zone.local(2023, 1, 7, 7, 40)
-
   multisearchable against: %i[title text]
 
   belongs_to :user
@@ -18,7 +16,7 @@ class Request < ApplicationRecord
 
   scope :include_associations, -> { preload(messages: :sender).includes(messages: :files).eager_load(:messages) }
   scope :planned, -> { where.not(schedule_send_for: nil).where('schedule_send_for > ?', Time.current) }
-  scope :broadcasted, -> { where.not(broadcasted_at: nil).or(where('requests.created_at <= ?', SCHEDULE_REQUEST_FEATURE_DEPLOYED_AT)) }
+  scope :broadcasted, -> { where.not(broadcasted_at: nil) }
 
   validates :files, blob: { content_type: ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'] }
   validates :title, presence: true
