@@ -74,6 +74,7 @@ RSpec.describe Request, type: :model do
       create(:request, created_at: Time.zone.local(2023, 1, 7, 7, 39), broadcasted_at: nil)
     end
     let!(:recent_request) { create(:request) }
+    let!(:planned_request) { create(:request, schedule_send_for: 1.day.from_now, broadcasted_at: nil) }
 
     context 'broadcasted' do
       subject { Request.broadcasted }
@@ -81,6 +82,7 @@ RSpec.describe Request, type: :model do
 
       it { is_expected.to include(recent_request) }
       it { is_expected.to include(request_created_before_broadcasted_at_introduced) }
+      it { is_expected.not_to include(planned_request) }
     end
   end
 
