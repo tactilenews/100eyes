@@ -10,18 +10,20 @@
     <%= c 'new_request_link' %>
 
     <% header.tab_bar do %>
-      <%= c('tab_bar', items: {
-        requests_path => {
+      <%= c('tab_bar', items: [
+        {
+          url: requests_path,
           label: "Gestellt",
           active: @filter == :sent,
           count: @sent_requests_count
         },
-        requests_path(filter: :planned) => {
+        {
+          url: requests_path(filter: :planned),
           label: "Geplant",
           active: @filter == :planned,
           count: @planned_requests_count
         },
-      }) %>
+      ]) %>
     <% end %>
   <% end %>
 

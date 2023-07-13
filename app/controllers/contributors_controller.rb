@@ -3,6 +3,7 @@
 class ContributorsController < ApplicationController
   before_action :set_contributor, only: %i[update destroy show edit message]
   before_action :count_params, only: :count
+  before_action :contributors_params, only: :index
 
   def message
     request = contributor.active_request
@@ -14,11 +15,16 @@ class ContributorsController < ApplicationController
   end
 
   def index
-    @filter = filter_param
+    @state = state_params
+    @tag_list = tag_list_params
+
     @active_count = Contributor.active.count
     @inactive_count = Contributor.inactive.count
+    @available_tags = Contributor.all_tags_with_count.to_json
 
-    @contributors = @filter == :inactive ? Contributor.inactive : Contributor.active
+    @contributors = @state == :inactive ? Contributor.inactive : Contributor.active
+    @contributors = @contributors.with_tags(tag_list_params)
+    @filter_count = @contributors.size
     @contributors = @contributors.with_attached_avatar.includes(:tags)
   end
 
@@ -60,6 +66,10 @@ class ContributorsController < ApplicationController
     @contributor = Contributor.find(params[:id])
   end
 
+  def contributors_params
+    params.permit(:state, tag_list: [])
+  end
+
   def contributor_params
     params.require(:contributor).permit(:note, :first_name, :last_name, :avatar, :email, :threema_id, :phone, :zip_code, :city, :tag_list,
                                         :active, :additional_email)
@@ -73,12 +83,19 @@ class ContributorsController < ApplicationController
     params.permit(tag_list: [])
   end
 
-  def filter_param
-    value = params.permit(:filter)[:filter]&.to_sym
+  def state_params
+    value = contributors_params[:state]&.to_sym
 
     return :active unless %i[active inactive].include?(value)
 
     value
+  end
+
+  def tag_list_params
+    value = contributors_params[:tag_list]
+    return [] if value.blank? || value.all?(&:blank?)
+
+    value.reject(&:empty?).first.split(',')
   end
 
   def handle_failed_update
