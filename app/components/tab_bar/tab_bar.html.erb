@@ -3,19 +3,21 @@
     <% items.each do |options| %>
       <li class="TabBar-item <%= 'TabBar-item--active' if options.dig(:active) %>">
         <%= c('button',
-          label: options.dig(:label),
           link: options.dig(:url),
           styles: [:inline],
           data: options.dig(:data)
         ) do %>
+          <% if options.key?(:label) %>
+            <%= options.dig(:label) %>
+          <% end %>
+          <% if options.key?(:count) %>
+            <span class="TabBar-count">
+              <%= options.dig(:count) %>
+            </span>
+          <% end %>
           <% if options.key?(:icon) %>
             <%= c 'icon', icon: options.dig(:icon), styles: [:inline] %>
           <% end %>
-        <% end %>
-        <% if options.key?(:count) %>
-          <span class="TabBar-count">
-            <%= options.dig(:count) %>
-          </span>
         <% end %>
       </li>
     <% end %>
