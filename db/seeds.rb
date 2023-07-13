@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 # rubocop:disable Rails/Output
-password = 'go3LS4gvPuuSoq2m0B2n'
-otp_secret_key = 'THDBCRGPERS75F7IDDLISUDC6N2YYG3V'
+password = ENV.fetch('SEED_USER_PASSWORD', SecureRandom.alphanumeric(20))
+otp_secret_key = ENV.fetch('SEED_USER_OTP_SECRET', User.otp_random_secret)
 
 organization = Organization.create_or_find_by(name: '100eyes',
                                               upgrade_discount: 10,
