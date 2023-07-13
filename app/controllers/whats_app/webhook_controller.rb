@@ -12,8 +12,12 @@ module WhatsApp
         handle_unknown_contributor(whats_app_phone_number)
       end
 
-      adapter.on(WhatsAppAdapter::RESPONDING_TO_TEMPLATE_MESSAGE) do |contributor, text|
-        handle_respond_to_template_message(contributor, text)
+      adapter.on(WhatsAppAdapter::REQUEST_FOR_MORE_INFO) do |contributor|
+        handle_request_for_more_info(contributor)
+      end
+
+      adapter.on(WhatsAppAdapter::REQUEST_TO_RECEIVE_MESSAGE) do |contributor, twilio_message_sid|
+        handle_request_to_receive_message(contributor, twilio_message_sid)
       end
 
       adapter.on(WhatsAppAdapter::UNSUPPORTED_CONTENT) do |contributor|
@@ -59,7 +63,8 @@ module WhatsApp
 
     def message_params
       params.permit(:AccountSid, :ApiVersion, :Body, :ButtonText, :ButtonPayload, :From, :Latitude, :Longitude,
-                    :MediaContentType0, :MediaUrl0, :MessageSid, :NumMedia, :NumSegments, :ProfileName,
+                    :MediaContentType0, :MediaUrl0, :MessageSid, :NumMedia, :NumSegments,
+                    :OriginalRepliedMessageSender, :OriginalRepliedMessageSid, :ProfileName,
                     :ReferralNumMedia, :SmsMessageSid, :SmsSid, :SmsStatus, :To, :WaId)
     end
 
@@ -77,19 +82,22 @@ module WhatsApp
       ErrorNotifier.report(exception)
     end
 
-    def handle_respond_to_template_message(contributor, text)
+    def handle_request_for_more_info(contributor)
       contributor.update!(whats_app_message_template_responded_at: Time.current)
 
-      if text.strip.eql?(I18n.t('adapter.whats_app.quick_reply_button_text.more_info'))
-        WhatsAppAdapter::Outbound.send_more_info_message!(contributor)
-      else
-        message = contributor.received_messages.first
-        WhatsAppAdapter::Outbound.send!(message)
-      end
+      WhatsAppAdapter::Outbound.send_more_info_message!(contributor)
+    end
+
+    def handle_request_to_receive_message(contributor, twilio_message_sid)
+      contributor.update!(whats_app_message_template_responded_at: Time.current, whats_app_message_template_sent_at: nil)
+
+      message = (send_requested_message(contributor, twilio_message_sid) if twilio_message_sid)
+      WhatsAppAdapter::Outbound.send!(message || contributor.received_messages.first)
     end
 
     def handle_unsubsribe_contributor(contributor)
       contributor.update!(deactivated_at: Time.current)
+
       WhatsAppAdapter::Outbound.send_unsubsribed_successfully_message!(contributor)
       ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
       User.admin.find_each do |admin|
@@ -98,12 +106,31 @@ module WhatsApp
     end
 
     def handle_subscribe_contributor(contributor)
-      contributor.update!(deactivated_at: nil)
+      contributor.update!(deactivated_at: nil, whats_app_message_template_responded_at: Time.current)
+
       WhatsAppAdapter::Outbound.send_welcome_message!(contributor)
       ContributorSubscribed.with(contributor_id: contributor.id).deliver_later(User.all)
       User.admin.find_each do |admin|
         PostmarkAdapter::Outbound.contributor_subscribed!(admin, contributor)
       end
+    end
+
+    def send_requested_message(contributor, twilio_message_sid)
+      message_text = fetch_message_from_twilio(twilio_message_sid)
+
+      request_title = message_text.scan(/„[^"]*“/).first&.gsub('„', '')&.gsub('“', '')
+      request = Request.find_by(title: request_title)
+
+      request&.messages&.where(recipient_id: contributor.id)&.first
+    end
+
+    def fetch_message_from_twilio(twilio_message_sid)
+      twilio_instance = Twilio::REST::Client.new(Setting.twilio_api_key_sid, Setting.twilio_api_key_secret, Setting.twilio_account_sid)
+      message = twilio_instance.messages(twilio_message_sid).fetch
+      message.body
+    rescue Twilio::REST::RestError => e
+      ErrorNotifier.report(e)
+      nil
     end
   end
 end
