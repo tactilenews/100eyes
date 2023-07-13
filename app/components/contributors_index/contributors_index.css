@@ -2,8 +2,14 @@
   padding: 0;
 }
 
-.ContributorsIndex-filterSection > .Form > * + * {
-  margin-bottom: var(--spacing-unit-s);
+.ContributorsIndex-filterSectionLabel {
+  font-size: 1.25rem;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.ContributorsIndex-filterSection .TagsInput {
+  margin: var(--spacing-unit-s) 0;
 }
 
 .ContributorsIndex-filterSection .Button {
