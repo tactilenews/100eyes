@@ -92,7 +92,7 @@ class Request < ApplicationRecord
   private
 
   def broadcast_updated_request
-    return unless planned? && saved_change_to_schedule_send_for?
+    return unless saved_change_to_schedule_send_for?
 
     Request.broadcast!(self)
   end
