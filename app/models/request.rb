@@ -26,7 +26,7 @@ class Request < ApplicationRecord
 
   after_create { Request.broadcast!(self) }
 
-  after_update_commit :broadcast_updated_request, :notify_recipient
+  after_update_commit :broadcast_updated_request
 
   delegate :replies, to: :messages
 
@@ -95,11 +95,5 @@ class Request < ApplicationRecord
     return unless planned? && saved_change_to_schedule_send_for?
 
     Request.broadcast!(self)
-  end
-
-  def notify_recipient
-    return unless saved_change_to_schedule_send_for?
-
-    RequestScheduled.with(request_id: id).deliver_later(User.all)
   end
 end
