@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Request, type: :model do
-  let!(:contributor) { create(:contributor) }
+  let(:contributor) { create(:contributor) }
   let(:user) { create(:user) }
 
   let(:request) do
@@ -292,7 +292,10 @@ RSpec.describe Request, type: :model do
   end
 
   describe '::after_update_commit' do
-    before { allow(Request).to receive(:broadcast!).and_call_original }
+    before do
+      allow(Request).to receive(:broadcast!).and_call_original
+      create(:contributor)
+    end
     subject { request.update!(params) }
 
     describe '#broadcast_updated_request' do
