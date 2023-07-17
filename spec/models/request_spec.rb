@@ -11,6 +11,7 @@ RSpec.describe Request, type: :model do
       title: 'Hitchhiker’s Guide',
       text: 'What is the answer to life, the universe, and everything?',
       user: user,
+      schedule_send_for: Time.current,
       files: [fixture_file_upload('example-image.png')]
     )
   end
@@ -287,6 +288,83 @@ RSpec.describe Request, type: :model do
       it { should change { Message.pluck(:recipient_id) }.from([]).to([4]) }
       it { should change { Message.pluck(:sender_id) }.from([]).to([request.user.id]) }
       it { should change { Message.pluck(:broadcasted) }.from([]).to([true]) }
+    end
+  end
+
+  describe '::after_update_commit' do
+    before do
+      allow(Request).to receive(:broadcast!).and_call_original
+      create(:contributor)
+    end
+    subject { request.update!(params) }
+
+    describe '#broadcast_updated_request' do
+      context 'not planned request' do
+        before { request.save! }
+
+        let(:params) { { text: 'I have new text' } }
+
+        it 'does not broadcast request' do
+          expect(Request).not_to receive(:broadcast!)
+
+          subject
+        end
+
+        it 'does not create a notification' do
+          expect { subject }.not_to(change { ActivityNotification.where(type: RequestScheduled.name).count })
+        end
+      end
+
+      context 'planned request' do
+        let(:params) { { schedule_send_for: 1.day.from_now } }
+
+        it 'calls broadcast! to schedule request' do
+          expect(Request).to receive(:broadcast!).with(request)
+
+          subject
+        end
+
+        it 'creates a notification' do
+          expect { subject }.to(change { ActivityNotification.where(type: RequestScheduled.name).count }.from(0).to(1))
+        end
+
+        context 'no change to scheduled time' do
+          before { request.save! }
+          let(:params) { { text: 'Fixed typo' } }
+
+          it 'does not broadcast request' do
+            expect(Request).not_to receive(:broadcast!)
+
+            subject
+          end
+        end
+
+        context 'schedule_send_for set to nil' do
+          before { request.update(schedule_send_for: 1.day.from_now) }
+          let(:params) { { schedule_send_for: nil } }
+
+          it 'does not create a notification' do
+            expect { subject }.not_to(change { ActivityNotification.where(type: RequestScheduled.name).count })
+          end
+
+          it 'broadcasts the messages' do
+            expect { subject }.to(change(Message, :count).from(0).to(1))
+          end
+        end
+
+        context 'schedule_send_for set to time in past' do
+          before { request.update(schedule_send_for: 1.day.from_now) }
+          let(:params) { { schedule_send_for: 1.day.ago } }
+
+          it 'does not create a notification' do
+            expect { subject }.not_to(change { ActivityNotification.where(type: RequestScheduled.name).count })
+          end
+
+          it 'broadcasts the messages' do
+            expect { subject }.to(change(Message, :count).from(0).to(1))
+          end
+        end
+      end
     end
   end
 end
