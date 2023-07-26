@@ -7,10 +7,8 @@ RSpec.describe TabBar::TabBar, type: :component do
   let(:params) { { items: items } }
 
   let(:items) do
-    {
-      '/a': { label: 'Link A', active: true },
-      '/b': { label: 'Link B' }
-    }
+    [{ url: '/a', label: 'Link A', active: true },
+     { url: '/b', label: 'Link B' }]
   end
 
   it { should have_css('.TabBar') }
@@ -24,8 +22,20 @@ RSpec.describe TabBar::TabBar, type: :component do
   end
 
   context 'with counts' do
-    let(:items) { { '/a': { label: 'Link A', count: 3 } } }
+    let(:items) { [{ url: '/a', label: 'Link A', count: 3 }] }
 
     it { should have_css('.TabBar-item .TabBar-count', text: 3) }
+  end
+
+  context 'without url' do
+    let(:items) { [{ label: 'Button A' }] }
+
+    it { should have_css('button.Button') }
+  end
+
+  context 'with icon' do
+    let(:items) { [{ icon: 'filter-tool' }] }
+
+    it { should have_css('.Icon.Icon--inline') }
   end
 end

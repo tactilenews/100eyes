@@ -1,39 +1,8 @@
-<%= c 'main' do %>
-  <%= c 'page_header', styles: [:lightGrayBackground, :spaceBetween, :largeMarginBottom] do |header| %>
-    <div>
-      <%= c 'heading' do %>
-        <%= I18n.t 'contributor.contributor', count: :other %>
-      <% end %>
-      <p><%= t('contributor.subheading') %></p>
-    </div>
-
-    <%= c 'copy_button',
-      label: I18n.t('contributor.actions.copy_invite'),
-      styles: [:colorNavBar, :customIcon],
-      url: invites_url,
-      key: 'url',
-      custom_icon: 'onboarding-ticket'
-    %>
-
-    <% header.tab_bar do %>
-      <%= c('tab_bar', items: {
-        contributors_path => {
-          label: "Aktiv",
-          active: @filter == :active,
-          count: @active_count,
-        },
-        contributors_path(filter: :inactive) => {
-          label: "Inaktiv",
-          active: @filter == :inactive,
-          count: @inactive_count,
-        },
-      }) %>
-    <% end %>
-  <% end %>
-
-  <%= c 'section' do %>
-    <% @contributors.each do |contributor| %>
-      <%= c 'contributor_row', contributor: contributor %>
-    <% end %>
-  <% end %>
-<% end %>
+<%= c 'contributors_index',
+  contributors: @contributors,
+  tag_list: @tag_list,
+  state: @state,
+  active_count: @active_count,
+  inactive_count: @inactive_count,
+  filter_count: @filter_count
+%>

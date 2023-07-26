@@ -70,13 +70,13 @@ module WhatsAppAdapter
       def freeform_message_permitted?(recipient)
         responding_to_template_message = recipient.whats_app_message_template_responded_at.present? &&
                                          recipient.whats_app_message_template_responded_at > 24.hours.ago
-        latest_message_received_within_24_hours_ago = recipient.replies.first&.created_at.present? &&
-                                                      recipient.replies.first.created_at > 24.hours.ago
-        responding_to_template_message || latest_message_received_within_24_hours_ago
+        latest_message_received_within_last_24_hours = recipient.replies.first&.created_at.present? &&
+                                                       recipient.replies.first.created_at > 24.hours.ago
+        responding_to_template_message || latest_message_received_within_last_24_hours
       end
 
       def send_message_template(recipient, message)
-        recipient.update(whats_app_template_message_sent_at: Time.current)
+        recipient.update(whats_app_message_template_sent_at: Time.current)
         WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(payload: template_payload(recipient, message))
       end
 
