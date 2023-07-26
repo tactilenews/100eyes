@@ -38,9 +38,7 @@ class ChartsController < ApplicationController
   end
 
   def group_messages(messages, group_keys)
-    return [] unless messages.any?
-
-    column = messages.all? { |message| message.is_a? Request } ? :broadcasted_at : :created_at
+    column = messages.any? && messages.all? { |message| message.is_a? Request } ? :broadcasted_at : :created_at
     messages = messages.group_by_day_of_week(column, format: '%A', week_start: :monday) if group_keys.include?(:day_of_week)
     return messages unless group_keys.include?(:hour_of_day)
 
