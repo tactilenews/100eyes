@@ -38,6 +38,8 @@ module WhatsApp
 
     def three_sixty_dialog_message
       head :ok
+      return if params['statuses'].present? # TODO: Do we want to handle statuses?
+
       adapter = WhatsAppAdapter::ThreeSixtyDialogInbound.new
 
       adapter.on(WhatsAppAdapter::UNKNOWN_CONTRIBUTOR) do |whats_app_phone_number|
@@ -106,9 +108,10 @@ module WhatsApp
 
     def three_sixty_dialog_message_params
       params.permit({ webhook: [contacts: [:wa_id, { profile: [:name] }],
-                                messages: [:from, :id, :type, :timestamp, { text: [:body] }, { context: %i[from id] }]] },
+                                messages: [:from, :id, :type, :timestamp, { text: [:body] }, { context: %i[from id] },
+                                           { button: [:text] }]] },
                     contacts: [:wa_id, { profile: [:name] }],
-                    messages: [:from, :id, :type, :timestamp, { text: [:body] }, { context: %i[from id] }])
+                    messages: [:from, :id, :type, :timestamp, { text: [:body] }, { context: %i[from id] }, { button: [:text] }])
     end
 
     def error_params

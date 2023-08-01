@@ -62,14 +62,15 @@ module WhatsAppAdapter
     end
 
     def initialize_message(whats_app_message)
-      message_text = whats_app_message[:messages].first[:text][:body]
+      message = whats_app_message[:messages].first
+      text = message[:text]&.dig(:body) || message[:button]&.dig(:text)
 
-      trigger(REQUEST_FOR_MORE_INFO, sender) if request_for_more_info?(message_text)
-      trigger(UNSUBSCRIBE_CONTRIBUTOR, sender) if unsubscribe_text?(message_text)
-      trigger(SUBSCRIBE_CONTRIBUTOR, sender) if subscribe_text?(message_text)
-      trigger(REQUEST_TO_RECEIVE_MESSAGE, sender) if request_to_receive_message?(sender, whats_app_message)
+      trigger(REQUEST_FOR_MORE_INFO, sender) if request_for_more_info?(text)
+      trigger(UNSUBSCRIBE_CONTRIBUTOR, sender) if unsubscribe_text?(text)
+      trigger(SUBSCRIBE_CONTRIBUTOR, sender) if subscribe_text?(text)
+      trigger(REQUEST_TO_RECEIVE_MESSAGE, sender) if request_to_receive_message?(sender, text)
 
-      message = Message.new(text: message_text, sender: sender)
+      message = Message.new(text: text, sender: sender)
       message.raw_data.attach(
         io: StringIO.new(JSON.generate(whats_app_message)),
         filename: 'whats_app_message.json',
@@ -111,11 +112,12 @@ module WhatsAppAdapter
     end
 
     def request_for_more_info?(text)
+      return false if text.blank?
+
       text.strip.eql?(I18n.t('adapter.whats_app.quick_reply_button_text.more_info'))
     end
 
-    def request_to_receive_message?(contributor, whats_app_message)
-      text = whats_app_message[:messages].first[:text][:body]
+    def request_to_receive_message?(contributor, text)
       return false if request_for_more_info?(text) || unsubscribe_text?(text) || subscribe_text?(text)
 
       contributor.whats_app_message_template_sent_at.present?
@@ -131,17 +133,21 @@ module WhatsAppAdapter
     end
 
     def unsubscribe_text?(text)
+      return false if text.blank?
+
       text.downcase.strip.eql?(I18n.t('adapter.whats_app.unsubscribe.text'))
     end
 
     def subscribe_text?(text)
+      return false if text.blank?
+
       text.downcase.strip.eql?(I18n.t('adapter.whats_app.subscribe.text'))
     end
 
     def create_message?
       has_non_text_content = message.files.any? || message.unknown_content
       text = message.text
-      has_non_text_content || (message.text && !quick_reply_response?(text) && !unsubscribe_text?(text) && !subscribe_text?(text))
+      has_non_text_content || (message.text.present? && !quick_reply_response?(text) && !unsubscribe_text?(text) && !subscribe_text?(text))
     end
   end
 end
