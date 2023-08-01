@@ -14,7 +14,20 @@ module WhatsAppAdapter
         response = Net::HTTP.start(url.host, url.port, use_ssl: true) do |http|
           http.request(request)
         end
-        response.value # may raise exception
+        handle_response(response)
+      end
+
+      private
+
+      def handle_response(response)
+        case response.code.to_i
+        when 200
+          Rails.logger.debug 'Great!'
+        when 400..599
+          exception = WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: response.code, message: response.body)
+          Rails.logger.debug response.body.to_s
+          ErrorNotifier.report(exception)
+        end
       end
     end
   end
