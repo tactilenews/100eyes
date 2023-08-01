@@ -6,7 +6,7 @@ module WhatsAppAdapter
       queue_as :default
 
       def perform(payload:)
-        url = URI.parse("#{Setting.three_sixty_dialog[:whats_app][:rest_api_endpoint]}/messages")
+        url = URI.parse("#{Setting.three_sixty_dialog_whats_app_rest_api_endpoint}/messages")
         headers = { 'D360-API-KEY' => Setting.three_sixty_dialog_api_key, 'Content-Type' => 'application/json' }
         request = Net::HTTP::Post.new(url.to_s, headers)
 

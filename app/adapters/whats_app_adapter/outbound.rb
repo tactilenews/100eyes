@@ -93,7 +93,7 @@ module WhatsAppAdapter
       end
 
       def template_payload(recipient, message)
-        template_namespace = Setting.three_sixty_dialog[:whats_app][:template_namespace]
+        template_namespace = Setting.three_sixty_dialog_whats_app_template_namespace
         {
           recipient_type: 'individual',
           to: recipient.whats_app_phone_number.split('+').last,
@@ -104,7 +104,7 @@ module WhatsAppAdapter
               policy: 'deterministic',
               code: 'de'
             },
-            name: "new_request_#{time_of_day}_#{rand(1..3)}",
+            name: 'new_request_morning_1', # TODO: Use dynamic template name after WhatsAppAdapter::CreateTemplate works
             components: [{
               type: 'body',
               parameters: [{
