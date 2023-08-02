@@ -2,14 +2,17 @@
 
 module WhatsAppAdapter
   class Outbound
-    class ThreeSixtyDialogText < ApplicationJob
+    class ThreeSixtyDialogFile < ApplicationJob
       queue_as :default
 
-      def perform(payload:)
+      def perform(message_id:, file_id:)
+        message = Message.find(message_id)
+        @recipient = message.recipient
+        @file_id = file_id
+
         url = URI.parse("#{Setting.three_sixty_dialog_whats_app_rest_api_endpoint}/messages")
         headers = { 'D360-API-KEY' => Setting.three_sixty_dialog_api_key, 'Content-Type' => 'application/json' }
         request = Net::HTTP::Post.new(url.to_s, headers)
-
         request.body = payload.to_json
         response = Net::HTTP.start(url.host, url.port, use_ssl: true) do |http|
           http.request(request)
@@ -18,6 +21,19 @@ module WhatsAppAdapter
       end
 
       private
+
+      attr_reader :recipient, :file_id
+
+      def payload
+        {
+          recipient_type: 'individual',
+          to: recipient.whats_app_phone_number.split('+').last,
+          type: 'image',
+          image: {
+            id: file_id
+          }
+        }
+      end
 
       def handle_response(response)
         case response.code.to_i

@@ -99,7 +99,7 @@ module WhatsAppAdapter
       def send_message_template(recipient, message)
         recipient.update(whats_app_message_template_sent_at: Time.current)
         if Setting.three_sixty_dialog_api_key.present?
-          WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(payload: new_request_payload(recipient, message.request.title))
+          WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(payload: new_request_payload(recipient, message.request))
         else
           text = I18n.t("adapter.whats_app.request_template.new_request_#{time_of_day}_#{rand(1..3)}", first_name: recipient.first_name,
                                                                                                        request_title: message.request.title)
@@ -116,6 +116,10 @@ module WhatsAppAdapter
           else
             WhatsAppAdapter::Outbound::Text.perform_later
           end
+        elsif Setting.three_sixty_dialog_api_key.present?
+          files.each do |_file|
+            WhatsAppAdapter::UploadFile.perform_later(message_id: message.id)
+          end
         else
           files.each_with_index do |file, index|
             WhatsAppAdapter::Outbound::File.perform_later(recipient: recipient, text: index.zero? ? message.text : '', file: file)
@@ -124,7 +128,7 @@ module WhatsAppAdapter
       end
 
       # rubocop:disable Metrics/MethodLength
-      def new_request_payload(recipient, request_title)
+      def new_request_payload(recipient, request)
         {
           recipient_type: 'individual',
           to: recipient.whats_app_phone_number.split('+').last,
@@ -136,19 +140,21 @@ module WhatsAppAdapter
               code: 'de'
             },
             name: 'new_request_morning_1', # TODO: Use dynamic template name after WhatsAppAdapter::CreateTemplate works
-            components: [{
-              type: 'body',
-              parameters: [
-                {
-                  type: 'text',
-                  text: recipient.first_name
-                },
-                {
-                  type: 'text',
-                  text: request_title
-                }
-              ]
-            }]
+            components: [
+              {
+                type: 'body',
+                parameters: [
+                  {
+                    type: 'text',
+                    text: recipient.first_name
+                  },
+                  {
+                    type: 'text',
+                    text: request.title
+                  }
+                ]
+              }
+            ]
           }
         }
       end
