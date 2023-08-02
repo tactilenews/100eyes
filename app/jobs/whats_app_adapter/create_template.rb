@@ -35,7 +35,6 @@ module WhatsAppAdapter
 
     def set_headers
       {
-        'D360-API-KEY': Setting.three_sixty_dialog_api_key,
         'Content-Type': 'application/json',
         Authorization: "Bearer #{Setting.three_sixty_dialog_partner_token}"
       }
@@ -69,7 +68,7 @@ module WhatsAppAdapter
       end
       channels_array = JSON.parse(response.body)['partner_channels']
       client_hash = channels_array.find { |hash| hash['client']['id'] == Setting.three_sixty_dialog_client_id }
-      waba_account_id = client_hash['waba_account']['external_id']
+      waba_account_id = client_hash['waba_account']['id']
       Setting.three_sixty_dialog_client_waba_account_id = waba_account_id
     end
 
@@ -113,9 +112,11 @@ module WhatsAppAdapter
 
     def handle_response(response)
       case response.code.to_i
-      when 200
+      when 201
         Rails.logger.debug 'Great!'
       when 400..599
+        return if response.body.match?(/you have provided is already in use. Please choose a different name for your template./)
+
         exception = WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: response.code, message: response.body)
         ErrorNotifier.report(exception)
       end
