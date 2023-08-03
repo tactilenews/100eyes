@@ -110,11 +110,17 @@ module WhatsAppAdapter
       message = whats_app_message[:messages].first
       return unless message
 
+      unsupported_content = message.keys.any? do |key|
+        UNSUPPORTED_CONTENT_TYPES.include?(key)
+      end
       errors = message[:errors]
-      ((errors && errors.first[:title].match?(/Unsupported message type/)) || errors.first[:title].match?(/Received Wrong Message Type/)) ||
-        message.keys.any? do |key|
-          UNSUPPORTED_CONTENT_TYPES.include?(key)
-        end
+      return unsupported_content unless errors
+
+      error_indicating_unsupported_content(errors)
+    end
+
+    def error_indicating_unsupported_content(errors)
+      errors.first[:title].match?(/Unsupported message type/) || errors.first[:title].match?(/Received Wrong Message Type/)
     end
 
     def request_for_more_info?(text)
