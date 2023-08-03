@@ -10,7 +10,7 @@ module WhatsAppAdapter
 
   class ThreeSixtyDialogInbound
     SUPPORTED_ATTACHMENT_TYPES = %w[image/jpg image/jpeg image/png image/gif audio/ogg video/mp4].freeze
-    UNSUPPORTED_CONTENT_TYPES = %w[application text/vcard latitude longitude].freeze
+    UNSUPPORTED_CONTENT_TYPES = %w[location contacts].freeze
 
     attr_reader :sender, :text, :message
 
@@ -107,9 +107,14 @@ module WhatsAppAdapter
     end
 
     def unsupported_content?(whats_app_message)
-      whats_app_message.keys.any? { |key| UNSUPPORTED_CONTENT_TYPES.include?(key) } || whats_app_message.any? do |key, value|
-        key.match?(/media_content_type/) && UNSUPPORTED_CONTENT_TYPES.any? { |content_type| value.match?(/#{content_type}/) }
-      end
+      message = whats_app_message[:messages].first
+      return unless message
+
+      errors = message[:errors]
+      ((errors && errors.first[:title].match?(/Unsupported message type/)) || errors.first[:title].match?(/Received Wrong Message Type/)) ||
+        message.keys.any? do |key|
+          UNSUPPORTED_CONTENT_TYPES.include?(key)
+        end
     end
 
     def request_for_more_info?(text)

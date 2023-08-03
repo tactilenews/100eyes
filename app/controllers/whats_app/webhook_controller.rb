@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/ClassLength, Metrics/AbcSize
+# TODO: Separate WhatsApp implementations intro separate controllers
 module WhatsApp
   class WebhookController < ApplicationController
     skip_before_action :require_login, :verify_authenticity_token
@@ -39,6 +41,8 @@ module WhatsApp
     def three_sixty_dialog_message
       head :ok
       return if params['statuses'].present? # TODO: Do we want to handle statuses?
+
+      handle_error(params['errors']) if params['errors'].present?
 
       adapter = WhatsAppAdapter::ThreeSixtyDialogInbound.new
 
@@ -105,11 +109,21 @@ module WhatsApp
       params.permit({ webhook: [contacts: [:wa_id, { profile: [:name] }],
                                 messages: [:from, :id, :type, :timestamp, { text: [:body] }, { context: %i[from id] },
                                            { button: [:text] }, { image: %i[id mime_type sha256] }, { voice: %i[id mime_type sha256] },
-                                           { video: %i[id mime_type sha256] }]] },
+                                           { video: %i[id mime_type sha256] },
+                                           { errors: %i[code details title] },
+                                           { location: %i[latitude longitude timestamp type] },
+                                           { contacts: [{ org: {} }, { addresses: [] }, { emails: [] }, { ims: [] },
+                                                        { phones: %i[phone type wa_id] }, { urls: [] },
+                                                        { name: %i[first_name formatted_name last_name] }] }]] },
                     contacts: [:wa_id, { profile: [:name] }],
                     messages: [:from, :id, :type, :timestamp, { text: [:body] }, { context: %i[from id] }, { button: [:text] },
                                { image: %i[id mime_type sha256] }, { voice: %i[id mime_type sha256] },
-                               { video: %i[id mime_type sha256] }])
+                               { video: %i[id mime_type sha256] },
+                               { errors: %i[code details title] },
+                               { location: %i[latitude longitude timestamp type] },
+                               { contacts: [{ org: {} }, { addresses: [] }, { emails: [] }, { ims: [] },
+                                            { phones: %i[phone type wa_id] }, { urls: [] },
+                                            { name: %i[first_name formatted_name last_name] }] }])
     end
 
     def error_params
@@ -182,5 +196,11 @@ module WhatsApp
       ErrorNotifier.report(e)
       nil
     end
+
+    def handle_error(error)
+      exception = WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: error['code'], message: error['title'])
+      ErrorNotifier.new(exception, context: { details: error['details'] })
+    end
   end
 end
+# rubocop:enable Metrics/ClassLength, Metrics/AbcSize
