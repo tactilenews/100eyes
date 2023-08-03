@@ -92,11 +92,6 @@ module WhatsApp
       ErrorNotifier.report(exception, context: { message_sid: status_params['MessageSid'] })
     end
 
-    def three_sixty_dialog_status
-      Rails.logger.debug params
-      head :ok
-    end
-
     private
 
     def message_params
@@ -109,9 +104,12 @@ module WhatsApp
     def three_sixty_dialog_message_params
       params.permit({ webhook: [contacts: [:wa_id, { profile: [:name] }],
                                 messages: [:from, :id, :type, :timestamp, { text: [:body] }, { context: %i[from id] },
-                                           { button: [:text] }]] },
+                                           { button: [:text] }, { image: %i[id mime_type sha256] }, { voice: %i[id mime_type sha256] },
+                                           { video: %i[id mime_type sha256] }]] },
                     contacts: [:wa_id, { profile: [:name] }],
-                    messages: [:from, :id, :type, :timestamp, { text: [:body] }, { context: %i[from id] }, { button: [:text] }])
+                    messages: [:from, :id, :type, :timestamp, { text: [:body] }, { context: %i[from id] }, { button: [:text] },
+                               { image: %i[id mime_type sha256] }, { voice: %i[id mime_type sha256] },
+                               { video: %i[id mime_type sha256] }])
     end
 
     def error_params

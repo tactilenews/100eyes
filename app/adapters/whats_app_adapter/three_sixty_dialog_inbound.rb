@@ -87,17 +87,18 @@ module WhatsAppAdapter
     end
 
     def initialize_file(whats_app_message)
-      return [] unless whats_app_message[:media_content_type0] && whats_app_message[:media_url0]
+      message = whats_app_message[:messages].first
+      return [] unless message[:image] || message[:voice] || message[:video]
 
       file = Message::File.new
 
-      content_type = whats_app_message[:media_content_type0]
-      media_url = whats_app_message[:media_url0]
-      filename = media_url.split('/Media/').last
+      message_file = message[:image] || message[:voice] || message[:video]
+      content_type = message_file[:mime_type]
+      file_id = message_file[:id]
 
       file.attachment.attach(
-        io: URI.parse(media_url).open,
-        filename: filename,
+        io: StringIO.new(fetch_file(file_id)),
+        filename: file_id,
         content_type: content_type,
         identify: false
       )
@@ -148,6 +149,16 @@ module WhatsAppAdapter
       has_non_text_content = message.files.any? || message.unknown_content
       text = message.text
       has_non_text_content || (message.text.present? && !quick_reply_response?(text) && !unsubscribe_text?(text) && !subscribe_text?(text))
+    end
+
+    def fetch_file(file_id)
+      url = URI.parse("#{Setting.three_sixty_dialog_whats_app_rest_api_endpoint}/media/#{file_id}")
+      headers = { 'D360-API-KEY' => Setting.three_sixty_dialog_api_key, 'Content-Type' => 'application/json' }
+      request = Net::HTTP::Get.new(url.to_s, headers)
+      response = Net::HTTP.start(url.host, url.port, use_ssl: true) do |http|
+        http.request(request)
+      end
+      response.body
     end
   end
 end
