@@ -10,28 +10,48 @@ module WhatsAppAdapter
       @template_name = template_name
       @template_text = template_text
 
-      token = Setting.find_by(var: 'three_sixty_dialog_partner_token')
-      fetch_token unless token&.value && token.updated_at > 24.hours.ago
+      @token = Setting.find_by(var: 'three_sixty_dialog_partner_token')
+      @token = fetch_token unless token&.value && token.updated_at > 24.hours.ago
 
-      waba_account_id = Setting.three_sixty_dialog_client_waba_account_id
-      waba_account_id = fetch_waba_account_id if waba_account_id.blank?
+      @waba_account_id = Setting.three_sixty_dialog_client_waba_account_id
+      @waba_account_id = fetch_waba_account_id if waba_account_id.blank?
+      conditionally_create_template
+    end
 
+    attr_reader :base_uri, :partner_id, :template_name, :template_text, :token, :waba_account_id
+
+    private
+
+    def conditionally_create_template
+      url = URI.parse(
+        "#{base_uri}/partners/#{partner_id}/waba_accounts/#{waba_account_id}/waba_templates"
+      )
+      headers = set_headers
+      request = Net::HTTP::Get.new(url.to_s, headers)
+      response = Net::HTTP.start(url.host, url.port, use_ssl: true) do |http|
+        http.request(request)
+      end
+      waba_templates = JSON.parse(response.body)['waba_templates']
+      template_names_array = waba_templates.pluck('name')
+      return if template_name.in?(template_names_array)
+
+      create_template
+    end
+
+    def create_template
       url = URI.parse(
         "#{base_uri}/partners/#{partner_id}/waba_accounts/#{waba_account_id}/waba_templates"
       )
       headers = set_headers
 
       request = Net::HTTP::Post.new(url.to_s, headers)
-      request.body = template_payload.to_json
+      payload = template_name.match?(/welcome_message/) ? welcome_message_template_payload : new_request_template_payload
+      request.body = payload.to_json
       response = Net::HTTP.start(url.host, url.port, use_ssl: true) do |http|
         http.request(request)
       end
       handle_response(response)
     end
-
-    attr_reader :base_uri, :partner_id, :template_name, :template_text
-
-    private
 
     def set_headers
       {
@@ -73,7 +93,7 @@ module WhatsAppAdapter
     end
 
     # rubocop:disable Metrics/MethodLength
-    def template_payload
+    def new_request_template_payload
       {
         name: template_name,
         category: 'MARKETING',
@@ -109,6 +129,26 @@ module WhatsAppAdapter
       }
     end
     # rubocop:enable Metrics/MethodLength
+
+    def welcome_message_template_payload
+      {
+        name: template_name,
+        category: 'MARKETING',
+        components: [
+          {
+            type: 'BODY',
+            text: template_text,
+            example: {
+              body_text: [
+                ['100eyes']
+              ]
+            }
+          }
+        ],
+        language: 'de',
+        allow_category_change: true
+      }
+    end
 
     def handle_response(response)
       case response.code.to_i
