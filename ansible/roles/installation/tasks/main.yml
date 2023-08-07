@@ -53,6 +53,10 @@
     TWILIO_AUTH_TOKEN: "{{ rails.twilio.auth_token }}"
     TWILIO_API_KEY_SID: "{{ rails.twilio.api_key.sid }}"
     TWILIO_API_KEY_SECRET: "{{ rails.twilio.api_key.secret }}"
+    360_DIALOG_PARTNER_ID: "{{ rails.three_sixty_dialog.partner.id }}"
+    360_DIALOG_PARTNER_USERNAME: "{{ rails.three_sixty_dialog.partner.username }}"
+    360_DIALOG_PARTNER_PASSWORD: "{{ rails.three_sixty_dialog.partner.password }}"
+
   community.general.docker_compose:
     project_src: /home/ansible
     build: no
