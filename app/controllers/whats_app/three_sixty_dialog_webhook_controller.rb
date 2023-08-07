@@ -28,7 +28,7 @@ module WhatsApp
       end
 
       adapter.on(WhatsAppAdapter::UNSUPPORTED_CONTENT) do |contributor|
-        WhatsAppAdapter::Outbound.send_unsupported_content_message!(contributor)
+        WhatsAppAdapter::ThreeSixtyDialogOutbound.send_unsupported_content_message!(contributor)
       end
 
       adapter.on(WhatsAppAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
@@ -89,7 +89,7 @@ module WhatsApp
     def handle_request_to_receive_message(contributor)
       contributor.update!(whats_app_message_template_responded_at: Time.current, whats_app_message_template_sent_at: nil)
 
-      WhatsAppAdapter::Outbound.send!(contributor.received_messages.first)
+      WhatsAppAdapter::ThreeSixtyDialogOutbound.send!(contributor.received_messages.first)
     end
   end
 end
