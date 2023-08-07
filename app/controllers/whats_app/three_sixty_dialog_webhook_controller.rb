@@ -43,6 +43,16 @@ module WhatsApp
     end
     # rubocop:enable Metrics/AbcSize
 
+    def create_api_key
+      channel_ids = create_api_key_params[:channels].split('[').last.split(']').last.split(',')
+      client_id = create_api_key_params[:client]
+      Setting.three_sixty_dialog_client_id = client_id
+      channel_ids.each do |channel_id|
+        WhatsAppAdapter::CreateApiKey.perform_later(channel_id: channel_id)
+      end
+      render 'onboarding/success'
+    end
+
     private
 
     def message_params
@@ -65,6 +75,10 @@ module WhatsApp
                                { contacts: [{ org: {} }, { addresses: [] }, { emails: [] }, { ims: [] },
                                             { phones: %i[phone type wa_id] }, { urls: [] },
                                             { name: %i[first_name formatted_name last_name] }] }])
+    end
+
+    def create_api_key_params
+      params.permit(:client, :channels, :revoked)
     end
 
     def handle_error(error)
