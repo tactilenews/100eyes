@@ -5,11 +5,11 @@ require 'net/http'
 module WhatsAppAdapter
   class SetWebhookUrl < ApplicationJob
     def perform
-      return unless Setting.three_sixty_dialog_api_key
+      return unless Setting.three_sixty_dialog_client_api_key
 
       base_uri = Setting.three_sixty_dialog_whats_app_rest_api_endpoint
       url = URI.parse("#{base_uri}/configs/webhook")
-      headers = { 'D360-API-KEY' => Setting.three_sixty_dialog_api_key, 'Content-Type' => 'application/json' }
+      headers = { 'D360-API-KEY' => Setting.three_sixty_dialog_client_api_key, 'Content-Type' => 'application/json' }
       request = Net::HTTP::Post.new(url.to_s, headers)
 
       request.body = { url: "https://#{Setting.application_host}/whats_app/three-sixty-dialog-webhook" }.to_json

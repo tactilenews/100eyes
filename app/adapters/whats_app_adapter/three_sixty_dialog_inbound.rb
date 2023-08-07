@@ -164,7 +164,7 @@ module WhatsAppAdapter
 
     def fetch_file(file_id)
       url = URI.parse("#{Setting.three_sixty_dialog_whats_app_rest_api_endpoint}/media/#{file_id}")
-      headers = { 'D360-API-KEY' => Setting.three_sixty_dialog_api_key, 'Content-Type' => 'application/json' }
+      headers = { 'D360-API-KEY' => Setting.three_sixty_dialog_client_api_key, 'Content-Type' => 'application/json' }
       request = Net::HTTP::Get.new(url.to_s, headers)
       response = Net::HTTP.start(url.host, url.port, use_ssl: true) do |http|
         http.request(request)

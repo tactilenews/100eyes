@@ -5,7 +5,7 @@ require 'net/http'
 module WhatsAppAdapter
   class UploadFile < ApplicationJob
     def perform(message_id:)
-      return if Setting.three_sixty_dialog_api_key.blank?
+      return if Setting.three_sixty_dialog_client_api_key.blank?
 
       @message_id = message_id
       message = Message.find(message_id)
@@ -15,7 +15,7 @@ module WhatsAppAdapter
         base_uri = Setting.three_sixty_dialog_whats_app_rest_api_endpoint
         url = URI.parse("#{base_uri}/media")
         headers = {
-          'D360-API-KEY': Setting.three_sixty_dialog_api_key,
+          'D360-API-KEY': Setting.three_sixty_dialog_client_api_key,
           'Content-Type': file.blob.content_type
         }
         request = Net::HTTP::Post.new(url.to_s, headers)

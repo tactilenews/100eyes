@@ -2,6 +2,7 @@
 
 require 'net/http'
 
+# rubocop:disable Metrics/ClassLength
 module WhatsAppAdapter
   class CreateTemplate < ApplicationJob
     def perform(template_name:, template_text:)
@@ -14,7 +15,9 @@ module WhatsAppAdapter
       @token = fetch_token unless token&.value && token.updated_at > 24.hours.ago
 
       @waba_account_id = Setting.three_sixty_dialog_client_waba_account_id
-      @waba_account_id = fetch_waba_account_id if waba_account_id.blank?
+      waba_accont_namespace = Setting.three_sixty_dialog_whats_app_template_namespace
+      @waba_account_id = fetch_client_info if waba_account_id.blank? || waba_accont_namespace.blank?
+
       conditionally_create_template
     end
 
@@ -75,7 +78,7 @@ module WhatsAppAdapter
       Setting.three_sixty_dialog_partner_token = token
     end
 
-    def fetch_waba_account_id
+    def fetch_client_info
       url = URI.parse("#{base_uri}/partners/#{partner_id}/channels")
       headers = {
         Accept: 'application/json',
@@ -88,8 +91,10 @@ module WhatsAppAdapter
       end
       channels_array = JSON.parse(response.body)['partner_channels']
       client_hash = channels_array.find { |hash| hash['client']['id'] == Setting.three_sixty_dialog_client_id }
-      waba_account_id = client_hash['waba_account']['id']
-      Setting.three_sixty_dialog_client_waba_account_id = waba_account_id
+      waba_account = client_hash['waba_account']
+      Setting.three_sixty_dialog_whats_app_template_namespace = waba_account['namespace']
+
+      Setting.three_sixty_dialog_client_waba_account_id = waba_account['id']
     end
 
     # rubocop:disable Metrics/MethodLength
@@ -163,3 +168,4 @@ module WhatsAppAdapter
     end
   end
 end
+# rubocop:enable Metrics/ClassLength

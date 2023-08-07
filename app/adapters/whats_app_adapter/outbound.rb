@@ -19,7 +19,7 @@ module WhatsAppAdapter
         return unless contributor_can_receive_messages?(contributor)
 
         welcome_message = I18n.t('adapter.whats_app.welcome_message', project_name: Setting.project_name)
-        if Setting.three_sixty_dialog_api_key.present?
+        if Setting.three_sixty_dialog_client_api_key.present?
           payload = if freeform_message_permitted?(contributor)
                       text_payload(contributor, welcome_message)
                     else
@@ -36,7 +36,7 @@ module WhatsAppAdapter
 
         text = I18n.t('adapter.whats_app.unsupported_content_template', first_name: contributor.first_name,
                                                                         contact_person: contributor.organization.contact_person.name)
-        if Setting.three_sixty_dialog_api_key.present?
+        if Setting.three_sixty_dialog_client_api_key.present?
           WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(payload: text_payload(contributor, text))
         else
           WhatsAppAdapter::Outbound::Text.perform_later(recipient: contributor, text: text)
@@ -47,7 +47,7 @@ module WhatsAppAdapter
         return unless contributor_can_receive_messages?(contributor)
 
         text = [Setting.about, "_#{I18n.t('adapter.whats_app.unsubscribe.instructions')}_"].join("\n\n")
-        if Setting.three_sixty_dialog_api_key.present?
+        if Setting.three_sixty_dialog_client_api_key.present?
           WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(payload: text_payload(contributor, text))
         else
           WhatsAppAdapter::Outbound::Text.perform_later(recipient: contributor, text: text)
@@ -58,7 +58,7 @@ module WhatsAppAdapter
         return unless contributor_can_receive_messages?(contributor)
 
         text = [I18n.t('adapter.whats_app.unsubscribe.successful'), "_#{I18n.t('adapter.whats_app.subscribe.instructions')}_"].join("\n\n")
-        if Setting.three_sixty_dialog_api_key.present?
+        if Setting.three_sixty_dialog_client_api_key.present?
           WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(payload: text_payload(contributor, text))
         else
           WhatsAppAdapter::Outbound::Text.perform_later(recipient: contributor, text: text)
@@ -98,7 +98,7 @@ module WhatsAppAdapter
 
       def send_message_template(recipient, message)
         recipient.update(whats_app_message_template_sent_at: Time.current)
-        if Setting.three_sixty_dialog_api_key.present?
+        if Setting.three_sixty_dialog_client_api_key.present?
           WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(payload: new_request_payload(recipient, message.request))
         else
           text = I18n.t("adapter.whats_app.request_template.new_request_#{time_of_day}_#{rand(1..3)}", first_name: recipient.first_name,
@@ -111,12 +111,12 @@ module WhatsAppAdapter
         files = message.files
 
         if files.blank?
-          if Setting.three_sixty_dialog_api_key.present?
+          if Setting.three_sixty_dialog_client_api_key.present?
             WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(payload: text_payload(recipient, message.text))
           else
             WhatsAppAdapter::Outbound::Text.perform_later
           end
-        elsif Setting.three_sixty_dialog_api_key.present?
+        elsif Setting.three_sixty_dialog_client_api_key.present?
           files.each do |_file|
             WhatsAppAdapter::UploadFile.perform_later(message_id: message.id)
           end
