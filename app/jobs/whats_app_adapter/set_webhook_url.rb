@@ -5,7 +5,7 @@ require 'net/http'
 module WhatsAppAdapter
   class SetWebhookUrl < ApplicationJob
     def perform
-      return unless Setting.three_sixty_dialog_client_api_key.present?
+      return if Setting.three_sixty_dialog_client_api_key.blank?
 
       base_uri = Setting.three_sixty_dialog_whats_app_rest_api_endpoint
       url = URI.parse("#{base_uri}/configs/webhook")
