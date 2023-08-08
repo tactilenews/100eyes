@@ -45,14 +45,19 @@ module WhatsAppAdapter
         http.request(request)
       end
       token = JSON.parse(response.body)['access_token']
-      Setting.three_sixty_dialog_partner_token = token
+      setting = Setting.find_or_initialize_by(var: :three_sixty_dialog_partner_token)
+      setting.value = token
+      setting.save
     end
 
     def handle_response(response)
       case response.code.to_i
-      when 200
+      when 201
         api_key = JSON.parse(response.body)['api_key']
-        Setting.three_sixty_dialog_client_api_key = api_key
+        setting = Setting.find_or_initialize_by(var: :three_sixty_dialog_client_api_key)
+        setting.value = api_key
+        setting.save
+        WhatsAppAdapter::SetWebhookUrl.perform_later
       when 400..599
         exception = WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: response.code, message: response.body)
         ErrorNotifier.report(exception)

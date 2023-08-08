@@ -21,7 +21,7 @@ module WhatsAppAdapter
 
       def handle_response(response)
         case response.code.to_i
-        when 200
+        when 201
           Rails.logger.debug 'Great!'
         when 400..599
           exception = WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: response.code, message: response.body)

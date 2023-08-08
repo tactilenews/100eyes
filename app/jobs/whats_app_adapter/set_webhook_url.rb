@@ -5,7 +5,7 @@ require 'net/http'
 module WhatsAppAdapter
   class SetWebhookUrl < ApplicationJob
     def perform
-      return unless Setting.three_sixty_dialog_client_api_key
+      return unless Setting.three_sixty_dialog_client_api_key.present?
 
       base_uri = Setting.three_sixty_dialog_whats_app_rest_api_endpoint
       url = URI.parse("#{base_uri}/configs/webhook")
@@ -23,7 +23,7 @@ module WhatsAppAdapter
 
     def handle_response(response)
       case response.code.to_i
-      when 200
+      when 201
         Rails.logger.debug 'Great!'
       when 400..599
         exception = WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: response.code, message: response.body)
