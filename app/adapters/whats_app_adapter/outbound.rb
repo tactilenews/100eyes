@@ -22,7 +22,7 @@ module WhatsAppAdapter
       private
 
       def business_solution_provider
-        Setting.three_sixty_dialog_client_api_key.present? ? 'ThreeSixtyDialog' : 'Twitter'
+        Setting.three_sixty_dialog_client_api_key.present? ? 'ThreeSixtyDialog' : 'Twilio'
       end
     end
   end

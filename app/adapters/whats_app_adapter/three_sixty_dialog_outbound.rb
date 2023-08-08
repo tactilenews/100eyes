@@ -3,8 +3,6 @@
 module WhatsAppAdapter
   class ThreeSixtyDialogOutbound
     class << self
-      include TimeBasedTemplates
-
       def send!(message)
         recipient = message&.recipient
         return unless contributor_can_receive_messages?(recipient)
