@@ -1,0 +1,20 @@
+.WhatsAppSetup {
+  display: flex;
+  align-items: center;
+}
+
+.WhatsAppSetup-header {
+  flex-basis: 50%;
+}
+
+.WhatsAppSetup-openModalButton > svg {
+  margin-right: var(--spacing-unit-xs);
+  width: var(--spacing-unit);
+  color: var(--color-primary);
+}
+
+.WhatsAppSetup-openModalButton {
+  display: flex;
+  align-items: center;
+  margin-left: var(--spacing-unit);
+}
