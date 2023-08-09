@@ -111,9 +111,9 @@ ActiveRecord::Schema.define(version: 2023_06_30_061952) do
     t.datetime "additional_consent_given_at"
     t.bigint "organization_id"
     t.string "whats_app_phone_number"
+    t.datetime "whats_app_message_template_responded_at"
     t.bigint "deactivated_by_user_id"
     t.boolean "deactivated_by_admin", default: false
-    t.datetime "whats_app_message_template_responded_at"
     t.datetime "whats_app_message_template_sent_at"
     t.index ["email"], name: "index_contributors_on_email", unique: true
     t.index ["organization_id"], name: "index_contributors_on_organization_id"
