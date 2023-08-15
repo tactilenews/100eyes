@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/ClassLength
 module WhatsAppAdapter
   class ThreeSixtyDialogOutbound
     class << self
@@ -172,3 +173,4 @@ module WhatsAppAdapter
     end
   end
 end
+# rubocop:enable Metrics/ClassLength
