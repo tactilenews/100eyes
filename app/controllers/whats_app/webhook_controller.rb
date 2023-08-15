@@ -8,29 +8,29 @@ module WhatsApp
     UNSUCCESSFUL_DELIVERY = %w[undelivered failed].freeze
 
     def message
-      adapter = WhatsAppAdapter::Inbound.new
+      adapter = WhatsAppAdapter::TwilioInbound.new
 
-      adapter.on(WhatsAppAdapter::UNKNOWN_CONTRIBUTOR) do |whats_app_phone_number|
+      adapter.on(WhatsAppAdapter::TwilioInbound::UNKNOWN_CONTRIBUTOR) do |whats_app_phone_number|
         handle_unknown_contributor(whats_app_phone_number)
       end
 
-      adapter.on(WhatsAppAdapter::REQUEST_FOR_MORE_INFO) do |contributor|
+      adapter.on(WhatsAppAdapter::TwilioInbound::REQUEST_FOR_MORE_INFO) do |contributor|
         handle_request_for_more_info(contributor)
       end
 
-      adapter.on(WhatsAppAdapter::REQUEST_TO_RECEIVE_MESSAGE) do |contributor, twilio_message_sid|
+      adapter.on(WhatsAppAdapter::TwilioInbound::REQUEST_TO_RECEIVE_MESSAGE) do |contributor, twilio_message_sid|
         handle_request_to_receive_message(contributor, twilio_message_sid)
       end
 
-      adapter.on(WhatsAppAdapter::UNSUPPORTED_CONTENT) do |contributor|
+      adapter.on(WhatsAppAdapter::TwilioInbound::UNSUPPORTED_CONTENT) do |contributor|
         WhatsAppAdapter::TwilioOutbound.send_unsupported_content_message!(contributor)
       end
 
-      adapter.on(WhatsAppAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
+      adapter.on(WhatsAppAdapter::TwilioInbound::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
         handle_unsubsribe_contributor(contributor)
       end
 
-      adapter.on(WhatsAppAdapter::SUBSCRIBE_CONTRIBUTOR) do |contributor|
+      adapter.on(WhatsAppAdapter::TwilioInbound::SUBSCRIBE_CONTRIBUTOR) do |contributor|
         handle_subscribe_contributor(contributor)
       end
 

@@ -15,27 +15,27 @@ module WhatsApp
 
       adapter = WhatsAppAdapter::ThreeSixtyDialogInbound.new
 
-      adapter.on(WhatsAppAdapter::UNKNOWN_CONTRIBUTOR) do |whats_app_phone_number|
+      adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::UNKNOWN_CONTRIBUTOR) do |whats_app_phone_number|
         handle_unknown_contributor(whats_app_phone_number)
       end
 
-      adapter.on(WhatsAppAdapter::REQUEST_FOR_MORE_INFO) do |contributor|
+      adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::REQUEST_FOR_MORE_INFO) do |contributor|
         handle_request_for_more_info(contributor)
       end
 
-      adapter.on(WhatsAppAdapter::REQUEST_TO_RECEIVE_MESSAGE) do |contributor|
+      adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::REQUEST_TO_RECEIVE_MESSAGE) do |contributor|
         handle_request_to_receive_message(contributor)
       end
 
-      adapter.on(WhatsAppAdapter::UNSUPPORTED_CONTENT) do |contributor|
+      adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::UNSUPPORTED_CONTENT) do |contributor|
         WhatsAppAdapter::ThreeSixtyDialogOutbound.send_unsupported_content_message!(contributor)
       end
 
-      adapter.on(WhatsAppAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
+      adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
         handle_unsubsribe_contributor(contributor)
       end
 
-      adapter.on(WhatsAppAdapter::SUBSCRIBE_CONTRIBUTOR) do |contributor|
+      adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::SUBSCRIBE_CONTRIBUTOR) do |contributor|
         handle_subscribe_contributor(contributor)
       end
 
