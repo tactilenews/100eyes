@@ -11,7 +11,7 @@ module WhatsApp
       head :ok
       return if params['statuses'].present? # TODO: Do we want to handle statuses?
 
-      handle_error(params['errors']) if params['errors'].present?
+      handle_error(params['messages'].first['errors'].first) if params['messages'].first['errors'].present?
 
       adapter = WhatsAppAdapter::ThreeSixtyDialogInbound.new
 
@@ -61,7 +61,9 @@ module WhatsApp
                                                               { button: [:text] }, { image: %i[id mime_type sha256] },
                                                               { voice: %i[id mime_type sha256] },
                                                               { video: %i[id mime_type sha256] },
+                                                              { audio: %i[id mime_type sha256] },
                                                               { errors: %i[code details title] },
+                                                              { document: %i[filename id mime_type sha256] },
                                                               { location: %i[latitude longitude timestamp type] },
                                                               { contacts: [{ org: {} }, { addresses: [] }, { emails: [] }, { ims: [] },
                                                                            { phones: %i[phone type wa_id] }, { urls: [] },
@@ -70,7 +72,9 @@ module WhatsApp
                     messages: [:from, :id, :type, :timestamp, { text: [:body] }, { context: %i[from id] }, { button: [:text] },
                                { image: %i[id mime_type sha256] }, { voice: %i[id mime_type sha256] },
                                { video: %i[id mime_type sha256] },
+                               { audio: %i[id mime_type sha256] },
                                { errors: %i[code details title] },
+                               { document: %i[filename id mime_type sha256] },
                                { location: %i[latitude longitude timestamp type] },
                                { contacts: [{ org: {} }, { addresses: [] }, { emails: [] }, { ims: [] },
                                             { phones: %i[phone type wa_id] }, { urls: [] },
@@ -83,7 +87,7 @@ module WhatsApp
 
     def handle_error(error)
       exception = WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: error['code'], message: error['title'])
-      ErrorNotifier.new(exception, context: { details: error['details'] })
+      ErrorNotifier.report(exception, context: { details: error['details'] })
     end
 
     def handle_request_to_receive_message(contributor)

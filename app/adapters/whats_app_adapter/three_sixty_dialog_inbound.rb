@@ -8,8 +8,7 @@ module WhatsAppAdapter
     REQUEST_TO_RECEIVE_MESSAGE = :request_to_receive_message
     UNSUBSCRIBE_CONTRIBUTOR = :unsubscribe_contributor
     SUBSCRIBE_CONTRIBUTOR = :subscribe_contributor
-    SUPPORTED_ATTACHMENT_TYPES = %w[image/jpg image/jpeg image/png image/gif audio/ogg video/mp4].freeze
-    UNSUPPORTED_CONTENT_TYPES = %w[location contacts].freeze
+    UNSUPPORTED_CONTENT_TYPES = %w[location contacts document].freeze
 
     attr_reader :sender, :text, :message
 
@@ -87,11 +86,11 @@ module WhatsAppAdapter
 
     def initialize_file(whats_app_message)
       message = whats_app_message[:messages].first
-      return [] unless message[:image] || message[:voice] || message[:video]
+      return [] unless file_type_supported?(message)
 
       file = Message::File.new
 
-      message_file = message[:image] || message[:voice] || message[:video]
+      message_file = supported_file(message)
       content_type = message_file[:mime_type]
       file_id = message_file[:id]
 
@@ -103,6 +102,14 @@ module WhatsAppAdapter
       )
 
       [file]
+    end
+
+    def file_type_supported?(message)
+      supported_file(message).present?
+    end
+
+    def supported_file(message)
+      message[:image] || message[:voice] || message[:video] || message[:audio]
     end
 
     def unsupported_content?(whats_app_message)

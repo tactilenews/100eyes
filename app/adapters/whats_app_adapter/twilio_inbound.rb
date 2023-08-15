@@ -8,7 +8,6 @@ module WhatsAppAdapter
     REQUEST_TO_RECEIVE_MESSAGE = :request_to_receive_message
     UNSUBSCRIBE_CONTRIBUTOR = :unsubscribe_contributor
     SUBSCRIBE_CONTRIBUTOR = :subscribe_contributor
-    SUPPORTED_ATTACHMENT_TYPES = %w[image/jpg image/jpeg image/png image/gif audio/ogg video/mp4].freeze
     UNSUPPORTED_CONTENT_TYPES = %w[application text/vcard latitude longitude].freeze
 
     attr_reader :sender, :text, :message
