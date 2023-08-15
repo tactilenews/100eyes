@@ -149,12 +149,23 @@ module WhatsAppAdapter
           to: recipient.whats_app_phone_number.split('+').last,
           type: 'template',
           template: {
-            namespace: template_namespace,
+            namespace: Setting.three_sixty_dialog_whats_app_template_namespace,
             language: {
               policy: 'deterministic',
               code: 'de'
             },
-            name: 'welcome_message'
+            name: 'welcome_message',
+            components: [
+              {
+                type: 'body',
+                parameters: [
+                  {
+                    type: 'text',
+                    text: Setting.project_name
+                  }
+                ]
+              }
+            ]
           }
         }
       end
