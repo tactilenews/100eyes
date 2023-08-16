@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'webmock/rspec'
 
 RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
   let(:whats_app_phone_number) { '+491511234567' }
@@ -255,7 +256,212 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
           end
         end
 
-        # TODO: Write test cases for unsupported content
+        context 'files' do
+          let(:message) { params[:messages].first }
+          let(:fetch_file_url) { "#{Setting.three_sixty_dialog_whats_app_rest_api_endpoint}/media/some_valid_id" }
+
+          before { message[:text] = nil }
+
+          context 'supported content' do
+            before { stub_request(:get, fetch_file_url).to_return(status: 200, body: 'downloaded_file') }
+
+            context 'voice' do
+              let(:voice) do
+                {
+                  id: 'some_valid_id',
+                  mime_type: 'audio/ogg; codecs=opus',
+                  sha256: 'sha256_hash'
+                }
+              end
+              before do
+                message[:type] = 'voice'
+                message[:voice] = voice
+              end
+
+              it 'creates a new Message::File' do
+                expect { subject.call }.to change(Message::File, :count).from(0).to(1)
+              end
+
+              it 'creates a new Message' do
+                expect { subject.call }.to change(Message, :count).from(2).to(3)
+              end
+
+              it 'attaches the file to the message' do
+                subject.call
+
+                expect(Message.first.files.first).to eq(Message::File.first)
+              end
+            end
+
+            context 'voice' do
+              let(:voice) do
+                {
+                  id: 'some_valid_id',
+                  mime_type: 'audio/ogg; codecs=opus',
+                  sha256: 'sha256_hash'
+                }
+              end
+              before do
+                message[:type] = 'voice'
+                message[:voice] = voice
+              end
+
+              it 'creates a new Message::File' do
+                expect { subject.call }.to change(Message::File, :count).from(0).to(1)
+              end
+
+              it 'creates a new Message' do
+                expect { subject.call }.to change(Message, :count).from(2).to(3)
+              end
+
+              it 'attaches the file to the message with its mime_type' do
+                subject.call
+
+                latest_message = Message.where(sender: contributor).first
+                expect(latest_message.files.first).to eq(Message::File.first)
+                expect(latest_message.files.first.attachment.content_type).to eq(message[:voice][:mime_type])
+              end
+            end
+
+            context 'video' do
+              let(:video) do
+                {
+                  id: 'some_valid_id',
+                  mime_type: 'video/mp4',
+                  sha256: 'sha256_hash'
+                }
+              end
+              before do
+                message[:type] = 'video'
+                message[:video] = video
+              end
+
+              it 'creates a new Message::File' do
+                expect { subject.call }.to change(Message::File, :count).from(0).to(1)
+              end
+
+              it 'creates a new Message' do
+                expect { subject.call }.to change(Message, :count).from(2).to(3)
+              end
+
+              it 'attaches the file to the message with its mime_type' do
+                subject.call
+
+                latest_message = Message.where(sender: contributor).first
+                expect(latest_message.files.first).to eq(Message::File.first)
+                expect(latest_message.files.first.attachment.content_type).to eq(message[:video][:mime_type])
+              end
+            end
+
+            context 'audio' do
+              let(:audio) do
+                {
+                  id: 'some_valid_id',
+                  mime_type: 'audio/ogg',
+                  sha256: 'sha256_hash'
+                }
+              end
+              before do
+                message[:type] = 'audio'
+                message[:audio] = audio
+              end
+
+              it 'creates a new Message::File' do
+                expect { subject.call }.to change(Message::File, :count).from(0).to(1)
+              end
+
+              it 'creates a new Message' do
+                expect { subject.call }.to change(Message, :count).from(2).to(3)
+              end
+
+              it 'attaches the file to the message with its mime_type' do
+                subject.call
+
+                latest_message = Message.where(sender: contributor).first
+                expect(latest_message.files.first).to eq(Message::File.first)
+                expect(latest_message.files.first.attachment.content_type).to eq(message[:audio][:mime_type])
+              end
+            end
+          end
+
+          context 'unsupported content' do
+            let(:text) do
+              I18n.t('adapter.whats_app.unsupported_content_template', first_name: contributor.first_name,
+                                                                       contact_person: contributor.organization.contact_person.name)
+            end
+
+            context 'document' do
+              let(:document) do
+                {
+                  filename: 'animated-cat-image-0056.gif',
+                  id: 'some_valid_id',
+                  mime_type: 'image/gif',
+                  sha256: 'sha256_hash'
+                }
+              end
+              before do
+                message[:type] = 'document'
+                message[:document] = document
+              end
+
+              it 'sends a message to contributor to let them know the message type is not supported' do
+                expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText).with(text_payload)
+              end
+            end
+
+            context 'location' do
+              let(:location) do
+                {
+                  latitude: '22.9871',
+                  longitude: '43.2048'
+                }
+              end
+              before do
+                message[:type] = 'location'
+                message[:location] = location
+              end
+
+              it 'sends a message to contributor to let them know the message type is not supported' do
+                expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText).with(text_payload)
+              end
+            end
+
+            context 'contacts' do
+              let(:contacts) do
+                {
+                  contacts: [
+                    { addresses: [],
+                      emails: [],
+                      ims: [],
+                      name: {
+                        first_name: '360dialog',
+                        formatted_name: '360dialog Sandbox',
+                        last_name: 'Sandbox'
+                      },
+                      org: {},
+                      phones: [
+                        { phone: '+49 30 609859535',
+                          type: 'Mobile',
+                          wa_id: '4930609859535' }
+                      ], urls: [] }
+                  ],
+                  from: '4915143416265',
+                  id: 'some_valid_id',
+                  timestamp: '1692123428',
+                  type: 'contacts'
+                }
+              end
+              before do
+                message[:type] = 'contacts'
+                message[:contacts] = contacts
+              end
+
+              it 'sends a message to contributor to let them know the message type is not supported' do
+                expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText).with(text_payload)
+              end
+            end
+          end
+        end
       end
     end
   end

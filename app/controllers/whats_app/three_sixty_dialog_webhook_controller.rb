@@ -64,7 +64,7 @@ module WhatsApp
                                                               { audio: %i[id mime_type sha256] },
                                                               { errors: %i[code details title] },
                                                               { document: %i[filename id mime_type sha256] },
-                                                              { location: %i[latitude longitude timestamp type] },
+                                                              { location: %i[latitude longitude] },
                                                               { contacts: [{ org: {} }, { addresses: [] }, { emails: [] }, { ims: [] },
                                                                            { phones: %i[phone type wa_id] }, { urls: [] },
                                                                            { name: %i[first_name formatted_name last_name] }] }]] },
@@ -75,7 +75,7 @@ module WhatsApp
                                { audio: %i[id mime_type sha256] },
                                { errors: %i[code details title] },
                                { document: %i[filename id mime_type sha256] },
-                               { location: %i[latitude longitude timestamp type] },
+                               { location: %i[latitude longitude] },
                                { contacts: [{ org: {} }, { addresses: [] }, { emails: [] }, { ims: [] },
                                             { phones: %i[phone type wa_id] }, { urls: [] },
                                             { name: %i[first_name formatted_name last_name] }] }])
