@@ -59,6 +59,7 @@ module WhatsAppAdapter
       sender
     end
 
+    # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     def initialize_message(whats_app_message)
       message = whats_app_message[:messages].first
       text = message[:text]&.dig(:body) || message[:button]&.dig(:text) || supported_file(message)&.dig(:caption)
@@ -76,6 +77,7 @@ module WhatsAppAdapter
       )
       message
     end
+    # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
     def initialize_unsupported_content(whats_app_message)
       return unless unsupported_content?(whats_app_message)
