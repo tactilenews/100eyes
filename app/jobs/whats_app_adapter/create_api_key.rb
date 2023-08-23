@@ -5,8 +5,6 @@ require 'net/http'
 module WhatsAppAdapter
   class CreateApiKey < ApplicationJob
     def perform(channel_id:)
-      return if Setting.three_sixty_dialog_client_api_key.present?
-
       @base_uri = Setting.three_sixty_dialog_partner_rest_api_endpoint
 
       token = Setting.find_by(var: 'three_sixty_dialog_partner_token')
