@@ -8,7 +8,7 @@ module WhatsAppAdapter
     REQUEST_TO_RECEIVE_MESSAGE = :request_to_receive_message
     UNSUBSCRIBE_CONTRIBUTOR = :unsubscribe_contributor
     SUBSCRIBE_CONTRIBUTOR = :subscribe_contributor
-    UNSUPPORTED_CONTENT_TYPES = %w[location contacts document].freeze
+    UNSUPPORTED_CONTENT_TYPES = %w[location contacts application].freeze
 
     attr_reader :sender, :text, :message
 
@@ -61,7 +61,7 @@ module WhatsAppAdapter
 
     def initialize_message(whats_app_message)
       message = whats_app_message[:messages].first
-      text = message[:text]&.dig(:body) || message[:button]&.dig(:text)
+      text = message[:text]&.dig(:body) || message[:button]&.dig(:text) || supported_file(message)&.dig(:caption)
 
       trigger(REQUEST_FOR_MORE_INFO, sender) if request_for_more_info?(text)
       trigger(UNSUBSCRIBE_CONTRIBUTOR, sender) if unsubscribe_text?(text)
@@ -93,10 +93,11 @@ module WhatsAppAdapter
       message_file = supported_file(message)
       content_type = message_file[:mime_type]
       file_id = message_file[:id]
+      filename = message_file[:filename] || file_id
 
       file.attachment.attach(
         io: StringIO.new(fetch_file(file_id)),
-        filename: file_id,
+        filename: filename,
         content_type: content_type,
         identify: false
       )
@@ -105,11 +106,13 @@ module WhatsAppAdapter
     end
 
     def file_type_supported?(message)
-      supported_file(message).present?
+      supported_file = message[:image] || message[:voice] || message[:video] || message[:audio] ||
+                       (message[:document] && UNSUPPORTED_CONTENT_TYPES.none? { |type| message[:document][:mime_type].include?(type) })
+      supported_file.present?
     end
 
     def supported_file(message)
-      message[:image] || message[:voice] || message[:video] || message[:audio]
+      message[:image] || message[:voice] || message[:video] || message[:audio] || message[:document]
     end
 
     def unsupported_content?(whats_app_message)
@@ -118,6 +121,8 @@ module WhatsAppAdapter
 
       unsupported_content = message.keys.any? do |key|
         UNSUPPORTED_CONTENT_TYPES.include?(key)
+      end || UNSUPPORTED_CONTENT_TYPES.any? do |type|
+        message[:document]&.dig(:mime_type) && message[:document][:mime_type].include?(type)
       end
       errors = message[:errors]
       return unsupported_content unless errors
