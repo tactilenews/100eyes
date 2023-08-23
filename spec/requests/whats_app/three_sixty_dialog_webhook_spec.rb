@@ -260,10 +260,40 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
           let(:message) { params[:messages].first }
           let(:fetch_file_url) { "#{Setting.three_sixty_dialog_whats_app_rest_api_endpoint}/media/some_valid_id" }
 
-          before { message[:text] = nil }
+          before { message.delete(:text) }
 
           context 'supported content' do
             before { stub_request(:get, fetch_file_url).to_return(status: 200, body: 'downloaded_file') }
+
+            context 'image' do
+              let(:image) do
+                {
+                  id: 'some_valid_id',
+                  mime_type: 'image/jpeg',
+                  sha256: 'sha256_hash'
+                }
+              end
+              before do
+                message[:type] = 'image'
+                message[:image] = image
+              end
+
+              it 'creates a new Message::File' do
+                expect { subject.call }.to change(Message::File, :count).from(0).to(1)
+              end
+
+              it 'creates a new Message' do
+                expect { subject.call }.to change(Message, :count).from(2).to(3)
+              end
+
+              it 'attaches the file to the message with its mime_type' do
+                subject.call
+
+                latest_message = Message.where(sender: contributor).first
+                expect(latest_message.files.first).to eq(Message::File.first)
+                expect(latest_message.files.first.attachment.content_type).to eq(message[:image][:mime_type])
+              end
+            end
 
             context 'voice' do
               let(:voice) do
@@ -290,36 +320,6 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
                 subject.call
 
                 expect(Message.first.files.first).to eq(Message::File.first)
-              end
-            end
-
-            context 'voice' do
-              let(:voice) do
-                {
-                  id: 'some_valid_id',
-                  mime_type: 'audio/ogg; codecs=opus',
-                  sha256: 'sha256_hash'
-                }
-              end
-              before do
-                message[:type] = 'voice'
-                message[:voice] = voice
-              end
-
-              it 'creates a new Message::File' do
-                expect { subject.call }.to change(Message::File, :count).from(0).to(1)
-              end
-
-              it 'creates a new Message' do
-                expect { subject.call }.to change(Message, :count).from(2).to(3)
-              end
-
-              it 'attaches the file to the message with its mime_type' do
-                subject.call
-
-                latest_message = Message.where(sender: contributor).first
-                expect(latest_message.files.first).to eq(Message::File.first)
-                expect(latest_message.files.first.attachment.content_type).to eq(message[:voice][:mime_type])
               end
             end
 
@@ -382,6 +382,80 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
                 expect(latest_message.files.first.attachment.content_type).to eq(message[:audio][:mime_type])
               end
             end
+
+            context 'document' do
+              context 'image' do
+                let(:document) do
+                  {
+                    filename: 'animated-cat-image-0056.gif',
+                    id: 'some_valid_id',
+                    mime_type: 'image/gif',
+                    sha256: 'sha256_hash'
+                  }
+                end
+
+                before do
+                  message[:type] = 'document'
+                  message[:document] = document
+                end
+
+                it 'attaches the file to the message with its mime_type' do
+                  subject.call
+
+                  latest_message = Message.where(sender: contributor).first
+                  expect(latest_message.files.first.attachment).to be_attached
+                  expect(latest_message.files.first.attachment.content_type).to eq(message[:document][:mime_type])
+                end
+              end
+
+              context 'audio' do
+                let(:document) do
+                  {
+                    filename: 'AUD-12345.opus',
+                    id: 'some_valid_id',
+                    mime_type: 'audio/ogg',
+                    sha256: 'sha256_hash'
+                  }
+                end
+
+                before do
+                  message[:type] = 'document'
+                  message[:document] = document
+                end
+
+                it 'attaches the file to the message with its mime_type' do
+                  subject.call
+
+                  latest_message = Message.where(sender: contributor).first
+                  expect(latest_message.files.first.attachment).to be_attached
+                  expect(latest_message.files.first.attachment.content_type).to eq(message[:document][:mime_type])
+                end
+              end
+
+              context 'video' do
+                let(:document) do
+                  {
+                    filename: 'VID_12345.mp4',
+                    id: 'some_valid_id',
+                    mime_type: 'video/mp4',
+                    sha256: 'sha256_hash'
+                  }
+                end
+
+                before do
+                  message[:type] = 'document'
+                  message[:document] = document
+                end
+
+                it 'attaches the file to the message with its mime_type' do
+                  subject.call
+
+                  latest_message = Message.where(sender: contributor).first
+                  expect(latest_message.files.first.attachment).to be_attached
+                  expect(latest_message.files.first.attachment.content_type).to eq(message[:document][:mime_type])
+                end
+              end
+            end
           end
 
           context 'unsupported content' do
@@ -393,9 +467,9 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
             context 'document' do
               let(:document) do
                 {
-                  filename: 'animated-cat-image-0056.gif',
+                  filename: 'Comprovante.pdf',
                   id: 'some_valid_id',
-                  mime_type: 'image/gif',
+                  mime_type: 'application/pdf',
                   sha256: 'sha256_hash'
                 }
               end
