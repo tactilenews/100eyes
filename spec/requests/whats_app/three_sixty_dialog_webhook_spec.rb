@@ -459,6 +459,8 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
           end
 
           context 'unsupported content' do
+            let(:contact_person) { create(:user) }
+            let!(:organization) { create(:organization, contact_person: contact_person, contributors: [contributor]) }
             let(:text) do
               I18n.t('adapter.whats_app.unsupported_content_template', first_name: contributor.first_name,
                                                                        contact_person: contributor.organization.contact_person.name)
