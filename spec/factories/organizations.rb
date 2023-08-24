@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :organization do
     name { '100eyes' }
     upgrade_discount { 10 }
-    association :contact_person, factory: :user
+    contact_person { create(:user) }
 
     transient do
       users_count { 0 }
