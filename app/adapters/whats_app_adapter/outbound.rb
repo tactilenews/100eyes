@@ -4,19 +4,19 @@ module WhatsAppAdapter
   class Outbound
     class << self
       def send!(message)
-        business_solution_provider.constantize.send!(message)
+        business_solution_provider.send!(message)
       end
 
       def send_welcome_message!(contributor)
-        business_solution_provider.constantize.send_welcome_message!(contributor)
+        business_solution_provider.send_welcome_message!(contributor)
       end
 
       def send_more_info_message!(contributor)
-        business_solution_provider.constantize.send_more_info_message!(contributor)
+        business_solution_provider.send_more_info_message!(contributor)
       end
 
       def send_unsubsribed_successfully_message!(contributor)
-        business_solution_provider.constantize.send_unsubsribed_successfully_message!(contributor)
+        business_solution_provider.send_unsubsribed_successfully_message!(contributor)
       end
 
       private
