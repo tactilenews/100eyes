@@ -6,7 +6,7 @@ RSpec.describe Contributor, type: :model do
   let(:the_request) do
     create(:request, title: 'Hitchhiker’s Guide', text: 'What is the answer to life, the universe, and everything?')
   end
-  let(:contributor) { create(:contributor, email: 'contributor@example.org') }
+  let!(:contributor) { create(:contributor, email: 'contributor@example.org') }
 
   it 'is sorted in alphabetical order' do
     zora = create(:contributor, first_name: 'Zora', last_name: 'Zimmermann')
