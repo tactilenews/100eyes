@@ -112,7 +112,7 @@ module WhatsAppAdapter
               policy: 'deterministic',
               code: 'de'
             },
-            name: 'new_request_morning_1', # TODO: Use dynamic template name after WhatsAppAdapter::CreateTemplate works
+            name: "new_request_#{time_of_day}_#{rand(1..3)}",
             components: [
               {
                 type: 'body',
