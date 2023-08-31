@@ -5,10 +5,6 @@ export default class extends Controller {
     permissionsUrl: String,
   };
 
-  connect() {
-    console.log('connected');
-  }
-
   openModal() {
     const windowFeatures =
       'toolbar=no, menubar=no, width=600, height=900, top=100, left=100';
