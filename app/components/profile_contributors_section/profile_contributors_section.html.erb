@@ -2,12 +2,10 @@
   <%= c 'heading', style: :beta do %>
     <%= t('profile.contributors_section.main_heading') %>
   <% end %>
-  <p>
-    <%= t('profile.contributors_section.number_of_contributors_of_business_plan_used',
-            contributors_count: organization.contributors.active.count,
-            allocated_contributors: organization.business_plan.number_of_contributors)
+  <p><%= t('profile.contributors_section.number_of_contributors_of_business_plan_used',
+         contributors_count: organization.contributors.active.count,
+         allocated_contributors: organization.business_plan.number_of_contributors)
      %>
-  </p>
   <%= c 'flex' do %>
     <%= c 'contributors_status_bar', organization: organization %>
     <%= c 'copy_button',
