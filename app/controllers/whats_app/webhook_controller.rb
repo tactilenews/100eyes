@@ -2,7 +2,7 @@
 
 module WhatsApp
   class WebhookController < ApplicationController
-    include HandleCallbacks
+    include WhatsAppHandleCallbacks
 
     skip_before_action :require_login, :verify_authenticity_token
     UNSUCCESSFUL_DELIVERY = %w[undelivered failed].freeze

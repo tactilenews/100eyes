@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module HandleCallbacks
+module WhatsAppHandleCallbacks
   extend ActiveSupport::Concern
 
   private

@@ -2,7 +2,7 @@
 
 module WhatsApp
   class ThreeSixtyDialogWebhookController < ApplicationController
-    include HandleCallbacks
+    include WhatsAppHandleCallbacks
 
     skip_before_action :require_login, :verify_authenticity_token
 
