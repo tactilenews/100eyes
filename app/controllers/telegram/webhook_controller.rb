@@ -42,5 +42,9 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
         m.contributor.reply(adapter)
       end
     end
+
+    rescue_from Telegram::Bot::Forbidden do |e|
+      raise unless e.message.match?(/Forbidden: bot was kicked from the supergroup chat/)
+    end
   end
 end
