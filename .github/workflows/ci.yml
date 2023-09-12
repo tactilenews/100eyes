@@ -31,10 +31,19 @@ jobs:
       - name: Update file watchers because of rails settings cached
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
+      - name: Read .tool-versions
+        uses: marocchino/tool-versions-action@v1
+        id: versions
+
+      - name: Use Node.js ${{ steps.versions.outputs.nodejs}}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ steps.versions.outputs.nodejs}}
+
       - name: Install ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.0.0
+          ruby-version:  ${{ steps.versions.outputs.ruby}}
           bundler-cache: true
 
       - name: Cache NPM dependencies
