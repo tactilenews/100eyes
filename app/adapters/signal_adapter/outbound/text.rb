@@ -45,14 +45,7 @@ module SignalAdapter
             headers: response.to_hash,
             body: error_message
           }
-          tags = if error_message.match?(/with challenge token /)
-                   regex = /"(.*?)"/
-                   challenge_token = error_message.split('with challenge token ').last.match(regex).to_s.split(/"/).last
-                   { challenge_token: challenge_token }
-                 else
-                   {}
-                 end
-          ErrorNotifier.report(exception, context: context, tags: tags)
+          ErrorNotifier.report(exception, context: context)
         end
       end
     end
