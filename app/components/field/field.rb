@@ -2,18 +2,19 @@
 
 module Field
   class Field < ApplicationComponent
-    def initialize(object:, attr:, value: nil, **)
+    def initialize(object:, attr:, value: nil, label: nil, **)
       super
 
       @object = object
       @attr = attr
       @value = value
+      @label = label
     end
 
     def call
       c('base_field', {
           id: id,
-          label: label,
+          label: label_or_default,
           help: help,
           errors: errors,
           styles: styles,
@@ -34,7 +35,7 @@ module Field
 
     private
 
-    attr_reader :object, :attr
+    attr_reader :object, :attr, :label
 
     def id
       "#{model_name}[#{attr}]"
@@ -48,8 +49,8 @@ module Field
       @value ||= object.send(attr)
     end
 
-    def label
-      I18n.t("#{model_name}.form.#{attr}.label")
+    def label_or_default
+      label || I18n.t("#{model_name}.form.#{attr}.label")
     end
 
     def help

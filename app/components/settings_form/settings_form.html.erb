@@ -13,6 +13,23 @@
       <%= c('settings_field', type: :image_input, attr: :onboarding_hero) %>
       <%= c('settings_field', type: :input, attr: :onboarding_title) %>
       <%= c('settings_field', type: :textarea, attr: :onboarding_page) %>
+      <%= c 'section', styles: [:noHorizontalPadding] do %>
+        <%= c 'heading', styles: [:beta] do %>
+          Channels
+        <% end %>
+        <%= c 'flex' do %>
+            <% Setting.channels.each do |key, value| %>
+              <%= c('field',
+                  object: Setting.new,
+                  attr: :channels,
+                  styles: [:leftAligned],
+                  label: key.to_s.camelize
+                ) do |field| %>
+                <%= c 'checkbox', id: "setting[channels][#{key}]", checked: value %>
+              <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
       <% if current_user.admin? %>
         <%= c('settings_field', type: :url_input, attr: :onboarding_data_protection_link) %>
         <%= c('settings_field', type: :textarea, attr: :onboarding_data_processing_consent_additional_info) %>
