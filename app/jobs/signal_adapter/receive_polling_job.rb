@@ -17,9 +17,7 @@ module SignalAdapter
       adapter = SignalAdapter::Inbound.new
 
       adapter.on(SignalAdapter::CONNECT) do |contributor|
-        contributor.update!(signal_onboarding_completed_at: Time.zone.now)
-        SignalAdapter::Outbound.send_welcome_message!(contributor)
-        SignalAdapter::AttachContributorsAvatarJob.perform_later(contributor)
+        handle_connect(contributor)
       end
 
       adapter.on(SignalAdapter::UNKNOWN_CONTRIBUTOR) do |signal_phone_number|
@@ -29,6 +27,12 @@ module SignalAdapter
 
       adapter.on(SignalAdapter::UNKNOWN_CONTENT) do |contributor|
         SignalAdapter::Outbound.send_unknown_content_message!(contributor)
+      end
+
+      adapter.on(SignalAdapter::HANDLE_DELIVERY_RECEIPT) do |delivery_receipt, contributor|
+        if delivery_receipt[:isDelivery]
+          contributor.received_messages.first.update(received_at: Time.zone.at(delivery_receipt[:when]).to_datetime)
+        end
       end
 
       signal_messages.each do |raw_message|
@@ -59,6 +63,12 @@ module SignalAdapter
 
     def queue_empty?
       Delayed::Job.where(queue: queue_name, failed_at: nil).none?
+    end
+
+    def handle_connect(contributor)
+      contributor.update!(signal_onboarding_completed_at: Time.zone.now)
+      SignalAdapter::Outbound.send_welcome_message!(contributor)
+      SignalAdapter::AttachContributorsAvatarJob.perform_later(contributor)
     end
   end
 end
