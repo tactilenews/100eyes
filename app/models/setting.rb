@@ -83,4 +83,11 @@ class Setting < RailsSettings::Base
 
   field :channel_image
   field :about, default: File.read(File.join('config', 'locales', 'about.txt'))
+  field :channels, type: :hash, default: {
+    threema: true,
+    telegram: true,
+    email: true,
+    signal: true,
+    whats_app: true
+  }
 end
