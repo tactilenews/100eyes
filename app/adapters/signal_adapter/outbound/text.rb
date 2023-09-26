@@ -10,23 +10,17 @@ module SignalAdapter
       def perform(recipient:, text:)
         @recipient = recipient
         @text = text
-        url = URI.parse("#{Setting.signal_cli_rest_api_endpoint}/v2/send")
-        request = Net::HTTP::Post.new(url.to_s, {
+        uri = URI.parse("#{Setting.signal_cli_rest_api_endpoint}/v2/send")
+        request = Net::HTTP::Post.new(uri, {
                                         Accept: 'application/json',
                                         'Content-Type': 'application/json'
                                       })
         request.body = data.to_json
-        response = Net::HTTP.start(url.host, url.port) do |http|
-          http.request(request)
+        SignalAdapter::Api.perform_request(request) do
+          # TODO: Do something on success. For example, mark the message as delivered?
+          # Or should we use deliver receipts as the source of truth.
+          Rails.logger.debug 'Great!'
         end
-        response.value # may raise exception
-      rescue Net::HTTPClientException => e
-        ErrorNotifier.report(e, context: {
-                               code: e.response.code,
-                               message: e.response.message,
-                               headers: e.response.to_hash,
-                               body: e.response.body
-                             })
       end
 
       def data
