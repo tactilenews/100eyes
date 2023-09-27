@@ -15,7 +15,7 @@ module SignalAdapter
                                         'Content-Type': 'application/json'
                                       })
         request.body = data.to_json
-        SignalAdapter::Api.perform_request(request) do
+        SignalAdapter::Api.perform_request(request, recipient) do
           # TODO: Do something on success. For example, mark the message as delivered?
           # Or should we use deliver receipts as the source of truth.
           Rails.logger.debug 'Great!'
