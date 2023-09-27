@@ -15,6 +15,11 @@ class SettingsController < ApplicationController
       Setting.send("#{key}=", blob)
     end
 
+    settings_channel_param.each do |key, values_params|
+      values_hash = values_params.to_h.transform_values { |value| ActiveModel::Type::Boolean.new.cast(value) }
+      Setting.send("#{key}=", values_hash)
+    end
+
     flash[:success] = I18n.t('settings.success')
     redirect_to settings_url
   end
@@ -48,7 +53,12 @@ class SettingsController < ApplicationController
       :signal_unknown_content_message,
       :telegram_unknown_content_message,
       :telegram_contributor_not_found_message,
-      :threema_unknown_content_message
+      :threema_unknown_content_message,
+      :about
     )
+  end
+
+  def settings_channel_param
+    params.require(:setting).permit(channels: {})
   end
 end

@@ -2,8 +2,8 @@
 
 module SignalAdapter
   class BadRequestError < StandardError
-    def initialize(url:)
-      super("Bad Reqest to url: #{url}")
+    def initialize(error_code:, message:)
+      super("Message was not delivered with error code `#{error_code}` and message `#{message}`")
     end
   end
 end
