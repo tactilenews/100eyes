@@ -127,7 +127,7 @@ GEM
       railties (>= 5.0)
     cliver (0.3.2)
     coderay (1.1.3)
-    concurrent-ruby (1.1.10)
+    concurrent-ruby (1.2.2)
     counter_culture (3.3.0)
       activerecord (>= 4.2)
       activesupport (>= 4.2)
@@ -189,7 +189,7 @@ GEM
       domain_name (~> 0.5)
     http-form_data (2.3.0)
     httpclient (2.8.3)
-    i18n (1.12.0)
+    i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     image_processing (1.12.2)
       mini_magick (>= 4.9.5, < 5)
@@ -237,7 +237,7 @@ GEM
     mini_magick (4.11.0)
     mini_mime (1.1.2)
     mini_portile2 (2.8.0)
-    minitest (5.16.3)
+    minitest (5.20.0)
     msgpack (1.7.1)
     multipart-post (2.2.3)
     nio4r (2.5.8)
@@ -399,7 +399,7 @@ GEM
       faraday (>= 0.9, < 3.0)
       jwt (>= 1.5, <= 2.5)
       nokogiri (>= 1.6, < 2.0)
-    tzinfo (2.0.5)
+    tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unf (0.1.4)
       unf_ext
@@ -409,8 +409,8 @@ GEM
       activemodel (>= 3.2)
       mail (~> 2.5)
     vcr (6.1.0)
-    view_component (2.72.0)
-      activesupport (>= 5.0.0, < 8.0)
+    view_component (3.6.0)
+      activesupport (>= 5.2.0, < 8.0)
       concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
     webmock (3.18.1)
@@ -422,7 +422,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.6.6)
+    zeitwerk (2.6.12)
 
 PLATFORMS
   ruby
@@ -476,7 +476,7 @@ DEPENDENCIES
   tzinfo-data
   valid_email2 (~> 4.0)
   vcr
-  view_component (~> 2)
+  view_component (~> 3)
   webmock
 
 RUBY VERSION
