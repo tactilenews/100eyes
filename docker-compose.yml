@@ -26,7 +26,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   signal:
-    image: bbernhard/signal-cli-rest-api:0.119-dev
+    image: bbernhard/signal-cli-rest-api:0.69
     environment:
       - MODE=native
         #- AUTO_RECEIVE_SCHEDULE=0 22 * * * #enable this parameter on demand (see description below)
