@@ -122,4 +122,6 @@ Rails.application.routes.draw do
 
   get '/v1/contributors/me', to: 'api#show'
   post '/v1/contributors', to: 'api#create'
+  get '/v1/contributors/me/requests/current', to: 'api#current_request'
+  post '/v1/contributors/me/messages', to: 'api#messages'
 end

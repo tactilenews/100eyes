@@ -2,21 +2,17 @@
 
 class ApiController < ApplicationController
   skip_before_action :require_login
-  before_action :authorize_api_access
+  before_action :authorize_api_access, :contributor
 
   def show
-    contributor = Contributor.find_by(external_id: external_id)
-
-    unless contributor
+    if contributor
+      render json: { status: 'ok', data: { first_name: contributor.first_name, external_id: contributor.external_id } }, status: :ok
+    else
       render json: { status: 'error', message: 'Not found' }, status: :not_found
-      return
     end
-
-    render json: { status: 'ok', data: { first_name: contributor.first_name, external_id: contributor.external_id } }, status: :ok
   end
 
   def create
-    contributor = Contributor.find_by(external_id: external_id)
     if contributor
       render json: {
         status: 'ok',
@@ -41,7 +37,50 @@ class ApiController < ApplicationController
     end
   end
 
+  def current_request
+    if contributor
+      current_personalized_request = contributor.received_messages.first
+      render json: {
+        status: 'ok',
+        data: {
+          id: current_personalized_request.id,
+          personalized_text: current_personalized_request.text,
+          contributor_replies_count: contributor.replies.where(request_id: current_personalized_request.request.id).count
+        }
+      }, status: :ok
+    else
+      render json: { status: 'error', message: 'Not found' }, status: :not_found
+    end
+  end
+
+  def messages
+    if contributor
+      message = Message.new(
+        request: contributor.active_request,
+        text: messages_params[:text],
+        sender: contributor
+      )
+      message.raw_data.attach(
+        io: StringIO.new(JSON.generate(messages_params)),
+        filename: 'api.json',
+        content_type: 'application/json'
+      )
+
+      if message.save!
+        render json: { status: 'ok', data: { id: message.id, text: message.text } }, status: :created
+      else
+        render json: { status: 'error', message: 'Record could not be created' }, status: :unprocessable_entity
+      end
+    else
+      render json: { status: 'error', message: 'Not found' }, status: :not_found
+    end
+  end
+
   private
+
+  def contributor
+    @contributor ||= Contributor.find_by(external_id: external_id)
+  end
 
   def authorize_api_access
     authenticate_or_request_with_http_token do |token, _options|
@@ -55,5 +94,9 @@ class ApiController < ApplicationController
 
   def onboard_params
     params.permit(:first_name)
+  end
+
+  def messages_params
+    params.permit(:text)
   end
 end

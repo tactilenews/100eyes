@@ -147,4 +147,139 @@ RSpec.describe 'Api' do
       end
     end
   end
+
+  describe 'GET /contributors/me/requests/current' do
+    subject { -> { get '/v1/contributors/me/requests/current', headers: headers } }
+
+    describe 'not authorized' do
+      context 'missing auth headers' do
+        it 'returns not authorized' do
+          subject.call
+
+          expect(response).to have_http_status(:unauthorized)
+          expect(response.code.to_i).to eq(401)
+        end
+      end
+
+      context 'invalid token' do
+        let(:headers) { { 'Authorization' => "Bearer #{SecureRandom.urlsafe_base64(128)}" } }
+
+        it 'returns not authorized' do
+          subject.call
+
+          expect(response).to have_http_status(:unauthorized)
+          expect(response.code.to_i).to eq(401)
+        end
+      end
+    end
+
+    describe 'authorized' do
+      before { allow(Setting).to receive(:api_token).and_return(token) }
+      let(:headers) { valid_headers }
+
+      context 'unknown contributor' do
+        it 'returns not found' do
+          subject.call
+
+          expect(response).to have_http_status(:not_found)
+          expect(response.code.to_i).to eq(404)
+        end
+
+        it 'returns error status with message Not found' do
+          subject.call
+
+          expect(response.body).to eq({ status: 'error', message: 'Not found' }.to_json)
+        end
+      end
+
+      context 'known contributor' do
+        let(:contributor) { create(:contributor, external_id: external_id) }
+        let!(:message) { create(:message, :outbound, recipient_id: contributor.id) }
+        let(:expected_response) do
+          {
+            status: 'ok',
+            data:
+             {
+               id: message.id,
+               personalized_text: message.text,
+               contributor_replies_count: contributor.replies.where(request_id: message.request.id).count
+             }
+          }.to_json
+        end
+
+        it 'returns resource data' do
+          subject.call
+
+          expect(response.body).to eq(expected_response)
+          expect(response.code.to_i).to eq(200)
+        end
+      end
+    end
+
+    describe 'POST /v1/contributors/me/messages' do
+      subject { -> { post v1_contributors_me_messages_path, params: { text: 'Create this message' }, headers: headers } }
+
+      describe 'not authorized' do
+        context 'missing auth headers' do
+          it 'returns not authorized' do
+            subject.call
+
+            expect(response).to have_http_status(:unauthorized)
+            expect(response.code.to_i).to eq(401)
+          end
+        end
+
+        context 'invalid token' do
+          let(:headers) { { 'Authorization' => "Bearer #{SecureRandom.urlsafe_base64(128)}" } }
+
+          it 'returns not authorized' do
+            subject.call
+
+            expect(response).to have_http_status(:unauthorized)
+            expect(response.code.to_i).to eq(401)
+          end
+        end
+      end
+
+      describe 'authorized' do
+        before { allow(Setting).to receive(:api_token).and_return(token) }
+
+        let(:headers) { valid_headers }
+        let(:expected_response) do
+          {
+            status: 'ok',
+            data: {
+              id: Message.first.id,
+              text: Message.first.text
+            }
+          }
+        end
+
+        context 'unknown contributor' do
+          it 'returns not found' do
+            subject.call
+
+            expect(response).to have_http_status(:not_found)
+            expect(response.code.to_i).to eq(404)
+          end
+        end
+
+        context 'known contributor' do
+          let!(:contributor) { create(:contributor, external_id: external_id) }
+          let!(:request) { create(:request) }
+
+          it 'creates a message' do
+            expect { subject.call }.to change(Message, :count).by(1)
+          end
+
+          it 'returns resource data' do
+            subject.call
+
+            expect(response.body).to eq(expected_response.to_json)
+            expect(response.code.to_i).to eq(201)
+          end
+        end
+      end
+    end
+  end
 end
