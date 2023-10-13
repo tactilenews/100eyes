@@ -4,45 +4,56 @@ class ApiController < ApplicationController
   skip_before_action :require_login
   before_action :authorize_api_access
 
-  def contributor
-    contributor = Contributor.find_by(external_id: contributor_params[:external_id])
-    return head :not_found unless contributor
+  def show
+    contributor = Contributor.find_by(external_id: external_id)
 
-    render json: { first_name: contributor.first_name, external_id: contributor.external_id }
-  end
-
-  def onboard
-    contributor = Contributor.find_by(external_id: onboard_params[:external_id])
-    if contributor
-      render json: { id: contributor.id }
+    unless contributor
+      render json: { status: 'error', message: 'Not found' }, status: :not_found
       return
     end
 
-    contributor = Contributor.new(onboard_params.merge(data_processing_consented_at: Time.current))
+    render json: { status: 'ok', data: { first_name: contributor.first_name, external_id: contributor.external_id } }, status: :ok
+  end
+
+  def create
+    contributor = Contributor.find_by(external_id: external_id)
+    if contributor
+      render json: {
+        status: 'ok',
+        data: { id: contributor.id,
+                first_name: contributor.first_name,
+                external_id: contributor.external_id }
+      }, status: :created
+      return
+    end
+
+    contributor = Contributor.new(onboard_params.merge(data_processing_consented_at: Time.current, external_id: external_id))
 
     if contributor.save!
-      render json: { id: contributor.id }
+      render json: {
+        status: 'ok',
+        data: { id: contributor.id,
+                first_name: contributor.first_name,
+                external_id: contributor.external_id }
+      }, status: :created
     else
-      head :unprocessable_entity
+      render json: { status: 'error', message: 'Record could not be created' }, status: :unprocessable_entity
     end
   end
 
   private
 
   def authorize_api_access
-    headers = request.headers
-    jwt = headers['Authorization'].split.last if headers['Authorization'].present?
-
-    JsonWebToken.decode(jwt)
-  rescue JWT::DecodeError
-    head :unauthorized
+    authenticate_or_request_with_http_token do |token, _options|
+      ActiveSupport::SecurityUtils.secure_compare(token, Setting.api_token)
+    end
   end
 
-  def contributor_params
-    params.permit(:external_id)
+  def external_id
+    request.headers['X-100eyes-External-Id']
   end
 
   def onboard_params
-    params.permit(:external_id, :first_name)
+    params.permit(:first_name)
   end
 end

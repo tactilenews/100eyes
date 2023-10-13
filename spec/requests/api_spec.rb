@@ -4,66 +4,116 @@ require 'rails_helper'
 
 RSpec.describe 'Api' do
   let(:external_id) { 'amzn1.ask.account.valid_uuid' }
-  let(:attrs) do
+  let(:token) { SecureRandom.urlsafe_base64(128) }
+  let(:headers) { {} }
+  let(:valid_headers) do
     {
-      first_name: 'John',
-      external_id: external_id
+      'Authorization' => "Bearer #{token}",
+      'X-100eyes-External-Id' => external_id
     }
   end
-  let(:secret_key) { Rails.application.secrets.secret_key_base.to_s }
-  let(:algorithm) { 'HS256' }
-  let(:valid_jwt) { JWT.encode({ data: payload }, secret_key, algorithm) }
-  let(:payload) { { api_key: SecureRandom.base64(16), action: 'api' } }
-  let(:auth_headers) { {} }
 
-  describe 'GET /contributor' do
-    subject { -> { get '/v1/contributor', params: { external_id: external_id }, headers: auth_headers } }
+  describe 'GET /contributors/me' do
+    subject { -> { get '/v1/contributors/me', headers: headers } }
 
     describe 'not authorized' do
-      it 'returns not authorized' do
-        subject.call
+      context 'missing auth headers' do
+        it 'returns not authorized' do
+          subject.call
 
-        expect(response).to have_http_status(:unauthorized)
+          expect(response).to have_http_status(:unauthorized)
+          expect(response.code.to_i).to eq(401)
+        end
+      end
+
+      context 'invalid token' do
+        let(:headers) { { 'Authorization' => "Bearer #{SecureRandom.urlsafe_base64(128)}" } }
+
+        it 'returns not authorized' do
+          subject.call
+
+          expect(response).to have_http_status(:unauthorized)
+          expect(response.code.to_i).to eq(401)
+        end
       end
     end
 
     describe 'authorized' do
-      let(:auth_headers) do
-        { 'Authorization' => "Bearer #{valid_jwt}" }
-      end
+      before { allow(Setting).to receive(:api_token).and_return(token) }
+      let(:headers) { valid_headers }
+
       context 'unknown contributor' do
         it 'returns not found' do
           subject.call
+
           expect(response).to have_http_status(:not_found)
+          expect(response.code.to_i).to eq(404)
+        end
+
+        it 'returns error status with message Not found' do
+          subject.call
+
+          expect(response.body).to eq({ status: 'error', message: 'Not found' }.to_json)
         end
       end
 
       context 'known contributor' do
         before { create(:contributor, external_id: external_id) }
+        let(:expected_response) do
+          {
+            status: 'ok',
+            data:
+             {
+               first_name: 'John',
+               external_id: external_id
+             }
+          }.to_json
+        end
 
         it 'returns first name and external id' do
           subject.call
 
-          expect(response.body).to eq(attrs.to_json)
+          expect(response.body).to eq(expected_response)
+          expect(response.code.to_i).to eq(200)
         end
       end
     end
   end
 
-  describe 'POST /v1/onboard' do
-    subject { -> { post v1_onboard_path, params: attrs, headers: auth_headers } }
+  describe 'POST /v1/contributors' do
+    subject { -> { post v1_contributors_path, params: { first_name: 'John' }, headers: headers } }
 
     describe 'not authorized' do
-      it 'returns not authorized' do
-        subject.call
+      context 'missing auth headers' do
+        it 'returns not authorized' do
+          subject.call
 
-        expect(response).to have_http_status(:unauthorized)
+          expect(response).to have_http_status(:unauthorized)
+          expect(response.code.to_i).to eq(401)
+        end
+      end
+
+      context 'invalid token' do
+        let(:headers) { { 'Authorization' => "Bearer #{SecureRandom.urlsafe_base64(128)}" } }
+
+        it 'returns not authorized' do
+          subject.call
+
+          expect(response).to have_http_status(:unauthorized)
+          expect(response.code.to_i).to eq(401)
+        end
       end
     end
 
     describe 'authorized' do
-      let(:auth_headers) do
-        { 'Authorization' => "Bearer #{valid_jwt}" }
+      before { allow(Setting).to receive(:api_token).and_return(token) }
+
+      let(:headers) { valid_headers }
+      let(:expected_response) do
+        {
+          first_name: 'John',
+          external_id: external_id
+        }
       end
 
       context 'unknown contributor' do
@@ -74,7 +124,9 @@ RSpec.describe 'Api' do
         it 'returns internal id' do
           subject.call
 
-          expect(response.body).to eq({ id: Contributor.first.id }.to_json)
+          expect(JSON.parse(response.body)).to eq({ status: 'ok',
+                                                    data: expected_response.merge(id: Contributor.first.id) }.with_indifferent_access)
+          expect(response.code.to_i).to eq(201)
         end
       end
 
@@ -88,7 +140,9 @@ RSpec.describe 'Api' do
         it 'returns internal id' do
           subject.call
 
-          expect(response.body).to eq({ id: contributor.id }.to_json)
+          expect(JSON.parse(response.body)).to eq({ status: 'ok',
+                                                    data: expected_response.merge(id: contributor.id) }.with_indifferent_access)
+          expect(response.code.to_i).to eq(201)
         end
       end
     end

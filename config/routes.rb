@@ -120,6 +120,6 @@ Rails.application.routes.draw do
   post '/profile/user', to: 'profile#create_user'
   put '/profile/upgrade_business_plan', to: 'profile#upgrade_business_plan'
 
-  get '/v1/contributor', to: 'api#contributor'
-  post '/v1/onboard', to: 'api#onboard'
+  get '/v1/contributors/me', to: 'api#show'
+  post '/v1/contributors', to: 'api#create'
 end
