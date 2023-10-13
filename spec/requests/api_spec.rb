@@ -88,7 +88,7 @@ RSpec.describe 'Api' do
         it 'returns internal id' do
           subject.call
 
-          expect(response.body).to eq({ id: Contributor.first.id }.to_json)
+          expect(response.body).to eq({ id: contributor.id }.to_json)
         end
       end
     end

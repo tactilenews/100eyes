@@ -12,9 +12,13 @@ class ApiController < ApplicationController
   end
 
   def onboard
-    contributor = Contributor.find_or_initialize_by(external_id: onboard_params[:external_id])
-    contributor.first_name = onboard_params[:first_name]
-    contributor.data_processing_consented_at = Time.current if contributor.data_processing_consented_at.blank?
+    contributor = Contributor.find_by(external_id: onboard_params[:external_id])
+    if contributor
+      render json: { id: contributor.id }
+      return
+    end
+
+    contributor = Contributor.new(onboard_params.merge(data_processing_consented_at: Time.current))
 
     if contributor.save!
       render json: { id: contributor.id }
