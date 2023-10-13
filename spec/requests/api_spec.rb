@@ -10,55 +10,86 @@ RSpec.describe 'Api' do
       external_id: external_id
     }
   end
+  let(:secret_key) { Rails.application.secrets.secret_key_base.to_s }
+  let(:algorithm) { 'HS256' }
+  let(:valid_jwt) { JWT.encode({ data: payload }, secret_key, algorithm) }
+  let(:payload) { { api_key: SecureRandom.base64(16), action: 'api' } }
+  let(:auth_headers) { {} }
 
   describe 'GET /contributor' do
-    subject { -> { get v1_contributor_path(external_id: external_id) } }
+    subject { -> { get '/v1/contributor', params: { external_id: external_id }, headers: auth_headers } }
 
-    context 'unknown contributor' do
-      it 'returns not found' do
+    describe 'not authorized' do
+      it 'returns not authorized' do
         subject.call
 
-        expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
-    context 'known contributor' do
-      before { create(:contributor, external_id: external_id) }
+    describe 'authorized' do
+      let(:auth_headers) do
+        { 'Authorization' => "Bearer #{valid_jwt}" }
+      end
+      context 'unknown contributor' do
+        it 'returns not found' do
+          subject.call
+          expect(response).to have_http_status(:not_found)
+        end
+      end
 
-      it 'returns first name and external id' do
-        subject.call
+      context 'known contributor' do
+        before { create(:contributor, external_id: external_id) }
 
-        expect(response.body).to eq(attrs.to_json)
+        it 'returns first name and external id' do
+          subject.call
+
+          expect(response.body).to eq(attrs.to_json)
+        end
       end
     end
   end
 
   describe 'POST /v1/onboard' do
-    subject { -> { post v1_onboard_path, params: attrs } }
+    subject { -> { post v1_onboard_path, params: attrs, headers: auth_headers } }
 
-    context 'unknown contributor' do
-      it 'creates a contributor' do
-        expect { subject.call }.to change(Contributor, :count).from(0).to(1)
-      end
-
-      it 'returns internal id' do
+    describe 'not authorized' do
+      it 'returns not authorized' do
         subject.call
 
-        expect(response.body).to eq({ id: Contributor.first.id }.to_json)
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
-    context 'known contributor' do
-      let!(:contributor) { create(:contributor, external_id: external_id) }
-
-      it 'does not change contributor count' do
-        expect { subject.call }.not_to change(Contributor, :count)
+    describe 'authorized' do
+      let(:auth_headers) do
+        { 'Authorization' => "Bearer #{valid_jwt}" }
       end
 
-      it 'returns internal id' do
-        subject.call
+      context 'unknown contributor' do
+        it 'creates a contributor' do
+          expect { subject.call }.to change(Contributor, :count).from(0).to(1)
+        end
 
-        expect(response.body).to eq({ id: Contributor.first.id }.to_json)
+        it 'returns internal id' do
+          subject.call
+
+          expect(response.body).to eq({ id: Contributor.first.id }.to_json)
+        end
+      end
+
+      context 'known contributor' do
+        let!(:contributor) { create(:contributor, external_id: external_id) }
+
+        it 'does not change contributor count' do
+          expect { subject.call }.not_to change(Contributor, :count)
+        end
+
+        it 'returns internal id' do
+          subject.call
+
+          expect(response.body).to eq({ id: Contributor.first.id }.to_json)
+        end
       end
     end
   end

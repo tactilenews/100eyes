@@ -2,6 +2,7 @@
 
 class ApiController < ApplicationController
   skip_before_action :require_login
+  before_action :authorize_api_access
 
   def contributor
     contributor = Contributor.find_by(external_id: contributor_params[:external_id])
@@ -23,6 +24,15 @@ class ApiController < ApplicationController
   end
 
   private
+
+  def authorize_api_access
+    headers = request.headers
+    jwt = headers['Authorization'].split.last if headers['Authorization'].present?
+
+    JsonWebToken.decode(jwt)
+  rescue JWT::DecodeError
+    head :unauthorized
+  end
 
   def contributor_params
     params.permit(:external_id)
