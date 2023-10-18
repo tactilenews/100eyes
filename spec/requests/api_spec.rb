@@ -35,7 +35,6 @@ RSpec.describe 'Api' do
         it 'returns not authorized' do
           subject.call
 
-          expect(response.body).to eq('What is happening, why a 500 when the tests pass locally?')
           expect(response).to have_http_status(:unauthorized)
           expect(response.code.to_i).to eq(401)
         end
@@ -103,7 +102,6 @@ RSpec.describe 'Api' do
         it 'returns not authorized' do
           subject.call
 
-          expect(response.body).to eq('What is happening, why a 500 when the tests pass locally?')
           expect(response).to have_http_status(:unauthorized)
           expect(response.code.to_i).to eq(401)
         end
@@ -172,7 +170,6 @@ RSpec.describe 'Api' do
         it 'returns not authorized' do
           subject.call
 
-          expect(response.body).to eq('What is happening, why a 500 when the tests pass locally?')
           expect(response).to have_http_status(:unauthorized)
           expect(response.code.to_i).to eq(401)
         end
@@ -230,7 +227,6 @@ RSpec.describe 'Api' do
           it 'returns not authorized' do
             subject.call
 
-            expect(response.body).to eq('What is happening, why a 500 when the tests pass locally?')
             expect(response).to have_http_status(:unauthorized)
             expect(response.code.to_i).to eq(401)
           end
