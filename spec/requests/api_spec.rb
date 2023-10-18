@@ -4,13 +4,16 @@ require 'rails_helper'
 
 RSpec.describe 'Api' do
   let(:external_id) { 'amzn1.ask.account.valid_uuid' }
-  let(:token) { SecureRandom.urlsafe_base64(128) }
+  let(:token) { invalid_token }
   let(:headers) { {} }
   let(:valid_headers) do
     {
       'Authorization' => "Bearer #{token}",
       'X-100eyes-External-Id' => external_id
     }
+  end
+  let(:invalid_token) do
+    'XyoBRczv5bzH_jZhkatxP-1WYZr996z3tCIVgn4LHbCAUHG8Er3XzXR31dp509T3-Ym9z9neosZnmJwnyIRdrE4h0VNki4r1jKBIhjQTRXV4w08qpLSrDHa8ZnG7czLbRasPJ1'
   end
 
   describe 'GET /contributors/me' do
@@ -27,7 +30,7 @@ RSpec.describe 'Api' do
       end
 
       context 'invalid token' do
-        let(:headers) { { 'Authorization' => "Bearer #{SecureRandom.urlsafe_base64(128)}" } }
+        let(:headers) { { 'Authorization' => "Bearer #{invalid_token}" } }
 
         it 'returns not authorized' do
           subject.call
@@ -94,7 +97,7 @@ RSpec.describe 'Api' do
       end
 
       context 'invalid token' do
-        let(:headers) { { 'Authorization' => "Bearer #{SecureRandom.urlsafe_base64(128)}" } }
+        let(:headers) { { 'Authorization' => "Bearer #{invalid_token}" } }
 
         it 'returns not authorized' do
           subject.call
@@ -162,7 +165,7 @@ RSpec.describe 'Api' do
       end
 
       context 'invalid token' do
-        let(:headers) { { 'Authorization' => "Bearer #{SecureRandom.urlsafe_base64(128)}" } }
+        let(:headers) { { 'Authorization' => "Bearer #{invalid_token}" } }
 
         it 'returns not authorized' do
           subject.call
@@ -230,7 +233,7 @@ RSpec.describe 'Api' do
         end
 
         context 'invalid token' do
-          let(:headers) { { 'Authorization' => "Bearer #{SecureRandom.urlsafe_base64(128)}" } }
+          let(:headers) { { 'Authorization' => "Bearer #{invalid_token}" } }
 
           it 'returns not authorized' do
             subject.call
