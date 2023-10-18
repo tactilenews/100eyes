@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ApiController < ApplicationController
-  skip_before_action :require_login
+  skip_before_action :require_login, :verify_authenticity_token
   before_action :authorize_api_access, :contributor
 
   def show
@@ -39,13 +39,13 @@ class ApiController < ApplicationController
 
   def current_request
     if contributor
-      current_personalized_request = contributor.received_messages.first
+      current_request = contributor.active_request
       render json: {
         status: 'ok',
         data: {
-          id: current_personalized_request.id,
-          personalized_text: current_personalized_request.text,
-          contributor_replies_count: contributor.replies.where(request_id: current_personalized_request.request.id).count
+          id: current_request.id,
+          personalized_text: current_request.personalized_text(contributor),
+          contributor_replies_count: contributor.replies.where(request_id: current_request.id).count
         }
       }, status: :ok
     else
