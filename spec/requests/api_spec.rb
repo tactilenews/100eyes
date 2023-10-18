@@ -200,8 +200,8 @@ RSpec.describe 'Api' do
             status: 'ok',
             data:
              {
-               id: message.id,
-               personalized_text: message.text,
+               id: message.request.id,
+               personalized_text: message.request.personalized_text(contributor),
                contributor_replies_count: contributor.replies.where(request_id: message.request.id).count
              }
           }.to_json
