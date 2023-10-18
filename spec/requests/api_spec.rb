@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Api' do
   let(:external_id) { 'amzn1.ask.account.valid_uuid' }
-  let(:token) { invalid_token }
+  let(:token) { SecureRandom.urlsafe_base64(128) }
   let(:headers) { {} }
   let(:valid_headers) do
     {
