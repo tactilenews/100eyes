@@ -24,6 +24,7 @@
     DOCKER_IMAGE_TAG: "{{ docker_image_tag }}"
     RAILS_ENV: "{{ rails.environment }}"
     HUNDRED_EYES_PROJECT_NAME: "{{ rails.hundred_eyes_project_name }}"
+    HUNDRED_EYES_API_TOKEN: "{{ rails.hundred_eyes_api_token }}"
     TELEGRAM_BOT_API_KEY: "{{ rails.telegram_bot.api_key }}"
     TELEGRAM_BOT_USERNAME: "{{ rails.telegram_bot.username }}"
     POSTGRES_HOST: "{{ postgres_host }}"
