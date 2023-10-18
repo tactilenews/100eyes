@@ -12,9 +12,8 @@ RSpec.describe 'Api' do
       'X-100eyes-External-Id' => external_id
     }
   end
-  let(:invalid_token) do
-    'XyoBRczv5bzH_jZhkatxP-1WYZr996z3tCIVgn4LHbCAUHG8Er3XzXR31dp509T3-Ym9z9neosZnmJwnyIRdrE4h0VNki4r1jKBIhjQTRXV4w08qpLSrDHa8ZnG7czLbRasPJ1'
-  end
+  let(:invalid_token) { SecureRandom.urlsafe_base64(128) }
+  before { allow(Setting).to receive(:api_token).and_return(token) }
 
   describe 'GET /contributors/me' do
     subject { -> { get '/v1/contributors/me', headers: headers } }
@@ -42,7 +41,6 @@ RSpec.describe 'Api' do
     end
 
     describe 'authorized' do
-      before { allow(Setting).to receive(:api_token).and_return(token) }
       let(:headers) { valid_headers }
 
       context 'unknown contributor' do
@@ -109,8 +107,6 @@ RSpec.describe 'Api' do
     end
 
     describe 'authorized' do
-      before { allow(Setting).to receive(:api_token).and_return(token) }
-
       let(:headers) { valid_headers }
       let(:expected_response) do
         {
@@ -177,7 +173,6 @@ RSpec.describe 'Api' do
     end
 
     describe 'authorized' do
-      before { allow(Setting).to receive(:api_token).and_return(token) }
       let(:headers) { valid_headers }
 
       context 'unknown contributor' do
@@ -245,8 +240,6 @@ RSpec.describe 'Api' do
       end
 
       describe 'authorized' do
-        before { allow(Setting).to receive(:api_token).and_return(token) }
-
         let(:headers) { valid_headers }
         let(:expected_response) do
           {
