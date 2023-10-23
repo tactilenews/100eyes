@@ -115,6 +115,26 @@ RSpec.describe 'Api' do
         }
       end
 
+      context 'no first name provided' do
+        subject { -> { post v1_contributors_path, params: { first_name: '' }, headers: headers } }
+
+        let(:expected_response) do
+          {
+            status: 'error',
+            message: 'First name muss ausgefüllt werden'
+          }.with_indifferent_access
+        end
+        it { is_expected.not_to change(Contributor, :count) }
+
+        it 'returns error with message' do
+          subject.call
+
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response.code.to_i).to eq(422)
+          expect(JSON.parse(response.body)).to eq(expected_response)
+        end
+      end
+
       context 'unknown contributor' do
         it 'creates a contributor' do
           expect { subject.call }.to change(Contributor, :count).from(0).to(1)

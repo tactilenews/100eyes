@@ -22,10 +22,9 @@ class ApiController < ApplicationController
       }, status: :created
       return
     end
-
     contributor = Contributor.new(onboard_params.merge(data_processing_consented_at: Time.current, external_id: external_id))
 
-    if contributor.save!
+    if contributor.save
       render json: {
         status: 'ok',
         data: { id: contributor.id,
@@ -33,7 +32,7 @@ class ApiController < ApplicationController
                 external_id: contributor.external_id }
       }, status: :created
     else
-      render json: { status: 'error', message: 'Record could not be created' }, status: :unprocessable_entity
+      render json: { status: 'error', message: contributor.errors.full_messages.join(' ') }, status: :unprocessable_entity
     end
   end
 
