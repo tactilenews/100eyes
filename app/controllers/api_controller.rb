@@ -6,7 +6,8 @@ class ApiController < ApplicationController
 
   def show
     if contributor
-      render json: { status: 'ok', data: { first_name: contributor.first_name, external_id: contributor.external_id } }, status: :ok
+      render_json_show_contributor
+
     else
       render json: { status: 'error', message: 'Not found' }, status: :not_found
     end
@@ -14,13 +15,13 @@ class ApiController < ApplicationController
 
   def create
     if contributor
-      render_json_contributor
+      render_json_created_contributor
       return
     end
     contributor = Contributor.new(onboard_params.merge(data_processing_consented_at: Time.current, external_id: external_id))
 
     if contributor.save
-      render_json_contributor
+      render_json_created_contributor
     else
       render json: { status: 'error', message: contributor.errors.full_messages.join(' ') }, status: :unprocessable_entity
     end
@@ -89,13 +90,26 @@ class ApiController < ApplicationController
     params.permit(:text)
   end
 
-  def render_json_contributor
+  def render_json_created_contributor
     render json: {
       status: 'ok',
-      data: { id: contributor.id,
-              first_name: contributor.first_name,
-              external_id: contributor.external_id,
-              external_channel: contributor.external_channel }
+      data: {
+        id: contributor.id,
+        first_name: contributor.first_name,
+        external_id: contributor.external_id,
+        external_channel: contributor.external_channel
+      }
     }, status: :created
+  end
+
+  def render_json_show_contributor
+    render json: {
+      status: 'ok',
+      data: {
+        first_name: contributor.first_name,
+        external_id: contributor.external_id,
+        active: contributor.active?
+      }
+    }, status: :ok
   end
 end

@@ -60,23 +60,40 @@ RSpec.describe 'Api' do
       end
 
       context 'known contributor' do
-        before { create(:contributor, external_id: external_id) }
+        let!(:contributor) { create(:contributor, first_name: 'John', external_id: external_id) }
         let(:expected_response) do
           {
             status: 'ok',
             data:
              {
                first_name: 'John',
-               external_id: external_id
+               external_id: external_id,
+               active: true
              }
-          }.to_json
+          }
         end
 
-        it 'returns first name and external id' do
-          subject.call
+        context 'inactive contributor' do
+          before do
+            contributor.update(deactivated_at: Time.current)
+            expected_response[:data][:active] = false
+          end
 
-          expect(response.body).to eq(expected_response)
-          expect(response.code.to_i).to eq(200)
+          it 'returns first name, external id, and active state' do
+            subject.call
+
+            expect(response.body).to eq(expected_response.to_json)
+            expect(response.code.to_i).to eq(200)
+          end
+        end
+
+        context 'active contributor' do
+          it 'returns first name, external id, and active state' do
+            subject.call
+
+            expect(response.body).to eq(expected_response.to_json)
+            expect(response.code.to_i).to eq(200)
+          end
         end
       end
     end
