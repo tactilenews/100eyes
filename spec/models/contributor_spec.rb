@@ -18,6 +18,18 @@ RSpec.describe Contributor, type: :model do
     expect(Contributor.third).to eq(zora)
   end
 
+  describe 'validations' do
+    subject { contributor }
+
+    it { is_expected.to be_valid }
+
+    context 'absence of first name' do
+      before { contributor.first_name = '' }
+
+      it { is_expected.not_to be_valid }
+    end
+  end
+
   describe '.find_by_email' do
     subject { described_class.with_lowercased_email(address) }
 

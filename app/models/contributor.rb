@@ -46,6 +46,8 @@ class Contributor < ApplicationRecord
 
   validates_with ThreemaValidator, if: -> { threema_id.present? }
 
+  validates :first_name, presence: true
+
   scope :with_tags, lambda { |tag_list = []|
     tag_list.blank? ? all : tagged_with(tag_list)
   }
