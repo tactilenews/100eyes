@@ -112,7 +112,11 @@ class Contributor < ApplicationRecord
   end
 
   def channels
-    { email: email?, signal: signal?, telegram: telegram?, threema: threema?, whats_app: whats_app? }.select { |_k, v| v }.keys
+    channels_array = { email: email?, signal: signal?, telegram: telegram?, threema: threema?, whats_app: whats_app? }.select do |_k, v|
+      v
+    end.keys
+    channels_array.push(external_channel.to_sym) if external_channel.present?
+    channels_array
   end
 
   def active_request

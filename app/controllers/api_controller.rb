@@ -14,23 +14,13 @@ class ApiController < ApplicationController
 
   def create
     if contributor
-      render json: {
-        status: 'ok',
-        data: { id: contributor.id,
-                first_name: contributor.first_name,
-                external_id: contributor.external_id }
-      }, status: :created
+      render_json_contributor
       return
     end
     contributor = Contributor.new(onboard_params.merge(data_processing_consented_at: Time.current, external_id: external_id))
 
     if contributor.save
-      render json: {
-        status: 'ok',
-        data: { id: contributor.id,
-                first_name: contributor.first_name,
-                external_id: contributor.external_id }
-      }, status: :created
+      render_json_contributor
     else
       render json: { status: 'error', message: contributor.errors.full_messages.join(' ') }, status: :unprocessable_entity
     end
@@ -92,10 +82,20 @@ class ApiController < ApplicationController
   end
 
   def onboard_params
-    params.permit(:first_name)
+    params.permit(:first_name, :external_channel)
   end
 
   def messages_params
     params.permit(:text)
+  end
+
+  def render_json_contributor
+    render json: {
+      status: 'ok',
+      data: { id: contributor.id,
+              first_name: contributor.first_name,
+              external_id: contributor.external_id,
+              external_channel: contributor.external_channel }
+    }, status: :created
   end
 end

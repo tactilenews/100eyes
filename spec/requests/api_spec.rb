@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Api' do
   let(:external_id) { 'amzn1.ask.account.valid_uuid' }
+  let(:external_channel) { 'alexa' }
   let(:token) { SecureRandom.urlsafe_base64(128) }
   let(:headers) { {} }
   let(:valid_headers) do
@@ -82,7 +83,9 @@ RSpec.describe 'Api' do
   end
 
   describe 'POST /v1/contributors' do
-    subject { -> { post v1_contributors_path, params: { first_name: 'john' }, headers: headers } }
+    subject { -> { post v1_contributors_path, params: params, headers: headers } }
+
+    let(:params) { { first_name: 'john', external_channel: external_channel } }
 
     describe 'not authorized' do
       context 'missing auth headers' do
@@ -111,12 +114,13 @@ RSpec.describe 'Api' do
       let(:expected_response) do
         {
           first_name: 'John',
-          external_id: external_id
+          external_id: external_id,
+          external_channel: external_channel
         }
       end
 
       context 'no first name provided' do
-        subject { -> { post v1_contributors_path, params: { first_name: '' }, headers: headers } }
+        let(:params) { { first_name: '' } }
 
         let(:expected_response) do
           {
@@ -150,7 +154,7 @@ RSpec.describe 'Api' do
       end
 
       context 'known contributor' do
-        let!(:contributor) { create(:contributor, external_id: external_id) }
+        let!(:contributor) { create(:contributor, external_id: external_id, external_channel: external_channel) }
 
         it 'does not change contributor count' do
           expect { subject.call }.not_to change(Contributor, :count)

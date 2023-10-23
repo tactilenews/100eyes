@@ -280,6 +280,17 @@ RSpec.describe Contributor, type: :model do
       let(:contributor) { create(:contributor, telegram_id: '123', email: 'contributor@example.org') }
       it { should contain_exactly(:telegram, :email) }
     end
+
+    describe 'give an external channel' do
+      let(:contributor) { create(:contributor, email: nil, external_channel: 'alexa') }
+
+      it { should contain_exactly(:alexa) }
+    end
+
+    describe 'given a contributor with telegram, email, and an external channel' do
+      let(:contributor) { create(:contributor, telegram_id: '123', email: 'contributor@example.org', external_channel: 'custom123') }
+      it { should contain_exactly(:telegram, :email, :custom123) }
+    end
   end
 
   describe '#telegram?' do
