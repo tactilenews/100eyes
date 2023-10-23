@@ -82,7 +82,7 @@ RSpec.describe 'Api' do
   end
 
   describe 'POST /v1/contributors' do
-    subject { -> { post v1_contributors_path, params: { first_name: 'John' }, headers: headers } }
+    subject { -> { post v1_contributors_path, params: { first_name: 'john' }, headers: headers } }
 
     describe 'not authorized' do
       context 'missing auth headers' do
@@ -140,7 +140,7 @@ RSpec.describe 'Api' do
           expect { subject.call }.to change(Contributor, :count).from(0).to(1)
         end
 
-        it 'returns internal id' do
+        it 'returns contributor info, with capitalized first name' do
           subject.call
 
           expect(JSON.parse(response.body)).to eq({ status: 'ok',
@@ -156,7 +156,7 @@ RSpec.describe 'Api' do
           expect { subject.call }.not_to change(Contributor, :count)
         end
 
-        it 'returns internal id' do
+        it 'returns contributor info, with capitalized first name' do
           subject.call
 
           expect(JSON.parse(response.body)).to eq({ status: 'ok',

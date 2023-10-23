@@ -8,6 +8,7 @@ class Contributor < ApplicationRecord
   attr_accessor :editor_guarantees_data_consent
 
   after_create_commit :notify_recipient
+  before_save { first_name.capitalize! }
 
   multisearchable against: %i[first_name last_name username note]
 

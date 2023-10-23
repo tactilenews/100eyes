@@ -30,6 +30,19 @@ RSpec.describe Contributor, type: :model do
     end
   end
 
+  describe '::before_save' do
+    let(:contributor) { build(:contributor, first_name: 'jonnhy') }
+    subject { contributor.first_name }
+
+    it { is_expected.to eq('jonnhy') }
+
+    context 'capitalizes first name before save' do
+      before { contributor.save }
+
+      it { is_expected.to eq('Jonnhy') }
+    end
+  end
+
   describe '.find_by_email' do
     subject { described_class.with_lowercased_email(address) }
 
