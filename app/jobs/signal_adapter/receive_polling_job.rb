@@ -30,9 +30,7 @@ module SignalAdapter
       end
 
       adapter.on(SignalAdapter::HANDLE_DELIVERY_RECEIPT) do |delivery_receipt, contributor|
-        if delivery_receipt[:isDelivery]
-          contributor.received_messages.first.update(received_at: Time.zone.at(delivery_receipt[:when]).to_datetime)
-        end
+        handle_delivery_receipt(delivery_receipt, contributor)
       end
 
       signal_messages.each do |raw_message|
@@ -69,6 +67,13 @@ module SignalAdapter
       contributor.update!(signal_onboarding_completed_at: Time.zone.now)
       SignalAdapter::Outbound.send_welcome_message!(contributor)
       SignalAdapter::AttachContributorsAvatarJob.perform_later(contributor)
+    end
+
+    def handle_delivery_receipt(delivery_receipt, contributor)
+      datetime = Time.zone.at(delivery_receipt[:when] / 1000).to_datetime
+      latest_received_message = contributor.received_messages.first
+      latest_received_message.update(received_at: datetime) if delivery_receipt[:isDelivery]
+      latest_received_message.update(read_at: datetime) if delivery_receipt[:isRead]
     end
   end
 end
