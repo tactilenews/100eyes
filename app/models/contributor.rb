@@ -8,7 +8,7 @@ class Contributor < ApplicationRecord
   attr_accessor :editor_guarantees_data_consent
 
   after_create_commit :notify_recipient
-  before_save { first_name.capitalize! }
+  before_save { titleize_first_name }
 
   multisearchable against: %i[first_name last_name username note]
 
@@ -206,6 +206,10 @@ class Contributor < ApplicationRecord
   alias additional_consent additional_consent?
 
   private
+
+  def titleize_first_name
+    self.first_name = first_name.titleize
+  end
 
   def notify_recipient
     OnboardingCompleted.with(contributor_id: id).deliver_later(User.all)
