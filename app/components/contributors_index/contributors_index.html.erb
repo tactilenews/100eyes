@@ -7,13 +7,15 @@
       <p><%= t('contributor.subheading') %></p>
     </div>
 
-    <%= c 'copy_button',
-      label: I18n.t('contributor.actions.copy_invite'),
-      styles: [:colorNavBar, :customIcon],
-      url: invites_url,
-      key: 'url',
-      custom_icon: 'onboarding-ticket'
-    %>
+    <% unless Setting.api_token.present?  %>
+      <%= c 'copy_button',
+        label: I18n.t('contributor.actions.copy_invite'),
+        styles: [:colorNavBar, :customIcon],
+        url: invites_url,
+        key: 'url',
+        custom_icon: 'onboarding-ticket'
+      %>
+    <% end %>
 
     <% header.tab_bar do %>
       <%= c('tab_bar', items: [
