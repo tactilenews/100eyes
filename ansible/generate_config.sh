@@ -52,14 +52,14 @@ rails:
   environment: production
   hundred_eyes_project_name: 100eyes
   threema:
-    api_identity: # (REQUIRED) your threema ID
-    api_secret: # (REQUIRED) your threema Secret
-    private_key: # (REQUIRED) your threema private key *without* `private:` prefix
+    api_identity:
+    api_secret:
+    private_key: # your threema private key *without* `private:` prefix
   telegram_bot:
-    api_key: # (REQUIRED) your telegram API token
-    username: # (REQUIRED) your telegram bot name, e.g. 'HundredEyesBot'
+    api_key: # 
+    username: # your telegram bot name, e.g. 'HundredEyesBot'
   postmark:
-    api_token: # (REQUIRED) API token for your new Postmark server
+    api_token:
     transactional_stream: "outbound"
     broadcasts_stream: "broadcast"
   signal:
