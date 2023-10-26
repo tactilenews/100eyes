@@ -318,5 +318,68 @@ RSpec.describe 'Api' do
         end
       end
     end
+
+    describe 'PUT /contributors/me' do
+      subject { -> { put '/v1/contributors/me', params: params, headers: headers } }
+
+      let(:params) { { phone_number: '+491234567' } }
+
+      describe 'not authorized' do
+        context 'missing auth headers' do
+          it 'returns not authorized' do
+            subject.call
+
+            expect(response).to have_http_status(:unauthorized)
+            expect(response.code.to_i).to eq(401)
+          end
+        end
+
+        context 'invalid token' do
+          let(:headers) { { 'Authorization' => "Bearer #{invalid_token}" } }
+
+          it 'returns not authorized' do
+            subject.call
+
+            expect(response).to have_http_status(:unauthorized)
+            expect(response.code.to_i).to eq(401)
+          end
+        end
+      end
+
+      describe 'authorized' do
+        let(:headers) { valid_headers }
+        let(:expected_response) do
+          {
+            status: 'ok',
+            data: {
+              id: contributor.id,
+              first_name: contributor.first_name,
+              external_id: external_id,
+              phone_number: '+491234567'
+            }
+          }
+        end
+
+        context 'unknown contributor' do
+          it 'returns not found' do
+            subject.call
+
+            expect(response).to have_http_status(:not_found)
+            expect(response.code.to_i).to eq(404)
+          end
+        end
+
+        context 'known contributor' do
+          let!(:contributor) { create(:contributor, external_id: external_id) }
+
+          it 'returns resource data' do
+            subject.call
+
+            expect(response.body).to eq(expected_response.to_json)
+            expect(response.code.to_i).to eq(200)
+          end
+        end
+      end
+    end
   end
 end

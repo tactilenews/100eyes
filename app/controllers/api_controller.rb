@@ -7,7 +7,6 @@ class ApiController < ApplicationController
   def show
     if contributor
       render_json_show_contributor
-
     else
       render json: { status: 'error', message: 'Not found' }, status: :not_found
     end
@@ -24,6 +23,18 @@ class ApiController < ApplicationController
       render_json_created_contributor
     else
       render json: { status: 'error', message: contributor.errors.full_messages.join(' ') }, status: :unprocessable_entity
+    end
+  end
+
+  def update
+    if contributor
+      if contributor.update(phone: update_contributor_params[:phone_number])
+        render_json_updated_contributor
+      else
+        render json: { status: 'error', message: contributor.errors.full_messages.join(' ') }, status: :unprocessable_entity
+      end
+    else
+      render json: { status: 'error', message: 'Not found' }, status: :not_found
     end
   end
 
@@ -86,6 +97,10 @@ class ApiController < ApplicationController
     params.permit(:first_name, :external_channel)
   end
 
+  def update_contributor_params
+    params.permit(:phone_number)
+  end
+
   def messages_params
     params.permit(:text)
   end
@@ -109,6 +124,18 @@ class ApiController < ApplicationController
         first_name: contributor.first_name,
         external_id: contributor.external_id,
         active: contributor.active?
+      }
+    }, status: :ok
+  end
+
+  def render_json_updated_contributor
+    render json: {
+      status: 'ok',
+      data: {
+        id: contributor.id,
+        first_name: contributor.first_name,
+        external_id: contributor.external_id,
+        phone_number: contributor.phone
       }
     }, status: :ok
   end
