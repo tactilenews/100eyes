@@ -9,6 +9,10 @@
         <%= c 'textarea', field.input_defaults %>
       <% end %>
 
+      <%= c 'field', object: contributor, attr: :phone do |field| %>
+        <%= c 'input', field.input_defaults %>
+      <% end %>
+
       <%= c 'submit_button', label: I18n.t('save') %>
     <% end %>
   <% end %>
