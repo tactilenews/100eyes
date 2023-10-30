@@ -51,6 +51,7 @@ traefik:
 rails:
   environment: production
   hundred_eyes_project_name: 100eyes
+  hundread_eyes_api_token:
   threema:
     api_identity:
     api_secret:

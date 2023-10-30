@@ -24,7 +24,7 @@
     DOCKER_IMAGE_TAG: "{{ docker_image_tag }}"
     RAILS_ENV: "{{ rails.environment }}"
     HUNDRED_EYES_PROJECT_NAME: "{{ rails.hundred_eyes_project_name }}"
-    HUNDRED_EYES_API_TOKEN: "{{ rails.hundred_eyes_api_token }}"
+    HUNDRED_EYES_API_TOKEN: "{{ rails.hundred_eyes_api_token | default('') }}"
     TELEGRAM_BOT_API_KEY: "{{ rails.telegram_bot.api_key | default('') }}"
     TELEGRAM_BOT_USERNAME: "{{ rails.telegram_bot.username | default('') }}"
     POSTGRES_HOST: "{{ postgres_host }}"
@@ -72,9 +72,4 @@
 - name: Create and migrate database
   command:
     cmd: docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec app bin/rails db:migrate
-    chdir: /home/ansible
-
-- name: Set Telegram webhook
-  command:
-    cmd: docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec app bin/rails telegram:bot:set_webhook
     chdir: /home/ansible
