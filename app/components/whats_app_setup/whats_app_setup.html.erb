@@ -1,0 +1,20 @@
+<%= c 'section',
+  styles: [:wide, :xlargeMarginTop, :noSpaceBetween],
+  **attrs,
+  data: { controller: 'whats-app-setup',
+          whats_app_setup_permissions_url_value: permissions_url
+        } do %>
+  <header class="WhatsAppSetup-header">
+    <%= c 'heading', style: :beta do %>
+      <%= t('.heading') %>
+    <% end %>
+    <p><%= t('.setup_explained') %></p>
+  </header>
+
+  <%= c 'button',
+    data: { action: 'whats-app-setup#openModal' },
+    class: 'Button--secondary WhatsAppSetup-openModalButton' do %>
+    <%= svg 'plus-sign' %>
+    <%= t('.open_modal_button') %>
+  <% end %>
+<% end %>

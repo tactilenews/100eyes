@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2023_10_23_130033) do
+=======
+ActiveRecord::Schema.define(version: 2023_10_24_144124) do
+>>>>>>> main
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -172,6 +176,7 @@ ActiveRecord::Schema.define(version: 2023_10_23_130033) do
     t.bigint "creator_id"
     t.string "sender_type"
     t.datetime "received_at"
+    t.datetime "read_at"
     t.index ["creator_id"], name: "index_messages_on_creator_id"
     t.index ["recipient_id"], name: "index_messages_on_recipient_id"
     t.index ["request_id"], name: "index_messages_on_request_id"
