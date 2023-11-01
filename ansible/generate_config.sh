@@ -60,7 +60,7 @@ rails:
     api_key: # 
     username: # your telegram bot name, e.g. 'HundredEyesBot'
   postmark:
-    api_token:
+    api_token: # (REQUIRED) API token for your new Postmark server
     transactional_stream: "outbound"
     broadcasts_stream: "broadcast"
   signal:

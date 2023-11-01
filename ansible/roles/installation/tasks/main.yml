@@ -35,7 +35,7 @@
     ACME_EMAIL_ADDRESS: "{{ traefik.acme_email_address }}"
     TRAEFIK_HOSTNAME: "{{ dns.traefik_hostname }}"
     APPLICATION_HOSTNAME: "{{ dns.application_hostname }}"
-    POSTMARK_API_TOKEN: "{{ rails.postmark.api_token | default('') }}"
+    POSTMARK_API_TOKEN: "{{ rails.postmark.api_token }}"
     POSTMARK_BROADCASTS_STREAM: "{{ rails.postmark.broadcasts_stream }}"
     POSTMARK_TRANSACTIONAL_STREAM: "{{ rails.postmark.transactional_stream }}"
     EMAIL_FROM_ADDRESS: "{{ rails.email_from_address }}"
