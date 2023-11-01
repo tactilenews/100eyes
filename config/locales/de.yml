@@ -353,6 +353,10 @@ de:
       empty_state:
         no_contributors: Du hast noch keine Mitglieder, verschick du Einladungslinks.
         filter_active: Keine Mitglieder mit diesen Filtern gefunden
+    whats_app_setup:
+      heading: WhatsApp-Integration
+      setup_explained: Erteilen Sie unserem Business Solutions Provider, 360dialog, die Berechtigung, Ihren WhatsApp Business Manager zu verwalten, um WhatsApp als Kanal hinzuzufügen.
+      open_modal_button: WhatsApp einrichten
     onboarding_channels_checkboxes:
       legend: Aktive Onboarding-Channel
       help_text: Achtung, hier deaktivieren sie Kanäle. Teilnehmerinnen können sich nur noch auf aktiven Kanälen anmelden.

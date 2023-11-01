@@ -2,33 +2,35 @@
 
 module WhatsApp
   class WebhookController < ApplicationController
+    include WhatsAppHandleCallbacks
+
     skip_before_action :require_login, :verify_authenticity_token
     UNSUCCESSFUL_DELIVERY = %w[undelivered failed].freeze
 
     def message
-      adapter = WhatsAppAdapter::Inbound.new
+      adapter = WhatsAppAdapter::TwilioInbound.new
 
-      adapter.on(WhatsAppAdapter::UNKNOWN_CONTRIBUTOR) do |whats_app_phone_number|
+      adapter.on(WhatsAppAdapter::TwilioInbound::UNKNOWN_CONTRIBUTOR) do |whats_app_phone_number|
         handle_unknown_contributor(whats_app_phone_number)
       end
 
-      adapter.on(WhatsAppAdapter::REQUEST_FOR_MORE_INFO) do |contributor|
+      adapter.on(WhatsAppAdapter::TwilioInbound::REQUEST_FOR_MORE_INFO) do |contributor|
         handle_request_for_more_info(contributor)
       end
 
-      adapter.on(WhatsAppAdapter::REQUEST_TO_RECEIVE_MESSAGE) do |contributor, twilio_message_sid|
+      adapter.on(WhatsAppAdapter::TwilioInbound::REQUEST_TO_RECEIVE_MESSAGE) do |contributor, twilio_message_sid|
         handle_request_to_receive_message(contributor, twilio_message_sid)
       end
 
-      adapter.on(WhatsAppAdapter::UNSUPPORTED_CONTENT) do |contributor|
-        WhatsAppAdapter::Outbound.send_unsupported_content_message!(contributor)
+      adapter.on(WhatsAppAdapter::TwilioInbound::UNSUPPORTED_CONTENT) do |contributor|
+        WhatsAppAdapter::TwilioOutbound.send_unsupported_content_message!(contributor)
       end
 
-      adapter.on(WhatsAppAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
+      adapter.on(WhatsAppAdapter::TwilioInbound::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
         handle_unsubsribe_contributor(contributor)
       end
 
-      adapter.on(WhatsAppAdapter::SUBSCRIBE_CONTRIBUTOR) do |contributor|
+      adapter.on(WhatsAppAdapter::TwilioInbound::SUBSCRIBE_CONTRIBUTOR) do |contributor|
         handle_subscribe_contributor(contributor)
       end
 
@@ -82,37 +84,11 @@ module WhatsApp
       ErrorNotifier.report(exception)
     end
 
-    def handle_request_for_more_info(contributor)
-      contributor.update!(whats_app_message_template_responded_at: Time.current)
-
-      WhatsAppAdapter::Outbound.send_more_info_message!(contributor)
-    end
-
     def handle_request_to_receive_message(contributor, twilio_message_sid)
       contributor.update!(whats_app_message_template_responded_at: Time.current, whats_app_message_template_sent_at: nil)
 
       message = (send_requested_message(contributor, twilio_message_sid) if twilio_message_sid)
-      WhatsAppAdapter::Outbound.send!(message || contributor.received_messages.first)
-    end
-
-    def handle_unsubsribe_contributor(contributor)
-      contributor.update!(deactivated_at: Time.current)
-
-      WhatsAppAdapter::Outbound.send_unsubsribed_successfully_message!(contributor)
-      ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
-      User.admin.find_each do |admin|
-        PostmarkAdapter::Outbound.contributor_marked_as_inactive!(admin, contributor)
-      end
-    end
-
-    def handle_subscribe_contributor(contributor)
-      contributor.update!(deactivated_at: nil, whats_app_message_template_responded_at: Time.current)
-
-      WhatsAppAdapter::Outbound.send_welcome_message!(contributor)
-      ContributorSubscribed.with(contributor_id: contributor.id).deliver_later(User.all)
-      User.admin.find_each do |admin|
-        PostmarkAdapter::Outbound.contributor_subscribed!(admin, contributor)
-      end
+      WhatsAppAdapter::TwilioOutbound.send!(message || contributor.received_messages.first)
     end
 
     def send_requested_message(contributor, twilio_message_sid)
