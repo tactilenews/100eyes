@@ -13,7 +13,7 @@ module SignalAdapter
           yield response if block_given?
         else
           error_message = JSON.parse(response.body)['error']
-          mark_contributor_as_inactive(contributor) if error_message.match?(/User is not registered/)
+          mark_contributor_as_inactive(contributor) if error_message.match?(/Unregistered user/)
           exception = SignalAdapter::BadRequestError.new(error_code: response.code, message: error_message)
           context = {
             code: response.code,

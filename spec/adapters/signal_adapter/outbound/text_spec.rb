@@ -24,7 +24,7 @@ RSpec.describe SignalAdapter::Outbound::Text do
       end
 
       describe 'on error' do
-        let(:error_message) { 'User is not registered' }
+        let(:error_message) { 'Unregistered user' }
         before(:each) { stub_request(:post, 'http://signal:8080/v2/send').to_return(status: 400, body: { error: error_message }.to_json) }
 
         it 'reports the error' do

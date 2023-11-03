@@ -42,12 +42,12 @@ RSpec.describe SignalAdapter::Api do
           it { should have_received(:report) }
         end
 
-        describe 'User is not registered error' do
+        describe 'Unregistered user error' do
           let!(:admin) { create_list(:user, 2, admin: true) }
           let!(:non_admin_user) { create(:user) }
 
           before do
-            stub_request(:post, uri).to_return(status: 400, body: { error: 'User is not registered' }.to_json)
+            stub_request(:post, uri).to_return(status: 400, body: { error: 'Unregistered user' }.to_json)
           end
 
           subject { -> { api.perform_request(request, recipient) } }
