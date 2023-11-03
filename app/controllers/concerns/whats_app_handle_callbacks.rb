@@ -17,7 +17,7 @@ module WhatsAppHandleCallbacks
   end
 
   def handle_unsubsribe_contributor(contributor)
-    contributor.update!(deactivated_at: Time.current)
+    contributor.update!(unsubscribed_at: Time.current)
 
     WhatsAppAdapter::Outbound.send_unsubsribed_successfully_message!(contributor)
     ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
@@ -27,7 +27,7 @@ module WhatsAppHandleCallbacks
   end
 
   def handle_subscribe_contributor(contributor)
-    contributor.update!(deactivated_at: nil, whats_app_message_template_responded_at: Time.current)
+    contributor.update!(unsubscribed_at: nil, whats_app_message_template_responded_at: Time.current)
 
     WhatsAppAdapter::Outbound.send_welcome_message!(contributor)
     ContributorSubscribed.with(contributor_id: contributor.id).deliver_later(User.all)

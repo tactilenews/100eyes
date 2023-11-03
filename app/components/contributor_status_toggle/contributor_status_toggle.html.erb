@@ -37,6 +37,14 @@
                  first_name: contributor.first_name
           ).html_safe %>
         </p>
+      <% elsif contributor.unsubscribed_at.present? %>
+        <p>
+          <%= t('.unsubscribed.text',
+                name: contributor.name,
+                project_name: Setting.project_name,
+                first_name: contributor.first_name
+          ).html_safe %>
+        </p>
       <% else %>
         <p>
           <%= t('.automatically_marked_inactive.text',
