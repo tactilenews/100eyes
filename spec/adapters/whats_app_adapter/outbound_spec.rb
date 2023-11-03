@@ -1,136 +1,184 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require 'webmock/rspec'
 
 RSpec.describe WhatsAppAdapter::Outbound do
   let(:adapter) { described_class.new }
-  let(:message) { create(:message, text: 'WhatsApp as a channel is great, no?', broadcasted: true, recipient: contributor) }
+  let!(:message) { create(:message, text: 'Tell me your favorite color, and why.', broadcasted: true, recipient: contributor) }
   let(:contributor) { create(:contributor, email: nil) }
-
-  describe '::send_welcome_message!' do
-    let(:expected_job_args) do
-      { recipient: contributor, text: I18n.t('adapter.whats_app.welcome_message', project_name: Setting.project_name) }
-    end
-    subject { -> { described_class.send_welcome_message!(contributor) } }
-    before { message } # we don't count the extra ::send here
-
-    it { should_not enqueue_job(described_class::Text) }
-
-    context 'contributor has a phone number' do
-      let(:contributor) do
-        create(
-          :contributor,
-          whats_app_phone_number: '+491511234567',
-          email: nil
-        )
-      end
-
-      it { should enqueue_job(described_class::Text).with(expected_job_args) }
-    end
-  end
 
   describe '::send!' do
     subject { -> { described_class.send!(message) } }
-    before { message } # we don't count the extra ::send here
 
-    context '`whats_app_phone_number` blank' do
-      it { should_not enqueue_job(described_class::Text) }
+    context 'with 360dialog configured' do
+      before do
+        allow(Setting).to receive(:three_sixty_dialog_client_api_key).and_return('valid_api_key')
+        allow(WhatsAppAdapter::ThreeSixtyDialogOutbound).to receive(:send!)
+        allow(WhatsAppAdapter::TwilioOutbound).to receive(:send!)
+      end
+
+      it 'it is expected to send the message with 360dialog' do
+        expect(WhatsAppAdapter::ThreeSixtyDialogOutbound).to receive(:send!).with(message)
+
+        subject.call
+      end
+
+      it 'it is expected not to send it with Twilio' do
+        expect(WhatsAppAdapter::TwilioOutbound).not_to receive(:send!)
+
+        subject.call
+      end
     end
 
-    context 'given a WhatsApp contributor' do
-      let(:contributor) do
-        create(
-          :contributor,
-          email: nil,
-          whats_app_phone_number: '+491511234567'
-        )
+    context 'without 360dialog configured' do
+      before do
+        allow(Setting).to receive(:three_sixty_dialog_client_api_key).and_return(nil)
+        allow(WhatsAppAdapter::ThreeSixtyDialogOutbound).to receive(:send!)
+        allow(WhatsAppAdapter::TwilioOutbound).to receive(:send!)
       end
 
-      describe 'contributor has not sent a message within 24 hours' do
-        it 'enqueues the Text job with WhatsApp template' do
-          expect { subject.call }.to(have_enqueued_job(described_class::Text).on_queue('default').with do |params|
-                                       expect(params[:recipient]).to eq(contributor)
-                                       expect(params[:text]).to include(contributor.first_name)
-                                       expect(params[:text]).to include(message.request.title)
-                                     end)
-        end
+      it 'it is expected not to send the message with 360dialog' do
+        expect(WhatsAppAdapter::ThreeSixtyDialogOutbound).not_to receive(:send!)
+
+        subject.call
       end
 
-      describe 'contributor has responded to a template' do
-        before { contributor.update(whats_app_message_template_responded_at: Time.current) }
+      it 'it is expected to send it with Twilio' do
+        expect(WhatsAppAdapter::TwilioOutbound).to receive(:send!).with(message)
 
-        it 'enqueues the Text job with the request text' do
-          expect { subject.call }.to(have_enqueued_job(described_class::Text).on_queue('default').with do |params|
-            expect(params[:recipient]).to eq(contributor)
-            expect(params[:text]).to eq(message.text)
-          end)
-        end
-      end
-
-      describe 'contributor has sent a reply within 24 hours' do
-        before { create(:message, sender: contributor) }
-
-        it 'enqueues the Text job with the request text' do
-          expect { subject.call }.to(have_enqueued_job(described_class::Text).on_queue('default').with do |params|
-            expect(params[:recipient]).to eq(contributor)
-            expect(params[:text]).to eq(message.text)
-          end)
-        end
-      end
-
-      describe 'message with files' do
-        let(:file) { create(:file) }
-        before { message.update(files: [file]) }
-
-        context 'contributor has not sent a message within 24 hours' do
-          it 'enqueues the Text job with WhatsApp template' do
-            expect { subject.call }.to(have_enqueued_job(described_class::Text).on_queue('default').with do |params|
-              expect(params[:recipient]).to eq(contributor)
-              expect(params[:text]).to include(contributor.first_name)
-              expect(params[:text]).to include(message.request.title)
-            end)
-          end
-        end
-
-        context 'contributor has sent a reply within 24 hours' do
-          before { create(:message, sender: contributor) }
-          it 'enqueues a File job with file, contributor, text' do
-            expect { subject.call }.to(have_enqueued_job(described_class::File).on_queue('default').with do |params|
-              expect(params[:file]).to eq(message.files.first)
-              expect(params[:recipient]).to eq(contributor)
-              expect(params[:text]).to eq(message.text)
-            end)
-          end
-        end
+        subject.call
       end
     end
   end
 
-  describe '::freeform_message_permitted?(recipient)' do
-    subject { described_class.freeform_message_permitted?(contributor) }
+  describe '::send_welcome_message!' do
+    subject { -> { described_class.send_welcome_message!(contributor) } }
 
-    describe 'template message' do
-      context  'contributor has responded' do
-        before { contributor.update(whats_app_message_template_responded_at: 1.second.ago) }
-
-        it { is_expected.to eq(true) }
+    context 'with 360dialog configured' do
+      before do
+        allow(Setting).to receive(:three_sixty_dialog_client_api_key).and_return('valid_api_key')
+        allow(WhatsAppAdapter::ThreeSixtyDialogOutbound).to receive(:send_welcome_message!)
+        allow(WhatsAppAdapter::TwilioOutbound).to receive(:send_welcome_message!)
       end
 
-      context 'contributor has not responded, and has no messages within 24 hours' do
-        it { is_expected.to eq(false) }
+      it 'it is expected to send the welcome message with 360dialog' do
+        expect(WhatsAppAdapter::ThreeSixtyDialogOutbound).to receive(:send_welcome_message!).with(contributor)
+
+        subject.call
+      end
+
+      it 'it is expected not to send the welcome message with Twilio' do
+        expect(WhatsAppAdapter::TwilioOutbound).not_to receive(:send_welcome_message!)
+
+        subject.call
       end
     end
 
-    describe 'message from contributor within 24 hours' do
-      context 'has been received' do
-        before { create(:message, sender: contributor) }
-
-        it { is_expected.to eq(true) }
+    context 'without 360dialog configured' do
+      before do
+        allow(Setting).to receive(:three_sixty_dialog_client_api_key).and_return(nil)
+        allow(WhatsAppAdapter::ThreeSixtyDialogOutbound).to receive(:send_welcome_message!)
+        allow(WhatsAppAdapter::TwilioOutbound).to receive(:send_welcome_message!)
       end
 
-      context 'has not been received' do
-        it { is_expected.to eq(false) }
+      it 'it is expected not to send the welcome message with 360dialog' do
+        expect(WhatsAppAdapter::ThreeSixtyDialogOutbound).not_to receive(:send_welcome_message!)
+
+        subject.call
+      end
+
+      it 'it is expected to send the welcome message with Twilio' do
+        expect(WhatsAppAdapter::TwilioOutbound).to receive(:send_welcome_message!).with(contributor)
+
+        subject.call
+      end
+    end
+  end
+
+  describe '::send_more_info_message!' do
+    subject { -> { described_class.send_more_info_message!(contributor) } }
+
+    context 'with 360dialog configured' do
+      before do
+        allow(Setting).to receive(:three_sixty_dialog_client_api_key).and_return('valid_api_key')
+        allow(WhatsAppAdapter::ThreeSixtyDialogOutbound).to receive(:send_more_info_message!)
+        allow(WhatsAppAdapter::TwilioOutbound).to receive(:send_more_info_message!)
+      end
+
+      it 'it is expected to send the more info message with 360dialog' do
+        expect(WhatsAppAdapter::ThreeSixtyDialogOutbound).to receive(:send_more_info_message!).with(contributor)
+
+        subject.call
+      end
+
+      it 'it is expected not to send the more info message with Twilio' do
+        expect(WhatsAppAdapter::TwilioOutbound).not_to receive(:send_more_info_message!)
+
+        subject.call
+      end
+    end
+
+    context 'without 360dialog configured' do
+      before do
+        allow(Setting).to receive(:three_sixty_dialog_client_api_key).and_return(nil)
+        allow(WhatsAppAdapter::ThreeSixtyDialogOutbound).to receive(:send_more_info_message!)
+        allow(WhatsAppAdapter::TwilioOutbound).to receive(:send_more_info_message!)
+      end
+
+      it 'it is expected not to send the more info message with 360dialog' do
+        expect(WhatsAppAdapter::ThreeSixtyDialogOutbound).not_to receive(:send_more_info_message!)
+
+        subject.call
+      end
+
+      it 'it is expected to send the more info message with Twilio' do
+        expect(WhatsAppAdapter::TwilioOutbound).to receive(:send_more_info_message!).with(contributor)
+
+        subject.call
+      end
+    end
+  end
+
+  describe '::send_unsubsribed_successfully_message!' do
+    subject { -> { described_class.send_unsubsribed_successfully_message!(contributor) } }
+
+    context 'with 360dialog configured' do
+      before do
+        allow(Setting).to receive(:three_sixty_dialog_client_api_key).and_return('valid_api_key')
+        allow(WhatsAppAdapter::ThreeSixtyDialogOutbound).to receive(:send_unsubsribed_successfully_message!)
+        allow(WhatsAppAdapter::TwilioOutbound).to receive(:send_unsubsribed_successfully_message!)
+      end
+
+      it 'it is expected to send the unsubscribed successfully message with 360dialog' do
+        expect(WhatsAppAdapter::ThreeSixtyDialogOutbound).to receive(:send_unsubsribed_successfully_message!).with(contributor)
+
+        subject.call
+      end
+
+      it 'it is expected not to send the unsubscribed successfully message with Twilio' do
+        expect(WhatsAppAdapter::TwilioOutbound).not_to receive(:send_unsubsribed_successfully_message!)
+
+        subject.call
+      end
+    end
+
+    context 'without 360dialog configured' do
+      before do
+        allow(Setting).to receive(:three_sixty_dialog_client_api_key).and_return(nil)
+        allow(WhatsAppAdapter::ThreeSixtyDialogOutbound).to receive(:send_unsubsribed_successfully_message!)
+        allow(WhatsAppAdapter::TwilioOutbound).to receive(:send_unsubsribed_successfully_message!)
+      end
+
+      it 'it is expected to send the unsubscribed successfully message with 360dialog' do
+        expect(WhatsAppAdapter::ThreeSixtyDialogOutbound).not_to receive(:send_unsubsribed_successfully_message!)
+
+        subject.call
+      end
+
+      it 'it is expected not to send the unsubscribed successfully message with Twilio' do
+        expect(WhatsAppAdapter::TwilioOutbound).to receive(:send_unsubsribed_successfully_message!).with(contributor)
+
+        subject.call
       end
     end
   end

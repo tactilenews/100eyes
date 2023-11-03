@@ -11,7 +11,7 @@ module Onboarding
     end
 
     def ensure_whats_app_is_set_up
-      return if Setting.whats_app_server_phone_number.present?
+      return if Setting.whats_app_server_phone_number.present? || Setting.three_sixty_dialog_client_api_key.present?
 
       raise ActionController::RoutingError, 'Not Found'
     end
