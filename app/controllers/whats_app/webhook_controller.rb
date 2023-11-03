@@ -6,6 +6,7 @@ module WhatsApp
 
     skip_before_action :require_login, :verify_authenticity_token
     UNSUCCESSFUL_DELIVERY = %w[undelivered failed].freeze
+    INVALID_MESSAGE_RECIPIENT_ERROR_CODE = 63_024 # https://www.twilio.com/docs/api/errors/63024
 
     def message
       adapter = WhatsAppAdapter::TwilioInbound.new
@@ -56,8 +57,13 @@ module WhatsApp
     def status
       return unless status_params['MessageStatus'].in?(UNSUCCESSFUL_DELIVERY)
 
+      whats_app_phone_number = status_params['To'].split('whatsapp:').last
+      if status_params['ErrorCode'].to_i.eql?(INVALID_MESSAGE_RECIPIENT_ERROR_CODE)
+        handle_invalid_message_recipient(whats_app_phone_number)
+        return
+      end
       exception = WhatsAppAdapter::MessageDeliveryUnsuccessfulError.new(status: status_params['MessageStatus'],
-                                                                        whats_app_phone_number: status_params['To'].split('whatsapp:').last)
+                                                                        whats_app_phone_number: whats_app_phone_number)
       ErrorNotifier.report(exception, context: { message_sid: status_params['MessageSid'] })
     end
 
@@ -75,8 +81,8 @@ module WhatsApp
     end
 
     def status_params
-      params.permit(:AccountSid, :ApiVersion, :ChannelInstallSid, :ChannelPrefix, :ChannelToAddress, :ErrorCode, :EventType,
-                    :From, :MessageSid, :MessageStatus, :SmsSid, :SmsStatus, :To)
+      params.permit(:AccountSid, :ApiVersion, :ChannelInstallSid, :ChannelPrefix, :ChannelToAddress, :ErrorCode, :ErrorMessage,
+                    :EventType, :From, :MessageSid, :MessageStatus, :SmsSid, :SmsStatus, :To)
     end
 
     def handle_unknown_contributor(whats_app_phone_number)
@@ -89,6 +95,17 @@ module WhatsApp
 
       message = (send_requested_message(contributor, twilio_message_sid) if twilio_message_sid)
       WhatsAppAdapter::TwilioOutbound.send!(message || contributor.received_messages.first)
+    end
+
+    def handle_invalid_message_recipient(whats_app_phone_number)
+      contributor = Contributor.find_by(whats_app_phone_number: whats_app_phone_number)
+      return unless contributor
+
+      contributor.update(deactivated_at: Time.current)
+      ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
+      User.admin.find_each do |admin|
+        PostmarkAdapter::Outbound.contributor_marked_as_inactive!(admin, contributor)
+      end
     end
 
     def send_requested_message(contributor, twilio_message_sid)
