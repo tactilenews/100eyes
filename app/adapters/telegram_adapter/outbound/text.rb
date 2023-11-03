@@ -7,7 +7,7 @@ module TelegramAdapter
       discard_on Telegram::Bot::Forbidden do |job|
         message = job.arguments.first[:message]
         message&.update(blocked: true)
-        contributor = message.recipient
+        contributor = message&.recipient
         return unless contributor
 
         contributor.update(deactivated_at: Time.current)
