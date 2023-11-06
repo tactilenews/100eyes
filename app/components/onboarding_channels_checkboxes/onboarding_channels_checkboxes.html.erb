@@ -1,0 +1,16 @@
+<fieldset <%= attrs %>>
+  <legend class="OnboardingChannelsCheckboxes-legend">
+    <%= t '.legend' %>
+  </legend>
+  <p class="OnboardingChannelsCheckboxes-helpText">
+    <%= t '.help_text' %>
+  </p>
+  <ul class="OnboardingChannelsCheckboxes-list">
+    <% Setting.channels.each do |key, value| %>
+      <li class="OnboardingChannelsCheckboxes-listItem">
+        <%= c 'checkbox', id: "setting[channels][#{key}]", checked: value %>
+        <label for=<%= "setting[channels][#{key}]" %>><%= key.to_s.camelize %>
+      </li>
+    <% end %>
+  </ul>
+</fieldset>

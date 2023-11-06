@@ -24,17 +24,20 @@ RSpec.describe SignalAdapter::Inbound do
     {
       envelope: {
         source: '+4912345789',
+        sourceNumber: '+4912345789',
+        sourceUuid: 'valid_uuid',
+        sourceName: 'Signal Contributor',
         sourceDevice: 1,
-        timestamp: 1_626_711_330_462,
+        timestamp: 1_694_759_894_782,
         receiptMessage: {
-          when: 1_626_711_330_462,
+          when: 1_694_759_894_782,
           isDelivery: true,
           isRead: false,
-          timestamps: [
-            1_626_711_326_111
-          ]
+          isViewed: false,
+          timestamps: [1_694_759_894_066]
         }
-      }
+      },
+      account: Setting.signal_server_phone_number
     }
   end
 
@@ -205,6 +208,7 @@ RSpec.describe SignalAdapter::Inbound do
       end
 
       context 'given a receipt message' do
+        before { create(:message, recipient_id: contributor.id) }
         let(:signal_message) { signal_receipt_message }
 
         it { should be(nil) }
@@ -512,6 +516,26 @@ RSpec.describe SignalAdapter::Inbound do
         before { signal_message[:envelope][:dataMessage][:message] = 'Bestellen' }
 
         it { is_expected.to have_received(:call) }
+      end
+    end
+
+    describe 'HANDLE_DELIVERY_RECEIPT' do
+      let(:handle_delivery_receipt_callback) { spy('handle_delivery_receipt_callback') }
+      let(:signal_message) { signal_receipt_message }
+
+      before do
+        adapter.on(SignalAdapter::HANDLE_DELIVERY_RECEIPT) do |delivery_receipt, contributor|
+          handle_delivery_receipt_callback.call(delivery_receipt, contributor)
+        end
+      end
+
+      subject do
+        adapter.consume(signal_message)
+        handle_delivery_receipt_callback
+      end
+
+      describe 'if the message is a delivery receipt' do
+        it { should have_received(:call) }
       end
     end
   end

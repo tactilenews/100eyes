@@ -78,8 +78,14 @@ module TelegramAdapter
         return sender
       end
 
+      unless text
+        trigger(UNKNOWN_CONTRIBUTOR)
+        return nil
+      end
+
       telegram_onboarding_token = text.delete_prefix('/start').strip.upcase
       sender = Contributor.find_by(telegram_id: nil, telegram_onboarding_token: telegram_onboarding_token)
+
       if sender
         sender.username = username
         sender.telegram_id = telegram_id

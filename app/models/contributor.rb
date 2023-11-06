@@ -14,7 +14,7 @@ class Contributor < ApplicationRecord
   has_many :replies, class_name: 'Message', as: :sender, dependent: :destroy
   has_many :received_messages, class_name: 'Message', inverse_of: :recipient, foreign_key: 'recipient_id', dependent: :destroy
   has_many :replied_to_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :replies
-  has_many :received_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :received_messages
+  has_many :received_requests, -> { broadcasted.reorder(broadcasted_at: :desc).distinct }, source: :request, through: :received_messages
   has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
   belongs_to :organization, optional: true
   belongs_to :deactivated_by_user, class_name: 'User', optional: true
@@ -26,8 +26,9 @@ class Contributor < ApplicationRecord
   acts_as_taggable_on :tags
 
   default_scope { order(:first_name, :last_name) }
-  scope :active, -> { where(deactivated_at: nil) }
+  scope :active, -> { where(deactivated_at: nil, unsubscribed_at: nil) }
   scope :inactive, -> { where.not(deactivated_at: nil) }
+  scope :unsubscribed, -> { where.not(unsubscribed_at: nil) }
 
   phony_normalize :signal_phone_number, default_country_code: 'DE'
   phony_normalize :whats_app_phone_number, default_country_code: 'DE'
@@ -113,7 +114,7 @@ class Contributor < ApplicationRecord
   end
 
   def active_request
-    received_requests.reorder(created_at: :desc).first || Request.reorder(created_at: :desc).first
+    received_requests.first || Request.broadcasted.first
   end
 
   def telegram?

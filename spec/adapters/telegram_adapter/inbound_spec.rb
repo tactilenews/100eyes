@@ -62,6 +62,23 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
 
       before { telegram_message['text'] = 'Do not save me without text' }
       it { should be_a(Message) }
+
+      describe 'given the payload does not have a caption nor text' do
+        let(:telegram_message) { telegram_message_from_spammer }
+
+        it { should be_nil }
+
+        describe 'when UNKNOWN_CONTRIBUTOR is registered' do
+          subject do
+            proc do |block|
+              adapter.on(TelegramAdapter::UNKNOWN_CONTRIBUTOR, &block)
+              adapter.consume(telegram_message)
+            end
+          end
+
+          it { should yield_control }
+        end
+      end
     end
 
     describe '|message|text' do
@@ -260,5 +277,46 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
      'file_size' => 20_852,
      'width' => 460,
      'height' => 460 }] }
+  end
+
+  let(:telegram_message_from_spammer) do
+    {
+      message_id: 25,
+      from: {
+        id: 5_521_147_309,
+        is_bot: false,
+        # rubocop:disable Layout/LineLength
+        first_name: "\u0423\u043c\u0438\u0440\u0430\u044e \u0438 \u0432\u0441\u0435 \u0440\u0430\u0434\u044b \u043a\u0430\u043a \u0438 \u044f)",
+        # rubocop:enable  Layout/LineLength
+        username: 'Annazollo'
+      },
+      chat: {
+        id: -1_001_597_054_590,
+        title: "Milfa \u043e\u0431\u0449\u0435\u043d\u0438\u044f \u0447\u0430\u0442",
+        username: 'milfadanil',
+        type: 'supergroup'
+      },
+      date: 1_693_849_886,
+      new_chat_participant: {
+        id: 5_829_883_840,
+        is_bot: true,
+        first_name: 'Wir sind Potsdam',
+        username: 'MAZ_Potsdam_Bot'
+      },
+      new_chat_member: {
+        id: 5_829_883_840,
+        is_bot: true,
+        first_name: 'Wir sind Potsdam',
+        username: 'MAZ_Potsdam_Bot'
+      },
+      new_chat_members: [
+        {
+          id: 5_829_883_840,
+          is_bot: true,
+          first_name: 'Wir sind Potsdam',
+          username: 'MAZ_Potsdam_Bot'
+        }
+      ]
+    }
   end
 end

@@ -9,6 +9,7 @@ class RequestDashboard < Administrate::BaseDashboard
     text: Field::String,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
+    broadcasted_at: Field::DateTime,
     messages: Field::HasMany
   }.freeze
 
@@ -16,6 +17,7 @@ class RequestDashboard < Administrate::BaseDashboard
     id
     title
     created_at
+    broadcasted_at
   ].freeze
 
   SHOW_PAGE_ATTRIBUTES = %i[
@@ -24,6 +26,7 @@ class RequestDashboard < Administrate::BaseDashboard
     text
     created_at
     updated_at
+    broadcasted_at
     messages
   ].freeze
 

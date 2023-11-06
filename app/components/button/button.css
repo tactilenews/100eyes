@@ -112,6 +112,12 @@
   padding: var(--input-padding);
 }
 
+.Button--warning {
+  --background-color: var(--color-orange-lightest);
+  --border-color: var(--color-orange);
+  --text-color: var(--color-orange-darkest);
+}
+
 .Button:disabled {
   background-color: var(--color-gray);
   pointer-events: none;

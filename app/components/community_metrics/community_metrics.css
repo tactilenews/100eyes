@@ -1,0 +1,46 @@
+.CommunityMetrics .Metric-icon > svg {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -10%;
+}
+
+@media screen and (max-width: 54.9999rem) {
+  .CommunityMetrics .Card {
+    padding-left: var(--spacing-unit-s);
+    width: 100%;
+  }
+
+  .CommunityMetrics .Metric--large .Metric-value {
+    font-size: var(--font-size);
+  }
+}
+
+@media screen and (min-width: 55rem) {
+  .CommunityMetrics > .CardMetrics {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .CommunityMetrics .Card {
+    padding-left: var(--spacing-unit-xl);
+    width: calc(50% - var(--spacing-unit-s));
+  }
+
+  .CommunityMetrics .Metric--large {
+    flex-wrap: nowrap;
+  }
+
+  .CommunityMetrics .Metric--large .Metric-icon {
+    order: 3;
+  }
+
+  .CommunityMetrics .Metric--large .Metric-label {
+    order: 2;
+    flex: 1;
+  }
+
+  .CommunityMetrics .Metric--large .Metric-value {
+    margin-right: var(--spacing-unit-s);
+  }
+}

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/ClassLength
 module PostmarkAdapter
   class Outbound < ApplicationMailer
     default template_name: :mailer
@@ -7,6 +8,16 @@ module PostmarkAdapter
 
     rescue_from Postmark::InactiveRecipientError do |exception|
       ErrorNotifier.report(exception, context: { recipients: exception.recipients }, tags: { support: 'yes' })
+      exception.recipients.each do |email_address|
+        contributor = Contributor.find_by(email: email_address)
+        next unless contributor
+
+        contributor.update(deactivated_at: Time.current)
+        ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
+        User.admin.find_each do |admin|
+          contributor_marked_as_inactive!(admin, contributor)
+        end
+      end
     end
 
     attr_reader :msg
@@ -103,7 +114,7 @@ module PostmarkAdapter
       subject = I18n.t('adapter.postmark.contributor_marked_as_inactive_email.subject', project_name: Setting.project_name,
                                                                                         contributor_name: contributor.name,
                                                                                         channel: contributor.channels.first.to_s.camelize)
-      text = I18n.t('adapter.whats_app.unsubscribe.by_request_of_contributor', contributor_name: contributor.name)
+      text = I18n.t('adapter.postmark.contributor_marked_as_inactive_email.text', contributor_name: contributor.name)
       message_stream = Setting.postmark_transactional_stream
       @text = [subject, text].join("\n")
       mail(to: admin.email, subject: subject, message_stream: message_stream)
@@ -165,3 +176,4 @@ module PostmarkAdapter
     end
   end
 end
+# rubocop:enable Metrics/ClassLength

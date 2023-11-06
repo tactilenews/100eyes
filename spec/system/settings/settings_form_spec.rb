@@ -8,6 +8,11 @@ RSpec.describe 'Permissions' do
   it 'Exposes certain fields only to admin' do
     visit settings_path(as: user)
 
+    # Channels
+    Setting.channels.each do |key, _value|
+      expect(page).not_to have_field(key.to_s.camelize, id: "setting[channels][#{key}]")
+    end
+
     # Data protection link
     expect(page).not_to have_field('Link zur Datenschutzerklärung')
     expect(page).not_to have_text(/Der Link wird während des Onboardings in der Fußzeile angezeigt. Vor der Anmeldung müssen neue/)
@@ -30,6 +35,11 @@ RSpec.describe 'Permissions' do
 
     user.update(admin: true)
     visit settings_path(as: user)
+
+    # Channels
+    Setting.channels.each do |key, _value|
+      expect(page).to have_field(key.to_s.camelize, id: "setting[channels][#{key}]")
+    end
 
     # Data protection link
     expect(page).to have_field('Link zur Datenschutzerklärung')

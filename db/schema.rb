@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_01_091224) do
+ActiveRecord::Schema.define(version: 2023_11_03_055533) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -111,10 +111,11 @@ ActiveRecord::Schema.define(version: 2023_03_01_091224) do
     t.datetime "additional_consent_given_at"
     t.bigint "organization_id"
     t.string "whats_app_phone_number"
-    t.datetime "whats_app_template_message_sent_at"
     t.datetime "whats_app_message_template_responded_at"
     t.bigint "deactivated_by_user_id"
     t.boolean "deactivated_by_admin", default: false
+    t.datetime "whats_app_message_template_sent_at"
+    t.datetime "unsubscribed_at"
     t.index ["email"], name: "index_contributors_on_email", unique: true
     t.index ["organization_id"], name: "index_contributors_on_organization_id"
     t.index ["signal_phone_number"], name: "index_contributors_on_signal_phone_number", unique: true
@@ -169,6 +170,8 @@ ActiveRecord::Schema.define(version: 2023_03_01_091224) do
     t.boolean "highlighted", default: false
     t.bigint "creator_id"
     t.string "sender_type"
+    t.datetime "received_at"
+    t.datetime "read_at"
     t.index ["creator_id"], name: "index_messages_on_creator_id"
     t.index ["recipient_id"], name: "index_messages_on_recipient_id"
     t.index ["request_id"], name: "index_messages_on_request_id"

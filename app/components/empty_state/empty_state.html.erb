@@ -1,7 +1,7 @@
 <div class="EmptyState">
   <%= c 'box' do %>
     <div class="EmptyState-icon">
-      <%= c 'icon', icon: 'a-chat' %>
+      <%= c 'icon', icon: custom_icon || 'a-chat', size: custom_icon ? 36 : 24 %>
     </div>
 
     <%= c 'heading', tag: :p, styles: [:beta] do %>

@@ -537,8 +537,8 @@ RSpec.describe Contributor, type: :model do
       it { should eq(the_request) }
     end
 
-    describe 'if a request was created' do
-      before(:each) { the_request }
+    describe 'if a request was broadcasted' do
+      before(:each) { the_request.update(broadcasted_at: 1.day.ago) }
       describe 'and afterwards a contributor joins' do
         before(:each) { contributor }
         it { should eq(the_request) }
@@ -547,9 +547,19 @@ RSpec.describe Contributor, type: :model do
 
     describe 'when many requests are sent to the contributor' do
       before(:each) do
-        another_request = create(:request, created_at: 1.day.ago)
+        another_request = create(:request, broadcasted_at: 1.day.ago)
         create(:message, request: the_request, recipient: contributor)
         create(:message, request: another_request, recipient: contributor)
+      end
+
+      it { should eq(the_request) }
+    end
+
+    describe 'when there is a planned request' do
+      before(:each) do
+        planned_request = create(:request, broadcasted_at: nil, schedule_send_for: 1.day.from_now)
+        create(:message, request: the_request, recipient: contributor)
+        create(:message, request: planned_request, recipient: contributor)
       end
 
       it { should eq(the_request) }
@@ -610,10 +620,9 @@ RSpec.describe Contributor, type: :model do
     subject { Contributor.active }
 
     context 'given some inactive and active contributors' do
-      let(:active_contributor) { create(:contributor, active: true) }
-      let(:inactive_contributor) { create(:contributor, active: false) }
-
-      before { active_contributor && inactive_contributor }
+      let!(:active_contributor) { create(:contributor, deactivated_at: nil) }
+      let!(:unsubscribed_contributor) { create(:contributor, unsubscribed_at: 1.day.ago) }
+      let!(:inactive_contributor) { create(:contributor, deactivated_at: 1.hour.ago) }
 
       it 'returns only active contributors' do
         should eq([active_contributor])
@@ -625,13 +634,26 @@ RSpec.describe Contributor, type: :model do
     subject { Contributor.inactive }
 
     context 'given some inactive and active contributors' do
-      let(:active_contributor) { create(:contributor, active: true) }
-      let(:inactive_contributor) { create(:contributor, active: false) }
-
-      before { active_contributor && inactive_contributor }
+      let!(:active_contributor) { create(:contributor, deactivated_at: nil) }
+      let!(:unsubscribed_contributor) { create(:contributor, unsubscribed_at: 1.day.ago) }
+      let!(:inactive_contributor) { create(:contributor, deactivated_at: 1.hour.ago) }
 
       it 'returns only inactive contributors' do
         should eq([inactive_contributor])
+      end
+    end
+  end
+
+  describe 'scope ::unsubscribed' do
+    subject { Contributor.unsubscribed }
+
+    context 'given some inactive and active contributors' do
+      let!(:active_contributor) { create(:contributor, deactivated_at: nil) }
+      let!(:unsubscribed_contributor) { create(:contributor, unsubscribed_at: 1.day.ago) }
+      let!(:inactive_contributor) { create(:contributor, deactivated_at: 1.hour.ago) }
+
+      it 'returns only inactive contributors' do
+        should eq([unsubscribed_contributor])
       end
     end
   end

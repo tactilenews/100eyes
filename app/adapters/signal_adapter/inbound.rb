@@ -6,6 +6,7 @@ module SignalAdapter
   CONNECT = :connect
   UNSUBSCRIBE_CONTRIBUTOR = :unsubscribe_contributor
   SUBSCRIBE_CONTRIBUTOR = :subscribe_contributor
+  HANDLE_DELIVERY_RECEIPT = :handle_delivery_receipt
 
   class Inbound
     UNKNOWN_CONTENT_KEYS = %w[mentions contacts sticker].freeze
@@ -64,9 +65,12 @@ module SignalAdapter
       sender
     end
 
+    # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     def initialize_message(signal_message)
       is_data_message = signal_message.dig(:envelope, :dataMessage)
       is_remove_emoji = signal_message.dig(:envelope, :dataMessage, :reaction, :isRemove)
+      is_delivery_receipt = signal_message.dig(:envelope, :receiptMessage)
+      trigger(HANDLE_DELIVERY_RECEIPT, is_delivery_receipt, sender) if is_delivery_receipt
       return nil if !is_data_message || is_remove_emoji
 
       data_message = signal_message.dig(:envelope, :dataMessage)
@@ -90,6 +94,7 @@ module SignalAdapter
 
       message
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
     def initialize_files(signal_message)
       attachments = signal_message.dig(:envelope, :dataMessage, :attachments)

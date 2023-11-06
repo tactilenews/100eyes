@@ -2,18 +2,21 @@
 
 class Request < ApplicationRecord
   include PlaceholderHelper
+  include PgSearch::Model
+
+  multisearchable against: %i[title text]
 
   belongs_to :user
   has_many :messages, dependent: :destroy
   has_many :contributors, through: :messages, source: :recipient
   has_many :photos, through: :messages
-  default_scope { order(created_at: :desc) }
+  default_scope { order(broadcasted_at: :desc) }
   has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
   has_many_attached :files
 
   scope :include_associations, -> { preload(messages: :sender).includes(messages: :files).eager_load(:messages) }
   scope :planned, -> { where.not(schedule_send_for: nil).where('schedule_send_for > ?', Time.current) }
-  scope :sent, -> { where(schedule_send_for: nil).or(where('schedule_send_for < ?', Time.current)) }
+  scope :broadcasted, -> { where.not(broadcasted_at: nil) }
 
   validates :files, blob: { content_type: ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'] }
   validates :title, presence: true
@@ -23,7 +26,7 @@ class Request < ApplicationRecord
 
   after_create { Request.broadcast!(self) }
 
-  after_update_commit :broadcast_updated_request, :notify_recipient
+  after_update_commit :broadcast_updated_request
 
   delegate :replies, to: :messages
 
@@ -89,14 +92,8 @@ class Request < ApplicationRecord
   private
 
   def broadcast_updated_request
-    return unless planned? && saved_change_to_schedule_send_for?
-
-    Request.broadcast!(self)
-  end
-
-  def notify_recipient
     return unless saved_change_to_schedule_send_for?
 
-    RequestScheduled.with(request_id: id).deliver_later(User.all)
+    Request.broadcast!(self)
   end
 end

@@ -10,6 +10,7 @@ module SignalAdapter
       throw(:abort) unless queue_empty?
     end
 
+    # rubocop:disable Metrics/MethodLength
     def perform(*_args)
       return if Setting.signal_server_phone_number.blank?
 
@@ -17,7 +18,7 @@ module SignalAdapter
       adapter = SignalAdapter::Inbound.new
 
       adapter.on(SignalAdapter::CONNECT) do |contributor|
-        handle_connect_contributor(contributor)
+        handle_connect(contributor)
       end
 
       adapter.on(SignalAdapter::UNKNOWN_CONTRIBUTOR) do |signal_phone_number|
@@ -37,6 +38,10 @@ module SignalAdapter
         handle_subscribe_contributor(contributor)
       end
 
+      adapter.on(SignalAdapter::HANDLE_DELIVERY_RECEIPT) do |delivery_receipt, contributor|
+        handle_delivery_receipt(delivery_receipt, contributor)
+      end
+
       signal_messages.each do |raw_message|
         adapter.consume(raw_message) { |m| m.contributor.reply(adapter) }
       rescue StandardError => e
@@ -45,6 +50,7 @@ module SignalAdapter
 
       ping_monitoring_service && return
     end
+    # rubocop:enable Metrics/MethodLength
 
     private
 
@@ -67,7 +73,7 @@ module SignalAdapter
       Delayed::Job.where(queue: queue_name, failed_at: nil).none?
     end
 
-    def handle_connect_contributor(contributor)
+    def handle_connect(contributor)
       contributor.update!(signal_onboarding_completed_at: Time.zone.now)
       SignalAdapter::Outbound.send_welcome_message!(contributor)
       SignalAdapter::AttachContributorsAvatarJob.perform_later(contributor)
@@ -97,6 +103,13 @@ module SignalAdapter
       User.admin.find_each do |admin|
         PostmarkAdapter::Outbound.contributor_subscribed!(admin, contributor)
       end
+    end
+
+    def handle_delivery_receipt(delivery_receipt, contributor)
+      datetime = Time.zone.at(delivery_receipt[:when] / 1000).to_datetime
+      latest_received_message = contributor.received_messages.first
+      latest_received_message.update(received_at: datetime) if delivery_receipt[:isDelivery]
+      latest_received_message.update(read_at: datetime) if delivery_receipt[:isRead]
     end
   end
 end
