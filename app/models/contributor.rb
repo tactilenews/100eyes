@@ -26,8 +26,9 @@ class Contributor < ApplicationRecord
   acts_as_taggable_on :tags
 
   default_scope { order(:first_name, :last_name) }
-  scope :active, -> { where(deactivated_at: nil) }
+  scope :active, -> { where(deactivated_at: nil, unsubscribed_at: nil) }
   scope :inactive, -> { where.not(deactivated_at: nil) }
+  scope :unsubscribed, -> { where.not(unsubscribed_at: nil) }
 
   phony_normalize :signal_phone_number, default_country_code: 'DE'
   phony_normalize :whats_app_phone_number, default_country_code: 'DE'

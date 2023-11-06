@@ -196,7 +196,18 @@ de:
         action: Mitglied reaktivieren
       automatically_marked_inactive:
         text: "<strong>%{name}</strong> ist ein <strong>inaktives Mitglied</strong> deiner Community und erhält aktuell keine Recherchefragen über %{project_name}."
-        possible_reason_whats_app: "<strong>%{first_name}</strong> hat darum gebeten, vom Empfang von Nachrichten über WhatsApp abgemeldet zu werden."
+        possible_reason_whats_app: |
+          Die Rufnummer wurde möglicherweise nicht bei WhatsApp registriert oder der Empfänger hat die neuen Nutzungsbedingungen und Datenschutzrichtlinien von WhatsApp nicht akzeptiert.
+          Es ist auch möglich, dass der Empfänger eine alte, nicht unterstützte Version des WhatsApp-Clients für sein Telefon verwendet. Bitte überprüfe dies mit<strong>%{first_name}</strong>.
+        possible_reason_signal: "Die Rufnummer wurde möglicherweise nicht bei Signal registriert. Bitte überprüfe dies mit <strong>%{first_name}</strong>."
+        possible_reason_threema: "Diese Threema-ID wurde möglicherweise von Threema als ungültig gemeldet. Bitte <strong>%{first_name}</strong>, die Threema-ID zu überprüfen."
+        possible_reason_email: "Diese E-Mail-Adresse wurde vom Server als inaktiv gemeldet. Das bedeutet, es können keine E-Mails an diese Adresse zugestellt werden."
+        possible_reason_telegram: "<strong>%{first_name}</strong> hat sich aktiv vom Empfang von Nachrichten auf Telegram abgemeldet. Wenn du vermutest, dass dies eine versehentliche Abmeldung ist, kontaktiere %{first_name}."
+      unsubscribed:
+        text: |
+          <strong>%{name}</strong> ist ein <strong>inaktives Mitglied</strong> deiner Community und erhält aktuell keine Recherchefragen über %{project_name}.
+          <strong>%{first_name}</strong> hat darum gebeten, vom Erhalt von Nachrichten über WhatsApp abgemeldet zu werden.
+          Wenn du vermutest, dass es sich um eine versehentliche Abmeldung handelt, kontaktiere <strong>%{first_name}</strong>.
     contributor_email_settings:
       heading: "Ausgewählter Kanal: E-Mail"
       text: "%{name} hat sich via E-Mail angemeldet."
@@ -381,7 +392,7 @@ de:
         text: "%{organization_name} hat die zahl der gebuchten Contributors überschritten. Technisch ist das kein problem. Sprich mit der Kund:in doch demnächst über eine Aufstockung des Plans."
       contributor_marked_as_inactive_email:
         subject: "%{contributor_name} wurde bei %{channel} als inaktiv markiert, weil er keine Nachrichten mehr von %{project_name} empfangen kann."
-        text: Wenn Sie vermuten, dass es sich um eine versehentliche Abmeldung handelt, setzen Sie sich mit %{contributor_name} in Verbindung. Vielleicht möchte die Person die Nachrichten lieber über einen anderen Kanal empfangen? Dann verschicken Sie einen neuen Anmelde-Link.
+        text: "Wenn Sie vermuten, dass es sich um eine versehentliche Abmeldung handelt, setzen Sie sich mit %{contributor_name} in Verbindung. Vielleicht möchte die Person die Nachrichten lieber über einen anderen Kanal empfangen? Dann verschicken Sie einen neuen Anmelde-Link."
       contributor_subscribed_email:
         subject: "%{contributor_name} hat erneut den Empfang von Nachrichten über %{channel} von %{project_name} angefordert."
     whats_app:
@@ -910,7 +921,7 @@ de:
       text_html: "Die Frage <strong>%{request_title}</strong> wurde für den Versand am %{date} um %{time} geplant und wird an %{contributors_count} Community-Mitgliedern versendet."
       link_text: Zur Frage
     contributor_marked_inactive:
-      text_html: "<strong>%{contributor_name}</strong> wurde als inaktiv markiert, weil sie keine Fragen mehr zu %{contributor_channel} erhalten können."
+      text_html: "<strong>%{contributor_name}</strong> wurde als inaktiv markiert, weil die Person über diesen Kanal keine Fragen mehr zu %{contributor_channel} erhalten können."
       link_text: "Zum Profil"
     contributor_subscribed:
       text_html: "<strong>%{contributor_name}</strong> hat beantragt, erneut Nachrichten per %{contributor_channel} zu bestellen."

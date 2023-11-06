@@ -178,8 +178,8 @@ RSpec.describe WhatsApp::WebhookController do
                      "_#{I18n.t('adapter.whats_app.subscribe.instructions')}_"].join("\n\n") }
           end
 
-          it 'marks contributor as inactive' do
-            expect { subject.call }.to change { contributor.reload.deactivated_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+          it 'marks contributor as unsubscribed' do
+            expect { subject.call }.to change { contributor.reload.unsubscribed_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
           end
 
           it 'enqueues a job to inform the contributor of successful unsubscribe' do
@@ -212,7 +212,7 @@ RSpec.describe WhatsApp::WebhookController do
           let!(:non_admin_user) { create(:user) }
 
           before do
-            contributor.update(deactivated_at: Time.current)
+            contributor.update(unsubscribed_at: Time.current)
             params['Body'] = 'Bestellen'
           end
 
@@ -221,7 +221,7 @@ RSpec.describe WhatsApp::WebhookController do
           end
 
           it 'marks contributor as active' do
-            expect { subject.call }.to change { contributor.reload.deactivated_at }.from(kind_of(ActiveSupport::TimeWithZone)).to(nil)
+            expect { subject.call }.to change { contributor.reload.unsubscribed_at }.from(kind_of(ActiveSupport::TimeWithZone)).to(nil)
           end
 
           it 'marks that contributor has responded to template message' do
