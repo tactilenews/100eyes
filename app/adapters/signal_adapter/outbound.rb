@@ -30,7 +30,7 @@ module SignalAdapter
       def send_unsubsribed_successfully_message!(contributor)
         return unless contributor_can_receive_messages?(contributor)
 
-        text = [I18n.t('adapter.shared.unsubscribe.successful'), "_#{I18n.t('adapter.shared.subscribe.instructions')}_"].join("\n\n")
+        text = [I18n.t('adapter.shared.unsubscribe.successful'), I18n.t('adapter.shared.subscribe.instructions')].join("\n\n")
         SignalAdapter::Outbound::Text.perform_later(recipient: contributor, text: text)
       end
 
