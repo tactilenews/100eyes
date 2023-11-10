@@ -32,14 +32,14 @@ module WhatsAppAdapter
       def send_more_info_message!(contributor)
         return unless contributor_can_receive_messages?(contributor)
 
-        text = [Setting.about, "_#{I18n.t('adapter.whats_app.unsubscribe.instructions')}_"].join("\n\n")
+        text = [Setting.about, "_#{I18n.t('adapter.shared.unsubscribe.instructions')}_"].join("\n\n")
         WhatsAppAdapter::Outbound::Text.perform_later(recipient: contributor, text: text)
       end
 
       def send_unsubsribed_successfully_message!(contributor)
         return unless contributor_can_receive_messages?(contributor)
 
-        text = [I18n.t('adapter.whats_app.unsubscribe.successful'), "_#{I18n.t('adapter.whats_app.subscribe.instructions')}_"].join("\n\n")
+        text = [I18n.t('adapter.shared.unsubscribe.successful'), "_#{I18n.t('adapter.shared.subscribe.instructions')}_"].join("\n\n")
         WhatsAppAdapter::Outbound::Text.perform_later(recipient: contributor, text: text)
       end
 

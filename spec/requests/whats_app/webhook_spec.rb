@@ -155,7 +155,7 @@ RSpec.describe WhatsApp::WebhookController do
         context 'request for more info' do
           before { params['Body'] = 'Mehr Infos' }
           let(:more_info_job_args) do
-            { recipient: contributor, text: [Setting.about, "_#{I18n.t('adapter.whats_app.unsubscribe.instructions')}_"].join("\n\n") }
+            { recipient: contributor, text: [Setting.about, "_#{I18n.t('adapter.shared.unsubscribe.instructions')}_"].join("\n\n") }
           end
 
           it 'enqueues a job to send more info message' do
@@ -174,8 +174,8 @@ RSpec.describe WhatsApp::WebhookController do
           before { params['Body'] = 'Abbestellen' }
           let(:sucessful_unsubscribe_job_args) do
             { recipient: contributor,
-              text: [I18n.t('adapter.whats_app.unsubscribe.successful'),
-                     "_#{I18n.t('adapter.whats_app.subscribe.instructions')}_"].join("\n\n") }
+              text: [I18n.t('adapter.shared.unsubscribe.successful'),
+                     "_#{I18n.t('adapter.shared.subscribe.instructions')}_"].join("\n\n") }
           end
 
           it 'marks contributor as unsubscribed' do
