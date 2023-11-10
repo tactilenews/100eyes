@@ -28,6 +28,12 @@ module SignalAdapter
       @sender = initialize_sender(signal_message)
       return unless @sender
 
+      delivery_receipt = initialize_delivery_receipt(signal_message)
+      return if delivery_receipt
+
+      remove_emoji = signal_message.dig(:envelope, :dataMessage, :reaction, :isRemove)
+      return if remove_emoji
+
       @message = initialize_message(signal_message)
       return unless @message
 
@@ -65,13 +71,17 @@ module SignalAdapter
       sender
     end
 
-    # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    def initialize_delivery_receipt(signal_message)
+      delivery_receipt = signal_message.dig(:envelope, :receiptMessage)
+      return nil unless delivery_receipt
+
+      trigger(HANDLE_DELIVERY_RECEIPT, delivery_receipt, sender)
+      delivery_receipt
+    end
+
     def initialize_message(signal_message)
       is_data_message = signal_message.dig(:envelope, :dataMessage)
-      is_remove_emoji = signal_message.dig(:envelope, :dataMessage, :reaction, :isRemove)
-      is_delivery_receipt = signal_message.dig(:envelope, :receiptMessage)
-      trigger(HANDLE_DELIVERY_RECEIPT, is_delivery_receipt, sender) if is_delivery_receipt
-      return nil if !is_data_message || is_remove_emoji
+      return nil unless is_data_message
 
       data_message = signal_message.dig(:envelope, :dataMessage)
       reaction = data_message[:reaction]
@@ -94,7 +104,6 @@ module SignalAdapter
 
       message
     end
-    # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
     def initialize_files(signal_message)
       attachments = signal_message.dig(:envelope, :dataMessage, :attachments)
