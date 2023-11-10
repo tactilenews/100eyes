@@ -26,6 +26,9 @@ module SignalAdapter
       @sender = initialize_sender(signal_message)
       return unless @sender
 
+      delivery_receipt = initialize_delivery_receipt(signal_message)
+      return if delivery_receipt
+
       @message = initialize_message(signal_message)
       return unless @message
 
@@ -64,11 +67,18 @@ module SignalAdapter
       sender
     end
 
+    def initialize_delivery_receipt(signal_message)
+      delivery_receipt = signal_message.dig(:envelope, :receiptMessage)
+      return nil unless delivery_receipt
+
+      trigger(HANDLE_DELIVERY_RECEIPT, delivery_receipt, sender)
+      delivery_receipt
+    end
+
     def initialize_message(signal_message)
       is_data_message = signal_message.dig(:envelope, :dataMessage)
       is_remove_emoji = signal_message.dig(:envelope, :dataMessage, :reaction, :isRemove)
-      is_delivery_receipt = signal_message.dig(:envelope, :receiptMessage)
-      trigger(HANDLE_DELIVERY_RECEIPT, is_delivery_receipt, sender) if is_delivery_receipt
+
       return nil if !is_data_message || is_remove_emoji
 
       data_message = signal_message.dig(:envelope, :dataMessage)
