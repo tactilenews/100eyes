@@ -140,7 +140,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
 
       context 'request for more info' do
         before { params[:messages].first[:text][:body] = 'Mehr Infos' }
-        let(:text) { [Setting.about, "_#{I18n.t('adapter.whats_app.unsubscribe.instructions')}_"].join("\n\n") }
+        let(:text) { [Setting.about, "_#{I18n.t('adapter.shared.unsubscribe.instructions')}_"].join("\n\n") }
 
         it 'marks that contributor has responded to template message' do
           expect { subject.call }.to change {
@@ -169,7 +169,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
 
         before { params[:messages].first[:text][:body] = 'Abbestellen' }
         let(:text) do
-          [I18n.t('adapter.whats_app.unsubscribe.successful'), "_#{I18n.t('adapter.whats_app.subscribe.instructions')}_"].join("\n\n")
+          [I18n.t('adapter.shared.unsubscribe.successful'), "_#{I18n.t('adapter.shared.subscribe.instructions')}_"].join("\n\n")
         end
 
         it 'marks contributor as inactive' do

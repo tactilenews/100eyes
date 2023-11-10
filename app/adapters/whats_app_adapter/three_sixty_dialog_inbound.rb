@@ -160,13 +160,13 @@ module WhatsAppAdapter
     def unsubscribe_text?(text)
       return false if text.blank?
 
-      text.downcase.strip.eql?(I18n.t('adapter.whats_app.unsubscribe.text'))
+      text.downcase.strip.eql?(I18n.t('adapter.shared.unsubscribe.text'))
     end
 
     def subscribe_text?(text)
       return false if text.blank?
 
-      text.downcase.strip.eql?(I18n.t('adapter.whats_app.subscribe.text'))
+      text.downcase.strip.eql?(I18n.t('adapter.shared.subscribe.text'))
     end
 
     def create_message?

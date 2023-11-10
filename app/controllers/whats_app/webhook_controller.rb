@@ -97,11 +97,6 @@ module WhatsApp
       WhatsAppAdapter::TwilioOutbound.send!(message || contributor.received_messages.first)
     end
 
-    def handle_unsubscribe_contributor(contributor)
-      contributor.update!(deactivated_at: Time.current)
-      WhatsAppAdapter::Outbound.send_unsubsribed_successfully_message!(contributor)
-    end
-
     def handle_invalid_message_recipient(whats_app_phone_number)
       contributor = Contributor.find_by(whats_app_phone_number: whats_app_phone_number)
       return unless contributor
@@ -110,23 +105,6 @@ module WhatsApp
       ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
       User.admin.find_each do |admin|
         PostmarkAdapter::Outbound.contributor_marked_as_inactive!(admin, contributor)
-      end
-    end
-
-    def handle_subscribe_contributor(contributor)
-      if contributor.deactivated_by_user.present?
-        exception = StandardError.new(
-          "Contributor #{contributor.name} has been deactivated by #{contributor.deactivated_by_user.name} and has tried to re-subscribe"
-        )
-        ErrorNotifier.report(exception)
-        return
-      end
-
-      contributor.update!(deactivated_at: nil)
-      WhatsAppAdapter::Outbound.send_welcome_message!(contributor)
-      ContributorSubscribed.with(contributor_id: contributor.id).deliver_later(User.all)
-      User.admin.find_each do |admin|
-        PostmarkAdapter::Outbound.contributor_subscribed!(admin, contributor)
       end
     end
 
