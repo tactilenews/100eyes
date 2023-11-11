@@ -108,7 +108,7 @@ RSpec.describe Threema::WebhookController do
 
         it 'deactivates the contributor' do
           Timecop.freeze(Time.zone.local(2008, 9, 1, 12, 0, 0)) do
-            expect { subject }.to change { contributor.reload.deactivated_at }.from(nil).to(Time.current)
+            expect { subject }.to change { contributor.reload.unsubscribed_at }.from(nil).to(Time.current)
           end
         end
 
@@ -137,14 +137,14 @@ RSpec.describe Threema::WebhookController do
       describe 'Re-subscribe' do
         let(:threema_mock) { instance_double(Threema::Receive::Text, content: 'Bestellen') }
         let(:admin) { create(:user, admin: true) }
-        let(:deactivated_at) { Time.zone.local(2023, 0o4, 0o1) }
+        let(:unsubscribed_at) { Time.zone.local(2023, 0o4, 0o1) }
 
         before do
           allow(Threema::Lookup).to receive(:new).with({ threema: threema }).and_return(threema_lookup_double)
           allow(threema_lookup_double).to receive(:key).and_return('PUBLIC_KEY_HEX_ENCODED')
           allow(Setting).to receive(:onboarding_success_heading).and_return('Welcome!')
           allow(Setting).to receive(:onboarding_success_text).and_return('')
-          contributor.update!(deactivated_at: deactivated_at)
+          contributor.update!(unsubscribed_at: unsubscribed_at)
         end
 
         it 'does not create a message' do
@@ -153,7 +153,7 @@ RSpec.describe Threema::WebhookController do
 
         it 're-activates the contributor' do
           Timecop.freeze(Time.zone.local(2023, 0o4, 25)) do
-            expect { subject }.to change { contributor.reload.deactivated_at }.from(deactivated_at).to(nil)
+            expect { subject }.to change { contributor.reload.unsubscribed_at }.from(unsubscribed_at).to(nil)
           end
         end
 

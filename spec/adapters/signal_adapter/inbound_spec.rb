@@ -497,7 +497,7 @@ RSpec.describe SignalAdapter::Inbound do
       let(:subscribe_contributor_callback) { spy('subscribe_contributor_callback') }
 
       before do
-        contributor.update!(deactivated_at: 1.week.ago)
+        contributor.update!(unsubscribed_at: 1.week.ago)
         adapter.on(SignalAdapter::SUBSCRIBE_CONTRIBUTOR) do |contributor|
           subscribe_contributor_callback.call(contributor)
         end

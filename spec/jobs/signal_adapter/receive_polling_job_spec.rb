@@ -172,6 +172,15 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
       end
     end
 
+    describe 'given a known', vcr: { cassette_name: :receive_signal_message_to_unsubscribe } do
+      context 'contributor requests to unsubscribe' do
+        it_behaves_like 'a Contributor unsubscribes',
+                        nil,
+                        { signal_phone_number: '+4915112345789', signal_onboarding_completed_at: Time.zone.now },
+                        SignalAdapter::Outbound::Text
+      end
+    end
+
     describe 'given the Signal server is unavailable' do
       let(:error_message) do
         [['error', "Error while checking account #{Setting.signal_server_phone_number}: [502] Bad response: 502 \n"]].to_json
