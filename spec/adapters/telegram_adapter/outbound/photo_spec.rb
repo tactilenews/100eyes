@@ -20,7 +20,7 @@ RSpec.describe TelegramAdapter::Outbound::Photo do
         .and_return(ActiveStorage::Blob.service.path_for(photos.second.attachment.blob.key))
     end
 
-    subject { adapter.perform(telegram_id: message.recipient.telegram_id, media: media, message: message) }
+    subject { adapter.perform(contributor_id: message.recipient.id, media: media, message: message) }
     let(:expected_message) do
       { chat_id: 4,
         media: [

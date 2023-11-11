@@ -19,8 +19,11 @@ module TelegramAdapter
 
       attr_reader :telegram_id, :message
 
-      def perform(telegram_id:, media:, message: nil)
-        @telegram_id = telegram_id
+      def perform(contributor_id:, media:, message: nil)
+        contributor = Contributor.find(contributor_id)
+        return unless contributor
+
+        @telegram_id = contributor.telegram_id
         @message = message
         media_array = media.map.with_index do |photo, index|
           {

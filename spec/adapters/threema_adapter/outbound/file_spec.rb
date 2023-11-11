@@ -29,7 +29,7 @@ RSpec.describe ThreemaAdapter::Outbound::File do
     end
     subject do
       lambda {
-        adapter.perform(recipient: message.recipient,
+        adapter.perform(contributor_id: message.recipient.id,
                         file_path: file_path,
                         file_name: message.files.first.attachment.blob.filename.to_s,
                         caption: message.text,

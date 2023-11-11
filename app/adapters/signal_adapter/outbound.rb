@@ -10,28 +10,28 @@ module SignalAdapter
         if message.files.present?
           SignalAdapter::Outbound::File.perform_later(message: message)
         else
-          SignalAdapter::Outbound::Text.perform_later(recipient: recipient, text: message.text)
+          SignalAdapter::Outbound::Text.perform_later(contributor_id: recipient.id, text: message.text)
         end
       end
 
       def send_unknown_content_message!(contributor)
         return unless contributor_can_receive_messages?(contributor)
 
-        SignalAdapter::Outbound::Text.perform_later(recipient: contributor, text: Setting.signal_unknown_content_message)
+        SignalAdapter::Outbound::Text.perform_later(contributor_id: contributor, text: Setting.signal_unknown_content_message)
       end
 
       def send_welcome_message!(contributor)
         return unless contributor_can_receive_messages?(contributor)
 
         welcome_message = [Setting.onboarding_success_heading, Setting.onboarding_success_text].join("\n")
-        SignalAdapter::Outbound::Text.perform_later(recipient: contributor, text: welcome_message)
+        SignalAdapter::Outbound::Text.perform_later(contributor_id: contributor.id, text: welcome_message)
       end
 
       def send_unsubsribed_successfully_message!(contributor)
         return unless contributor_can_receive_messages?(contributor)
 
         text = [I18n.t('adapter.shared.unsubscribe.successful'), I18n.t('adapter.shared.subscribe.instructions')].join("\n\n")
-        SignalAdapter::Outbound::Text.perform_later(recipient: contributor, text: text)
+        SignalAdapter::Outbound::Text.perform_later(contributor_id: contributor.id, text: text)
       end
 
       def contributor_can_receive_messages?(recipient)

@@ -148,10 +148,10 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
           end
 
           it 'schedules a welcome message' do
-            expect { subject.call }.to have_enqueued_job(TelegramAdapter::Outbound::Text) do |text, telegram_id|
-              expect(text).to eq('Welcome!/n')
-              expect(telegram_id).to eq(contributor.telegram_id)
-            end
+            expect { subject.call }.to(have_enqueued_job(TelegramAdapter::Outbound::Text).with do |params|
+              expect(params[:text]).to eq("<b>Welcome!</b>\n")
+              expect(params[:contributor_id]).to eq(contributor.id)
+            end)
           end
 
           it_behaves_like 'an ActivityNotification', 'ContributorSubscribed'

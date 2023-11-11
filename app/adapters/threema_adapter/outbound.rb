@@ -22,26 +22,26 @@ module ThreemaAdapter
       def send_welcome_message!(contributor)
         return unless contributor&.threema_id
 
-        ThreemaAdapter::Outbound::Text.perform_later(text: welcome_message, recipient: contributor)
+        ThreemaAdapter::Outbound::Text.perform_later(contributor_id: contributor.id, text: welcome_message)
       end
 
       def send_unsupported_content_message!(contributor)
         return unless contributor&.threema_id
 
-        ThreemaAdapter::Outbound::Text.perform_later(text: Setting.threema_unknown_content_message, recipient: contributor)
+        ThreemaAdapter::Outbound::Text.perform_later(contributor_id: contributor.id, text: Setting.threema_unknown_content_message)
       end
 
       def send_unsubsribed_successfully_message!(contributor)
         return unless contributor&.threema_id
 
         text = [I18n.t('adapter.shared.unsubscribe.successful'), "_#{I18n.t('adapter.shared.subscribe.instructions')}_"].join("\n\n")
-        ThreemaAdapter::Outbound::Text.perform_later(text: text, recipient: contributor)
+        ThreemaAdapter::Outbound::Text.perform_later(contributor_id: contributor.id, text: text)
       end
 
       def send_files(files, message)
         files.each_with_index do |file, index|
           ThreemaAdapter::Outbound::File.perform_later(
-            recipient: message.recipient,
+            contributor_id: message.recipient.id,
             file_path: ActiveStorage::Blob.service.path_for(file.attachment.blob.key),
             file_name: file.attachment.blob.filename.to_s,
             caption: index.zero? ? message.text : nil,
@@ -51,7 +51,7 @@ module ThreemaAdapter
       end
 
       def send_text(message)
-        ThreemaAdapter::Outbound::Text.perform_later(recipient: message.recipient, text: message.text)
+        ThreemaAdapter::Outbound::Text.perform_later(contributor_id: message.recipient.id, text: message.text)
       end
     end
   end

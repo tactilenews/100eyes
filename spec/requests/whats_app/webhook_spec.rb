@@ -86,7 +86,7 @@ RSpec.describe WhatsApp::WebhookController do
 
       context 'responding to template' do
         before { contributor.update(whats_app_message_template_sent_at: Time.current) }
-        let(:latest_message_job_args) { { recipient: contributor, text: contributor.received_messages.first.text } }
+        let(:latest_message_job_args) { { contributor_id: contributor.id, text: contributor.received_messages.first.text } }
 
         context 'request to receive latest message' do
           it 'enqueues a job to send the latest received message' do
@@ -112,7 +112,7 @@ RSpec.describe WhatsApp::WebhookController do
 
             describe 'previous request' do
               let(:requested_message_job_args) do
-                { recipient: contributor, text: previous_request.messages.where(recipient_id: contributor.id).first.text }
+                { contributor_id: contributor.id, text: previous_request.messages.where(recipient_id: contributor.id).first.text }
               end
               let(:body_text) do
                 "Some template message with request title „#{previous_request.title}“. Wenn du antworten möchtest, klicke auf 'Antworten'."
@@ -127,7 +127,7 @@ RSpec.describe WhatsApp::WebhookController do
 
             describe 'newer request' do
               let(:requested_message_job_args) do
-                { recipient: contributor, text: newer_request.messages.where(recipient_id: contributor.id).first.text }
+                { contributor_id: contributor.id, text: newer_request.messages.where(recipient_id: contributor.id).first.text }
               end
               let(:body_text) do
                 "Some template message with request title „#{newer_request.title}“. Wenn du antworten möchtest, klicke auf 'Antworten'."
@@ -155,7 +155,7 @@ RSpec.describe WhatsApp::WebhookController do
         context 'request for more info' do
           before { params['Body'] = 'Mehr Infos' }
           let(:more_info_job_args) do
-            { recipient: contributor, text: [Setting.about, "_#{I18n.t('adapter.shared.unsubscribe.instructions')}_"].join("\n\n") }
+            { contributor_id: contributor.id, text: [Setting.about, "_#{I18n.t('adapter.shared.unsubscribe.instructions')}_"].join("\n\n") }
           end
 
           it 'enqueues a job to send more info message' do
@@ -173,7 +173,7 @@ RSpec.describe WhatsApp::WebhookController do
 
           before { params['Body'] = 'Abbestellen' }
           let(:sucessful_unsubscribe_job_args) do
-            { recipient: contributor,
+            { contributor_id: contributor.id,
               text: [I18n.t('adapter.shared.unsubscribe.successful'),
                      "_#{I18n.t('adapter.shared.subscribe.instructions')}_"].join("\n\n") }
           end
@@ -217,7 +217,7 @@ RSpec.describe WhatsApp::WebhookController do
           end
 
           let(:sucessful_subscribe_job_args) do
-            { recipient: contributor, text: I18n.t('adapter.whats_app.welcome_message', project_name: Setting.project_name) }
+            { contributor_id: contributor.id, text: I18n.t('adapter.whats_app.welcome_message', project_name: Setting.project_name) }
           end
 
           it 'marks contributor as active' do
