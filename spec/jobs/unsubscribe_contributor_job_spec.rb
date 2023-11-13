@@ -24,12 +24,13 @@ RSpec.describe UnsubscribeContributorJob do
 
     context 'Threema contributor' do
       let(:adapter) { ThreemaAdapter::Outbound }
-      let(:mock_threema_lookup) { Threema::Lookup.new(threema: Threema.new) }
+      let(:threema_lookup_double) { instance_double(Threema::Lookup) }
+      let(:threema) { instance_double(Threema) }
       let(:threema_id) { 'Z1234567' }
-      let(:valid_threema_id) { 'valid_public_key' }
       before do
-        allow(Threema::Lookup).to receive(:new).and_return(mock_threema_lookup)
-        allow(mock_threema_lookup).to receive(:key).with(threema_id).and_return(valid_threema_id)
+        allow(Threema).to receive(:new).and_return(threema)
+        allow(Threema::Lookup).to receive(:new).with({ threema: threema }).and_return(threema_lookup_double)
+        allow(threema_lookup_double).to receive(:key).and_return('PUBLIC_KEY_HEX_ENCODED')
       end
 
       it_behaves_like 'a Contributor unsubscribes', ThreemaAdapter::Outbound::Text do

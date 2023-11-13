@@ -37,7 +37,7 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
     end
 
     adapter.on(TelegramAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
-      handle_unsubscribe_contributor(contributor)
+      UnsubscribeContributorJob.perform_later(contributor.id, TelegramAdapter::Outbound)
     end
 
     adapter.on(TelegramAdapter::SUBSCRIBE_CONTRIBUTOR) do |contributor|
@@ -53,15 +53,6 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
   end
 
   private
-
-  def handle_unsubscribe_contributor(contributor)
-    contributor.update!(unsubscribed_at: Time.current)
-    TelegramAdapter::Outbound.send_unsubsribed_successfully_message!(contributor)
-    ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
-    User.admin.find_each do |admin|
-      PostmarkAdapter::Outbound.contributor_marked_as_inactive!(admin, contributor)
-    end
-  end
 
   def handle_subscribe_contributor(contributor)
     if contributor.deactivated_by_user.present?

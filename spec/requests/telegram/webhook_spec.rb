@@ -123,9 +123,9 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
 
         context 'who would like to unsubscribe' do
           let(:message) { 'Abbestellen' }
-          let(:chat_id) { 123_456_789 }
+          let(:chat_id) { 12_345 }
 
-          it_behaves_like 'a Contributor unsubscribes', :with_an_avatar, { telegram_id: 123_456_789 }, TelegramAdapter::Outbound::Text
+          it { is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(contributor.id, TelegramAdapter::Outbound) }
         end
 
         context 'who has unsubsribed, and would like to re-subscribe' do

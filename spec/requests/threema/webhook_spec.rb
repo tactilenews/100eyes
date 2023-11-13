@@ -93,44 +93,9 @@ RSpec.describe Threema::WebhookController do
 
       describe 'Unsubscribe' do
         let(:threema_mock) { instance_double(Threema::Receive::Text, content: 'Abbestellen') }
-        let(:unsubscribed_successfully_text) do
-          [I18n.t('adapter.shared.unsubscribe.successful'), "_#{I18n.t('adapter.shared.subscribe.instructions')}_"].join("\n\n")
-        end
-        let(:admin) { create(:user, admin: true) }
-        before do
-          allow(Threema::Lookup).to receive(:new).with({ threema: threema }).and_return(threema_lookup_double)
-          allow(threema_lookup_double).to receive(:key).and_return('PUBLIC_KEY_HEX_ENCODED')
-        end
 
-        it 'does not create a message' do
-          expect { subject }.not_to change(Message, :count)
-        end
-
-        it 'deactivates the contributor' do
-          Timecop.freeze(Time.zone.local(2008, 9, 1, 12, 0, 0)) do
-            expect { subject }.to change { contributor.reload.unsubscribed_at }.from(nil).to(Time.current)
-          end
-        end
-
-        it 'schedules an unsubscribed_successfully message' do
-          expect { subject }.to have_enqueued_job(ThreemaAdapter::Outbound::Text) do |text, recipient|
-            expect(text).to eq(unsubscribed_successfully_text)
-            expect(recipient).to eq(contributor)
-          end
-        end
-
-        it_behaves_like 'an ActivityNotification', 'ContributorMarkedInactive'
-
-        it 'sends an email out to all admin' do
-          expect { subject }.to have_enqueued_job.on_queue('default').with(
-            'PostmarkAdapter::Outbound',
-            'contributor_marked_as_inactive_email',
-            'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
-            {
-              params: { admin: admin, contributor: contributor },
-              args: []
-            }
-          )
+        it 'enqueues a job to unsubscribe the contributor' do
+          expect { subject }.to have_enqueued_job(UnsubscribeContributorJob).with(contributor.id, ThreemaAdapter::Outbound)
         end
       end
 

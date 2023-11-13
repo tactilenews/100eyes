@@ -172,13 +172,9 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
       end
     end
 
-    describe 'given a known', vcr: { cassette_name: :receive_signal_message_to_unsubscribe } do
-      context 'contributor requests to unsubscribe' do
-        it_behaves_like 'a Contributor unsubscribes',
-                        nil,
-                        { signal_phone_number: '+4915112345789', signal_onboarding_completed_at: Time.zone.now },
-                        SignalAdapter::Outbound::Text
-      end
+    describe 'given a known contributor requests to unsubscribe', vcr: { cassette_name: :receive_signal_message_to_unsubscribe } do
+      let!(:contributor) { create(:contributor, signal_phone_number: '+4915112345789', signal_onboarding_completed_at: Time.zone.now) }
+      it { is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(contributor.id, SignalAdapter::Outbound) }
     end
 
     describe 'given the Signal server is unavailable' do

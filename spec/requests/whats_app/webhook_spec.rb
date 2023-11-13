@@ -168,43 +168,9 @@ RSpec.describe WhatsApp::WebhookController do
         end
 
         context 'request to unsubscribe' do
-          let!(:admin) { create_list(:user, 2, admin: true) }
-          let!(:non_admin_user) { create(:user) }
-
           before { params['Body'] = 'Abbestellen' }
-          let(:sucessful_unsubscribe_job_args) do
-            { contributor_id: contributor.id,
-              text: [I18n.t('adapter.shared.unsubscribe.successful'),
-                     "_#{I18n.t('adapter.shared.subscribe.instructions')}_"].join("\n\n") }
-          end
 
-          it 'marks contributor as unsubscribed' do
-            expect { subject.call }.to change { contributor.reload.unsubscribed_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
-          end
-
-          it 'enqueues a job to inform the contributor of successful unsubscribe' do
-            expect do
-              subject.call
-            end.to have_enqueued_job(WhatsAppAdapter::Outbound::Text).on_queue('default').with(sucessful_unsubscribe_job_args)
-          end
-
-          it_behaves_like 'an ActivityNotification', 'ContributorMarkedInactive'
-
-          it 'enqueues a job to inform admin' do
-            expect { subject.call }.to have_enqueued_job.on_queue('default').with(
-              'PostmarkAdapter::Outbound',
-              'contributor_marked_as_inactive_email',
-              'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
-              {
-                params: { admin: an_instance_of(User), contributor: contributor },
-                args: []
-              }
-            ).exactly(2).times
-          end
-
-          it 'does not enqueue a job to send the latest received message' do
-            expect { subject.call }.not_to have_enqueued_job(WhatsAppAdapter::Outbound::Text).with(latest_message_job_args)
-          end
+          it { is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(contributor.id, WhatsAppAdapter::Outbound) }
         end
 
         context 'request to re-subscribe' do

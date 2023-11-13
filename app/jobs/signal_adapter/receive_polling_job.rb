@@ -31,7 +31,7 @@ module SignalAdapter
       end
 
       adapter.on(SignalAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
-        handle_unsubscribe_contributor(contributor)
+        UnsubscribeContributorJob.perform_later(contributor.id, SignalAdapter::Outbound)
       end
 
       adapter.on(SignalAdapter::SUBSCRIBE_CONTRIBUTOR) do |contributor|
@@ -77,15 +77,6 @@ module SignalAdapter
       contributor.update!(signal_onboarding_completed_at: Time.zone.now)
       SignalAdapter::Outbound.send_welcome_message!(contributor)
       SignalAdapter::AttachContributorsAvatarJob.perform_later(contributor)
-    end
-
-    def handle_unsubscribe_contributor(contributor)
-      contributor.update!(unsubscribed_at: Time.current)
-      SignalAdapter::Outbound.send_unsubsribed_successfully_message!(contributor)
-      ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
-      User.admin.find_each do |admin|
-        PostmarkAdapter::Outbound.contributor_marked_as_inactive!(admin, contributor)
-      end
     end
 
     def handle_subscribe_contributor(contributor)
