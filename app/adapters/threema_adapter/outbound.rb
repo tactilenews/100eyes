@@ -38,6 +38,13 @@ module ThreemaAdapter
         ThreemaAdapter::Outbound::Text.perform_later(contributor_id: contributor.id, text: text)
       end
 
+      def send_resubscribe_error_message!(contributor)
+        return unless contributor&.threema_id
+
+        ThreemaAdapter::Outbound::Text.perform_later(contributor_id: contributor.id,
+                                                     text: I18n.t('adapter.shared.subscribe.resubscribe_failure'))
+      end
+
       def send_files(files, message)
         files.each_with_index do |file, index|
           ThreemaAdapter::Outbound::File.perform_later(

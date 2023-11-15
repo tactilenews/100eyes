@@ -426,9 +426,7 @@ de:
       subscribe:
         text: bestellen
         instructions: Um unseren Kanal erneut zu bestellen, schreiben Sie "bestellen".
-  jobs:
-    resubscribed_contributor_job:
-      resubscribed_error: Eine Registrierung ist aktuell nicht möglich. Ihr Account wurde deaktiviert. Bitte wenden Sie sich an kontakt@tactile.news
+        resubscribe_failure: Eine Registrierung ist aktuell nicht möglich. Ihr Account wurde deaktiviert. Bitte wenden Sie sich an kontakt@tactile.news
 
   save: Speichern
   cancel: Abbrechen

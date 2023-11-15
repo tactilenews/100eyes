@@ -11,6 +11,8 @@ module WhatsAppAdapter
 
       delegate :send_unsubsribed_successfully_message!, to: :business_solution_provider
 
+      delegate :send_resubscribe_error_message!, to: :business_solution_provider
+
       private
 
       def business_solution_provider

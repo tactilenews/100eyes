@@ -43,6 +43,13 @@ module WhatsAppAdapter
         WhatsAppAdapter::Outbound::Text.perform_later(contributor_id: contributor.id, text: text)
       end
 
+      def send_resubscribe_error_message!(contributor)
+        return unless contributor_can_receive_messages?(contributor)
+
+        WhatsAppAdapter::Outbound::Text.perform_later(contributor_id: contributor.id,
+                                                      text: I18n.t('adapter.shared.subscribe.resubscribe_failure'))
+      end
+
       private
 
       def contributor_can_receive_messages?(recipient)

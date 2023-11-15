@@ -3,16 +3,19 @@
 class ResubscribeContributorJob < ApplicationJob
   queue_as :resubscribe_contributor
 
+  class ResubscribeError < StandardError; end
+
   def perform(contributor_id, adapter)
     contributor = Contributor.find(contributor_id)
     return unless contributor
 
     if contributor.deactivated_by_user.present? || contributor.deactivated_by_admin?
-      exception = StandardError.new(
-        "Contributor #{contributor.name} has been deactivated by #{contributor.deactivated_by_user&.name || 'an admin'} and has tried to re-subscribe"
+      deactivated_by = (contributor.deactivated_by_user&.name || 'an admin')
+      exception = ResubscribeContributorJob::ResubscribeError.new(
+        "Contributor #{contributor.name} has been deactivated by #{deactivated_by} and has tried to re-subscribe"
       )
       ErrorNotifier.report(exception)
-      adapter.send_resubscribe_error_message!(contributor, I18n.t('jobs.resubscribed_contributor_job.resubscribed_error'))
+      adapter.send_resubscribe_error_message!(contributor)
       return
     end
 

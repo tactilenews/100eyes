@@ -12,7 +12,35 @@ RSpec.describe ResubscribeContributorJob do
       let(:adapter) { SignalAdapter::Outbound }
 
       it_behaves_like 'a Contributor resubscribes', SignalAdapter::Outbound::Text do
-        let(:contributor) { create(:contributor, signal_phone_number: '+491234567', signal_onboarding_completed_at: Time.current, unsubscribed_at: 1.day.ago) }
+        let(:contributor) do
+          create(:contributor, signal_phone_number: '+491234567', signal_onboarding_completed_at: Time.current, unsubscribed_at: 1.day.ago)
+        end
+      end
+
+      describe 'which has been marked inactive by a user' do
+        it_behaves_like 'a resubscribe failure', SignalAdapter::Outbound::Text do
+          let(:contributor) do
+            create(:contributor,
+                   signal_phone_number: '+491234567',
+                   signal_onboarding_completed_at: Time.current,
+                   unsubscribed_at: 1.day.ago,
+                   deactivated_at: Time.current,
+                   deactivated_by_user: create(:user))
+          end
+        end
+      end
+
+      describe 'which has been marked inactive by an admin' do
+        it_behaves_like 'a resubscribe failure', SignalAdapter::Outbound::Text do
+          let(:contributor) do
+            create(:contributor,
+                   signal_phone_number: '+491234567',
+                   signal_onboarding_completed_at: Time.current,
+                   unsubscribed_at: 1.day.ago,
+                   deactivated_at: Time.current,
+                   deactivated_by_admin: true)
+          end
+        end
       end
     end
 
@@ -21,6 +49,30 @@ RSpec.describe ResubscribeContributorJob do
 
       it_behaves_like 'a Contributor resubscribes', TelegramAdapter::Outbound::Text do
         let(:contributor) { create(:contributor, telegram_id: 123_456_789, unsubscribed_at: 1.week.ago) }
+      end
+
+      describe 'which has been marked inactive by a user' do
+        it_behaves_like 'a resubscribe failure', TelegramAdapter::Outbound::Text do
+          let(:contributor) do
+            create(:contributor,
+                   telegram_id: 123_456_789,
+                   unsubscribed_at: 1.week.ago,
+                   deactivated_at: Time.current,
+                   deactivated_by_user: create(:user))
+          end
+        end
+      end
+
+      describe 'which has been marked inactive by an admin' do
+        it_behaves_like 'a resubscribe failure', TelegramAdapter::Outbound::Text do
+          let(:contributor) do
+            create(:contributor,
+                   telegram_id: 123_456_789,
+                   unsubscribed_at: 1.week.ago,
+                   deactivated_at: Time.current,
+                   deactivated_by_admin: true)
+          end
+        end
       end
     end
 
@@ -36,10 +88,35 @@ RSpec.describe ResubscribeContributorJob do
       end
 
       it_behaves_like 'a Contributor resubscribes', ThreemaAdapter::Outbound::Text do
-        let(:contributor) { create(:contributor,  threema_id: threema_id, unsubscribed_at: 1.month.ago) }
+        let(:contributor) { create(:contributor, threema_id: threema_id, unsubscribed_at: 1.month.ago) }
+      end
+
+      describe 'which has been marked inactive by a user' do
+        it_behaves_like 'a resubscribe failure', ThreemaAdapter::Outbound::Text do
+          let(:contributor) do
+            create(:contributor,
+                   threema_id: threema_id,
+                   unsubscribed_at: 1.month.ago,
+                   deactivated_at: Time.current,
+                   deactivated_by_user: create(:user))
+          end
+        end
+      end
+
+      describe 'which has been marked inactive by an admin' do
+        it_behaves_like 'a resubscribe failure', ThreemaAdapter::Outbound::Text do
+          let(:contributor) do
+            create(:contributor,
+                   threema_id: threema_id,
+                   unsubscribed_at: 1.month.ago,
+                   deactivated_at: Time.current,
+                   deactivated_by_admin: true)
+          end
+        end
       end
     end
 
+    # rubocop:disable Style/FormatStringToken
     context 'unsubscribed WhatsApp contributor' do
       let(:adapter) { WhatsAppAdapter::Outbound }
       let(:whats_app_welcome_template) { I18n.t('adapter.whats_app.welcome_message').gsub('%{project_name}', '100eyes') }
@@ -48,8 +125,65 @@ RSpec.describe ResubscribeContributorJob do
       end
 
       it_behaves_like 'a Contributor resubscribes', WhatsAppAdapter::Outbound::Text do
-        let(:contributor) { create(:contributor,  whats_app_phone_number: '+491234567', unsubscribed_at: 5.days.ago) }
+        let(:contributor) { create(:contributor, whats_app_phone_number: '+491234567', unsubscribed_at: 5.days.ago) }
+      end
+
+      context 'Twilio' do
+        before { allow(Setting).to receive(:three_sixty_dialog_client_api_key).and_return(nil) }
+
+        describe 'which has been marked inactive by a user' do
+          it_behaves_like 'a resubscribe failure', WhatsAppAdapter::Outbound::Text do
+            let(:contributor) do
+              create(:contributor,
+                     whats_app_phone_number: '+491234567',
+                     unsubscribed_at: 5.days.ago,
+                     deactivated_at: Time.current,
+                     deactivated_by_user: create(:user))
+            end
+          end
+        end
+
+        describe 'which has been marked inactive by an admin' do
+          it_behaves_like 'a resubscribe failure', WhatsAppAdapter::Outbound::Text do
+            let(:contributor) do
+              create(:contributor,
+                     whats_app_phone_number: '+491234567',
+                     unsubscribed_at: 5.days.ago,
+                     deactivated_at: Time.current,
+                     deactivated_by_admin: true)
+            end
+          end
+        end
+      end
+
+      context '360dialog' do
+        before { allow(Setting).to receive(:three_sixty_dialog_client_api_key).and_return('valid_api_key') }
+
+        describe 'which has been marked inactive by a user' do
+          it_behaves_like 'a resubscribe failure', WhatsAppAdapter::Outbound::ThreeSixtyDialogText do
+            let(:contributor) do
+              create(:contributor,
+                     whats_app_phone_number: '+491234567',
+                     unsubscribed_at: 5.days.ago,
+                     deactivated_at: Time.current,
+                     deactivated_by_user: create(:user))
+            end
+          end
+        end
+
+        describe 'which has been marked inactive by an admin' do
+          it_behaves_like 'a resubscribe failure', WhatsAppAdapter::Outbound::ThreeSixtyDialogText do
+            let(:contributor) do
+              create(:contributor,
+                     whats_app_phone_number: '+491234567',
+                     unsubscribed_at: 5.days.ago,
+                     deactivated_at: Time.current,
+                     deactivated_by_admin: true)
+            end
+          end
+        end
       end
     end
+    # rubocop:enable Style/FormatStringToken
   end
 end
