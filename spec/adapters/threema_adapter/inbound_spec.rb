@@ -215,18 +215,18 @@ RSpec.describe ThreemaAdapter::Inbound do
       end
     end
 
-    describe 'SUBSCRIBE_CONTRIBUTOR' do
-      let(:subscribe_contributor_callback) { spy('subscribe_contributor_callback') }
+    describe 'RESUBSCRIBE_CONTRIBUTOR' do
+      let(:resubscribe_contributor_callback) { spy('resubscribe_contributor_callback') }
 
       before do
-        adapter.on(ThreemaAdapter::SUBSCRIBE_CONTRIBUTOR) do |contributor|
-          subscribe_contributor_callback.call(contributor)
+        adapter.on(ThreemaAdapter::RESUBSCRIBE_CONTRIBUTOR) do |contributor|
+          resubscribe_contributor_callback.call(contributor)
         end
       end
 
       subject do
         adapter.consume(threema_message)
-        subscribe_contributor_callback
+        resubscribe_contributor_callback
       end
 
       context 'any text other than the keyword Bestellen' do

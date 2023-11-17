@@ -5,7 +5,7 @@ module SignalAdapter
   UNKNOWN_CONTENT = :unknown_content
   CONNECT = :connect
   UNSUBSCRIBE_CONTRIBUTOR = :unsubscribe_contributor
-  SUBSCRIBE_CONTRIBUTOR = :subscribe_contributor
+  RESUBSCRIBE_CONTRIBUTOR = :resubscribe_contributor
   HANDLE_DELIVERY_RECEIPT = :handle_delivery_receipt
 
   class Inbound
@@ -88,7 +88,7 @@ module SignalAdapter
 
       message_text = reaction ? reaction[:emoji] : data_message[:message]
       trigger(UNSUBSCRIBE_CONTRIBUTOR, sender) if unsubscribe_text?(message_text)
-      trigger(SUBSCRIBE_CONTRIBUTOR, sender) if subscribe_text?(message_text)
+      trigger(RESUBSCRIBE_CONTRIBUTOR, sender) if subscribe_text?(message_text)
 
       message = Message.new(text: message_text, sender: sender)
       message.raw_data.attach(

@@ -35,7 +35,7 @@ module WhatsApp
         UnsubscribeContributorJob.perform_later(contributor.id, WhatsAppAdapter::Outbound)
       end
 
-      adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::SUBSCRIBE_CONTRIBUTOR) do |contributor|
+      adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::RESUBSCRIBE_CONTRIBUTOR) do |contributor|
         ResubscribeContributorJob.perform_later(contributor.id, WhatsAppAdapter::Outbound)
       end
 

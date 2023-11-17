@@ -5,7 +5,7 @@ module TelegramAdapter
   UNKNOWN_CONTENT = :unknown_content
   CONNECT = :connect
   UNSUBSCRIBE_CONTRIBUTOR = :unsubscribe_contributor
-  SUBSCRIBE_CONTRIBUTOR = :subscribe_contributor
+  RESUBSCRIBE_CONTRIBUTOR = :resubscribe_contributor
 
   class Inbound
     UNKNOWN_CONTENT_KEYS = %w[
@@ -98,7 +98,7 @@ module TelegramAdapter
 
     def initialize_message(telegram_message)
       trigger(UNSUBSCRIBE_CONTRIBUTOR, sender) if unsubscribe_text?(text)
-      trigger(SUBSCRIBE_CONTRIBUTOR, sender) if subscribe_text?(text)
+      trigger(RESUBSCRIBE_CONTRIBUTOR, sender) if subscribe_text?(text)
 
       media_group_id = telegram_message['media_group_id']
       message = Message.find_by(telegram_media_group_id: media_group_id) if media_group_id

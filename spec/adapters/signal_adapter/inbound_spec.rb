@@ -493,19 +493,19 @@ RSpec.describe SignalAdapter::Inbound do
       end
     end
 
-    describe 'SUBSCRIBE_CONTRIBUTOR' do
-      let(:subscribe_contributor_callback) { spy('subscribe_contributor_callback') }
+    describe 'RESUBSCRIBE_CONTRIBUTOR' do
+      let(:resubscribe_contributor_callback) { spy('resubscribe_contributor_callback') }
 
       before do
         contributor.update!(unsubscribed_at: 1.week.ago)
-        adapter.on(SignalAdapter::SUBSCRIBE_CONTRIBUTOR) do |contributor|
-          subscribe_contributor_callback.call(contributor)
+        adapter.on(SignalAdapter::RESUBSCRIBE_CONTRIBUTOR) do |contributor|
+          resubscribe_contributor_callback.call(contributor)
         end
       end
 
       subject do
         adapter.consume(signal_message)
-        subscribe_contributor_callback
+        resubscribe_contributor_callback
       end
 
       context 'any text other than the keyword Bestellen' do

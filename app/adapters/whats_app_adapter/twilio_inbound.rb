@@ -7,7 +7,7 @@ module WhatsAppAdapter
     REQUEST_FOR_MORE_INFO = :request_for_more_info
     REQUEST_TO_RECEIVE_MESSAGE = :request_to_receive_message
     UNSUBSCRIBE_CONTRIBUTOR = :unsubscribe_contributor
-    SUBSCRIBE_CONTRIBUTOR = :subscribe_contributor
+    RESUBSCRIBE_CONTRIBUTOR = :resubscribe_contributor
     UNSUPPORTED_CONTENT_TYPES = %w[application text/vcard latitude longitude].freeze
 
     attr_reader :sender, :text, :message
@@ -65,7 +65,7 @@ module WhatsAppAdapter
 
       trigger(REQUEST_FOR_MORE_INFO, sender) if request_for_more_info?(message_text)
       trigger(UNSUBSCRIBE_CONTRIBUTOR, sender) if unsubscribe_text?(message_text)
-      trigger(SUBSCRIBE_CONTRIBUTOR, sender) if subscribe_text?(message_text)
+      trigger(RESUBSCRIBE_CONTRIBUTOR, sender) if subscribe_text?(message_text)
       trigger(REQUEST_TO_RECEIVE_MESSAGE, sender, original_replied_message_sid) if request_to_receive_message?(sender, whats_app_message)
 
       message = Message.new(text: message_text, sender: sender)

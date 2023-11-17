@@ -20,7 +20,7 @@ class Threema::WebhookController < ApplicationController
       UnsubscribeContributorJob.perform_later(contributor.id, ThreemaAdapter::Outbound)
     end
 
-    adapter.on(ThreemaAdapter::SUBSCRIBE_CONTRIBUTOR) do |contributor|
+    adapter.on(ThreemaAdapter::RESUBSCRIBE_CONTRIBUTOR) do |contributor|
       ResubscribeContributorJob.perform_later(contributor.id, ThreemaAdapter::Outbound)
     end
 

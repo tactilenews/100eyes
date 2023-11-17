@@ -40,7 +40,7 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
       UnsubscribeContributorJob.perform_later(contributor.id, TelegramAdapter::Outbound)
     end
 
-    adapter.on(TelegramAdapter::SUBSCRIBE_CONTRIBUTOR) do |contributor|
+    adapter.on(TelegramAdapter::RESUBSCRIBE_CONTRIBUTOR) do |contributor|
       ResubscribeContributorJob.perform_later(contributor.id, TelegramAdapter::Outbound)
     end
 

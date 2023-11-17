@@ -34,7 +34,7 @@ module SignalAdapter
         UnsubscribeContributorJob.perform_later(contributor.id, SignalAdapter::Outbound)
       end
 
-      adapter.on(SignalAdapter::SUBSCRIBE_CONTRIBUTOR) do |contributor|
+      adapter.on(SignalAdapter::RESUBSCRIBE_CONTRIBUTOR) do |contributor|
         ResubscribeContributorJob.perform_later(contributor.id, SignalAdapter::Outbound)
       end
 
