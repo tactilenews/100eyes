@@ -130,43 +130,9 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
 
         context 'who has unsubsribed, and would like to re-subscribe' do
           let(:message) { 'Bestellen' }
-          let(:admin) { create(:user, admin: true) }
-          let(:unsubscribed_at) { Time.zone.local(2023, 0o4, 0o1) }
+          before { contributor.update!(unsubscribed_at: 1.day.ago) }
 
-          before do
-            allow(Setting).to receive(:onboarding_success_heading).and_return('Welcome!')
-            allow(Setting).to receive(:onboarding_success_text).and_return('')
-            contributor.update!(unsubscribed_at: unsubscribed_at)
-          end
-
-          it 'does not create a message' do
-            expect { subject.call }.not_to change(Message, :count)
-          end
-
-          it 're-activates the contributor' do
-            expect { subject.call }.to change { contributor.reload.unsubscribed_at }.from(unsubscribed_at).to(nil)
-          end
-
-          it 'schedules a welcome message' do
-            expect { subject.call }.to(have_enqueued_job(TelegramAdapter::Outbound::Text).with do |params|
-              expect(params[:text]).to eq("<b>Welcome!</b>\n")
-              expect(params[:contributor_id]).to eq(contributor.id)
-            end)
-          end
-
-          it_behaves_like 'an ActivityNotification', 'ContributorSubscribed'
-
-          it 'sends an email out to all admin' do
-            expect { subject.call }.to have_enqueued_job.on_queue('default').with(
-              'PostmarkAdapter::Outbound',
-              'contributor_subscribed_email',
-              'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
-              {
-                params: { admin: admin, contributor: contributor },
-                args: []
-              }
-            )
-          end
+          it { is_expected.to have_enqueued_job(ResubscribeContributorJob).with(contributor.id, TelegramAdapter::Outbound) }
         end
       end
     end

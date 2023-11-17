@@ -35,7 +35,7 @@ module SignalAdapter
       end
 
       adapter.on(SignalAdapter::SUBSCRIBE_CONTRIBUTOR) do |contributor|
-        handle_subscribe_contributor(contributor)
+        ResubscribeContributorJob.perform_later(contributor.id, SignalAdapter::Outbound)
       end
 
       adapter.on(SignalAdapter::HANDLE_DELIVERY_RECEIPT) do |delivery_receipt, contributor|
@@ -77,23 +77,6 @@ module SignalAdapter
       contributor.update!(signal_onboarding_completed_at: Time.zone.now)
       SignalAdapter::Outbound.send_welcome_message!(contributor)
       SignalAdapter::AttachContributorsAvatarJob.perform_later(contributor)
-    end
-
-    def handle_subscribe_contributor(contributor)
-      if contributor.deactivated_by_user.present?
-        exception = StandardError.new(
-          "Contributor #{contributor.name} has been deactivated by #{contributor.deactivated_by_user.name} and has tried to re-subscribe"
-        )
-        ErrorNotifier.report(exception)
-        return
-      end
-
-      contributor.update!(unsubscribed_at: nil)
-      SignalAdapter::Outbound.send_welcome_message!(contributor)
-      ContributorSubscribed.with(contributor_id: contributor.id).deliver_later(User.all)
-      User.admin.find_each do |admin|
-        PostmarkAdapter::Outbound.contributor_subscribed!(admin, contributor)
-      end
     end
 
     def handle_delivery_receipt(delivery_receipt, contributor)

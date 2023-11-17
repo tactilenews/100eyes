@@ -101,46 +101,13 @@ RSpec.describe Threema::WebhookController do
 
       describe 'Re-subscribe' do
         let(:threema_mock) { instance_double(Threema::Receive::Text, content: 'Bestellen') }
-        let(:admin) { create(:user, admin: true) }
-        let(:unsubscribed_at) { Time.zone.local(2023, 0o4, 0o1) }
-
         before do
-          allow(Threema::Lookup).to receive(:new).with({ threema: threema }).and_return(threema_lookup_double)
-          allow(threema_lookup_double).to receive(:key).and_return('PUBLIC_KEY_HEX_ENCODED')
-          allow(Setting).to receive(:onboarding_success_heading).and_return('Welcome!')
-          allow(Setting).to receive(:onboarding_success_text).and_return('')
-          contributor.update!(unsubscribed_at: unsubscribed_at)
+          contributor.unsubscribed_at = 1.day.ago
+          contributor.save(validate: false)
         end
 
-        it 'does not create a message' do
-          expect { subject }.not_to change(Message, :count)
-        end
-
-        it 're-activates the contributor' do
-          Timecop.freeze(Time.zone.local(2023, 0o4, 25)) do
-            expect { subject }.to change { contributor.reload.unsubscribed_at }.from(unsubscribed_at).to(nil)
-          end
-        end
-
-        it 'schedules a welcome message' do
-          expect { subject }.to have_enqueued_job(ThreemaAdapter::Outbound::Text) do |text, recipient|
-            expect(text).to eq('Welcome!/n')
-            expect(recipient).to eq(contributor)
-          end
-        end
-
-        it_behaves_like 'an ActivityNotification', 'ContributorSubscribed'
-
-        it 'sends an email out to all admin' do
-          expect { subject }.to have_enqueued_job.on_queue('default').with(
-            'PostmarkAdapter::Outbound',
-            'contributor_subscribed_email',
-            'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
-            {
-              params: { admin: admin, contributor: contributor },
-              args: []
-            }
-          )
+        it 'enqueues a job to resubscribe the contributor' do
+          expect { subject }.to have_enqueued_job(ResubscribeContributorJob).with(contributor.id, ThreemaAdapter::Outbound)
         end
       end
     end

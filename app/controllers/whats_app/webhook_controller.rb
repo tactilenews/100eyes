@@ -32,7 +32,7 @@ module WhatsApp
       end
 
       adapter.on(WhatsAppAdapter::TwilioInbound::SUBSCRIBE_CONTRIBUTOR) do |contributor|
-        handle_subscribe_contributor(contributor)
+        ResubscribeContributorJob.perform_later(contributor.id, WhatsAppAdapter::Outbound)
       end
 
       whats_app_message_params = message_params.to_h.transform_keys(&:underscore)

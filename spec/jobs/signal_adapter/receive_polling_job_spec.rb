@@ -177,6 +177,16 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
       it { is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(contributor.id, SignalAdapter::Outbound) }
     end
 
+    describe 'given a contributor who has unsubscribed and requests to resubscribe',
+             vcr: { cassette_name: :receive_signal_message_to_resubscribe } do
+      let!(:contributor) do
+        create(:contributor, signal_phone_number: '+4915112345789', signal_onboarding_completed_at: Time.zone.now,
+                             unsubscribed_at: 1.week.ago)
+      end
+
+      it { is_expected.to have_enqueued_job(ResubscribeContributorJob).with(contributor.id, SignalAdapter::Outbound) }
+    end
+
     describe 'given the Signal server is unavailable' do
       let(:error_message) do
         [['error', "Error while checking account #{Setting.signal_server_phone_number}: [502] Bad response: 502 \n"]].to_json
