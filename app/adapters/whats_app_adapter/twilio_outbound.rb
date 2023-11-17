@@ -39,7 +39,7 @@ module WhatsAppAdapter
       def send_unsubsribed_successfully_message!(contributor)
         return unless contributor_can_receive_messages?(contributor)
 
-        text = [I18n.t('adapter.shared.unsubscribe.successful'), "_#{I18n.t('adapter.shared.subscribe.instructions')}_"].join("\n\n")
+        text = [I18n.t('adapter.shared.unsubscribe.successful'), "_#{I18n.t('adapter.shared.resubscribe.instructions')}_"].join("\n\n")
         WhatsAppAdapter::Outbound::Text.perform_later(contributor_id: contributor.id, text: text)
       end
 
@@ -47,7 +47,7 @@ module WhatsAppAdapter
         return unless contributor_can_receive_messages?(contributor)
 
         WhatsAppAdapter::Outbound::Text.perform_later(contributor_id: contributor.id,
-                                                      text: I18n.t('adapter.shared.subscribe.resubscribe_failure'))
+                                                      text: I18n.t('adapter.shared.resubscribe.failure'))
       end
 
       private

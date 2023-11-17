@@ -3,7 +3,7 @@
 module ThreemaAdapter
   UNKNOWN_CONTRIBUTOR = :unknown_contributor
   UNSUBSCRIBE_CONTRIBUTOR = :unsubscribe_contributor
-  SUBSCRIBE_CONTRIBUTOR = :subscribe_contributor
+  RESUBSCRIBE_CONTRIBUTOR = :resubscribe_contributor
   UNSUPPORTED_CONTENT = :unsupported_content
 
   class Inbound
@@ -66,7 +66,7 @@ module ThreemaAdapter
       text = initialize_text(decrypted_message)
 
       trigger(UNSUBSCRIBE_CONTRIBUTOR, sender) if unsubscribe_text?(text)
-      trigger(SUBSCRIBE_CONTRIBUTOR, sender) if subscribe_text?(text)
+      trigger(RESUBSCRIBE_CONTRIBUTOR, sender) if resubscribe_text?(text)
       message = Message.new(text: text, sender: sender)
       message.raw_data.attach(
         io: StringIO.new(decrypted_message.content),
@@ -114,8 +114,8 @@ module ThreemaAdapter
       text&.downcase&.strip.eql?(I18n.t('adapter.shared.unsubscribe.text'))
     end
 
-    def subscribe_text?(text)
-      text&.downcase&.strip.eql?(I18n.t('adapter.shared.subscribe.text'))
+    def resubscribe_text?(text)
+      text&.downcase&.strip.eql?(I18n.t('adapter.shared.resubscribe.text'))
     end
 
     def create_message?

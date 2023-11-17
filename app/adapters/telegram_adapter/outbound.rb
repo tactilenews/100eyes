@@ -29,7 +29,8 @@ module TelegramAdapter
       def send_unsubsribed_successfully_message!(contributor)
         return unless contributor&.telegram_id
 
-        text = [I18n.t('adapter.shared.unsubscribe.successful'), "<em>#{I18n.t('adapter.shared.subscribe.instructions')}</em>"].join("\n\n")
+        text = [I18n.t('adapter.shared.unsubscribe.successful'),
+                "<em>#{I18n.t('adapter.shared.resubscribe.instructions')}</em>"].join("\n\n")
         TelegramAdapter::Outbound::Text.perform_later(contributor_id: contributor.id, text: text)
       end
 
@@ -37,7 +38,7 @@ module TelegramAdapter
         return unless contributor&.telegram_id
 
         TelegramAdapter::Outbound::Text.perform_later(contributor_id: contributor.id,
-                                                      text: I18n.t('adapter.shared.subscribe.resubscribe_failure'))
+                                                      text: I18n.t('adapter.shared.resubscribe.failure'))
       end
     end
   end

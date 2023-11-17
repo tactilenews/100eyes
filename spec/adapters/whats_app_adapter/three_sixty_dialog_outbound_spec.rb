@@ -240,7 +240,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
 
       before do
         text_payload[:text][:body] = [I18n.t('adapter.shared.unsubscribe.successful'),
-                                      "_#{I18n.t('adapter.shared.subscribe.instructions')}_"].join("\n\n")
+                                      "_#{I18n.t('adapter.shared.resubscribe.instructions')}_"].join("\n\n")
       end
 
       it { is_expected.to enqueue_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText).with({ payload: text_payload }) }

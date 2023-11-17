@@ -98,7 +98,7 @@ module TelegramAdapter
 
     def initialize_message(telegram_message)
       trigger(UNSUBSCRIBE_CONTRIBUTOR, sender) if unsubscribe_text?(text)
-      trigger(RESUBSCRIBE_CONTRIBUTOR, sender) if subscribe_text?(text)
+      trigger(RESUBSCRIBE_CONTRIBUTOR, sender) if resubscribe_text?(text)
 
       media_group_id = telegram_message['media_group_id']
       message = Message.find_by(telegram_media_group_id: media_group_id) if media_group_id
@@ -164,8 +164,8 @@ module TelegramAdapter
       text&.downcase&.strip.eql?(I18n.t('adapter.shared.unsubscribe.text'))
     end
 
-    def subscribe_text?(text)
-      text&.downcase&.strip.eql?(I18n.t('adapter.shared.subscribe.text'))
+    def resubscribe_text?(text)
+      text&.downcase&.strip.eql?(I18n.t('adapter.shared.resubscribe.text'))
     end
 
     def create_message?

@@ -66,7 +66,7 @@ module WhatsAppAdapter
 
       trigger(REQUEST_FOR_MORE_INFO, sender) if request_for_more_info?(text)
       trigger(UNSUBSCRIBE_CONTRIBUTOR, sender) if unsubscribe_text?(text)
-      trigger(RESUBSCRIBE_CONTRIBUTOR, sender) if subscribe_text?(text)
+      trigger(RESUBSCRIBE_CONTRIBUTOR, sender) if resubscribe_text?(text)
       trigger(REQUEST_TO_RECEIVE_MESSAGE, sender) if request_to_receive_message?(sender, text)
 
       message = Message.new(text: text, sender: sender)
@@ -143,7 +143,7 @@ module WhatsAppAdapter
     end
 
     def request_to_receive_message?(contributor, text)
-      return false if request_for_more_info?(text) || unsubscribe_text?(text) || subscribe_text?(text)
+      return false if request_for_more_info?(text) || unsubscribe_text?(text) || resubscribe_text?(text)
 
       contributor.whats_app_message_template_sent_at.present?
     end
@@ -163,10 +163,10 @@ module WhatsAppAdapter
       text.downcase.strip.eql?(I18n.t('adapter.shared.unsubscribe.text'))
     end
 
-    def subscribe_text?(text)
+    def resubscribe_text?(text)
       return false if text.blank?
 
-      text.downcase.strip.eql?(I18n.t('adapter.shared.subscribe.text'))
+      text.downcase.strip.eql?(I18n.t('adapter.shared.resubscribe.text'))
     end
 
     def create_message?

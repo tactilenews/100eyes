@@ -2,7 +2,7 @@
 
 RSpec.shared_examples 'a resubscribe failure' do |adapter|
   let!(:request) { create(:request) }
-  let(:resubscribe_failure_message) { I18n.t('adapter.shared.subscribe.resubscribe_failure') }
+  let(:failure_message) { I18n.t('adapter.shared.resubscribe.failure') }
   let(:resubscribe_error) do
     ResubscribeContributorJob::ResubscribeError.new(resubscribe_error_text)
   end
@@ -20,7 +20,7 @@ RSpec.shared_examples 'a resubscribe failure' do |adapter|
   it {
     is_expected.to(have_enqueued_job(adapter).on_queue('default').with do |params|
       expect(params[:contributor_id]).to eq(contributor.id)
-      expect(params[:text]).to match(resubscribe_failure_message)
+      expect(params[:text]).to match(failure_message)
     end)
   }
 end
