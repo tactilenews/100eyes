@@ -362,15 +362,15 @@ de:
         other: "Das sind die Mitglieder deiner Community <strong>gefiltert nach den Tags</strong>"
     contributors_list:
       empty_state:
-        no_contributors: Du hast noch keine Mitglieder, verschick du Einladungslinks.
+        no_contributors: Du hast noch keine Mitglieder. Über Einladungslinks können sich neue Mitglieder hier anmelden.
         filter_active: Keine Mitglieder mit diesen Filtern gefunden
     whats_app_setup:
       heading: WhatsApp-Integration
-      setup_explained: Erteilen Sie unserem Business Solutions Provider, 360dialog, die Berechtigung, Ihren WhatsApp Business Manager zu verwalten, um WhatsApp als Kanal hinzuzufügen.
+      setup_explained: Erteile unserem Drittanbieter 360dialog die Berechtigung, den WhatsApp Business Manager zu verwalten, um WhatsApp als Kanal hinzuzufügen.
       open_modal_button: WhatsApp einrichten
     onboarding_channels_checkboxes:
       legend: Aktive Onboarding-Channel
-      help_text: Achtung, hier deaktivieren sie Kanäle. Teilnehmerinnen können sich nur noch auf aktiven Kanälen anmelden.
+      help_text: Achtung, hier deaktivierst du Kanäle. Mitglieder können sich nur noch auf aktiven Kanälen anmelden.
 
   mailer:
     unsubscribe:
