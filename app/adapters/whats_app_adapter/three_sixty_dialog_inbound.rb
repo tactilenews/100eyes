@@ -172,7 +172,7 @@ module WhatsAppAdapter
     def create_message?
       has_non_text_content = message.files.any? || message.unknown_content
       text = message.text
-      has_non_text_content || (text.present? && !quick_reply_response?(text) && !unsubscribe_text?(text) && !subscribe_text?(text))
+      has_non_text_content || (text.present? && !quick_reply_response?(text) && !unsubscribe_text?(text) && !resubscribe_text?(text))
     end
 
     def fetch_file(file_id)

@@ -171,7 +171,7 @@ module TelegramAdapter
     def create_message?
       has_non_text_content = photos.any? || message.files.any? || message.unknown_content
       text = message.text
-      has_non_text_content || (text.present? && !unsubscribe_text?(text) && !subscribe_text?(text))
+      has_non_text_content || (text.present? && !unsubscribe_text?(text) && !resubscribe_text?(text))
     end
   end
 end

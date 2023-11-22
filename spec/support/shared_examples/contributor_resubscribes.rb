@@ -20,7 +20,7 @@ RSpec.shared_examples 'a Contributor resubscribes' do |adapter|
   it 'enqueues a job to inform admin' do
     expect { subject.call }.to have_enqueued_job.on_queue('default').with(
       'PostmarkAdapter::Outbound',
-      'contributor_subscribed_email',
+      'contributor_resubscribed_email',
       'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
       {
         params: { admin: an_instance_of(User), contributor: contributor },

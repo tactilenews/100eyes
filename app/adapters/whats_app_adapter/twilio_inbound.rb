@@ -65,7 +65,7 @@ module WhatsAppAdapter
 
       trigger(REQUEST_FOR_MORE_INFO, sender) if request_for_more_info?(message_text)
       trigger(UNSUBSCRIBE_CONTRIBUTOR, sender) if unsubscribe_text?(message_text)
-      trigger(RESUBSCRIBE_CONTRIBUTOR, sender) if subscribe_text?(message_text)
+      trigger(RESUBSCRIBE_CONTRIBUTOR, sender) if resubscribe_text?(message_text)
       trigger(REQUEST_TO_RECEIVE_MESSAGE, sender, original_replied_message_sid) if request_to_receive_message?(sender, whats_app_message)
 
       message = Message.new(text: message_text, sender: sender)
@@ -115,7 +115,7 @@ module WhatsAppAdapter
 
     def request_to_receive_message?(contributor, whats_app_message)
       text = whats_app_message[:body]
-      return false if request_for_more_info?(text) || unsubscribe_text?(text) || subscribe_text?(text)
+      return false if request_for_more_info?(text) || unsubscribe_text?(text) || resubscribe_text?(text)
 
       contributor.whats_app_message_template_sent_at.present? || whats_app_message[:original_replied_message_sid]
     end
@@ -133,14 +133,14 @@ module WhatsAppAdapter
       text&.downcase&.strip.eql?(I18n.t('adapter.shared.unsubscribe.text'))
     end
 
-    def subscribe_text?(text)
-      text&.downcase&.strip.eql?(I18n.t('adapter.shared.subscribe.text'))
+    def resubscribe_text?(text)
+      text&.downcase&.strip.eql?(I18n.t('adapter.shared.resubscribe.text'))
     end
 
     def create_message?
       has_non_text_content = message.files.any? || message.unknown_content
       text = message.text
-      has_non_text_content || (text.present? && !quick_reply_response?(text) && !unsubscribe_text?(text) && !subscribe_text?(text))
+      has_non_text_content || (text.present? && !quick_reply_response?(text) && !unsubscribe_text?(text) && !resubscribe_text?(text))
     end
   end
 end
