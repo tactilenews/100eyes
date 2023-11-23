@@ -45,10 +45,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
       before do
         create(:request)
 
-        unless Setting.signal_server_phone_number
-          allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
-        end
-
+        allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
         allow(job).to receive(:ping_monitoring_service).and_return(nil)
       end
 
@@ -174,10 +171,8 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
 
     describe 'given a known contributor requests to unsubscribe', vcr: { cassette_name: :receive_signal_message_to_unsubscribe } do
       before do
-        unless Setting.signal_server_phone_number
-          allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
-          allow(Setting).to receive(:signal_cli_rest_api_endpoint).and_return('http://signal:8080')
-        end
+        allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
+        allow(Setting).to receive(:signal_cli_rest_api_endpoint).and_return('http://signal:8080')
       end
 
       let!(:contributor) { create(:contributor, signal_phone_number: '+4915112345789', signal_onboarding_completed_at: Time.zone.now) }
@@ -187,10 +182,8 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
     describe 'given a contributor who has unsubscribed and requests to resubscribe',
              vcr: { cassette_name: :receive_signal_message_to_resubscribe } do
       before do
-        unless Setting.signal_server_phone_number
-          allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
-          allow(Setting).to receive(:signal_cli_rest_api_endpoint).and_return('http://signal:8080')
-        end
+        allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
+        allow(Setting).to receive(:signal_cli_rest_api_endpoint).and_return('http://signal:8080')
       end
       let!(:contributor) do
         create(:contributor, signal_phone_number: '+4915112345789', signal_onboarding_completed_at: Time.zone.now,
