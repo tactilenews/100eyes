@@ -164,7 +164,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
 
           it 'bounces a warning to the contributor' do
             should have_enqueued_job(SignalAdapter::Outbound::Text).with(
-              recipient: contributor,
+              contributor_id: contributor,
               text: 'We cannot process this content'
             )
           end
