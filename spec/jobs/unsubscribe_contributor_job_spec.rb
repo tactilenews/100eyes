@@ -6,6 +6,13 @@ RSpec.describe UnsubscribeContributorJob do
   describe '#perform_later(contributor_id, adapter)' do
     subject { -> { described_class.new.perform(contributor.id, adapter) } }
 
+    context 'given an unsubscribed contributor' do
+      let(:contributor) { create(:contributor,  whats_app_phone_number: '+491234567', unsubscribed_at: 1.day.ago) }
+      let(:adapter) { WhatsAppAdapter::Outbound }
+
+      it { is_expected.not_to(change { contributor.reload.unsubscribed_at }) }
+    end
+
     context 'Signal contributor' do
       let(:adapter) { SignalAdapter::Outbound }
 

@@ -6,6 +6,7 @@ class UnsubscribeContributorJob < ApplicationJob
   def perform(contributor_id, adapter)
     contributor = Contributor.find(contributor_id)
     return unless contributor
+    return if contributor.unsubscribed_at.present?
 
     contributor.update!(unsubscribed_at: Time.current)
     adapter.send_unsubsribed_successfully_message!(contributor)
