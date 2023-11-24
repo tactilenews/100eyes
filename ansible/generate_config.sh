@@ -67,8 +67,8 @@ rails:
     monitoring_url:
   secret_key_base: "${secret_key_base}"
   postgres:
-    user: app
-    db: app_production
+    user: "${nickname}_app_user"
+    db: "${nickname}_production"
     password: "${postgres_password}"
     host: # optional (e.g. for managed databases)
     port: # optional (e.g. for managed databases)
@@ -84,6 +84,12 @@ rails:
     api_key:
       sid: ""
       secret: ""
+  three_sixty_dialog:
+    partner:
+      id: ""
+      username: ""
+      password: ""
+
 CONFIGURATION
 
 cat <<- INSTRUCTIONS
