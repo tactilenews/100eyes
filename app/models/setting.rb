@@ -27,6 +27,10 @@ class Setting < RailsSettings::Base
     self.onboarding_hero_blob_id = blob.id
   end
 
+  def self.whats_app_configured?
+    whats_app_server_phone_number.present? || three_sixty_dialog_client_api_key.present?
+  end
+
   field :project_name, default: ENV['HUNDRED_EYES_PROJECT_NAME'] || '100eyes'
   field :application_host, readonly: true, default: ENV['APPLICATION_HOSTNAME'] || 'localhost:3000'
 
@@ -102,6 +106,6 @@ class Setting < RailsSettings::Base
     telegram: true,
     email: true,
     signal: true,
-    whats_app: true
+    whats_app: whats_app_configured?
   }
 end

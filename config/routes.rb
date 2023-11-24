@@ -34,7 +34,7 @@ Rails.application.routes.draw do
       get '/telegram/fallback/:telegram_onboarding_token', to: 'telegram#fallback', as: 'telegram_fallback'
       post '/telegram/', to: 'telegram#create'
 
-      constraints(-> { Setting.whats_app_server_phone_number.present? || Setting.three_sixty_dialog_client_api_key.present? }) do
+      constraints(-> { Setting.whats_app_configured? }) do
         get '/whats-app/', to: 'whats_app#show'
         post '/whats-app/', to: 'whats_app#create'
       end
