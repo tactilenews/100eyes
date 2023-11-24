@@ -124,12 +124,12 @@ RSpec.describe ResubscribeContributorJob do
         allow(Setting).to receive(:onboarding_success_text).and_return(whats_app_welcome_template)
       end
 
-      it_behaves_like 'a Contributor resubscribes', WhatsAppAdapter::Outbound::Text do
-        let(:contributor) { create(:contributor, whats_app_phone_number: '+491234567', unsubscribed_at: 5.days.ago) }
-      end
-
       context 'Twilio' do
         before { allow(Setting).to receive(:three_sixty_dialog_client_api_key).and_return(nil) }
+
+        it_behaves_like 'a Contributor resubscribes', WhatsAppAdapter::Outbound::Text do
+          let(:contributor) { create(:contributor, whats_app_phone_number: '+491234567', unsubscribed_at: 5.days.ago) }
+        end
 
         describe 'which has been marked inactive by a user' do
           it_behaves_like 'a resubscribe failure', WhatsAppAdapter::Outbound::Text do
@@ -158,6 +158,10 @@ RSpec.describe ResubscribeContributorJob do
 
       context '360dialog' do
         before { allow(Setting).to receive(:three_sixty_dialog_client_api_key).and_return('valid_api_key') }
+
+        it_behaves_like 'a Contributor resubscribes', WhatsAppAdapter::Outbound::ThreeSixtyDialogText do
+          let(:contributor) { create(:contributor, whats_app_phone_number: '+491234567', unsubscribed_at: 5.days.ago) }
+        end
 
         describe 'which has been marked inactive by a user' do
           it_behaves_like 'a resubscribe failure', WhatsAppAdapter::Outbound::ThreeSixtyDialogText do

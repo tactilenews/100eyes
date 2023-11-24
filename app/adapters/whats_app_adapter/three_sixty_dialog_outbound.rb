@@ -53,8 +53,8 @@ module WhatsAppAdapter
       def send_resubscribe_error_message!(contributor)
         return unless contributor_can_receive_messages?(contributor)
 
-        WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(contributor_id: contributor.id,
-                                                                      text: I18n.t('adapter.shared.resubscribe.failure'))
+        text = I18n.t('adapter.shared.resubscribe.failure')
+        WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(payload: text_payload(contributor, text))
       end
 
       private

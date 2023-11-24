@@ -19,8 +19,13 @@ RSpec.shared_examples 'a resubscribe failure' do |adapter|
   end
   it {
     is_expected.to(have_enqueued_job(adapter).on_queue('default').with do |params|
-      expect(params[:contributor_id]).to eq(contributor.id)
-      expect(params[:text]).to match(failure_message)
+      if adapter.eql?(WhatsAppAdapter::Outbound::ThreeSixtyDialogText)
+        expect(params[:payload][:to]).to eq(contributor.whats_app_phone_number.split('+').last)
+        expect(params[:payload][:text][:body]).to eq(failure_message)
+      else
+        expect(params[:contributor_id]).to eq(contributor.id)
+        expect(params[:text]).to match(failure_message)
+      end
     end)
   }
 end
