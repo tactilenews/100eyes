@@ -176,6 +176,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
       before do
         unless Setting.signal_server_phone_number
           allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
+          allow(Setting).to receive(:signal_cli_rest_api_endpoint).and_return('http://signal:8080')
         end
       end
 
@@ -188,6 +189,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
       before do
         unless Setting.signal_server_phone_number
           allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
+          allow(Setting).to receive(:signal_cli_rest_api_endpoint).and_return('http://signal:8080')
         end
       end
       let!(:contributor) do
