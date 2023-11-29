@@ -13,6 +13,9 @@ RSpec.describe 'Dashboard' do
     request = create(:request, user: user)
     create_list(:message, 2, request: request, sender: contributor)
   end
+
+  after { Timecop.return }
+
   it 'Shows several useful sections' do
     Timecop.travel(Time.current.beginning_of_day + 5.hours)
     visit dashboard_path(as: user)

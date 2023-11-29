@@ -30,6 +30,8 @@ RSpec.describe 'Profile' do
     current_plan.update(valid_from: Time.current, valid_until: Time.current + 6.months)
   end
 
+  after { Timecop.return }
+
   it 'allows viewing/updating business plan' do
     visit dashboard_path(as: user)
 
