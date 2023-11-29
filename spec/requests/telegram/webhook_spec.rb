@@ -123,7 +123,6 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
 
         context 'who would like to unsubscribe' do
           let(:message) { 'Abbestellen' }
-          let(:chat_id) { 12_345 }
 
           it { is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(contributor.id, TelegramAdapter::Outbound) }
         end
