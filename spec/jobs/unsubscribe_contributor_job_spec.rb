@@ -41,15 +41,27 @@ RSpec.describe UnsubscribeContributorJob do
       end
 
       it_behaves_like 'a Contributor unsubscribes', ThreemaAdapter::Outbound::Text do
-        let(:contributor) { create(:contributor,  threema_id: threema_id) }
+        let(:contributor) { create(:contributor, threema_id: threema_id) }
       end
     end
 
     context 'WhatsApp contributor' do
       let(:adapter) { WhatsAppAdapter::Outbound }
 
-      it_behaves_like 'a Contributor unsubscribes', WhatsAppAdapter::Outbound::Text do
-        let(:contributor) { create(:contributor,  whats_app_phone_number: '+491234567') }
+      context 'Twilio' do
+        before { allow(Setting).to receive(:three_sixty_dialog_client_api_key).and_return(nil) }
+
+        it_behaves_like 'a Contributor unsubscribes', WhatsAppAdapter::Outbound::Text do
+          let(:contributor) { create(:contributor,  whats_app_phone_number: '+491234567') }
+        end
+      end
+
+      context '360dialog' do
+        before { allow(Setting).to receive(:three_sixty_dialog_client_api_key).and_return('valid_api_key') }
+
+        it_behaves_like 'a Contributor unsubscribes', WhatsAppAdapter::Outbound::ThreeSixtyDialogText do
+          let(:contributor) { create(:contributor,  whats_app_phone_number: '+491234567') }
+        end
       end
     end
   end
