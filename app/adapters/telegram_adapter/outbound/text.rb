@@ -17,9 +17,12 @@ module TelegramAdapter
         end
       end
 
-      def perform(text:, telegram_id:, message: nil)  # rubocop:disable Lint/UnusedMethodArgument
+      def perform(contributor_id:, text:, message: nil)  # rubocop:disable Lint/UnusedMethodArgument
+        contributor = Contributor.find(contributor_id)
+        return unless contributor
+
         Telegram.bot.send_message(
-          chat_id: telegram_id,
+          chat_id: contributor.telegram_id,
           text: text,
           parse_mode: :HTML
         )

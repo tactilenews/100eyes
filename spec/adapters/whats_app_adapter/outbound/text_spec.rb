@@ -19,7 +19,7 @@ RSpec.describe WhatsAppAdapter::Outbound::Text do
   end
 
   describe '#perform' do
-    subject { -> { adapter.perform(recipient: message.recipient, text: message.text) } }
+    subject { -> { adapter.perform(contributor_id: message.recipient.id, text: message.text) } }
 
     before do
       allow(Setting).to receive(:twilio_account_sid).and_return(valid_account_sid)

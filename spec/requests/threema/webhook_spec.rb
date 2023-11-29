@@ -15,21 +15,31 @@ RSpec.describe Threema::WebhookController do
       'nickname' => 'matt.rider'
     }
   end
-  let(:message) { create(:message) }
   let(:threema_mock) { instance_double(Threema::Receive::Text, content: 'Hello World!') }
   let(:threema) { instance_double(Threema) }
+  let(:client_mock) { instance_double(Threema::Client) }
+  let(:threema_lookup_double) { instance_double(Threema::Lookup) }
 
   before do
     allow(Threema).to receive(:new).and_return(threema)
     allow(threema).to receive(:receive).and_return(threema_mock)
+    allow(client_mock).to receive(:not_found_ok)
+    allow(threema).to receive(:client).and_return(client_mock)
   end
 
   describe '#message' do
     subject { post '/threema/webhook', params: params }
 
     context 'No contributor' do
+      before { allow(Sentry).to receive(:capture_exception).with(an_instance_of(ThreemaAdapter::UnknownContributorError)) }
+
       it 'does not create a message' do
         expect { subject }.not_to change(Message, :count)
+      end
+
+      it 'sends an error to Sentry so that our admins get notified' do
+        subject
+        expect(Sentry).to have_received(:capture_exception)
       end
     end
 
@@ -38,8 +48,6 @@ RSpec.describe Threema::WebhookController do
       let!(:request) { create(:request) }
 
       before do
-        allow(Threema).to receive(:new).and_return(threema)
-        allow(threema).to receive(:receive).and_return(threema_mock)
         allow(threema_mock).to receive(:instance_of?) { false }
       end
 
@@ -61,28 +69,45 @@ RSpec.describe Threema::WebhookController do
         end
       end
 
-      describe 'Unknown content' do
-        let(:threema_mock) { instance_double(Threema::Receive::Image, content: 'x\00x\\0') }
+      describe 'Unsupported content' do
+        let(:threema_mock) { instance_double(Threema::Receive::NotImplementedFallback, content: 'x\00x\\0') }
 
         before do
-          allow(Threema).to receive(:new).and_return(threema)
-          allow(threema).to receive(:receive).and_return(threema_mock)
-          allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::Image).and_return(true)
+          allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::NotImplementedFallback).and_return(true)
+          allow(threema_mock).to receive(:respond_to?).with(:mime_type).and_return(true)
+          allow(Setting).to receive(:threema_unknown_content_message).and_return('Oh no, this is unsupported!')
         end
 
         it 'returns 200 to avoid retries' do
-          allow(threema).to receive(:send).with(type: :text, threema_id: contributor.threema_id,
-                                                text: Setting.threema_unknown_content_message)
-
           subject
           expect(response).to have_http_status(200)
         end
 
-        it 'sends a automated message response' do
-          expect(threema).to receive(:send).with(type: :text, threema_id: contributor.threema_id,
-                                                 text: Setting.threema_unknown_content_message)
+        it 'sends an automated message response' do
+          expect { subject }.to have_enqueued_job(ThreemaAdapter::Outbound::Text).with do |text, recipient|
+            expect(text).to eq('Oh, no, this is unsuporrted!')
+            expect(recipient).to eq(contributor)
+          end
+        end
+      end
 
-          subject
+      describe 'Unsubscribe' do
+        let(:threema_mock) { instance_double(Threema::Receive::Text, content: 'Abbestellen') }
+
+        it 'enqueues a job to unsubscribe the contributor' do
+          expect { subject }.to have_enqueued_job(UnsubscribeContributorJob).with(contributor.id, ThreemaAdapter::Outbound)
+        end
+      end
+
+      describe 'Re-subscribe' do
+        let(:threema_mock) { instance_double(Threema::Receive::Text, content: 'Bestellen') }
+        before do
+          contributor.unsubscribed_at = 1.day.ago
+          contributor.save(validate: false)
+        end
+
+        it 'enqueues a job to resubscribe the contributor' do
+          expect { subject }.to have_enqueued_job(ResubscribeContributorJob).with(contributor.id, ThreemaAdapter::Outbound)
         end
       end
     end

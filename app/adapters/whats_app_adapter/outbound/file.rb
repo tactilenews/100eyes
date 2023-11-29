@@ -9,11 +9,14 @@ module WhatsAppAdapter
         @twilio_instance = Twilio::REST::Client.new(Setting.twilio_api_key_sid, Setting.twilio_api_key_secret, Setting.twilio_account_sid)
       end
 
-      def perform(recipient:, text:, file:)
+      def perform(contributor_id:, text:, file:)
+        contributor = Contributor.find(contributor_id)
+        return unless contributor
+
         self.class.twilio_instance.messages.create(
           from: "whatsapp:#{Setting.whats_app_server_phone_number}",
           body: text,
-          to: "whatsapp:#{recipient.whats_app_phone_number}",
+          to: "whatsapp:#{contributor.whats_app_phone_number}",
           media_url: Rails.application.routes.url_helpers.rails_blob_url(file.attachment.blob, host: Setting.application_host)
         )
       end

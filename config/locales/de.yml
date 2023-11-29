@@ -393,7 +393,9 @@ de:
       contributor_marked_as_inactive_email:
         subject: "%{contributor_name} wurde bei %{channel} als inaktiv markiert, weil er keine Nachrichten mehr von %{project_name} empfangen kann."
         text: "Wenn Sie vermuten, dass es sich um eine versehentliche Abmeldung handelt, setzen Sie sich mit %{contributor_name} in Verbindung. Vielleicht möchte die Person die Nachrichten lieber über einen anderen Kanal empfangen? Dann verschicken Sie einen neuen Anmelde-Link."
-      contributor_subscribed_email:
+      contributor_unsubscribed_email:
+        subject: "%{contributor_name} hat darum gebeten, keine weiteren Nachrichten über %{channel} von %{project_name} zu erhalten."
+      contributor_resubscribed_email:
         subject: "%{contributor_name} hat erneut den Empfang von Nachrichten über %{channel} von %{project_name} angefordert."
     whats_app:
       welcome_message: "Vielen Dank für deine Anmeldung bei %{project_name}. Unsere Dialog-Recherche startet bald. Wir melden uns dann bei dir."
@@ -414,15 +416,18 @@ de:
       quick_reply_button_text:
         answer: Antworten
         more_info: Mehr Infos
+    shared:
       unsubscribe:
-        instructions: Um unseren Kanal Abzubestellen, schreibe „abbestellen“.
         text: abbestellen
-        by_request_of_contributor: "Das Mitglied, %{contributor_name}, hat darum gebeten, keine weiteren Nachrichten mit WhatsApp mehr zu erhalten."
+        instructions: Um unseren Kanal Abzubestellen, schreibe „abbestellen“.
         successful: Du wurdest erfolgreich abgemeldet. Wir danken dir für deinen Beitrag zu diesem Projekt.
-      subscribe:
+        by_request_of_contributor: "Das Mitglied, %{contributor_name}, hat darum gebeten, keine weiteren Nachrichten mit %{channel} mehr zu erhalten."
+      resubscribe:
         text: bestellen
         instructions: Um unseren Kanal erneut zu bestellen, schreiben Sie "bestellen".
+        failure: Eine Registrierung ist aktuell nicht möglich. Ihr Account wurde deaktiviert. Bitte wenden Sie sich an kontakt@tactile.news
         by_request_of_contributor: "Das Mitglied %{contributor_name} hat darum gebeten, wieder Nachrichten über WhatsApp empfangen zu können."
+
   save: Speichern
   cancel: Abbrechen
   skip_to_content: Zum Hauptinhalt springen

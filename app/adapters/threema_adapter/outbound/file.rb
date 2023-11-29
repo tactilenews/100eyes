@@ -27,7 +27,10 @@ module ThreemaAdapter
         @threema_instance ||= Threema.new
       end
 
-      def perform(recipient:, file_path:, file_name: nil, caption: nil, render_type: nil)
+      def perform(contributor_id:, file_path:, file_name: nil, caption: nil, render_type: nil)
+        recipient = Contributor.find(contributor_id)
+        return unless recipient
+
         self.class.threema_instance.send(type: :file,
                                          threema_id: recipient.threema_id.upcase,
                                          file: file_path,

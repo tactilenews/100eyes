@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# frozen_string_literal
-
 class BroadcastRequestJob < ApplicationJob
   queue_as :broadcast_request
 

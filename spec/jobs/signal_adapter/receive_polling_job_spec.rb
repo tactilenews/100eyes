@@ -164,12 +164,40 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
 
           it 'bounces a warning to the contributor' do
             should have_enqueued_job(SignalAdapter::Outbound::Text).with(
-              recipient: contributor,
+              contributor_id: contributor,
               text: 'We cannot process this content'
             )
           end
         end
       end
+    end
+
+    describe 'given a known contributor requests to unsubscribe', vcr: { cassette_name: :receive_signal_message_to_unsubscribe } do
+      before do
+        unless Setting.signal_server_phone_number
+          allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
+          allow(Setting).to receive(:signal_cli_rest_api_endpoint).and_return('http://signal:8080')
+        end
+      end
+
+      let!(:contributor) { create(:contributor, signal_phone_number: '+4915112345789', signal_onboarding_completed_at: Time.zone.now) }
+      it { is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(contributor.id, SignalAdapter::Outbound) }
+    end
+
+    describe 'given a contributor who has unsubscribed and requests to resubscribe',
+             vcr: { cassette_name: :receive_signal_message_to_resubscribe } do
+      before do
+        unless Setting.signal_server_phone_number
+          allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
+          allow(Setting).to receive(:signal_cli_rest_api_endpoint).and_return('http://signal:8080')
+        end
+      end
+      let!(:contributor) do
+        create(:contributor, signal_phone_number: '+4915112345789', signal_onboarding_completed_at: Time.zone.now,
+                             unsubscribed_at: 1.week.ago)
+      end
+
+      it { is_expected.to have_enqueued_job(ResubscribeContributorJob).with(contributor.id, SignalAdapter::Outbound) }
     end
 
     describe 'given the Signal server is unavailable' do

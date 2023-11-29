@@ -5,7 +5,6 @@ module PostmarkAdapter
   class Outbound < ApplicationMailer
     default template_name: :mailer
     default from: -> { default_from }
-
     rescue_from Postmark::InactiveRecipientError do |exception|
       ErrorNotifier.report(exception, context: { recipients: exception.recipients }, tags: { support: 'yes' })
       exception.recipients.each do |email_address|
@@ -22,48 +21,56 @@ module PostmarkAdapter
 
     attr_reader :msg
 
-    def self.send!(message)
-      return unless message.recipient&.email
+    class << self
+      def send!(message)
+        return unless message.recipient&.email
 
-      with(message: message).message_email.deliver_later
-    end
+        with(message: message).message_email.deliver_later
+      end
 
-    def self.send_welcome_message!(contributor)
-      return unless contributor&.email
+      def send_welcome_message!(contributor)
+        return unless contributor&.email
 
-      with(contributor: contributor).welcome_email.deliver_later
-    end
+        with(contributor: contributor).welcome_email.deliver_later
+      end
 
-    def self.send_business_plan_upgraded_message!(admin, organization)
-      return unless admin&.email && admin&.admin? && organization&.id
+      def send_business_plan_upgraded_message!(admin, organization)
+        return unless admin&.email && admin&.admin? && organization&.id
 
-      price_per_month_with_discount = ActionController::Base.helpers.number_to_currency(
-        organization.business_plan.price_per_month - (
-          organization.business_plan.price_per_month * organization.upgrade_discount / 100.to_f
-        ),
-        locale: :de
-      )
+        price_per_month_with_discount = ActionController::Base.helpers.number_to_currency(
+          organization.business_plan.price_per_month - (
+            organization.business_plan.price_per_month * organization.upgrade_discount / 100.to_f
+          ),
+          locale: :de
+        )
 
-      with(admin: admin, organization: organization,
-           price_per_month_with_discount: price_per_month_with_discount).business_plan_upgraded_email.deliver_later
-    end
+        with(admin: admin, organization: organization,
+             price_per_month_with_discount: price_per_month_with_discount).business_plan_upgraded_email.deliver_later
+      end
 
-    def self.send_user_count_exceeds_plan_limit_message!(admin, organization)
-      return unless admin&.email && admin&.admin? && organization&.id
+      def send_user_count_exceeds_plan_limit_message!(admin, organization)
+        return unless admin&.email && admin&.admin? && organization&.id
 
-      with(admin: admin, organization: organization).user_count_exceeds_plan_limit_email.deliver_later
-    end
+        with(admin: admin, organization: organization).user_count_exceeds_plan_limit_email.deliver_later
+      end
 
-    def self.contributor_marked_as_inactive!(admin, contributor)
-      return unless admin&.email && admin&.admin? && contributor&.id
+      def contributor_marked_as_inactive!(admin, contributor)
+        return unless admin&.email && admin&.admin? && contributor&.id
 
-      with(admin: admin, contributor: contributor).contributor_marked_as_inactive_email.deliver_later
-    end
+        with(admin: admin, contributor: contributor).contributor_marked_as_inactive_email.deliver_later
+      end
 
-    def self.contributor_subscribed!(admin, contributor)
-      return unless admin&.email && admin&.admin? && contributor&.id
+      def contributor_unsubscribed!(admin, contributor)
+        return unless admin&.email && admin&.admin? && contributor&.id
 
-      with(admin: admin, contributor: contributor).contributor_subscribed_email.deliver_later
+        with(admin: admin, contributor: contributor).contributor_unsubscribed_email.deliver_later
+      end
+
+      def contributor_resubscribed!(admin, contributor)
+        return unless admin&.email && admin&.admin? && contributor&.id
+
+        with(admin: admin, contributor: contributor).contributor_resubscribed_email.deliver_later
+      end
     end
 
     def bounce_email
@@ -120,14 +127,27 @@ module PostmarkAdapter
       mail(to: admin.email, subject: subject, message_stream: message_stream)
     end
 
-    def contributor_subscribed_email
+    def contributor_unsubscribed_email
       contributor = params[:contributor]
       admin = params[:admin]
-      subject = I18n.t('adapter.postmark.contributor_subscribed_email.subject', project_name: Setting.project_name,
-                                                                                contributor_name: contributor.name,
-                                                                                channel: contributor.channels.first.to_s.camelize)
+      channel = contributor.channels.first.to_s.camelize
+      subject = I18n.t('adapter.postmark.contributor_unsubscribed_email.subject', project_name: Setting.project_name,
+                                                                                  contributor_name: contributor.name,
+                                                                                  channel: channel)
+      text = I18n.t('adapter.postmark.contributor_marked_as_inactive_email.text', contributor_name: contributor.name, channel: channel)
+      message_stream = Setting.postmark_transactional_stream
+      @text = [subject, text].join("\n")
+      mail(to: admin.email, subject: subject, message_stream: message_stream)
+    end
+
+    def contributor_resubscribed_email
+      contributor = params[:contributor]
+      admin = params[:admin]
+      subject = I18n.t('adapter.postmark.contributor_resubscribed_email.subject', project_name: Setting.project_name,
+                                                                                  contributor_name: contributor.name,
+                                                                                  channel: contributor.channels.first.to_s.camelize)
       text = I18n.t(
-        'adapter.whats_app.subscribe.by_request_of_contributor', contributor_name: contributor.name
+        'adapter.shared.resubscribe.by_request_of_contributor', contributor_name: contributor.name
       )
       message_stream = Setting.postmark_transactional_stream
       @text = [subject, text].join("\n")
