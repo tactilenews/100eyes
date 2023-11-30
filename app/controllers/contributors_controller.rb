@@ -20,9 +20,10 @@ class ContributorsController < ApplicationController
 
     @active_count = Contributor.active.count
     @inactive_count = Contributor.inactive.count
+    @unsubscribed_count = Contributor.unsubscribed.count
     @available_tags = Contributor.all_tags_with_count.to_json
 
-    @contributors = @state == :inactive ? Contributor.inactive : Contributor.active
+    @contributors = filtered_contributors
     @contributors = @contributors.with_tags(tag_list_params)
     @filter_count = @contributors.size
     @contributors = @contributors.with_attached_avatar.includes(:tags)
@@ -86,9 +87,20 @@ class ContributorsController < ApplicationController
   def state_params
     value = contributors_params[:state]&.to_sym
 
-    return :active unless %i[active inactive].include?(value)
+    return :active unless %i[active inactive unsubscribed].include?(value)
 
     value
+  end
+
+  def filtered_contributors
+    case @state
+    when :inactive
+      Contributor.inactive
+    when :unsubscribed
+      Contributor.unsubscribed
+    else
+      Contributor.active
+    end
   end
 
   def tag_list_params
