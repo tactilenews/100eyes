@@ -40,7 +40,7 @@ class ContributorsController < ApplicationController
   def update
     @contributors = Contributor.with_attached_avatar
     @contributor.editor_guarantees_data_consent = true
-    @contributor.deactivated_by_user = current_user unless ActiveModel::Type::Boolean.new.cast(contributor_params[:active])
+    @contributor.deactivated_by_user = deactivate_by_user_state
 
     if @contributor.update(contributor_params)
       redirect_to contributor_url, flash: { success: I18n.t('contributor.saved', name: @contributor.name) }
@@ -107,6 +107,10 @@ class ContributorsController < ApplicationController
     # as displaying an invalid avatar will result in rendering errors.
     old_avatar = Contributor.with_attached_avatar.find(@contributor.id).avatar
     contributor.avatar = old_avatar.blob
+  end
+
+  def deactivate_by_user_state
+    ActiveModel::Type::Boolean.new.cast(contributor_params[:active]) ? nil : current_user
   end
 
   attr_reader :contributor
