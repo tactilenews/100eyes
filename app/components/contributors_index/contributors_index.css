@@ -15,3 +15,7 @@
 .ContributorsIndex-filterSection .Button {
   margin-right: var(--spacing-unit-s);
 }
+
+.ContributorsIndex-toggleFilterSectionButton.TabBar-item {
+  margin-left: calc(1.5 * var(--spacing-unit-xl));
+}
