@@ -21,7 +21,7 @@
           url: contributors_path(state: :active, tag_list: tag_list.present? ? @tag_list : nil),
           label: "Aktiv",
           active: state == :active,
-          count: active_contributors_count
+          count: active_contributors_count,
         },
         {
           url: contributors_path(state: :inactive, tag_list: tag_list.present? ? @tag_list : nil),
@@ -39,7 +39,7 @@
           label: I18n.t('contributor.filter_section.submit_button'),
           icon: "filter-tool",
           data: { action: 'contributors-index#toggleFilterSection' },
-          class: "ContributorsIndex-toggleFilterSectionButton"
+          class: "ContributorsIndex-toggleFilterSectionButton",
         }
       ]) %>
     <% end %>
