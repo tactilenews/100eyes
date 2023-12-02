@@ -55,6 +55,7 @@ module WhatsApp
     end
 
     def status
+      head :ok
       return unless status_params['MessageStatus'].in?(UNSUCCESSFUL_DELIVERY)
 
       whats_app_phone_number = status_params['To'].split('whatsapp:').last
@@ -63,7 +64,8 @@ module WhatsApp
         return
       end
       exception = WhatsAppAdapter::MessageDeliveryUnsuccessfulError.new(status: status_params['MessageStatus'],
-                                                                        whats_app_phone_number: whats_app_phone_number)
+                                                                        whats_app_phone_number: whats_app_phone_number,
+                                                                        message: status_params['ErrorMessage'])
       ErrorNotifier.report(exception, context: { message_sid: status_params['MessageSid'] })
     end
 
@@ -82,7 +84,7 @@ module WhatsApp
 
     def status_params
       params.permit(:AccountSid, :ApiVersion, :ChannelInstallSid, :ChannelPrefix, :ChannelToAddress, :ErrorCode, :ErrorMessage,
-                    :EventType, :From, :MessageSid, :MessageStatus, :SmsSid, :SmsStatus, :To)
+                    :EventType, :From, :MessageSid, :MessageStatus, :SmsSid, :SmsStatus, :StructuredMessage, :To)
     end
 
     def handle_unknown_contributor(whats_app_phone_number)
