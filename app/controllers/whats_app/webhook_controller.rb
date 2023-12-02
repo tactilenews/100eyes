@@ -9,6 +9,7 @@ module WhatsApp
     INVALID_MESSAGE_RECIPIENT_ERROR_CODE = 63_024 # https://www.twilio.com/docs/api/errors/63024
 
     def message
+      head :ok
       adapter = WhatsAppAdapter::TwilioInbound.new
 
       adapter.on(WhatsAppAdapter::TwilioInbound::UNKNOWN_CONTRIBUTOR) do |whats_app_phone_number|

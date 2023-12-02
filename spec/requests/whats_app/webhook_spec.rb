@@ -79,6 +79,12 @@ RSpec.describe WhatsApp::WebhookController do
         create(:message, request: request, recipient: contributor)
       end
 
+      it 'returns 200' do
+        subject.call
+
+        expect(response).to have_http_status(200)
+      end
+
       context 'no message template sent' do
         it 'creates a messsage' do
           expect { subject.call }.to change(Message, :count).from(2).to(3)
@@ -213,6 +219,12 @@ RSpec.describe WhatsApp::WebhookController do
     let(:exception) do
       WhatsAppAdapter::MessageDeliveryUnsuccessfulError.new(status: params['MessageStatus'],
                                                             whats_app_phone_number: whats_app_phone_number, message: params['ErrorMessage'])
+    end
+
+    it 'returns 200' do
+      subject.call
+
+      expect(response).to have_http_status(200)
     end
 
     describe 'given an unknown contributor' do
