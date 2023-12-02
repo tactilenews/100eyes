@@ -215,11 +215,46 @@ RSpec.describe WhatsApp::WebhookController do
                                                             whats_app_phone_number: whats_app_phone_number, message: params['ErrorMessage'])
     end
 
-    describe 'given a failed message delivery' do
-      it 'reports the error with the error message' do
-        expect(Sentry).to receive(:capture_exception).with(exception)
+    describe 'given an unknown contributor' do
+      it 'does not report it as an error, as it is not actionable' do
+        expect(Sentry).not_to receive(:capture_exception)
 
         subject.call
+      end
+
+      context 'due to an invalid message recipient error' do
+        it { is_expected.not_to have_enqueued_job(DeactivateContributorJob) }
+      end
+    end
+
+    describe 'given a known contributor' do
+      let!(:contributor) { create(:contributor, whats_app_phone_number: whats_app_phone_number) }
+
+      describe 'given a failed message delivery' do
+        it 'reports the error with the error message' do
+          expect(Sentry).to receive(:capture_exception).with(exception)
+
+          subject.call
+        end
+
+        context 'due to an invalid message recipient error' do
+          before do
+            params['ErrorCode'] = '63024'
+            params['ErrorMessage'] = 'Twilio Error: Invalid message recipient. Generated new message with sid: someSid'
+          end
+
+          it 'does not report it as an error, as it is not actionable' do
+            expect(Sentry).not_to receive(:capture_exception)
+
+            subject.call
+          end
+
+          it {
+            is_expected.to have_enqueued_job(DeactivateContributorJob).with do |params|
+              expect(params[:contributor_id]).to eq(contributor.id)
+            end
+          }
+        end
       end
     end
   end
