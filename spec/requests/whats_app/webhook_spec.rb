@@ -270,4 +270,71 @@ RSpec.describe WhatsApp::WebhookController do
       end
     end
   end
+
+  describe '#errors' do
+    subject { -> { post whats_app_errors_path, params: params } }
+
+    let(:url) { 'https://example.100ey.es/whats_app/webhook' }
+    let(:error_payload) do
+      {
+        'error_code' => '21408',
+        'more_info' => {
+          'ErrorCode' => '21408',
+          'LogLevel' => 'ERROR',
+          'Msg' => 'Got HTTP 404 response to https://example.100ey.es/twilio/voice',
+          'url' => url
+        },
+        'webhook' => {
+          'request' => {
+            'url' => url,
+            'parameters' => {
+              'MessageSid' => 'someMessageSid'
+            }
+          }
+        }
+      }
+    end
+    let(:params) do
+      {
+        'AccountSid' => 'someAccountSid',
+        'Level' => 'ERROR',
+        'ParentAccountSid' => 'someParentAccountSid',
+        'Payload' => error_payload.to_json,
+        'PayloadType' => 'application/json',
+        'Sid' => 'someSid',
+        'Timestamp' => Time.current.to_i
+      }
+    end
+    let(:exception) do
+      WhatsAppAdapter::TwilioError.new(error_code: error_payload['error_code'],
+                                       message: error_payload['more_info']['Msg'],
+                                       url: error_payload['more_info']['url'])
+    end
+
+    it 'returns 200' do
+      subject.call
+
+      expect(response).to have_http_status(200)
+    end
+
+    it 'reports the error with error code, message, and url' do
+      expect(Sentry).to receive(:capture_exception).with(exception)
+
+      subject.call
+    end
+
+    context 'given more_info is not provided' do
+      before { error_payload.delete('more_info') }
+
+      let(:exception) do
+        WhatsAppAdapter::TwilioError.new(error_code: error_payload['error_code'])
+      end
+
+      it 'reports the error with error code' do
+        expect(Sentry).to receive(:capture_exception).with(exception)
+
+        subject.call
+      end
+    end
+  end
 end

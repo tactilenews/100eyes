@@ -41,17 +41,21 @@ module WhatsApp
     end
 
     def errors
+      head :ok
       return unless error_params['Level'] == 'ERROR'
 
-      payload = JSON.parse(error_params['Payload'])
-      parameters = payload.with_indifferent_access.dig(:webhook, :request, :parameters)
-      exception = WhatsAppAdapter::TwilioError.new(error_code: payload['error_code'])
+      payload = JSON.parse(error_params['Payload']).deep_transform_keys(&:underscore).with_indifferent_access
+      parameters = payload.dig(:webhook, :request, :parameters)
+      more_info = payload[:more_info]
+      message = more_info&.dig(:msg)
+      url = more_info&.dig(:url)
+      exception = WhatsAppAdapter::TwilioError.new(error_code: payload['error_code'], message: message, url: url)
       ErrorNotifier.report(exception,
                            context: {
                              channel_to_address: parameters&.dig(:channelToAddress),
-                             more_info: payload['more_info'],
+                             more_info: more_info,
                              error_sid: error_params['Sid'],
-                             message_sid: parameters&.dig(:messageSid)
+                             message_sid: parameters&.dig(:message_sid)
                            })
     end
 
