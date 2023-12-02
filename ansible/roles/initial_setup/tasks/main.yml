@@ -1,7 +1,7 @@
 ---
-- include: set_hostname.yml
-- include: packages.yml
-- include: ansible_user.yml
-- include: upload_public_keys.yml
-- include: security.yml
+- include_tasks: set_hostname.yml
+- include_tasks: packages.yml
+- include_tasks: ansible_user.yml
+- include_tasks: upload_public_keys.yml
+- include_tasks: security.yml
 
