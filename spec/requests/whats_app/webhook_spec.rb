@@ -6,28 +6,29 @@ RSpec.describe WhatsApp::WebhookController do
   let(:auth_token) { 'valid_auth_token' }
   let(:mock_twilio_security_request_validator) { instance_double(Twilio::Security::RequestValidator) }
   let(:whats_app_phone_number) { '+491511234567' }
-  let(:params) do
-    {
-      'AccountSid' => 'someAccount',
-      'ApiVersion' => '2010-04-01',
-      'Body' => 'Hello',
-      'From' => "whatsapp:#{whats_app_phone_number}",
-      'MessageSid' => 'someId',
-      'NumMedia' => '0',
-      'NumSegments' => '1',
-      'ProfileName' => 'Matthew Rider',
-      'ReferralNumMedia' => '0',
-      'SmsMessageSid' => 'someId',
-      'SmsSid' => 'someId',
-      'SmsStatus' => 'received',
-      'To' => "whatsapp:#{Setting.whats_app_server_phone_number}",
-      'WaId' => '491511234567'
-    }
-  end
-
-  subject { -> { post whats_app_webhook_path, params: params } }
 
   describe '#message' do
+    subject { -> { post whats_app_webhook_path, params: params } }
+
+    let(:params) do
+      {
+        'AccountSid' => 'someAccount',
+        'ApiVersion' => '2010-04-01',
+        'Body' => 'Hello',
+        'From' => "whatsapp:#{whats_app_phone_number}",
+        'MessageSid' => 'someId',
+        'NumMedia' => '0',
+        'NumSegments' => '1',
+        'ProfileName' => 'Matthew Rider',
+        'ReferralNumMedia' => '0',
+        'SmsMessageSid' => 'someId',
+        'SmsSid' => 'someId',
+        'SmsStatus' => 'received',
+        'To' => "whatsapp:#{Setting.whats_app_server_phone_number}",
+        'WaId' => '491511234567'
+      }
+    end
+
     before do
       allow(Sentry).to receive(:capture_exception)
       allow(Setting).to receive(:whats_app_server_phone_number).and_return('4915133311445')
@@ -181,6 +182,44 @@ RSpec.describe WhatsApp::WebhookController do
 
           it { is_expected.to have_enqueued_job(ResubscribeContributorJob).with(contributor.id, WhatsAppAdapter::Outbound) }
         end
+      end
+    end
+  end
+
+  describe '#status' do
+    subject { -> { post whats_app_status_path, params: params } }
+
+    let(:params) do
+      {
+        'AccountSid' => 'someAccountSID',
+        'ApiVersion' => '2010-04-01',
+        'ChannelInstallSid' => 'someChannelInstallSid',
+        'ChannelPrefix' => 'whatsapp',
+        'ChannelToAddress' => whats_app_phone_number.to_s,
+        'ErrorCode' => '63016',
+        'ErrorMessage' => freeform_message_not_allowed_error_message,
+        'From' => "whatsapp:#{Setting.whats_app_server_phone_number}",
+        'MessageSid' => 'someSid',
+        'MessageStatus' => 'failed',
+        'SmsSid' => 'someSid',
+        'SmsStatus' => 'failed',
+        'StructuredMessage' => 'false',
+        'To' => "whatsapp:#{whats_app_phone_number}"
+      }
+    end
+    let(:freeform_message_not_allowed_error_message) do
+      'Twilio Error: Failed to send freeform message because you are outside the allowed window.. Generated new message with sid: someSid'
+    end
+    let(:exception) do
+      WhatsAppAdapter::MessageDeliveryUnsuccessfulError.new(status: params['MessageStatus'],
+                                                            whats_app_phone_number: whats_app_phone_number, message: params['ErrorMessage'])
+    end
+
+    describe 'given a failed message delivery' do
+      it 'reports the error with the error message' do
+        expect(Sentry).to receive(:capture_exception).with(exception)
+
+        subject.call
       end
     end
   end
