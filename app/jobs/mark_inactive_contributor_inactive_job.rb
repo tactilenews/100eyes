@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class MarkInactiveContributorInactiveJob < ApplicationJob
-  queue_as :deactivate_contributor
+  queue_as :mark_inactive_contributor_inactive
 
   def perform(contributor_id:)
     contributor = Contributor.where(id: contributor_id).first
