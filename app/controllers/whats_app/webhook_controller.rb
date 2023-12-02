@@ -63,7 +63,7 @@ module WhatsApp
       return unless contributor
 
       if status_params['ErrorCode'].to_i.eql?(INVALID_MESSAGE_RECIPIENT_ERROR_CODE)
-        DeactivateContributorJob.perform_later(contributor_id: contributor.id)
+        MarkInactiveContributorInactiveJob.perform_later(contributor_id: contributor.id)
         return
       end
       exception = WhatsAppAdapter::MessageDeliveryUnsuccessfulError.new(status: status_params['MessageStatus'],

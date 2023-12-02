@@ -52,23 +52,11 @@ RSpec.describe SignalAdapter::Api do
 
           subject { -> { api.perform_request(request, recipient) } }
 
-          it 'marks the contributor as inactive' do
-            expect { subject.call }.to change { recipient.reload.deactivated_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
-          end
-
-          it_behaves_like 'an ActivityNotification', 'ContributorMarkedInactive'
-
-          it 'enqueues a job to inform admin' do
-            expect { subject.call }.to have_enqueued_job.on_queue('default').with(
-              'PostmarkAdapter::Outbound',
-              'contributor_marked_as_inactive_email',
-              'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
-              {
-                params: { admin: an_instance_of(User), contributor: recipient },
-                args: []
-              }
-            ).exactly(2).times
-          end
+          it {
+            is_expected.to have_enqueued_job(MarkInactiveContributorInactiveJob).with do |params|
+              expect(params[:contributor_id].to(eq(recipient.id)))
+            end
+          }
         end
       end
     end

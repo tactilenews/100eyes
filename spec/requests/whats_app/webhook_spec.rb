@@ -223,7 +223,7 @@ RSpec.describe WhatsApp::WebhookController do
       end
 
       context 'due to an invalid message recipient error' do
-        it { is_expected.not_to have_enqueued_job(DeactivateContributorJob) }
+        it { is_expected.not_to have_enqueued_job(MarkInactiveContributorInactiveJob) }
       end
     end
 
@@ -250,7 +250,7 @@ RSpec.describe WhatsApp::WebhookController do
           end
 
           it {
-            is_expected.to have_enqueued_job(DeactivateContributorJob).with do |params|
+            is_expected.to have_enqueued_job(MarkInactiveContributorInactiveJob).with do |params|
               expect(params[:contributor_id]).to eq(contributor.id)
             end
           }

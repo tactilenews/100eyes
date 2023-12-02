@@ -13,12 +13,7 @@ module ThreemaAdapter
           contributor = Contributor.where('lower(threema_id) = ?', threema_id.downcase).first
           return unless contributor
 
-          contributor.deactivated_at = Time.current
-          contributor.save(validate: false)
-          ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
-          User.admin.find_each do |admin|
-            PostmarkAdapter::Outbound.contributor_marked_as_inactive!(admin, contributor)
-          end
+          MarkInactiveContributorInactiveJob.perform_later(contributor_id: contributor.id)
         end
         ErrorNotifier.report(exception, tags: tags)
       end

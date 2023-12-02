@@ -10,11 +10,7 @@ module TelegramAdapter
         contributor = message&.recipient
         return unless contributor
 
-        contributor.update(deactivated_at: Time.current)
-        ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
-        User.admin.find_each do |admin|
-          PostmarkAdapter::Outbound.contributor_marked_as_inactive!(admin, contributor)
-        end
+        MarkInactiveContributorInactiveJob.perform_later(contributor_id: contributor.id)
       end
 
       def perform(contributor_id:, text:, message: nil)  # rubocop:disable Lint/UnusedMethodArgument
