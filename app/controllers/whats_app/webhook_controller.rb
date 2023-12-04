@@ -7,6 +7,7 @@ module WhatsApp
     skip_before_action :require_login, :verify_authenticity_token
     UNSUCCESSFUL_DELIVERY = %w[undelivered failed].freeze
     INVALID_MESSAGE_RECIPIENT_ERROR_CODE = 63_024 # https://www.twilio.com/docs/api/errors/63024
+    FREEFORM_MESSAGE_NOT_ALLOWED_ERROR_CODE = 63_016 # https://www.twilio.com/docs/api/errors/63016
 
     def message
       head :ok
@@ -71,6 +72,9 @@ module WhatsApp
         MarkInactiveContributorInactiveJob.perform_later(contributor_id: contributor.id)
         return
       end
+      if status_params['ErrorCode'].to_i.eql?(FREEFORM_MESSAGE_NOT_ALLOWED_ERROR_CODE)
+        handle_freeform_message_not_allowed_error(contributor, status_params['MessageSid'])
+      end
       exception = WhatsAppAdapter::MessageDeliveryUnsuccessfulError.new(status: status_params['MessageStatus'],
                                                                         whats_app_phone_number: whats_app_phone_number,
                                                                         message: status_params['ErrorMessage'])
@@ -123,6 +127,14 @@ module WhatsApp
     rescue Twilio::REST::RestError => e
       ErrorNotifier.report(e)
       nil
+    end
+
+    def handle_freeform_message_not_allowed_error(contributor, twilio_message_sid)
+      message_text = fetch_message_from_twilio(twilio_message_sid)
+      message = Message.find_by(text: message_text)
+      return unless message
+
+      WhatsAppAdapter::TwilioOutbound.send_message_template!(contributor, message)
     end
   end
 end
