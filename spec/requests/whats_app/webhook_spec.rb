@@ -221,51 +221,71 @@ RSpec.describe WhatsApp::WebhookController do
                                                             whats_app_phone_number: whats_app_phone_number, message: params['ErrorMessage'])
     end
 
-    it 'returns 200' do
-      subject.call
+    before { allow(Twilio::Security::RequestValidator).to receive(:new).and_return(mock_twilio_security_request_validator) }
 
-      expect(response).to have_http_status(200)
-    end
+    describe 'fails Rack::TwilioWebhookAuthentication' do
+      before { allow(mock_twilio_security_request_validator).to receive(:validate).and_return(false) }
 
-    describe 'given an unknown contributor' do
-      it 'does not report it as an error, as it is not actionable' do
-        expect(Sentry).not_to receive(:capture_exception)
-
+      it 'returns forbidden' do
         subject.call
+        expect(response).to have_http_status(:forbidden)
       end
 
-      context 'due to an invalid message recipient error' do
-        it { is_expected.not_to have_enqueued_job(MarkInactiveContributorInactiveJob) }
+      it 'returns message why it failed' do
+        subject.call
+        expect(response.body).to eq('Twilio Request Validation Failed.')
       end
     end
 
-    describe 'given a known contributor' do
-      let!(:contributor) { create(:contributor, whats_app_phone_number: whats_app_phone_number) }
+    describe 'passes Rack::TwilioWebhookAuthentication' do
+      before { allow(mock_twilio_security_request_validator).to receive(:validate).and_return(true) }
 
-      describe 'given a failed message delivery' do
-        it 'reports the error with the error message' do
-          expect(Sentry).to receive(:capture_exception).with(exception)
+      it 'returns 200' do
+        subject.call
+
+        expect(response).to have_http_status(200)
+      end
+
+      describe 'given an unknown contributor' do
+        it 'does not report it as an error, as it is not actionable' do
+          expect(Sentry).not_to receive(:capture_exception)
 
           subject.call
         end
 
         context 'due to an invalid message recipient error' do
-          before do
-            params['ErrorCode'] = '63024'
-            params['ErrorMessage'] = 'Twilio Error: Invalid message recipient. Generated new message with sid: someSid'
-          end
+          it { is_expected.not_to have_enqueued_job(MarkInactiveContributorInactiveJob) }
+        end
+      end
 
-          it 'does not report it as an error, as it is not actionable' do
-            expect(Sentry).not_to receive(:capture_exception)
+      describe 'given a known contributor' do
+        let!(:contributor) { create(:contributor, whats_app_phone_number: whats_app_phone_number) }
+
+        describe 'given a failed message delivery' do
+          it 'reports the error with the error message' do
+            expect(Sentry).to receive(:capture_exception).with(exception)
 
             subject.call
           end
 
-          it {
-            is_expected.to have_enqueued_job(MarkInactiveContributorInactiveJob).with do |params|
-              expect(params[:contributor_id]).to eq(contributor.id)
+          context 'due to an invalid message recipient error' do
+            before do
+              params['ErrorCode'] = '63024'
+              params['ErrorMessage'] = 'Twilio Error: Invalid message recipient. Generated new message with sid: someSid'
             end
-          }
+
+            it 'does not report it as an error, as it is not actionable' do
+              expect(Sentry).not_to receive(:capture_exception)
+
+              subject.call
+            end
+
+            it {
+              is_expected.to have_enqueued_job(MarkInactiveContributorInactiveJob).with do |params|
+                expect(params[:contributor_id]).to eq(contributor.id)
+              end
+            }
+          end
         end
       end
     end
@@ -311,29 +331,49 @@ RSpec.describe WhatsApp::WebhookController do
                                        url: error_payload['more_info']['url'])
     end
 
-    it 'returns 200' do
-      subject.call
+    before { allow(Twilio::Security::RequestValidator).to receive(:new).and_return(mock_twilio_security_request_validator) }
 
-      expect(response).to have_http_status(200)
-    end
+    describe 'fails Rack::TwilioWebhookAuthentication' do
+      before { allow(mock_twilio_security_request_validator).to receive(:validate).and_return(false) }
 
-    it 'reports the error with error code, message, and url' do
-      expect(Sentry).to receive(:capture_exception).with(exception)
-
-      subject.call
-    end
-
-    context 'given more_info is not provided' do
-      before { error_payload.delete('more_info') }
-
-      let(:exception) do
-        WhatsAppAdapter::TwilioError.new(error_code: error_payload['error_code'])
+      it 'returns forbidden' do
+        subject.call
+        expect(response).to have_http_status(:forbidden)
       end
 
-      it 'reports the error with error code' do
+      it 'returns message why it failed' do
+        subject.call
+        expect(response.body).to eq('Twilio Request Validation Failed.')
+      end
+    end
+
+    describe 'passes Rack::TwilioWebhookAuthentication' do
+      before { allow(mock_twilio_security_request_validator).to receive(:validate).and_return(true) }
+
+      it 'returns 200' do
+        subject.call
+
+        expect(response).to have_http_status(200)
+      end
+
+      it 'reports the error with error code, message, and url' do
         expect(Sentry).to receive(:capture_exception).with(exception)
 
         subject.call
+      end
+
+      context 'given more_info is not provided' do
+        before { error_payload.delete('more_info') }
+
+        let(:exception) do
+          WhatsAppAdapter::TwilioError.new(error_code: error_payload['error_code'])
+        end
+
+        it 'reports the error with error code' do
+          expect(Sentry).to receive(:capture_exception).with(exception)
+
+          subject.call
+        end
       end
     end
   end
