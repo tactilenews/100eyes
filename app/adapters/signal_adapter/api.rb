@@ -13,7 +13,7 @@ module SignalAdapter
           yield response if block_given?
         else
           error_message = JSON.parse(response.body)['error']
-          mark_contributor_as_inactive(contributor) if error_message.match?(/Unregistered user/)
+          MarkInactiveContributorInactiveJob.perform_later(contributor_id: contributor.id) if error_message.match?(/Unregistered user/)
           exception = SignalAdapter::BadRequestError.new(error_code: response.code, message: error_message)
           context = {
             code: response.code,
@@ -22,16 +22,6 @@ module SignalAdapter
             body: error_message
           }
           ErrorNotifier.report(exception, context: context)
-        end
-      end
-
-      private
-
-      def mark_contributor_as_inactive(contributor)
-        contributor.update(deactivated_at: Time.current)
-        ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
-        User.admin.find_each do |admin|
-          PostmarkAdapter::Outbound.contributor_marked_as_inactive!(admin, contributor)
         end
       end
     end

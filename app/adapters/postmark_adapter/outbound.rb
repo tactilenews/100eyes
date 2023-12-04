@@ -11,11 +11,7 @@ module PostmarkAdapter
         contributor = Contributor.find_by(email: email_address)
         next unless contributor
 
-        contributor.update(deactivated_at: Time.current)
-        ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
-        User.admin.find_each do |admin|
-          contributor_marked_as_inactive!(admin, contributor)
-        end
+        MarkInactiveContributorInactiveJob.perform_later(contributor_id: contributor.id)
       end
     end
 

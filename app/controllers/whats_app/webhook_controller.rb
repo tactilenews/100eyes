@@ -9,6 +9,7 @@ module WhatsApp
     INVALID_MESSAGE_RECIPIENT_ERROR_CODE = 63_024 # https://www.twilio.com/docs/api/errors/63024
 
     def message
+      head :ok
       adapter = WhatsAppAdapter::TwilioInbound.new
 
       adapter.on(WhatsAppAdapter::TwilioInbound::UNKNOWN_CONTRIBUTOR) do |whats_app_phone_number|
@@ -40,17 +41,21 @@ module WhatsApp
     end
 
     def errors
+      head :ok
       return unless error_params['Level'] == 'ERROR'
 
-      payload = JSON.parse(error_params['Payload'])
-      parameters = payload.with_indifferent_access.dig(:webhook, :request, :parameters)
-      exception = WhatsAppAdapter::TwilioError.new(error_code: payload['error_code'])
+      payload = JSON.parse(error_params['Payload']).deep_transform_keys(&:underscore).with_indifferent_access
+      parameters = payload.dig(:webhook, :request, :parameters)
+      more_info = payload[:more_info]
+      message = more_info&.dig(:msg)
+      url = more_info&.dig(:url)
+      exception = WhatsAppAdapter::TwilioError.new(error_code: payload['error_code'], message: message, url: url)
       ErrorNotifier.report(exception,
                            context: {
                              channel_to_address: parameters&.dig(:channelToAddress),
-                             more_info: payload['more_info'],
+                             more_info: more_info,
                              error_sid: error_params['Sid'],
-                             message_sid: parameters&.dig(:messageSid)
+                             message_sid: parameters&.dig(:message_sid)
                            })
     end
 
@@ -59,8 +64,11 @@ module WhatsApp
       return unless status_params['MessageStatus'].in?(UNSUCCESSFUL_DELIVERY)
 
       whats_app_phone_number = status_params['To'].split('whatsapp:').last
+      contributor = Contributor.find_by(whats_app_phone_number: whats_app_phone_number)
+      return unless contributor
+
       if status_params['ErrorCode'].to_i.eql?(INVALID_MESSAGE_RECIPIENT_ERROR_CODE)
-        handle_invalid_message_recipient(whats_app_phone_number)
+        MarkInactiveContributorInactiveJob.perform_later(contributor_id: contributor.id)
         return
       end
       exception = WhatsAppAdapter::MessageDeliveryUnsuccessfulError.new(status: status_params['MessageStatus'],
@@ -97,17 +105,6 @@ module WhatsApp
 
       message = (send_requested_message(contributor, twilio_message_sid) if twilio_message_sid)
       WhatsAppAdapter::TwilioOutbound.send!(message || contributor.received_messages.first)
-    end
-
-    def handle_invalid_message_recipient(whats_app_phone_number)
-      contributor = Contributor.find_by(whats_app_phone_number: whats_app_phone_number)
-      return unless contributor
-
-      contributor.update(deactivated_at: Time.current)
-      ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
-      User.admin.find_each do |admin|
-        PostmarkAdapter::Outbound.contributor_marked_as_inactive!(admin, contributor)
-      end
     end
 
     def send_requested_message(contributor, twilio_message_sid)
