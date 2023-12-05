@@ -5,8 +5,11 @@ module WhatsApp
     include WhatsAppHandleCallbacks
 
     skip_before_action :require_login, :verify_authenticity_token
+    before_action :set_contributor, only: :status
+
     UNSUCCESSFUL_DELIVERY = %w[undelivered failed].freeze
     INVALID_MESSAGE_RECIPIENT_ERROR_CODE = 63_024 # https://www.twilio.com/docs/api/errors/63024
+    FREEFORM_MESSAGE_NOT_ALLOWED_ERROR_CODE = 63_016 # https://www.twilio.com/docs/api/errors/63016
 
     def message
       head :ok
@@ -61,20 +64,7 @@ module WhatsApp
 
     def status
       head :ok
-      return unless status_params['MessageStatus'].in?(UNSUCCESSFUL_DELIVERY)
-
-      whats_app_phone_number = status_params['To'].split('whatsapp:').last
-      contributor = Contributor.find_by(whats_app_phone_number: whats_app_phone_number)
-      return unless contributor
-
-      if status_params['ErrorCode'].to_i.eql?(INVALID_MESSAGE_RECIPIENT_ERROR_CODE)
-        MarkInactiveContributorInactiveJob.perform_later(contributor_id: contributor.id)
-        return
-      end
-      exception = WhatsAppAdapter::MessageDeliveryUnsuccessfulError.new(status: status_params['MessageStatus'],
-                                                                        whats_app_phone_number: whats_app_phone_number,
-                                                                        message: status_params['ErrorMessage'])
-      ErrorNotifier.report(exception, context: { message_sid: status_params['MessageSid'] })
+      handle_unsuccessful_delivery if status_params['MessageStatus'].in?(UNSUCCESSFUL_DELIVERY)
     end
 
     private
@@ -93,6 +83,11 @@ module WhatsApp
     def status_params
       params.permit(:AccountSid, :ApiVersion, :ChannelInstallSid, :ChannelPrefix, :ChannelToAddress, :ErrorCode, :ErrorMessage,
                     :EventType, :From, :MessageSid, :MessageStatus, :SmsSid, :SmsStatus, :StructuredMessage, :To)
+    end
+
+    def set_contributor
+      whats_app_phone_number = status_params['To'].split('whatsapp:').last
+      @contributor = Contributor.find_by(whats_app_phone_number: whats_app_phone_number)
     end
 
     def handle_unknown_contributor(whats_app_phone_number)
@@ -123,6 +118,30 @@ module WhatsApp
     rescue Twilio::REST::RestError => e
       ErrorNotifier.report(e)
       nil
+    end
+
+    def handle_freeform_message_not_allowed_error(contributor, twilio_message_sid)
+      message_text = fetch_message_from_twilio(twilio_message_sid)
+      message = Message.find_by(text: message_text)
+      return unless message
+
+      WhatsAppAdapter::TwilioOutbound.send_message_template!(contributor, message)
+    end
+
+    def handle_unsuccessful_delivery
+      return unless @contributor
+
+      if status_params['ErrorCode'].to_i.eql?(INVALID_MESSAGE_RECIPIENT_ERROR_CODE)
+        MarkInactiveContributorInactiveJob.perform_later(contributor_id: @contributor.id)
+        return
+      end
+      if status_params['ErrorCode'].to_i.eql?(FREEFORM_MESSAGE_NOT_ALLOWED_ERROR_CODE) && status_params['MessageStatus'].eql?('failed')
+        handle_freeform_message_not_allowed_error(@contributor, status_params['MessageSid'])
+      end
+      exception = WhatsAppAdapter::MessageDeliveryUnsuccessfulError.new(status: status_params['MessageStatus'],
+                                                                        whats_app_phone_number: @contributor.whats_app_phone_number,
+                                                                        message: status_params['ErrorMessage'])
+      ErrorNotifier.report(exception, context: { message_sid: status_params['MessageSid'] })
     end
   end
 end

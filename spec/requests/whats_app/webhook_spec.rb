@@ -202,8 +202,8 @@ RSpec.describe WhatsApp::WebhookController do
         'ChannelInstallSid' => 'someChannelInstallSid',
         'ChannelPrefix' => 'whatsapp',
         'ChannelToAddress' => whats_app_phone_number.to_s,
-        'ErrorCode' => '63016',
-        'ErrorMessage' => freeform_message_not_allowed_error_message,
+        'ErrorCode' => '60228',
+        'ErrorMessage' => 'Template was not found',
         'From' => "whatsapp:#{Setting.whats_app_server_phone_number}",
         'MessageSid' => 'someSid',
         'MessageStatus' => 'failed',
@@ -213,9 +213,7 @@ RSpec.describe WhatsApp::WebhookController do
         'To' => "whatsapp:#{whats_app_phone_number}"
       }
     end
-    let(:freeform_message_not_allowed_error_message) do
-      'Twilio Error: Failed to send freeform message because you are outside the allowed window.. Generated new message with sid: someSid'
-    end
+
     let(:exception) do
       WhatsAppAdapter::MessageDeliveryUnsuccessfulError.new(status: params['MessageStatus'],
                                                             whats_app_phone_number: whats_app_phone_number, message: params['ErrorMessage'])
@@ -285,6 +283,60 @@ RSpec.describe WhatsApp::WebhookController do
                 expect(params[:contributor_id]).to eq(contributor.id)
               end
             }
+          end
+
+          context 'due to a freeform message not allowed error' do
+            let!(:request) do
+              create(:request, title: 'I failed to send', text: 'Hey {{FIRST_NAME}}, because it was sent outside the allowed window')
+            end
+            let(:valid_account_sid) { 'VALID_ACCOUNT_SID' }
+            let(:valid_api_key_sid) { 'VALID_API_KEY_SID' }
+            let(:valid_api_key_secret) { 'VALID_API_KEY_SECRET' }
+            let(:mock_twilio_rest_client) { instance_double(Twilio::REST::Client) }
+            let(:messages_double) { double(Twilio::REST::Api::V2010::AccountContext::MessageInstance, body: body_text) }
+            let(:body_text) { 'no message with this text saved' }
+            let(:freeform_message_not_allowed_error_message) do
+              'Twilio Error: Failed to send freeform message because you are outside the allowed window.'
+            end
+
+            before do
+              allow(Twilio::REST::Client).to receive(:new).and_return(mock_twilio_rest_client)
+              allow(mock_twilio_rest_client).to receive(:messages).with('someSid').and_return(messages_double)
+              allow(messages_double).to receive(:fetch).and_return(messages_double)
+              params['ErrorCode'] = '63016'
+              params['ErrorMessage'] = freeform_message_not_allowed_error_message
+            end
+
+            it 'reports it as an error, as we want to track specifics to when this occurs' do
+              expect(Sentry).to receive(:capture_exception).with(exception)
+
+              subject.call
+            end
+
+            it 'given message cannot be found by Twilio message sid body' do
+              expect { subject.call }.not_to have_enqueued_job(WhatsAppAdapter::Outbound::Text)
+              expect { subject.call }.not_to raise_error
+            end
+
+            describe 'given a message is found by Twilio message sid body' do
+              let!(:message) { create(:message, text: body_text, request: request) }
+              let(:body_text) { "Hey #{contributor.first_name}, because it was sent outside the allowed window" }
+
+              it 'enqueues the Text job with WhatsApp template' do
+                expect { subject.call }.to(have_enqueued_job(WhatsAppAdapter::Outbound::Text).on_queue('default').with do |params|
+                  expect(params[:contributor_id]).to eq(contributor.id)
+                  expect(params[:text]).to include(contributor.first_name)
+                  expect(params[:text]).to include(message.request.title)
+                end)
+              end
+
+              context 'given an undelivered status' do
+                before { params['MessageStatus'] = 'undelivered' }
+                it 'is expected not to schedule a job as it would send out twice, one for undelivered and one for failed' do
+                  expect { subject.call }.not_to have_enqueued_job(WhatsAppAdapter::Outbound::Text)
+                end
+              end
+            end
           end
         end
       end
