@@ -318,6 +318,7 @@ RSpec.describe WhatsApp::WebhookController do
 
             it 'given message cannot be found by Twilio message sid body' do
               expect { subject.call }.not_to have_enqueued_job(WhatsAppAdapter::Outbound::Text)
+              expect { subject.call }.not_to raise_error
             end
 
             describe 'given a message is found by Twilio message sid body' do
