@@ -72,7 +72,7 @@ module WhatsApp
         MarkInactiveContributorInactiveJob.perform_later(contributor_id: contributor.id)
         return
       end
-      if status_params['ErrorCode'].to_i.eql?(FREEFORM_MESSAGE_NOT_ALLOWED_ERROR_CODE)
+      if status_params['ErrorCode'].to_i.eql?(FREEFORM_MESSAGE_NOT_ALLOWED_ERROR_CODE) && status_params['MessageStatus'].eql?('failed')
         handle_freeform_message_not_allowed_error(contributor, status_params['MessageSid'])
       end
       exception = WhatsAppAdapter::MessageDeliveryUnsuccessfulError.new(status: status_params['MessageStatus'],
