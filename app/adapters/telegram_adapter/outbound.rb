@@ -14,8 +14,7 @@ module TelegramAdapter
                                                          media: media,
                                                          message: message)
         else
-          TelegramAdapter::Outbound::Text.perform_later(text: message.text, contributor_id: recipient.id,
-                                                        message: message)
+          TelegramAdapter::Outbound::Text.perform_later(contributor_id: recipient.id, message: message)
         end
       end
 

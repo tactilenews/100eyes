@@ -6,15 +6,47 @@ RSpec.describe TelegramAdapter::Outbound::Text do
   let(:adapter) { described_class.new }
   let(:contributor) { create(:contributor, telegram_id: 4) }
   let(:message) { create(:message, text: 'Forgot to ask: How are you?', broadcasted: true, recipient: contributor) }
+  let(:successful_response) do
+    {
+      'ok' => true,
+      'result' =>
+        {
+          'message_id' => 12_345_678,
+          'from' => {
+            'id' => 12_345_678,
+            'is_bot' => true,
+            'first_name' => "@#{Telegram.bots[:default].username}",
+            'username' => Telegram.bots[:default].username
+          },
+          'chat' => {
+            'id' => 875_171_743,
+            'first_name' => contributor.first_name,
+            'last_name' => contributor.last_name,
+            'username' => contributor.username,
+            'type' => 'private'
+          },
+          'date' => Time.current.to_i,
+          'text' => message.text
+        }
+    }
+  end
 
   describe '#perform' do
-    subject { adapter.perform(text: message.text, contributor_id: message.recipient.id) }
+    subject { adapter.perform(contributor_id: message.recipient.id, message: message) }
     let(:expected_message) { { chat_id: 4, text: 'Forgot to ask: How are you?', parse_mode: :HTML } }
 
     it 'sends the message with TelegramBot' do
       expect(Telegram.bot).to receive(:send_message).with(expected_message)
 
       subject
+    end
+
+    context 'successful delivery' do
+      before { allow(Telegram.bot).to receive(:send_message).and_return(successful_response) }
+
+      it 'marks the message as received' do
+        expect { subject }.to change { message.reload.received_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+      end
     end
   end
 end
