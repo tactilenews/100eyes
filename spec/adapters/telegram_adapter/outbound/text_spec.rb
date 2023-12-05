@@ -44,8 +44,14 @@ RSpec.describe TelegramAdapter::Outbound::Text do
     context 'successful delivery' do
       before { allow(Telegram.bot).to receive(:send_message).and_return(successful_response) }
 
+      let(:external_id) { successful_response.with_indifferent_access[:result][:message_id].to_s }
+
       it 'marks the message as received' do
         expect { subject }.to change { message.reload.received_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+      end
+
+      it "saves the message's external id" do
+        expect { subject }.to change { message.reload.external_id }.from(nil).to(external_id)
       end
     end
   end

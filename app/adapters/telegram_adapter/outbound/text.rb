@@ -34,7 +34,8 @@ module TelegramAdapter
 
       def mark_message_as_received(telegram_message)
         timestamp = telegram_message[:result][:date]
-        message.update!(received_at: Time.zone.at(timestamp).to_datetime)
+        external_id = telegram_message[:result][:message_id].to_s
+        message.update!(received_at: Time.zone.at(timestamp).to_datetime, external_id: external_id)
       end
     end
   end
