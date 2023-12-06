@@ -115,8 +115,6 @@ ActiveRecord::Schema.define(version: 2023_12_05_194628) do
     t.bigint "deactivated_by_user_id"
     t.boolean "deactivated_by_admin", default: false
     t.datetime "whats_app_message_template_sent_at"
-    t.string "external_id"
-    t.string "external_channel"
     t.datetime "unsubscribed_at"
     t.index ["email"], name: "index_contributors_on_email", unique: true
     t.index ["organization_id"], name: "index_contributors_on_organization_id"
