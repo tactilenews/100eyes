@@ -12,7 +12,7 @@ RSpec.describe IconList::IconList, type: :component do
     ]
   end
 
-  it { should have_css('.IconList') }
-  it { should have_css('.IconList-title', text: 'My Title') }
-  it { should have_text('Lorem Ipsum') }
+  it { is_expected.to have_css('.IconList') }
+  it { is_expected.to have_css('.IconList-title', text: 'My Title') }
+  it { is_expected.to have_text('Lorem Ipsum') }
 end

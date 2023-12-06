@@ -10,8 +10,9 @@ RSpec.shared_examples 'a Contributor unsubscribes' do |adapter|
 
   it { is_expected.not_to change(Message, :count) }
   it { is_expected.to change { contributor.reload.unsubscribed_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone)) }
+
   it {
-    is_expected.to(have_enqueued_job(adapter).on_queue('default').with do |params|
+    expect(subject).to(have_enqueued_job(adapter).on_queue('default').with do |params|
       if adapter.eql?(WhatsAppAdapter::Outbound::ThreeSixtyDialogText)
         expect(params[:payload][:to]).to eq(contributor.whats_app_phone_number.split('+').last)
         expect(params[:payload][:text][:body]).to match(unsubscribe_successful_message)
@@ -21,6 +22,7 @@ RSpec.shared_examples 'a Contributor unsubscribes' do |adapter|
       end
     end)
   }
+
   it_behaves_like 'an ActivityNotification', 'ContributorMarkedInactive'
   it 'enqueues a job to inform admin' do
     expect { subject.call }.to have_enqueued_job.on_queue('default').with(

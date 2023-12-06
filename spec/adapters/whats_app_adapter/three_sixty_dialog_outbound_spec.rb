@@ -76,10 +76,11 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
 
   describe '::send!' do
     subject { -> { described_class.send!(message) } }
+
     before { message } # we don't count the extra ::send here
 
     context '`whats_app_phone_number` blank' do
-      it { should_not enqueue_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText) }
+      it { is_expected.not_to enqueue_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText) }
     end
 
     context 'given a WhatsApp contributor' do
@@ -121,6 +122,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
 
       describe 'message with files' do
         let(:file) { create(:file) }
+
         before { message.update(files: [file]) }
 
         context 'contributor has not sent a message within 24 hours' do
@@ -254,11 +256,11 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
       context  'contributor has responded' do
         before { contributor.update(whats_app_message_template_responded_at: 1.second.ago) }
 
-        it { is_expected.to eq(true) }
+        it { is_expected.to be(true) }
       end
 
       context 'contributor has not responded, and has no messages within 24 hours' do
-        it { is_expected.to eq(false) }
+        it { is_expected.to be(false) }
       end
     end
 
@@ -266,11 +268,11 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
       context 'has been received' do
         before { create(:message, sender: contributor) }
 
-        it { is_expected.to eq(true) }
+        it { is_expected.to be(true) }
       end
 
       context 'has not been received' do
-        it { is_expected.to eq(false) }
+        it { is_expected.to be(false) }
       end
     end
   end

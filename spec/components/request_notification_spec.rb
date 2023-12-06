@@ -8,5 +8,5 @@ RSpec.describe RequestNotification::RequestNotification, type: :component do
   let(:params) { { request: request } }
   let(:request) { build(:request) }
 
-  it { should have_css('.RequestNotification', visible: :hidden) }
+  it { is_expected.to have_css('.RequestNotification', visible: :hidden) }
 end

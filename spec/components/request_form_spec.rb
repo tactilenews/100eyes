@@ -6,5 +6,6 @@ RSpec.describe RequestForm::RequestForm, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
   let(:params) { { request: build(:request) } }
-  it { should have_css('.RequestForm') }
+
+  it { is_expected.to have_css('.RequestForm') }
 end

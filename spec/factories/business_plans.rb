@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/BlockLength
 FactoryBot.define do
   factory :business_plan do
     name { 'Free' }
@@ -110,4 +109,3 @@ FactoryBot.define do
     end
   end
 end
-# rubocop:enable Metrics/BlockLength

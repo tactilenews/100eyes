@@ -48,7 +48,7 @@ RSpec.describe Threema::WebhookController do
       let!(:request) { create(:request) }
 
       before do
-        allow(threema_mock).to receive(:instance_of?) { false }
+        allow(threema_mock).to receive(:instance_of?).and_return(false)
       end
 
       it { is_expected.to eq(200) }
@@ -61,11 +61,12 @@ RSpec.describe Threema::WebhookController do
 
       describe 'DeliveryReceipt' do
         let(:threema_mock) { instance_double(Threema::Receive::DeliveryReceipt, content: 'x\00x\\0') }
+
         before { allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::DeliveryReceipt).and_return(true) }
 
         it 'returns 200 to avoid retries' do
           subject
-          expect(response).to have_http_status(200)
+          expect(response).to have_http_status(:ok)
         end
       end
 
@@ -80,7 +81,7 @@ RSpec.describe Threema::WebhookController do
 
         it 'returns 200 to avoid retries' do
           subject
-          expect(response).to have_http_status(200)
+          expect(response).to have_http_status(:ok)
         end
 
         it 'sends an automated message response' do
@@ -101,6 +102,7 @@ RSpec.describe Threema::WebhookController do
 
       describe 'Re-subscribe' do
         let(:threema_mock) { instance_double(Threema::Receive::Text, content: 'Bestellen') }
+
         before do
           contributor.unsubscribed_at = 1.day.ago
           contributor.save(validate: false)

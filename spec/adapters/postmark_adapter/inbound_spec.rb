@@ -8,6 +8,7 @@ RSpec.describe PostmarkAdapter::Inbound do
 
   describe '#text' do
     subject { -> { email_message.text } }
+
     let(:mail) do
       mail = Mail.new do |m|
         m.from 'contributor@example.org'
@@ -18,7 +19,7 @@ RSpec.describe PostmarkAdapter::Inbound do
       mail
     end
 
-    it { should_not raise_error }
+    it { is_expected.not_to raise_error }
     it { expect(subject.call).to eq('This is a text body part') }
 
     describe 'given no multipart' do
@@ -30,17 +31,20 @@ RSpec.describe PostmarkAdapter::Inbound do
           m.body html_part
         end
       end
-      it { should_not raise_error }
+
+      it { is_expected.not_to raise_error }
       it { expect(subject.call).to eq('This is a text body part') }
 
       describe '<html> tags present in text' do
         let(:html_part) { '<h1>This is a text body part</h1>' }
+
         it { expect(subject.call).to eq("\nThis is a text body part\n") }
       end
     end
 
     describe '<html> tags present in text' do
       let(:html_part) { '<h1>This is a text body part</h1>' }
+
       it { expect(subject.call).to eq("\nThis is a text body part\n") }
     end
 
@@ -94,6 +98,7 @@ RSpec.describe PostmarkAdapter::Inbound do
     describe 'previous messages present in reply' do
       context 'given unchanged class and id attributes' do
         let(:mail) { Mail.read(Rails.root.join / 'spec/adapters/postmark_adapter/reply.eml') }
+
         it 'removes previous messages' do
           previous_message = 'Hier könnte Ihre Frage stehen'
           expect(mail.html_part.decoded).to include(previous_message) # sanity check
@@ -103,6 +108,7 @@ RSpec.describe PostmarkAdapter::Inbound do
 
       context 'given only an unchanged id attribute' do
         let(:mail) { Mail.read(Rails.root.join / 'spec/adapters/postmark_adapter/reply_only_id_attribute.eml') }
+
         it 'removes previous messages' do
           previous_message = 'Hier könnte Ihre Frage stehen'
           expect(mail.html_part.decoded).to include(previous_message) # sanity check
@@ -112,6 +118,7 @@ RSpec.describe PostmarkAdapter::Inbound do
 
       context 'given only a changed class attribute' do
         let(:mail) { Mail.read(Rails.root.join / 'spec/adapters/postmark_adapter/reply_changed_class_attribute.eml') }
+
         it 'removes previous messages' do
           previous_message = 'Hier könnte Ihre Frage stehen'
           expect(mail.html_part.decoded).to include(previous_message) # sanity check
@@ -124,6 +131,7 @@ RSpec.describe PostmarkAdapter::Inbound do
   describe '#message' do
     describe '.unknown_content' do
       subject { email_message.message.unknown_content }
+
       describe 'given a mail attachment' do
         describe 'with a .txt multipart' do
           let(:mail) do
@@ -135,7 +143,8 @@ RSpec.describe PostmarkAdapter::Inbound do
             mail.add_file(Rails.root.join('README.md').to_s)
             mail
           end
-          it { should be(true) }
+
+          it { is_expected.to be(true) }
         end
 
         describe 'with a .png multipart' do
@@ -148,31 +157,36 @@ RSpec.describe PostmarkAdapter::Inbound do
             mail.add_file(Rails.root.join('example-image.png').to_s)
             mail
           end
-          it { should be(false) }
+
+          it { is_expected.to be(false) }
         end
       end
     end
   end
 
   describe '#file' do
+    subject { email_message.file }
+
     let(:mail) do
       mail = Mail.new
       mail.add_file Rails.root.join('README.md').to_s
       mail
     end
-    subject { email_message.file }
-    it { should be_nil }
+
+    it { is_expected.to be_nil }
   end
 
   describe '#photos' do
     subject { email_message.photos }
+
     describe 'given a file attachment' do
       let(:mail) do
         mail = Mail.new
         mail.add_file Rails.root.join('README.md').to_s
         mail
       end
-      it { should be_empty }
+
+      it { is_expected.to be_empty }
     end
 
     describe 'given an image attachment' do
@@ -181,8 +195,9 @@ RSpec.describe PostmarkAdapter::Inbound do
         mail.add_file Rails.root.join('example-image.png').to_s
         mail
       end
-      it { should_not be_empty }
-      it { should all be_a(Photo) }
+
+      it { is_expected.not_to be_empty }
+      it { is_expected.to all be_a(Photo) }
     end
   end
 end

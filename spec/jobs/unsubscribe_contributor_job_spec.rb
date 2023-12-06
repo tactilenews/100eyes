@@ -34,6 +34,7 @@ RSpec.describe UnsubscribeContributorJob do
       let(:threema_lookup_double) { instance_double(Threema::Lookup) }
       let(:threema) { instance_double(Threema) }
       let(:threema_id) { 'Z1234567' }
+
       before do
         allow(Threema).to receive(:new).and_return(threema)
         allow(Threema::Lookup).to receive(:new).with({ threema: threema }).and_return(threema_lookup_double)

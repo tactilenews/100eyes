@@ -3,11 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe Request, type: :model do
+  subject { request }
+
   let(:contributor) { create(:contributor) }
   let(:user) { create(:user) }
 
   let(:request) do
-    Request.new(
+    described_class.new(
       title: 'Hitchhiker’s Guide',
       text: 'What is the answer to life, the universe, and everything?',
       user: user,
@@ -15,8 +17,6 @@ RSpec.describe Request, type: :model do
       files: [fixture_file_upload('example-image.png')]
     )
   end
-
-  subject { request }
 
   describe 'validations' do
     it { is_expected.to be_valid }
@@ -90,7 +90,7 @@ RSpec.describe Request, type: :model do
     let!(:contributor) { create(:contributor, tag_list: ['programmer']) }
     let!(:request) { create(:request, tag_list: ['programmer']) }
 
-    before(:each) do
+    before do
       contributor.tag_list = ''
       contributor.save
       contributor.reload
@@ -101,55 +101,63 @@ RSpec.describe Request, type: :model do
       expect(Contributor.all_tags.map(&:name)).to eq([])
       request.reload
       expect(request.tag_list).to eq(['programmer'])
-      expect(Request.all_tags.map(&:name)).to eq(['programmer'])
+      expect(described_class.all_tags.map(&:name)).to eq(['programmer'])
     end
   end
 
   describe '#personalized_text' do
+    subject { request.personalized_text(contributor) }
+
     let(:contributor) { build(:contributor, first_name: 'Zora', last_name: 'Zimmermanne') }
     let(:request) { build(:request, text: text) }
 
-    subject { request.personalized_text(contributor) }
-
     context 'with uppercase placeholder' do
       let(:text) { 'Hi {{VORNAME}}, how are you?' }
-      it { should eq('Hi Zora, how are you?') }
+
+      it { is_expected.to eq('Hi Zora, how are you?') }
     end
 
     context 'with lowercase placeholder' do
       let(:text) { 'Hi {{vorname}}, how are you?' }
-      it { should eq('Hi Zora, how are you?') }
+
+      it { is_expected.to eq('Hi Zora, how are you?') }
     end
 
     context 'with mixed-cased placeholder' do
       let(:text) { 'Hi {{Vorname}}, how are you?' }
-      it { should eq('Hi Zora, how are you?') }
+
+      it { is_expected.to eq('Hi Zora, how are you?') }
     end
 
     context 'with optional whitespace in placeholder' do
       let(:text) { 'Hi {{ VORNAME }}, how are you?' }
-      it { should eq('Hi Zora, how are you?') }
+
+      it { is_expected.to eq('Hi Zora, how are you?') }
     end
 
     context 'with multiple placeholders' do
       let(:text) { '{{VORNAME}}! {{VORNAME}}! {{VORNAME}}!' }
-      it { should eq('Zora! Zora! Zora!') }
+
+      it { is_expected.to eq('Zora! Zora! Zora!') }
     end
 
     context 'with unsupported placeholder' do
       let(:text) { 'This is {{NOT_SUPPORTED}}' }
-      it { should eq('This is {{NOT_SUPPORTED}}') }
+
+      it { is_expected.to eq('This is {{NOT_SUPPORTED}}') }
     end
 
     context 'if name contains leading/trailing whitespace' do
       let(:text) { 'Hi {{VORNAME}}, how are you?' }
       let(:contributor) { build(:contributor, first_name: ' Zora ') }
-      it { should eq('Hi Zora, how are you?') }
+
+      it { is_expected.to eq('Hi Zora, how are you?') }
     end
   end
 
   describe '#messages_by_contributor' do
     subject { request.messages_by_contributor }
+
     let(:request) { create(:request) }
 
     describe 'with messages by multiple contributors' do
@@ -177,7 +185,7 @@ RSpec.describe Request, type: :model do
     let(:stats) { request.stats }
 
     describe 'given a number of requests, replies and photos' do
-      before(:each) do
+      before do
         create_list(:message, 2)
         delivered_messages = create_list(:message, 7, :outbound, request: request, broadcasted: true)
         # _ is some unresponsive recipient
@@ -191,112 +199,126 @@ RSpec.describe Request, type: :model do
 
       describe '[:counts][:replies]' do
         subject { stats[:counts][:replies] }
-        it { should eq(13) } # unique contributors
+
+        it { is_expected.to eq(13) } # unique contributors
 
         describe 'messages from us' do
-          before(:each) do
+          before do
             create(:message, request: request, sender: nil, broadcasted: true)
           end
 
           it 'are excluded' do
-            should eq(13)
+            expect(subject).to eq(13)
           end
         end
       end
 
       describe '[:counts][:contributors]' do
         subject { stats[:counts][:contributors] }
-        it { should eq(6) } # unique contributors
+
+        it { is_expected.to eq(6) } # unique contributors
 
         describe 'messages from us' do
-          before(:each) do
+          before do
             create(:message, request: request, sender: nil, broadcasted: true)
           end
 
           it 'are excluded' do
-            should eq(6)
+            expect(subject).to eq(6)
           end
         end
       end
 
       describe '[:counts][:recipients]' do
         subject { stats[:counts][:recipients] }
-        it { should eq(7) }
+
+        it { is_expected.to eq(7) }
       end
 
       describe '[:counts][:photos]' do
         subject { stats[:counts][:photos] }
-        it { should eq(10) } # unique photos
+
+        it { is_expected.to eq(10) } # unique photos
       end
 
       describe 'iterating through a list' do
-        subject { -> { Request.find_each.map(&:stats) } }
-        it { should make_database_queries(count: 39) }
+        subject { -> { described_class.find_each.map(&:stats) } }
+
+        it { is_expected.to make_database_queries(count: 39) }
 
         describe 'preload(messages: :sender).eager_load(:messages)' do
-          subject { -> { Request.preload(messages: :sender).includes(messages: :files).eager_load(:messages).find_each.map(&:stats) } }
-          it { should make_database_queries(count: 17) } # better
+          subject do
+            lambda {
+              described_class.preload(messages: :sender).includes(messages: :files).eager_load(:messages).find_each.map(&:stats)
+            }
+          end
+
+          it { is_expected.to make_database_queries(count: 17) } # better
         end
       end
     end
   end
 
   describe '::after_create' do
-    before(:each) { allow(Request).to receive(:broadcast!).and_call_original } # is stubbed for every other test
     subject { -> { request.save! } }
+
+    before { allow(described_class).to receive(:broadcast!).and_call_original } # is stubbed for every other test
+
     describe 'given some existing contributors in the moment of creation' do
-      before(:each) do
+      before do
         create(:contributor, id: 1, email: 'somebody@example.org')
         create(:contributor, id: 2, email: nil, telegram_id: 22)
       end
 
-      it { should change { Message.count }.from(0).to(2) }
-      it { should change { Message.pluck(:recipient_id) }.from([]).to([2, 1]) }
-      it { should change { Message.pluck(:sender_id) }.from([]).to([request.user.id, request.user.id]) }
-      it { should change { Message.pluck(:broadcasted) }.from([]).to([true, true]) }
-      it { should change { Message::File.count }.from(0).to(2) }
+      it { is_expected.to change(Message, :count).from(0).to(2) }
+      it { is_expected.to change { Message.pluck(:recipient_id) }.from([]).to([2, 1]) }
+      it { is_expected.to change { Message.pluck(:sender_id) }.from([]).to([request.user.id, request.user.id]) }
+      it { is_expected.to change { Message.pluck(:broadcasted) }.from([]).to([true, true]) }
+      it { is_expected.to change(Message::File, :count).from(0).to(2) }
     end
 
     describe 'creates message only for contributors tagged with tag_list' do
       let(:request) do
-        Request.new(
+        described_class.new(
           title: 'Hitchhiker’s Guide',
           text: 'What is the answer to life, the universe, and everything?',
           tag_list: 'programmer',
           user: user
         )
       end
-      before(:each) do
+
+      before do
         create(:contributor, id: 1, email: 'somebody@example.org', tag_list: ['programmer'])
         create(:contributor, id: 2, email: nil, telegram_id: 22)
       end
 
-      it { should change { Message.count }.from(0).to(1) }
-      it { should change { Message.pluck(:recipient_id) }.from([]).to([1]) }
-      it { should change { Message.pluck(:sender_id) }.from([]).to([request.user.id]) }
-      it { should change { Message.pluck(:broadcasted) }.from([]).to([true]) }
+      it { is_expected.to change(Message, :count).from(0).to(1) }
+      it { is_expected.to change { Message.pluck(:recipient_id) }.from([]).to([1]) }
+      it { is_expected.to change { Message.pluck(:sender_id) }.from([]).to([request.user.id]) }
+      it { is_expected.to change { Message.pluck(:broadcasted) }.from([]).to([true]) }
     end
 
     describe 'given contributors who are deactivated' do
-      before(:each) do
+      before do
         create(:contributor, id: 3, email: 'deactivated@example.org', active: false)
         create(:contributor, id: 4, email: 'activated@example.org', active: true)
         create(:contributor, id: 5, telegram_id: 24, active: false)
       end
 
-      it { should change { Message.count }.from(0).to(1) }
-      it { should change { Message.pluck(:recipient_id) }.from([]).to([4]) }
-      it { should change { Message.pluck(:sender_id) }.from([]).to([request.user.id]) }
-      it { should change { Message.pluck(:broadcasted) }.from([]).to([true]) }
+      it { is_expected.to change(Message, :count).from(0).to(1) }
+      it { is_expected.to change { Message.pluck(:recipient_id) }.from([]).to([4]) }
+      it { is_expected.to change { Message.pluck(:sender_id) }.from([]).to([request.user.id]) }
+      it { is_expected.to change { Message.pluck(:broadcasted) }.from([]).to([true]) }
     end
   end
 
   describe '::after_update_commit' do
+    subject { request.update!(params) }
+
     before do
-      allow(Request).to receive(:broadcast!).and_call_original
+      allow(described_class).to receive(:broadcast!).and_call_original
       create(:contributor)
     end
-    subject { request.update!(params) }
 
     describe '#broadcast_updated_request' do
       context 'not planned request' do
@@ -305,7 +327,7 @@ RSpec.describe Request, type: :model do
         let(:params) { { text: 'I have new text' } }
 
         it 'does not broadcast request' do
-          expect(Request).not_to receive(:broadcast!)
+          expect(described_class).not_to receive(:broadcast!)
 
           subject
         end
@@ -319,7 +341,7 @@ RSpec.describe Request, type: :model do
         let(:params) { { schedule_send_for: 1.day.from_now } }
 
         it 'calls broadcast! to schedule request' do
-          expect(Request).to receive(:broadcast!).with(request)
+          expect(described_class).to receive(:broadcast!).with(request)
 
           subject
         end
@@ -330,10 +352,11 @@ RSpec.describe Request, type: :model do
 
         context 'no change to scheduled time' do
           before { request.save! }
+
           let(:params) { { text: 'Fixed typo' } }
 
           it 'does not broadcast request' do
-            expect(Request).not_to receive(:broadcast!)
+            expect(described_class).not_to receive(:broadcast!)
 
             subject
           end
@@ -341,6 +364,7 @@ RSpec.describe Request, type: :model do
 
         context 'schedule_send_for set to nil' do
           before { request.update(schedule_send_for: 1.day.from_now) }
+
           let(:params) { { schedule_send_for: nil } }
 
           it 'does not create a notification' do
@@ -354,6 +378,7 @@ RSpec.describe Request, type: :model do
 
         context 'schedule_send_for set to time in past' do
           before { request.update(schedule_send_for: 1.day.from_now) }
+
           let(:params) { { schedule_send_for: 1.day.ago } }
 
           it 'does not create a notification' do

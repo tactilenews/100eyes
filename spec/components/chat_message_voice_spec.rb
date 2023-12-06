@@ -7,5 +7,6 @@ RSpec.describe ChatMessageAudio::ChatMessageAudio, type: :component do
 
   let(:audio) { create(:file) }
   let(:params) { { audio: audio } }
-  it { should have_css('.ChatMessageAudio') }
+
+  it { is_expected.to have_css('.ChatMessageAudio') }
 end

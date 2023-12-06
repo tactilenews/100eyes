@@ -6,5 +6,6 @@ RSpec.describe Hero::Hero, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
   let(:params) { {} }
-  it { should have_css('.Hero') }
+
+  it { is_expected.to have_css('.Hero') }
 end

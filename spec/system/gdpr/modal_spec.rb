@@ -11,7 +11,7 @@ RSpec.describe 'GDPR modal' do
   end
 
   describe 'If GDPR modal is enabled' do
-    before(:each) { allow(Setting).to receive(:onboarding_show_gdpr_modal).and_return(true) }
+    before { allow(Setting).to receive(:onboarding_show_gdpr_modal).and_return(true) }
 
     it 'visiting onboarding page' do
       visit onboarding_path(jwt: jwt)

@@ -8,7 +8,7 @@ RSpec.describe RequestMetrics::RequestMetrics, type: :component do
   let(:params) { { request: request } }
   let(:request) { build(:request) }
 
-  it { should have_text('haben geantwortet') }
-  it { should have_text('empfangene Nachrichten') }
-  it { should have_text('empfangene Bilder') }
+  it { is_expected.to have_text('haben geantwortet') }
+  it { is_expected.to have_text('empfangene Nachrichten') }
+  it { is_expected.to have_text('empfangene Bilder') }
 end

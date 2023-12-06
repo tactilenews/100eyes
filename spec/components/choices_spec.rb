@@ -6,5 +6,6 @@ RSpec.describe Choices::Choices, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
   let(:params) { { id: 'my-id' } }
-  it { should have_css('.Choices') }
+
+  it { is_expected.to have_css('.Choices') }
 end

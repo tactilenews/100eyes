@@ -8,5 +8,5 @@ RSpec.describe OnboardingTelegramForm::OnboardingTelegramForm, type: :component 
   let(:contributor) { build(:contributor) }
   let(:params) { { contributor: contributor } }
 
-  it { should have_css('.OnboardingTelegramForm') }
+  it { is_expected.to have_css('.OnboardingTelegramForm') }
 end

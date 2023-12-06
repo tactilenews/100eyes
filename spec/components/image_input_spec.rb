@@ -4,16 +4,17 @@ require 'rails_helper'
 
 RSpec.describe ImageInput::ImageInput, type: :component do
   subject { render_inline(described_class.new(**params)) }
+
   let(:params) { { id: :logo } }
 
-  it { should have_css('.ImageInput') }
-  it { should have_css('input[type="file"][id="logo"][name="logo"][hidden]', visible: :all) }
+  it { is_expected.to have_css('.ImageInput') }
+  it { is_expected.to have_css('input[type="file"][id="logo"][name="logo"][hidden]', visible: :all) }
 
   context 'without existing upload' do
-    it { should have_text('Kein Bild ausgewählt') }
-    it { should have_css('svg.Icon') }
-    it { should have_button('Bild auswählen') }
-    it { should_not have_css('.ImageInput-selectedImage') }
+    it { is_expected.to have_text('Kein Bild ausgewählt') }
+    it { is_expected.to have_css('svg.Icon') }
+    it { is_expected.to have_button('Bild auswählen') }
+    it { is_expected.not_to have_css('.ImageInput-selectedImage') }
   end
 
   context 'with existing upload' do
@@ -22,9 +23,9 @@ RSpec.describe ImageInput::ImageInput, type: :component do
 
     let(:params) { { id: :logo, value: blob } }
 
-    it { should have_text('example-image.png') }
-    it { should have_css('img[src$="/example-image.png"]') }
-    it { should have_button('Bild ersetzen') }
-    it { should_not have_css('.ImageInput-emptyState') }
+    it { is_expected.to have_text('example-image.png') }
+    it { is_expected.to have_css('img[src$="/example-image.png"]') }
+    it { is_expected.to have_button('Bild ersetzen') }
+    it { is_expected.not_to have_css('.ImageInput-emptyState') }
   end
 end

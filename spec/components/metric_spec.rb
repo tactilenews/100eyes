@@ -12,26 +12,27 @@ RSpec.describe Metric::Metric, type: :component do
   let(:label) { '# of comments' }
   let(:icon) { 'comment' }
 
-  it { should have_css('.Metric') }
-  it { should have_text('# of comments') }
+  it { is_expected.to have_css('.Metric') }
+  it { is_expected.to have_text('# of comments') }
 
   describe 'without total value' do
-    it { should have_text('50') }
-    it { should_not have_css('.Metric-progress') }
+    it { is_expected.to have_text('50') }
+    it { is_expected.not_to have_css('.Metric-progress') }
   end
 
   describe 'with total value' do
     let(:total) { 100 }
 
-    it { should have_text('50/100') }
+    it { is_expected.to have_text('50/100') }
 
     describe 'with inline style' do
-      it { should_not have_css('.Metric-progress') }
+      it { is_expected.not_to have_css('.Metric-progress') }
     end
 
     describe 'with large style' do
       let(:style) { :large }
-      it { should have_css('.Metric-progress[style="--progress: calc(50 / 100 * 100%)"]') }
+
+      it { is_expected.to have_css('.Metric-progress[style="--progress: calc(50 / 100 * 100%)"]') }
     end
   end
 end

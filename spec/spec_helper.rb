@@ -94,11 +94,11 @@ RSpec.configure do |config|
   #   # as the one that triggered the failure.
   #   Kernel.srand config.seed
 
-  config.before(:each) do
+  config.before do
     allow(Request).to receive(:broadcast!)
   end
 
-  config.after(:each) do
+  config.after do
     Setting.clear_cache
   end
 end

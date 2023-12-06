@@ -6,5 +6,6 @@ RSpec.describe TagsInput::TagsInput, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
   let(:params) { {} }
-  it { should have_css('.TagsInput') }
+
+  it { is_expected.to have_css('.TagsInput') }
 end

@@ -7,8 +7,8 @@ RSpec.describe UploadButton::UploadButton, type: :component do
 
   let(:params) { { id: 'avatar', input_label: 'Avatar', button_label: 'Upload new avatar' } }
 
-  it { should have_css('.UploadButton') }
-  it { should have_css('button', text: 'Upload new avatar') }
-  it { should have_css('label', text: 'Avatar') }
-  it { should have_css('input[type="file"]') }
+  it { is_expected.to have_css('.UploadButton') }
+  it { is_expected.to have_css('button', text: 'Upload new avatar') }
+  it { is_expected.to have_css('label', text: 'Avatar') }
+  it { is_expected.to have_css('input[type="file"]') }
 end

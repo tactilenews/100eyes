@@ -5,12 +5,14 @@ require 'telegram/bot/rspec/integration/rails'
 
 RSpec.describe 'Requests', telegram_bot: :rails do
   describe 'POST /requests' do
-    before(:each) { allow(Request).to receive(:broadcast!).and_call_original } # is stubbed for every other test
     subject { -> { post requests_path(as: user), params: params } }
+
+    before { allow(Request).to receive(:broadcast!).and_call_original } # is stubbed for every other test
+
     let(:params) { { request: { title: 'Example Question', text: 'How do you do?', hints: ['confidential'] } } }
     let(:user) { create(:user) }
 
-    it { should change { Request.count }.from(0).to(1) }
+    it { is_expected.to change(Request, :count).from(0).to(1) }
 
     it 'redirects to requests#show' do
       response = subject.call
@@ -25,11 +27,12 @@ RSpec.describe 'Requests', telegram_bot: :rails do
 
     describe 'without hints param' do
       let(:params) { { request: {  title: 'Example Question', text: 'How do you do?' } } }
-      it { should_not raise_error }
+
+      it { is_expected.not_to raise_error }
     end
 
     describe 'without contributors' do
-      it { should_not raise_error }
+      it { is_expected.not_to raise_error }
     end
 
     context 'with image file(s)' do
@@ -89,12 +92,12 @@ RSpec.describe 'Requests', telegram_bot: :rails do
   end
 
   describe 'GET /notifications' do
+    subject { -> { get notifications_request_path(request, as: user), params: params } }
+
     let(:request) { create(:request) }
     let!(:older_message) { create(:message, request_id: request.id, created_at: 2.minutes.ago) }
     let(:params) { { last_updated_at: 1.minute.ago } }
     let(:user) { create(:user) }
-
-    subject { -> { get notifications_request_path(request, as: user), params: params } }
 
     context 'No messages in last 1 minute' do
       it 'responds with message count 0' do

@@ -15,9 +15,9 @@ RSpec.describe BaseField::BaseField, type: :component do
     }
   end
 
-  it { should have_css('.BaseField') }
-  it { should have_text('Text input') }
-  it { should have_css('.BaseField label[for="name"]', text: 'Name') }
-  it { should have_css('.BaseField-helpText', text: 'Help text') }
-  it { should have_css('.BaseField-errorText', text: 'Error') }
+  it { is_expected.to have_css('.BaseField') }
+  it { is_expected.to have_text('Text input') }
+  it { is_expected.to have_css('.BaseField label[for="name"]', text: 'Name') }
+  it { is_expected.to have_css('.BaseField-helpText', text: 'Help text') }
+  it { is_expected.to have_css('.BaseField-errorText', text: 'Error') }
 end

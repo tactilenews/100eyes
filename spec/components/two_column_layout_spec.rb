@@ -10,7 +10,7 @@ RSpec.describe TwoColumnLayout::TwoColumnLayout, type: :component do
     end
   end
 
-  it { should have_css('.TwoColumnLayout') }
-  it { should have_css('.TwoColumnLayout-sidebar', text: 'Sidebar') }
-  it { should have_text('Content') }
+  it { is_expected.to have_css('.TwoColumnLayout') }
+  it { is_expected.to have_css('.TwoColumnLayout-sidebar', text: 'Sidebar') }
+  it { is_expected.to have_text('Content') }
 end

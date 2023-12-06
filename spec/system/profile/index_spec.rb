@@ -25,6 +25,7 @@ RSpec.describe 'Profile' do
     end
   end
   let!(:inactive_contributor) { create(:contributor, deactivated_at: 1.hour.ago, organization: organization) }
+
   before do
     allow(Setting).to receive(:channel_image).and_return(ActiveStorage::Blob.new(filename: 'channel_image.jpg'))
     current_plan.update(valid_from: Time.current, valid_until: Time.current + 6.months)

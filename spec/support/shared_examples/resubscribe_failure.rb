@@ -13,12 +13,14 @@ RSpec.shared_examples 'a resubscribe failure' do |adapter|
 
   it { is_expected.not_to change(Message, :count) }
   it { is_expected.not_to(change { contributor.reload.unsubscribed_at }) }
+
   it 'reports an error' do
     expect(Sentry).to receive(:capture_exception).with(resubscribe_error)
     subject.call
   end
+
   it {
-    is_expected.to(have_enqueued_job(adapter).on_queue('default').with do |params|
+    expect(subject).to(have_enqueued_job(adapter).on_queue('default').with do |params|
       if adapter.eql?(WhatsAppAdapter::Outbound::ThreeSixtyDialogText)
         expect(params[:payload][:to]).to eq(contributor.whats_app_phone_number.split('+').last)
         expect(params[:payload][:text][:body]).to eq(failure_message)

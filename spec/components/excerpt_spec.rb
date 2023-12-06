@@ -6,5 +6,6 @@ RSpec.describe Excerpt::Excerpt, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
   let(:params) { { title: 'Lorem Ipsum', text: 'dolor sit amet', date: 2.days.ago, link: '#' } }
-  it { should have_css('.Excerpt') }
+
+  it { is_expected.to have_css('.Excerpt') }
 end

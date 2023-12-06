@@ -44,13 +44,13 @@ RSpec.describe 'Charts' do
   end
 
   describe 'GET /charts/day-and-time-replies' do
+    subject { -> { get charts_day_and_time_replies_path(as: user) } }
+
     before do
       message
       data_dup.first[:y] = 1
       friday[:data] = data_dup
     end
-
-    subject { -> { get charts_day_and_time_replies_path(as: user) } }
 
     it 'responds with a series of each day and inbound grouped messages' do
       subject.call
@@ -100,6 +100,7 @@ RSpec.describe 'Charts' do
 
   describe 'GET /charts/day-requests-replies' do
     subject { -> { get charts_day_requests_replies_path(as: user) } }
+
     let(:data) do
       I18n.t('date.day_names').rotate(1).map do |day|
         { x: day, y: 0 }

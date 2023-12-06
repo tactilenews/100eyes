@@ -6,5 +6,6 @@ RSpec.describe Card::Card, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
   let(:params) { {} }
-  it { should have_css('.Card') }
+
+  it { is_expected.to have_css('.Card') }
 end

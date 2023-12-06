@@ -4,8 +4,9 @@ require 'rails_helper'
 
 RSpec.describe 'Image uploads' do
   let(:user) { create(:user) }
-  before(:each) { allow(Setting).to receive(:project_name).and_return('Die Lokal-Community!') }
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
+
+  before { allow(Setting).to receive(:project_name).and_return('Die Lokal-Community!') }
 
   it 'Upload new onboarding logo' do
     visit onboarding_path(jwt: jwt)

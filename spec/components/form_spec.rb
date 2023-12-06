@@ -8,5 +8,5 @@ RSpec.describe Form::Form, type: :component do
   let(:contributor) { create(:contributor) }
   let(:params) { { model: contributor } }
 
-  it { should have_css("form[action='/contributors/#{contributor.id}']") }
+  it { is_expected.to have_css("form[action='/contributors/#{contributor.id}']") }
 end

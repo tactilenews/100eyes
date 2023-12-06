@@ -6,5 +6,6 @@ RSpec.describe Markdown::Markdown, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
   let(:params) { { raw: '' } }
-  it { should have_css('.Markdown') }
+
+  it { is_expected.to have_css('.Markdown') }
 end

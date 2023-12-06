@@ -7,7 +7,8 @@ RSpec.describe PlaintextMessage::PlaintextMessage, type: :component do
 
   let(:params) { { message: message } }
   let(:message) { 'Hello World!' }
-  it { should have_css('.PlaintextMessage') }
+
+  it { is_expected.to have_css('.PlaintextMessage') }
 
   context 'given a message with leading/tailing whitespace' do
     let(:message) do
@@ -62,6 +63,6 @@ RSpec.describe PlaintextMessage::PlaintextMessage, type: :component do
       expect(subject).to have_text('Hi {{VORNAME}}, how are you?')
     end
 
-    it { should have_css('.Placeholder', text: '{{VORNAME}}') }
+    it { is_expected.to have_css('.Placeholder', text: '{{VORNAME}}') }
   end
 end

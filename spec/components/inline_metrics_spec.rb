@@ -7,5 +7,5 @@ RSpec.describe InlineMetrics::InlineMetrics, type: :component do
 
   let(:params) { { metrics: [] } }
 
-  it { should have_css('.InlineMetrics') }
+  it { is_expected.to have_css('.InlineMetrics') }
 end

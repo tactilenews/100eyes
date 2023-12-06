@@ -7,8 +7,8 @@ RSpec.describe CommunityMetrics::CommunityMetrics, type: :component do
 
   let(:params) { { active_contributors_count: 25, requests_count: 200, replies_count: 3_000, engagment_metric: 100.0 } }
 
-  it { should have_text('aktive Mitglieder') }
-  it { should have_text('Fragen gestellt') }
-  it { should have_text('empfangene Nachrichten') }
-  it { should have_text('Interaktionsquote') }
+  it { is_expected.to have_text('aktive Mitglieder') }
+  it { is_expected.to have_text('Fragen gestellt') }
+  it { is_expected.to have_text('empfangene Nachrichten') }
+  it { is_expected.to have_text('Interaktionsquote') }
 end

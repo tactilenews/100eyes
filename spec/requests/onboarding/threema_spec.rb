@@ -10,6 +10,7 @@ RSpec.describe 'Onboarding::Threema', type: :request do
   let(:params) { { jwt: jwt } }
   let(:threema) { instance_double(Threema) }
   let(:threema_lookup_double) { instance_double(Threema::Lookup) }
+
   before do
     allow(Threema).to receive(:new).and_return(threema)
     allow(Threema::Lookup).to receive(:new).with({ threema: threema }).and_return(threema_lookup_double)
@@ -17,6 +18,8 @@ RSpec.describe 'Onboarding::Threema', type: :request do
   end
 
   describe 'POST /onboarding/threema' do
+    subject { -> { post onboarding_threema_path, params: params } }
+
     let(:attrs) do
       {
         first_name: 'Zora',
@@ -28,8 +31,6 @@ RSpec.describe 'Onboarding::Threema', type: :request do
     end
 
     let(:params) { { jwt: jwt, contributor: attrs, context: :contributor_signup } }
-
-    subject { -> { post onboarding_threema_path, params: params } }
 
     it 'creates contributor' do
       expect { subject.call }.to change(Contributor, :count).by(1)
@@ -47,7 +48,7 @@ RSpec.describe 'Onboarding::Threema', type: :request do
       )
     end
 
-    it { should enqueue_job(ThreemaAdapter::Outbound::Text) }
+    it { is_expected.to enqueue_job(ThreemaAdapter::Outbound::Text) }
 
     it 'redirects to success page' do
       subject.call

@@ -9,21 +9,21 @@ RSpec.describe '/contributors', type: :request do
   let(:user) { create(:user) }
 
   describe 'GET /index' do
-    it 'should be successful' do
+    it 'is successful' do
       get contributors_url(as: user)
       expect(response).to be_successful
     end
   end
 
   describe 'GET /show' do
-    it 'should be successful' do
+    it 'is successful' do
       get contributor_url(contributor, as: user)
       expect(response).to be_successful
     end
   end
 
   describe 'GET /requests/:id' do
-    it 'should be successful' do
+    it 'is successful' do
       get contributor_request_path(id: the_request.id, contributor_id: contributor.id, as: user)
       expect(response).to be_successful
     end
@@ -39,6 +39,8 @@ RSpec.describe '/contributors', type: :request do
   end
 
   describe 'PATCH /update' do
+    subject { -> { patch contributor_url(contributor, as: user), params: { contributor: new_attrs } } }
+
     let(:new_attrs) do
       {
         first_name: 'Zora',
@@ -52,8 +54,6 @@ RSpec.describe '/contributors', type: :request do
         tag_list: 'programmer,student'
       }
     end
-
-    subject { -> { patch contributor_url(contributor, as: user), params: { contributor: new_attrs } } }
 
     it 'updates the requested contributor' do
       subject.call
@@ -102,7 +102,7 @@ RSpec.describe '/contributors', type: :request do
       end
 
       it 'does not change data processing consent' do
-        expect { subject.call }.to_not(change { contributor.data_processing_consent })
+        expect { subject.call }.not_to(change(contributor, :data_processing_consent))
       end
     end
 
@@ -187,18 +187,21 @@ RSpec.describe '/contributors', type: :request do
       let(:contributor) { create(:contributor, **params) }
 
       describe 'response' do
-        before(:each) { subject.call }
+        before { subject.call }
+
         it { expect(response).to have_http_status(:bad_request) }
       end
 
       describe 'given an active request' do
-        before(:each) { create(:message, :outbound, request: the_request, recipient: contributor) }
+        before { create(:message, :outbound, request: the_request, recipient: contributor) }
 
         it { is_expected.to change(Message, :count).by(1) }
 
         describe 'response' do
-          before(:each) { subject.call }
+          before { subject.call }
+
           let(:newest_message) { Message.reorder(created_at: :desc).first }
+
           it do
             expect(response)
               .to redirect_to(

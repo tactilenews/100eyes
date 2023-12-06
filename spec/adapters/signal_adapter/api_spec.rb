@@ -17,20 +17,23 @@ RSpec.describe SignalAdapter::Api do
 
     describe 'http response code' do
       describe '200' do
-        before(:each) do
+        before do
           stub_request(:post, uri).to_return(status: 200)
         end
+
         specify { expect { |block| api.perform_request(request, recipient, &block) }.to yield_control }
 
         describe 'ErrorNotifier' do
           subject { ErrorNotifier }
+
           before { api.perform_request(request, recipient) }
-          it { should_not have_received(:report) }
+
+          it { is_expected.not_to have_received(:report) }
         end
       end
 
       describe '400' do
-        before(:each) do
+        before do
           stub_request(:post, uri).to_return(status: 400, body: { error: 'Ouch!' }.to_json)
         end
 
@@ -38,11 +41,15 @@ RSpec.describe SignalAdapter::Api do
 
         describe 'ErrorNotifier' do
           subject { ErrorNotifier }
+
           before { api.perform_request(request, recipient) }
-          it { should have_received(:report) }
+
+          it { is_expected.to have_received(:report) }
         end
 
         describe 'Unregistered user error' do
+          subject { -> { api.perform_request(request, recipient) } }
+
           let!(:admin) { create_list(:user, 2, admin: true) }
           let!(:non_admin_user) { create(:user) }
 
@@ -50,10 +57,8 @@ RSpec.describe SignalAdapter::Api do
             stub_request(:post, uri).to_return(status: 400, body: { error: 'Unregistered user' }.to_json)
           end
 
-          subject { -> { api.perform_request(request, recipient) } }
-
           it {
-            is_expected.to have_enqueued_job(MarkInactiveContributorInactiveJob).with do |params|
+            expect(subject).to have_enqueued_job(MarkInactiveContributorInactiveJob).with do |params|
               expect(params[:contributor_id].to(eq(recipient.id)))
             end
           }

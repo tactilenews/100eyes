@@ -32,7 +32,7 @@ RSpec.describe 'Users' do
       check 'Admin'
 
       click_on 'Sign up'
-      expect(User.find_by(email: 'new_admin@example.org').reload.organization).to eq(nil)
+      expect(User.find_by(email: 'new_admin@example.org').reload.organization).to be_nil
 
       expect(page).to have_text('User was successfully created.')
     end

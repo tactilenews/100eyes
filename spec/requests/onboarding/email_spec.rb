@@ -10,6 +10,8 @@ RSpec.describe 'Onboarding::Email', type: :request do
   let(:params) { { jwt: jwt } }
 
   describe 'POST /onboarding/email' do
+    subject { -> { post onboarding_email_path, params: params } }
+
     let(:attrs) do
       {
         first_name: 'Zora',
@@ -21,8 +23,6 @@ RSpec.describe 'Onboarding::Email', type: :request do
     end
 
     let(:params) { { jwt: jwt, contributor: attrs, context: :contributor_signup } }
-
-    subject { -> { post onboarding_email_path, params: params } }
 
     it 'creates contributor' do
       expect { subject.call }.to change(Contributor, :count).by(1)
@@ -41,7 +41,7 @@ RSpec.describe 'Onboarding::Email', type: :request do
     end
 
     it {
-      should enqueue_job(ActionMailer::MailDeliveryJob).with(
+      expect(subject).to enqueue_job(ActionMailer::MailDeliveryJob).with(
         'PostmarkAdapter::Outbound',
         'welcome_email',
         'deliver_now',

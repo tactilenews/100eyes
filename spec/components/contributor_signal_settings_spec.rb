@@ -18,15 +18,15 @@ RSpec.describe ContributorSignalSettings::ContributorSignalSettings, type: :comp
 
   let(:onboarding_completed_at) { Time.zone.now }
 
-  it { should have_css('h2', text: 'Signal') }
-  it { should have_css('p', text: 'Max Mustermann hat sich mit der Handynummer 0151 1234 5678 angemeldet.') }
+  it { is_expected.to have_css('h2', text: 'Signal') }
+  it { is_expected.to have_css('p', text: 'Max Mustermann hat sich mit der Handynummer 0151 1234 5678 angemeldet.') }
 
   context 'given a contributor with incomplete onboarding' do
     let(:onboarding_completed_at) { nil }
 
-    it { should have_css('p', text: 'Max Mustermann hat sich am 01.01.2021 via Signal') }
-    it { should have_css('p', text: 'mit der Handynummer 0151 1234 5678 angemeldet, die Anmeldung aber noch nicht abgeschlossen.') }
-    it { should have_css('p', text: 'Sende Max einen Link mit Hinweisen zum Abschließen der Anmeldung.') }
-    it { should have_css('button[data-copy-button-copy-value$="http://test.host/onboarding/signal/link"]') }
+    it { is_expected.to have_css('p', text: 'Max Mustermann hat sich am 01.01.2021 via Signal') }
+    it { is_expected.to have_css('p', text: 'mit der Handynummer 0151 1234 5678 angemeldet, die Anmeldung aber noch nicht abgeschlossen.') }
+    it { is_expected.to have_css('p', text: 'Sende Max einen Link mit Hinweisen zum Abschließen der Anmeldung.') }
+    it { is_expected.to have_css('button[data-copy-button-copy-value$="http://test.host/onboarding/signal/link"]') }
   end
 end
