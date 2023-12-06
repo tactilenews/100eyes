@@ -13,7 +13,7 @@ module TelegramAdapter
         MarkInactiveContributorInactiveJob.perform_later(contributor_id: contributor.id)
       end
 
-      def perform(contributor_id:, message:)
+      def perform(contributor_id:, text:, message: nil)
         contributor = Contributor.find(contributor_id)
         return unless contributor
 
@@ -21,7 +21,7 @@ module TelegramAdapter
 
         telegram_message = Telegram.bot.send_message(
           chat_id: contributor.telegram_id,
-          text: message.text,
+          text: text,
           parse_mode: :HTML
         )
         telegram_message = telegram_message.with_indifferent_access

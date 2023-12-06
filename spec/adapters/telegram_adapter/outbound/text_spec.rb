@@ -30,9 +30,10 @@ RSpec.describe TelegramAdapter::Outbound::Text do
         }
     }
   end
+  before { allow(Telegram.bot).to receive(:send_message).and_return(successful_response) }
 
   describe '#perform' do
-    subject { adapter.perform(contributor_id: message.recipient.id, message: message) }
+    subject { adapter.perform(contributor_id: message.recipient.id, text: message.text, message: message) }
     let(:expected_message) { { chat_id: 4, text: 'Forgot to ask: How are you?', parse_mode: :HTML } }
 
     it 'sends the message with TelegramBot' do
@@ -42,8 +43,6 @@ RSpec.describe TelegramAdapter::Outbound::Text do
     end
 
     context 'successful delivery' do
-      before { allow(Telegram.bot).to receive(:send_message).and_return(successful_response) }
-
       let(:external_id) { successful_response.with_indifferent_access[:result][:message_id].to_s }
 
       it 'marks the message as received' do
