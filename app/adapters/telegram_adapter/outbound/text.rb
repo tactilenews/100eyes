@@ -19,22 +19,22 @@ module TelegramAdapter
 
         @message = message
 
-        telegram_message = Telegram.bot.send_message(
+        response = Telegram.bot.send_message(
           chat_id: contributor.telegram_id,
           text: text,
           parse_mode: :HTML
         )
-        telegram_message = telegram_message.with_indifferent_access
-        mark_message_as_received(telegram_message) if telegram_message[:ok]
+        response = response.with_indifferent_access
+        mark_message_as_received(response) if response[:ok]
       end
 
       attr_reader :message
 
       private
 
-      def mark_message_as_received(telegram_message)
-        timestamp = telegram_message[:result][:date]
-        external_id = telegram_message[:result][:message_id].to_s
+      def mark_message_as_received(response)
+        timestamp = response[:result][:date]
+        external_id = response[:result][:message_id].to_s
         message.update!(received_at: Time.zone.at(timestamp).to_datetime, external_id: external_id)
       end
     end
