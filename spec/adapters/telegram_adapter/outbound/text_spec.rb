@@ -19,7 +19,7 @@ RSpec.describe TelegramAdapter::Outbound::Text do
             'username' => Telegram.bots[:default].username
           },
           'chat' => {
-            'id' => 875_171_743,
+            'id' => 12_345_678,
             'first_name' => contributor.first_name,
             'last_name' => contributor.last_name,
             'username' => contributor.username,
