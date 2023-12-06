@@ -25,7 +25,7 @@ module TelegramAdapter
           parse_mode: :HTML
         )
         response = response.with_indifferent_access
-        mark_message_as_received(response) if response[:ok]
+        mark_message_as_received(response) if response[:ok] && message
       end
 
       attr_reader :message
