@@ -63,7 +63,7 @@ class Request < ApplicationRecord
 
   def self.broadcast!(request)
     if request.planned?
-      BroadcastRequestJob.delay(run_at: request.schedule_send_for).perform_later(request.id)
+      BroadcastRequestJob.delay(run_at: request.schedule_send_for).perform_later(request_id: request.id)
       RequestScheduled.with(request_id: request.id).deliver_later(User.all)
     else
       Contributor.active.with_tags(request.tag_list).each do |contributor|
