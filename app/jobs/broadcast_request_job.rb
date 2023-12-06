@@ -9,7 +9,7 @@ class BroadcastRequestJob < ApplicationJob
     return if request.broadcasted_at.present?
 
     if request.planned? # rescheduled for future after this job was created
-      BroadcastRequestJob.delay(run_at: request.schedule_send_for).perform_later(request.id)
+      BroadcastRequestJob.delay(run_at: request.schedule_send_for).perform_later(request_id: request.id)
       return
     end
 
