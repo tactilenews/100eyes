@@ -77,13 +77,11 @@ module ThreemaAdapter
     end
 
     def initialize_text(decrypted_message)
-      if decrypted_message.instance_of?(Threema::Receive::File)
-        return decrypted_message.caption if decrypted_message.caption
-
-        return nil
+      if decrypted_message.instance_of? Threema::Receive::Text
+        decrypted_message.content
+      elsif decrypted_message.instance_of?(Threema::Receive::File) && decrypted_message.caption
+        decrypted_message.caption
       end
-
-      decrypted_message.content
     end
 
     def initialize_unsupported_content(decrypted_message)
