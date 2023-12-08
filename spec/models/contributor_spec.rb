@@ -467,7 +467,10 @@ RSpec.describe Contributor, type: :model do
       it { should_not(change { Message.count }) }
 
       describe 'given a recent request' do
-        before(:each) { the_request }
+        before do
+          the_request
+          allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::Text).and_return(true)
+        end
 
         it { is_expected.to(change { Message.count }.from(0).to(1)) }
         it { should_not(change { Photo.count }) }

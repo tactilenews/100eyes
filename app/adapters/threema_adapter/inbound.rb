@@ -77,9 +77,11 @@ module ThreemaAdapter
     end
 
     def initialize_text(decrypted_message)
-      return decrypted_message.caption if decrypted_message.instance_of?(Threema::Receive::File) && decrypted_message.caption
-
-      decrypted_message.content
+      if decrypted_message.instance_of? Threema::Receive::Text
+        decrypted_message.content
+      elsif decrypted_message.instance_of?(Threema::Receive::File) && decrypted_message.caption
+        decrypted_message.caption
+      end
     end
 
     def initialize_unsupported_content(decrypted_message)
@@ -104,10 +106,10 @@ module ThreemaAdapter
     end
 
     def file_type_unsupported?(decrypted_message)
-      return false unless decrypted_message.respond_to? :mime_type
+      return true if decrypted_message.instance_of?(Threema::Receive::NotImplementedFallback)
+      return false unless decrypted_message.respond_to?(:mime_type)
 
-      decrypted_message.instance_of?(Threema::Receive::NotImplementedFallback) ||
-        UNSUPPORTED_CONTENT_TYPES.any? { |type| decrypted_message.mime_type.include? type }
+      UNSUPPORTED_CONTENT_TYPES.any? { |type| decrypted_message.mime_type.include? type }
     end
 
     def unsubscribe_text?(text)
