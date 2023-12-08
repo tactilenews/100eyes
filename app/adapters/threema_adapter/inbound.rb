@@ -77,7 +77,11 @@ module ThreemaAdapter
     end
 
     def initialize_text(decrypted_message)
-      return decrypted_message.caption if decrypted_message.instance_of?(Threema::Receive::File) && decrypted_message.caption
+      if decrypted_message.instance_of?(Threema::Receive::File)
+        return decrypted_message.caption if decrypted_message.caption
+
+        return nil
+      end
 
       decrypted_message.content
     end
