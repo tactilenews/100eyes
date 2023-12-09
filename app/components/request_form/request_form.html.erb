@@ -79,6 +79,11 @@
           <% end %>
         <% end %>
 
+        <% if @request.planned? %>
+          <%= link_to request_path(@request), method: :delete do %>
+            <%= t('.planned_request.destroy') %>
+          <% end %>
+        <% end %>
         <%= c 'button',
           type: 'submit',
           styles: [:block, :primary],
