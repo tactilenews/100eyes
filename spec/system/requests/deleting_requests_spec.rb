@@ -36,7 +36,9 @@ RSpec.describe 'Deleting requests' do
     end
 
     expect(page).to have_current_path(edit_request_path(planned_request))
-    click_on I18n.t('components.request_form.planned_request.destroy')
+    page.accept_confirm(I18n.t('request.destroy_confirm', request_title: planned_request.title)) do
+      click_on I18n.t('components.request_form.planned_request.destroy')
+    end
     expect(page).to have_content(I18n.t('request.destroy', request_title: planned_request.title))
     expect(page).to have_current_path(requests_path(filter: :planned))
   end

@@ -603,6 +603,7 @@ de:
       other: Deine Frage wurde erfolgreich an %{count} Mitglieder in der Community gesendet
     editing_disallowed: Sie können eine bereits verschickte Frage nicht mehr bearbeiten.
     destroy: "Deine Anfrage %{request_title} wurde erfolgreich gelöscht"
+    destroy_confirm: "Bist du sicher, dass du %{request_title} dauerhaft löschen möchtest?"
     replies: Alle Antworten
     created_at: Frage gestellt %{datetime}
     planned_for: Frage geplant für %{datetime}
