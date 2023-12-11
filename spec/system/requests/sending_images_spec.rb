@@ -19,9 +19,25 @@ RSpec.describe 'Sending image files', js: true do
     it 'sending a request with image files' do
       visit new_request_path(as: user)
 
+      # With no text
+      fill_in 'Titel', with: 'Message with files'
+
+      click_button 'Bilder anhängen'
+      image_file = File.expand_path('../../fixtures/files/example-image.png', __dir__)
+      find_field('request_files', visible: :all).attach_file(image_file)
+
+      click_button 'Frage an die Community senden'
+
+      expect(page).to have_content('Message with files')
+      expect(page).to have_current_path(request_path(Request.first))
+
+      # With text
+      visit new_request_path(as: user)
+
       fill_in 'Titel', with: 'Message with files'
       fill_in 'Was möchtest du wissen?', with: 'Did you get my image?'
 
+      # Non-image file
       click_button 'Bilder anhängen'
       image_file = File.expand_path('../../fixtures/files/invalid_profile_picture.pdf', __dir__)
       find_field('request_files', visible: :all).attach_file(image_file)
@@ -33,6 +49,7 @@ RSpec.describe 'Sending image files', js: true do
       expect(page).to have_current_path(new_request_path(as: user))
       expect(page).to have_content('Kein gültiges Bildformat. Bitte senden Sie Bilder als jpg, png oder gif.')
 
+      # Image file
       click_button 'Bilder anhängen'
       image_file = File.expand_path('../../fixtures/files/example-image.png', __dir__)
       find_field('request_files', visible: :all).attach_file(image_file)

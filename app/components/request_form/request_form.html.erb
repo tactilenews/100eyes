@@ -38,7 +38,6 @@
             <% end %>
           <% end %>
           <%= c 'textarea', field.input_defaults.merge(
-            required: true,
             show_emoji_picker_hint: true,
             highlight_placeholders: true,
             data: { request_form_target: 'message', action: 'request-form#updateCharacterCounter' }

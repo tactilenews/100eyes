@@ -67,6 +67,21 @@ RSpec.describe 'Requests', telegram_bot: :rails do
           expect(flash[:success]).not_to be_empty
         end
       end
+
+      describe 'with no text' do
+        before { params[:request][:text] = '' }
+
+        it 'redirects to requests#show' do
+          response = subject.call
+          request = Request.last
+          expect(response).to redirect_to request
+        end
+
+        it 'shows success notification' do
+          subject.call
+          expect(flash[:success]).not_to be_empty
+        end
+      end
     end
 
     context 'scheduled for future datetime' do

@@ -39,17 +39,16 @@ export default class extends Controller {
   }
 
   updatePreview(event) {
-    const message = this.setMessage();
     const imagePreviewCaption = document.getElementById('caption');
     if (imagePreviewCaption) {
-      imagePreviewCaption.innerHTML = message;
+      imagePreviewCaption.innerHTML = this.setCaption();
     } else {
-      this.previewTarget.innerHTML = message;
+      this.previewTarget.innerHTML = this.setMessage();
     }
 
     if (event?.target?.files?.length) {
       this.previewTarget.innerHTML = '';
-      this.addImagePreview(event.target.files, message);
+      this.addImagePreview(event.target.files, this.setCaption());
     }
   }
 
@@ -168,7 +167,7 @@ export default class extends Controller {
       );
       this.previewTarget.innerHTML = this.setMessage();
     } else {
-      this.addImagePreview(this.imageInputTarget.files, this.setMessage());
+      this.addImagePreview(this.imageInputTarget.files, this.setCaption());
     }
   }
 
@@ -177,6 +176,16 @@ export default class extends Controller {
     let message = sanitize(this.messageTarget.value);
     message = message || this.previewFallbackValue;
     return replacePlaceholder(message, placeholder, 'Max');
+  }
+
+  setCaption() {
+    const placeholder = 'VORNAME';
+    const message = sanitize(this.messageTarget.value);
+    if (message && message.length > 0) {
+      return replacePlaceholder(message, placeholder, 'Max');
+    } else {
+      return message;
+    }
   }
 
   updateFilesname(index, file) {

@@ -20,7 +20,7 @@ class Request < ApplicationRecord
 
   validates :files, blob: { content_type: ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'] }
   validates :title, presence: true
-  validates :text, length: { maximum: 1500 }, presence: true
+  validates :text, length: { maximum: 1500 }, presence: true, unless: -> { files.attached? }
 
   acts_as_taggable_on :tags
 
