@@ -3,13 +3,13 @@
 class BroadcastRequestJob < ApplicationJob
   queue_as :broadcast_request
 
-  def perform(request_id:)
+  def perform(request_id)
     request = Request.where(id: request_id).first
     return unless request
     return if request.broadcasted_at.present?
 
     if request.planned? # rescheduled for future after this job was created
-      BroadcastRequestJob.delay(run_at: request.schedule_send_for).perform_later(request_id: request.id)
+      BroadcastRequestJob.delay(run_at: request.schedule_send_for).perform_later(request.id)
       return
     end
 
