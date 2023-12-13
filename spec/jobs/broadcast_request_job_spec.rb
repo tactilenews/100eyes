@@ -12,7 +12,7 @@ RSpec.describe BroadcastRequestJob do
     context 'given the request has been deleted' do
       before { request.destroy }
 
-      it 'does not rails an error' do
+      it 'does not raise an error' do
         expect { subject.call }.not_to raise_error
       end
 
