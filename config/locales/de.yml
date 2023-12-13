@@ -136,7 +136,7 @@ de:
       attach_image_to_message: Bilder anhängen
       attached_images: Angehängte Bilder
       planned_request:
-        destroy: geplante Anfrage löschen
+        destroy: Diese geplante Frage löschen
     chat_preview:
       status: jetzt online
       alt: >
@@ -602,8 +602,10 @@ de:
       one: Deine Frage wurde erfolgreich an ein Mitglied in der Community gesendet
       other: Deine Frage wurde erfolgreich an %{count} Mitglieder in der Community gesendet
     editing_disallowed: Sie können eine bereits verschickte Frage nicht mehr bearbeiten.
-    destroy: "Deine Anfrage %{request_title} wurde erfolgreich gelöscht"
-    destroy_confirm: "Bist du sicher, dass du %{request_title} dauerhaft löschen möchtest?"
+    destroy:
+      successful: "Deine Frage „%{request_title}” wurde erfolgreich gelöscht"
+      confirm: "Bist du sicher, dass du %{request_title} dauerhaft löschen möchtest?"
+      broadcasted_request_unallowed: "Frage %{request_title} wurde bereits gesendet und kann nicht gelöscht werden"
     replies: Alle Antworten
     created_at: Frage gestellt %{datetime}
     planned_for: Frage geplant für %{datetime}

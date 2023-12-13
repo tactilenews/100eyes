@@ -83,7 +83,7 @@
           <%= link_to request_path(@request),
             class: 'Button Button--block Button--destroy',
             method: :delete,
-            data: { confirm: I18n.t('request.destroy_confirm', request_title: @request.title) } do %>
+            data: { confirm: I18n.t('request.destroy.confirm', request_title: @request.title) } do %>
             <%= t('.planned_request.destroy') %>
           <% end %>
         <% end %>
