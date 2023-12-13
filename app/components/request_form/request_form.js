@@ -48,6 +48,7 @@ export default class extends Controller {
 
     if (event?.target?.files?.length) {
       this.previewTarget.innerHTML = '';
+      this.messageTarget.removeAttribute('required');
       this.addImagePreview(event.target.files, this.setCaption());
     }
   }
@@ -166,6 +167,7 @@ export default class extends Controller {
         'RequestForm-filenamesWrapper--hidden'
       );
       this.previewTarget.innerHTML = this.setMessage();
+      this.messageTarget.setAttribute('required', true);
     } else {
       this.addImagePreview(this.imageInputTarget.files, this.setCaption());
     }
