@@ -3,7 +3,6 @@
 module Onboarding
   class SignalController < OnboardingController
     skip_before_action :verify_jwt, only: :link
-    before_action :ensure_signal_is_set_up
 
     def link; end
 
@@ -19,12 +18,6 @@ module Onboarding
 
     def complete_onboarding(contributor)
       SignalAdapter::CreateContactJob.perform_later(contributor)
-    end
-
-    def ensure_signal_is_set_up
-      return if Setting.signal_server_phone_number.present?
-
-      raise ActionController::RoutingError, 'Not Found'
     end
   end
 end
