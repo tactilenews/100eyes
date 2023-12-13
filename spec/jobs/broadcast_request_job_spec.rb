@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe BroadcastRequestJob do
-  describe '#perform_later(request_id:)' do
-    subject { -> { described_class.new.perform(request_id: request.id) } }
+  describe '#perform_later(request_id)' do
+    subject { -> { described_class.new.perform(request.id) } }
 
     let!(:contributor) { create(:contributor) }
     let(:request) { create(:request, broadcasted_at: nil) }
