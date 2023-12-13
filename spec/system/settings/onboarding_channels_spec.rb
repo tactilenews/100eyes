@@ -23,7 +23,7 @@ RSpec.describe 'Configuring Onboarding Channels' do
     end
 
     click_on 'Speichern'
-    expect(page).to have_current_path(settings_path(as: admin))
+    expect(page).to have_current_path(settings_path, ignore_query: true)
 
     within('.OnboardingChannelsCheckboxes') do
       Setting.channels.keys.map(&:to_sym).each do |key|
