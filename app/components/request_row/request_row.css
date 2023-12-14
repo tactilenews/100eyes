@@ -26,6 +26,11 @@
   justify-content: space-between;
 }
 
+.RequestRow-editableWrapper .Icon:first-of-type {
+  margin-left: auto;
+  margin-right: var(--spacing-unit-s);
+}
+
 .RequestRow:target {
   border-color: var(--color-focus);
   box-shadow: var(--input-focus-shadow);
