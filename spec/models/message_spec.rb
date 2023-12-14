@@ -110,6 +110,7 @@ RSpec.describe Message, type: :model do
     describe 'given a recipient with telegram' do
       before do
         recipient.update(telegram_id: 11)
+        allow(Telegram.bot).to receive(:send_message).and_return({})
       end
 
       describe '#blocked' do
@@ -121,7 +122,7 @@ RSpec.describe Message, type: :model do
 
         it { should be(false) }
         describe 'but if contributor blocked the telegram bot' do
-          before(:each) { allow(Telegram.bot).to receive(:send_message).and_raise(Telegram::Bot::Forbidden) }
+          before { allow(Telegram.bot).to receive(:send_message).and_raise(Telegram::Bot::Forbidden) }
           it { should be(true) }
         end
       end

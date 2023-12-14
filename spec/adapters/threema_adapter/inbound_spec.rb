@@ -69,7 +69,10 @@ RSpec.describe ThreemaAdapter::Inbound do
       let(:threema_mock) do
         instance_double(Threema::Receive::File, name: 'my voice', content: 'x\00x\\0', mime_type: 'audio/aac', caption: 'some caption')
       end
-      before { allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::File).and_return(true) }
+      before do
+        allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::Text).and_return(false)
+        allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::File).and_return(true)
+      end
 
       describe '#file' do
         let(:file) { message.files.first }
@@ -194,6 +197,7 @@ RSpec.describe ThreemaAdapter::Inbound do
       let(:unsubscribe_contributor_callback) { spy('unsubscribe_contributor_callback') }
 
       before do
+        allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::Text).and_return(true)
         adapter.on(ThreemaAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
           unsubscribe_contributor_callback.call(contributor)
         end
@@ -219,6 +223,7 @@ RSpec.describe ThreemaAdapter::Inbound do
       let(:resubscribe_contributor_callback) { spy('resubscribe_contributor_callback') }
 
       before do
+        allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::Text).and_return(true)
         adapter.on(ThreemaAdapter::RESUBSCRIBE_CONTRIBUTOR) do |contributor|
           resubscribe_contributor_callback.call(contributor)
         end

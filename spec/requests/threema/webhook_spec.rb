@@ -25,6 +25,7 @@ RSpec.describe Threema::WebhookController do
     allow(threema).to receive(:receive).and_return(threema_mock)
     allow(client_mock).to receive(:not_found_ok)
     allow(threema).to receive(:client).and_return(client_mock)
+    allow(threema_mock).to receive(:instance_of?) { false }
   end
 
   describe '#message' do
@@ -48,7 +49,7 @@ RSpec.describe Threema::WebhookController do
       let!(:request) { create(:request) }
 
       before do
-        allow(threema_mock).to receive(:instance_of?) { false }
+        allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::Text).and_return(true)
       end
 
       it { is_expected.to eq(200) }
@@ -67,6 +68,28 @@ RSpec.describe Threema::WebhookController do
           subject
           expect(response).to have_http_status(200)
         end
+      end
+
+      describe 'Threema::Receive::File' do
+        let(:audio_content) do
+          "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01"
+        end
+        let(:threema_mock) do
+          instance_double(Threema::Receive::File, content: audio_content, mime_type: 'audio/mp4', name: 'some audio file', caption: nil)
+        end
+
+        before do
+          allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::Text).and_return(false)
+          allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::File).and_return(true)
+        end
+
+        it { is_expected.to eq(200) }
+
+        it 'creates a message' do
+          expect { subject }.to change(Message, :count).from(0).to(1)
+        end
+
+        it_behaves_like 'an ActivityNotification', 'MessageReceived'
       end
 
       describe 'Unsupported content' do
