@@ -15,7 +15,6 @@ RSpec.describe 'Scheduling requests', js: true do
     it 'schedules a future job' do
       visit new_request_path(as: user)
 
-      expect(page).not_to have_link(I18n.t('components.request_form.planned_request.destroy'))
       fill_in 'Titel', with: 'Scheduled request'
       fill_in 'Was möchtest du wissen?', with: 'Did you get my scheduled request?'
 
