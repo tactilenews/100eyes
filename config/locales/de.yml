@@ -136,7 +136,8 @@ de:
       attach_image_to_message: Bilder anhängen
       attached_images: Angehängte Bilder
       planned_request:
-        destroy: Diese geplante Frage löschen
+        destroy:
+          button_text: Diese geplante Frage löschen
     chat_preview:
       status: jetzt online
       alt: >
@@ -384,6 +385,10 @@ de:
     onboarding_channels_checkboxes:
       legend: Aktive Onboarding-Channel
       help_text: Achtung, hier deaktivieren sie Kanäle. Teilnehmerinnen können sich nur noch auf aktiven Kanälen anmelden.
+    destroy_planned_request_modal:
+      heading: "Bist du sicher, dass du „%{request_title}” dauerhaft löschen möchtest?"
+      cancel: abbrechen
+      confirm: löschen
 
   mailer:
     unsubscribe:
@@ -604,7 +609,6 @@ de:
     editing_disallowed: Sie können eine bereits verschickte Frage nicht mehr bearbeiten.
     destroy:
       successful: "Deine Frage „%{request_title}” wurde erfolgreich gelöscht"
-      confirm: "Bist du sicher, dass du %{request_title} dauerhaft löschen möchtest?"
       broadcasted_request_unallowed: "Frage %{request_title} wurde bereits gesendet und kann nicht gelöscht werden"
     replies: Alle Antworten
     created_at: Frage gestellt %{datetime}

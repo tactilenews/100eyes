@@ -13,6 +13,7 @@ export default class extends Controller {
     'filenames',
     'submitButton',
     'characterCounter',
+    'modal',
   ];
   static values = {
     membersCountMessage: String,
@@ -216,5 +217,13 @@ export default class extends Controller {
     isInvalid
       ? this.submitButtonTarget.setAttribute('disabled', isInvalid)
       : this.submitButtonTarget.removeAttribute('disabled');
+  }
+
+  openModal() {
+    this.modalTarget.showModal();
+  }
+
+  closeModal() {
+    this.modalTarget.close();
   }
 }
