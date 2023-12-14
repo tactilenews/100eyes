@@ -88,6 +88,52 @@ RSpec.describe 'Requests', telegram_bot: :rails do
     end
   end
 
+  describe 'DELETE /requests/:id' do
+    subject { -> { delete "/requests/#{request.id}?as=#{user.id}" } }
+
+    let(:user) { create(:user) }
+
+    context 'broadcasted request' do
+      let!(:request) { create(:request) }
+
+      it 'does not delete the request' do
+        expect { subject.call }.not_to change(Request, :count)
+      end
+
+      it 'redirects to requests path' do
+        subject.call
+
+        expect(response).to redirect_to requests_path
+      end
+
+      it 'shows error message' do
+        subject.call
+
+        expect(flash[:error]).to eq(I18n.t('request.destroy.broadcasted_request_unallowed', request_title: request.title))
+      end
+    end
+
+    context 'planned request' do
+      let!(:request) { create(:request, broadcasted_at: nil, schedule_send_for: 1.day.from_now) }
+
+      it 'deletes the request' do
+        expect { subject.call }.to change(Request, :count).from(1).to(0)
+      end
+
+      it 'redirects to requests path with planned filter' do
+        subject.call
+
+        expect(response).to redirect_to requests_path(filter: :planned)
+      end
+
+      it 'shows a notice that it was successful' do
+        subject.call
+
+        expect(flash[:notice]).to eq(I18n.t('request.destroy.successful', request_title: request.title))
+      end
+    end
+  end
+
   describe 'GET /notifications' do
     let(:request) { create(:request) }
     let!(:older_message) { create(:message, request_id: request.id, created_at: 2.minutes.ago) }
