@@ -37,9 +37,11 @@ RSpec.describe 'Deleting requests' do
     end
 
     expect(page).to have_current_path(edit_request_path(planned_request))
-    page.accept_confirm(I18n.t('request.destroy.confirm', request_title: planned_request.title)) do
-      click_on I18n.t('components.request_form.planned_request.destroy')
-    end
+
+    click_on I18n.t('components.request_form.planned_request.destroy.button_text')
+    expect(page).to have_content(I18n.t('components.destroy_planned_request_modal.heading', request_title: planned_request.title))
+    click_on 'löschen'
+
     expect(page).to have_content(I18n.t('request.destroy.successful', request_title: planned_request.title))
     expect(page).to have_current_path(requests_path(filter: :planned))
 
@@ -53,9 +55,12 @@ RSpec.describe 'Deleting requests' do
     expect(page).to have_current_path(edit_request_path(another_planned_request))
     Timecop.travel(10.minutes.from_now)
     another_planned_request.update(broadcasted_at: 5.minutes.ago)
-    page.accept_confirm(I18n.t('request.destroy.confirm', request_title: planned_request.title)) do
-      click_on I18n.t('components.request_form.planned_request.destroy')
-    end
+
+    click_on I18n.t('components.request_form.planned_request.destroy.button_text')
+    expect(page).to have_content(I18n.t('components.request_form.planned_request.destroy.button_text',
+                                        request_title: another_planned_request.title))
+    click_on 'löschen'
+
     expect(page).to have_content(I18n.t('request.destroy.broadcasted_request_unallowed', request_title: another_planned_request.title))
     expect(page).to have_current_path(requests_path)
   end
