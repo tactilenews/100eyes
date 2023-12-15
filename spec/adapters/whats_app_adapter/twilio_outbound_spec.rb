@@ -64,6 +64,7 @@ RSpec.describe WhatsAppAdapter::TwilioOutbound do
           expect { subject.call }.to(have_enqueued_job(WhatsAppAdapter::Outbound::Text).on_queue('default').with do |params|
             expect(params[:contributor_id]).to eq(contributor.id)
             expect(params[:text]).to eq(message.text)
+            expect(params[:message]).to eq(message)
           end)
         end
       end
@@ -75,6 +76,7 @@ RSpec.describe WhatsAppAdapter::TwilioOutbound do
           expect { subject.call }.to(have_enqueued_job(WhatsAppAdapter::Outbound::Text).on_queue('default').with do |params|
             expect(params[:contributor_id]).to eq(contributor.id)
             expect(params[:text]).to eq(message.text)
+            expect(params[:message]).to eq(message)
           end)
         end
       end
@@ -97,9 +99,8 @@ RSpec.describe WhatsAppAdapter::TwilioOutbound do
           before { create(:message, sender: contributor) }
           it 'enqueues a File job with file, contributor, text' do
             expect { subject.call }.to(have_enqueued_job(WhatsAppAdapter::Outbound::File).on_queue('default').with do |params|
-              expect(params[:file]).to eq(message.files.first)
+              expect(params[:message]).to eq(message)
               expect(params[:contributor_id]).to eq(contributor.id)
-              expect(params[:text]).to eq(message.text)
             end)
           end
         end
