@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 class RequestsController < ApplicationController
-  before_action :set_request, only: %i[show show_contributor_messages edit update notifications]
+  before_action :set_request, only: %i[show show_contributor_messages edit update notifications destroy]
   before_action :set_contributor, only: %i[show_contributor_messages]
   before_action :notifications_params, only: :notifications
   before_action :disallow_edit, only: %i[edit update]
+  before_action :disallow_destroy, only: :destroy
 
   def index
     @filter = filter_param
@@ -57,6 +58,14 @@ class RequestsController < ApplicationController
     end
   end
 
+  def destroy
+    if @request.destroy
+      redirect_to requests_url(filter: :planned), notice: t('request.destroy.successful', request_title: @request.title)
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
   def show_contributor_messages
     @chat_messages = @contributor.conversation_about(@request)
   end
@@ -100,6 +109,12 @@ class RequestsController < ApplicationController
     return if @request.planned?
 
     redirect_to requests_path, flash: { error: I18n.t('request.editing_disallowed') }
+  end
+
+  def disallow_destroy
+    return if @request.planned?
+
+    redirect_to requests_path, flash: { error: I18n.t('request.destroy.broadcasted_request_unallowed', request_title: @request.title) }
   end
 
   def filter_param
