@@ -60,6 +60,34 @@
               class="RequestForm-filenamesList"
             ></ul>
           </div>
+          <% if @request.files.attached? %>
+            <div class="RequestForm-filenamesWrapper">
+              <%= c 'heading', style: :gamma do %>
+                <%= t('.attached_images') %>
+              <% end %>
+              <ul
+                data-request-form-target="filenames"
+                class="RequestForm-filenamesList"
+              >
+              <% @request.files.each_with_index do |file, index| %>
+                <li
+                  id="image-filename-<%= file.blob[:filename] %>"
+                  class="RequestForm-filenamesListItem"
+                >
+                  <p class="RequestForm-filename"><%= file.blob[:filename] %></p>
+                  <button
+                    class="RequestForm-removeListItemButton Button"
+                    data-action="request-form#removeImageFromRequest"
+                    data-request-form-image-index-value="<%= index %>"
+                    type="button"
+                  >
+                   x
+                  </button>
+                </li>
+              <% end %>
+              </ul>
+            </div>
+          <% end %>
         <% end %>
 
         <%= c 'field', object: @request, attr: :schedule_send_for do  |field| %>
