@@ -8,6 +8,7 @@ module WhatsApp
     before_action :set_contributor, only: :status
 
     UNSUCCESSFUL_DELIVERY = %w[undelivered failed].freeze
+    SUCCESSFUL_DELIVERY = %w[delivered read].freeze
     INVALID_MESSAGE_RECIPIENT_ERROR_CODE = 63_024 # https://www.twilio.com/docs/api/errors/63024
     FREEFORM_MESSAGE_NOT_ALLOWED_ERROR_CODE = 63_016 # https://www.twilio.com/docs/api/errors/63016
 
@@ -65,6 +66,7 @@ module WhatsApp
     def status
       head :ok
       handle_unsuccessful_delivery if status_params['MessageStatus'].in?(UNSUCCESSFUL_DELIVERY)
+      handle_successful_delivery if status_params['MessageStatus'].in?(SUCCESSFUL_DELIVERY)
     end
 
     private
@@ -142,6 +144,22 @@ module WhatsApp
                                                                         whats_app_phone_number: @contributor.whats_app_phone_number,
                                                                         message: status_params['ErrorMessage'])
       ErrorNotifier.report(exception, context: { message_sid: status_params['MessageSid'] })
+    end
+
+    def handle_successful_delivery
+      return unless @contributor
+
+      message = Message.where(external_id: status_params['MessageSid']).first
+      return unless message
+
+      delivered_status = SUCCESSFUL_DELIVERY.first
+      read_status = SUCCESSFUL_DELIVERY.last
+      message.update(received_at: Time.current) if status_params['MessageStatus'].eql?(delivered_status)
+
+      return unless status_params['MessageStatus'].eql?(read_status)
+
+      message.received_at = Time.current if message.received_at.blank?
+      message.update(read_at: Time.current)
     end
   end
 end
