@@ -18,6 +18,7 @@ export default class extends Controller {
   static values = {
     membersCountMessage: String,
     previewFallback: String,
+    requestFilesUrl: Array,
   };
 
   connect() {
@@ -47,11 +48,17 @@ export default class extends Controller {
       this.previewTarget.innerHTML = this.setMessage();
     }
 
-    if (event?.target?.files?.length) {
+    if (event?.target?.files?.length || this.requestFilesUrlValue.length) {
       this.previewTarget.innerHTML = '';
       this.messageTarget.removeAttribute('required');
-      this.addImagePreview(event.target.files, this.setCaption());
     }
+    if (event?.target?.files?.length)
+      this.addImagePreview(event.target.files, this.setCaption());
+    if (this.requestFilesUrlValue.length)
+      this.addAttachedRequestFilesPreview(
+        this.requestFilesUrlValue,
+        this.setCaption()
+      );
   }
 
   updateMembersCount(event) {
@@ -89,7 +96,8 @@ export default class extends Controller {
     const figure = document.createElement('figure');
     const div = document.createElement('div');
     div.classList.add('RequestForm-imagePreviewWrapper');
-    this.removeExistingPreview();
+    this.removeExistingImagePreview();
+    this.removeExistingFilesname();
 
     for (let i = 0; i < files.length; i++) {
       let file = files.item(i);
@@ -114,8 +122,33 @@ export default class extends Controller {
         img.classList.add('RequestForm-firstImageInOddNumber');
       }
       div.appendChild(img);
-      this.setImageAttributes(img, file);
+      this.setImageAttributes(img, URL.createObjectURL(file));
     }
+
+    this.addPreview(figure, div, message);
+  }
+
+  addAttachedRequestFilesPreview(urls, message) {
+    const figure = document.createElement('figure');
+    const div = document.createElement('div');
+    div.classList.add('RequestForm-imagePreviewWrapper');
+
+    this.removeExistingImagePreview();
+
+    urls.forEach((url, i) => {
+      const img = document.createElement('img');
+      img.classList.add('RequestForm-imagePreview');
+      if (urls.length % 2 == 1 && i == 0) {
+        img.classList.add('RequestForm-firstImageInOddNumber');
+      }
+      div.appendChild(img);
+      this.setImageAttributes(img, url);
+    });
+
+    this.addPreview(figure, div, message);
+  }
+
+  addPreview(figure, div, message) {
     figure.appendChild(div);
     const figcaption = document.createElement('figcaption');
     figcaption.setAttribute('id', 'caption');
@@ -127,7 +160,7 @@ export default class extends Controller {
     firstFigcaption.innerHTML = message;
   }
 
-  removeExistingPreview() {
+  removeExistingImagePreview() {
     const existingFigure = document.getElementById('file-preview');
     if (existingFigure) existingFigure.remove();
     const chatPreviewBubbles = document.querySelectorAll(
@@ -138,14 +171,17 @@ export default class extends Controller {
         element.remove();
       }
     });
+  }
+
+  removeExistingFilesname() {
     const listItems = document.querySelectorAll(
       '.RequestForm-filenamesListItem'
     );
     listItems.forEach(listItem => listItem.remove());
   }
 
-  setImageAttributes(img, file) {
-    img.setAttribute('src', URL.createObjectURL(file));
+  setImageAttributes(img, url) {
+    img.setAttribute('src', url);
     img.setAttribute('width', 100);
     img.setAttribute('width', 100);
   }
@@ -163,7 +199,8 @@ export default class extends Controller {
     this.imageInputTarget.files = dt.files;
     event.target.parentNode.remove();
     if (this.imageInputTarget.files.length == 0) {
-      this.removeExistingPreview();
+      this.removeExistingImagePreview();
+      this.removeExistingFilesname();
       this.filenamesTarget.parentNode.classList.add(
         'RequestForm-filenamesWrapper--hidden'
       );
