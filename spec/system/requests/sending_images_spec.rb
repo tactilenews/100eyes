@@ -27,7 +27,7 @@ RSpec.describe 'Sending image files', js: true do
       expect(message).to eq 'Please fill out this field.'
       expect(page).to have_current_path(new_request_path(as: user))
 
-      # with no text, with file
+      # With no text, with file
       visit new_request_path(as: user)
 
       fill_in 'Titel', with: 'Message with files, no text'
@@ -37,6 +37,7 @@ RSpec.describe 'Sending image files', js: true do
       find_field('request_files', visible: :all).attach_file(image_file)
 
       click_button 'Frage an die Community senden'
+
       expect(page).to have_content('Message with files, no text')
       expect(page).to have_current_path(request_path(Request.first))
 
@@ -73,7 +74,6 @@ RSpec.describe 'Sending image files', js: true do
       expect(page).to have_css(
         'button.RequestForm-removeListItemButton[data-action="request-form#removeImage"][data-request-form-image-index-value="0"]'
       )
-
       click_button 'x'
 
       expect(page).not_to have_content('Angehängte Bilder')

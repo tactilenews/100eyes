@@ -61,15 +61,12 @@
               class="RequestForm-filenamesList"
             ></ul>
           </div>
-          <% if @request.files.attached? %>
+          <% if @request.planned? && @request.files.attached? %>
             <div class="RequestForm-filenamesWrapper">
               <%= c 'heading', style: :gamma do %>
                 <%= t('.attached_images') %>
               <% end %>
-              <ul
-                data-request-form-target="filenames"
-                class="RequestForm-filenamesList"
-              >
+              <ul class="RequestForm-filenamesList">
               <% @request.files.each_with_index do |file, index| %>
                 <li
                   id="image-filename-<%= file.blob[:filename] %>"
