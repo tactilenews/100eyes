@@ -94,11 +94,9 @@ module WhatsAppAdapter
         files = message.files
 
         if files.blank?
-          WhatsAppAdapter::Outbound::Text.perform_later(contributor_id: recipient.id, text: message.text)
+          WhatsAppAdapter::Outbound::Text.perform_later(contributor_id: recipient.id, text: message.text, message: message)
         else
-          files.each_with_index do |file, index|
-            WhatsAppAdapter::Outbound::File.perform_later(contributor_id: recipient.id, text: index.zero? ? message.text : '', file: file)
-          end
+          WhatsAppAdapter::Outbound::File.perform_later(contributor_id: recipient.id, message: message)
         end
       end
     end

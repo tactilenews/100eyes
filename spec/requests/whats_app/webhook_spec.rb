@@ -6,6 +6,7 @@ RSpec.describe WhatsApp::WebhookController do
   let(:auth_token) { 'valid_auth_token' }
   let(:mock_twilio_security_request_validator) { instance_double(Twilio::Security::RequestValidator) }
   let(:whats_app_phone_number) { '+491511234567' }
+  let(:twilio_message_sid) { 'someValidMessageSid' }
 
   describe '#message' do
     subject { -> { post whats_app_webhook_path, params: params } }
@@ -16,13 +17,13 @@ RSpec.describe WhatsApp::WebhookController do
         'ApiVersion' => '2010-04-01',
         'Body' => 'Hello',
         'From' => "whatsapp:#{whats_app_phone_number}",
-        'MessageSid' => 'someId',
+        'MessageSid' => twilio_message_sid,
         'NumMedia' => '0',
         'NumSegments' => '1',
         'ProfileName' => 'Matthew Rider',
         'ReferralNumMedia' => '0',
-        'SmsMessageSid' => 'someId',
-        'SmsSid' => 'someId',
+        'SmsMessageSid' => twilio_message_sid,
+        'SmsSid' => twilio_message_sid,
         'SmsStatus' => 'received',
         'To' => "whatsapp:#{Setting.whats_app_server_phone_number}",
         'WaId' => '491511234567'
@@ -93,7 +94,10 @@ RSpec.describe WhatsApp::WebhookController do
 
       context 'responding to template' do
         before { contributor.update(whats_app_message_template_sent_at: Time.current) }
-        let(:latest_message_job_args) { { contributor_id: contributor.id, text: contributor.received_messages.first.text } }
+        let(:message) { contributor.received_messages.first }
+        let(:latest_message_job_args) do
+          { contributor_id: contributor.id, text: message.text, message: message }
+        end
 
         context 'request to receive latest message' do
           it 'enqueues a job to send the latest received message' do
@@ -118,8 +122,9 @@ RSpec.describe WhatsApp::WebhookController do
             end
 
             describe 'previous request' do
+              let(:message) { previous_request.messages.where(recipient_id: contributor.id).first }
               let(:requested_message_job_args) do
-                { contributor_id: contributor.id, text: previous_request.messages.where(recipient_id: contributor.id).first.text }
+                { contributor_id: contributor.id, text: message.text, message: message }
               end
               let(:body_text) do
                 "Some template message with request title „#{previous_request.title}“. Wenn du antworten möchtest, klicke auf 'Antworten'."
@@ -133,8 +138,9 @@ RSpec.describe WhatsApp::WebhookController do
             end
 
             describe 'newer request' do
+              let(:message) { newer_request.messages.where(recipient_id: contributor.id).first }
               let(:requested_message_job_args) do
-                { contributor_id: contributor.id, text: newer_request.messages.where(recipient_id: contributor.id).first.text }
+                { contributor_id: contributor.id, text: message.text, message: message }
               end
               let(:body_text) do
                 "Some template message with request title „#{newer_request.title}“. Wenn du antworten möchtest, klicke auf 'Antworten'."
@@ -205,9 +211,9 @@ RSpec.describe WhatsApp::WebhookController do
         'ErrorCode' => '60228',
         'ErrorMessage' => 'Template was not found',
         'From' => "whatsapp:#{Setting.whats_app_server_phone_number}",
-        'MessageSid' => 'someSid',
+        'MessageSid' => twilio_message_sid,
         'MessageStatus' => 'failed',
-        'SmsSid' => 'someSid',
+        'SmsSid' => twilio_message_sid,
         'SmsStatus' => 'failed',
         'StructuredMessage' => 'false',
         'To' => "whatsapp:#{whats_app_phone_number}"
@@ -301,7 +307,7 @@ RSpec.describe WhatsApp::WebhookController do
 
             before do
               allow(Twilio::REST::Client).to receive(:new).and_return(mock_twilio_rest_client)
-              allow(mock_twilio_rest_client).to receive(:messages).with('someSid').and_return(messages_double)
+              allow(mock_twilio_rest_client).to receive(:messages).with(twilio_message_sid).and_return(messages_double)
               allow(messages_double).to receive(:fetch).and_return(messages_double)
               params['ErrorCode'] = '63016'
               params['ErrorMessage'] = freeform_message_not_allowed_error_message
@@ -334,6 +340,73 @@ RSpec.describe WhatsApp::WebhookController do
                 before { params['MessageStatus'] = 'undelivered' }
                 it 'is expected not to schedule a job as it would send out twice, one for undelivered and one for failed' do
                   expect { subject.call }.not_to have_enqueued_job(WhatsAppAdapter::Outbound::Text)
+                end
+              end
+            end
+          end
+        end
+      end
+
+      describe 'given a successful delivery' do
+        let(:params) do
+          {
+            'AccountSid' => 'someAccountSID',
+            'ApiVersion' => '2010-04-01',
+            'ChannelInstallSid' => 'someChannelInstallSid',
+            'ChannelPrefix' => 'whatsapp',
+            'ChannelToAddress' => whats_app_phone_number.to_s,
+            'From' => "whatsapp:#{Setting.whats_app_server_phone_number}",
+            'MessageSid' => twilio_message_sid,
+            'MessageStatus' => 'delivered',
+            'SmsSid' => twilio_message_sid,
+            'SmsStatus' => 'delivered',
+            'To' => "whatsapp:#{whats_app_phone_number}"
+          }
+        end
+
+        context 'unknown contributor' do
+          it 'is not expected to raise an error' do
+            expect { subject.call }.not_to raise_error
+          end
+        end
+
+        context 'given a known contributor' do
+          let!(:contributor) { create(:contributor, whats_app_phone_number: whats_app_phone_number) }
+
+          context 'given a delivered status' do
+            context 'given no message can be found by the twilio message sid' do
+              it 'is expected to not raise an error' do
+                expect { subject.call }.not_to raise_error
+              end
+            end
+
+            context 'given a message with the twilio message sid as external_id' do
+              let!(:message) { create(:message, external_id: twilio_message_sid) }
+
+              it 'is expected to mark the message as received' do
+                expect { subject.call }.to change { message.reload.received_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+              end
+            end
+          end
+
+          context 'given a read status' do
+            before { params['MessageStatus'] = 'read' }
+
+            context 'given a message with the twilio message sid as external_id' do
+              let!(:message) { create(:message, external_id: twilio_message_sid, received_at: 1.hour.ago) }
+
+              it 'is expected to mark the message as read' do
+                expect { subject.call }.to change { message.reload.read_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+              end
+
+              context 'given a message has not been marked as received' do
+                before { message.update(received_at: nil) }
+
+                it 'is expected to mark both received_at and read_at' do
+                  expect { subject.call }.to change { message.reload.received_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+                                                                                  .and change {
+                                                                                         message.reload.read_at
+                                                                                       }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
                 end
               end
             end
@@ -373,7 +446,7 @@ RSpec.describe WhatsApp::WebhookController do
         'ParentAccountSid' => 'someParentAccountSid',
         'Payload' => error_payload.to_json,
         'PayloadType' => 'application/json',
-        'Sid' => 'someSid',
+        'Sid' => twilio_message_sid,
         'Timestamp' => Time.current.to_i
       }
     end
