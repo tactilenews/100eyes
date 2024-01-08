@@ -14,6 +14,8 @@ export default class extends Controller {
     'submitButton',
     'characterCounter',
     'modal',
+    'attachedFiles',
+    'imageInputAttachedFile',
   ];
   static values = {
     membersCountMessage: String,
@@ -24,7 +26,6 @@ export default class extends Controller {
   connect() {
     this.updatePreview();
     this.updateMembersCount();
-    this.imageInputTarget.classList.add('hidden');
     this.updateCharacterCounter();
   }
 
@@ -89,7 +90,9 @@ export default class extends Controller {
   }
 
   insertImage() {
-    this.imageInputTarget.click();
+    if (this.hasImageInputTarget) this.imageInputTarget.click();
+    if (this.hasImageInputAttachedFileTarget)
+      this.imageInputAttachedFileTarget.click();
   }
 
   addImagePreview(files, message) {
@@ -208,6 +211,33 @@ export default class extends Controller {
       this.messageTarget.setAttribute('required', true);
     } else {
       this.addImagePreview(this.imageInputTarget.files, this.setCaption());
+    }
+  }
+
+  removeAttachedImage(event) {
+    event.target.parentNode.remove();
+
+    const id = event.target.dataset.requestFormImageIdValue;
+    const url = event.target.dataset.requestFormImageUrlValue;
+    this.requestFilesUrlValue = this.requestFilesUrlValue.filter(u => u == url);
+    const hiddenInputs = this.imageInputAttachedFileTargets;
+    const inputToDelete = hiddenInputs.find(
+      image => image.getAttribute('value') == id
+    );
+    inputToDelete.remove();
+    if (this.imageInputAttachedFileTargets.length == 0) {
+      this.removeExistingImagePreview();
+      this.removeExistingFilesname();
+      this.attachedFilesTarget.parentNode.classList.add(
+        'RequestForm-filenamesWrapper--hidden'
+      );
+      this.previewTarget.innerHTML = this.setMessage();
+      this.messageTarget.setAttribute('required', true);
+    } else {
+      this.addAttachedRequestFilesPreview(
+        this.requestFilesUrlValue,
+        this.setCaption()
+      );
     }
   }
 

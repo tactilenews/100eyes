@@ -28,13 +28,26 @@
               class: 'RequestForm-insertPlaceholderButton',
               type: 'button',
               data: { action: 'request-form#insertImage' } do %>
-              <%= field.file_field(:request,
-                                   :files,
-                                   data: { request_form_target: 'imageInput' },
-                                   multiple: true,
-                                   accept: 'image/*'
+              <% if @request.planned? && @request.files.attached? %>
+                <% @request.files.each do |file| %>
+                  <%= field.hidden_field(:request,
+                                       :files,
+                                        data: { request_form_target: 'imageInputAttachedFile' },
+                                        multiple: true,
+                                        value: file.signed_id
 
-              ) %>
+                  ) %>
+                <% end %>
+              <% else %>
+                <%= field.file_field(:request,
+                                    :files,
+                                    data: { request_form_target: 'imageInput' },
+                                    multiple: true,
+                                    hidden: true,
+                                    accept: 'image/*'
+
+                ) %>
+              <% end %>
               <%= t('.attach_image_to_message') %>
             <% end %>
           <% end %>
@@ -66,8 +79,11 @@
               <%= c 'heading', style: :gamma do %>
                 <%= t('.attached_images') %>
               <% end %>
-              <ul class="RequestForm-filenamesList">
-              <% @request.files.each_with_index do |file, index| %>
+              <ul
+                class="RequestForm-filenamesList"
+                data-request-form-target="attachedFiles"
+              >
+              <% @request.files.each do |file| %>
                 <li
                   id="image-filename-<%= file.blob[:filename] %>"
                   class="RequestForm-filenamesListItem"
@@ -75,8 +91,9 @@
                   <p class="RequestForm-filename"><%= file.blob[:filename] %></p>
                   <button
                     class="RequestForm-removeListItemButton Button"
-                    data-action="request-form#removeImageFromRequest"
-                    data-request-form-image-index-value="<%= index %>"
+                    data-action="request-form#removeAttachedImage"
+                    data-request-form-image-id-value="<%= file.signed_id %>"
+                    data-request-form-image-url-value="<%= url_for(file) %>"
                     type="button"
                   >
                    x

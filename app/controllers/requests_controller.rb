@@ -43,6 +43,7 @@ class RequestsController < ApplicationController
   def edit; end
 
   def update
+    @request.files.purge_later if @request.files.attached? && request_params[:files].blank?
     if @request.update(request_params)
       if @request.planned?
         redirect_to requests_path(filter: :planned), flash: {
