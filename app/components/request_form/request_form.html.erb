@@ -31,23 +31,22 @@
               <% if @request.planned? && @request.files.attached? %>
                 <% @request.files.each do |file| %>
                   <%= field.hidden_field(:request,
-                                       :files,
-                                        data: { request_form_target: 'imageInputAttachedFile' },
-                                        multiple: true,
-                                        value: file.signed_id
+                                         :files,
+                                         data: { request_form_target: 'imageInputAttachedFile' },
+                                         multiple: true,
+                                         value: file.signed_id
 
                   ) %>
                 <% end %>
-              <% else %>
-                <%= field.file_field(:request,
-                                    :files,
-                                    data: { request_form_target: 'imageInput' },
-                                    multiple: true,
-                                    hidden: true,
-                                    accept: 'image/*'
-
-                ) %>
               <% end %>
+              <%= field.file_field(:request,
+                                   :files,
+                                   data: { request_form_target: 'imageInput' },
+                                   multiple: true,
+                                   hidden: true,
+                                   accept: 'image/*'
+
+              ) %>
               <%= t('.attach_image_to_message') %>
             <% end %>
           <% end %>
@@ -72,17 +71,8 @@
             <ul
               data-request-form-target="filenames"
               class="RequestForm-filenamesList"
-            ></ul>
-          </div>
-          <% if @request.planned? && @request.files.attached? %>
-            <div class="RequestForm-filenamesWrapper">
-              <%= c 'heading', style: :gamma do %>
-                <%= t('.attached_images') %>
-              <% end %>
-              <ul
-                class="RequestForm-filenamesList"
-                data-request-form-target="attachedFiles"
-              >
+            >
+            <% if @request.planned? && @request.files.attached? %>
               <% @request.files.each do |file| %>
                 <li
                   id="image-filename-<%= file.blob[:filename] %>"
@@ -100,9 +90,9 @@
                   </button>
                 </li>
               <% end %>
-              </ul>
-            </div>
-          <% end %>
+            <% end %>
+            </ul>
+          </div>
         <% end %>
 
         <%= c 'field', object: @request, attr: :schedule_send_for do  |field| %>
