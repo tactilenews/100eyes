@@ -6,8 +6,8 @@ RSpec.describe ThreemaAdapter::Inbound do
   let(:threema_id) { 'V5EA564T' }
   let!(:contributor) { build(:contributor, threema_id: threema_id).tap { |contributor| contributor.save(validate: false) } }
 
-  let(:threema_message) { described_class.new(message) }
-  let(:message) do
+  let(:adapter) { described_class.new }
+  let(:threema_message) do
     ActionController::Parameters.new({
                                        'from' => 'V5EA564T',
                                        'to' => '*100EYES',
@@ -23,146 +23,283 @@ RSpec.describe ThreemaAdapter::Inbound do
   let(:threema) { instance_double(Threema) }
   before do
     allow(Threema).to receive(:new).and_return(threema)
-    allow(threema).to receive(:receive).with({ payload: message }).and_return(threema_mock)
+    allow(threema).to receive(:receive).with({ payload: threema_message }).and_return(threema_mock)
     allow(threema_mock).to receive(:instance_of?) { false }
   end
 
-  describe 'DeliveryReceipt' do
-    subject { threema_message.delivery_receipt }
-
-    before { allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::DeliveryReceipt).and_return(true) }
-
-    context 'Threema::Receive::DeliveryReceipt' do
-      let(:threema_mock) { instance_double(Threema::Receive::DeliveryReceipt, content: 'x\00x\\0') }
-
-      it { is_expected.to be(true) }
+  describe '#consume' do
+    let(:message) do
+      adapter.consume(threema_message) do |message|
+        return message
+      end
     end
-  end
 
-  describe '#text' do
     before { allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::Text).and_return(true) }
 
-    subject { threema_message.message.text }
+    describe 'DeliveryReceipt' do
+      subject { message }
 
-    it { is_expected.to eq('Hello World!') }
+      before { allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::DeliveryReceipt).and_return(true) }
 
-    describe 'saving the message' do
-      subject { threema_message.message.raw_data }
-      it { should be_attached }
-    end
-  end
+      context 'Threema::Receive::DeliveryReceipt' do
+        let(:threema_mock) { instance_double(Threema::Receive::DeliveryReceipt, content: 'x\00x\\0') }
 
-  describe '#contributor' do
-    subject { threema_message.message.contributor }
-    it { should eq(contributor) }
-
-    context 'if contributor has lowercase Threema ID' do
-      let(:threema_id) { 'v5ea564t' }
-      it { should eq(contributor) }
-    end
-  end
-
-  describe 'Threema::Receive::File' do
-    let(:threema_mock) do
-      instance_double(Threema::Receive::File, name: 'my voice', content: 'x\00x\\0', mime_type: 'audio/aac', caption: 'some caption')
-    end
-    before { allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::File).and_return(true) }
-
-    describe '#file' do
-      let(:file) { threema_message.message.files.first }
-      subject { file.attachment }
-
-      describe 'handling different content types' do
-        context 'audio' do
-          it { should be_attached }
-
-          it 'preserves the content_type' do
-            expect(subject.blob.content_type).to eq('audio/aac')
-          end
-        end
-
-        context 'image' do
-          let(:threema_mock) do
-            instance_double(Threema::Receive::File, name: 'my image', content: 'x\00x\\0', mime_type: 'image/jpeg', caption: nil)
-          end
-
-          it { should be_attached }
-          it 'preserves the content_type' do
-            expect(subject.blob.content_type).to eq('image/jpeg')
-          end
-        end
-
-        context 'video' do
-          let(:threema_mock) do
-            instance_double(Threema::Receive::File, name: 'my video', content: 'x\00x\\0', mime_type: 'video/mp4',
-                                                    caption: 'look at this cool video')
-          end
-
-          it { should be_attached }
-          it 'preserves the content_type' do
-            expect(subject.blob.content_type).to eq('video/mp4')
-          end
-        end
+        it { is_expected.to be(nil) }
       end
     end
 
-    describe 'saving the caption' do
-      subject { threema_message.message.text }
+    describe '|message|raw_data' do
+      subject { message.raw_data }
 
-      it { is_expected.to eq('some caption') }
+      it { is_expected.to be_attached }
     end
 
-    describe 'saving the message' do
-      subject do
-        lambda do
-          threema_message.message.request = create(:request)
-          threema_message.message.save!
-        end
+    describe '#sender' do
+      subject { message.sender }
+
+      it { is_expected.to eq(contributor) }
+
+      context 'if contributor has lowercase Threema ID' do
+        let(:threema_id) { 'v5ea564t' }
+        it { is_expected.to eq(contributor) }
       end
-      it { should change { ActiveStorage::Attachment.where(record_type: 'Message::File').count }.from(0).to(1) }
-    end
-  end
-
-  describe 'Unknown content' do
-    subject { threema_message.unknown_content }
-
-    context 'Threema::Receive::Image' do
-      let(:threema_mock) { instance_double(Threema::Receive::Image, content: 'x\00x\\0') }
-      before { allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::Image).and_return(true) }
-
-      it { is_expected.to be(true) }
     end
 
     describe 'Threema::Receive::File' do
+      let(:threema_mock) do
+        instance_double(Threema::Receive::File, name: 'my voice', content: 'x\00x\\0', mime_type: 'audio/aac', caption: 'some caption')
+      end
       before do
+        allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::Text).and_return(false)
         allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::File).and_return(true)
-        allow(threema_mock).to receive(:respond_to?).with(:mime_type).and_return(true)
       end
 
-      context 'Pdf files' do
-        let(:threema_mock) do
-          instance_double(Threema::Receive::File, name: 'my pdf', content: 'x\00x\\0', mime_type: 'application/pdf',
-                                                  caption: 'do you accept pdf?')
-        end
+      describe '#file' do
+        let(:file) { message.files.first }
+        subject { file.attachment }
 
-        it { is_expected.to be(true) }
+        describe 'handling different content types' do
+          context 'audio' do
+            it { should be_attached }
+
+            it 'preserves the content_type' do
+              expect(subject.blob.content_type).to eq('audio/aac')
+            end
+          end
+
+          context 'image' do
+            let(:threema_mock) do
+              instance_double(Threema::Receive::File, name: 'my image', content: 'x\00x\\0', mime_type: 'image/jpeg', caption: nil)
+            end
+
+            it { should be_attached }
+            it 'preserves the content_type' do
+              expect(subject.blob.content_type).to eq('image/jpeg')
+            end
+          end
+
+          context 'video' do
+            let(:threema_mock) do
+              instance_double(Threema::Receive::File, name: 'my video', content: 'x\00x\\0', mime_type: 'video/mp4',
+                                                      caption: 'look at this cool video')
+            end
+
+            it { should be_attached }
+            it 'preserves the content_type' do
+              expect(subject.blob.content_type).to eq('video/mp4')
+            end
+          end
+        end
       end
 
-      context 'Contact' do
-        let(:threema_mock) do
-          instance_double(Threema::Receive::File, name: "my friend's contact", content: 'x\00x\\0', mime_type: 'text/x-vcard', caption: nil)
-        end
+      describe 'saving the caption' do
+        subject { message.text }
 
-        it { is_expected.to be(true) }
+        it { is_expected.to eq('some caption') }
       end
 
-      context 'Word doc' do
-        let(:threema_mock) do
-          instance_double(Threema::Receive::File, name: "my friend's contact", content: 'x\00x\\0', mime_type: 'application/msword',
-                                                  caption: nil)
+      describe 'saving the message' do
+        subject do
+          lambda do
+            message.request = create(:request)
+            message.save!
+          end
+        end
+        it { should change { ActiveStorage::Attachment.where(record_type: 'Message::File').count }.from(0).to(1) }
+      end
+    end
+
+    describe 'Unsupported content' do
+      subject { message.unknown_content }
+
+      describe 'Threema::Receive::File' do
+        before do
+          allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::File).and_return(true)
+          allow(threema_mock).to receive(:respond_to?).with(:mime_type).and_return(true)
         end
 
-        it { is_expected.to be(true) }
+        context 'Pdf files' do
+          let(:threema_mock) do
+            instance_double(Threema::Receive::File, name: 'my pdf', content: 'x\00x\\0', mime_type: 'application/pdf',
+                                                    caption: 'do you accept pdf?')
+          end
+
+          it { is_expected.to be(true) }
+        end
+
+        context 'Contact' do
+          let(:threema_mock) do
+            instance_double(Threema::Receive::File, name: "my friend's contact", content: 'x\00x\\0', mime_type: 'text/x-vcard',
+                                                    caption: nil)
+          end
+
+          it { is_expected.to be(true) }
+        end
+
+        context 'Word doc' do
+          let(:threema_mock) do
+            instance_double(Threema::Receive::File, name: "my friend's contact", content: 'x\00x\\0', mime_type: 'application/msword',
+                                                    caption: nil)
+          end
+
+          it { is_expected.to be(true) }
+        end
+      end
+    end
+  end
+
+  describe '#on' do
+    describe 'UNKNOWN_CONTRIBUTOR' do
+      let(:unknown_contributor_callback) { spy('unknown_contributor_callback') }
+
+      before do
+        adapter.on(ThreemaAdapter::UNKNOWN_CONTRIBUTOR) do |threema_id|
+          unknown_contributor_callback.call(threema_id)
+        end
+      end
+
+      subject do
+        adapter.consume(threema_message)
+        unknown_contributor_callback
+      end
+
+      describe 'if the sender is a contributor ' do
+        it { is_expected.not_to have_received(:call) }
+      end
+
+      describe 'if the sender is unknown' do
+        before { threema_message[:from] = 'NOT_KNOWN' }
+        it { is_expected.to have_received(:call).with('NOT_KNOWN') }
+      end
+    end
+
+    describe 'UNSUBSCRIBE_CONTRIBUTOR' do
+      let(:unsubscribe_contributor_callback) { spy('unsubscribe_contributor_callback') }
+
+      before do
+        allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::Text).and_return(true)
+        adapter.on(ThreemaAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
+          unsubscribe_contributor_callback.call(contributor)
+        end
+      end
+
+      subject do
+        adapter.consume(threema_message)
+        unsubscribe_contributor_callback
+      end
+
+      context 'any text other than the keyword Abbestellen' do
+        it { is_expected.not_to have_received(:call) }
+      end
+
+      context 'with keyword Abbestellen' do
+        let(:threema_mock) { instance_double(Threema::Receive::Text, content: 'Abbestellen') }
+
+        it { is_expected.to have_received(:call) }
+      end
+    end
+
+    describe 'RESUBSCRIBE_CONTRIBUTOR' do
+      let(:resubscribe_contributor_callback) { spy('resubscribe_contributor_callback') }
+
+      before do
+        allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::Text).and_return(true)
+        adapter.on(ThreemaAdapter::RESUBSCRIBE_CONTRIBUTOR) do |contributor|
+          resubscribe_contributor_callback.call(contributor)
+        end
+      end
+
+      subject do
+        adapter.consume(threema_message)
+        resubscribe_contributor_callback
+      end
+
+      context 'any text other than the keyword Bestellen' do
+        it { is_expected.not_to have_received(:call) }
+      end
+
+      context 'with keyword Bestellen' do
+        let(:threema_mock) { instance_double(Threema::Receive::Text, content: 'Bestellen') }
+
+        it { is_expected.to have_received(:call) }
+      end
+    end
+
+    describe 'UNSUPPORTED_CONTENT' do
+      let(:unsupported_content_callback) { spy('unsupported_content_callback') }
+
+      before do
+        adapter.on(ThreemaAdapter::UNSUPPORTED_CONTENT) do |contributor|
+          unsupported_content_callback.call(contributor)
+        end
+      end
+
+      subject do
+        adapter.consume(threema_message)
+        unsupported_content_callback
+      end
+
+      context 'if the message is a plaintext message' do
+        it { is_expected.not_to have_received(:call) }
+      end
+
+      describe 'non-text message' do
+        before { allow(threema_mock).to receive(:respond_to?).with(:mime_type).and_return(true) }
+
+        context 'Threema::Receive::NotImplementedFallback' do
+          before do
+            allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::NotImplementedFallback).and_return(true)
+          end
+
+          it { is_expected.to have_received(:call).with(contributor) }
+        end
+
+        context 'Pdf files' do
+          let(:threema_mock) do
+            instance_double(Threema::Receive::File, name: 'my pdf', content: 'x\00x\\0', mime_type: 'application/pdf',
+                                                    caption: 'do you accept pdf?')
+          end
+
+          it { is_expected.to have_received(:call).with(contributor) }
+        end
+
+        context 'Contact' do
+          let(:threema_mock) do
+            instance_double(Threema::Receive::File, name: "my friend's contact", content: 'x\00x\\0', mime_type: 'text/x-vcard',
+                                                    caption: nil)
+          end
+
+          it { is_expected.to have_received(:call).with(contributor) }
+        end
+
+        context 'Word doc' do
+          let(:threema_mock) do
+            instance_double(Threema::Receive::File, name: "my friend's contact", content: 'x\00x\\0', mime_type: 'application/msword',
+                                                    caption: nil)
+          end
+
+          it { is_expected.to have_received(:call).with(contributor) }
+        end
       end
     end
   end

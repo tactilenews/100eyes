@@ -8,7 +8,7 @@ RSpec.describe SignalAdapter::Outbound do
   let(:message) { create(:message, text: 'Forgot to ask: How are you?', broadcasted: true, recipient: contributor) }
   let(:contributor) { create(:contributor, email: nil) }
   let(:expected_job_args) do
-    { recipient: contributor, text: [Setting.onboarding_success_heading, Setting.onboarding_success_text].join("\n") }
+    { contributor_id: contributor.id, text: [Setting.onboarding_success_heading, Setting.onboarding_success_text].join("\n") }
   end
 
   describe '::send_welcome_message!' do

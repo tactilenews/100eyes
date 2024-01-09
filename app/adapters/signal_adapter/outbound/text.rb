@@ -7,8 +7,10 @@ module SignalAdapter
 
       attr_reader :recipient, :text
 
-      def perform(recipient:, text:)
-        @recipient = recipient
+      def perform(contributor_id:, text:)
+        @recipient = Contributor.find(contributor_id)
+        return unless @recipient
+
         @text = text
         uri = URI.parse("#{Setting.signal_cli_rest_api_endpoint}/v2/send")
         request = Net::HTTP::Post.new(uri, {
@@ -16,7 +18,7 @@ module SignalAdapter
                                         'Content-Type': 'application/json'
                                       })
         request.body = data.to_json
-        SignalAdapter::Api.perform_request(request) do
+        SignalAdapter::Api.perform_request(request, recipient) do
           # TODO: Do something on success. For example, mark the message as delivered?
           # Or should we use deliver receipts as the source of truth.
           Rails.logger.debug 'Great!'

@@ -20,9 +20,10 @@ class ContributorsController < ApplicationController
 
     @active_count = Contributor.active.count
     @inactive_count = Contributor.inactive.count
+    @unsubscribed_count = Contributor.unsubscribed.count
     @available_tags = Contributor.all_tags_with_count.to_json
 
-    @contributors = @state == :inactive ? Contributor.inactive : Contributor.active
+    @contributors = filtered_contributors
     @contributors = @contributors.with_tags(tag_list_params)
     @filter_count = @contributors.size
     @contributors = @contributors.with_attached_avatar.includes(:tags)
@@ -40,7 +41,7 @@ class ContributorsController < ApplicationController
   def update
     @contributors = Contributor.with_attached_avatar
     @contributor.editor_guarantees_data_consent = true
-    @contributor.deactivated_by_user = current_user unless ActiveModel::Type::Boolean.new.cast(contributor_params[:active])
+    @contributor.deactivated_by_user = deactivate_by_user_state
 
     if @contributor.update(contributor_params)
       redirect_to contributor_url, flash: { success: I18n.t('contributor.saved', name: @contributor.name) }
@@ -86,9 +87,20 @@ class ContributorsController < ApplicationController
   def state_params
     value = contributors_params[:state]&.to_sym
 
-    return :active unless %i[active inactive].include?(value)
+    return :active unless %i[active inactive unsubscribed].include?(value)
 
     value
+  end
+
+  def filtered_contributors
+    case @state
+    when :inactive
+      Contributor.inactive
+    when :unsubscribed
+      Contributor.unsubscribed
+    else
+      Contributor.active
+    end
   end
 
   def tag_list_params
@@ -107,6 +119,10 @@ class ContributorsController < ApplicationController
     # as displaying an invalid avatar will result in rendering errors.
     old_avatar = Contributor.with_attached_avatar.find(@contributor.id).avatar
     contributor.avatar = old_avatar.blob
+  end
+
+  def deactivate_by_user_state
+    ActiveModel::Type::Boolean.new.cast(contributor_params[:active]) ? nil : current_user
   end
 
   attr_reader :contributor

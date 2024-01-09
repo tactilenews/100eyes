@@ -5,9 +5,15 @@ module WhatsApp
     include WhatsAppHandleCallbacks
 
     skip_before_action :require_login, :verify_authenticity_token
+    before_action :set_contributor, only: :status
+
     UNSUCCESSFUL_DELIVERY = %w[undelivered failed].freeze
+    SUCCESSFUL_DELIVERY = %w[delivered read].freeze
+    INVALID_MESSAGE_RECIPIENT_ERROR_CODE = 63_024 # https://www.twilio.com/docs/api/errors/63024
+    FREEFORM_MESSAGE_NOT_ALLOWED_ERROR_CODE = 63_016 # https://www.twilio.com/docs/api/errors/63016
 
     def message
+      head :ok
       adapter = WhatsAppAdapter::TwilioInbound.new
 
       adapter.on(WhatsAppAdapter::TwilioInbound::UNKNOWN_CONTRIBUTOR) do |whats_app_phone_number|
@@ -27,11 +33,11 @@ module WhatsApp
       end
 
       adapter.on(WhatsAppAdapter::TwilioInbound::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
-        handle_unsubsribe_contributor(contributor)
+        UnsubscribeContributorJob.perform_later(contributor.id, WhatsAppAdapter::Outbound)
       end
 
-      adapter.on(WhatsAppAdapter::TwilioInbound::SUBSCRIBE_CONTRIBUTOR) do |contributor|
-        handle_subscribe_contributor(contributor)
+      adapter.on(WhatsAppAdapter::TwilioInbound::RESUBSCRIBE_CONTRIBUTOR) do |contributor|
+        ResubscribeContributorJob.perform_later(contributor.id, WhatsAppAdapter::Outbound)
       end
 
       whats_app_message_params = message_params.to_h.transform_keys(&:underscore)
@@ -39,26 +45,28 @@ module WhatsApp
     end
 
     def errors
+      head :ok
       return unless error_params['Level'] == 'ERROR'
 
-      payload = JSON.parse(error_params['Payload'])
-      parameters = payload.with_indifferent_access.dig(:webhook, :request, :parameters)
-      exception = WhatsAppAdapter::TwilioError.new(error_code: payload['error_code'])
+      payload = JSON.parse(error_params['Payload']).deep_transform_keys(&:underscore).with_indifferent_access
+      parameters = payload.dig(:webhook, :request, :parameters)
+      more_info = payload[:more_info]
+      message = more_info&.dig(:msg)
+      url = more_info&.dig(:url)
+      exception = WhatsAppAdapter::TwilioError.new(error_code: payload['error_code'], message: message, url: url)
       ErrorNotifier.report(exception,
                            context: {
                              channel_to_address: parameters&.dig(:channelToAddress),
-                             more_info: payload['more_info'],
+                             more_info: more_info,
                              error_sid: error_params['Sid'],
-                             message_sid: parameters&.dig(:messageSid)
+                             message_sid: parameters&.dig(:message_sid)
                            })
     end
 
     def status
-      return unless status_params['MessageStatus'].in?(UNSUCCESSFUL_DELIVERY)
-
-      exception = WhatsAppAdapter::MessageDeliveryUnsuccessfulError.new(status: status_params['MessageStatus'],
-                                                                        whats_app_phone_number: status_params['To'].split('whatsapp:').last)
-      ErrorNotifier.report(exception, context: { message_sid: status_params['MessageSid'] })
+      head :ok
+      handle_unsuccessful_delivery if status_params['MessageStatus'].in?(UNSUCCESSFUL_DELIVERY)
+      handle_successful_delivery if status_params['MessageStatus'].in?(SUCCESSFUL_DELIVERY)
     end
 
     private
@@ -75,8 +83,13 @@ module WhatsApp
     end
 
     def status_params
-      params.permit(:AccountSid, :ApiVersion, :ChannelInstallSid, :ChannelPrefix, :ChannelToAddress, :ErrorCode, :EventType,
-                    :From, :MessageSid, :MessageStatus, :SmsSid, :SmsStatus, :To)
+      params.permit(:AccountSid, :ApiVersion, :ChannelInstallSid, :ChannelPrefix, :ChannelToAddress, :ErrorCode, :ErrorMessage,
+                    :EventType, :From, :MessageSid, :MessageStatus, :SmsSid, :SmsStatus, :StructuredMessage, :To)
+    end
+
+    def set_contributor
+      whats_app_phone_number = status_params['To'].split('whatsapp:').last
+      @contributor = Contributor.find_by(whats_app_phone_number: whats_app_phone_number)
     end
 
     def handle_unknown_contributor(whats_app_phone_number)
@@ -107,6 +120,46 @@ module WhatsApp
     rescue Twilio::REST::RestError => e
       ErrorNotifier.report(e)
       nil
+    end
+
+    def handle_freeform_message_not_allowed_error(contributor, twilio_message_sid)
+      message_text = fetch_message_from_twilio(twilio_message_sid)
+      message = Message.find_by(text: message_text)
+      return unless message
+
+      WhatsAppAdapter::TwilioOutbound.send_message_template!(contributor, message)
+    end
+
+    def handle_unsuccessful_delivery
+      return unless @contributor
+
+      if status_params['ErrorCode'].to_i.eql?(INVALID_MESSAGE_RECIPIENT_ERROR_CODE)
+        MarkInactiveContributorInactiveJob.perform_later(contributor_id: @contributor.id)
+        return
+      end
+      if status_params['ErrorCode'].to_i.eql?(FREEFORM_MESSAGE_NOT_ALLOWED_ERROR_CODE) && status_params['MessageStatus'].eql?('failed')
+        handle_freeform_message_not_allowed_error(@contributor, status_params['MessageSid'])
+      end
+      exception = WhatsAppAdapter::MessageDeliveryUnsuccessfulError.new(status: status_params['MessageStatus'],
+                                                                        whats_app_phone_number: @contributor.whats_app_phone_number,
+                                                                        message: status_params['ErrorMessage'])
+      ErrorNotifier.report(exception, context: { message_sid: status_params['MessageSid'] })
+    end
+
+    def handle_successful_delivery
+      return unless @contributor
+
+      message = Message.where(external_id: status_params['MessageSid']).first
+      return unless message
+
+      delivered_status = SUCCESSFUL_DELIVERY.first
+      read_status = SUCCESSFUL_DELIVERY.last
+      message.update(received_at: Time.current) if status_params['MessageStatus'].eql?(delivered_status)
+
+      return unless status_params['MessageStatus'].eql?(read_status)
+
+      message.received_at = Time.current if message.received_at.blank?
+      message.update(read_at: Time.current)
     end
   end
 end

@@ -8,10 +8,6 @@
   align-items: end;
 }
 
-.TabBar-item:nth-child(3) {
-  margin-left: calc(1.5 * var(--spacing-unit-xl));
-}
-
 .TabBar-item {
   display: inline-block;
   padding: var(--spacing-unit-xs) 0;
@@ -21,8 +17,8 @@
   transition: 0.1s all ease-out;
 }
 
-.TabBar-item:nth-child(even) {
-  margin-left: var(--spacing-unit);
+.TabBar-item:not(:last-child) {
+  margin-right: var(--spacing-unit);
 }
 
 .TabBar-item:not(.TabBar-item--active):hover {

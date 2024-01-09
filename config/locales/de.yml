@@ -135,6 +135,9 @@ de:
       insert_placeholder_button: Vornamen einfügen
       attach_image_to_message: Bilder anhängen
       attached_images: Angehängte Bilder
+      planned_request:
+        destroy:
+          button_text: Diese geplante Frage löschen
     chat_preview:
       status: jetzt online
       alt: >
@@ -196,7 +199,18 @@ de:
         action: Mitglied reaktivieren
       automatically_marked_inactive:
         text: "<strong>%{name}</strong> ist ein <strong>inaktives Mitglied</strong> deiner Community und erhält aktuell keine Recherchefragen über %{project_name}."
-        possible_reason_whats_app: "<strong>%{first_name}</strong> hat darum gebeten, vom Empfang von Nachrichten über WhatsApp abgemeldet zu werden."
+        possible_reason_whats_app: |
+          Die Rufnummer wurde möglicherweise nicht bei WhatsApp registriert oder der Empfänger hat die neuen Nutzungsbedingungen und Datenschutzrichtlinien von WhatsApp nicht akzeptiert.
+          Es ist auch möglich, dass der Empfänger eine alte, nicht unterstützte Version des WhatsApp-Clients für sein Telefon verwendet. Bitte überprüfe dies mit<strong>%{first_name}</strong>.
+        possible_reason_signal: "Die Rufnummer wurde möglicherweise nicht bei Signal registriert. Bitte überprüfe dies mit <strong>%{first_name}</strong>."
+        possible_reason_threema: "Diese Threema-ID wurde möglicherweise von Threema als ungültig gemeldet. Bitte <strong>%{first_name}</strong>, die Threema-ID zu überprüfen."
+        possible_reason_email: "Diese E-Mail-Adresse wurde vom Server als inaktiv gemeldet. Das bedeutet, es können keine E-Mails an diese Adresse zugestellt werden."
+        possible_reason_telegram: "<strong>%{first_name}</strong> hat sich aktiv vom Empfang von Nachrichten auf Telegram abgemeldet. Wenn du vermutest, dass dies eine versehentliche Abmeldung ist, kontaktiere %{first_name}."
+      unsubscribed:
+        text: |
+          <strong>%{name}</strong> ist ein <strong>inaktives Mitglied</strong> deiner Community und erhält aktuell keine Recherchefragen über %{project_name}.
+          <strong>%{first_name}</strong> hat darum gebeten, vom Erhalt von Nachrichten über WhatsApp abgemeldet zu werden.
+          Wenn du vermutest, dass es sich um eine versehentliche Abmeldung handelt, kontaktiere <strong>%{first_name}</strong>.
     contributor_email_settings:
       heading: "Ausgewählter Kanal: E-Mail"
       text: "%{name} hat sich via E-Mail angemeldet."
@@ -346,20 +360,35 @@ de:
       next: Nächste
       last: Letzte
     contributors_index:
+      subheading: Das sind die Mitglieder deiner Community
+      actions:
+        copy_invite: Einladung kopieren
+      filter_section:
+        heading: Nach Tags filtern
+        submit_button: filtern
+        clear_button: leeren
+      contributors_filter:
+        active: Aktiv
+        inactive: Inaktiv
+        unsubscribed: Abbestellt
       filter_active_text:
         one: "Das sind die Mitglieder deiner Community <strong>gefiltert nach dem Tag</strong>"
         other: "Das sind die Mitglieder deiner Community <strong>gefiltert nach den Tags</strong>"
     contributors_list:
       empty_state:
-        no_contributors: Du hast noch keine Mitglieder, verschick du Einladungslinks.
+        no_contributors: Du hast noch keine Mitglieder. Über Einladungslinks können sich neue Mitglieder hier anmelden.
         filter_active: Keine Mitglieder mit diesen Filtern gefunden
     whats_app_setup:
       heading: WhatsApp-Integration
-      setup_explained: Erteilen Sie unserem Business Solutions Provider, 360dialog, die Berechtigung, Ihren WhatsApp Business Manager zu verwalten, um WhatsApp als Kanal hinzuzufügen.
+      setup_explained: Erteile unserem Drittanbieter 360dialog die Berechtigung, den WhatsApp Business Manager zu verwalten, um WhatsApp als Kanal hinzuzufügen.
       open_modal_button: WhatsApp einrichten
     onboarding_channels_checkboxes:
       legend: Aktive Onboarding-Channel
-      help_text: Achtung, hier deaktivieren sie Kanäle. Teilnehmerinnen können sich nur noch auf aktiven Kanälen anmelden.
+      help_text: Achtung, hier deaktivierst du Kanäle. Mitglieder können sich nur noch auf aktiven Kanälen anmelden.
+    destroy_planned_request_modal:
+      heading: "Bist du sicher, dass du „%{request_title}” dauerhaft löschen möchtest?"
+      cancel: abbrechen
+      confirm: löschen
 
   mailer:
     unsubscribe:
@@ -381,8 +410,10 @@ de:
         text: "%{organization_name} hat die zahl der gebuchten Contributors überschritten. Technisch ist das kein problem. Sprich mit der Kund:in doch demnächst über eine Aufstockung des Plans."
       contributor_marked_as_inactive_email:
         subject: "%{contributor_name} wurde bei %{channel} als inaktiv markiert, weil er keine Nachrichten mehr von %{project_name} empfangen kann."
-        text: Wenn Sie vermuten, dass es sich um eine versehentliche Abmeldung handelt, setzen Sie sich mit %{contributor_name} in Verbindung. Vielleicht möchte die Person die Nachrichten lieber über einen anderen Kanal empfangen? Dann verschicken Sie einen neuen Anmelde-Link.
-      contributor_subscribed_email:
+        text: "Wenn Sie vermuten, dass es sich um eine versehentliche Abmeldung handelt, setzen Sie sich mit %{contributor_name} in Verbindung. Vielleicht möchte die Person die Nachrichten lieber über einen anderen Kanal empfangen? Dann verschicken Sie einen neuen Anmelde-Link."
+      contributor_unsubscribed_email:
+        subject: "%{contributor_name} hat darum gebeten, keine weiteren Nachrichten über %{channel} von %{project_name} zu erhalten."
+      contributor_resubscribed_email:
         subject: "%{contributor_name} hat erneut den Empfang von Nachrichten über %{channel} von %{project_name} angefordert."
     whats_app:
       welcome_message: "Vielen Dank für deine Anmeldung bei %{project_name}. Unsere Dialog-Recherche startet bald. Wir melden uns dann bei dir."
@@ -403,15 +434,18 @@ de:
       quick_reply_button_text:
         answer: Antworten
         more_info: Mehr Infos
+    shared:
       unsubscribe:
-        instructions: Um unseren Kanal Abzubestellen, schreibe „abbestellen“.
         text: abbestellen
-        by_request_of_contributor: "Das Mitglied, %{contributor_name}, hat darum gebeten, keine weiteren Nachrichten mit WhatsApp mehr zu erhalten."
+        instructions: Um unseren Kanal Abzubestellen, schreibe „abbestellen“.
         successful: Du wurdest erfolgreich abgemeldet. Wir danken dir für deinen Beitrag zu diesem Projekt.
-      subscribe:
+        by_request_of_contributor: "Das Mitglied, %{contributor_name}, hat darum gebeten, keine weiteren Nachrichten mit %{channel} mehr zu erhalten."
+      resubscribe:
         text: bestellen
         instructions: Um unseren Kanal erneut zu bestellen, schreiben Sie "bestellen".
+        failure: Eine Registrierung ist aktuell nicht möglich. Ihr Account wurde deaktiviert. Bitte wenden Sie sich an kontakt@tactile.news
         by_request_of_contributor: "Das Mitglied %{contributor_name} hat darum gebeten, wieder Nachrichten über WhatsApp empfangen zu können."
+
   save: Speichern
   cancel: Abbrechen
   skip_to_content: Zum Hauptinhalt springen
@@ -509,9 +543,6 @@ de:
     contributor:
       one: Mitglied
       other: Mitglieder
-    actions:
-      create: Manuell hinzufügen
-      copy_invite: Einladung kopieren
     create: Mitglied manuell hinzufügen
     success: Mitglied wurde erstellt
     activity: Aktivität
@@ -522,11 +553,6 @@ de:
     destroyed: Contributor %{name} wurde erfolgreich gelöscht.
     message-send: Nachricht an %{name} wurde verschickt
     skip_to_profile: Zum Profil springen
-    subheading: Das sind die Mitglieder deiner Community
-    filter_section:
-      heading: Nach Tags filtern
-      submit_button: filtern
-      clear_button: leeren
     form:
       first_name:
         label: Vorname
@@ -581,6 +607,9 @@ de:
       one: Deine Frage wurde erfolgreich an ein Mitglied in der Community gesendet
       other: Deine Frage wurde erfolgreich an %{count} Mitglieder in der Community gesendet
     editing_disallowed: Sie können eine bereits verschickte Frage nicht mehr bearbeiten.
+    destroy:
+      successful: "Deine Frage „%{request_title}” wurde erfolgreich gelöscht"
+      broadcasted_request_unallowed: "Frage %{request_title} wurde bereits gesendet und kann nicht gelöscht werden"
     replies: Alle Antworten
     created_at: Frage gestellt %{datetime}
     planned_for: Frage geplant für %{datetime}
@@ -910,7 +939,7 @@ de:
       text_html: "Die Frage <strong>%{request_title}</strong> wurde für den Versand am %{date} um %{time} geplant und wird an %{contributors_count} Community-Mitgliedern versendet."
       link_text: Zur Frage
     contributor_marked_inactive:
-      text_html: "<strong>%{contributor_name}</strong> wurde als inaktiv markiert, weil sie keine Fragen mehr zu %{contributor_channel} erhalten können."
+      text_html: "<strong>%{contributor_name}</strong> wurde als inaktiv markiert, weil die Person über diesen Kanal keine Fragen mehr zu %{contributor_channel} erhalten können."
       link_text: "Zum Profil"
     contributor_subscribed:
       text_html: "<strong>%{contributor_name}</strong> hat beantragt, erneut Nachrichten per %{contributor_channel} zu bestellen."

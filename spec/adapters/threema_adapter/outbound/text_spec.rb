@@ -11,7 +11,7 @@ RSpec.describe ThreemaAdapter::Outbound::Text do
   let(:message) { create(:message, recipient: contributor) }
 
   describe '#perform' do
-    subject { -> { adapter.perform(text: message.text, recipient: message.recipient) } }
+    subject { -> { adapter.perform(text: message.text, contributor_id: message.recipient.id) } }
 
     it 'sends the message' do
       expect_any_instance_of(Threema).to receive(:send).with(type: :text, threema_id: 'V5EA564T', text: message.text)

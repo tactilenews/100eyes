@@ -11,8 +11,7 @@ RSpec.describe Request, type: :model do
       title: 'Hitchhiker’s Guide',
       text: 'What is the answer to life, the universe, and everything?',
       user: user,
-      schedule_send_for: Time.current,
-      files: [fixture_file_upload('example-image.png')]
+      schedule_send_for: Time.current
     )
   end
 
@@ -31,6 +30,17 @@ RSpec.describe Request, type: :model do
       before { request.text = '' }
 
       it { is_expected.not_to be_valid }
+
+      describe 'with file attached' do
+        before do
+          request.files.attach(
+            io: Rails.root.join('example-image.png').open,
+            filename: 'example-image.png'
+          )
+        end
+
+        it { is_expected.to be_valid }
+      end
     end
 
     context 'text shorter than or equal to 1500 chars' do
@@ -74,8 +84,17 @@ RSpec.describe Request, type: :model do
     expect(subject.attributes.keys).to include('title', 'text', 'user_id')
   end
 
-  it 'has files attached' do
-    expect(subject.files).to be_attached
+  context 'files' do
+    before do
+      request.files.attach(
+        io: Rails.root.join('example-image.png').open,
+        filename: 'example-image.png'
+      )
+    end
+
+    it 'attached' do
+      expect(subject.files).to be_attached
+    end
   end
 
   it 'is by default sorted in reverse chronological order' do
@@ -242,8 +261,16 @@ RSpec.describe Request, type: :model do
   end
 
   describe '::after_create' do
-    before(:each) { allow(Request).to receive(:broadcast!).and_call_original } # is stubbed for every other test
     subject { -> { request.save! } }
+
+    before do
+      request.files.attach(
+        io: Rails.root.join('example-image.png').open,
+        filename: 'example-image.png'
+      )
+      allow(Request).to receive(:broadcast!).and_call_original # is stubbed for every other test
+    end
+
     describe 'given some existing contributors in the moment of creation' do
       before(:each) do
         create(:contributor, id: 1, email: 'somebody@example.org')

@@ -10,6 +10,7 @@ module SignalAdapter
       throw(:abort) unless queue_empty?
     end
 
+    # rubocop:disable Metrics/MethodLength
     def perform(*_args)
       return if Setting.signal_server_phone_number.blank?
 
@@ -29,6 +30,14 @@ module SignalAdapter
         SignalAdapter::Outbound.send_unknown_content_message!(contributor)
       end
 
+      adapter.on(SignalAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
+        UnsubscribeContributorJob.perform_later(contributor.id, SignalAdapter::Outbound)
+      end
+
+      adapter.on(SignalAdapter::RESUBSCRIBE_CONTRIBUTOR) do |contributor|
+        ResubscribeContributorJob.perform_later(contributor.id, SignalAdapter::Outbound)
+      end
+
       adapter.on(SignalAdapter::HANDLE_DELIVERY_RECEIPT) do |delivery_receipt, contributor|
         handle_delivery_receipt(delivery_receipt, contributor)
       end
@@ -41,6 +50,7 @@ module SignalAdapter
 
       ping_monitoring_service && return
     end
+    # rubocop:enable Metrics/MethodLength
 
     private
 
@@ -72,6 +82,8 @@ module SignalAdapter
     def handle_delivery_receipt(delivery_receipt, contributor)
       datetime = Time.zone.at(delivery_receipt[:when] / 1000).to_datetime
       latest_received_message = contributor.received_messages.first
+      return unless latest_received_message
+
       latest_received_message.update(received_at: datetime) if delivery_receipt[:isDelivery]
       latest_received_message.update(read_at: datetime) if delivery_receipt[:isRead]
     end

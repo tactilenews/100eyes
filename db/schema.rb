@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_24_144124) do
+ActiveRecord::Schema.define(version: 2023_12_05_194628) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -117,6 +117,7 @@ ActiveRecord::Schema.define(version: 2023_10_24_144124) do
     t.datetime "whats_app_message_template_sent_at"
     t.string "external_id"
     t.string "external_channel"
+    t.datetime "unsubscribed_at"
     t.index ["email"], name: "index_contributors_on_email", unique: true
     t.index ["organization_id"], name: "index_contributors_on_organization_id"
     t.index ["signal_phone_number"], name: "index_contributors_on_signal_phone_number", unique: true
@@ -173,6 +174,7 @@ ActiveRecord::Schema.define(version: 2023_10_24_144124) do
     t.string "sender_type"
     t.datetime "received_at"
     t.datetime "read_at"
+    t.string "external_id"
     t.index ["creator_id"], name: "index_messages_on_creator_id"
     t.index ["recipient_id"], name: "index_messages_on_recipient_id"
     t.index ["request_id"], name: "index_messages_on_request_id"

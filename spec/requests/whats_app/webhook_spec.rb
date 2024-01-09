@@ -6,28 +6,30 @@ RSpec.describe WhatsApp::WebhookController do
   let(:auth_token) { 'valid_auth_token' }
   let(:mock_twilio_security_request_validator) { instance_double(Twilio::Security::RequestValidator) }
   let(:whats_app_phone_number) { '+491511234567' }
-  let(:params) do
-    {
-      'AccountSid' => 'someAccount',
-      'ApiVersion' => '2010-04-01',
-      'Body' => 'Hello',
-      'From' => "whatsapp:#{whats_app_phone_number}",
-      'MessageSid' => 'someId',
-      'NumMedia' => '0',
-      'NumSegments' => '1',
-      'ProfileName' => 'Matthew Rider',
-      'ReferralNumMedia' => '0',
-      'SmsMessageSid' => 'someId',
-      'SmsSid' => 'someId',
-      'SmsStatus' => 'received',
-      'To' => "whatsapp:#{Setting.whats_app_server_phone_number}",
-      'WaId' => '491511234567'
-    }
-  end
-
-  subject { -> { post whats_app_webhook_path, params: params } }
+  let(:twilio_message_sid) { 'someValidMessageSid' }
 
   describe '#message' do
+    subject { -> { post whats_app_webhook_path, params: params } }
+
+    let(:params) do
+      {
+        'AccountSid' => 'someAccount',
+        'ApiVersion' => '2010-04-01',
+        'Body' => 'Hello',
+        'From' => "whatsapp:#{whats_app_phone_number}",
+        'MessageSid' => twilio_message_sid,
+        'NumMedia' => '0',
+        'NumSegments' => '1',
+        'ProfileName' => 'Matthew Rider',
+        'ReferralNumMedia' => '0',
+        'SmsMessageSid' => twilio_message_sid,
+        'SmsSid' => twilio_message_sid,
+        'SmsStatus' => 'received',
+        'To' => "whatsapp:#{Setting.whats_app_server_phone_number}",
+        'WaId' => '491511234567'
+      }
+    end
+
     before do
       allow(Sentry).to receive(:capture_exception)
       allow(Setting).to receive(:whats_app_server_phone_number).and_return('4915133311445')
@@ -78,6 +80,12 @@ RSpec.describe WhatsApp::WebhookController do
         create(:message, request: request, recipient: contributor)
       end
 
+      it 'returns 200' do
+        subject.call
+
+        expect(response).to have_http_status(200)
+      end
+
       context 'no message template sent' do
         it 'creates a messsage' do
           expect { subject.call }.to change(Message, :count).from(2).to(3)
@@ -86,7 +94,10 @@ RSpec.describe WhatsApp::WebhookController do
 
       context 'responding to template' do
         before { contributor.update(whats_app_message_template_sent_at: Time.current) }
-        let(:latest_message_job_args) { { recipient: contributor, text: contributor.received_messages.first.text } }
+        let(:message) { contributor.received_messages.first }
+        let(:latest_message_job_args) do
+          { contributor_id: contributor.id, text: message.text, message: message }
+        end
 
         context 'request to receive latest message' do
           it 'enqueues a job to send the latest received message' do
@@ -111,8 +122,9 @@ RSpec.describe WhatsApp::WebhookController do
             end
 
             describe 'previous request' do
+              let(:message) { previous_request.messages.where(recipient_id: contributor.id).first }
               let(:requested_message_job_args) do
-                { recipient: contributor, text: previous_request.messages.where(recipient_id: contributor.id).first.text }
+                { contributor_id: contributor.id, text: message.text, message: message }
               end
               let(:body_text) do
                 "Some template message with request title „#{previous_request.title}“. Wenn du antworten möchtest, klicke auf 'Antworten'."
@@ -126,8 +138,9 @@ RSpec.describe WhatsApp::WebhookController do
             end
 
             describe 'newer request' do
+              let(:message) { newer_request.messages.where(recipient_id: contributor.id).first }
               let(:requested_message_job_args) do
-                { recipient: contributor, text: newer_request.messages.where(recipient_id: contributor.id).first.text }
+                { contributor_id: contributor.id, text: message.text, message: message }
               end
               let(:body_text) do
                 "Some template message with request title „#{newer_request.title}“. Wenn du antworten möchtest, klicke auf 'Antworten'."
@@ -155,7 +168,7 @@ RSpec.describe WhatsApp::WebhookController do
         context 'request for more info' do
           before { params['Body'] = 'Mehr Infos' }
           let(:more_info_job_args) do
-            { recipient: contributor, text: [Setting.about, "_#{I18n.t('adapter.whats_app.unsubscribe.instructions')}_"].join("\n\n") }
+            { contributor_id: contributor.id, text: [Setting.about, "_#{I18n.t('adapter.shared.unsubscribe.instructions')}_"].join("\n\n") }
           end
 
           it 'enqueues a job to send more info message' do
@@ -168,91 +181,323 @@ RSpec.describe WhatsApp::WebhookController do
         end
 
         context 'request to unsubscribe' do
-          let!(:admin) { create_list(:user, 2, admin: true) }
-          let!(:non_admin_user) { create(:user) }
-
           before { params['Body'] = 'Abbestellen' }
-          let(:sucessful_unsubscribe_job_args) do
-            { recipient: contributor,
-              text: [I18n.t('adapter.whats_app.unsubscribe.successful'),
-                     "_#{I18n.t('adapter.whats_app.subscribe.instructions')}_"].join("\n\n") }
-          end
 
-          it 'marks contributor as inactive' do
-            expect { subject.call }.to change { contributor.reload.deactivated_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
-          end
-
-          it 'enqueues a job to inform the contributor of successful unsubscribe' do
-            expect do
-              subject.call
-            end.to have_enqueued_job(WhatsAppAdapter::Outbound::Text).on_queue('default').with(sucessful_unsubscribe_job_args)
-          end
-
-          it_behaves_like 'an ActivityNotification', 'ContributorMarkedInactive'
-
-          it 'enqueues a job to inform admin' do
-            expect { subject.call }.to have_enqueued_job.on_queue('default').with(
-              'PostmarkAdapter::Outbound',
-              'contributor_marked_as_inactive_email',
-              'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
-              {
-                params: { admin: an_instance_of(User), contributor: contributor },
-                args: []
-              }
-            ).exactly(2).times
-          end
-
-          it 'does not enqueue a job to send the latest received message' do
-            expect { subject.call }.not_to have_enqueued_job(WhatsAppAdapter::Outbound::Text).with(latest_message_job_args)
-          end
+          it { is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(contributor.id, WhatsAppAdapter::Outbound) }
         end
 
         context 'request to re-subscribe' do
-          let!(:admin) { create_list(:user, 2, admin: true) }
-          let!(:non_admin_user) { create(:user) }
-
           before do
-            contributor.update(deactivated_at: Time.current)
+            contributor.update(unsubscribed_at: Time.current)
             params['Body'] = 'Bestellen'
           end
 
-          let(:sucessful_subscribe_job_args) do
-            { recipient: contributor, text: I18n.t('adapter.whats_app.welcome_message', project_name: Setting.project_name) }
+          it { is_expected.to have_enqueued_job(ResubscribeContributorJob).with(contributor.id, WhatsAppAdapter::Outbound) }
+        end
+      end
+    end
+  end
+
+  describe '#status' do
+    subject { -> { post whats_app_status_path, params: params } }
+
+    let(:params) do
+      {
+        'AccountSid' => 'someAccountSID',
+        'ApiVersion' => '2010-04-01',
+        'ChannelInstallSid' => 'someChannelInstallSid',
+        'ChannelPrefix' => 'whatsapp',
+        'ChannelToAddress' => whats_app_phone_number.to_s,
+        'ErrorCode' => '60228',
+        'ErrorMessage' => 'Template was not found',
+        'From' => "whatsapp:#{Setting.whats_app_server_phone_number}",
+        'MessageSid' => twilio_message_sid,
+        'MessageStatus' => 'failed',
+        'SmsSid' => twilio_message_sid,
+        'SmsStatus' => 'failed',
+        'StructuredMessage' => 'false',
+        'To' => "whatsapp:#{whats_app_phone_number}"
+      }
+    end
+
+    let(:exception) do
+      WhatsAppAdapter::MessageDeliveryUnsuccessfulError.new(status: params['MessageStatus'],
+                                                            whats_app_phone_number: whats_app_phone_number, message: params['ErrorMessage'])
+    end
+
+    before { allow(Twilio::Security::RequestValidator).to receive(:new).and_return(mock_twilio_security_request_validator) }
+
+    describe 'fails Rack::TwilioWebhookAuthentication' do
+      before { allow(mock_twilio_security_request_validator).to receive(:validate).and_return(false) }
+
+      it 'returns forbidden' do
+        subject.call
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it 'returns message why it failed' do
+        subject.call
+        expect(response.body).to eq('Twilio Request Validation Failed.')
+      end
+    end
+
+    describe 'passes Rack::TwilioWebhookAuthentication' do
+      before { allow(mock_twilio_security_request_validator).to receive(:validate).and_return(true) }
+
+      it 'returns 200' do
+        subject.call
+
+        expect(response).to have_http_status(200)
+      end
+
+      describe 'given an unknown contributor' do
+        it 'does not report it as an error, as it is not actionable' do
+          expect(Sentry).not_to receive(:capture_exception)
+
+          subject.call
+        end
+
+        context 'due to an invalid message recipient error' do
+          it { is_expected.not_to have_enqueued_job(MarkInactiveContributorInactiveJob) }
+        end
+      end
+
+      describe 'given a known contributor' do
+        let!(:contributor) { create(:contributor, whats_app_phone_number: whats_app_phone_number) }
+
+        describe 'given a failed message delivery' do
+          it 'reports the error with the error message' do
+            expect(Sentry).to receive(:capture_exception).with(exception)
+
+            subject.call
           end
 
-          it 'marks contributor as active' do
-            expect { subject.call }.to change { contributor.reload.deactivated_at }.from(kind_of(ActiveSupport::TimeWithZone)).to(nil)
-          end
+          context 'due to an invalid message recipient error' do
+            before do
+              params['ErrorCode'] = '63024'
+              params['ErrorMessage'] = 'Twilio Error: Invalid message recipient. Generated new message with sid: someSid'
+            end
 
-          it 'marks that contributor has responded to template message' do
-            expect { subject.call }.to change {
-                                         contributor.reload.whats_app_message_template_responded_at
-                                       }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
-          end
+            it 'does not report it as an error, as it is not actionable' do
+              expect(Sentry).not_to receive(:capture_exception)
 
-          it 'enqueues a job to welcome contributor' do
-            expect do
               subject.call
-            end.to have_enqueued_job(WhatsAppAdapter::Outbound::Text).on_queue('default').with(sucessful_subscribe_job_args)
+            end
+
+            it {
+              is_expected.to have_enqueued_job(MarkInactiveContributorInactiveJob).with do |params|
+                expect(params[:contributor_id]).to eq(contributor.id)
+              end
+            }
           end
 
-          it_behaves_like 'an ActivityNotification', 'ContributorSubscribed'
+          context 'due to a freeform message not allowed error' do
+            let!(:request) do
+              create(:request, title: 'I failed to send', text: 'Hey {{FIRST_NAME}}, because it was sent outside the allowed window')
+            end
+            let(:valid_account_sid) { 'VALID_ACCOUNT_SID' }
+            let(:valid_api_key_sid) { 'VALID_API_KEY_SID' }
+            let(:valid_api_key_secret) { 'VALID_API_KEY_SECRET' }
+            let(:mock_twilio_rest_client) { instance_double(Twilio::REST::Client) }
+            let(:messages_double) { double(Twilio::REST::Api::V2010::AccountContext::MessageInstance, body: body_text) }
+            let(:body_text) { 'no message with this text saved' }
+            let(:freeform_message_not_allowed_error_message) do
+              'Twilio Error: Failed to send freeform message because you are outside the allowed window.'
+            end
 
-          it 'enqueues a job to inform admin' do
-            expect { subject.call }.to have_enqueued_job.on_queue('default').with(
-              'PostmarkAdapter::Outbound',
-              'contributor_subscribed_email',
-              'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
-              {
-                params: { admin: an_instance_of(User), contributor: contributor },
-                args: []
-              }
-            ).exactly(2).times
+            before do
+              allow(Twilio::REST::Client).to receive(:new).and_return(mock_twilio_rest_client)
+              allow(mock_twilio_rest_client).to receive(:messages).with(twilio_message_sid).and_return(messages_double)
+              allow(messages_double).to receive(:fetch).and_return(messages_double)
+              params['ErrorCode'] = '63016'
+              params['ErrorMessage'] = freeform_message_not_allowed_error_message
+            end
+
+            it 'reports it as an error, as we want to track specifics to when this occurs' do
+              expect(Sentry).to receive(:capture_exception).with(exception)
+
+              subject.call
+            end
+
+            it 'given message cannot be found by Twilio message sid body' do
+              expect { subject.call }.not_to have_enqueued_job(WhatsAppAdapter::Outbound::Text)
+              expect { subject.call }.not_to raise_error
+            end
+
+            describe 'given a message is found by Twilio message sid body' do
+              let!(:message) { create(:message, text: body_text, request: request) }
+              let(:body_text) { "Hey #{contributor.first_name}, because it was sent outside the allowed window" }
+
+              it 'enqueues the Text job with WhatsApp template' do
+                expect { subject.call }.to(have_enqueued_job(WhatsAppAdapter::Outbound::Text).on_queue('default').with do |params|
+                  expect(params[:contributor_id]).to eq(contributor.id)
+                  expect(params[:text]).to include(contributor.first_name)
+                  expect(params[:text]).to include(message.request.title)
+                end)
+              end
+
+              context 'given an undelivered status' do
+                before { params['MessageStatus'] = 'undelivered' }
+                it 'is expected not to schedule a job as it would send out twice, one for undelivered and one for failed' do
+                  expect { subject.call }.not_to have_enqueued_job(WhatsAppAdapter::Outbound::Text)
+                end
+              end
+            end
+          end
+        end
+      end
+
+      describe 'given a successful delivery' do
+        let(:params) do
+          {
+            'AccountSid' => 'someAccountSID',
+            'ApiVersion' => '2010-04-01',
+            'ChannelInstallSid' => 'someChannelInstallSid',
+            'ChannelPrefix' => 'whatsapp',
+            'ChannelToAddress' => whats_app_phone_number.to_s,
+            'From' => "whatsapp:#{Setting.whats_app_server_phone_number}",
+            'MessageSid' => twilio_message_sid,
+            'MessageStatus' => 'delivered',
+            'SmsSid' => twilio_message_sid,
+            'SmsStatus' => 'delivered',
+            'To' => "whatsapp:#{whats_app_phone_number}"
+          }
+        end
+
+        context 'unknown contributor' do
+          it 'is not expected to raise an error' do
+            expect { subject.call }.not_to raise_error
+          end
+        end
+
+        context 'given a known contributor' do
+          let!(:contributor) { create(:contributor, whats_app_phone_number: whats_app_phone_number) }
+
+          context 'given a delivered status' do
+            context 'given no message can be found by the twilio message sid' do
+              it 'is expected to not raise an error' do
+                expect { subject.call }.not_to raise_error
+              end
+            end
+
+            context 'given a message with the twilio message sid as external_id' do
+              let!(:message) { create(:message, external_id: twilio_message_sid) }
+
+              it 'is expected to mark the message as received' do
+                expect { subject.call }.to change { message.reload.received_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+              end
+            end
           end
 
-          it 'does not enqueue a job to send the latest received message' do
-            expect { subject.call }.not_to have_enqueued_job(WhatsAppAdapter::Outbound::Text).with(latest_message_job_args)
+          context 'given a read status' do
+            before { params['MessageStatus'] = 'read' }
+
+            context 'given a message with the twilio message sid as external_id' do
+              let!(:message) { create(:message, external_id: twilio_message_sid, received_at: 1.hour.ago) }
+
+              it 'is expected to mark the message as read' do
+                expect { subject.call }.to change { message.reload.read_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+              end
+
+              context 'given a message has not been marked as received' do
+                before { message.update(received_at: nil) }
+
+                it 'is expected to mark both received_at and read_at' do
+                  expect { subject.call }.to change { message.reload.received_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+                                                                                  .and change {
+                                                                                         message.reload.read_at
+                                                                                       }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+                end
+              end
+            end
           end
+        end
+      end
+    end
+  end
+
+  describe '#errors' do
+    subject { -> { post whats_app_errors_path, params: params } }
+
+    let(:url) { 'https://example.100ey.es/whats_app/webhook' }
+    let(:error_payload) do
+      {
+        'error_code' => '21408',
+        'more_info' => {
+          'ErrorCode' => '21408',
+          'LogLevel' => 'ERROR',
+          'Msg' => 'Got HTTP 404 response to https://example.100ey.es/twilio/voice',
+          'url' => url
+        },
+        'webhook' => {
+          'request' => {
+            'url' => url,
+            'parameters' => {
+              'MessageSid' => 'someMessageSid'
+            }
+          }
+        }
+      }
+    end
+    let(:params) do
+      {
+        'AccountSid' => 'someAccountSid',
+        'Level' => 'ERROR',
+        'ParentAccountSid' => 'someParentAccountSid',
+        'Payload' => error_payload.to_json,
+        'PayloadType' => 'application/json',
+        'Sid' => twilio_message_sid,
+        'Timestamp' => Time.current.to_i
+      }
+    end
+    let(:exception) do
+      WhatsAppAdapter::TwilioError.new(error_code: error_payload['error_code'],
+                                       message: error_payload['more_info']['Msg'],
+                                       url: error_payload['more_info']['url'])
+    end
+
+    before { allow(Twilio::Security::RequestValidator).to receive(:new).and_return(mock_twilio_security_request_validator) }
+
+    describe 'fails Rack::TwilioWebhookAuthentication' do
+      before { allow(mock_twilio_security_request_validator).to receive(:validate).and_return(false) }
+
+      it 'returns forbidden' do
+        subject.call
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it 'returns message why it failed' do
+        subject.call
+        expect(response.body).to eq('Twilio Request Validation Failed.')
+      end
+    end
+
+    describe 'passes Rack::TwilioWebhookAuthentication' do
+      before { allow(mock_twilio_security_request_validator).to receive(:validate).and_return(true) }
+
+      it 'returns 200' do
+        subject.call
+
+        expect(response).to have_http_status(200)
+      end
+
+      it 'reports the error with error code, message, and url' do
+        expect(Sentry).to receive(:capture_exception).with(exception)
+
+        subject.call
+      end
+
+      context 'given more_info is not provided' do
+        before { error_payload.delete('more_info') }
+
+        let(:exception) do
+          WhatsAppAdapter::TwilioError.new(error_code: error_payload['error_code'])
+        end
+
+        it 'reports the error with error code' do
+          expect(Sentry).to receive(:capture_exception).with(exception)
+
+          subject.call
         end
       end
     end

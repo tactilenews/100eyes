@@ -7,7 +7,10 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
   let(:adapter) { described_class.new }
   let(:contributor) { create(:contributor, :with_an_avatar, telegram_id: telegram_id) }
   let(:telegram_id) { 146_338_764 }
-  let(:telegram_message) { { 'chat' => { 'id' => 42 }, 'from' => { 'id' => telegram_id } } }
+  let(:telegram_message) do
+    { 'chat' => { 'id' => 42 },
+      'from' => { 'id' => telegram_id } }
+  end
   before { contributor }
 
   before(:all) do
@@ -56,6 +59,8 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
 
     describe '|message| block argument' do
       subject { message }
+
+      before { telegram_message['text'] = 'Do not save me without text' }
       it { should be_a(Message) }
 
       describe 'given the payload does not have a caption nor text' do
@@ -130,7 +135,7 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
     describe '|message|photos' do
       subject { message.photos }
       describe 'given a message without photos' do
-        before { message['text'] = 'Ich bin eine normale Nachricht' }
+        before { telegram_message['text'] = 'Ich bin eine normale Nachricht' }
         it { should eq([]) }
       end
 
@@ -193,13 +198,18 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
       context 'contributor exists' do
         context 'but missing `avatar_url`', vcr: { cassette_name: :avatar_url_and_download_file } do
           let(:contributor) { create(:contributor, telegram_id: telegram_id) }
-          let(:telegram_message) { { 'chat' => { 'id' => 42 }, 'from' => { 'id' => contributor.telegram_id } } }
+          let(:telegram_message) do
+            { 'chat' => { 'id' => 42 }, 'from' => { 'id' => contributor.telegram_id }, 'text' => 'Do not save me without text' }
+          end
           it { expect { subject.save! }.to(change { contributor.reload.avatar.attached? }.from(false).to(true)) }
         end
 
         context 'but `username` is outdated' do
           let(:contributor) { create(:contributor, :with_an_avatar, telegram_id: 42, username: 'bob') }
-          let(:telegram_message) { { 'chat' => { 'id' => 42 }, 'from' => { 'id' => contributor.telegram_id, 'username' => 'alice' } } }
+          let(:telegram_message) do
+            { 'chat' => { 'id' => 42 }, 'from' => { 'id' => contributor.telegram_id, 'username' => 'alice' },
+              'text' => 'Do not save me without text' }
+          end
 
           it { expect { subject.save! }.to(change { contributor.reload.username }.from('bob').to('alice')) }
         end

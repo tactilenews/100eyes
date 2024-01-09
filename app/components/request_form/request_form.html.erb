@@ -81,6 +81,16 @@
           <% end %>
         <% end %>
 
+        <% if @request.planned? %>
+          <%= c 'button',
+            type: 'button',
+            styles: [:block, :destroy],
+            data: { action: 'request-form#openModal' } do %>
+            <%= t('.planned_request.destroy.button_text') %>
+          <% end%>
+          <%= c 'destroy_planned_request_modal', planned_request: @request, data: { controller: 'modal', request_form_target: 'modal' } %>
+        <% end %>
+
         <%= c 'button',
           type: 'submit',
           styles: [:block, :primary],

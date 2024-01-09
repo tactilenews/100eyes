@@ -20,9 +20,11 @@ Rails.application.routes.draw do
       get '/email', to: 'email#show'
       post '/email', to: 'email#create'
 
-      get '/signal/', to: 'signal#show'
-      get '/signal/link/', to: 'signal#link', as: 'signal_link'
-      post '/signal/', to: 'signal#create'
+      constraints(-> { Setting.signal_server_phone_number.present? }) do
+        get '/signal/', to: 'signal#show'
+        get '/signal/link/', to: 'signal#link', as: 'signal_link'
+        post '/signal/', to: 'signal#create'
+      end
 
       get '/threema/', to: 'threema#show'
       post '/threema/', to: 'threema#create'
@@ -32,8 +34,10 @@ Rails.application.routes.draw do
       get '/telegram/fallback/:telegram_onboarding_token', to: 'telegram#fallback', as: 'telegram_fallback'
       post '/telegram/', to: 'telegram#create'
 
-      get '/whats-app/', to: 'whats_app#show'
-      post '/whats-app/', to: 'whats_app#create'
+      constraints(-> { Setting.whats_app_server_phone_number.present? || Setting.three_sixty_dialog_client_api_key.present? }) do
+        get '/whats-app/', to: 'whats_app#show'
+        post '/whats-app/', to: 'whats_app#create'
+      end
     end
   end
 
@@ -54,7 +58,7 @@ Rails.application.routes.draw do
 
   telegram_webhook Telegram::WebhookController
 
-  resources :requests, only: %i[index show new create edit update], concerns: :paginatable do
+  resources :requests, only: %i[index show new create edit update destroy], concerns: :paginatable do
     member do
       get 'notifications', format: /json/
     end

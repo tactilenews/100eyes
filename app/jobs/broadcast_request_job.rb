@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
-# frozen_string_literal
-
 class BroadcastRequestJob < ApplicationJob
   queue_as :broadcast_request
 
   def perform(request_id)
-    request = Request.find(request_id)
+    request = Request.where(id: request_id).first
+    return unless request
     return if request.broadcasted_at.present?
 
     if request.planned? # rescheduled for future after this job was created
