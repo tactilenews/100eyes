@@ -18,6 +18,31 @@ RSpec.describe Contributor, type: :model do
     expect(Contributor.third).to eq(zora)
   end
 
+  describe 'validations' do
+    subject { contributor }
+
+    it { is_expected.to be_valid }
+
+    context 'absence of first name' do
+      before { contributor.first_name = '' }
+
+      it { is_expected.not_to be_valid }
+    end
+  end
+
+  describe '::before_save' do
+    let(:contributor) { build(:contributor, first_name: 'jonnhy') }
+    subject { contributor.first_name }
+
+    it { is_expected.to eq('jonnhy') }
+
+    context 'capitalizes first name before save' do
+      before { contributor.save }
+
+      it { is_expected.to eq('Jonnhy') }
+    end
+  end
+
   describe '.find_by_email' do
     subject { described_class.with_lowercased_email(address) }
 
@@ -254,6 +279,17 @@ RSpec.describe Contributor, type: :model do
     describe 'given a contributor with telegram and email' do
       let(:contributor) { create(:contributor, telegram_id: '123', email: 'contributor@example.org') }
       it { should contain_exactly(:telegram, :email) }
+    end
+
+    describe 'give an external channel' do
+      let(:contributor) { create(:contributor, email: nil, external_channel: 'alexa') }
+
+      it { should contain_exactly(:alexa) }
+    end
+
+    describe 'given a contributor with telegram, email, and an external channel' do
+      let(:contributor) { create(:contributor, telegram_id: '123', email: 'contributor@example.org', external_channel: 'custom123') }
+      it { should contain_exactly(:telegram, :email, :custom123) }
     end
   end
 

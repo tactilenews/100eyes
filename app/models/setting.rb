@@ -28,6 +28,8 @@ class Setting < RailsSettings::Base
   end
 
   field :project_name, default: ENV['HUNDRED_EYES_PROJECT_NAME'] || '100eyes'
+  field :api_token, readonly: true, default: ENV.fetch('HUNDRED_EYES_API_TOKEN', nil)
+
   field :application_host, readonly: true, default: ENV['APPLICATION_HOSTNAME'] || 'localhost:3000'
 
   field :git_commit_sha, readonly: true, default: ENV.fetch('GIT_COMMIT_SHA', nil)

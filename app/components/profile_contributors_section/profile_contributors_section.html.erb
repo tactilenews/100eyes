@@ -8,12 +8,14 @@
      %>
   <%= c 'flex' do %>
     <%= c 'contributors_status_bar', organization: organization %>
-    <%= c 'copy_button',
-      class: 'Button--secondary ProfileContributorsSection-copyInviteButton',
-      label: I18n.t('profile.contributors_section.copy_invite'),
-      url: invites_url,
-      key: 'url',
-      custom_icon: 'plus-sign'
-    %>
+    <% unless Setting.api_token.present? %>
+      <%= c 'copy_button',
+        class: 'Button--secondary ProfileContributorsSection-copyInviteButton',
+        label: I18n.t('profile.contributors_section.copy_invite'),
+        url: invites_url,
+        key: 'url',
+        custom_icon: 'plus-sign'
+      %>
+    <% end %>
   <% end %>
 <% end %>
