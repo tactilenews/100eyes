@@ -23,7 +23,7 @@
     - role: geerlingguy.pip
       vars:
         pip_install_packages:
-          - name: docker
+          - name: "docker < 7.0.0"
           - name: docker-compose
           - name: passlib
     - role: geerlingguy.docker
