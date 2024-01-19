@@ -23,9 +23,7 @@ traefik_domain="${domain_head}-traefik.${domain_tail}"
 traefik_password=$(cat /dev/urandom | ${TR} -dc 'a-zA-Z0-9' | fold -w 20 | head -n 1)
 sudo_password=$(cat /dev/urandom | ${TR} -dc 'a-zA-Z0-9' | fold -w 20 | head -n 1)
 
-postgres_password=$(cat /dev/urandom | ${TR} -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
 secret_key_base=$(cat /dev/urandom | ${TR} -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
-postgres_password=$(cat /dev/urandom | ${TR} -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
 inbound_email_password=$(cat /dev/urandom | ${TR} -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
 
 CONFIG_FILE=$(mktemp /tmp/host.XXXXXXXXXX)
@@ -57,7 +55,7 @@ rails:
     private_key: # your threema private key *without* `private:` prefix
   telegram_bot:
     api_key: 
-    username: your telegram bot name, e.g. 'HundredEyesBot'
+    username: # your telegram bot name, e.g. 'HundredEyesBot'
   postmark:
     api_token: # (REQUIRED) API token for your new Postmark server
     transactional_stream: "outbound"
@@ -67,9 +65,9 @@ rails:
     monitoring_url:
   secret_key_base: "${secret_key_base}"
   postgres:
-    user: app
-    db: app_production
-    password: "${postgres_password}"
+    user: "${nickname}_app_user"
+    db: "${nickname}_production"
+    password: # (REQUIRED) copied from Digital Ocean database config
     host: # optional (e.g. for managed databases)
     port: # optional (e.g. for managed databases)
   inbound_email_password: "${inbound_email_password}"
@@ -84,6 +82,12 @@ rails:
     api_key:
       sid: ""
       secret: ""
+  three_sixty_dialog:
+    partner:
+      id: ""
+      username: ""
+      password: ""
+
 CONFIGURATION
 
 cat <<- INSTRUCTIONS
