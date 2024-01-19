@@ -23,9 +23,7 @@ traefik_domain="${domain_head}-traefik.${domain_tail}"
 traefik_password=$(cat /dev/urandom | ${TR} -dc 'a-zA-Z0-9' | fold -w 20 | head -n 1)
 sudo_password=$(cat /dev/urandom | ${TR} -dc 'a-zA-Z0-9' | fold -w 20 | head -n 1)
 
-postgres_password=$(cat /dev/urandom | ${TR} -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
 secret_key_base=$(cat /dev/urandom | ${TR} -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
-postgres_password=$(cat /dev/urandom | ${TR} -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
 inbound_email_password=$(cat /dev/urandom | ${TR} -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
 
 CONFIG_FILE=$(mktemp /tmp/host.XXXXXXXXXX)
@@ -69,7 +67,7 @@ rails:
   postgres:
     user: "${nickname}_app_user"
     db: "${nickname}_production"
-    password: "${postgres_password}"
+    password: # (REQUIRED) copied from Digital Ocean database config
     host: # optional (e.g. for managed databases)
     port: # optional (e.g. for managed databases)
   inbound_email_password: "${inbound_email_password}"
