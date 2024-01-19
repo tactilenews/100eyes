@@ -104,7 +104,9 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
       end
 
       context 'who is already connected' do
+        subject { -> { dispatch_message message, message_options } }
         let(:contributor) { create(:contributor, :with_an_avatar, telegram_id: 12_345) }
+
         it { should_not(change { Message.count }) }
 
         context 'given a recent request' do
@@ -117,6 +119,19 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
         context ' message has a document' do
           let(:message_options) { { from: { id: 12_345 }, document: 'something' } }
           it { should respond_with_message "Cannot handle this, I'm sorry :(" }
+        end
+
+        context 'who would like to unsubscribe' do
+          let(:message) { 'Abbestellen' }
+
+          it { is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(contributor.id, TelegramAdapter::Outbound) }
+        end
+
+        context 'who has unsubsribed, and would like to re-subscribe' do
+          let(:message) { 'Bestellen' }
+          before { contributor.update!(unsubscribed_at: 1.day.ago) }
+
+          it { is_expected.to have_enqueued_job(ResubscribeContributorJob).with(contributor.id, TelegramAdapter::Outbound) }
         end
       end
     end

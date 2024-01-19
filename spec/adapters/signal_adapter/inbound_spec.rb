@@ -347,6 +347,15 @@ RSpec.describe SignalAdapter::Inbound do
         end
       end
     end
+
+    context 'given the keyword Abbestellen' do
+      subject { message }
+      before { signal_message[:envelope][:dataMessage][:message] = 'Abbestellen' }
+
+      it 'does not create a message' do
+        expect { subject }.not_to change(Message, :count)
+      end
+    end
   end
 
   describe '#on' do
@@ -456,6 +465,57 @@ RSpec.describe SignalAdapter::Inbound do
         let(:signal_message) { signal_message_with_attachment }
         before { signal_message[:envelope][:dataMessage][:attachments][0][:contentType] = ['application/pdf'] }
         it { should have_received(:call).with(contributor) }
+      end
+    end
+
+    describe 'UNSUBSCRIBE_CONTRIBUTOR' do
+      let(:unsubscribe_contributor_callback) { spy('unsubscribe_contributor_callback') }
+
+      before do
+        adapter.on(SignalAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
+          unsubscribe_contributor_callback.call(contributor)
+        end
+      end
+
+      subject do
+        adapter.consume(signal_message)
+        unsubscribe_contributor_callback
+      end
+
+      context 'any text other than the keyword Abbestellen' do
+        it { is_expected.not_to have_received(:call) }
+      end
+
+      context 'with keyword Abbestellen' do
+        before { signal_message[:envelope][:dataMessage][:message] = 'Abbestellen' }
+
+        it { is_expected.to have_received(:call) }
+      end
+    end
+
+    describe 'RESUBSCRIBE_CONTRIBUTOR' do
+      let(:resubscribe_contributor_callback) { spy('resubscribe_contributor_callback') }
+
+      before do
+        contributor.update!(unsubscribed_at: 1.week.ago)
+        adapter.on(SignalAdapter::RESUBSCRIBE_CONTRIBUTOR) do |contributor|
+          resubscribe_contributor_callback.call(contributor)
+        end
+      end
+
+      subject do
+        adapter.consume(signal_message)
+        resubscribe_contributor_callback
+      end
+
+      context 'any text other than the keyword Bestellen' do
+        it { is_expected.not_to have_received(:call) }
+      end
+
+      context 'with keyword Bestellen' do
+        before { signal_message[:envelope][:dataMessage][:message] = 'Bestellen' }
+
+        it { is_expected.to have_received(:call) }
       end
     end
 

@@ -217,7 +217,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
       end
 
       before do
-        text_payload[:text][:body] = [Setting.about, "_#{I18n.t('adapter.whats_app.unsubscribe.instructions')}_"].join("\n\n")
+        text_payload[:text][:body] = [Setting.about, "_#{I18n.t('adapter.shared.unsubscribe.instructions')}_"].join("\n\n")
       end
 
       it { is_expected.to enqueue_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText).with({ payload: text_payload }) }
@@ -239,8 +239,8 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
       end
 
       before do
-        text_payload[:text][:body] = [I18n.t('adapter.whats_app.unsubscribe.successful'),
-                                      "_#{I18n.t('adapter.whats_app.subscribe.instructions')}_"].join("\n\n")
+        text_payload[:text][:body] = [I18n.t('adapter.shared.unsubscribe.successful'),
+                                      "_#{I18n.t('adapter.shared.resubscribe.instructions')}_"].join("\n\n")
       end
 
       it { is_expected.to enqueue_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText).with({ payload: text_payload }) }

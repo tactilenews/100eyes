@@ -7,8 +7,10 @@ module SignalAdapter
 
       attr_reader :recipient, :text
 
-      def perform(recipient:, text:)
-        @recipient = recipient
+      def perform(contributor_id:, text:)
+        @recipient = Contributor.find(contributor_id)
+        return unless @recipient
+
         @text = text
         uri = URI.parse("#{Setting.signal_cli_rest_api_endpoint}/v2/send")
         request = Net::HTTP::Post.new(uri, {

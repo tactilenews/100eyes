@@ -7,7 +7,7 @@ RSpec.describe SignalAdapter::Outbound::Text do
   let(:adapter) { described_class.new }
   let(:contributor) { create(:contributor, signal_phone_number: '+4915112345678', email: nil) }
   let(:message) { create(:message, :with_file, text: 'Hello Signal') }
-  let(:perform) { -> { adapter.perform(recipient: contributor, text: message.text) } }
+  let(:perform) { -> { adapter.perform(contributor_id: contributor.id, text: message.text) } }
 
   describe 'perform' do
     subject { perform }

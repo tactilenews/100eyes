@@ -38,15 +38,22 @@ module WhatsAppAdapter
       def send_more_info_message!(contributor)
         return unless contributor_can_receive_messages?(contributor)
 
-        text = [Setting.about, "_#{I18n.t('adapter.whats_app.unsubscribe.instructions')}_"].join("\n\n")
+        text = [Setting.about, "_#{I18n.t('adapter.shared.unsubscribe.instructions')}_"].join("\n\n")
         WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(payload: text_payload(contributor, text))
       end
 
       def send_unsubsribed_successfully_message!(contributor)
         return unless contributor_can_receive_messages?(contributor)
 
-        text = [I18n.t('adapter.whats_app.unsubscribe.successful'),
-                "_#{I18n.t('adapter.whats_app.subscribe.instructions')}_"].join("\n\n")
+        text = [I18n.t('adapter.shared.unsubscribe.successful'),
+                "_#{I18n.t('adapter.shared.resubscribe.instructions')}_"].join("\n\n")
+        WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(payload: text_payload(contributor, text))
+      end
+
+      def send_resubscribe_error_message!(contributor)
+        return unless contributor_can_receive_messages?(contributor)
+
+        text = I18n.t('adapter.shared.resubscribe.failure')
         WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(payload: text_payload(contributor, text))
       end
 

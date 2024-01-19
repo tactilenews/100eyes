@@ -13,12 +13,7 @@ module ThreemaAdapter
           contributor = Contributor.where('lower(threema_id) = ?', threema_id.downcase).first
           return unless contributor
 
-          contributor.deactivated_at = Time.current
-          contributor.save(validate: false)
-          ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(User.all)
-          User.admin.find_each do |admin|
-            PostmarkAdapter::Outbound.contributor_marked_as_inactive!(admin, contributor)
-          end
+          MarkInactiveContributorInactiveJob.perform_later(contributor_id: contributor.id)
         end
         ErrorNotifier.report(exception, tags: tags)
       end
@@ -27,7 +22,10 @@ module ThreemaAdapter
         @threema_instance ||= Threema.new
       end
 
-      def perform(recipient:, file_path:, file_name: nil, caption: nil, render_type: nil)
+      def perform(contributor_id:, file_path:, file_name: nil, caption: nil, render_type: nil)
+        recipient = Contributor.find(contributor_id)
+        return unless recipient
+
         self.class.threema_instance.send(type: :file,
                                          threema_id: recipient.threema_id.upcase,
                                          file: file_path,

@@ -1,7 +1,7 @@
 <nav class="TabBar" data-controller="tab-bar">
   <ul class="TabBar-list">
     <% items.each do |options| %>
-      <li class="TabBar-item <%= 'TabBar-item--active' if options.dig(:active) %>">
+      <li class="TabBar-item <%= 'TabBar-item--active' if options.dig(:active) %> <%= options.dig(:class) %>">
         <%= c('button',
           link: options.dig(:url),
           styles: [:inline],

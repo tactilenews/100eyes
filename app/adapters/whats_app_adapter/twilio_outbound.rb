@@ -10,7 +10,7 @@ module WhatsAppAdapter
         if freeform_message_permitted?(recipient)
           send_message(recipient, message)
         else
-          send_message_template(recipient, message)
+          send_message_template!(recipient, message)
         end
       end
 
@@ -18,7 +18,7 @@ module WhatsAppAdapter
         return unless contributor_can_receive_messages?(contributor)
 
         welcome_message = I18n.t('adapter.whats_app.welcome_message', project_name: Setting.project_name)
-        WhatsAppAdapter::Outbound::Text.perform_later(recipient: contributor, text: welcome_message)
+        WhatsAppAdapter::Outbound::Text.perform_later(contributor_id: contributor.id, text: welcome_message)
       end
 
       def send_unsupported_content_message!(contributor)
@@ -26,21 +26,35 @@ module WhatsAppAdapter
 
         text = I18n.t('adapter.whats_app.unsupported_content_template', first_name: contributor.first_name,
                                                                         contact_person: contributor.organization.contact_person.name)
-        WhatsAppAdapter::Outbound::Text.perform_later(recipient: contributor, text: text)
+        WhatsAppAdapter::Outbound::Text.perform_later(contributor_id: contributor.id, text: text)
       end
 
       def send_more_info_message!(contributor)
         return unless contributor_can_receive_messages?(contributor)
 
-        text = [Setting.about, "_#{I18n.t('adapter.whats_app.unsubscribe.instructions')}_"].join("\n\n")
-        WhatsAppAdapter::Outbound::Text.perform_later(recipient: contributor, text: text)
+        text = [Setting.about, "_#{I18n.t('adapter.shared.unsubscribe.instructions')}_"].join("\n\n")
+        WhatsAppAdapter::Outbound::Text.perform_later(contributor_id: contributor.id, text: text)
       end
 
       def send_unsubsribed_successfully_message!(contributor)
         return unless contributor_can_receive_messages?(contributor)
 
-        text = [I18n.t('adapter.whats_app.unsubscribe.successful'), "_#{I18n.t('adapter.whats_app.subscribe.instructions')}_"].join("\n\n")
-        WhatsAppAdapter::Outbound::Text.perform_later(recipient: contributor, text: text)
+        text = [I18n.t('adapter.shared.unsubscribe.successful'), "_#{I18n.t('adapter.shared.resubscribe.instructions')}_"].join("\n\n")
+        WhatsAppAdapter::Outbound::Text.perform_later(contributor_id: contributor.id, text: text)
+      end
+
+      def send_resubscribe_error_message!(contributor)
+        return unless contributor_can_receive_messages?(contributor)
+
+        WhatsAppAdapter::Outbound::Text.perform_later(contributor_id: contributor.id,
+                                                      text: I18n.t('adapter.shared.resubscribe.failure'))
+      end
+
+      def send_message_template!(recipient, message)
+        recipient.update(whats_app_message_template_sent_at: Time.current)
+        text = I18n.t("adapter.whats_app.request_template.new_request_#{time_of_day}_#{rand(1..3)}", first_name: recipient.first_name,
+                                                                                                     request_title: message.request.title)
+        WhatsAppAdapter::Outbound::Text.perform_later(contributor_id: recipient.id, text: text)
       end
 
       private
@@ -76,22 +90,13 @@ module WhatsAppAdapter
         responding_to_template_message || latest_message_received_within_last_24_hours
       end
 
-      def send_message_template(recipient, message)
-        recipient.update(whats_app_message_template_sent_at: Time.current)
-        text = I18n.t("adapter.whats_app.request_template.new_request_#{time_of_day}_#{rand(1..3)}", first_name: recipient.first_name,
-                                                                                                     request_title: message.request.title)
-        WhatsAppAdapter::Outbound::Text.perform_later(recipient: recipient, text: text)
-      end
-
       def send_message(recipient, message)
         files = message.files
 
         if files.blank?
-          WhatsAppAdapter::Outbound::Text.perform_later(recipient: recipient, text: message.text)
+          WhatsAppAdapter::Outbound::Text.perform_later(contributor_id: recipient.id, text: message.text, message: message)
         else
-          files.each_with_index do |file, index|
-            WhatsAppAdapter::Outbound::File.perform_later(recipient: recipient, text: index.zero? ? message.text : '', file: file)
-          end
+          WhatsAppAdapter::Outbound::File.perform_later(contributor_id: recipient.id, message: message)
         end
       end
     end

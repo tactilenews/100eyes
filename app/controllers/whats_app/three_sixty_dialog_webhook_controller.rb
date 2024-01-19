@@ -32,11 +32,11 @@ module WhatsApp
       end
 
       adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
-        handle_unsubsribe_contributor(contributor)
+        UnsubscribeContributorJob.perform_later(contributor.id, WhatsAppAdapter::Outbound)
       end
 
-      adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::SUBSCRIBE_CONTRIBUTOR) do |contributor|
-        handle_subscribe_contributor(contributor)
+      adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::RESUBSCRIBE_CONTRIBUTOR) do |contributor|
+        ResubscribeContributorJob.perform_later(contributor.id, WhatsAppAdapter::Outbound)
       end
 
       adapter.consume(message_params.to_h) { |message| message.contributor.reply(adapter) }

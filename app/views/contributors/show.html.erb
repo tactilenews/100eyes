@@ -28,6 +28,8 @@
 
     <hr>
 
-    <%= c 'contributor_status_toggle', contributor: @contributor %>
+    <% unless @contributor.unsubscribed_at.present? %>
+      <%= c 'contributor_status_toggle', contributor: @contributor %>
+    <% end %>
   <% end %>
 <% end %>

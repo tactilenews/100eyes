@@ -1,0 +1,19 @@
+<%= c 'modal', **attrs do %>
+  <%= c 'heading', tag: :h2 do %>
+    <%= t('.heading', request_title: planned_request.title) %>
+  <% end %>
+  <footer class="DestroyPlannedRequestModal-footer">
+    <%= c 'button',
+      type: 'button',
+      styles: [:block, :secondary],
+      data: { action: 'request-form#closeModal' } do %>
+      <%= t('.cancel') %>
+    <% end %>
+    <%= c 'button',
+      link: request_path(planned_request),
+      styles: [:block, :destroy],
+      data: { method: :delete } do %>
+      <%= t('.confirm') %>
+    <% end %>
+  </footer>
+<% end %>
