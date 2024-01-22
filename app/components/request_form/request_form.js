@@ -96,7 +96,7 @@ export default class extends Controller {
     this.imageInputTarget.click();
   }
 
-  addImagePreview(files, message) {
+  setUpImagePreview() {
     let figure = document.getElementById('file-preview');
     let div;
     if (figure) {
@@ -106,6 +106,11 @@ export default class extends Controller {
       div = document.createElement('div');
       div.classList.add('RequestForm-imagePreviewWrapper');
     }
+    return [figure, div];
+  }
+
+  addImagePreview(files, message) {
+    const [figure, div] = this.setUpImagePreview();
 
     for (let i = 0; i < files.length; i++) {
       let file = files.item(i);
@@ -137,15 +142,7 @@ export default class extends Controller {
   }
 
   addAttachedRequestFilesPreview(urls, message) {
-    let figure = document.getElementById('file-preview');
-    let div;
-    if (figure) {
-      div = figure.firstChild;
-    } else {
-      figure = document.createElement('figure');
-      div = document.createElement('div');
-      div.classList.add('RequestForm-imagePreviewWrapper');
-    }
+    const [figure, div] = this.setUpImagePreview();
 
     urls.forEach((url, i) => {
       const img = document.createElement('img');
