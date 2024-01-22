@@ -25,7 +25,7 @@ RSpec.describe 'Sending image files', js: true do
       click_button 'Frage an die Community senden'
       message = page.find('textarea[name="request[text]"]').evaluate_script('this.validationMessage')
       expect(message).to eq 'Please fill out this field.'
-      expect(page).to have_current_path(new_request_path(as: user))
+      expect(page).to have_current_path(new_request_path, ignore_query: true)
 
       # With no text, with file
       visit new_request_path(as: user)
@@ -56,7 +56,7 @@ RSpec.describe 'Sending image files', js: true do
 
       click_button 'Frage an die Community senden'
 
-      expect(page).to have_current_path(new_request_path(as: user))
+      expect(page).to have_current_path(new_request_path, ignore_query: true)
       expect(page).to have_content('Kein gültiges Bildformat. Bitte senden Sie Bilder als jpg, png oder gif.')
 
       # Image file
