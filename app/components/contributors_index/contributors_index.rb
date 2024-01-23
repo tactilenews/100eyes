@@ -33,5 +33,10 @@ module ContributorsIndex
     def unsubscribed_contributors_count
       tag_list.present? && state == :unsubscribed ? filter_count : unsubscribed_count
     end
+
+    def api_only_instance?
+      configured_messengers_hash = Setting.channels.except('email')
+      Setting.api_token.present? && configured_messengers_hash.values.all?(false)
+    end
   end
 end

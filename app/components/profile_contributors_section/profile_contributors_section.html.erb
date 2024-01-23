@@ -8,7 +8,7 @@
      %>
   <%= c 'flex' do %>
     <%= c 'contributors_status_bar', organization: organization %>
-    <% unless Setting.api_token.present? %>
+    <% unless api_only_instance? %>
       <%= c 'copy_button',
         class: 'Button--secondary ProfileContributorsSection-copyInviteButton',
         label: I18n.t('profile.contributors_section.copy_invite'),

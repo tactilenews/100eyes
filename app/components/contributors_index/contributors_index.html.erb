@@ -7,7 +7,7 @@
       <p><%= t('.subheading') %></p>
     </div>
 
-    <% unless Setting.api_token.present?  %>
+    <% unless api_only_instance?  %>
       <%= c 'copy_button',
         label: t('.actions.copy_invite'),
         styles: [:colorNavBar, :customIcon],
