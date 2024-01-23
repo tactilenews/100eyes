@@ -107,6 +107,10 @@ export default class extends Controller {
       div.classList.add('RequestForm-imagePreviewWrapper');
       div.setAttribute('id', 'image-preview-wrapper');
     }
+
+    figure.appendChild(div);
+    this.previewTarget.parentNode.appendChild(figure);
+
     return [figure, div];
   }
 
@@ -139,7 +143,7 @@ export default class extends Controller {
       this.setImageAttributes(img, URL.createObjectURL(file));
     }
 
-    this.addPreview(figure, div, message);
+    this.addPreview(figure, message);
   }
 
   addAttachedRequestFilesPreview(urls, message) {
@@ -159,19 +163,21 @@ export default class extends Controller {
       }
     });
 
-    this.addPreview(figure, div, message);
+    this.addPreview(figure, message);
   }
 
-  addPreview(figure, div, message) {
-    figure.appendChild(div);
-    const figcaption = document.createElement('figcaption');
-    figcaption.setAttribute('id', 'caption');
-    figure.setAttribute('id', 'file-preview');
-    figure.appendChild(figcaption);
+  addPreview(figure, message) {
+    let figcaption = document.getElementById('caption');
 
-    this.previewTarget.parentNode.appendChild(figure);
-    const firstFigcaption = figure.querySelector('figcaption');
-    firstFigcaption.innerHTML = message;
+    if (!figcaption) {
+      figcaption = document.createElement('figcaption');
+      figcaption.setAttribute('id', 'caption');
+      figure.setAttribute('id', 'file-preview');
+      figure.appendChild(figcaption);
+    }
+
+    figure.appendChild(figcaption);
+    figcaption.innerHTML = message;
   }
 
   removeExistingImagePreview() {
