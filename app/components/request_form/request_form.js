@@ -100,11 +100,12 @@ export default class extends Controller {
     let figure = document.getElementById('file-preview');
     let div;
     if (figure) {
-      div = figure.firstChild;
+      div = document.getElementById('image-preview-wrapper');
     } else {
       figure = document.createElement('figure');
       div = document.createElement('div');
       div.classList.add('RequestForm-imagePreviewWrapper');
+      div.setAttribute('id', 'image-preview-wrapper');
     }
     return [figure, div];
   }
@@ -145,13 +146,17 @@ export default class extends Controller {
     const [figure, div] = this.setUpImagePreview();
 
     urls.forEach((url, i) => {
-      const img = document.createElement('img');
-      img.classList.add('RequestForm-imagePreview');
-      if (urls.length % 2 == 1 && i == 0) {
-        img.classList.add('RequestForm-firstImageInOddNumber');
+      const existingImage = document.getElementById(`image-${url}`);
+      if (!existingImage) {
+        const img = document.createElement('img');
+        img.setAttribute('id', `image-${url}`);
+        img.classList.add('RequestForm-imagePreview');
+        if (urls.length % 2 == 1 && i == 0) {
+          img.classList.add('RequestForm-firstImageInOddNumber');
+        }
+        div.appendChild(img);
+        this.setImageAttributes(img, url);
       }
-      div.appendChild(img);
-      this.setImageAttributes(img, url);
     });
 
     this.addPreview(figure, div, message);
@@ -208,23 +213,7 @@ export default class extends Controller {
     this.imageInputTarget.files = dt.files;
     event.target.parentNode.remove();
     this.removeExistingImagePreview();
-
-    if (
-      this.imageInputTarget.files.length == 0 &&
-      this.imageInputAttachedFileTargets.length == 0
-    ) {
-      this.filenamesTarget.parentNode.classList.add(
-        'RequestForm-filenamesWrapper--hidden'
-      );
-      this.previewTarget.innerHTML = this.setMessage();
-      this.messageTarget.setAttribute('required', true);
-    } else {
-      this.addImagePreview(this.imageInputTarget.files, this.setCaption());
-      this.addAttachedRequestFilesPreview(
-        this.requestFilesUrlValue,
-        this.setCaption()
-      );
-    }
+    this.updatePreviewAfterRemoveEvent();
   }
 
   removeAttachedImage(event) {
@@ -239,10 +228,13 @@ export default class extends Controller {
     );
     inputToDelete.remove();
     this.removeExistingImagePreview();
+    this.updatePreviewAfterRemoveEvent();
+  }
 
+  updatePreviewAfterRemoveEvent() {
     if (
-      this.imageInputAttachedFileTargets.length == 0 &&
-      this.imageInputTarget.files.length == 0
+      this.imageInputTarget.files.length == 0 &&
+      this.imageInputAttachedFileTargets.length == 0
     ) {
       this.filenamesTarget.parentNode.classList.add(
         'RequestForm-filenamesWrapper--hidden'
