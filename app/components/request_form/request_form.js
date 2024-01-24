@@ -14,16 +14,17 @@ export default class extends Controller {
     'submitButton',
     'characterCounter',
     'modal',
+    'imageInputAttachedFile',
   ];
   static values = {
     membersCountMessage: String,
     previewFallback: String,
+    requestFilesUrl: Array,
   };
 
   connect() {
     this.updatePreview();
     this.updateMembersCount();
-    this.imageInputTarget.classList.add('hidden');
     this.updateCharacterCounter();
   }
 
@@ -47,10 +48,20 @@ export default class extends Controller {
       this.previewTarget.innerHTML = this.setMessage();
     }
 
-    if (event?.target?.files?.length) {
+    if (event?.target?.files?.length || this.requestFilesUrlValue.length) {
       this.previewTarget.innerHTML = '';
       this.messageTarget.removeAttribute('required');
+    }
+    if (event?.target?.files?.length)
       this.addImagePreview(event.target.files, this.setCaption());
+    if (this.requestFilesUrlValue.length) {
+      this.filenamesTarget.parentNode.classList.remove(
+        'RequestForm-filenamesWrapper--hidden'
+      );
+      this.addAttachedRequestFilesPreview(
+        this.requestFilesUrlValue,
+        this.setCaption()
+      );
     }
   }
 
@@ -85,11 +96,26 @@ export default class extends Controller {
     this.imageInputTarget.click();
   }
 
+  setUpImagePreview() {
+    let figure = document.getElementById('file-preview');
+    let div;
+    if (figure) {
+      div = document.getElementById('image-preview-wrapper');
+    } else {
+      figure = document.createElement('figure');
+      div = document.createElement('div');
+      div.classList.add('RequestForm-imagePreviewWrapper');
+      div.setAttribute('id', 'image-preview-wrapper');
+    }
+
+    figure.appendChild(div);
+    this.previewTarget.parentNode.appendChild(figure);
+
+    return [figure, div];
+  }
+
   addImagePreview(files, message) {
-    const figure = document.createElement('figure');
-    const div = document.createElement('div');
-    div.classList.add('RequestForm-imagePreviewWrapper');
-    this.removeExistingPreview();
+    const [figure, div] = this.setUpImagePreview();
 
     for (let i = 0; i < files.length; i++) {
       let file = files.item(i);
@@ -114,20 +140,47 @@ export default class extends Controller {
         img.classList.add('RequestForm-firstImageInOddNumber');
       }
       div.appendChild(img);
-      this.setImageAttributes(img, file);
+      this.setImageAttributes(img, URL.createObjectURL(file));
     }
-    figure.appendChild(div);
-    const figcaption = document.createElement('figcaption');
-    figcaption.setAttribute('id', 'caption');
-    figure.setAttribute('id', 'file-preview');
-    figure.appendChild(figcaption);
 
-    this.previewTarget.parentNode.appendChild(figure);
-    const firstFigcaption = figure.querySelector('figcaption');
-    firstFigcaption.innerHTML = message;
+    this.addPreview(figure, message);
   }
 
-  removeExistingPreview() {
+  addAttachedRequestFilesPreview(urls, message) {
+    const [figure, div] = this.setUpImagePreview();
+
+    urls.forEach((url, i) => {
+      const existingImage = document.getElementById(`image-${url}`);
+      if (!existingImage) {
+        const img = document.createElement('img');
+        img.setAttribute('id', `image-${url}`);
+        img.classList.add('RequestForm-imagePreview');
+        if (urls.length % 2 == 1 && i == 0) {
+          img.classList.add('RequestForm-firstImageInOddNumber');
+        }
+        div.appendChild(img);
+        this.setImageAttributes(img, url);
+      }
+    });
+
+    this.addPreview(figure, message);
+  }
+
+  addPreview(figure, message) {
+    let figcaption = document.getElementById('caption');
+
+    if (!figcaption) {
+      figcaption = document.createElement('figcaption');
+      figcaption.setAttribute('id', 'caption');
+      figure.setAttribute('id', 'file-preview');
+      figure.appendChild(figcaption);
+    }
+
+    figure.appendChild(figcaption);
+    figcaption.innerHTML = message;
+  }
+
+  removeExistingImagePreview() {
     const existingFigure = document.getElementById('file-preview');
     if (existingFigure) existingFigure.remove();
     const chatPreviewBubbles = document.querySelectorAll(
@@ -138,14 +191,17 @@ export default class extends Controller {
         element.remove();
       }
     });
+  }
+
+  removeExistingFilesname() {
     const listItems = document.querySelectorAll(
       '.RequestForm-filenamesListItem'
     );
     listItems.forEach(listItem => listItem.remove());
   }
 
-  setImageAttributes(img, file) {
-    img.setAttribute('src', URL.createObjectURL(file));
+  setImageAttributes(img, url) {
+    img.setAttribute('src', url);
     img.setAttribute('width', 100);
     img.setAttribute('width', 100);
   }
@@ -162,8 +218,30 @@ export default class extends Controller {
 
     this.imageInputTarget.files = dt.files;
     event.target.parentNode.remove();
-    if (this.imageInputTarget.files.length == 0) {
-      this.removeExistingPreview();
+    this.removeExistingImagePreview();
+    this.updatePreviewAfterRemoveEvent();
+  }
+
+  removeAttachedImage(event) {
+    event.target.parentNode.remove();
+
+    const id = event.target.dataset.requestFormImageIdValue;
+    const url = event.target.dataset.requestFormImageUrlValue;
+    this.requestFilesUrlValue = this.requestFilesUrlValue.filter(u => u != url);
+    const hiddenInputs = this.imageInputAttachedFileTargets;
+    const inputToDelete = hiddenInputs.find(
+      image => image.getAttribute('value') == id
+    );
+    inputToDelete.remove();
+    this.removeExistingImagePreview();
+    this.updatePreviewAfterRemoveEvent();
+  }
+
+  updatePreviewAfterRemoveEvent() {
+    if (
+      this.imageInputTarget.files.length == 0 &&
+      this.imageInputAttachedFileTargets.length == 0
+    ) {
       this.filenamesTarget.parentNode.classList.add(
         'RequestForm-filenamesWrapper--hidden'
       );
@@ -171,6 +249,10 @@ export default class extends Controller {
       this.messageTarget.setAttribute('required', true);
     } else {
       this.addImagePreview(this.imageInputTarget.files, this.setCaption());
+      this.addAttachedRequestFilesPreview(
+        this.requestFilesUrlValue,
+        this.setCaption()
+      );
     }
   }
 
@@ -192,28 +274,32 @@ export default class extends Controller {
   }
 
   updateFilesname(index, file) {
-    const listItem = document.createElement('li');
-    listItem.setAttribute('id', `image-filename-${file.name}`);
-    listItem.classList.add('RequestForm-filenamesListItem');
+    let listItem = document.getElementById(`image-filename-${file.name}`);
 
-    const paragraph = document.createElement('p');
-    paragraph.innerText = file.name;
-    paragraph.classList.add('RequestForm-filename');
-    listItem.appendChild(paragraph);
+    if (!listItem) {
+      listItem = document.createElement('li');
+      listItem.setAttribute('id', `image-filename-${file.name}`);
+      listItem.classList.add('RequestForm-filenamesListItem');
 
-    const removeButton = document.createElement('button');
-    removeButton.innerText = 'x';
-    removeButton.setAttribute('data-action', 'request-form#removeImage');
-    removeButton.setAttribute('data-request-form-image-index-value', index);
-    removeButton.setAttribute('type', 'button');
-    removeButton.classList.add('Button');
-    removeButton.classList.add('RequestForm-removeListItemButton');
-    listItem.appendChild(removeButton);
+      const paragraph = document.createElement('p');
+      paragraph.innerText = file.name;
+      paragraph.classList.add('RequestForm-filename');
+      listItem.appendChild(paragraph);
 
-    this.filenamesTarget.appendChild(listItem);
-    this.filenamesTarget.parentNode.classList.remove(
-      'RequestForm-filenamesWrapper--hidden'
-    );
+      const removeButton = document.createElement('button');
+      removeButton.innerText = 'x';
+      removeButton.setAttribute('data-action', 'request-form#removeImage');
+      removeButton.setAttribute('data-request-form-image-index-value', index);
+      removeButton.setAttribute('type', 'button');
+      removeButton.classList.add('Button');
+      removeButton.classList.add('RequestForm-removeListItemButton');
+      listItem.appendChild(removeButton);
+
+      this.filenamesTarget.appendChild(listItem);
+      this.filenamesTarget.parentNode.classList.remove(
+        'RequestForm-filenamesWrapper--hidden'
+      );
+    }
   }
 
   updateCharacterCounter() {

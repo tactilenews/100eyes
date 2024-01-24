@@ -3,6 +3,7 @@
   data-controller="request-form"
   data-request-form-members-count-message-value="<%= t('components.request_form.members_count_message').to_json %>"
   data-request-form-preview-fallback-value="<%= t('components.request_form.preview_fallback') %>"
+  data-request-form-request-files-url-value="<%= @request.files.map { |file| url_for(file) } %>"
 >
 
   <div class="RequestForm-column" data-action="input->request-form#updatePreview">
@@ -27,10 +28,22 @@
               class: 'RequestForm-insertPlaceholderButton',
               type: 'button',
               data: { action: 'request-form#insertImage' } do %>
+              <% if @request.planned? && @request.files.attached? %>
+                <% @request.files.each do |file| %>
+                  <%= field.hidden_field(:request,
+                                         :files,
+                                         data: { request_form_target: 'imageInputAttachedFile' },
+                                         multiple: true,
+                                         value: file.signed_id
+
+                  ) %>
+                <% end %>
+              <% end %>
               <%= field.file_field(:request,
                                    :files,
                                    data: { request_form_target: 'imageInput' },
                                    multiple: true,
+                                   hidden: true,
                                    accept: 'image/*'
 
               ) %>
@@ -58,7 +71,27 @@
             <ul
               data-request-form-target="filenames"
               class="RequestForm-filenamesList"
-            ></ul>
+            >
+            <% if @request.planned? && @request.files.attached? %>
+              <% @request.files.each do |file| %>
+                <li
+                  id="image-filename-<%= file.blob[:filename] %>"
+                  class="RequestForm-filenamesListItem"
+                >
+                  <p class="RequestForm-filename"><%= file.blob[:filename] %></p>
+                  <button
+                    class="RequestForm-removeListItemButton Button"
+                    data-action="request-form#removeAttachedImage"
+                    data-request-form-image-id-value="<%= file.signed_id %>"
+                    data-request-form-image-url-value="<%= url_for(file) %>"
+                    type="button"
+                  >
+                   x
+                  </button>
+                </li>
+              <% end %>
+            <% end %>
+            </ul>
           </div>
         <% end %>
 
