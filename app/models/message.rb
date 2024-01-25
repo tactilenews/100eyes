@@ -18,6 +18,7 @@ class Message < ApplicationRecord
   counter_culture :request, column_name: proc { |model| model.reply? ? 'replies_count' : nil }
 
   scope :replies, -> { where(sender_type: Contributor.name) }
+  scope :direct_messages, -> { where(sender_type: [User.name, nil], broadcasted: false) }
 
   delegate :name, to: :creator, allow_nil: true, prefix: true
 

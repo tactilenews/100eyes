@@ -32,7 +32,7 @@ class ChartsController < ApplicationController
 
   def joined_outbound(group_keys)
     grouped_requests = group_messages(Request.unscoped, group_keys).count
-    grouped_messages = group_messages(Message.unscoped.where(sender_type: [User.name, nil], broadcasted: false),
+    grouped_messages = group_messages(Message.unscoped.direct_messages,
                                       group_keys).count
     grouped_requests.merge(grouped_messages) { |_key, oldval, newval| oldval + newval }
   end
