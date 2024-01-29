@@ -61,16 +61,17 @@ class ApiController < ApplicationController
 
   def messages
     if contributor
-      message = Message.new(
+      params = {
         request: contributor.active_request,
         text: messages_params[:text],
         sender: contributor
-      )
-      message.raw_data.attach(
+      }
+      raw_data = {
         io: StringIO.new(JSON.generate(messages_params)),
         filename: 'api.json',
         content_type: 'application/json'
-      )
+      }
+      message = MessageGenerator.generate_message(params: params, raw_data: raw_data)
 
       if message.save!
         render_created_message(message)
@@ -84,17 +85,18 @@ class ApiController < ApplicationController
 
   def direct_message
     if contributor
-      message = Message.new(
+      params = {
         request: contributor.active_request,
         text: direct_message_params[:text],
         sender: current_user,
         recipient: contributor
-      )
-      message.raw_data.attach(
+      }
+      raw_data = {
         io: StringIO.new(JSON.generate(direct_message_params)),
         filename: 'api.json',
         content_type: 'application/json'
-      )
+      }
+      message = MessageGenerator.generate_message(params: params, raw_data: raw_data)
 
       if message.save!
         render_created_message(message)
