@@ -131,4 +131,5 @@ Rails.application.routes.draw do
   put '/v1/contributors/me', to: 'api#update'
   get '/v1/contributors/me/requests/current', to: 'api#current_request'
   post '/v1/contributors/me/messages', to: 'api#messages'
+  post '/v1/users/me/messages', to: 'api#direct_message'
 end

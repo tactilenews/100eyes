@@ -2,7 +2,10 @@
 
 class ApiController < ApplicationController
   skip_before_action :require_login, :verify_authenticity_token
-  before_action :authorize_api_access, :contributor
+  before_action :contributor
+  before_action :authorize_api_access, except: :direct_message
+  before_action :authenciate_user, only: :direct_message
+  rescue_from JWT::DecodeError, with: :render_unauthorized
 
   def show
     if contributor
@@ -34,7 +37,7 @@ class ApiController < ApplicationController
         render json: { status: 'error', message: contributor.errors.full_messages.join(' ') }, status: :unprocessable_entity
       end
     else
-      render json: { status: 'error', message: 'Not found' }, status: :not_found
+      render_not_found
     end
   end
 
@@ -50,7 +53,7 @@ class ApiController < ApplicationController
         }
       }, status: :ok
     else
-      render json: { status: 'error', message: 'Not found' }, status: :not_found
+      render_not_found
     end
   end
 
@@ -77,7 +80,32 @@ class ApiController < ApplicationController
     end
   end
 
+  def direct_message
+    if contributor
+      message = Message.new(
+        request: contributor.active_request,
+        text: direct_message_params[:text],
+        sender: current_user
+      )
+      message.raw_data.attach(
+        io: StringIO.new(JSON.generate(direct_message_params)),
+        filename: 'api.json',
+        content_type: 'application/json'
+      )
+
+      if message.save!
+        render json: { status: 'ok', data: { id: message.id, text: message.text } }, status: :created
+      else
+        render json: { status: 'error', message: 'Record could not be created' }, status: :unprocessable_entity
+      end
+    else
+      render_not_found
+    end
+  end
+
   private
+
+  attr_reader :current_user
 
   def contributor
     @contributor ||= Contributor.find_by(external_id: external_id)
@@ -87,6 +115,12 @@ class ApiController < ApplicationController
     authenticate_or_request_with_http_token do |token, _options|
       ActiveSupport::SecurityUtils.secure_compare(token, Setting.api_token)
     end
+  end
+
+  def authenciate_user
+    decoded_token = JWT.decode(direct_message_params[:jwt], Setting.api_token, true, { algorithm: 'HS256' }).first.with_indifferent_access
+    @current_user = User.find_by(email: decoded_token[:email], encrypted_password: decoded_token[:encrypted_password])
+    render_not_found unless @current_user
   end
 
   def external_id
@@ -103,6 +137,24 @@ class ApiController < ApplicationController
 
   def messages_params
     params.permit(:text)
+  end
+
+  def direct_message_params
+    params.permit(:text, :jwt)
+  end
+
+  def render_unauthorized
+    render json: {
+      status: 'error',
+      message: 'Unauthorized'
+    }, status: :unauthorized
+  end
+
+  def render_not_found
+    render json: {
+      status: 'error',
+      message: 'Not found'
+    }, status: :not_found
   end
 
   def render_json_created_contributor
