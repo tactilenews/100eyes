@@ -13,7 +13,7 @@ class ApiController < ApplicationController
     if contributor
       render_json_show_contributor
     else
-      render json: { status: 'error', message: 'Not found' }, status: :not_found
+      render_not_found
     end
   end
 
@@ -73,12 +73,12 @@ class ApiController < ApplicationController
       )
 
       if message.save!
-        render json: { status: 'ok', data: { id: message.id, text: message.text } }, status: :created
+        render_created_message(message)
       else
-        render json: { status: 'error', message: 'Record could not be created' }, status: :unprocessable_entity
+        render_creation_failed
       end
     else
-      render json: { status: 'error', message: 'Not found' }, status: :not_found
+      render_not_found
     end
   end
 
@@ -87,7 +87,8 @@ class ApiController < ApplicationController
       message = Message.new(
         request: contributor.active_request,
         text: direct_message_params[:text],
-        sender: current_user
+        sender: current_user,
+        recipient: contributor
       )
       message.raw_data.attach(
         io: StringIO.new(JSON.generate(direct_message_params)),
@@ -96,9 +97,9 @@ class ApiController < ApplicationController
       )
 
       if message.save!
-        render json: { status: 'ok', data: { id: message.id, text: message.text } }, status: :created
+        render_created_message(message)
       else
-        render json: { status: 'error', message: 'Record could not be created' }, status: :unprocessable_entity
+        render_creation_failed
       end
     else
       render_not_found

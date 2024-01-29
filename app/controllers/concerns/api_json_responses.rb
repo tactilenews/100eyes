@@ -19,6 +19,13 @@ module ApiJsonResponses
     }, status: :not_found
   end
 
+  def render_creation_failed
+    render json: {
+      status: 'error',
+      message: 'Record could not be created'
+    }, status: :unprocessable_entity
+  end
+
   def render_json_created_contributor
     render json: {
       status: 'ok',
@@ -27,6 +34,16 @@ module ApiJsonResponses
         first_name: contributor.first_name,
         external_id: contributor.external_id,
         external_channel: contributor.external_channel
+      }
+    }, status: :created
+  end
+
+  def render_created_message(message)
+    render json: {
+      status: 'ok',
+      data: {
+        id: message.id,
+        text: message.text
       }
     }, status: :created
   end

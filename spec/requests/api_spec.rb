@@ -438,11 +438,39 @@ RSpec.describe 'Api' do
         context 'known contributor' do
           let!(:contributor) { create(:contributor, first_name: 'John', external_id: external_id) }
           let!(:request) { create(:request) }
-
           let(:headers) { { 'X-100eyes-External-Id' => external_id } }
+          let(:created_message) { Message.first }
+          let(:expected_response) do
+            {
+              status: 'ok',
+              data: {
+                id: created_message.id,
+                text: created_message.text
+              }
+            }
+          end
 
           it 'creates the message' do
             expect { subject.call }.to change(Message, :count).by(1)
+          end
+
+          it 'assigns correct attrs' do
+            subject.call
+
+            expect(created_message).to have_attributes(
+              request: request,
+              sender: user,
+              text: params[:text],
+              broadcasted: false,
+              recipient: contributor
+            )
+          end
+
+          it 'returns resource data' do
+            subject.call
+
+            expect(response.body).to eq(expected_response.to_json)
+            expect(response.code.to_i).to eq(201)
           end
         end
       end
