@@ -165,9 +165,14 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
       end
 
       context 'with replies sent within 24 hours' do
+        let(:onboarding_success_heading) { 'Thanks for onboarding' }
+        let(:onboarding_success_text) { 'We will start sending messages soon.' }
+
         before do
           create(:message, sender: contributor)
-          text_payload[:text][:body] = I18n.t('adapter.whats_app.welcome_message', project_name: Setting.project_name)
+          text_payload[:text][:body] = ["*#{onboarding_success_heading}*", onboarding_success_text].join("\n\n")
+          allow(Setting).to receive(:onboarding_success_heading).and_return(onboarding_success_heading)
+          allow(Setting).to receive(:onboarding_success_text).and_return(onboarding_success_text)
         end
 
         it { is_expected.to enqueue_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText).with({ payload: text_payload }) }

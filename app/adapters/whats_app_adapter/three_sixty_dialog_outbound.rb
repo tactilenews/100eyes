@@ -18,7 +18,7 @@ module WhatsAppAdapter
       def send_welcome_message!(contributor)
         return unless contributor_can_receive_messages?(contributor)
 
-        welcome_message = I18n.t('adapter.whats_app.welcome_message', project_name: Setting.project_name)
+        welcome_message = ["*#{Setting.onboarding_success_heading}*", Setting.onboarding_success_text].join("\n\n")
         payload = if freeform_message_permitted?(contributor)
                     text_payload(contributor, welcome_message)
                   else
