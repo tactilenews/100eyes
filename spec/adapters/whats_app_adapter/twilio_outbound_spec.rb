@@ -10,10 +10,16 @@ RSpec.describe WhatsAppAdapter::TwilioOutbound do
 
   describe '::send_welcome_message!' do
     let(:expected_job_args) do
-      { contributor_id: contributor.id, text: I18n.t('adapter.whats_app.welcome_message', project_name: Setting.project_name) }
+      { contributor_id: contributor.id, text: ["*#{onboarding_success_heading}*", onboarding_success_text].join("\n\n") }
     end
+    let(:onboarding_success_heading) { 'Thanks for onboarding' }
+    let(:onboarding_success_text) { 'We will start sending messages soon.' }
     subject { -> { described_class.send_welcome_message!(contributor) } }
-    before { message } # we don't count the extra ::send here
+    before do
+      message # we don't count the extra ::send here
+      allow(Setting).to receive(:onboarding_success_heading).and_return(onboarding_success_heading)
+      allow(Setting).to receive(:onboarding_success_text).and_return(onboarding_success_text)
+    end
 
     it { should_not enqueue_job(WhatsAppAdapter::Outbound::Text) }
 
