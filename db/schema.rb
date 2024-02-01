@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_12_05_194628) do
+ActiveRecord::Schema.define(version: 2024_02_01_093729) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -162,7 +162,7 @@ ActiveRecord::Schema.define(version: 2023_12_05_194628) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "telegram_media_group_id"
-    t.integer "photos_count"
+    t.integer "photos_count", default: 0
     t.bigint "recipient_id"
     t.boolean "broadcasted", default: false
     t.boolean "unknown_content", default: false
@@ -213,7 +213,7 @@ ActiveRecord::Schema.define(version: 2023_12_05_194628) do
     t.string "text"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "replies_count"
+    t.integer "replies_count", default: 0
     t.bigint "user_id"
     t.datetime "schedule_send_for"
     t.datetime "broadcasted_at"
