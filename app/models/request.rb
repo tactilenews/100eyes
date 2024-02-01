@@ -14,7 +14,7 @@ class Request < ApplicationRecord
   has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
   has_many_attached :files
 
-  scope :include_associations, -> { preload(messages: :sender).includes([:tags, messages: :files]).eager_load(:messages) }
+  scope :include_associations, -> { preload(messages: :sender).includes([:tags, { messages: :files }]).eager_load(:messages) }
   scope :planned, -> { where.not(schedule_send_for: nil).where('schedule_send_for > ?', Time.current) }
   scope :broadcasted, -> { where.not(broadcasted_at: nil) }
 

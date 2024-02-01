@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ChangeRepliesCountDefaultOnRequests < ActiveRecord::Migration[6.1]
   def up
     change_column :requests, :replies_count, :integer, default: 0
