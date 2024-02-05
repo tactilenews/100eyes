@@ -250,11 +250,11 @@ RSpec.describe Request, type: :model do
 
       describe 'iterating through a list' do
         subject { -> { Request.find_each.map(&:stats) } }
-        it { should make_database_queries(count: 39) }
+        it { should make_database_queries(count: 29) }
 
-        describe 'preload(messages: :sender).eager_load(:messages)' do
-          subject { -> { Request.preload(messages: :sender).includes(messages: :files).eager_load(:messages).find_each.map(&:stats) } }
-          it { should make_database_queries(count: 17) } # better
+        describe '::include_associations' do
+          subject { -> { Request.include_associations.find_each.map(&:stats) } }
+          it { should make_database_queries(count: 7) } # better
         end
       end
     end
