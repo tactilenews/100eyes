@@ -39,7 +39,7 @@ class Request < ApplicationRecord
       counts: {
         recipients: messages.map(&:recipient_id).compact.uniq.size,
         contributors: messages.select(&:reply?).map(&:sender_id).compact.uniq.size,
-        photos: messages.replies.pluck(:photos_count).sum,
+        photos: messages.pluck(:photos_count).sum,
         replies: replies_count
       }
     }

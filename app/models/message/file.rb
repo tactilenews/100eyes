@@ -2,7 +2,7 @@
 
 class Message::File < ApplicationRecord
   belongs_to :message
-  counter_culture :message, column_name: proc { |model| model.image_attachment? ? 'photos_count' : nil }
+  counter_culture :message, column_name: proc { |model| model.message.reply? && model.image_attachment? ? 'photos_count' : nil }
   has_one_attached :attachment
   validates :attachment, presence: true
 
