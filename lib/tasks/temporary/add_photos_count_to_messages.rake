@@ -2,10 +2,10 @@
 
 namespace :messages do
   desc 'Add photos count to messages to remove nil default'
-  task add_photos_count_to_requests: :environment do
+  task add_photos_count_to_messages: :environment do
     puts "Add photos_count to #{Message.count} messages"
     ActiveRecord::Base.transaction do
-      Message.find_each do |message|
+      Message.replies.find_each do |message|
         message.photos_count = message.photos.count
         message.photos_count += message.files.joins(:attachment_blob).where(active_storage_blobs: {
                                                                               content_type: %w[image/jpg image/jpeg
