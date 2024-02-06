@@ -17,7 +17,13 @@ RSpec.describe WhatsAppAdapter::Outbound::File do
   let(:contributor) do
     create(:contributor, whats_app_phone_number: whats_app_phone_number, email: nil)
   end
-  let(:message) { create(:message, recipient: contributor, files: [create(:file), create(:file)]) }
+
+  let(:message) do
+    create(:message, recipient: contributor) do |message|
+      create_list(:file, 2, message: message)
+    end
+  end
+
   let(:expected_params) do
     {
       from: "whatsapp:#{Setting.whats_app_server_phone_number}",

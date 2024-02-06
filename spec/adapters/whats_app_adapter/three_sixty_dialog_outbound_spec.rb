@@ -120,8 +120,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
       end
 
       describe 'message with files' do
-        let(:file) { create(:file) }
-        before { message.update(files: [file]) }
+        before { create(:file, message: message) }
 
         context 'contributor has not sent a message within 24 hours' do
           it 'enqueues the Text job with WhatsApp template' do
