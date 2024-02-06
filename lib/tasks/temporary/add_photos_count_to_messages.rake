@@ -7,6 +7,10 @@ namespace :messages do
     ActiveRecord::Base.transaction do
       Message.find_each do |message|
         message.photos_count = message.photos.count
+        message.photos_count += message.files.joins(:attachment_blob).where(active_storage_blobs: {
+                                                                              content_type: %w[image/jpg image/jpeg
+                                                                                               image/png image/gif]
+                                                                            }).size
         message.save
         print '.'
       end
