@@ -29,6 +29,25 @@ RSpec.describe Message::File, type: :model do
         before { message.update(photos_count: 4711) }
         it { expect { subject }.to (change { message.photos_count }).from(4711).to(0) }
       end
+
+      context 'if there is a photo model' do
+        let(:message) { create(:message, :with_file, request: request, attachment: fixture_file_upload('example-image.png')) }
+        subject do
+          Photo.counter_culture_fix_counts
+          described_class.counter_culture_fix_counts
+          message.reload
+        end
+
+        before do
+          create(:photo, message: message)
+          message.update(photos_count: 4711)
+        end
+
+        it 'both caches get combined' do
+          pending 'counter_culture does not like two models updating a single count'
+          expect { subject }.to (change { message.photos_count }).from(4711).to(2)
+        end
+      end
     end
   end
 end
