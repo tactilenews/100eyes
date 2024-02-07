@@ -138,4 +138,24 @@ RSpec.describe Message, type: :model do
       it_behaves_like 'an ActivityNotification', 'MessageReceived'
     end
   end
+
+  describe '::counter_culture_fix_counts' do
+    let(:request) { create(:request) }
+
+    subject do
+      described_class.counter_culture_fix_counts
+      request.reload
+    end
+
+    describe 'fixes replies counter' do
+      before do
+        create(:message, :inbound, request: request)
+        create(:message, :outbound, request: request)
+        create(:message, :inbound) # another requst
+        request.update(replies_count: 4711)
+      end
+
+      it { expect { subject }.to (change { request.replies_count }).from(4711).to(1) }
+    end
+  end
 end
