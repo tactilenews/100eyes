@@ -2,14 +2,14 @@
 
 module ChatMessageAudio
   class ChatMessageAudio < ApplicationComponent
-    def initialize(audio:, **)
+    def initialize(audios:, **)
       super
 
-      @audio = audio
+      @audios = audios
     end
 
     private
 
-    attr_reader :audio
+    attr_reader :audios
   end
 end
