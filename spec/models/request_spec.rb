@@ -199,18 +199,21 @@ RSpec.describe Request, type: :model do
       before(:each) do
         create_list(:message, 2)
         delivered_messages = create_list(:message, 7, :outbound, request: request, broadcasted: true)
+        create(:message, :with_file, :outbound, request: request, broadcasted: false, attachment: fixture_file_upload('example-image.png'))
         # _ is some unresponsive recipient
         responsive_recipient, _, *other_recipients = delivered_messages.map(&:recipient)
         create_list(:message, 3, request: request, sender: responsive_recipient)
         other_recipients.each do |recipient|
           create(:message, :with_a_photo, sender: recipient, request: request)
           create(:message, :with_file, sender: recipient, request: request, attachment: fixture_file_upload('example-image.png'))
+          create(:message, :with_file, sender: recipient, request: request, attachment: fixture_file_upload('invalid_profile_picture.pdf'))
         end
+        request.reload
       end
 
       describe '[:counts][:replies]' do
         subject { stats[:counts][:replies] }
-        it { should eq(13) } # unique contributors
+        it { should eq(18) }
 
         describe 'messages from us' do
           before(:each) do
@@ -218,7 +221,7 @@ RSpec.describe Request, type: :model do
           end
 
           it 'are excluded' do
-            should eq(13)
+            should eq(18)
           end
         end
       end
@@ -240,7 +243,7 @@ RSpec.describe Request, type: :model do
 
       describe '[:counts][:recipients]' do
         subject { stats[:counts][:recipients] }
-        it { should eq(7) }
+        it { should eq(8) }
       end
 
       describe '[:counts][:photos]' do
@@ -250,11 +253,11 @@ RSpec.describe Request, type: :model do
 
       describe 'iterating through a list' do
         subject { -> { Request.find_each.map(&:stats) } }
-        it { should make_database_queries(count: 39) }
+        it { should make_database_queries(count: 32) }
 
-        describe 'preload(messages: :sender).eager_load(:messages)' do
-          subject { -> { Request.preload(messages: :sender).includes(messages: :files).eager_load(:messages).find_each.map(&:stats) } }
-          it { should make_database_queries(count: 17) } # better
+        describe '::include_associations' do
+          subject { -> { Request.include_associations.find_each.map(&:stats) } }
+          it { should make_database_queries(count: 4) } # better
         end
       end
     end

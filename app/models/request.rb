@@ -14,7 +14,7 @@ class Request < ApplicationRecord
   has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
   has_many_attached :files
 
-  scope :include_associations, -> { preload(messages: :sender).includes(messages: :files).eager_load(:messages) }
+  scope :include_associations, -> { preload(messages: :sender).includes([:tags, { messages: :files }]).eager_load(:messages) }
   scope :planned, -> { where.not(schedule_send_for: nil).where('schedule_send_for > ?', Time.current) }
   scope :broadcasted, -> { where.not(broadcasted_at: nil) }
 
@@ -39,13 +39,8 @@ class Request < ApplicationRecord
       counts: {
         recipients: messages.map(&:recipient_id).compact.uniq.size,
         contributors: messages.select(&:reply?).map(&:sender_id).compact.uniq.size,
-        photos: messages.replies.map do |message|
-          message.photos_count ||
-            message.files.joins(:attachment_blob).where(active_storage_blobs: { content_type: %w[image/jpg image/jpeg
-                                                                                                 image/png image/gif] }).size ||
-            0
-        end.sum,
-        replies: messages.count(&:reply?)
+        photos: messages.pluck(:photos_count).sum,
+        replies: replies_count
       }
     }
   end
