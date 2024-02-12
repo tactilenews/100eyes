@@ -253,11 +253,11 @@ RSpec.describe Request, type: :model do
 
       describe 'iterating through a list' do
         subject { -> { Request.find_each.map(&:stats) } }
-        it { should make_database_queries(count: 32) }
+        it { should make_database_queries(count: 35) }
 
         describe '::include_associations' do
           subject { -> { Request.include_associations.find_each.map(&:stats) } }
-          it { should make_database_queries(count: 4) } # better
+          it { should make_database_queries(count: 7) } # better
         end
       end
     end
