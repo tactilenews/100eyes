@@ -24,27 +24,35 @@ module ChatMessage
     end
 
     def audio?
-      files.first.attachment.blob.audio? unless files.empty?
+      files.any? { |file| file.attachment.blob.content_type.match? /audio/ }
     end
 
     def image?
-      files.first.attachment.blob.image? unless files.empty?
+      files.any? { |file| file.attachment.blob.content_type.match? /image/ }
     end
 
     def video?
-      files.first.attachment.blob.video? unless files.empty?
+      files.any? { |file| file.attachment.blob.content_type.match? /video/ }
     end
 
     def photos
       message.photos
     end
 
+    def image_files
+      files.select { |file| file.attachment.blob.content_type.match? /image/ }
+    end
+
+    def video_files
+      files.select { |file| file.attachment.blob.content_type.match? /video/ }
+    end
+
     def files
       message.files
     end
 
-    def audio
-      files.first unless files.empty?
+    def audio_files
+      files.select { |file| file.attachment.blob.content_type.match? /audio/ }
     end
 
     def creator_name

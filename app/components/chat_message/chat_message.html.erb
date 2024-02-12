@@ -59,34 +59,36 @@
       <% end %>
     <% end %>
 
-    <% if image? %>
-      <% if message.text.blank? %>
+    <% unless files.empty? %>
+      <% if image? %>
+        <% if message.text.blank? %>
+          <header class="ChatMessage-header">
+            <% if message.sender %>
+              <%= c 'avatar', record: message.sender, style: :small, class: "ChatMessage-avatar" %>
+            <% else %>
+              <%= c 'avatar', style: :small, class: "ChatMessage-avatar" %>
+            <% end %>
+            <%= c 'chat_message_photos', photos: image_files %>
+          </header>
+        <% else %>
+          <%= c 'chat_message_photos', photos: image_files %>
+        <% end %>
+      <% end %>
+
+      <% if audio? %>
         <header class="ChatMessage-header">
           <% if message.sender %>
             <%= c 'avatar', record: message.sender, style: :small, class: "ChatMessage-avatar" %>
           <% else %>
             <%= c 'avatar', style: :small, class: "ChatMessage-avatar" %>
           <% end %>
-          <%= c 'chat_message_photos', photos: files %>
+          <%= c 'chat_message_audio', audios: audio_files %>
         </header>
-      <% else %>
-        <%= c 'chat_message_photos', photos: files %>
       <% end %>
-    <% end %>
 
-    <% if audio? %>
-      <header class="ChatMessage-header">
-        <% if message.sender %>
-          <%= c 'avatar', record: message.sender, style: :small, class: "ChatMessage-avatar" %>
-        <% else %>
-          <%= c 'avatar', style: :small, class: "ChatMessage-avatar" %>
-        <% end %>
-        <%= c 'chat_message_audio', audio: audio %>
-      </header>
-    <% end %>
-
-    <% if video? %>
-      <%= c 'chat_message_video', videos: files %>
+      <% if video? %>
+        <%= c 'chat_message_video', videos: video_files %>
+      <% end %>
     <% end %>
 
     <footer class="ChatMessage-footer">
