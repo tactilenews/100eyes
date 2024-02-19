@@ -67,6 +67,12 @@ module PostmarkAdapter
 
         with(admin: admin, contributor: contributor).contributor_resubscribed_email.deliver_later
       end
+
+      def welcome_message_updated!(admin)
+        return unless admin&.email && admin&.admin?
+
+        with(admin: admin).welcome_message_updated_email.deliver_later
+      end
     end
 
     def bounce_email
@@ -145,6 +151,16 @@ module PostmarkAdapter
       text = I18n.t(
         'adapter.shared.resubscribe.by_request_of_contributor', contributor_name: contributor.name
       )
+      message_stream = Setting.postmark_transactional_stream
+      @text = [subject, text].join("\n")
+      mail(to: admin.email, subject: subject, message_stream: message_stream)
+    end
+
+    def welcome_message_updated_email
+      admin = params[:admin]
+
+      subject = I18n.t('adapter.postmark.welcome_message_updated.subject', project_name: Setting.project_name)
+      text = I18n.t('adapter.postmark.welcome_message_updated.text')
       message_stream = Setting.postmark_transactional_stream
       @text = [subject, text].join("\n")
       mail(to: admin.email, subject: subject, message_stream: message_stream)
