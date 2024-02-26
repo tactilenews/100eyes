@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 class RequestsController < ApplicationController
-  before_action :set_request, only: %i[show show_contributor_messages edit update notifications destroy]
+  before_action :set_request, only: %i[show show_contributor_messages edit update notifications destroy messages_by_contributor]
   before_action :set_contributor, only: %i[show_contributor_messages]
   before_action :notifications_params, only: :notifications
   before_action :disallow_edit, only: %i[edit update]
   before_action :disallow_destroy, only: :destroy
+  layout false, only: :messages_by_contributor
 
   def index
     @filter = filter_param
@@ -14,9 +15,7 @@ class RequestsController < ApplicationController
     @requests = filtered_requests.page(params[:page])
   end
 
-  def show
-    @message_groups = @request.messages_by_contributor
-  end
+  def show; end
 
   def create
     resize_image_files if request_params[:files].present?
@@ -75,6 +74,13 @@ class RequestsController < ApplicationController
     last_updated_at = Time.zone.parse(params[:last_updated_at])
     message_count = @request.replies.where('created_at >= ?', last_updated_at).count
     render json: { message_count: message_count }
+  end
+
+  def messages_by_contributor
+    @message_groups = @request.messages_by_contributor
+    render(
+      MessageGroups::MessageGroups.new(request: @request, message_groups: @message_groups), content_type: 'text/html'
+    )
   end
 
   private

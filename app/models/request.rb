@@ -38,7 +38,7 @@ class Request < ApplicationRecord
     {
       counts: {
         recipients: messages.map(&:recipient_id).compact.uniq.size,
-        contributors: messages.select(&:reply?).map(&:sender_id).compact.uniq.size,
+        contributors: messages.includes(:sender).select(&:reply?).map(&:sender_id).compact.uniq.size,
         photos: replies.pluck(:photos_count).sum,
         replies: replies_count
       }
@@ -51,6 +51,7 @@ class Request < ApplicationRecord
 
   def messages_by_contributor
     messages
+      .includes([:recipient, :sender, { photos: { attachment_attachment: :blob } }, { files: { attachment_attachment: :blob } }])
       .where(broadcasted: false)
       .group_by(&:contributor)
       .transform_values { |messages| messages.sort_by(&:created_at) }

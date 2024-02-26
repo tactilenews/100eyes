@@ -29,23 +29,11 @@
   <%= c 'section', style: :xlargeSpaceBetween do %>
     <%= c 'request_metrics', request: @request, style: :cards %>
 
-    <% if @message_groups.blank? %>
-
-      <%= c 'empty_state' do %>
-        <%= I18n.t 'request.no_replies' %>
-      <% end %>
-    <% else %>
-
-      <%= c 'stack' do %>
-        <%= c 'heading', tag: :h2 do %>
-          <%= I18n.t 'request.replies' %>
-        <% end %>
-
-        <% @message_groups.each do |contributor, messages| %>
-          <%= c 'chat_messages_group', contributor: contributor, messages: messages, request: @request %>
-        <% end %>
-      <% end %>
-
+    <%= c 'stack' do %>
+    <%= c 'heading', tag: :h2 do %>
+      <%= I18n.t 'request.replies' %>
     <% end %>
+    <%= c 'message_groups', request: @request, path: messages_by_contributor_request_path(@request) %>
+  <% end %>
   <% end %>
 <% end %>

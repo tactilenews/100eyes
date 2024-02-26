@@ -61,6 +61,7 @@ Rails.application.routes.draw do
   resources :requests, only: %i[index show new create edit update destroy], concerns: :paginatable do
     member do
       get 'notifications', format: /json/
+      get 'messages-by-contributor'
     end
   end
 
