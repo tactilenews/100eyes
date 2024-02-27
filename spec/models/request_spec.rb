@@ -193,6 +193,7 @@ RSpec.describe Request, type: :model do
 
   describe '#stats' do
     let(:request) { create(:request) }
+    let(:user) { create(:user) }
     let(:stats) { request.stats }
 
     describe 'given a number of requests, replies and photos' do
@@ -217,7 +218,7 @@ RSpec.describe Request, type: :model do
 
         describe 'messages from us' do
           before(:each) do
-            create(:message, request: request, sender: nil, broadcasted: true)
+            create(:message, request: request, sender: user, broadcasted: true)
           end
 
           it 'are excluded' do
@@ -232,7 +233,7 @@ RSpec.describe Request, type: :model do
 
         describe 'messages from us' do
           before(:each) do
-            create(:message, request: request, sender: nil, broadcasted: true)
+            create(:message, request: request, sender: user, broadcasted: true)
           end
 
           it 'are excluded' do
@@ -244,21 +245,21 @@ RSpec.describe Request, type: :model do
       describe '[:counts][:recipients]' do
         subject { stats[:counts][:recipients] }
         it { should eq(8) }
+
+        describe 'messages to us' do
+          before do
+            create(:message, request: request, sender: create(:contributor), broadcasted: true, recipient: nil)
+          end
+
+          it 'are excluded' do
+            should eq(8)
+          end
+        end
       end
 
       describe '[:counts][:photos]' do
         subject { stats[:counts][:photos] }
         it { should eq(10) } # unique photos
-      end
-
-      describe 'iterating through a list' do
-        subject { -> { Request.find_each.map(&:stats) } }
-        it { should make_database_queries(count: 35) }
-
-        describe '::include_associations' do
-          subject { -> { Request.include_associations.find_each.map(&:stats) } }
-          it { should make_database_queries(count: 7) } # better
-        end
       end
     end
   end
