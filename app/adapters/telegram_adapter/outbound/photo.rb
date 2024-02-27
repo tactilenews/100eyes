@@ -16,7 +16,7 @@ module TelegramAdapter
       attr_reader :telegram_id, :message
 
       def perform(contributor_id:, media:, message:)
-        contributor = Contributor.find(contributor_id)
+        contributor = Contributor.find_by(id: contributor_id)
         return unless contributor
 
         @telegram_id = contributor.telegram_id

@@ -10,7 +10,7 @@ module WhatsAppAdapter
       end
 
       def perform(contributor_id:, message:)
-        contributor = Contributor.find(contributor_id)
+        contributor = Contributor.find_by(id: contributor_id)
         return unless contributor
 
         responses = message.files.each_with_index.map do |file, index|

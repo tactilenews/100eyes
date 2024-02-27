@@ -4,7 +4,7 @@ class UnsubscribeContributorJob < ApplicationJob
   queue_as :unsubscribe_contributor
 
   def perform(contributor_id, adapter)
-    contributor = Contributor.find(contributor_id)
+    contributor = Contributor.find_by(id: contributor_id)
     return unless contributor
     return if contributor.unsubscribed_at.present?
 

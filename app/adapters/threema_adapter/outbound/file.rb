@@ -23,7 +23,7 @@ module ThreemaAdapter
       end
 
       def perform(contributor_id:, file_path:, file_name: nil, caption: nil, render_type: nil)
-        recipient = Contributor.find(contributor_id)
+        recipient = Contributor.find_by(id: contributor_id)
         return unless recipient
 
         self.class.threema_instance.send(type: :file,

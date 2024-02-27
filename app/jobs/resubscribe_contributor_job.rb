@@ -6,7 +6,7 @@ class ResubscribeContributorJob < ApplicationJob
   class ResubscribeError < StandardError; end
 
   def perform(contributor_id, adapter)
-    contributor = Contributor.find(contributor_id)
+    contributor = Contributor.find_by(id: contributor_id)
     return unless contributor
 
     if contributor.deactivated_by_user.present? || contributor.deactivated_by_admin?
