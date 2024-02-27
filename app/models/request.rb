@@ -51,7 +51,15 @@ class Request < ApplicationRecord
 
   def messages_by_contributor
     messages
-      .includes([:recipient, :sender, { photos: { attachment_attachment: :blob } }, { files: { attachment_attachment: :blob } }])
+      .includes(
+        [
+          :recipient,
+          :sender,
+          { photos: { attachment_attachment: :blob } },
+          { files: { attachment_attachment: :blob } },
+          { recipient: { avatar_attachment: :blob } }
+        ]
+      )
       .where(broadcasted: false)
       .group_by(&:contributor)
       .transform_values { |messages| messages.sort_by(&:created_at) }
