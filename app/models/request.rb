@@ -29,6 +29,7 @@ class Request < ApplicationRecord
   after_update_commit :broadcast_updated_request
 
   delegate :replies, to: :messages
+  delegate :outbound, to: :messages
 
   def personalized_text(contributor)
     replace_placeholder(text, I18n.t('request.personalization.first_name'), contributor.first_name.strip)
@@ -37,9 +38,9 @@ class Request < ApplicationRecord
   def stats
     {
       counts: {
-        recipients: messages.map(&:recipient_id).compact.uniq.size,
-        contributors: messages.includes(:sender).select(&:reply?).map(&:sender_id).compact.uniq.size,
-        photos: replies.pluck(:photos_count).sum,
+        recipients: outbound.select(:recipient_id).distinct.count,
+        contributors: replies.select(:sender_id).distinct.count,
+        photos: replies.sum(:photos_count),
         replies: replies_count
       }
     }
