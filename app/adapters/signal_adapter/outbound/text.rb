@@ -8,7 +8,7 @@ module SignalAdapter
       attr_reader :recipient, :text
 
       def perform(contributor_id:, text:)
-        @recipient = Contributor.find(contributor_id)
+        @recipient = Contributor.find_by(id: contributor_id)
         return unless @recipient
 
         @text = text

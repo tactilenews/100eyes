@@ -10,7 +10,7 @@ module WhatsAppAdapter
       end
 
       def perform(contributor_id:, text:, message: nil)
-        contributor = Contributor.find(contributor_id)
+        contributor = Contributor.find_by(id: contributor_id)
         return unless contributor
 
         response = self.class.twilio_instance.messages.create(

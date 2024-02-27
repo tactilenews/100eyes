@@ -17,7 +17,7 @@ module SignalAdapter
       def send_unknown_content_message!(contributor)
         return unless contributor_can_receive_messages?(contributor)
 
-        SignalAdapter::Outbound::Text.perform_later(contributor_id: contributor, text: Setting.signal_unknown_content_message)
+        SignalAdapter::Outbound::Text.perform_later(contributor_id: contributor.id, text: Setting.signal_unknown_content_message)
       end
 
       def send_welcome_message!(contributor)
