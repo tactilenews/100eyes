@@ -1,4 +1,4 @@
-<%= tag.turbo_frame id: 'messages', src: path do %>
+<%= tag.turbo_frame id: 'message-groups' do %>
   <% message_groups.each do |contributor, messages| %>
     <%= c 'chat_messages_group', contributor: contributor, messages: messages, request: request %>
   <% end %>

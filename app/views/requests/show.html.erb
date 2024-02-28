@@ -33,7 +33,7 @@
       <%= c 'heading', tag: :h2 do %>
         <%= I18n.t 'request.replies' %>
       <% end %>
-      <%= c 'message_groups', request: @request, path: messages_by_contributor_request_path(@request) %>
+      <%= c 'message_groups_skeleton', request_id: @request.id %>
     <% end %>
   <% end %>
 <% end %>

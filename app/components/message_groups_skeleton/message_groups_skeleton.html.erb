@@ -1,0 +1,58 @@
+<%= tag.turbo_frame id: "message-groups", src: messages_by_contributor_request_path(request_id) do %>
+  <div <%= attrs %>>
+    <header class="MessageGroupsSkeleton-header">
+      <div class="MessageGroupsSkeleton-avatar"></div>
+      <span class="MessageGroupsSkeleton-headingBackground"></span>
+      <span class="MessageGroupsSkeleton-actionsBackground"></span>
+      <span class="MessageGroupsSkeleton-actionsBackground"></span>
+    </header>
+    <article class="MessageGroupsSkeleton-itemBackground MessageGroupsSkeleton-itemBackground--left">
+      <header class="MessageGroupsSkeleton-itemHeader">
+        <div class="MessageGroupsSkeleton-avatar"></div>
+        <div class="MessageGroupsSkeleton-text"></div>
+      </header>
+      <footer>
+        <p class="MessageGroupsSkeleton-itemFooterText"></p>
+        <button class="MessageGroupsSkeleton-itemFooterButton"></button>
+        <button class="MessageGroupsSkeleton-itemFooterButton"></button>
+        <button class="MessageGroupsSkeleton-itemFooterButton"></button>
+      </footer>
+    </article>
+    <article class="MessageGroupsSkeleton-itemBackground MessageGroupsSkeleton-itemBackground--left">
+      <header class="MessageGroupsSkeleton-itemHeader">
+        <div class="MessageGroupsSkeleton-avatar"></div>
+        <div class="MessageGroupsSkeleton-text"></div>
+      </header>
+      <footer>
+        <p class="MessageGroupsSkeleton-itemFooterText"></p>
+        <button class="MessageGroupsSkeleton-itemFooterButton"></button>
+        <button class="MessageGroupsSkeleton-itemFooterButton"></button>
+        <button class="MessageGroupsSkeleton-itemFooterButton"></button>
+      </footer>
+    </article>
+    <article class="MessageGroupsSkeleton-itemBackground MessageGroupsSkeleton-itemBackground--right">
+      <header class="MessageGroupsSkeleton-itemHeader">
+        <div class="MessageGroupsSkeleton-avatar"></div>
+        <div class="MessageGroupsSkeleton-text"></div>
+      </header>
+      <footer>
+        <p class="MessageGroupsSkeleton-itemFooterText"></p>
+        <button class="MessageGroupsSkeleton-itemFooterButton"></button>
+        <button class="MessageGroupsSkeleton-itemFooterButton"></button>
+        <button class="MessageGroupsSkeleton-itemFooterButton"></button>
+      </footer>
+    </article>
+    <article class="MessageGroupsSkeleton-itemBackground MessageGroupsSkeleton-itemBackground--left">
+      <header class="MessageGroupsSkeleton-itemHeader">
+        <div class="MessageGroupsSkeleton-avatar"></div>
+        <div class="MessageGroupsSkeleton-text"></div>
+      </header>
+      <footer>
+        <p class="MessageGroupsSkeleton-itemFooterText"></p>
+        <button class="MessageGroupsSkeleton-itemFooterButton"></button>
+        <button class="MessageGroupsSkeleton-itemFooterButton"></button>
+        <button class="MessageGroupsSkeleton-itemFooterButton"></button>
+      </footer>
+    </article>
+  </div>
+<% end %>

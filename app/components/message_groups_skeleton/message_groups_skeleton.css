@@ -1,0 +1,117 @@
+.MessageGroupsSkeleton-header {
+  align-items: center;
+  display: flex;
+  width: 100%;
+  marging-bottom: var(--spacing-unit-xs);
+}
+
+.MessageGroupsSkeleton-avatar {
+  position: relative;
+  overflow: hidden;
+  width: var(--spacing-unit-l);
+  height: var(--spacing-unit-l);
+  border-radius: 50%;
+  background: var(--color-gray-light);
+  margin-right: var(--spacing-unit-s);
+}
+
+.MessageGroupsSkeleton-headingBackground {
+  width: 10rem;
+  height: var(--spacing-unit);
+  margin-right: var(--spacing-unit);
+  background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0.5) 50%,
+      rgba(255, 255, 255, 0) 80%
+    ),
+    var(--color-gray-light);
+  border-radius: var(--border-radius-l);
+}
+
+.MessageGroupsSkeleton-actionsBackground {
+  width: 8rem;
+  height: var(--spacing-unit);
+  margin-right: var(--spacing-unit);
+  background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0.5) 50%,
+      rgba(255, 255, 255, 0) 80%
+    ),
+    var(--color-gray-light);
+  background-repeat: repeat-y;
+  background-size: 50px 500px;
+  background-position: 0 0;
+  animation: shine 1s infinite;
+  border-radius: var(--border-radius-l);
+}
+
+.MessageGroupsSkeleton-itemBackground {
+  height: 11rem;
+  display: block;
+  background: var(--color-gray-lightest);
+  margin-top: var(--spacing-unit-xs);
+  border-radius: var(--border-radius-l);
+  padding: var(--spacing-unit-s);
+}
+
+.MessageGroupsSkeleton-itemBackground--left {
+  margin-right: 20%;
+}
+
+.MessageGroupsSkeleton-itemBackground--right {
+  margin-left: 20%;
+}
+
+.MessageGroupsSkeleton-itemHeader {
+  display: flex;
+  margin-bottom: var(--spacing-unit-s);
+}
+
+.MessageGroupsSkeleton-text {
+  background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0.5) 50%,
+      rgba(255, 255, 255, 0) 80%
+    ),
+    var(--color-gray-light);
+  height: 5rem;
+  width: calc(100% - var(--spacing-unit));
+  border-radius: var(--border-radius);
+}
+
+.MessageGroupsSkeleton-itemFooterText {
+  bbackground: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0.5) 50%,
+      rgba(255, 255, 255, 0) 80%
+    ),
+    var(--color-gray-light);
+  height: var(--spacing-unit);
+  width: 60%;
+  border-radius: var(--border-radius);
+}
+
+.MessageGroupsSkeleton-itemFooterButton {
+  background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0.5) 50%,
+      rgba(255, 255, 255, 0) 80%
+    ),
+    var(--color-gray-light);
+  height: var(--spacing-unit);
+  width: 15%;
+  border: 0;
+  border-radius: var(--border-radius);
+  margin-right: var(--spacing-unit-xs);
+}
+
+@keyframes shine {
+  to {
+    background-position: 100% 0;
+  }
+}
