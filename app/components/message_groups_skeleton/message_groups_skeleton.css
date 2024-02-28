@@ -1,8 +1,13 @@
+.MessageGroupsSkeleton-mainHeadingBackground {
+  margin-bottom: var(--spacing-unit);
+  width: 10rem;
+}
+
 .MessageGroupsSkeleton-header {
   align-items: center;
   display: flex;
   width: 100%;
-  marging-bottom: var(--spacing-unit-xs);
+  margin-bottom: var(--spacing-unit-xs);
 }
 
 .MessageGroupsSkeleton-avatar {
@@ -15,8 +20,9 @@
   margin-right: var(--spacing-unit-s);
 }
 
-.MessageGroupsSkeleton-headingBackground {
-  width: 10rem;
+.MessageGroupsSkeleton-headingBackground,
+.MessageGroupsSkeleton-mainHeadingBackground {
+  width: 9rem;
   height: var(--spacing-unit);
   margin-right: var(--spacing-unit);
   background: linear-gradient(
@@ -83,7 +89,7 @@
 }
 
 .MessageGroupsSkeleton-itemFooterText {
-  bbackground: linear-gradient(
+  background: linear-gradient(
       to right,
       rgba(255, 255, 255, 0),
       rgba(255, 255, 255, 0.5) 50%,
