@@ -1,5 +1,6 @@
 .RequestRow-meta {
   display: flex;
+  justify-content: space-between;
   font-size: var(--font-size-s);
   color: var(--color-text-light);
 }
