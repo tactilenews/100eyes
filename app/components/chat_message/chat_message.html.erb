@@ -40,9 +40,6 @@
           </div>
         </div>
       <% end %>
-      <% unless photos.empty? %>
-        <%= c 'chat_message_photos', photos: photos %>
-      <% end %>
       <% unless files.empty? %>
         <% if image? %>
           <%= c 'chat_message_photos', photos: image_files %>
