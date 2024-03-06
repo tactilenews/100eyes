@@ -71,7 +71,6 @@ class Request < ApplicationRecord
       .includes(
         [
           { sender: { avatar_attachment: :blob } },
-          { photos: { attachment_attachment: :blob } },
           { files: { attachment_attachment: :blob } },
           { recipient: { avatar_attachment: :blob } }
         ]
