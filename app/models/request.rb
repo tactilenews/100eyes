@@ -56,7 +56,6 @@ class Request < ApplicationRecord
         [
           :recipient,
           :sender,
-          { photos: { attachment_attachment: :blob } },
           { files: { attachment_attachment: :blob } },
           { recipient: { avatar_attachment: :blob } }
         ]
