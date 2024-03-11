@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class RequestsController < ApplicationController
-  before_action :set_request, only: %i[show show_contributor_messages edit update notifications destroy]
+  before_action :set_request, only: %i[show show_contributor_messages edit update notifications destroy messages_by_contributor stats]
   before_action :set_contributor, only: %i[show_contributor_messages]
   before_action :notifications_params, only: :notifications
   before_action :disallow_edit, only: %i[edit update]
@@ -14,9 +14,7 @@ class RequestsController < ApplicationController
     @requests = filtered_requests.page(params[:page])
   end
 
-  def show
-    @message_groups = @request.messages_by_contributor
-  end
+  def show; end
 
   def create
     resize_image_files if request_params[:files].present?
@@ -75,6 +73,36 @@ class RequestsController < ApplicationController
     last_updated_at = Time.zone.parse(params[:last_updated_at])
     message_count = @request.replies.where('created_at >= ?', last_updated_at).count
     render json: { message_count: message_count }
+  end
+
+  def messages_by_contributor
+    @message_groups = @request.messages_by_contributor
+    render(
+      MessageGroups::MessageGroups.new(request: @request, message_groups: @message_groups), content_type: 'text/html'
+    )
+  end
+
+  def stats
+    stats = @request.stats
+    metrics = [
+      {
+        value: stats[:counts][:contributors],
+        total: stats[:counts][:recipients],
+        label: I18n.t('components.request_metrics.contributors', count: stats[:counts][:contributors]),
+        icon: 'single-03'
+      },
+      {
+        value: stats[:counts][:replies],
+        label: I18n.t('components.request_metrics.replies', count: stats[:counts][:replies]),
+        icon: 'a-chat'
+      },
+      {
+        value: stats[:counts][:photos],
+        label: I18n.t('components.request_metrics.photos', count: stats[:counts][:photos]),
+        icon: 'camera'
+      }
+    ]
+    render(InlineMetrics::InlineMetrics.new(metrics: metrics), content_type: 'text/html')
   end
 
   private

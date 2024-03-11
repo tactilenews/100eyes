@@ -1,5 +1,7 @@
-<div class="<%= class_attr %>">
-  <% metrics.each do |metric| %>
-    <%= c 'metric', **metric %>
-  <% end %>
-</div>
+<%= tag.turbo_frame id: "inline-metrics", src: path, loading: :lazy do %>
+  <div class="<%= class_attr %>">
+    <% metrics.each do |metric| %>
+      <%= c 'metric', **metric %>
+    <% end %>
+  </div>
+<% end %>
