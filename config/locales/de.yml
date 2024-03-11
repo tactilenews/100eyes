@@ -415,6 +415,9 @@ de:
         subject: "%{contributor_name} hat darum gebeten, keine weiteren Nachrichten über %{channel} von %{project_name} zu erhalten."
       contributor_resubscribed_email:
         subject: "%{contributor_name} hat erneut den Empfang von Nachrichten über %{channel} von %{project_name} angefordert."
+      welcome_message_updated:
+        subject: "%{project_name} hat seine Willkommensnachricht aktualisiert"
+        text: "Wenn die Instanz WhatsApp verwendet, muss eine neue Vorlage erstellt werden, bevor versucht wird, die Willkommensnachricht zu senden."
     whats_app:
       request_template:
         new_request_morning_1: "Guten Morgen %{first_name}, wir haben eine neue Frage zum Thema „%{request_title}“. Wenn du antworten möchtest, klicke auf 'Antworten'."
