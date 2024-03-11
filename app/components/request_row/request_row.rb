@@ -14,18 +14,18 @@ module RequestRow
     def request_metrics
       [
         {
-          value: 0,
-          total: 0,
+          value: '...',
+          total: '...',
           label: I18n.t('components.request_metrics.contributors', count: 0),
           icon: 'single-03'
         },
         {
-          value: 0,
+          value: '...',
           label: I18n.t('components.request_metrics.replies', count: 0),
           icon: 'a-chat'
         },
         {
-          value: 0,
+          value: '...',
           label: I18n.t('components.request_metrics.photos', count: 0),
           icon: 'camera'
         }
