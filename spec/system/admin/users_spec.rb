@@ -38,7 +38,7 @@ RSpec.describe 'Users' do
     end
 
     describe 'admin updates user' do
-      it 'updates, without changing encrypted password or otp_secret_key' do
+      it 'updates, without changing encrypted password' do
         visit edit_admin_user_path(user, as: user)
 
         fill_in 'First name', with: 'UpdatedZora'
@@ -48,6 +48,14 @@ RSpec.describe 'Users' do
 
         uncheck 'Otp enabled'
         expect { click_on 'Update User' }.to(change { user.reload.otp_secret_key })
+
+        visit edit_admin_user_path(user, as: user)
+
+        uncheck 'Active'
+        expect { click_on 'Update User' }.to (change { user.reload.deactivated_at }).from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+
+        expect(page).to have_current_path(admin_user_path(user))
+        expect(page).to have_text('User was successfully updated.')
       end
     end
   end

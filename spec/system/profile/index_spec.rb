@@ -9,12 +9,13 @@ RSpec.describe 'Profile' do
   let(:user) do
     create(:user, first_name: 'Daniel', last_name: 'Theis', email: email, password: password, otp_enabled: otp_enabled)
   end
+  let(:user_to_be_deactivated) { create(:user, first_name: 'User', last_name: 'ToBeDeactivated') }
   let(:current_plan) { business_plans[1] }
   let(:contact_person) { create(:user, first_name: 'Isaac', last_name: 'Bonga') }
   let(:organization) do
     create(:organization, business_plan: current_plan, contact_person: contact_person, contributors_count: 5,
                           upgrade_discount: 15).tap do |org|
-      users = [user, contact_person, create(:user)]
+      users = [user, contact_person, user_to_be_deactivated, create(:user)]
       org.users << users
       org.save!
     end
@@ -57,15 +58,20 @@ RSpec.describe 'Profile' do
 
     # user management section
     expect(page).to have_content('Dein 100eyes Team')
-    expect(page).to have_content("3 von #{current_plan.number_of_users} Seats genutzt")
+    expect(page).to have_content("4 von #{current_plan.number_of_users} Seats genutzt")
     organization.users.each do |user|
       expect(page).to have_content(user.name)
     end
     click_button 'Teammitglied hinzufügen'
     expect(page).to have_css('.CreateUserModal')
-
     click_button 'Modal schließen'
     expect(page).to have_no_css('.CreateUserModal')
+
+    user_to_be_deactivated.update(deactivated_at: Time.current)
+
+    visit profile_path(as: user)
+    expect(page).to have_content("3 von #{current_plan.number_of_users} Seats genutzt")
+    expect(page).not_to have_content(user_to_be_deactivated.name)
 
     # contributors section
     expect(page).to have_content('Deine Community')

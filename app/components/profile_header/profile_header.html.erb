@@ -3,8 +3,10 @@
     <%= t('.main_heading', business_plan_name: organization.business_plan.name) %>
   <% end %>
 
-  <%= c 'heading', style: :gamma do %>
-    <%= t('.sub_heading.contact_person', contact_person_name: organization.contact_person.name, contact_person_email: organization.contact_person.email) %>
+  <% if organization.contact_person.present? %>
+    <%= c 'heading', style: :gamma do %>
+      <%= t('.sub_heading.contact_person', contact_person_name: organization.contact_person.name, contact_person_email: organization.contact_person.email) %>
+    <% end %>
   <% end %>
 
   <%= c 'heading', style: :gamma do %>

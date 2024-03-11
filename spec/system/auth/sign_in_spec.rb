@@ -96,5 +96,28 @@ RSpec.describe 'Sign in' do
 
       expect(page).to have_current_path(dashboard_path)
     end
+
+    context 'editor has been deactivated' do
+      before { user.update(deactivated_at: Time.current) }
+
+      it 'redirects to sign in form with error message' do
+        visit sign_in_path
+
+        # Enters correct credentials
+        fill_in 'session[email]', with: 'zora@example.org'
+        fill_in 'session[password]', with: '12345678'
+        click_button 'Anmelden'
+
+        expect(page).to have_current_path(otp_auth_path)
+        expect(page).to have_text('Anmeldung bestätigen')
+
+        # Enters correct code
+        fill_in 'session[otp]', with: user.otp_code
+        click_button 'Bestätigen'
+
+        expect(page).to have_current_path(sign_in_path)
+        expect(page).to have_text('Dein Konto ist derzeit nicht aktiv, bitte kontaktierst du den Support unter support@tactile.news.')
+      end
+    end
   end
 end

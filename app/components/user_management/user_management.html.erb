@@ -2,11 +2,11 @@
   <%= c 'heading', style: :beta do %>
     <%= t('.main_heading') %>
   <% end %>
-  <p><%= t('.number_of_users_of_business_plan_used', users_count: organization.users.count, allocated_users: organization.business_plan.number_of_users) %>
+  <p><%= t('.number_of_users_of_business_plan_used', users_count: organization.users.active.count, allocated_users: organization.business_plan.number_of_users) %>
 
   <%= c 'flex', style: :firstBaseline do %>
     <ul class="UserManagement-usersList">
-      <% organization.users.each do |user| %>
+      <% organization.users.active.each do |user| %>
         <li class="UserManagement-usersListItem">
           <strong><%= user.name %></strong>
         </li>
