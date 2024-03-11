@@ -116,6 +116,7 @@ RSpec.describe WhatsApp::WebhookController do
             before do
               subject.call
               params['OriginalRepliedMessageSid'] = 'someUniqueId'
+              params['ButtonText'] = 'Antworten'
               allow(Twilio::REST::Client).to receive(:new).and_return(mock_twilio_rest_client)
               allow(mock_twilio_rest_client).to receive(:messages).with('someUniqueId').and_return(messages_double)
               allow(messages_double).to receive(:fetch).and_return(messages_double)
