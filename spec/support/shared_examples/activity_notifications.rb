@@ -10,8 +10,8 @@ RSpec.shared_examples 'an ActivityNotification' do |event_type|
 
     it 'for each user' do
       run_action(subject)
-      recipient_ids = ActivityNotification.where(type: event_type).pluck(:recipient_id).uniq
-      user_ids = User.pluck(:id)
+      recipient_ids = ActivityNotification.where(type: event_type).pluck(:recipient_id).uniq.sort
+      user_ids = User.pluck(:id).sort
       expect(recipient_ids).to eq(user_ids)
     end
   end
