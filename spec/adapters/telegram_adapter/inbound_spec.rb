@@ -69,14 +69,12 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
         it { should be_nil }
 
         describe 'when UNKNOWN_CONTRIBUTOR is registered' do
-          subject do
-            proc do |block|
+          it {
+            expect do |block|
               adapter.on(TelegramAdapter::UNKNOWN_CONTRIBUTOR, &block)
               adapter.consume(telegram_message)
-            end
-          end
-
-          it { should yield_control }
+            end.to yield_control
+          }
         end
       end
     end
@@ -127,13 +125,13 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
               message.save!
             end
           end
-          it { should change { ActiveStorage::Attachment.where(record_type: 'Message::File').count }.from(0).to(1) }
+          it { expect { subject.call }.to change { ActiveStorage::Attachment.where(record_type: 'Message::File').count }.from(0).to(1) }
         end
       end
     end
 
     describe '|message|photos' do
-      subject { message.photos }
+      subject { message.files }
       describe 'given a message without photos' do
         before { telegram_message['text'] = 'Ich bin eine normale Nachricht' }
         it { should eq([]) }
@@ -143,11 +141,15 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
         let(:telegram_message) { message_with_photo }
 
         it { should_not be_empty }
-        it { should all(be_a(Photo)) }
+        it { should all(be_a(Message::File)) }
+        describe 'content type' do
+          subject { message.files.first.attachment.content_type }
+          it { should eq('image/jpeg') }
+        end
 
         it 'chooses the largest image' do
-          photo = subject.first
-          expect(photo.attachment.blob.byte_size).to eq(20_852)
+          image = subject.first
+          expect(image.attachment.blob.byte_size).to eq(20_852)
         end
 
         describe 'assigning a request and calling #save! on the message' do
@@ -161,12 +163,12 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
             end
           end
 
-          it { is_expected.to(change { Message.count }.from(0).to(1)) }
+          it { expect { subject.call }.to(change { Message.count }.from(0).to(1)) }
 
           describe 'given the contributor sends a series of images as album', vcr: { cassette_name: :photo_album } do
             let(:telegram_message) { message_with_photo.merge(media_group_id: '42') }
             it { expect { 3.times { subject.call } }.to(change { Message.count }.from(0).to(1)) }
-            it { expect { 3.times { subject.call } }.to(change { Photo.count }.from(0).to(3)) }
+            it { expect { 3.times { subject.call } }.to(change { Message::File.count }.from(0).to(3)) }
           end
         end
       end

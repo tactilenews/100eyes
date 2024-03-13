@@ -281,11 +281,11 @@ RSpec.describe Request, type: :model do
         create(:contributor, id: 2, email: nil, telegram_id: 22)
       end
 
-      it { should change { Message.count }.from(0).to(2) }
-      it { should change { Message.pluck(:recipient_id) }.from([]).to([2, 1]) }
-      it { should change { Message.pluck(:sender_id) }.from([]).to([request.user.id, request.user.id]) }
-      it { should change { Message.pluck(:broadcasted) }.from([]).to([true, true]) }
-      it { should change { Message::File.count }.from(0).to(2) }
+      it { expect { subject.call }.to  change { Message.count }.from(0).to(2) }
+      it { expect { subject.call }.to  change { Message.pluck(:recipient_id) }.from([]).to([2, 1]) }
+      it { expect { subject.call }.to  change { Message.pluck(:sender_id) }.from([]).to([request.user.id, request.user.id]) }
+      it { expect { subject.call }.to  change { Message.pluck(:broadcasted) }.from([]).to([true, true]) }
+      it { expect { subject.call }.to  change { Message::File.count }.from(0).to(2) }
     end
 
     describe 'creates message only for contributors tagged with tag_list' do
@@ -302,10 +302,10 @@ RSpec.describe Request, type: :model do
         create(:contributor, id: 2, email: nil, telegram_id: 22)
       end
 
-      it { should change { Message.count }.from(0).to(1) }
-      it { should change { Message.pluck(:recipient_id) }.from([]).to([1]) }
-      it { should change { Message.pluck(:sender_id) }.from([]).to([request.user.id]) }
-      it { should change { Message.pluck(:broadcasted) }.from([]).to([true]) }
+      it { expect { subject.call }.to change { Message.count }.from(0).to(1) }
+      it { expect { subject.call }.to change { Message.pluck(:recipient_id) }.from([]).to([1]) }
+      it { expect { subject.call }.to change { Message.pluck(:sender_id) }.from([]).to([request.user.id]) }
+      it { expect { subject.call }.to change { Message.pluck(:broadcasted) }.from([]).to([true]) }
     end
 
     describe 'given contributors who are deactivated' do
@@ -315,10 +315,10 @@ RSpec.describe Request, type: :model do
         create(:contributor, id: 5, telegram_id: 24, active: false)
       end
 
-      it { should change { Message.count }.from(0).to(1) }
-      it { should change { Message.pluck(:recipient_id) }.from([]).to([4]) }
-      it { should change { Message.pluck(:sender_id) }.from([]).to([request.user.id]) }
-      it { should change { Message.pluck(:broadcasted) }.from([]).to([true]) }
+      it { expect { subject.call }.to change { Message.count }.from(0).to(1) }
+      it { expect { subject.call }.to change { Message.pluck(:recipient_id) }.from([]).to([4]) }
+      it { expect { subject.call }.to change { Message.pluck(:sender_id) }.from([]).to([request.user.id]) }
+      it { expect { subject.call }.to change { Message.pluck(:broadcasted) }.from([]).to([true]) }
     end
   end
 

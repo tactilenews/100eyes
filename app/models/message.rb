@@ -11,7 +11,6 @@ class Message < ApplicationRecord
   belongs_to :recipient, class_name: 'Contributor', optional: true
   belongs_to :creator, class_name: 'User', optional: true
   belongs_to :request
-  has_many :photos, dependent: :destroy
   has_many :files, dependent: :destroy, class_name: 'Message::File'
   has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
 
