@@ -117,7 +117,9 @@ module WhatsAppAdapter
       text = whats_app_message[:body]
       return false if request_for_more_info?(text) || unsubscribe_text?(text) || resubscribe_text?(text)
 
-      contributor.whats_app_message_template_sent_at.present? || whats_app_message[:original_replied_message_sid]
+      contributor.whats_app_message_template_sent_at.present? ||
+        (whats_app_message[:original_replied_message_sid] &&
+        whats_app_message[:button_text].eql?(I18n.t('adapter.whats_app.quick_reply_button_text.answer')))
     end
 
     def quick_reply_response?(text)
