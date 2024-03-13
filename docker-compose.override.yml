@@ -35,8 +35,6 @@ services:
   assets:
     command: npm run dev
     <<: *x-dev-defaults
-    volumes:
-      - ./app/src:/usr/src/app/src
 
   job-worker:
     <<: *x-dev-defaults
