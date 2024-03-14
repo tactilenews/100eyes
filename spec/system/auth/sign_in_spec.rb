@@ -116,7 +116,7 @@ RSpec.describe 'Sign in' do
         click_button 'Bestätigen'
 
         expect(page).to have_current_path(sign_in_path)
-        expect(page).to have_text('Dein Konto ist derzeit nicht aktiv, bitte kontaktierst du den Support unter support@tactile.news.')
+        expect(page).to have_text('Dein Konto ist derzeit nicht aktiv, bitte kontaktiere den Support unter support@tactile.news')
       end
     end
   end
