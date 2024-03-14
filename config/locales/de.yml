@@ -680,6 +680,7 @@ de:
   sessions:
     errors:
       otp_incorrect: "Der 6-stellige Anmeldecode ist nicht korrekt."
+      deactivated_user: Dein Konto ist derzeit nicht aktiv, bitte kontaktiere den Support unter support@tactile.news
 
   activerecord:
     errors:

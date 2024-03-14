@@ -11,7 +11,9 @@ class UserDashboard < Administrate::BaseDashboard
     admin: Field::Boolean,
     otp_enabled: Field::Boolean.with_options(searchable: false),
     created_at: Field::DateTime,
-    updated_at: Field::DateTime
+    updated_at: Field::DateTime,
+    deactivated_at: Field::DateTime,
+    active: Field::Boolean
   }.freeze
 
   COLLECTION_ATTRIBUTES = %i[
@@ -21,6 +23,7 @@ class UserDashboard < Administrate::BaseDashboard
     email
     admin
     otp_enabled
+    active
   ].freeze
 
   SHOW_PAGE_ATTRIBUTES = %i[
@@ -32,6 +35,7 @@ class UserDashboard < Administrate::BaseDashboard
     otp_enabled
     created_at
     updated_at
+    deactivated_at
   ].freeze
 
   FORM_ATTRIBUTES = %i[
@@ -40,6 +44,7 @@ class UserDashboard < Administrate::BaseDashboard
     email
     admin
     otp_enabled
+    active
   ].freeze
 
   COLLECTION_FILTERS = {}.freeze

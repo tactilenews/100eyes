@@ -10,8 +10,10 @@ class OtpAuthController < ApplicationController
   def show; end
 
   def create
-    if @user.authenticate_otp(params[:session][:otp], drift: 30)
+    if @user.authenticate_otp(params[:session][:otp], drift: 30) && @user.active?
       sign_in(@user)
+    elsif @user.inactive?
+      redirect_to sign_in_path, flash: { alert: I18n.t('sessions.errors.deactivated_user') }
     else
       flash.now.alert = I18n.t('sessions.errors.otp_incorrect')
       render :show, status: :unauthorized
