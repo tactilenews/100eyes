@@ -38,7 +38,10 @@ FactoryBot.modify do
 end
 
 Rails.logger.debug 'Seeding requests..'
-requests = FactoryBot.create_list(:request, request_count)
+requests = FactoryBot.build_list(:request, request_count) do |request|
+  request.class.skip_callback(:create, :after, :broadcast_request, raise: false)
+  request.save!
+end
 
 Rails.logger.debug 'Seeding contributors..'
 contributors = FactoryBot.create_list(:contributor, contributors_count)
@@ -58,4 +61,7 @@ FactoryBot.modify do
 end
 
 Rails.logger.debug 'Seeding messages..'
-FactoryBot.create_list(:message, message_count)
+FactoryBot.build_list(:message, message_count) do |message|
+  message.class.skip_callback(:create, :after, :send_if_outbound, raise: false)
+  message.save!
+end

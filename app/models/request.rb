@@ -24,7 +24,7 @@ class Request < ApplicationRecord
 
   acts_as_taggable_on :tags
 
-  after_create { Request.broadcast!(self) }
+  after_create :broadcast_request
 
   after_update_commit :broadcast_updated_request
 
@@ -95,6 +95,10 @@ class Request < ApplicationRecord
   end
 
   private
+
+  def broadcast_request
+    Request.broadcast!(self)
+  end
 
   def broadcast_updated_request
     return unless saved_change_to_schedule_send_for?
