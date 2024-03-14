@@ -70,6 +70,13 @@ RSpec.describe 'Onboarding::Signal', type: :request do
       should_not enqueue_job(SignalAdapter::Outbound).with(message: Message.new(text: anything), recipient: anything)
     end
 
+    it 'enqueues a job to create a contact for the contributor' do
+      should(enqueue_job(SignalAdapter::CreateContactJob).with do |contributor|
+        expect(contributor.first_name).to eq attrs[:first_name]
+        expect(contributor.signal_phone_number).to eq attrs[:signal_phone_number]
+      end)
+    end
+
     it 'redirects to onboarding signal link page' do
       subject.call
       expect(response).to redirect_to onboarding_signal_link_path
