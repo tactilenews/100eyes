@@ -8,7 +8,7 @@
 -%>
 <% if params[:path] %>
   <%= paginator.render do -%>
-    <%= c 'pagination', current_page: current_page, remote: remote, pages: each_page, path: params[:path] %>
+    <%= c 'pagination', current_page: current_page, remote: remote, pages: each_page, path: params[:path], query: params[:query] %>
   <% end -%>
 <% else %>
   <%# administrate gem uses kaminari under the hood and trying to render our component results in an error: undefined method `c' for #<Kaminari::Helpers::Paginator %>
