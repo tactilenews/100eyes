@@ -1,5 +1,6 @@
 .RequestRow-meta {
   display: flex;
+  justify-content: space-between;
   font-size: var(--font-size-s);
   color: var(--color-text-light);
 }
@@ -24,6 +25,11 @@
 .RequestRow-editableWrapper {
   display: flex;
   justify-content: space-between;
+}
+
+.RequestRow-editableWrapper .Icon:first-of-type {
+  margin-left: auto;
+  margin-right: var(--spacing-unit-s);
 }
 
 .RequestRow:target {

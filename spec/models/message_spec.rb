@@ -110,6 +110,7 @@ RSpec.describe Message, type: :model do
     describe 'given a recipient with telegram' do
       before do
         recipient.update(telegram_id: 11)
+        allow(Telegram.bot).to receive(:send_message).and_return({})
       end
 
       describe '#blocked' do
@@ -121,11 +122,8 @@ RSpec.describe Message, type: :model do
 
         it { should be(false) }
         describe 'but if contributor blocked the telegram bot' do
-          before(:each) { allow(Telegram.bot).to receive(:send_message).and_raise(Telegram::Bot::Forbidden) }
-          it '' do
-            # binding.pry
-            should be(true)
-          end
+          before { allow(Telegram.bot).to receive(:send_message).and_raise(Telegram::Bot::Forbidden) }
+          it { should be(true) }
         end
       end
     end
@@ -138,6 +136,26 @@ RSpec.describe Message, type: :model do
       end
 
       it_behaves_like 'an ActivityNotification', 'MessageReceived'
+    end
+  end
+
+  describe '::counter_culture_fix_counts' do
+    let(:request) { create(:request) }
+
+    subject do
+      described_class.counter_culture_fix_counts
+      request.reload
+    end
+
+    describe 'fixes replies counter' do
+      before do
+        create(:message, :inbound, request: request)
+        create(:message, :outbound, request: request)
+        create(:message, :inbound) # another requst
+        request.update(replies_count: 4711)
+      end
+
+      it { expect { subject }.to (change { request.replies_count }).from(4711).to(1) }
     end
   end
 end

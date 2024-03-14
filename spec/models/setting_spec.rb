@@ -52,4 +52,86 @@ RSpec.describe Setting, type: :model do
       end
     end
   end
+
+  context '::onboarding_success_*' do
+    let!(:users) { create_list(:user, 2) }
+    let!(:admin) { create_list(:user, 3, admin: true) }
+    let(:param) { 'new value' }
+
+    describe 'onboarding_success_heading' do
+      let(:default_value) { File.read(File.join('config', 'locales', 'onboarding', 'success_heading.txt')) }
+
+      context 'getter' do
+        subject { Setting.send(method) }
+
+        let(:method) { :onboarding_success_heading }
+
+        it { is_expected.to eq(default_value) }
+      end
+
+      context 'setter' do
+        subject { Setting.send(method, param) }
+
+        let(:method) { 'onboarding_success_heading=' }
+
+        context 'setter other than onboarding_success_*' do
+          let(:method) { 'project_name=' }
+
+          it 'does not notify admin' do
+            expect { subject }.not_to have_enqueued_job
+          end
+        end
+
+        it 'updates the value' do
+          expect { subject }.to change(Setting, :onboarding_success_heading).from(default_value).to(param)
+        end
+
+        it 'sends an email to all admin that the value was updated' do
+          expect { subject }.to have_enqueued_job.on_queue('default').with(
+            'PostmarkAdapter::Outbound',
+            'welcome_message_updated_email',
+            'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
+            {
+              params: { admin: an_instance_of(User) },
+              args: []
+            }
+          ).exactly(3).times
+        end
+      end
+    end
+
+    describe 'onboarding_success_text' do
+      let(:default_value) { File.read(File.join('config', 'locales', 'onboarding', 'success_text.txt')) }
+
+      context 'getter' do
+        subject { Setting.send(method) }
+
+        let(:method) { :onboarding_success_text }
+
+        it { is_expected.to eq(default_value) }
+      end
+
+      context 'setter' do
+        subject { Setting.send(method, param) }
+
+        let(:method) { 'onboarding_success_text=' }
+
+        it 'updates the value' do
+          expect { subject }.to change(Setting, :onboarding_success_text).from(default_value).to(param)
+        end
+
+        it 'sends an email to all admin that the value was updated' do
+          expect { subject }.to have_enqueued_job.on_queue('default').with(
+            'PostmarkAdapter::Outbound',
+            'welcome_message_updated_email',
+            'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
+            {
+              params: { admin: an_instance_of(User) },
+              args: []
+            }
+          ).exactly(3).times
+        end
+      end
+    end
+  end
 end

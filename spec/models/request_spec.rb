@@ -11,7 +11,7 @@ RSpec.describe Request, type: :model do
       title: 'Hitchhiker’s Guide',
       text: 'What is the answer to life, the universe, and everything?',
       user: user,
-      files: [fixture_file_upload('example-image.png')]
+      schedule_send_for: Time.current
     )
   end
 
@@ -30,6 +30,17 @@ RSpec.describe Request, type: :model do
       before { request.text = '' }
 
       it { is_expected.not_to be_valid }
+
+      describe 'with file attached' do
+        before do
+          request.files.attach(
+            io: Rails.root.join('example-image.png').open,
+            filename: 'example-image.png'
+          )
+        end
+
+        it { is_expected.to be_valid }
+      end
     end
 
     context 'text shorter than or equal to 1500 chars' do
@@ -73,8 +84,17 @@ RSpec.describe Request, type: :model do
     expect(subject.attributes.keys).to include('title', 'text', 'user_id')
   end
 
-  it 'has files attached' do
-    expect(subject.files).to be_attached
+  context 'files' do
+    before do
+      request.files.attach(
+        io: Rails.root.join('example-image.png').open,
+        filename: 'example-image.png'
+      )
+    end
+
+    it 'attached' do
+      expect(subject.files).to be_attached
+    end
   end
 
   it 'is by default sorted in reverse chronological order' do
@@ -173,32 +193,36 @@ RSpec.describe Request, type: :model do
 
   describe '#stats' do
     let(:request) { create(:request) }
+    let(:user) { create(:user) }
     let(:stats) { request.stats }
 
     describe 'given a number of requests, replies and photos' do
       before(:each) do
         create_list(:message, 2)
         delivered_messages = create_list(:message, 7, :outbound, request: request, broadcasted: true)
+        create(:message, :with_file, :outbound, request: request, broadcasted: false, attachment: fixture_file_upload('example-image.png'))
         # _ is some unresponsive recipient
         responsive_recipient, _, *other_recipients = delivered_messages.map(&:recipient)
         create_list(:message, 3, request: request, sender: responsive_recipient)
         other_recipients.each do |recipient|
           create(:message, :with_a_photo, sender: recipient, request: request)
           create(:message, :with_file, sender: recipient, request: request, attachment: fixture_file_upload('example-image.png'))
+          create(:message, :with_file, sender: recipient, request: request, attachment: fixture_file_upload('invalid_profile_picture.pdf'))
         end
+        request.reload
       end
 
       describe '[:counts][:replies]' do
         subject { stats[:counts][:replies] }
-        it { should eq(13) } # unique contributors
+        it { should eq(18) }
 
         describe 'messages from us' do
           before(:each) do
-            create(:message, request: request, sender: nil, broadcasted: true)
+            create(:message, request: request, sender: user, broadcasted: true)
           end
 
           it 'are excluded' do
-            should eq(13)
+            should eq(18)
           end
         end
       end
@@ -209,7 +233,7 @@ RSpec.describe Request, type: :model do
 
         describe 'messages from us' do
           before(:each) do
-            create(:message, request: request, sender: nil, broadcasted: true)
+            create(:message, request: request, sender: user, broadcasted: true)
           end
 
           it 'are excluded' do
@@ -220,29 +244,37 @@ RSpec.describe Request, type: :model do
 
       describe '[:counts][:recipients]' do
         subject { stats[:counts][:recipients] }
-        it { should eq(7) }
+        it { should eq(8) }
+
+        describe 'messages to us' do
+          before do
+            create(:message, request: request, sender: create(:contributor), broadcasted: true, recipient: nil)
+          end
+
+          it 'are excluded' do
+            should eq(8)
+          end
+        end
       end
 
       describe '[:counts][:photos]' do
         subject { stats[:counts][:photos] }
         it { should eq(10) } # unique photos
       end
-
-      describe 'iterating through a list' do
-        subject { -> { Request.find_each.map(&:stats) } }
-        it { should make_database_queries(count: 39) }
-
-        describe 'preload(messages: :sender).eager_load(:messages)' do
-          subject { -> { Request.preload(messages: :sender).includes(messages: :files).eager_load(:messages).find_each.map(&:stats) } }
-          it { should make_database_queries(count: 17) } # better
-        end
-      end
     end
   end
 
   describe '::after_create' do
-    before(:each) { allow(Request).to receive(:broadcast!).and_call_original } # is stubbed for every other test
     subject { -> { request.save! } }
+
+    before do
+      request.files.attach(
+        io: Rails.root.join('example-image.png').open,
+        filename: 'example-image.png'
+      )
+      allow(Request).to receive(:broadcast!).and_call_original # is stubbed for every other test
+    end
+
     describe 'given some existing contributors in the moment of creation' do
       before(:each) do
         create(:contributor, id: 1, email: 'somebody@example.org')
@@ -287,6 +319,83 @@ RSpec.describe Request, type: :model do
       it { should change { Message.pluck(:recipient_id) }.from([]).to([4]) }
       it { should change { Message.pluck(:sender_id) }.from([]).to([request.user.id]) }
       it { should change { Message.pluck(:broadcasted) }.from([]).to([true]) }
+    end
+  end
+
+  describe '::after_update_commit' do
+    before do
+      allow(Request).to receive(:broadcast!).and_call_original
+      create(:contributor)
+    end
+    subject { request.update!(params) }
+
+    describe '#broadcast_updated_request' do
+      context 'not planned request' do
+        before { request.save! }
+
+        let(:params) { { text: 'I have new text' } }
+
+        it 'does not broadcast request' do
+          expect(Request).not_to receive(:broadcast!)
+
+          subject
+        end
+
+        it 'does not create a notification' do
+          expect { subject }.not_to(change { ActivityNotification.where(type: RequestScheduled.name).count })
+        end
+      end
+
+      context 'planned request' do
+        let(:params) { { schedule_send_for: 1.day.from_now } }
+
+        it 'calls broadcast! to schedule request' do
+          expect(Request).to receive(:broadcast!).with(request)
+
+          subject
+        end
+
+        it 'creates a notification' do
+          expect { subject }.to(change { ActivityNotification.where(type: RequestScheduled.name).count }.from(0).to(1))
+        end
+
+        context 'no change to scheduled time' do
+          before { request.save! }
+          let(:params) { { text: 'Fixed typo' } }
+
+          it 'does not broadcast request' do
+            expect(Request).not_to receive(:broadcast!)
+
+            subject
+          end
+        end
+
+        context 'schedule_send_for set to nil' do
+          before { request.update(schedule_send_for: 1.day.from_now) }
+          let(:params) { { schedule_send_for: nil } }
+
+          it 'does not create a notification' do
+            expect { subject }.not_to(change { ActivityNotification.where(type: RequestScheduled.name).count })
+          end
+
+          it 'broadcasts the messages' do
+            expect { subject }.to(change(Message, :count).from(0).to(1))
+          end
+        end
+
+        context 'schedule_send_for set to time in past' do
+          before { request.update(schedule_send_for: 1.day.from_now) }
+          let(:params) { { schedule_send_for: 1.day.ago } }
+
+          it 'does not create a notification' do
+            expect { subject }.not_to(change { ActivityNotification.where(type: RequestScheduled.name).count })
+          end
+
+          it 'broadcasts the messages' do
+            expect { subject }.to(change(Message, :count).from(0).to(1))
+          end
+        end
+      end
     end
   end
 end

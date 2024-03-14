@@ -1,0 +1,5 @@
+---
+- name: Set Telegram webhook
+  command:
+    cmd: docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec app bin/rails telegram:bot:set_webhook
+    chdir: /home/ansible

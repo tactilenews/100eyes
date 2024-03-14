@@ -112,6 +112,22 @@
   padding: var(--input-padding);
 }
 
+.Button--warning {
+  --background-color: var(--color-orange-lightest);
+  --border-color: var(--color-orange);
+  --text-color: var(--color-orange-darkest);
+}
+
+.Button--destroy {
+  --background-color: var(--color-red-lightest);
+  --border-color: var(--color-red);
+  --text-color: var(--color-red-dark);
+}
+
+.Button--destroy:focus {
+  --color-focus: var(--color-red-light);
+}
+
 .Button:disabled {
   background-color: var(--color-gray);
   pointer-events: none;

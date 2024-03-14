@@ -1,0 +1,12 @@
+.DestroyPlannedRequestModal-footer {
+  display: flex;
+  margin-top: var(--spacing-unit);
+}
+
+.DestroyPlannedRequestModal-footer .Button:first-child {
+  margin-right: var(--spacing-unit-xs);
+}
+
+.DestroyPlannedRequestModal-footer .Button:last-child {
+  margin-left: var(--spacing-unit-xs);
+}

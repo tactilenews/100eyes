@@ -1,0 +1,21 @@
+.ContributorsIndex-filterSection {
+  padding: 0;
+}
+
+.ContributorsIndex-filterSectionLabel {
+  font-size: 1.25rem;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.ContributorsIndex-filterSection .TagsInput {
+  margin: var(--spacing-unit-s) 0;
+}
+
+.ContributorsIndex-filterSection .Button {
+  margin-right: var(--spacing-unit-s);
+}
+
+.ContributorsIndex-toggleFilterSectionButton.TabBar-item {
+  margin-left: calc(1.5 * var(--spacing-unit-xl));
+}

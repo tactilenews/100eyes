@@ -24,8 +24,8 @@
     DOCKER_IMAGE_TAG: "{{ docker_image_tag }}"
     RAILS_ENV: "{{ rails.environment }}"
     HUNDRED_EYES_PROJECT_NAME: "{{ rails.hundred_eyes_project_name }}"
-    TELEGRAM_BOT_API_KEY: "{{ rails.telegram_bot.api_key }}"
-    TELEGRAM_BOT_USERNAME: "{{ rails.telegram_bot.username }}"
+    TELEGRAM_BOT_API_KEY: "{{ rails.telegram_bot.api_key | default('') }}"
+    TELEGRAM_BOT_USERNAME: "{{ rails.telegram_bot.username | default('') }}"
     POSTGRES_HOST: "{{ postgres_host }}"
     POSTGRES_PORT: "{{ postgres_port }}"
     POSTGRES_USER: "{{ postgres_user }}"
@@ -41,18 +41,22 @@
     SECRET_KEY_BASE: "{{ rails.secret_key_base }}"
     RAILS_INBOUND_EMAIL_PASSWORD: "{{ rails.inbound_email_password }}"
     CF_DNS_API_TOKEN: "{{ traefik.cloudflare_dns_api_token }}"
-    THREEMARB_API_IDENTITY: "{{ rails.threema.api_identity }}"
-    THREEMARB_API_SECRET: "{{ rails.threema.api_secret }}"
-    THREEMARB_PRIVATE: "{{ rails.threema.private_key }}"
+    THREEMARB_API_IDENTITY: "{{ rails.threema.api_identity | default('') }}"
+    THREEMARB_API_SECRET: "{{ rails.threema.api_secret | default('') }}"
+    THREEMARB_PRIVATE: "{{ rails.threema.private_key | default('') }}"
     SIGNAL_SERVER_PHONE_NUMBER: "{{ rails.signal.server_phone_number | default('') }}"
     SIGNAL_MONITORING_URL: "{{ rails.signal.monitoring_url | default('') }}"
     SENTRY_DSN: "{{ rails.sentry.dsn }}"
     ONBOARDING_SHOW_GDPR_MODAL: "{{ rails.onboarding.show_gdpr_modal | default('') | string | lower }}"
     WHATS_APP_SERVER_PHONE_NUMBER: "{{ rails.whats_app.server_phone_number | default('') }}"
-    TWILIO_ACCOUNT_SID: "{{ rails.twilio.account_sid }}"
-    TWILIO_AUTH_TOKEN: "{{ rails.twilio.auth_token }}"
-    TWILIO_API_KEY_SID: "{{ rails.twilio.api_key.sid }}"
-    TWILIO_API_KEY_SECRET: "{{ rails.twilio.api_key.secret }}"
+    TWILIO_ACCOUNT_SID: "{{ rails.twilio.account_sid | default('') }}"
+    TWILIO_AUTH_TOKEN: "{{ rails.twilio.auth_token | default('') }}"
+    TWILIO_API_KEY_SID: "{{ rails.twilio.api_key.sid | default('') }}"
+    TWILIO_API_KEY_SECRET: "{{ rails.twilio.api_key.secret | default('') }}"
+    THREE_SIXTY_DIALOG_PARTNER_ID: "{{ rails.three_sixty_dialog.partner.id | default('') }}"
+    THREE_SIXTY_DIALOG_PARTNER_USERNAME: "{{ rails.three_sixty_dialog.partner.username | default('') }}"
+    THREE_SIXTY_DIALOG_PARTNER_PASSWORD: "{{ rails.three_sixty_dialog.partner.password | default('') }}"
+
   community.general.docker_compose:
     project_src: /home/ansible
     build: no
@@ -71,9 +75,4 @@
 - name: Create and migrate database
   command:
     cmd: docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec app bin/rails db:migrate
-    chdir: /home/ansible
-
-- name: Set Telegram webhook
-  command:
-    cmd: docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec app bin/rails telegram:bot:set_webhook
     chdir: /home/ansible

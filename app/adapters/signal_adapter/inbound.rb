@@ -4,6 +4,9 @@ module SignalAdapter
   UNKNOWN_CONTRIBUTOR = :unknown_contributor
   UNKNOWN_CONTENT = :unknown_content
   CONNECT = :connect
+  UNSUBSCRIBE_CONTRIBUTOR = :unsubscribe_contributor
+  RESUBSCRIBE_CONTRIBUTOR = :resubscribe_contributor
+  HANDLE_DELIVERY_RECEIPT = :handle_delivery_receipt
 
   class Inbound
     UNKNOWN_CONTENT_KEYS = %w[mentions contacts sticker].freeze
@@ -25,14 +28,19 @@ module SignalAdapter
       @sender = initialize_sender(signal_message)
       return unless @sender
 
+      delivery_receipt = initialize_delivery_receipt(signal_message)
+      return if delivery_receipt
+
+      remove_emoji = signal_message.dig(:envelope, :dataMessage, :reaction, :isRemove)
+      return if remove_emoji
+
       @message = initialize_message(signal_message)
       return unless @message
 
       files = initialize_files(signal_message)
       @message.files = files
 
-      has_content = @message.text || @message.files.any? || @message.unknown_content
-      return unless has_content
+      return unless create_message?
 
       yield(@message) if block_given?
     end
@@ -63,15 +71,24 @@ module SignalAdapter
       sender
     end
 
+    def initialize_delivery_receipt(signal_message)
+      delivery_receipt = signal_message.dig(:envelope, :receiptMessage)
+      return nil unless delivery_receipt
+
+      trigger(HANDLE_DELIVERY_RECEIPT, delivery_receipt, sender)
+      delivery_receipt
+    end
+
     def initialize_message(signal_message)
       is_data_message = signal_message.dig(:envelope, :dataMessage)
-      is_remove_emoji = signal_message.dig(:envelope, :dataMessage, :reaction, :isRemove)
-      return nil if !is_data_message || is_remove_emoji
+      return nil unless is_data_message
 
       data_message = signal_message.dig(:envelope, :dataMessage)
       reaction = data_message[:reaction]
 
       message_text = reaction ? reaction[:emoji] : data_message[:message]
+      trigger(UNSUBSCRIBE_CONTRIBUTOR, sender) if unsubscribe_text?(message_text)
+      trigger(RESUBSCRIBE_CONTRIBUTOR, sender) if resubscribe_text?(message_text)
 
       message = Message.new(text: message_text, sender: sender)
       message.raw_data.attach(
@@ -117,6 +134,20 @@ module SignalAdapter
       )
 
       file
+    end
+
+    def unsubscribe_text?(text)
+      text&.downcase&.strip.eql?(I18n.t('adapter.shared.unsubscribe.text'))
+    end
+
+    def resubscribe_text?(text)
+      text&.downcase&.strip.eql?(I18n.t('adapter.shared.resubscribe.text'))
+    end
+
+    def create_message?
+      has_non_text_content = message.files.any? || message.unknown_content
+      text = message.text
+      has_non_text_content || (text.present? && !unsubscribe_text?(text) && !resubscribe_text?(text))
     end
   end
 end

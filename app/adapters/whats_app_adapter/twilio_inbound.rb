@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
 module WhatsAppAdapter
-  UNKNOWN_CONTRIBUTOR = :unknown_contributor
-  UNSUPPORTED_CONTENT = :unsupported_content
-  RESPONDING_TO_TEMPLATE_MESSAGE = :responding_to_template_message
-  UNSUBSCRIBE_CONTRIBUTOR = :unsubscribe_contributor
-  SUBSCRIBE_CONTRIBUTOR = :subscribe_contributor
-
-  class Inbound
-    SUPPORTED_ATTACHMENT_TYPES = %w[image/jpg image/jpeg image/png image/gif audio/ogg video/mp4].freeze
+  class TwilioInbound
+    UNKNOWN_CONTRIBUTOR = :unknown_contributor
+    UNSUPPORTED_CONTENT = :unsupported_content
+    REQUEST_FOR_MORE_INFO = :request_for_more_info
+    REQUEST_TO_RECEIVE_MESSAGE = :request_to_receive_message
+    UNSUBSCRIBE_CONTRIBUTOR = :unsubscribe_contributor
+    RESUBSCRIBE_CONTRIBUTOR = :resubscribe_contributor
     UNSUPPORTED_CONTENT_TYPES = %w[application text/vcard latitude longitude].freeze
 
     attr_reader :sender, :text, :message
@@ -62,10 +61,13 @@ module WhatsAppAdapter
 
     def initialize_message(whats_app_message)
       message_text = whats_app_message[:body]
+      original_replied_message_sid = whats_app_message[:original_replied_message_sid]
 
-      trigger(RESPONDING_TO_TEMPLATE_MESSAGE, sender, message_text) if sender.whats_app_template_message_sent_at.present?
+      trigger(REQUEST_FOR_MORE_INFO, sender) if request_for_more_info?(message_text)
       trigger(UNSUBSCRIBE_CONTRIBUTOR, sender) if unsubscribe_text?(message_text)
-      trigger(SUBSCRIBE_CONTRIBUTOR, sender) if subscribe_text?(message_text)
+      trigger(RESUBSCRIBE_CONTRIBUTOR, sender) if resubscribe_text?(message_text)
+      trigger(REQUEST_TO_RECEIVE_MESSAGE, sender, original_replied_message_sid) if request_to_receive_message?(sender, whats_app_message)
+
       message = Message.new(text: message_text, sender: sender)
       message.raw_data.attach(
         io: StringIO.new(JSON.generate(whats_app_message)),
@@ -107,6 +109,19 @@ module WhatsAppAdapter
       end
     end
 
+    def request_for_more_info?(text)
+      text.strip.eql?(I18n.t('adapter.whats_app.quick_reply_button_text.more_info'))
+    end
+
+    def request_to_receive_message?(contributor, whats_app_message)
+      text = whats_app_message[:body]
+      return false if request_for_more_info?(text) || unsubscribe_text?(text) || resubscribe_text?(text)
+
+      contributor.whats_app_message_template_sent_at.present? ||
+        (whats_app_message[:original_replied_message_sid] &&
+        whats_app_message[:button_text].eql?(I18n.t('adapter.whats_app.quick_reply_button_text.answer')))
+    end
+
     def quick_reply_response?(text)
       quick_reply_keys = %w[answer more_info]
       quick_reply_texts = []
@@ -117,17 +132,17 @@ module WhatsAppAdapter
     end
 
     def unsubscribe_text?(text)
-      text.downcase.strip.eql?(I18n.t('adapter.whats_app.unsubscribe.text'))
+      text&.downcase&.strip.eql?(I18n.t('adapter.shared.unsubscribe.text'))
     end
 
-    def subscribe_text?(text)
-      text.downcase.strip.eql?(I18n.t('adapter.whats_app.subscribe.text'))
+    def resubscribe_text?(text)
+      text&.downcase&.strip.eql?(I18n.t('adapter.shared.resubscribe.text'))
     end
 
     def create_message?
       has_non_text_content = message.files.any? || message.unknown_content
       text = message.text
-      has_non_text_content || (message.text && !quick_reply_response?(text) && !unsubscribe_text?(text) && !subscribe_text?(text))
+      has_non_text_content || (text.present? && !quick_reply_response?(text) && !unsubscribe_text?(text) && !resubscribe_text?(text))
     end
   end
 end

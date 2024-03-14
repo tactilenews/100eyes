@@ -1,15 +1,20 @@
 <a class="<%= class_attr %>" href="<%= link %>">
-  <div class="Excerpt-header">
-    <div class="Excerpt-title">
-      <%= c 'heading', tag: :h3 do %>
-        <%= title %>
-      <% end %>
+  <% if sender %>
+    <%= c 'avatar', record: sender %>
+  <% end %>
+  <div class="Excerpt-infoWrapper">
+    <div class="Excerpt-header">
+      <div class="Excerpt-title">
+        <%= c 'heading', tag: :h3 do %>
+          <%= title %>
+        <% end %>
+      </div>
+      <span class="Excerpt-date">
+        <%= date_time(date) %>
+      </span>
     </div>
-    <span class="Excerpt-date">
-      <%= date_time(date) %>
-    </span>
+    <p class="Excerpt-text">
+      <%= text %>
+    </p>
   </div>
-  <p class="Excerpt-text">
-    <%= text %>
-  </p>
 </a>

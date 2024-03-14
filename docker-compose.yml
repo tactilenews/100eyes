@@ -8,6 +8,8 @@ x-defaults: &x-defaults
     POSTGRES_PORT: "${POSTGRES_PORT:-5432}"
     SIGNAL_CLI_REST_API_ENDPOINT: "http://signal:8080"
     SIGNAL_CLI_REST_API_ATTACHMENT_PATH: "signal-cli-config/attachments/"
+    THREE_SIXTY_DIALOG_PARTNER_REST_API_ENDPOINT: "https://hub.360dialog.io/api/v2"
+    THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT: "https://waba.360dialog.io/v1"
 
 services:
   app:
@@ -26,9 +28,9 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   signal:
-    image: bbernhard/signal-cli-rest-api:0.66
+    image: bbernhard/signal-cli-rest-api:0.81
     environment:
-      - USE_NATIVE=0
+      - MODE=native
         #- AUTO_RECEIVE_SCHEDULE=0 22 * * * #enable this parameter on demand (see description below)
     ports:
       - "8080:8080" #map docker port 8080 to host port 8080.

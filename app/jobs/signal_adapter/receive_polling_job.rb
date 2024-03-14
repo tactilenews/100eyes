@@ -10,6 +10,7 @@ module SignalAdapter
       throw(:abort) unless queue_empty?
     end
 
+    # rubocop:disable Metrics/MethodLength
     def perform(*_args)
       return if Setting.signal_server_phone_number.blank?
 
@@ -17,9 +18,7 @@ module SignalAdapter
       adapter = SignalAdapter::Inbound.new
 
       adapter.on(SignalAdapter::CONNECT) do |contributor|
-        contributor.update!(signal_onboarding_completed_at: Time.zone.now)
-        SignalAdapter::Outbound.send_welcome_message!(contributor)
-        SignalAdapter::AttachContributorsAvatarJob.perform_later(contributor)
+        handle_connect(contributor)
       end
 
       adapter.on(SignalAdapter::UNKNOWN_CONTRIBUTOR) do |signal_phone_number|
@@ -31,6 +30,18 @@ module SignalAdapter
         SignalAdapter::Outbound.send_unknown_content_message!(contributor)
       end
 
+      adapter.on(SignalAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
+        UnsubscribeContributorJob.perform_later(contributor.id, SignalAdapter::Outbound)
+      end
+
+      adapter.on(SignalAdapter::RESUBSCRIBE_CONTRIBUTOR) do |contributor|
+        ResubscribeContributorJob.perform_later(contributor.id, SignalAdapter::Outbound)
+      end
+
+      adapter.on(SignalAdapter::HANDLE_DELIVERY_RECEIPT) do |delivery_receipt, contributor|
+        handle_delivery_receipt(delivery_receipt, contributor)
+      end
+
       signal_messages.each do |raw_message|
         adapter.consume(raw_message) { |m| m.contributor.reply(adapter) }
       rescue StandardError => e
@@ -39,6 +50,7 @@ module SignalAdapter
 
       ping_monitoring_service && return
     end
+    # rubocop:enable Metrics/MethodLength
 
     private
 
@@ -59,6 +71,21 @@ module SignalAdapter
 
     def queue_empty?
       Delayed::Job.where(queue: queue_name, failed_at: nil).none?
+    end
+
+    def handle_connect(contributor)
+      contributor.update!(signal_onboarding_completed_at: Time.zone.now)
+      SignalAdapter::Outbound.send_welcome_message!(contributor)
+      SignalAdapter::AttachContributorsAvatarJob.perform_later(contributor)
+    end
+
+    def handle_delivery_receipt(delivery_receipt, contributor)
+      datetime = Time.zone.at(delivery_receipt[:when] / 1000).to_datetime
+      latest_received_message = contributor.received_messages.first
+      return unless latest_received_message
+
+      latest_received_message.update(received_at: datetime) if delivery_receipt[:isDelivery]
+      latest_received_message.update(read_at: datetime) if delivery_receipt[:isRead]
     end
   end
 end

@@ -1,0 +1,10 @@
+.SettingsForm {
+  padding-left: var(--limit-max-inner-width);
+  padding-right: var(--limit-max-inner-width);
+  margin: var(--spacing-unit) 0;
+}
+
+.SettingsForm .Section {
+  padding-left: 0;
+  padding-right: 0;
+}

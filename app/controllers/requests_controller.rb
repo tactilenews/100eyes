@@ -1,21 +1,20 @@
 # frozen_string_literal: true
 
 class RequestsController < ApplicationController
-  before_action :set_request, only: %i[show show_contributor_messages edit update notifications]
+  before_action :set_request, only: %i[show show_contributor_messages edit update notifications destroy messages_by_contributor stats]
   before_action :set_contributor, only: %i[show_contributor_messages]
   before_action :notifications_params, only: :notifications
   before_action :disallow_edit, only: %i[edit update]
+  before_action :disallow_destroy, only: :destroy
 
   def index
     @filter = filter_param
-    @sent_requests_count = Request.include_associations.sent.count
-    @planned_requests_count = Request.include_associations.planned.count
+    @sent_requests_count = Request.broadcasted.count
+    @planned_requests_count = Request.planned.count
     @requests = filtered_requests.page(params[:page])
   end
 
-  def show
-    @message_groups = @request.messages_by_contributor
-  end
+  def show; end
 
   def create
     resize_image_files if request_params[:files].present?
@@ -42,6 +41,7 @@ class RequestsController < ApplicationController
   def edit; end
 
   def update
+    @request.files.purge_later if @request.files.attached? && request_params[:files].blank?
     if @request.update(request_params)
       if @request.planned?
         redirect_to requests_path(filter: :planned), flash: {
@@ -57,6 +57,14 @@ class RequestsController < ApplicationController
     end
   end
 
+  def destroy
+    if @request.destroy
+      redirect_to requests_url(filter: :planned), notice: t('request.destroy.successful', request_title: @request.title)
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
   def show_contributor_messages
     @chat_messages = @contributor.conversation_about(@request)
   end
@@ -65,6 +73,36 @@ class RequestsController < ApplicationController
     last_updated_at = Time.zone.parse(params[:last_updated_at])
     message_count = @request.replies.where('created_at >= ?', last_updated_at).count
     render json: { message_count: message_count }
+  end
+
+  def messages_by_contributor
+    @message_groups = @request.messages_by_contributor
+    render(
+      MessageGroups::MessageGroups.new(request: @request, message_groups: @message_groups), content_type: 'text/html'
+    )
+  end
+
+  def stats
+    stats = @request.stats
+    metrics = [
+      {
+        value: stats[:counts][:contributors],
+        total: stats[:counts][:recipients],
+        label: I18n.t('components.request_metrics.contributors', count: stats[:counts][:contributors]),
+        icon: 'single-03'
+      },
+      {
+        value: stats[:counts][:replies],
+        label: I18n.t('components.request_metrics.replies', count: stats[:counts][:replies]),
+        icon: 'a-chat'
+      },
+      {
+        value: stats[:counts][:photos],
+        label: I18n.t('components.request_metrics.photos', count: stats[:counts][:photos]),
+        icon: 'camera'
+      }
+    ]
+    render(InlineMetrics::InlineMetrics.new(metrics: metrics), content_type: 'text/html')
   end
 
   private
@@ -102,6 +140,12 @@ class RequestsController < ApplicationController
     redirect_to requests_path, flash: { error: I18n.t('request.editing_disallowed') }
   end
 
+  def disallow_destroy
+    return if @request.planned?
+
+    redirect_to requests_path, flash: { error: I18n.t('request.destroy.broadcasted_request_unallowed', request_title: @request.title) }
+  end
+
   def filter_param
     value = params.permit(:filter)[:filter]&.to_sym
 
@@ -111,6 +155,10 @@ class RequestsController < ApplicationController
   end
 
   def filtered_requests
-    @filter == :planned ? Request.reorder(schedule_send_for: :desc).include_associations.planned : Request.include_associations.sent
+    if @filter == :planned
+      Request.planned.reorder(schedule_send_for: :desc).includes(:tags)
+    else
+      Request.broadcasted.includes(:tags)
+    end
   end
 end

@@ -24,17 +24,20 @@ RSpec.describe SignalAdapter::Inbound do
     {
       envelope: {
         source: '+4912345789',
+        sourceNumber: '+4912345789',
+        sourceUuid: 'valid_uuid',
+        sourceName: 'Signal Contributor',
         sourceDevice: 1,
-        timestamp: 1_626_711_330_462,
+        timestamp: 1_694_759_894_782,
         receiptMessage: {
-          when: 1_626_711_330_462,
+          when: 1_694_759_894_782,
           isDelivery: true,
           isRead: false,
-          timestamps: [
-            1_626_711_326_111
-          ]
+          isViewed: false,
+          timestamps: [1_694_759_894_066]
         }
-      }
+      },
+      account: Setting.signal_server_phone_number
     }
   end
 
@@ -205,6 +208,7 @@ RSpec.describe SignalAdapter::Inbound do
       end
 
       context 'given a receipt message' do
+        before { create(:message, recipient_id: contributor.id) }
         let(:signal_message) { signal_receipt_message }
 
         it { should be(nil) }
@@ -343,6 +347,15 @@ RSpec.describe SignalAdapter::Inbound do
         end
       end
     end
+
+    context 'given the keyword Abbestellen' do
+      subject { message }
+      before { signal_message[:envelope][:dataMessage][:message] = 'Abbestellen' }
+
+      it 'does not create a message' do
+        expect { subject }.not_to change(Message, :count)
+      end
+    end
   end
 
   describe '#on' do
@@ -452,6 +465,77 @@ RSpec.describe SignalAdapter::Inbound do
         let(:signal_message) { signal_message_with_attachment }
         before { signal_message[:envelope][:dataMessage][:attachments][0][:contentType] = ['application/pdf'] }
         it { should have_received(:call).with(contributor) }
+      end
+    end
+
+    describe 'UNSUBSCRIBE_CONTRIBUTOR' do
+      let(:unsubscribe_contributor_callback) { spy('unsubscribe_contributor_callback') }
+
+      before do
+        adapter.on(SignalAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
+          unsubscribe_contributor_callback.call(contributor)
+        end
+      end
+
+      subject do
+        adapter.consume(signal_message)
+        unsubscribe_contributor_callback
+      end
+
+      context 'any text other than the keyword Abbestellen' do
+        it { is_expected.not_to have_received(:call) }
+      end
+
+      context 'with keyword Abbestellen' do
+        before { signal_message[:envelope][:dataMessage][:message] = 'Abbestellen' }
+
+        it { is_expected.to have_received(:call) }
+      end
+    end
+
+    describe 'RESUBSCRIBE_CONTRIBUTOR' do
+      let(:resubscribe_contributor_callback) { spy('resubscribe_contributor_callback') }
+
+      before do
+        contributor.update!(unsubscribed_at: 1.week.ago)
+        adapter.on(SignalAdapter::RESUBSCRIBE_CONTRIBUTOR) do |contributor|
+          resubscribe_contributor_callback.call(contributor)
+        end
+      end
+
+      subject do
+        adapter.consume(signal_message)
+        resubscribe_contributor_callback
+      end
+
+      context 'any text other than the keyword Bestellen' do
+        it { is_expected.not_to have_received(:call) }
+      end
+
+      context 'with keyword Bestellen' do
+        before { signal_message[:envelope][:dataMessage][:message] = 'Bestellen' }
+
+        it { is_expected.to have_received(:call) }
+      end
+    end
+
+    describe 'HANDLE_DELIVERY_RECEIPT' do
+      let(:handle_delivery_receipt_callback) { spy('handle_delivery_receipt_callback') }
+      let(:signal_message) { signal_receipt_message }
+
+      before do
+        adapter.on(SignalAdapter::HANDLE_DELIVERY_RECEIPT) do |delivery_receipt, contributor|
+          handle_delivery_receipt_callback.call(delivery_receipt, contributor)
+        end
+      end
+
+      subject do
+        adapter.consume(signal_message)
+        handle_delivery_receipt_callback
+      end
+
+      describe 'if the message is a delivery receipt' do
+        it { should have_received(:call) }
       end
     end
   end

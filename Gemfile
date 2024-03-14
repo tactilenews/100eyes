@@ -26,6 +26,7 @@ group :development, :test do
 end
 
 group :development do
+  gem 'bullet'
   gem 'listen', '>= 3.0.5', '< 3.8'
   gem 'rubocop-rails', require: false
 
@@ -84,9 +85,11 @@ gem 'sentry-ruby'
 gem 'administrate'
 gem 'administrate_exportable'
 
+# Notifications
 gem 'noticed', '~> 1.6'
 
 # Charts
 gem 'groupdate'
 
+# Pagination
 gem 'kaminari', '~> 1.2'

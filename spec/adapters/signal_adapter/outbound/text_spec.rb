@@ -7,7 +7,7 @@ RSpec.describe SignalAdapter::Outbound::Text do
   let(:adapter) { described_class.new }
   let(:contributor) { create(:contributor, signal_phone_number: '+4915112345678', email: nil) }
   let(:message) { create(:message, :with_file, text: 'Hello Signal') }
-  let(:perform) { -> { adapter.perform(recipient: contributor, text: message.text) } }
+  let(:perform) { -> { adapter.perform(contributor_id: contributor.id, text: message.text) } }
 
   describe 'perform' do
     subject { perform }
@@ -24,10 +24,11 @@ RSpec.describe SignalAdapter::Outbound::Text do
       end
 
       describe 'on error' do
-        before(:each) { stub_request(:post, 'http://signal:8080/v2/send').to_return(status: 400) }
+        let(:error_message) { 'Unregistered user' }
+        before(:each) { stub_request(:post, 'http://signal:8080/v2/send').to_return(status: 400, body: { error: error_message }.to_json) }
 
         it 'reports the error' do
-          expect(Sentry).to receive(:capture_exception).with(Net::HTTPClientException)
+          expect(Sentry).to receive(:capture_exception).with(SignalAdapter::BadRequestError.new(error_code: 400, message: error_message))
 
           subject.call
         end

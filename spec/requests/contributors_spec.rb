@@ -147,6 +147,32 @@ RSpec.describe '/contributors', type: :request do
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
+
+    context 'deactivating contributor' do
+      let(:new_attrs) { { active: 'off' } }
+
+      it 'sets the deactivated_at attribute' do
+        expect { subject.call }.to change { contributor.reload.deactivated_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+      end
+
+      it 'sets the deactivate_by_user to current_user' do
+        expect { subject.call }.to change { contributor.reload.deactivated_by_user }.from(nil).to(user)
+      end
+    end
+
+    context 'reactivating deactivated contributor' do
+      let(:new_attrs) { { active: 'on' } }
+
+      before { contributor.update(deactivated_at: Time.current, deactivated_by_user: user) }
+
+      it 'returns the deactivated_at attribute to nil' do
+        expect { subject.call }.to change { contributor.reload.deactivated_at }.from(kind_of(ActiveSupport::TimeWithZone)).to(nil)
+      end
+
+      it 'returns the deactivate_by_user to nil' do
+        expect { subject.call }.to change { contributor.reload.deactivated_by_user }.from(user).to(nil)
+      end
+    end
   end
 
   describe 'POST /message', telegram_bot: :rails do

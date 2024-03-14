@@ -7,6 +7,14 @@ RSpec.describe 'Dashboard' do
   let(:password) { Faker::Internet.password(min_length: 8, max_length: 128) }
   let(:otp_enabled) { true }
   let(:user) { create(:user, first_name: 'Dennis', last_name: 'Schroeder', email: email, password: password, otp_enabled: otp_enabled) }
+  let(:contributor) { create(:contributor) }
+
+  before do
+    request = create(:request, user: user)
+    create_list(:message, 2, request: request, sender: contributor)
+  end
+
+  after { Timecop.return }
 
   it 'Shows several useful sections' do
     Timecop.travel(Time.current.beginning_of_day + 5.hours)
@@ -20,6 +28,10 @@ RSpec.describe 'Dashboard' do
 
     # CommunityMetrics section
     expect(page).to have_css('section.CommunityMetrics')
+    within('section.CommunityMetrics') do
+      # should never exceed 100%, even if more messages than contributors have been received.
+      expect(page).to have_content('100% Interaktionsquote')
+    end
 
     # DayAndTimeActivityHeatmap section
     expect(page).to have_css('section.DayAndTimeActivityHeatmap')

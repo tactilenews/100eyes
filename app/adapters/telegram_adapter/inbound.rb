@@ -4,6 +4,8 @@ module TelegramAdapter
   UNKNOWN_CONTRIBUTOR = :unknown_contributor
   UNKNOWN_CONTENT = :unknown_content
   CONNECT = :connect
+  UNSUBSCRIBE_CONTRIBUTOR = :unsubscribe_contributor
+  RESUBSCRIBE_CONTRIBUTOR = :resubscribe_contributor
 
   class Inbound
     UNKNOWN_CONTENT_KEYS = %w[
@@ -43,6 +45,8 @@ module TelegramAdapter
       files = initialize_files(telegram_message)
       @message.files += files
 
+      return unless create_message?
+
       yield(@message) if block_given?
     end
 
@@ -74,8 +78,14 @@ module TelegramAdapter
         return sender
       end
 
+      unless text
+        trigger(UNKNOWN_CONTRIBUTOR)
+        return nil
+      end
+
       telegram_onboarding_token = text.delete_prefix('/start').strip.upcase
       sender = Contributor.find_by(telegram_id: nil, telegram_onboarding_token: telegram_onboarding_token)
+
       if sender
         sender.username = username
         sender.telegram_id = telegram_id
@@ -87,6 +97,9 @@ module TelegramAdapter
     end
 
     def initialize_message(telegram_message)
+      trigger(UNSUBSCRIBE_CONTRIBUTOR, sender) if unsubscribe_text?(text)
+      trigger(RESUBSCRIBE_CONTRIBUTOR, sender) if resubscribe_text?(text)
+
       media_group_id = telegram_message['media_group_id']
       message = Message.find_by(telegram_media_group_id: media_group_id) if media_group_id
       message ||= Message.new(text: text, sender: sender, telegram_media_group_id: media_group_id)
@@ -145,6 +158,20 @@ module TelegramAdapter
         file_path = file.dig(:result, :file_path)
         URI("https://api.telegram.org/file/bot#{Telegram.bot.token}/#{file_path}")
       end
+    end
+
+    def unsubscribe_text?(text)
+      text&.downcase&.strip.eql?(I18n.t('adapter.shared.unsubscribe.text'))
+    end
+
+    def resubscribe_text?(text)
+      text&.downcase&.strip.eql?(I18n.t('adapter.shared.resubscribe.text'))
+    end
+
+    def create_message?
+      has_non_text_content = photos.any? || message.files.any? || message.unknown_content
+      text = message.text
+      has_non_text_content || (text.present? && !unsubscribe_text?(text) && !resubscribe_text?(text))
     end
   end
 end

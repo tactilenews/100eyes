@@ -4,15 +4,15 @@ require 'rails_helper'
 
 RSpec.describe 'Filter contributors' do
   let(:user) { create(:user) }
-  let!(:active_contributor) { create(:contributor, active: true) }
-  let!(:inactive_contributor) { create(:contributor, active: false) }
+  let!(:active_contributor) { create(:contributor, active: true, tag_list: ['entwickler']) }
+  let!(:inactive_contributor) { create(:contributor, active: false, tag_list: ['entwickler']) }
   let!(:another_contributor) { create(:contributor, active: true) }
 
   it 'Editor lists contributors' do
     visit contributors_path(as: user)
 
-    expect(page).to have_link('Aktiv 2', href: contributors_path)
-    expect(page).to have_link('Inaktiv 1', href: contributors_path(filter: :inactive))
+    expect(page).to have_link('Aktiv 2', href: contributors_path(state: :active))
+    expect(page).to have_link('Inaktiv 1', href: contributors_path(state: :inactive))
 
     expect(page).to have_link(nil, href: contributor_path(active_contributor))
     expect(page).not_to have_link(nil, href: contributor_path(inactive_contributor))
@@ -21,6 +21,63 @@ RSpec.describe 'Filter contributors' do
 
     expect(page).to have_link(nil, href: contributor_path(inactive_contributor))
     expect(page).not_to have_link(nil, href: contributor_path(active_contributor))
+
+    click_on 'Aktiv'
+
+    expect(page).not_to have_link(nil, href: contributor_path(inactive_contributor))
+    expect(page).to have_link(nil, href: contributor_path(active_contributor))
+
+    expect(page).not_to have_css('.ContributorsIndex-filterSection')
+    click_on 'filtern'
+
+    expect(page).to have_css('.ContributorsIndex-filterSection')
+    find('.TagsInput').click
+    within('.TagsInput-dropdown') do
+      find('span', text: 'entwickler', match: :first).click
+    end
+
+    within('.ContributorsIndex-filterSection') do
+      click_on 'filtern'
+    end
+
+    expect(page).to have_css('.ContributorsIndex-filterSection')
+    expect(page).to have_content('Das sind die Mitglieder deiner Community gefiltert nach dem Tag (entwickler)')
+    expect(page).to have_link('Aktiv 1', href: contributors_path(state: :active, tag_list: ['entwickler']))
+    expect(page).to have_link(nil, href: contributor_path(active_contributor))
+    expect(page).not_to have_link(nil, href: contributor_path(another_contributor))
+
+    click_on 'leeren'
+
+    expect(page).not_to have_css('.ContributorsIndex-filterSection')
+    expect(page).not_to have_content('Das sind die Mitglieder deiner Community gefiltert nach dem Tag (entwickler)')
+    expect(page).to have_link('Aktiv 2', href: contributors_path(state: :active))
+    expect(page).to have_link(nil, href: contributor_path(active_contributor))
+    expect(page).to have_link(nil, href: contributor_path(another_contributor))
+
+    click_on 'filtern'
+
+    expect(page).to have_css('.ContributorsIndex-filterSection')
+    find('.TagsInput').click
+    within('.TagsInput-dropdown') do
+      find('span', text: 'entwickler', match: :first).click
+    end
+
+    within('.ContributorsIndex-filterSection') do
+      click_on 'filtern'
+    end
+
+    click_on 'Inaktiv'
+
+    expect(page).to have_css('.ContributorsIndex-filterSection')
+    expect(page).to have_content('Das sind die Mitglieder deiner Community gefiltert nach dem Tag (entwickler)')
+    expect(page).to have_link('Inaktiv 1', href: contributors_path(state: :inactive, tag_list: ['entwickler']))
+    expect(page).to have_link(nil, href: contributor_path(inactive_contributor))
+
+    within('.TabBar') do
+      click_on 'filtern'
+    end
+
+    expect(page).not_to have_css('.ContributorsIndex-filterSection')
   end
 
   it 'Editor views profile of an active contributor' do

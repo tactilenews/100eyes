@@ -434,7 +434,7 @@ RSpec.describe Contributor, type: :model do
       let(:threema) { instance_double(Threema) }
       let(:threema_message) do
         ActionController::Parameters.new({
-                                           'from' => 'V5EA564T',
+                                           'from' => threema_id,
                                            'to' => '*100EYES',
                                            'messageId' => 'dfbe859c44f15125',
                                            'date' => '1612808574',
@@ -444,11 +444,18 @@ RSpec.describe Contributor, type: :model do
                                            'nickname' => 'matt.rider'
                                          })
       end
+      subject do
+        lambda do
+          message_inbound_adapter = ThreemaAdapter::Inbound.new
+          message_inbound_adapter.consume(threema_message) do |message|
+            message.contributor.reply(message_inbound_adapter)
+          end
+        end
+      end
       let(:threema_id) { 'V5EA564T' }
-      let(:contributor) do
+      let!(:contributor) do
         build(:contributor, threema_id: threema_id).tap { |contributor| contributor.save(validate: false) }
       end
-      let(:message_inbound_adapter) { ThreemaAdapter::Inbound.new(threema_message) }
 
       before do
         allow(Threema).to receive(:new).and_return(threema)
@@ -460,7 +467,10 @@ RSpec.describe Contributor, type: :model do
       it { should_not(change { Message.count }) }
 
       describe 'given a recent request' do
-        before(:each) { the_request }
+        before do
+          the_request
+          allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::Text).and_return(true)
+        end
 
         it { is_expected.to(change { Message.count }.from(0).to(1)) }
         it { should_not(change { Photo.count }) }
@@ -530,8 +540,8 @@ RSpec.describe Contributor, type: :model do
       it { should eq(the_request) }
     end
 
-    describe 'if a request was created' do
-      before(:each) { the_request }
+    describe 'if a request was broadcasted' do
+      before(:each) { the_request.update(broadcasted_at: 1.day.ago) }
       describe 'and afterwards a contributor joins' do
         before(:each) { contributor }
         it { should eq(the_request) }
@@ -540,9 +550,19 @@ RSpec.describe Contributor, type: :model do
 
     describe 'when many requests are sent to the contributor' do
       before(:each) do
-        another_request = create(:request, created_at: 1.day.ago)
+        another_request = create(:request, broadcasted_at: 1.day.ago)
         create(:message, request: the_request, recipient: contributor)
         create(:message, request: another_request, recipient: contributor)
+      end
+
+      it { should eq(the_request) }
+    end
+
+    describe 'when there is a planned request' do
+      before(:each) do
+        planned_request = create(:request, broadcasted_at: nil, schedule_send_for: 1.day.from_now)
+        create(:message, request: the_request, recipient: contributor)
+        create(:message, request: planned_request, recipient: contributor)
       end
 
       it { should eq(the_request) }
@@ -603,10 +623,9 @@ RSpec.describe Contributor, type: :model do
     subject { Contributor.active }
 
     context 'given some inactive and active contributors' do
-      let(:active_contributor) { create(:contributor, active: true) }
-      let(:inactive_contributor) { create(:contributor, active: false) }
-
-      before { active_contributor && inactive_contributor }
+      let!(:active_contributor) { create(:contributor, deactivated_at: nil) }
+      let!(:unsubscribed_contributor) { create(:contributor, unsubscribed_at: 1.day.ago) }
+      let!(:inactive_contributor) { create(:contributor, deactivated_at: 1.hour.ago) }
 
       it 'returns only active contributors' do
         should eq([active_contributor])
@@ -618,13 +637,26 @@ RSpec.describe Contributor, type: :model do
     subject { Contributor.inactive }
 
     context 'given some inactive and active contributors' do
-      let(:active_contributor) { create(:contributor, active: true) }
-      let(:inactive_contributor) { create(:contributor, active: false) }
-
-      before { active_contributor && inactive_contributor }
+      let!(:active_contributor) { create(:contributor, deactivated_at: nil) }
+      let!(:unsubscribed_contributor) { create(:contributor, unsubscribed_at: 1.day.ago) }
+      let!(:inactive_contributor) { create(:contributor, deactivated_at: 1.hour.ago) }
 
       it 'returns only inactive contributors' do
         should eq([inactive_contributor])
+      end
+    end
+  end
+
+  describe 'scope ::unsubscribed' do
+    subject { Contributor.unsubscribed }
+
+    context 'given some inactive and active contributors' do
+      let!(:active_contributor) { create(:contributor, deactivated_at: nil) }
+      let!(:unsubscribed_contributor) { create(:contributor, unsubscribed_at: 1.day.ago) }
+      let!(:inactive_contributor) { create(:contributor, deactivated_at: 1.hour.ago) }
+
+      it 'returns only inactive contributors' do
+        should eq([unsubscribed_contributor])
       end
     end
   end
@@ -787,14 +819,11 @@ RSpec.describe Contributor, type: :model do
       allow(Setting).to receive(:onboarding_success_text).and_return('You onboarded successfully.')
     end
     subject { -> { contributor.send_welcome_message! } }
-    let(:expected_job_args) { { telegram_id: contributor.telegram_id, text: "Welcome new contributor!\nYou onboarded successfully." } }
 
     it { should_not have_enqueued_job }
 
     context 'signed up via telegram' do
-      let(:expected_job_args) do
-        { telegram_id: contributor.telegram_id, text: "<b>Welcome new contributor!</b>\nYou onboarded successfully." }
-      end
+      let(:expected_job_args) { { contributor_id: contributor.id, text: "<b>Welcome new contributor!</b>\nYou onboarded successfully." } }
       let(:contributor) { create(:contributor, telegram_id: nil, telegram_onboarding_token: 'ABCDEF', email: nil) }
       it { should_not have_enqueued_job }
 
@@ -805,7 +834,7 @@ RSpec.describe Contributor, type: :model do
     end
 
     context 'signed up via threema' do
-      let(:expected_job_args) { { recipient: contributor, text: "*Welcome new contributor!*\nYou onboarded successfully." } }
+      let(:expected_job_args) { { contributor_id: contributor.id, text: "*Welcome new contributor!*\nYou onboarded successfully." } }
       let(:contributor) do
         build(:contributor, threema_id: 'AAAAAAAA', email: nil, telegram_id: nil).tap { |contributor| contributor.save(validate: false) }
       end

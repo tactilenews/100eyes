@@ -1,0 +1,13 @@
+<% if contributors.empty? %>
+  <%= c 'empty_state', custom_icon: 'community' do %>
+    <% if filter_active %>
+      <p><%= t('.empty_state.filter_active') %></p>
+    <% else %>
+      <p><%= t('.empty_state.no_contributors') %></p>
+    <% end %>
+  <% end %>
+<% else %>
+  <% contributors.each do |contributor| %>
+    <%= c 'contributor_row', contributor: contributor %>
+  <% end %>
+<% end %>

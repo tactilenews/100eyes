@@ -17,6 +17,8 @@ RSpec.describe 'Activity Notifications' do
     let(:contributor_without_avatar) { create(:contributor) }
     let(:another_contributor) { create(:contributor) }
 
+    after { Timecop.return }
+
     it 'displays the activity notifications on dashboard' do
       visit dashboard_path(as: user)
 

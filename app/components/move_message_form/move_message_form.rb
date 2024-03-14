@@ -18,8 +18,8 @@ module MoveMessageForm
 
     def recent_requests
       Request
-        .where('created_at <= ?', request.created_at)
-        .order(created_at: :desc)
+        .where('broadcasted_at <= ?', request.broadcasted_at)
+        .order(broadcasted_at: :desc)
         .limit(5)
     end
 
@@ -28,7 +28,7 @@ module MoveMessageForm
         {
           value: request.id,
           label: request.title,
-          help: "Frage gestellt #{date_time(request.created_at)}"
+          help: "Frage gestellt #{date_time(request.broadcasted_at)}"
         }
       end
     end

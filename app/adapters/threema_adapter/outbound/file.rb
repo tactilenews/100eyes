@@ -6,7 +6,15 @@ module ThreemaAdapter
       queue_as :default
 
       rescue_from RuntimeError do |exception|
-        tags = exception.message.match?(/Can't find public key for Threema ID/) ? { support: 'yes' } : {}
+        tags = {}
+        if exception.message.match?(/Can't find public key for Threema ID/)
+          tags = { support: 'yes' }
+          threema_id = exception.message.split('Threema ID').last.strip
+          contributor = Contributor.where('lower(threema_id) = ?', threema_id.downcase).first
+          return unless contributor
+
+          MarkInactiveContributorInactiveJob.perform_later(contributor_id: contributor.id)
+        end
         ErrorNotifier.report(exception, tags: tags)
       end
 
@@ -14,7 +22,10 @@ module ThreemaAdapter
         @threema_instance ||= Threema.new
       end
 
-      def perform(recipient:, file_path:, file_name: nil, caption: nil, render_type: nil)
+      def perform(contributor_id:, file_path:, file_name: nil, caption: nil, render_type: nil)
+        recipient = Contributor.find_by(id: contributor_id)
+        return unless recipient
+
         self.class.threema_instance.send(type: :file,
                                          threema_id: recipient.threema_id.upcase,
                                          file: file_path,

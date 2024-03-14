@@ -1,0 +1,34 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://signal:8080/v1/receive/SIGNAL_SERVER_PHONE_NUMBER
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - signal:8080
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Date:
+      - Fri, 17 Nov 2023 14:43:19 GMT
+      Content-Length:
+      - '327'
+    body:
+      encoding: UTF-8
+      string: '[{"envelope":{"source":"+4915112345789","sourceNumber":"+4915112345789","sourceUuid":"bc55c186-5333-4e94-8c23-4e3c15cea7e6","sourceName":"Matthew
+        Rider","sourceDevice":1,"timestamp":1700231938209,"dataMessage":{"timestamp":1700231938209,"message":"Bestellen","expiresInSeconds":0,"viewOnce":false}},"account":"SIGNAL_SERVER_PHONE_NUMBER"}]'
+  recorded_at: Fri, 17 Nov 2023 14:43:19 GMT
+recorded_with: VCR 6.1.0

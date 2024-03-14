@@ -15,9 +15,16 @@ class Message < ApplicationRecord
   has_many :files, dependent: :destroy, class_name: 'Message::File'
   has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
 
-  counter_culture :request, column_name: proc { |model| model.reply? ? 'replies_count' : nil }
+  counter_culture :request,
+                  column_name: proc { |model| model.reply? ? 'replies_count' : nil },
+                  column_names: lambda {
+                    {
+                      Message.replies => 'replies_count'
+                    }
+                  }
 
   scope :replies, -> { where(sender_type: Contributor.name) }
+  scope :outbound, -> { where(sender_type: [User.name, nil]) }
 
   delegate :name, to: :creator, allow_nil: true, prefix: true
 
