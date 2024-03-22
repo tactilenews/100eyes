@@ -19,3 +19,7 @@
 .ContributorsIndex-toggleFilterSectionButton.TabBar-item {
   margin-left: calc(1.5 * var(--spacing-unit-xl));
 }
+
+.ContributorsIndex .Pagination-list {
+  justify-content: flex-start;
+}

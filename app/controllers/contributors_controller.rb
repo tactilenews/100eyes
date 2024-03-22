@@ -26,7 +26,7 @@ class ContributorsController < ApplicationController
     @contributors = filtered_contributors
     @contributors = @contributors.with_tags(tag_list_params)
     @filter_count = @contributors.size
-    @contributors = @contributors.with_attached_avatar.includes(:tags)
+    @contributors = @contributors.with_attached_avatar.includes(:tags).page(contributors_params[:page])
   end
 
   def show
@@ -68,7 +68,7 @@ class ContributorsController < ApplicationController
   end
 
   def contributors_params
-    params.permit(:state, tag_list: [])
+    params.permit(:state, :page, tag_list: [])
   end
 
   def contributor_params
