@@ -19,7 +19,15 @@ const buildOptions = {
 }
 
 console.log("started esbuild script");
-esbuild.context(buildOptions)
-  .then((ctx) => {
-    return ctx.watch();
-  }).catch(() => process.exit(1));
+
+if (process.argv.includes('--watch')) {
+  esbuild.context(buildOptions)
+    .then((ctx) => {
+      return ctx.watch();
+    }).catch(() => process.exit(1));
+} else {
+  esbuild.build(buildOptions)
+    .catch(() => process.exit(1));
+}
+
+
