@@ -3,18 +3,23 @@
 const esbuild = require('esbuild');
 const ImportGlobPlugin = require('esbuild-plugin-import-glob').default;
 
-esbuild.build({
+const buildOptions = {
   entryPoints: ['app/assets/javascript/application.js'],
   outdir: 'app/assets/builds',
   bundle: true,
   target: 'es2017',
   minify: process.env.NODE_ENV === 'production',
   logLevel: 'info',
-  watch: process.argv.includes('--watch'),
   loader: {
     '.ico': 'file',
   },
   plugins: [
     ImportGlobPlugin(),
   ],
-}).catch(() => process.exit(1));
+}
+
+console.log("started esbuild script");
+esbuild.context(buildOptions)
+  .then((ctx) => {
+    return ctx.watch();
+  }).catch(() => process.exit(1));
