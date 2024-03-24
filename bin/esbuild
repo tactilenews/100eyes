@@ -29,5 +29,3 @@ if (process.argv.includes('--watch')) {
   esbuild.build(buildOptions)
     .catch(() => process.exit(1));
 }
-
-
