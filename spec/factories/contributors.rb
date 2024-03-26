@@ -5,9 +5,7 @@ FactoryBot.define do
     first_name { 'John' }
     last_name { 'Doe' }
     data_processing_consent { true }
-    sequence :email do |n|
-      "contributor#{n}@example.org"
-    end
+    email { Faker::Internet.email }
 
     trait :with_an_avatar do
       after(:build) do |contributor|
@@ -18,6 +16,8 @@ FactoryBot.define do
       end
     end
 
-    organization
+    trait :with_new_organization do
+      organization
+    end
   end
 end
