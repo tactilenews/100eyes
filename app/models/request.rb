@@ -54,7 +54,6 @@ class Request < ApplicationRecord
     messages
       .includes(
         [
-          :recipient,
           { sender: { avatar_attachment: :blob } },
           { photos: { attachment_attachment: :blob } },
           { files: { attachment_attachment: :blob } },
