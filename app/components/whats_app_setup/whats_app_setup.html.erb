@@ -2,7 +2,8 @@
   styles: [:wide, :xlargeMarginTop, :noSpaceBetween],
   **attrs,
   data: { controller: 'whats-app-setup',
-          whats_app_setup_permissions_url_value: permissions_url
+          whats_app_setup_permissions_url_value: permissions_url,
+          testid: 'whats-app-setup'
         } do %>
   <header class="WhatsAppSetup-header">
     <%= c 'heading', style: :beta do %>
