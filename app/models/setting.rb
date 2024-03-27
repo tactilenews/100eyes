@@ -28,8 +28,16 @@ class Setting < RailsSettings::Base
     self.onboarding_hero_blob_id = blob.id
   end
 
+  def self.twilio_configured?
+    whats_app_server_phone_number.present? && twilio_api_key_sid.present? && twilio_api_key_secret.present? && twilio_account_sid.present?
+  end
+
+  def self.three_sixty_dialog_configured?
+    three_sixty_dialog_client_api_key.present?
+  end
+
   def self.whats_app_configured?
-    whats_app_server_phone_number.present? || three_sixty_dialog_client_api_key.present?
+    twilio_configured? || three_sixty_dialog_configured?
   end
 
   def self.signal_configured?
