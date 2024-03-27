@@ -4,17 +4,17 @@
   <% end %>
 
   <% if organization.contact_person.present? %>
-    <%= c 'heading', style: :gamma do %>
+    <%= c 'heading', tag: :h2, style: :beta, data: { testid: 'contact_person' } do %>
       <%= t('.sub_heading.contact_person', contact_person_name: organization.contact_person.name, contact_person_email: organization.contact_person.email) %>
     <% end %>
   <% end %>
 
-  <%= c 'heading', style: :gamma do %>
+  <%= c 'heading', tag: :h2, style: :beta, data: { testid: 'price_per_month' } do %>
     <%= t('.sub_heading.business_plan.price_per_month', price_per_month: price_per_month) %>
   <% end %>
 
   <% if organization.business_plan.valid_until.present? %>
-    <%= c 'heading', style: :gamma do %>
+    <%= c 'heading', tag: :h2, style: :beta, data: { testid: 'valid_until' } do %>
       <%= t('.sub_heading.business_plan.valid_until', valid_until: I18n.l(organization.business_plan.valid_until, format: '%m/%Y')) %>
     <% end %>
   <% end %>
@@ -28,7 +28,7 @@
       <%= c 'button',
         class: 'ProfileHeader-openModalButton',
         styles: [:secondary],
-        data: { action: 'profile-header#openModal' } do %>
+        data: { action: 'profile-header#openModal', testid: 'upgrade_business_plan_button' } do %>
         <%= svg 'plus-sign' %>
         <%= t('.upgrade_business_plan_button_html', upgrade_discount: organization.upgrade_discount) %>
       <% end%>

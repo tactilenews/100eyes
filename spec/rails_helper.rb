@@ -84,9 +84,14 @@ RSpec.configure do |config|
   # in component specs
   config.include ViewComponent::TestHelpers, type: :component
   config.include Capybara::RSpecMatchers, type: :component
+  config.include ActionView::Helpers::NumberHelper, type: :component
   config.include FactoryBot::Syntax::Methods
   config.include ActionView::Helpers::NumberHelper, type: :system
   config.include ActionView::Helpers::NumberHelper, type: :requests
 
   config.include Helpers
+end
+
+Capybara.configure do |config|
+  config.test_id = 'data-testid'
 end
