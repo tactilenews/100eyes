@@ -25,7 +25,7 @@ RSpec.describe 'Configuring Onboarding Channels' do
     # With no messengers configured
     within('.OnboardingChannelsCheckboxes') do
       Setting.channels.each_key do |key|
-        checked_status = !key.eql?(:email)
+        checked_status = key.eql?(:email)
         expect(page).to have_field(key.to_s.camelize, id: "setting[channels][#{key}]", checked: checked_status)
       end
     end
