@@ -15,9 +15,5 @@ FactoryBot.define do
         )
       end
     end
-
-    trait :with_new_organization do
-      organization
-    end
   end
 end
