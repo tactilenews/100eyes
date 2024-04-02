@@ -13,7 +13,7 @@ class OnboardingController < ApplicationController
 
   def index
     @jwt = jwt_param
-    @channels = Setting.channels.select { |_key, value| value == true }.keys
+    @channels = Setting.channels.select { |_key, value| value[:configured] && value[:allow_onboarding] }.keys
   end
 
   def success; end

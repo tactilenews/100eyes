@@ -14,6 +14,7 @@ RSpec.describe 'Onboarding::Threema', type: :request do
     allow(Threema).to receive(:new).and_return(threema)
     allow(Threema::Lookup).to receive(:new).with({ threema: threema }).and_return(threema_lookup_double)
     allow(threema_lookup_double).to receive(:key).and_return('PUBLIC_KEY_HEX_ENCODED')
+    allow(Setting).to receive(:threema_configured?).and_return(true)
   end
 
   describe 'POST /onboarding/threema' do
