@@ -29,7 +29,7 @@ Rails.application.configure do
   # Display error pages and disable caching in tests.
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = false
-  config.cache_store = :null_store
+  config.cache_store = :memory_store
 
   # Render exception templates.
   config.action_dispatch.show_exceptions = true
