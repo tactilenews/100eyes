@@ -1,6 +1,6 @@
 <%= c 'main' do %>
   <% content_for :notifications do %>
-    <%= c 'request_notification', request: @request %>
+    <%= c 'request_notification', request_for_info: @request %>
   <% end %>
 
   <%= c 'page_header', styles: [:largeMarginBottom, :flexboxColumn] do %>
@@ -27,7 +27,7 @@
   <% end %>
 
   <%= c 'section', style: :xlargeSpaceBetween do %>
-    <%= c 'request_metrics', request: @request, style: :cards %>
+    <%= c 'request_metrics', request_for_info: @request, style: :cards %>
 
     <%= c 'stack' do %>
       <%= c 'message_groups_skeleton', request_id: @request.id %>

@@ -415,8 +415,8 @@ GEM
       activemodel (>= 3.2)
       mail (~> 2.5)
     vcr (6.1.0)
-    view_component (2.72.0)
-      activesupport (>= 5.0.0, < 8.0)
+    view_component (2.83.0)
+      activesupport (>= 5.2.0, < 8.0)
       concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
     webmock (3.18.1)
@@ -484,7 +484,7 @@ DEPENDENCIES
   tzinfo-data
   valid_email2 (~> 4.0)
   vcr
-  view_component (~> 2)
+  view_component (~> 2.83.0)
   webmock
 
 RUBY VERSION

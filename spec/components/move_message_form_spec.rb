@@ -6,10 +6,10 @@ RSpec.describe MoveMessageForm::MoveMessageForm, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
   let!(:older_request) { create(:request, broadcasted_at: 1.hour.ago) }
-  let!(:current_request) { create(:request, broadcasted_at: 0.hours.ago) }
+  let!(:request_for_info) { create(:request, broadcasted_at: 0.hours.ago) }
   let!(:planned_request) { create(:request, broadcasted_at: 1.hour.from_now) }
 
-  let(:message) { create(:message, request: current_request) }
+  let(:message) { create(:message, request: request_for_info) }
 
   let(:params) { { message: message } }
 
@@ -19,7 +19,7 @@ RSpec.describe MoveMessageForm::MoveMessageForm, type: :component do
   it 'displays current request checked' do
     first = subject.css('input[type="radio"]').first
 
-    expect(first[:value]).to eq(current_request.id.to_s)
+    expect(first[:value]).to eq(request_for_info.id.to_s)
     expect(first[:checked]).to eq('checked')
   end
 
