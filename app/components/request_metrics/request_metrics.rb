@@ -2,10 +2,10 @@
 
 module RequestMetrics
   class RequestMetrics < ApplicationComponent
-    def initialize(request:, **)
+    def initialize(request_for_info:, **)
       super
 
-      @request = request
+      @request_for_info = request_for_info
     end
 
     def call
@@ -14,10 +14,10 @@ module RequestMetrics
 
     private
 
-    attr_reader :request
+    attr_reader :request_for_info
 
     def metrics
-      stats = request.stats
+      stats = request_for_info.stats
       [
         {
           value: stats[:counts][:contributors],
