@@ -7,5 +7,5 @@ RSpec.describe CardMetrics::CardMetrics, type: :component do
 
   let(:params) { { metrics: [] } }
 
-  it { should have_css('.CardMetrics') }
+  it { is_expected.to have_css('.CardMetrics') }
 end

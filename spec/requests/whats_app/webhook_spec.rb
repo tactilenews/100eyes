@@ -83,7 +83,7 @@ RSpec.describe WhatsApp::WebhookController do
       it 'returns 200' do
         subject.call
 
-        expect(response).to have_http_status(200)
+        expect(response).to have_http_status(:ok)
       end
 
       context 'no message template sent' do
@@ -94,6 +94,7 @@ RSpec.describe WhatsApp::WebhookController do
 
       context 'responding to template' do
         before { contributor.update(whats_app_message_template_sent_at: Time.current) }
+
         let(:message) { contributor.received_messages.first }
         let(:latest_message_job_args) do
           { contributor_id: contributor.id, text: message.text, message: message }
@@ -168,6 +169,7 @@ RSpec.describe WhatsApp::WebhookController do
 
         context 'request for more info' do
           before { params['Body'] = 'Mehr Infos' }
+
           let(:more_info_job_args) do
             { contributor_id: contributor.id, text: [Setting.about, "_#{I18n.t('adapter.shared.unsubscribe.instructions')}_"].join("\n\n") }
           end
@@ -248,7 +250,7 @@ RSpec.describe WhatsApp::WebhookController do
       it 'returns 200' do
         subject.call
 
-        expect(response).to have_http_status(200)
+        expect(response).to have_http_status(:ok)
       end
 
       describe 'given an unknown contributor' do
@@ -286,7 +288,7 @@ RSpec.describe WhatsApp::WebhookController do
             end
 
             it {
-              is_expected.to have_enqueued_job(MarkInactiveContributorInactiveJob).with do |params|
+              expect(subject).to have_enqueued_job(MarkInactiveContributorInactiveJob).with do |params|
                 expect(params[:contributor_id]).to eq(contributor.id)
               end
             }
@@ -339,6 +341,7 @@ RSpec.describe WhatsApp::WebhookController do
 
               context 'given an undelivered status' do
                 before { params['MessageStatus'] = 'undelivered' }
+
                 it 'is expected not to schedule a job as it would send out twice, one for undelivered and one for failed' do
                   expect { subject.call }.not_to have_enqueued_job(WhatsAppAdapter::Outbound::Text)
                 end
@@ -479,7 +482,7 @@ RSpec.describe WhatsApp::WebhookController do
       it 'returns 200' do
         subject.call
 
-        expect(response).to have_http_status(200)
+        expect(response).to have_http_status(:ok)
       end
 
       it 'reports the error with error code, message, and url' do

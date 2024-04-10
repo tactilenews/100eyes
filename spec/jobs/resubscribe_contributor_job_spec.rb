@@ -4,9 +4,9 @@ require 'rails_helper'
 
 RSpec.describe ResubscribeContributorJob do
   describe '#perform_later(contributor_id, adapter)' do
-    let(:user) { create(:user) }
-
     subject { -> { described_class.new.perform(contributor.id, adapter) } }
+
+    let(:user) { create(:user) }
 
     context 'unsubscribed Signal contributor' do
       let(:adapter) { SignalAdapter::Outbound }
@@ -81,6 +81,7 @@ RSpec.describe ResubscribeContributorJob do
       let(:threema_lookup_double) { instance_double(Threema::Lookup) }
       let(:threema) { instance_double(Threema) }
       let(:threema_id) { 'Z1234567' }
+
       before do
         allow(Threema).to receive(:new).and_return(threema)
         allow(Threema::Lookup).to receive(:new).with({ threema: threema }).and_return(threema_lookup_double)
@@ -120,6 +121,7 @@ RSpec.describe ResubscribeContributorJob do
     context 'unsubscribed WhatsApp contributor' do
       let(:adapter) { WhatsAppAdapter::Outbound }
       let(:whats_app_welcome_template) { I18n.t('adapter.whats_app.welcome_message').gsub('%{project_name}', '100eyes') }
+
       before do
         allow(Setting).to receive(:onboarding_success_text).and_return(whats_app_welcome_template)
       end

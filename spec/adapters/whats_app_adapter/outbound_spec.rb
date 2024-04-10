@@ -17,13 +17,13 @@ RSpec.describe WhatsAppAdapter::Outbound do
         allow(WhatsAppAdapter::TwilioOutbound).to receive(:send!)
       end
 
-      it 'it is expected to send the message with 360dialog' do
+      it 'is expected to send the message with 360dialog' do
         expect(WhatsAppAdapter::ThreeSixtyDialogOutbound).to receive(:send!).with(message)
 
         subject.call
       end
 
-      it 'it is expected not to send it with Twilio' do
+      it 'is expected not to send it with Twilio' do
         expect(WhatsAppAdapter::TwilioOutbound).not_to receive(:send!)
 
         subject.call
@@ -37,13 +37,13 @@ RSpec.describe WhatsAppAdapter::Outbound do
         allow(WhatsAppAdapter::TwilioOutbound).to receive(:send!)
       end
 
-      it 'it is expected not to send the message with 360dialog' do
+      it 'is expected not to send the message with 360dialog' do
         expect(WhatsAppAdapter::ThreeSixtyDialogOutbound).not_to receive(:send!)
 
         subject.call
       end
 
-      it 'it is expected to send it with Twilio' do
+      it 'is expected to send it with Twilio' do
         expect(WhatsAppAdapter::TwilioOutbound).to receive(:send!).with(message)
 
         subject.call
@@ -61,13 +61,13 @@ RSpec.describe WhatsAppAdapter::Outbound do
         allow(WhatsAppAdapter::TwilioOutbound).to receive(:send_welcome_message!)
       end
 
-      it 'it is expected to send the welcome message with 360dialog' do
+      it 'is expected to send the welcome message with 360dialog' do
         expect(WhatsAppAdapter::ThreeSixtyDialogOutbound).to receive(:send_welcome_message!).with(contributor)
 
         subject.call
       end
 
-      it 'it is expected not to send the welcome message with Twilio' do
+      it 'is expected not to send the welcome message with Twilio' do
         expect(WhatsAppAdapter::TwilioOutbound).not_to receive(:send_welcome_message!)
 
         subject.call
@@ -81,13 +81,13 @@ RSpec.describe WhatsAppAdapter::Outbound do
         allow(WhatsAppAdapter::TwilioOutbound).to receive(:send_welcome_message!)
       end
 
-      it 'it is expected not to send the welcome message with 360dialog' do
+      it 'is expected not to send the welcome message with 360dialog' do
         expect(WhatsAppAdapter::ThreeSixtyDialogOutbound).not_to receive(:send_welcome_message!)
 
         subject.call
       end
 
-      it 'it is expected to send the welcome message with Twilio' do
+      it 'is expected to send the welcome message with Twilio' do
         expect(WhatsAppAdapter::TwilioOutbound).to receive(:send_welcome_message!).with(contributor)
 
         subject.call
@@ -105,13 +105,13 @@ RSpec.describe WhatsAppAdapter::Outbound do
         allow(WhatsAppAdapter::TwilioOutbound).to receive(:send_more_info_message!)
       end
 
-      it 'it is expected to send the more info message with 360dialog' do
+      it 'is expected to send the more info message with 360dialog' do
         expect(WhatsAppAdapter::ThreeSixtyDialogOutbound).to receive(:send_more_info_message!).with(contributor)
 
         subject.call
       end
 
-      it 'it is expected not to send the more info message with Twilio' do
+      it 'is expected not to send the more info message with Twilio' do
         expect(WhatsAppAdapter::TwilioOutbound).not_to receive(:send_more_info_message!)
 
         subject.call
@@ -125,13 +125,13 @@ RSpec.describe WhatsAppAdapter::Outbound do
         allow(WhatsAppAdapter::TwilioOutbound).to receive(:send_more_info_message!)
       end
 
-      it 'it is expected not to send the more info message with 360dialog' do
+      it 'is expected not to send the more info message with 360dialog' do
         expect(WhatsAppAdapter::ThreeSixtyDialogOutbound).not_to receive(:send_more_info_message!)
 
         subject.call
       end
 
-      it 'it is expected to send the more info message with Twilio' do
+      it 'is expected to send the more info message with Twilio' do
         expect(WhatsAppAdapter::TwilioOutbound).to receive(:send_more_info_message!).with(contributor)
 
         subject.call
@@ -149,13 +149,13 @@ RSpec.describe WhatsAppAdapter::Outbound do
         allow(WhatsAppAdapter::TwilioOutbound).to receive(:send_unsubsribed_successfully_message!)
       end
 
-      it 'it is expected to send the unsubscribed successfully message with 360dialog' do
+      it 'is expected to send the unsubscribed successfully message with 360dialog' do
         expect(WhatsAppAdapter::ThreeSixtyDialogOutbound).to receive(:send_unsubsribed_successfully_message!).with(contributor)
 
         subject.call
       end
 
-      it 'it is expected not to send the unsubscribed successfully message with Twilio' do
+      it 'is expected not to send the unsubscribed successfully message with Twilio' do
         expect(WhatsAppAdapter::TwilioOutbound).not_to receive(:send_unsubsribed_successfully_message!)
 
         subject.call
@@ -169,13 +169,13 @@ RSpec.describe WhatsAppAdapter::Outbound do
         allow(WhatsAppAdapter::TwilioOutbound).to receive(:send_unsubsribed_successfully_message!)
       end
 
-      it 'it is expected to send the unsubscribed successfully message with 360dialog' do
+      it 'is expected to send the unsubscribed successfully message with 360dialog' do
         expect(WhatsAppAdapter::ThreeSixtyDialogOutbound).not_to receive(:send_unsubsribed_successfully_message!)
 
         subject.call
       end
 
-      it 'it is expected not to send the unsubscribed successfully message with Twilio' do
+      it 'is expected not to send the unsubscribed successfully message with Twilio' do
         expect(WhatsAppAdapter::TwilioOutbound).to receive(:send_unsubsribed_successfully_message!).with(contributor)
 
         subject.call

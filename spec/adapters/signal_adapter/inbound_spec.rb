@@ -4,6 +4,16 @@ require 'rails_helper'
 
 RSpec.describe SignalAdapter::Inbound do
   let(:adapter) { described_class.new }
+  let(:onboarding_completed_at) { Time.zone.now }
+  let(:phone_number) { '+4912345789' }
+  let!(:contributor) do
+    create(
+      :contributor,
+      id: 4711,
+      signal_phone_number: phone_number,
+      signal_onboarding_completed_at: onboarding_completed_at
+    )
+  end
   let(:signal_message) do
     {
       envelope: {
@@ -171,18 +181,6 @@ RSpec.describe SignalAdapter::Inbound do
       .and_return(file_fixture('signal_message_with_attachment').open)
   end
 
-  let(:onboarding_completed_at) { Time.zone.now }
-  let(:phone_number) { '+4912345789' }
-
-  let!(:contributor) do
-    create(
-      :contributor,
-      id: 4711,
-      signal_phone_number: phone_number,
-      signal_onboarding_completed_at: onboarding_completed_at
-    )
-  end
-
   describe '#consume' do
     let(:message) do
       adapter.consume(signal_message) do |message|
@@ -192,51 +190,57 @@ RSpec.describe SignalAdapter::Inbound do
 
     describe '|message| block argument' do
       subject { message }
-      it { should be_a(Message) }
+
+      it { is_expected.to be_a(Message) }
 
       context 'from an unknown contributor' do
         let(:onboarding_completed_at) { nil }
         let!(:phone_number) { '+495555555' }
 
-        it { should be(nil) }
+        it { is_expected.to be_nil }
       end
 
       context 'from a contributor with incomplete onboarding' do
         let(:onboarding_completed_at) { nil }
 
-        it { should be(nil) }
+        it { is_expected.to be_nil }
       end
 
       context 'given a receipt message' do
         before { create(:message, recipient_id: contributor.id) }
+
         let(:signal_message) { signal_receipt_message }
 
-        it { should be(nil) }
+        it { is_expected.to be_nil }
       end
 
       context 'given a typing indicator message' do
         let(:signal_message) { signal_typing_message }
 
-        it { should be(nil) }
+        it { is_expected.to be_nil }
       end
 
       describe 'with ignored content' do
         context 'given an expire time message' do
           let(:signal_message) { signal_expire_time_message }
-          it { should be(nil) }
+
+          it { is_expected.to be_nil }
         end
 
         context 'given a remote delete message' do
           let(:signal_message) { signal_remote_delete_message }
-          it { should be(nil) }
+
+          it { is_expected.to be_nil }
         end
 
         context 'given a reaction emoji that got removed' do
           let(:signal_message) { signal_reaction_emoji_message }
+
           before do
             signal_reaction_emoji_message[:envelope][:dataMessage][:reaction][:isRemove] = true
           end
-          it { should be(nil) }
+
+          it { is_expected.to be_nil }
         end
       end
 
@@ -254,43 +258,48 @@ RSpec.describe SignalAdapter::Inbound do
       subject { message.text }
 
       context 'given a signal_message with a `message`' do
-        it { should eq('Hello 100eyes') }
+        it { is_expected.to eq('Hello 100eyes') }
       end
 
       context 'given a signal_message without a `message` and with an attachment' do
         let(:signal_message) { signal_message_with_attachment }
+
         before { signal_message[:envelope][:dataMessage][:message] = nil }
-        it { should be(nil) }
+
+        it { is_expected.to be_nil }
       end
 
       context 'given a reaction emoji that got added' do
         let(:signal_message) { signal_reaction_emoji_message }
-        it { should eq('❤️') }
+
+        it { is_expected.to eq('❤️') }
       end
     end
 
     describe '|message|raw_data' do
       subject { message.raw_data }
-      it { should be_attached }
+
+      it { is_expected.to be_attached }
     end
 
     describe '#sender' do
       subject { message.sender }
 
-      it { should eq(Contributor.find(4711)) }
+      it { is_expected.to eq(Contributor.find(4711)) }
     end
 
     describe '|message|files' do
       let(:signal_message) { signal_message_with_attachment }
 
       describe 'handling different content types' do
-        let(:file) { message.files.first }
         subject { file.attachment }
+
+        let(:file) { message.files.first }
 
         context 'given an audio file' do
           before { signal_message[:envelope][:dataMessage][:attachments][0][:contentType] = 'audio/aac' }
 
-          it { should be_attached }
+          it { is_expected.to be_attached }
 
           it 'preserves the content_type' do
             expect(subject.blob.content_type).to eq('audio/aac')
@@ -300,7 +309,7 @@ RSpec.describe SignalAdapter::Inbound do
         context 'given an audio/mpeg file' do
           before { signal_message[:envelope][:dataMessage][:attachments][0][:contentType] = 'audio/mpeg' }
 
-          it { should be_attached }
+          it { is_expected.to be_attached }
 
           it 'preserves the content_type' do
             expect(subject.blob.content_type).to eq('audio/mpeg')
@@ -309,7 +318,8 @@ RSpec.describe SignalAdapter::Inbound do
 
         context 'given an image file' do
           before { signal_message[:envelope][:dataMessage][:attachments][0][:contentType] = 'image/jpeg' }
-          it { should be_attached }
+
+          it { is_expected.to be_attached }
 
           it 'preserves the content_type' do
             expect(subject.blob.content_type).to eq('image/jpeg')
@@ -318,7 +328,8 @@ RSpec.describe SignalAdapter::Inbound do
 
         context 'given a gif' do
           before { signal_message[:envelope][:dataMessage][:attachments][0][:contentType] = 'image/gif' }
-          it { should be_attached }
+
+          it { is_expected.to be_attached }
 
           it 'preserves the content_type' do
             expect(subject.blob.content_type).to eq('image/gif')
@@ -331,7 +342,7 @@ RSpec.describe SignalAdapter::Inbound do
             signal_message[:envelope][:dataMessage][:attachments][0][:filename] = nil
           end
 
-          it { should be_attached }
+          it { is_expected.to be_attached }
 
           it 'sets a fallback filename based on mime type' do
             expect(subject.filename.to_s).to eq('attachment.jpeg')
@@ -341,6 +352,7 @@ RSpec.describe SignalAdapter::Inbound do
 
       context 'given a message with multiple attached images' do
         let(:signal_message) { signal_message_with_multiple_attachments }
+
         it 'is expected to store all files' do
           expect(message.files[0].attachment).to be_attached
           expect(message.files[1].attachment).to be_attached
@@ -350,6 +362,7 @@ RSpec.describe SignalAdapter::Inbound do
 
     context 'given the keyword Abbestellen' do
       subject { message }
+
       before { signal_message[:envelope][:dataMessage][:message] = 'Abbestellen' }
 
       it 'does not create a message' do
@@ -360,6 +373,11 @@ RSpec.describe SignalAdapter::Inbound do
 
   describe '#on' do
     describe 'CONNECT' do
+      subject do
+        adapter.consume(signal_message)
+        connect_callback
+      end
+
       let(:connect_callback) { spy('connect_callback') }
 
       before do
@@ -368,27 +386,29 @@ RSpec.describe SignalAdapter::Inbound do
         end
       end
 
-      subject do
-        adapter.consume(signal_message)
-        connect_callback
-      end
-
       context 'if the sender is unknown' do
         let(:phone_number) { nil }
-        it { should_not have_received(:call) }
+
+        it { is_expected.not_to have_received(:call) }
       end
 
       context 'if the sender is a contributor with incomplete onboarding' do
         let(:onboarding_completed_at) { nil }
-        it { should have_received(:call).with(contributor) }
+
+        it { is_expected.to have_received(:call).with(contributor) }
       end
 
       context 'if the sender is a contributor who has completed onboarding' do
-        it { should_not have_received(:call) }
+        it { is_expected.not_to have_received(:call) }
       end
     end
 
     describe 'UNKNOWN_CONTRIBUTOR' do
+      subject do
+        adapter.consume(signal_message)
+        unknown_contributor_callback
+      end
+
       let(:unknown_contributor_callback) { spy('unknown_contributor_callback') }
 
       before do
@@ -397,27 +417,29 @@ RSpec.describe SignalAdapter::Inbound do
         end
       end
 
-      subject do
-        adapter.consume(signal_message)
-        unknown_contributor_callback
-      end
-
-      describe 'if the sender is a contributor ' do
-        it { should_not have_received(:call) }
+      describe 'if the sender is a contributor' do
+        it { is_expected.not_to have_received(:call) }
       end
 
       describe 'if the sender has not completed onboarding' do
         let(:onboarding_completed_at) { nil }
-        it { should_not have_received(:call) }
+
+        it { is_expected.not_to have_received(:call) }
       end
 
       describe 'if the sender is unknown' do
         before { signal_message[:envelope][:source] = '+4955443322' }
-        it { should have_received(:call).with('+4955443322') }
+
+        it { is_expected.to have_received(:call).with('+4955443322') }
       end
     end
 
     describe 'UNKNOWN_CONTENT' do
+      subject do
+        adapter.consume(signal_message)
+        unknown_content_callback
+      end
+
       let(:unknown_content_callback) { spy('unknown_content_callback') }
 
       before do
@@ -426,18 +448,14 @@ RSpec.describe SignalAdapter::Inbound do
         end
       end
 
-      subject do
-        adapter.consume(signal_message)
-        unknown_content_callback
-      end
-
       context 'if the message is a plaintext message' do
-        it { should_not have_received(:call) }
+        it { is_expected.not_to have_received(:call) }
       end
 
       context 'if the message contains a contact' do
         before { signal_message[:envelope][:dataMessage][:contacts] = ['Käptn Blaubär'] }
-        it { should have_received(:call).with(contributor) }
+
+        it { is_expected.to have_received(:call).with(contributor) }
       end
 
       context 'if the message contains a sticker' do
@@ -448,38 +466,43 @@ RSpec.describe SignalAdapter::Inbound do
             stickerId: 3
           }
         end
-        it { should have_received(:call).with(contributor) }
+
+        it { is_expected.to have_received(:call).with(contributor) }
       end
 
       context 'if the message contains a mention' do
         before { signal_message[:envelope][:dataMessage][:mentions] = ['everyone'] }
-        it { should have_received(:call).with(contributor) }
+
+        it { is_expected.to have_received(:call).with(contributor) }
       end
 
       context 'if the message contains supported attachments' do
         let(:signal_message) { signal_message_with_attachment }
-        it { should_not have_received(:call) }
+
+        it { is_expected.not_to have_received(:call) }
       end
 
       context 'if the message contains unsupported attachments' do
         let(:signal_message) { signal_message_with_attachment }
+
         before { signal_message[:envelope][:dataMessage][:attachments][0][:contentType] = ['application/pdf'] }
-        it { should have_received(:call).with(contributor) }
+
+        it { is_expected.to have_received(:call).with(contributor) }
       end
     end
 
     describe 'UNSUBSCRIBE_CONTRIBUTOR' do
+      subject do
+        adapter.consume(signal_message)
+        unsubscribe_contributor_callback
+      end
+
       let(:unsubscribe_contributor_callback) { spy('unsubscribe_contributor_callback') }
 
       before do
         adapter.on(SignalAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
           unsubscribe_contributor_callback.call(contributor)
         end
-      end
-
-      subject do
-        adapter.consume(signal_message)
-        unsubscribe_contributor_callback
       end
 
       context 'any text other than the keyword Abbestellen' do
@@ -494,6 +517,11 @@ RSpec.describe SignalAdapter::Inbound do
     end
 
     describe 'RESUBSCRIBE_CONTRIBUTOR' do
+      subject do
+        adapter.consume(signal_message)
+        resubscribe_contributor_callback
+      end
+
       let(:resubscribe_contributor_callback) { spy('resubscribe_contributor_callback') }
 
       before do
@@ -501,11 +529,6 @@ RSpec.describe SignalAdapter::Inbound do
         adapter.on(SignalAdapter::RESUBSCRIBE_CONTRIBUTOR) do |contributor|
           resubscribe_contributor_callback.call(contributor)
         end
-      end
-
-      subject do
-        adapter.consume(signal_message)
-        resubscribe_contributor_callback
       end
 
       context 'any text other than the keyword Bestellen' do
@@ -520,6 +543,11 @@ RSpec.describe SignalAdapter::Inbound do
     end
 
     describe 'HANDLE_DELIVERY_RECEIPT' do
+      subject do
+        adapter.consume(signal_message)
+        handle_delivery_receipt_callback
+      end
+
       let(:handle_delivery_receipt_callback) { spy('handle_delivery_receipt_callback') }
       let(:signal_message) { signal_receipt_message }
 
@@ -529,13 +557,8 @@ RSpec.describe SignalAdapter::Inbound do
         end
       end
 
-      subject do
-        adapter.consume(signal_message)
-        handle_delivery_receipt_callback
-      end
-
       describe 'if the message is a delivery receipt' do
-        it { should have_received(:call) }
+        it { is_expected.to have_received(:call) }
       end
     end
   end

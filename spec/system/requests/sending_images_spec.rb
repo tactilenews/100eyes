@@ -6,7 +6,7 @@ RSpec.describe 'Sending image files', js: true do
   let(:user) { create(:user) }
 
   context 'given contributors' do
-    before(:each) do
+    before do
       # `broadcast!` is stubbed in tests
       allow(Request).to receive(:broadcast!).and_call_original
 

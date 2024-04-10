@@ -6,10 +6,12 @@ RSpec.describe RequestForm::RequestForm, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
   let(:params) { { request: build(:request) } }
-  it { should have_css('.RequestForm') }
+
+  it { is_expected.to have_css('.RequestForm') }
+
   it {
-    is_expected.not_to have_css('button[data-action="request-form#openModal"]',
-                                text: I18n.t('components.request_form.planned_request.destroy.button_text'))
+    expect(subject).not_to have_css('button[data-action="request-form#openModal"]',
+                                    text: I18n.t('components.request_form.planned_request.destroy.button_text'))
   }
 
   context 'planned request' do

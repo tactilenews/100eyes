@@ -7,5 +7,5 @@ RSpec.describe QrCode::QrCode, type: :component do
 
   let(:params) { { url: 'https://example.org' } }
 
-  it { should have_css('.QrCode') }
+  it { is_expected.to have_css('.QrCode') }
 end

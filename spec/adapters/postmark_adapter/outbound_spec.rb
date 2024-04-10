@@ -17,12 +17,14 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
 
       describe 'subject' do
         subject { bounce_email.subject }
-        it { should eq('Wir können Ihre E-Mail Adresse nicht zuordnen') }
+
+        it { is_expected.to eq('Wir können Ihre E-Mail Adresse nicht zuordnen') }
       end
 
       describe 'body' do
         subject { bounce_email.text_part.body.decoded }
-        it { should include('This is the @text') }
+
+        it { is_expected.to include('This is the @text') }
       end
     end
 
@@ -31,6 +33,7 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
         allow(Setting).to receive(:onboarding_success_heading).and_return('Welcome new contributor!')
         allow(Setting).to receive(:onboarding_success_text).and_return('You onboarded successfully.')
       end
+
       let(:contributor) { create(:contributor, email: 'contributor@example.org') }
       let(:welcome_email) do
         described_class.with(contributor: contributor).welcome_email
@@ -38,12 +41,14 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
 
       describe 'subject' do
         subject { welcome_email.subject }
-        it { should eq('Welcome new contributor!') }
+
+        it { is_expected.to eq('Welcome new contributor!') }
       end
 
       describe 'body' do
         subject { welcome_email.text_part.body.decoded }
-        it { should include("Welcome new contributor!\r\nYou onboarded successfully.") }
+
+        it { is_expected.to include("Welcome new contributor!\r\nYou onboarded successfully.") }
       end
     end
   end
@@ -56,6 +61,7 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
     let(:message) { create(:message, id: 42, text: text, recipient: recipient, broadcasted: broadcasted, request: request) }
     let(:text) { 'How do you do?' }
     let(:broadcasted) { false }
+
     before { allow(Setting).to receive(:application_host).and_return('example.org') }
 
     describe '#message_email' do
@@ -63,38 +69,41 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
 
       describe 'to' do
         subject { message_email.to }
-        it { should eq(['recipient@example.org']) }
+
+        it { is_expected.to eq(['recipient@example.org']) }
       end
 
       describe 'from' do
+        subject { message_email[:from].formatted }
+
         before do
           allow(Setting).to receive(:email_from_address).and_return('100eyes-test-account@example.org')
           allow(Setting).to receive(:project_name).and_return('TestingProject')
         end
 
-        subject { message_email[:from].formatted }
-        it { should eq(['TestingProject <100eyes-test-account@example.org>']) }
+        it { is_expected.to eq(['TestingProject <100eyes-test-account@example.org>']) }
 
         context 'with a comma / list separator in the project name' do
           before do
             allow(Setting).to receive(:project_name).and_return('TestingProject, with a comma!')
           end
 
-          it { should eq(['"TestingProject, with a comma!" <100eyes-test-account@example.org>']) }
+          it { is_expected.to eq(['"TestingProject, with a comma!" <100eyes-test-account@example.org>']) }
         end
       end
 
       describe 'plaintext body' do
         subject { message_email.text_part.body.decoded }
 
-        it { should include I18n.t('mailer.unsubscribe.text') }
+        it { is_expected.to include I18n.t('mailer.unsubscribe.text') }
       end
 
       describe 'html body' do
-        let(:text) { "How do you do?\n\nHere’s another line!" }
         subject { message_email.html_part.body }
 
-        it { should include I18n.t('mailer.unsubscribe.html') }
+        let(:text) { "How do you do?\n\nHere’s another line!" }
+
+        it { is_expected.to include I18n.t('mailer.unsubscribe.html') }
 
         it 'formats plain text' do
           expect(subject).to have_css('p', exact_text: 'How do you do?')
@@ -105,22 +114,24 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
       describe '#message_stream' do
         subject { message_email.message_stream }
 
-        it { should eq(Setting.postmark_transactional_stream) }
+        it { is_expected.to eq(Setting.postmark_transactional_stream) }
 
         context 'given message is broadcasted as part of a request' do
           let(:broadcasted) { true }
-          it { should eq(Setting.postmark_broadcasts_stream) }
+
+          it { is_expected.to eq(Setting.postmark_broadcasts_stream) }
         end
       end
 
       describe '#subject' do
         subject { message_email.subject }
 
-        it { should eq('Re: Die Redaktion hat eine neue Frage') }
+        it { is_expected.to eq('Re: Die Redaktion hat eine neue Frage') }
 
         context 'if message is broadcasted' do
           let(:broadcasted) { true }
-          it { should eq('Die Redaktion hat eine neue Frage') }
+
+          it { is_expected.to eq('Die Redaktion hat eine neue Frage') }
         end
       end
 
@@ -130,8 +141,10 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
         it { is_expected.to eq('request/4711/message/42@example.org') }
 
         context 'if message is broadcasted' do
-          let(:broadcasted) { true }
           subject { message_email.message_id }
+
+          let(:broadcasted) { true }
+
           it { is_expected.to eq('request/4711@example.org') }
         end
       end
@@ -142,9 +155,11 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
         it { is_expected.to eq('request/4711@example.org') }
 
         context 'if message is broadcasted' do
-          let(:broadcasted) { true }
           subject { message_email.references }
-          it { is_expected.to eq(nil) }
+
+          let(:broadcasted) { true }
+
+          it { is_expected.to be_nil }
         end
       end
 
@@ -152,8 +167,9 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
         let(:message) { create(:message, :with_file, text: text, recipient: recipient, broadcasted: broadcasted, request: request) }
 
         context 'if message is broadcast' do
-          let(:broadcasted) { true }
           subject { message_email.attachments }
+
+          let(:broadcasted) { true }
 
           it { is_expected.not_to be_empty }
 
@@ -167,8 +183,9 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
         end
 
         context 'if message is not broadcast, ie a reply message' do
-          let(:broadcasted) { false }
           subject { message_email.attachments }
+
+          let(:broadcasted) { false }
 
           it { is_expected.to be_empty }
         end
@@ -177,6 +194,7 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
 
     describe '::send!' do
       subject { described_class.send!(message) }
+
       let(:message) { create(:message, text: 'How do you do?', broadcasted: true, recipient: contributor) }
       let(:contributor) { create(:contributor, email: 'contributor@example.org') }
 

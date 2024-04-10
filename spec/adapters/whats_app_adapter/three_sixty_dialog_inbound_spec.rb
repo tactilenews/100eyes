@@ -61,12 +61,13 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
 
     describe '|message| block argument' do
       subject { message }
+
       it { is_expected.to be_a(Message) }
 
       context 'from an unknown contributor' do
         let!(:phone_number) { '+495555555' }
 
-        it { is_expected.to be(nil) }
+        it { is_expected.to be_nil }
       end
 
       context 'given a message with text and an attachment' do
@@ -90,17 +91,19 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
 
       context 'given a whats_app_message without a `message` and with an attachment' do
         let(:whats_app_message) { whats_app_message_with_attachment }
+
         before do
           whats_app_message[:messages].first[:image][:caption] = nil
           stub_request(:get, fetch_file_url).to_return(status: 200, body: 'downloaded_file')
         end
 
-        it { is_expected.to be(nil) }
+        it { is_expected.to be_nil }
       end
     end
 
     describe '|message|raw_data' do
       subject { message.raw_data }
+
       it { is_expected.to be_attached }
     end
 
@@ -118,8 +121,9 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
       end
 
       describe 'handling different content types' do
-        let(:file) { message.files.first }
         subject { file.attachment }
+
+        let(:file) { message.files.first }
 
         context 'given an audio file' do
           before do
@@ -220,6 +224,11 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
 
   describe '#on' do
     describe 'UNKNOWN_CONTRIBUTOR' do
+      subject do
+        adapter.consume(whats_app_message)
+        unknown_contributor_callback
+      end
+
       let(:unknown_contributor_callback) { spy('unknown_contributor_callback') }
 
       before do
@@ -228,22 +237,23 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
         end
       end
 
-      subject do
-        adapter.consume(whats_app_message)
-        unknown_contributor_callback
-      end
-
-      describe 'if the sender is a contributor ' do
-        it { should_not have_received(:call) }
+      describe 'if the sender is a contributor' do
+        it { is_expected.not_to have_received(:call) }
       end
 
       describe 'if the sender is unknown' do
         before { whats_app_message[:contacts].first[:wa_id] = '4955443322' }
-        it { should have_received(:call).with('+4955443322') }
+
+        it { is_expected.to have_received(:call).with('+4955443322') }
       end
     end
 
     describe 'UNSUPPORTED_CONTENT' do
+      subject do
+        adapter.consume(whats_app_message)
+        unsupported_content_callback
+      end
+
       let(:unsupported_content_callback) { spy('unsupported_content_callback') }
 
       before do
@@ -252,14 +262,9 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
         end
       end
 
-      subject do
-        adapter.consume(whats_app_message)
-        unsupported_content_callback
-      end
-
       describe 'supported content' do
         context 'if the message is a plaintext message' do
-          it { should_not have_received(:call) }
+          it { is_expected.not_to have_received(:call) }
         end
 
         context 'files' do
@@ -284,7 +289,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
               message[:image] = image
             end
 
-            it { should_not have_received(:call) }
+            it { is_expected.not_to have_received(:call) }
           end
 
           context 'voice' do
@@ -295,12 +300,13 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
                 sha256: 'sha256_hash'
               }
             end
+
             before do
               message[:type] = 'voice'
               message[:voice] = voice
             end
 
-            it { should_not have_received(:call) }
+            it { is_expected.not_to have_received(:call) }
           end
 
           context 'video' do
@@ -311,12 +317,13 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
                 sha256: 'sha256_hash'
               }
             end
+
             before do
               message[:type] = 'video'
               message[:video] = video
             end
 
-            it { should_not have_received(:call) }
+            it { is_expected.not_to have_received(:call) }
           end
 
           context 'audio' do
@@ -327,12 +334,13 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
                 sha256: 'sha256_hash'
               }
             end
+
             before do
               message[:type] = 'audio'
               message[:audio] = audio
             end
 
-            it { should_not have_received(:call) }
+            it { is_expected.not_to have_received(:call) }
           end
 
           context 'document' do
@@ -351,7 +359,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
                 message[:document] = document
               end
 
-              it { should_not have_received(:call) }
+              it { is_expected.not_to have_received(:call) }
             end
 
             context 'audio' do
@@ -369,7 +377,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
                 message[:document] = document
               end
 
-              it { should_not have_received(:call) }
+              it { is_expected.not_to have_received(:call) }
             end
 
             context 'video' do
@@ -387,7 +395,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
                 message[:document] = document
               end
 
-              it { should_not have_received(:call) }
+              it { is_expected.not_to have_received(:call) }
             end
           end
         end
@@ -410,12 +418,13 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
               sha256: 'sha256_hash'
             }
           end
+
           before do
             message[:type] = 'document'
             message[:document] = document
           end
 
-          it { should have_received(:call).with(contributor) }
+          it { is_expected.to have_received(:call).with(contributor) }
         end
 
         context 'document|docx|' do
@@ -427,12 +436,13 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
               sha256: 'sha256_hash'
             }
           end
+
           before do
             message[:type] = 'document'
             message[:document] = document
           end
 
-          it { should have_received(:call).with(contributor) }
+          it { is_expected.to have_received(:call).with(contributor) }
         end
 
         context 'location' do
@@ -442,12 +452,13 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
               longitude: '43.2048'
             }
           end
+
           before do
             message[:type] = 'location'
             message[:location] = location
           end
 
-          it { should have_received(:call).with(contributor) }
+          it { is_expected.to have_received(:call).with(contributor) }
         end
 
         context 'contacts' do
@@ -475,12 +486,13 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
               type: 'contacts'
             }
           end
+
           before do
             message[:type] = 'contacts'
             message[:contacts] = contacts
           end
 
-          it { should have_received(:call).with(contributor) }
+          it { is_expected.to have_received(:call).with(contributor) }
         end
       end
     end

@@ -6,5 +6,6 @@ RSpec.describe OnboardingResponse::OnboardingResponse, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
   let(:params) { { heading: 'Hello', text: 'World' } }
-  it { should have_css('.OnboardingResponse') }
+
+  it { is_expected.to have_css('.OnboardingResponse') }
 end

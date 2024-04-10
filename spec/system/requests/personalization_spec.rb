@@ -6,7 +6,7 @@ RSpec.describe 'Request personalization' do
   let(:user) { create(:user) }
 
   context 'given two contributors'
-  before(:each) do
+  before do
     # `broadcast!` is stubbed in tests
     allow(Request).to receive(:broadcast!).and_call_original
 

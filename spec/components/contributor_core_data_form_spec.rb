@@ -8,7 +8,7 @@ RSpec.describe ContributorCoreDataForm::ContributorCoreDataForm, type: :componen
   let(:contributor) { create(:contributor, first_name: 'Zora', last_name: 'Zimmermann') }
   let(:params) { { contributor: contributor } }
 
-  it { should have_css('form') }
-  it { should have_css('h1', text: 'Stammdaten bearbeiten') }
-  it { should have_css('p', text: 'Zora Zimmermann') }
+  it { is_expected.to have_css('form') }
+  it { is_expected.to have_css('h1', text: 'Stammdaten bearbeiten') }
+  it { is_expected.to have_css('p', text: 'Zora Zimmermann') }
 end

@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe ChatMessage::ChatMessage, type: :component do
   subject(:component) { render_inline(described_class.new(**params)) }
+
   let(:params) { { message: message } }
 
   describe '[class]' do
@@ -11,12 +12,14 @@ RSpec.describe ChatMessage::ChatMessage, type: :component do
 
     describe 'given a non-highlighted message' do
       let(:message) { create(:message, highlighted: false) }
-      it { should_not include('ChatMessage--highlighted') }
+
+      it { is_expected.not_to include('ChatMessage--highlighted') }
     end
 
     describe 'given a highlighted message' do
       let(:message) { create(:message, highlighted: true) }
-      it { should include('ChatMessage--highlighted') }
+
+      it { is_expected.to include('ChatMessage--highlighted') }
     end
   end
 
@@ -25,7 +28,8 @@ RSpec.describe ChatMessage::ChatMessage, type: :component do
 
     describe 'given HTML text' do
       let(:message) { create(:message, text: '<h1>Hello!</h1>') }
-      it { should have_text('<h1>Hello!</h1>') }
+
+      it { is_expected.to have_text('<h1>Hello!</h1>') }
     end
   end
 
@@ -51,7 +55,7 @@ RSpec.describe ChatMessage::ChatMessage, type: :component do
         let(:message) { create(:message, :outbound, broadcasted: true) }
 
         it 'is hidden' do
-          expect(subject).to_not have_css('a', text: I18n.t('components.chat_message.move'))
+          expect(subject).not_to have_css('a', text: I18n.t('components.chat_message.move'))
         end
       end
     end
@@ -62,18 +66,24 @@ RSpec.describe ChatMessage::ChatMessage, type: :component do
 
     context 'given a manually created message' do
       let(:message) { create(:message, creator: create(:user, first_name: 'Princess', last_name: 'Mononoke')) }
-      it { should have_text(I18n.t('components.chat_message.created_by', name: 'Princess Mononoke')) }
+
+      it { is_expected.to have_text(I18n.t('components.chat_message.created_by', name: 'Princess Mononoke')) }
 
       context 'with a creator with no name' do
         let(:message) { create(:message, creator: create(:user, first_name: '', last_name: '')) }
-        it { should have_text(I18n.t('components.chat_message.created_by', name: I18n.t('components.chat_message.anonymous_creator'))) }
+
+        it {
+          expect(subject).to have_text(I18n.t('components.chat_message.created_by',
+                                              name: I18n.t('components.chat_message.anonymous_creator')))
+        }
       end
     end
 
     context 'given a non-manually created message' do
       let(:message) { create(:message) }
-      it { should have_text(I18n.t('components.chat_message.copy')) }
-      it { should_not have_text(I18n.t('components.chat_message.created_by', name: '')) }
+
+      it { is_expected.to have_text(I18n.t('components.chat_message.copy')) }
+      it { is_expected.not_to have_text(I18n.t('components.chat_message.created_by', name: '')) }
     end
   end
 end

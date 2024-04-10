@@ -8,5 +8,5 @@ RSpec.describe Callout::Callout, type: :component do
   let(:params) { {} }
   let(:content) { 'Message' }
 
-  it { should have_css('.Callout', text: 'Message') }
+  it { is_expected.to have_css('.Callout', text: 'Message') }
 end

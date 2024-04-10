@@ -7,10 +7,10 @@ RSpec.describe PageHeader::PageHeader, type: :component do
 
   let(:params) { {} }
 
-  it { should have_css('.PageHeader', text: 'Heading') }
-  it { should_not have_css('.PageHeader-actions') }
-  it { should_not have_css('.PageHeader-tabBar') }
-  it { should_not have_css('.PageHeader--tabBar') }
+  it { is_expected.to have_css('.PageHeader', text: 'Heading') }
+  it { is_expected.not_to have_css('.PageHeader-actions') }
+  it { is_expected.not_to have_css('.PageHeader-tabBar') }
+  it { is_expected.not_to have_css('.PageHeader--tabBar') }
 
   context 'with tab_bar slot' do
     subject do
@@ -19,7 +19,7 @@ RSpec.describe PageHeader::PageHeader, type: :component do
       end
     end
 
-    it { should have_css('.PageHeader--tabBar') }
-    it { should have_css('.PageHeader-tabBar', text: 'Tab Bar') }
+    it { is_expected.to have_css('.PageHeader--tabBar') }
+    it { is_expected.to have_css('.PageHeader-tabBar', text: 'Tab Bar') }
   end
 end

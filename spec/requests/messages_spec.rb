@@ -9,17 +9,18 @@ RSpec.describe '/messages', type: :request do
   let(:message) { create(:message) }
 
   describe 'GET /new' do
-    it 'should be successful' do
+    it 'is successful' do
       get new_message_url(as: user, params: { request_id: request, contributor_id: contributor })
       expect(response).to be_successful
     end
   end
 
   describe 'POST /messages' do
-    let(:msg_attrs) { { text: 'Triangles are my favorite shape.' } }
     subject { -> { post messages_url(as: user), params: { message: msg_attrs, request_id: request.id, contributor_id: contributor.id } } }
 
-    it { should change { Message.count }.from(0).to(1) }
+    let(:msg_attrs) { { text: 'Triangles are my favorite shape.' } }
+
+    it { is_expected.to change(Message, :count).from(0).to(1) }
 
     it 'redirects to the conversation link the message belongs to' do
       subject.call
@@ -32,17 +33,18 @@ RSpec.describe '/messages', type: :request do
     end
 
     it 'saves current user as creator' do
-      should change { Message.pluck(:creator_id) }.from([]).to([user.id])
+      expect(subject).to change { Message.pluck(:creator_id) }.from([]).to([user.id])
     end
   end
 
   describe 'PATCH /message/:id' do
+    subject { -> { patch message_url(message, as: user), params: { message: new_attrs } } }
+
     let(:previous_text) { 'Previous text' }
     let(:message) { create(:message, creator_id: user.id, text: previous_text) }
     let(:new_attrs) { { text: 'Grab your coat and get your hat' } }
-    subject { -> { patch message_url(message, as: user), params: { message: new_attrs } } }
 
-    it { should change { message.reload && message.text }.from(previous_text).to('Grab your coat and get your hat') }
+    it { is_expected.to change { message.reload && message.text }.from(previous_text).to('Grab your coat and get your hat') }
 
     it 'shows success notification' do
       subject.call

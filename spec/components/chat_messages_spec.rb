@@ -6,5 +6,6 @@ RSpec.describe ChatMessages::ChatMessages, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
   let(:params) { { messages: [] } }
-  it { should have_css('.ChatMessages') }
+
+  it { is_expected.to have_css('.ChatMessages') }
 end

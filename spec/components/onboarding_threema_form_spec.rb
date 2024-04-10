@@ -8,5 +8,5 @@ RSpec.describe OnboardingThreemaForm::OnboardingThreemaForm, type: :component do
   let(:contributor) { build(:contributor) }
   let(:params) { { contributor: contributor } }
 
-  it { should have_css('.OnboardingThreemaForm') }
+  it { is_expected.to have_css('.OnboardingThreemaForm') }
 end

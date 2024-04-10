@@ -6,5 +6,6 @@ RSpec.describe Notifications::Notifications, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
   let(:params) { { notifications: [] } }
-  it { should have_css('.Notifications') }
+
+  it { is_expected.to have_css('.Notifications') }
 end

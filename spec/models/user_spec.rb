@@ -21,7 +21,7 @@ RSpec.describe User do
 
     context 'non-admin' do
       it 'does not schedule a job' do
-        expect(User.count).to eq(organization.business_plan.number_of_users)
+        expect(described_class.count).to eq(organization.business_plan.number_of_users)
         expect { subject }.not_to have_enqueued_job
       end
     end
@@ -30,13 +30,13 @@ RSpec.describe User do
       let!(:admin) { create_list(:user, 3, admin: true) }
 
       it 'schedules a job to notify only admin of the change' do
-        expect(User.admin(false).count).to eq(organization.business_plan.number_of_users)
+        expect(described_class.admin(false).count).to eq(organization.business_plan.number_of_users)
         expect { subject }.to have_enqueued_job.on_queue('default').with(
           'PostmarkAdapter::Outbound',
           'user_count_exceeds_plan_limit_email',
           'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
           {
-            params: { admin: an_instance_of(User), organization: organization },
+            params: { admin: an_instance_of(described_class), organization: organization },
             args: []
           }
         ).exactly(3).times
@@ -45,8 +45,10 @@ RSpec.describe User do
   end
 
   describe '#reset_otp' do
-    let(:user) { create(:user) }
     subject { user.update(otp_enabled: false) }
+
+    let(:user) { create(:user) }
+
     it 'updates `otp_secret_key`' do
       expect { subject }.to change(user, :otp_secret_key)
     end
@@ -54,7 +56,7 @@ RSpec.describe User do
     context 'updating other attribute' do
       subject { user.update(first_name: 'Keep my secret', last_name: 'Please') }
 
-      it ' does not update otp_secret_key' do
+      it 'does not update otp_secret_key' do
         expect { subject }.not_to change(user, :otp_secret_key)
       end
     end

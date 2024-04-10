@@ -7,12 +7,12 @@ RSpec.describe OnboardingFooter::OnboardingFooter, type: :component do
 
   let(:params) { {} }
 
-  before(:each) do
+  before do
     allow(Setting).to receive(:onboarding_imprint_link).and_return('https://example.org/imprint')
     allow(Setting).to receive(:onboarding_data_protection_link).and_return('https://example.org/privacy')
   end
 
-  it { should have_css('.OnboardingFooter') }
-  it { should have_css('a[href="https://example.org/imprint"]', text: 'Impressum') }
-  it { should have_css('a[href="https://example.org/privacy"]', text: 'Datenschutz') }
+  it { is_expected.to have_css('.OnboardingFooter') }
+  it { is_expected.to have_css('a[href="https://example.org/imprint"]', text: 'Impressum') }
+  it { is_expected.to have_css('a[href="https://example.org/privacy"]', text: 'Datenschutz') }
 end

@@ -11,25 +11,29 @@ RSpec.describe ContributorChannelSettings::ContributorChannelSettings, type: :co
   let(:attrs) { {} }
   let(:params) { { contributor: contributor } }
 
-  it { should_not have_css('h2') }
+  it { is_expected.not_to have_css('h2') }
 
   context 'given an email contributor' do
     let(:attrs) { { email: 'mustermann@example.org' } }
-    it { should have_css('h2', text: 'E-Mail') }
+
+    it { is_expected.to have_css('h2', text: 'E-Mail') }
   end
 
   context 'given a Telegram contributor' do
     let(:attrs) { { telegram_id: 12_345_678 } }
-    it { should have_css('h2', text: 'Telegram') }
+
+    it { is_expected.to have_css('h2', text: 'Telegram') }
   end
 
   context 'given a Threema contributor' do
     let(:attrs) { { threema_id: 12_345_678 } }
-    it { should have_css('h2', text: 'Threema') }
+
+    it { is_expected.to have_css('h2', text: 'Threema') }
   end
 
   context 'given a Signal contributor' do
     let(:attrs) { { signal_phone_number: '+49123456789' } }
-    it { should have_css('h2', text: 'Signal') }
+
+    it { is_expected.to have_css('h2', text: 'Signal') }
   end
 end

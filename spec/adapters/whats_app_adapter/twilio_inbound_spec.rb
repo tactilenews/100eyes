@@ -55,6 +55,11 @@ RSpec.describe WhatsAppAdapter::TwilioInbound do
 
   describe '#on' do
     describe 'REQUEST_TO_RECEIVE_MESSAGE' do
+      subject do
+        adapter.consume(whats_app_message)
+        request_to_receive_message_callback
+      end
+
       let(:request_to_receive_message_callback) { spy('request_to_receive_message_callback') }
 
       before do
@@ -63,17 +68,13 @@ RSpec.describe WhatsAppAdapter::TwilioInbound do
         end
       end
 
-      subject do
-        adapter.consume(whats_app_message)
-        request_to_receive_message_callback
-      end
-
       context 'given a quick reply message is received' do
         it { is_expected.to have_received(:call).with(contributor, original_message_sid) }
       end
 
       context 'given a reply to a message that is not a quick reply is received' do
         let(:whats_app_message) { quote_response }
+
         it { is_expected.not_to have_received(:call).with(contributor, original_message_sid) }
       end
     end

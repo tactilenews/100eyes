@@ -12,7 +12,7 @@ RSpec.describe 'Onboarding::Signal', type: :request do
   describe 'GET /onboarding/signal' do
     subject { -> { get onboarding_signal_path(jwt: jwt) } }
 
-    before(:each) { allow(Setting).to receive(:signal_server_phone_number).and_return(signal_server_phone_number) }
+    before { allow(Setting).to receive(:signal_server_phone_number).and_return(signal_server_phone_number) }
 
     context 'if Signal is not set up on the server' do
       let(:signal_server_phone_number) { nil }
@@ -34,6 +34,8 @@ RSpec.describe 'Onboarding::Signal', type: :request do
   end
 
   describe 'POST /onboarding/signal' do
+    subject { -> { post onboarding_signal_path, params: params } }
+
     let(:attrs) do
       {
         first_name: 'Zora',
@@ -46,9 +48,7 @@ RSpec.describe 'Onboarding::Signal', type: :request do
 
     let(:params) { { jwt: jwt, contributor: attrs, context: :contributor_signup } }
 
-    subject { -> { post onboarding_signal_path, params: params } }
-
-    before(:each) { allow(Setting).to receive(:signal_server_phone_number).and_return('+4491234567890') }
+    before { allow(Setting).to receive(:signal_server_phone_number).and_return('+4491234567890') }
 
     it 'creates contributor' do
       expect { subject.call }.to change(Contributor, :count).by(1)
@@ -67,7 +67,7 @@ RSpec.describe 'Onboarding::Signal', type: :request do
     end
 
     it 'does not send welcome message' do
-      should_not enqueue_job(SignalAdapter::Outbound).with(message: Message.new(text: anything), recipient: anything)
+      expect(subject).not_to enqueue_job(SignalAdapter::Outbound).with(message: Message.new(text: anything), recipient: anything)
     end
 
     it 'redirects to onboarding signal link page' do

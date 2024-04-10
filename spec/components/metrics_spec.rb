@@ -7,11 +7,13 @@ RSpec.describe Metrics::Metrics, type: :component do
 
   describe 'with inline style' do
     let(:params) { { metrics: [], style: :inline } }
-    it { should have_css('.InlineMetrics') }
+
+    it { is_expected.to have_css('.InlineMetrics') }
   end
 
   describe 'with cards style' do
     let(:params) { { metrics: [], style: :cards } }
-    it { should have_css('.CardMetrics') }
+
+    it { is_expected.to have_css('.CardMetrics') }
   end
 end

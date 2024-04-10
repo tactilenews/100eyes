@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe TabBar::TabBar, type: :component do
   subject { render_inline(described_class.new(**params)) }
+
   let(:params) { { items: items } }
 
   let(:items) do
@@ -11,7 +12,7 @@ RSpec.describe TabBar::TabBar, type: :component do
      { url: '/b', label: 'Link B' }]
   end
 
-  it { should have_css('.TabBar') }
+  it { is_expected.to have_css('.TabBar') }
 
   it 'renders list of items' do
     expect(subject).to have_css('.TabBar-item--active', text: 'Link A')
@@ -24,18 +25,18 @@ RSpec.describe TabBar::TabBar, type: :component do
   context 'with counts' do
     let(:items) { [{ url: '/a', label: 'Link A', count: 3 }] }
 
-    it { should have_css('.TabBar-item .TabBar-count', text: 3) }
+    it { is_expected.to have_css('.TabBar-item .TabBar-count', text: 3) }
   end
 
   context 'without url' do
     let(:items) { [{ label: 'Button A' }] }
 
-    it { should have_css('button.Button') }
+    it { is_expected.to have_css('button.Button') }
   end
 
   context 'with icon' do
     let(:items) { [{ icon: 'filter-tool' }] }
 
-    it { should have_css('.Icon.Icon--inline') }
+    it { is_expected.to have_css('.Icon.Icon--inline') }
   end
 end

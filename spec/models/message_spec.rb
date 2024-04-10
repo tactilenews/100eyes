@@ -12,51 +12,61 @@ RSpec.describe Message, type: :model do
   end
 
   describe '#contributor' do
-    let(:contributor) { create(:contributor) }
     subject { message.contributor }
+
+    let(:contributor) { create(:contributor) }
 
     describe 'inbound message' do
       let(:message) { create(:message, sender: contributor) }
-      it { should eql(contributor) }
+
+      it { is_expected.to eql(contributor) }
     end
 
     context 'outbound' do
       let(:message) do
         create(:message, :outbound, recipient: contributor, broadcasted: true)
       end
-      it { should eql(contributor) }
+
+      it { is_expected.to eql(contributor) }
     end
   end
 
   describe '#reply?' do
     subject { message.reply? }
+
     describe 'inbound message' do
       let(:message) { create(:message, sender: create(:contributor)) }
-      it { should be(true) }
+
+      it { is_expected.to be(true) }
     end
 
     # legacy, sender should not be nil in the future, but was before we had User's as senders
     describe 'message has no sender' do
       let(:message) { create(:message, sender: nil, broadcasted: true) }
-      it { should be(false) }
+
+      it { is_expected.to be(false) }
     end
 
     describe 'outbound message' do
       let(:message) { create(:message, :outbound) }
-      it { should be(false) }
+
+      it { is_expected.to be(false) }
     end
   end
 
   describe '#manually_created?' do
     subject { message.manually_created? }
+
     context 'message has a creator' do
       let(:message) { create(:message, creator: create(:user)) }
-      it { should be(true) }
+
+      it { is_expected.to be(true) }
     end
 
     context 'message has no creator' do
       let(:message) { create(:message, creator: nil) }
-      it { should be(false) }
+
+      it { is_expected.to be(false) }
     end
   end
 
@@ -70,32 +80,41 @@ RSpec.describe Message, type: :model do
 
       describe 'given a recipient' do
         let(:params) { { sender: nil, recipient: contributor, broadcasted: true } }
-        it { should eq('/contributors/7/requests/6') }
+
+        it { is_expected.to eq('/contributors/7/requests/6') }
       end
 
       describe 'given an inbound message' do
         let(:params) { { recipient: nil, sender: contributor } }
-        it { should eq('/contributors/7/requests/6') }
+
+        it { is_expected.to eq('/contributors/7/requests/6') }
       end
     end
 
     describe '#chat_message_link' do
       subject { message.chat_message_link }
+
       let(:params) { { id: 8, recipient: nil, sender: contributor } }
-      it { should eq('/contributors/7/requests/6#message-8') }
+
+      it { is_expected.to eq('/contributors/7/requests/6#message-8') }
     end
   end
 
   describe 'validations' do
-    let(:message) { build(:message, sender: nil) }
     subject { message }
+
+    let(:message) { build(:message, sender: nil) }
+
     describe '#raw_data' do
       describe 'missing' do
-        before(:each) { message.raw_data = nil }
-        it { should be_valid }
+        before { message.raw_data = nil }
+
+        it { is_expected.to be_valid }
+
         describe 'but with a given sender' do
-          before(:each) { message.sender = build(:contributor) }
-          it { should_not be_valid }
+          before { message.sender = build(:contributor) }
+
+          it { is_expected.not_to be_valid }
         end
       end
     end
@@ -120,10 +139,12 @@ RSpec.describe Message, type: :model do
           message.blocked
         end
 
-        it { should be(false) }
+        it { is_expected.to be(false) }
+
         describe 'but if contributor blocked the telegram bot' do
           before { allow(Telegram.bot).to receive(:send_message).and_raise(Telegram::Bot::Forbidden) }
-          it { should be(true) }
+
+          it { is_expected.to be(true) }
         end
       end
     end
@@ -140,12 +161,12 @@ RSpec.describe Message, type: :model do
   end
 
   describe '::counter_culture_fix_counts' do
-    let(:request) { create(:request) }
-
     subject do
       described_class.counter_culture_fix_counts
       request.reload
     end
+
+    let(:request) { create(:request) }
 
     describe 'fixes replies counter' do
       before do
@@ -155,7 +176,7 @@ RSpec.describe Message, type: :model do
         request.update(replies_count: 4711)
       end
 
-      it { expect { subject }.to (change { request.replies_count }).from(4711).to(1) }
+      it { expect { subject }.to (change(request, :replies_count)).from(4711).to(1) }
     end
   end
 end

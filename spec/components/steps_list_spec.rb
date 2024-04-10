@@ -6,5 +6,6 @@ RSpec.describe StepsList::StepsList, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
   let(:params) { { steps: [] } }
-  it { should have_css('.StepsList') }
+
+  it { is_expected.to have_css('.StepsList') }
 end

@@ -4,15 +4,18 @@ require 'rails_helper'
 
 RSpec.describe OnboardingTelegramLink::OnboardingTelegramLink, type: :component do
   subject { render_inline(described_class.new(**params)) }
+
   before do
     allow(Setting).to receive(:telegram_bot_username).and_return('TestingBot')
   end
 
   let(:params) { { telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN' } }
-  it { should have_css('a[href="https://t.me/TestingBot?start=TELEGRAM_ONBOARDING_TOKEN"]') }
+
+  it { is_expected.to have_css('a[href="https://t.me/TestingBot?start=TELEGRAM_ONBOARDING_TOKEN"]') }
 
   context 'missing `telegram_onboarding_token`' do
     subject { -> { render_inline(described_class.new) } }
-    it { should raise_error(ArgumentError) }
+
+    it { is_expected.to raise_error(ArgumentError) }
   end
 end

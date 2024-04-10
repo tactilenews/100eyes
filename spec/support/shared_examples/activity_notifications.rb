@@ -4,7 +4,7 @@ RSpec.shared_examples 'an ActivityNotification' do |event_type|
   let!(:users) { create_list(:user, 5) }
 
   context 'creates activity notifications' do
-    it " of type #{event_type}" do
+    it "of type #{event_type}" do
       expect { run_action(subject) }.to change(ActivityNotification.where(type: event_type), :count).by(User.count)
     end
 

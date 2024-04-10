@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe Avatar::Avatar, type: :component do
   include Rails.application.routes.url_helpers
   subject { component }
+
   let(:params) { { record: contributor } }
   let(:component) { render_inline(described_class.new(**params)) }
 
@@ -13,7 +14,8 @@ RSpec.describe Avatar::Avatar, type: :component do
 
     describe 'given contributor without attached avatar' do
       let(:contributor) { build(:contributor, avatar: nil) }
-      it { should be_empty }
+
+      it { is_expected.to be_empty }
     end
   end
 
@@ -37,7 +39,8 @@ RSpec.describe Avatar::Avatar, type: :component do
 
     describe 'given a contributor' do
       let(:contributor) { build(:contributor, id: 0) }
-      it { should start_with('--avatar-color: ') }
+
+      it { is_expected.to start_with('--avatar-color: ') }
     end
   end
 
@@ -46,44 +49,51 @@ RSpec.describe Avatar::Avatar, type: :component do
 
     describe 'given a contributor without name' do
       let(:contributor) { build(:contributor, first_name: nil, last_name: nil) }
-      it { should eq('?') }
+
+      it { is_expected.to eq('?') }
     end
 
     describe 'given a contributor called "Zora"' do
       let(:contributor) { build(:contributor, first_name: 'Zora', last_name: nil) }
-      it { should eq('Z') }
+
+      it { is_expected.to eq('Z') }
     end
 
     describe 'given a contributor called "Zora Ackermann"' do
       let(:contributor) { build(:contributor, first_name: 'Zora', last_name: 'Ackermann') }
-      it { should eq('ZA') }
+
+      it { is_expected.to eq('ZA') }
     end
 
     describe 'given a contributor called "Vicco von Bülow"' do
       let(:contributor) { build(:contributor, first_name: 'Vicco', last_name: 'von Bülow') }
-      it { should eq('VvB') }
+
+      it { is_expected.to eq('VvB') }
     end
   end
 
   describe 'link' do
     context 'given a contributor without an avatar' do
       let(:contributor) { build(:contributor, avatar: nil) }
-      it { should_not have_css('.Avatar a') }
+
+      it { is_expected.not_to have_css('.Avatar a') }
 
       context 'if it is expandable' do
         let(:params) { { record: contributor, expandable: true } }
-        it { should_not have_css('.Avatar a') }
+
+        it { is_expected.not_to have_css('.Avatar a') }
       end
     end
 
     context 'given a contributor with an avatar' do
       let(:contributor) { create(:contributor, :with_an_avatar) }
 
-      it { should_not have_css('.Avatar a') }
+      it { is_expected.not_to have_css('.Avatar a') }
 
       context 'if it is expandable' do
         let(:params) { { record: contributor, expandable: true } }
-        it { should have_css('.Avatar a[aria-label="In Originalgröße anzeigen"]') }
+
+        it { is_expected.to have_css('.Avatar a[aria-label="In Originalgröße anzeigen"]') }
       end
     end
   end

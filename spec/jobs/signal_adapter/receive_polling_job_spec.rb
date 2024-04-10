@@ -6,9 +6,10 @@ require 'webmock/rspec'
 RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
   describe '#perform_later' do
     subject { -> { described_class.perform_later } }
+
     let(:queue) { 'poll_signal_messages' }
 
-    it { should have_enqueued_job(described_class).on_queue(queue) }
+    it { is_expected.to have_enqueued_job(described_class).on_queue(queue) }
 
     context 'given a polling job' do
       # Our implementation is specific to `delayed_job`. During test
@@ -17,18 +18,20 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
       let!(:job) { Delayed::Job.create(queue: queue, handler: 'Job', failed_at: failed_at) }
       let(:failed_at) { nil }
 
-      it { should_not have_enqueued_job(described_class).on_queue(queue) }
+      it { is_expected.not_to have_enqueued_job(described_class).on_queue(queue) }
 
       context 'that has failed' do
         let(:failed_at) { Time.zone.now }
-        it { should have_enqueued_job(described_class).on_queue(queue) }
+
+        it { is_expected.to have_enqueued_job(described_class).on_queue(queue) }
       end
     end
   end
 
   describe '#perform' do
-    let(:job) { described_class.new }
     subject { -> { job.perform } }
+
+    let(:job) { described_class.new }
 
     describe 'without a registered signal phone number on the server' do
       before do
@@ -37,7 +40,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
 
       it 'stops immediately as there are no messages to receive' do
         expect(job).not_to receive(:ping_monitoring_service)
-        should_not raise_error
+        expect(subject).not_to raise_error
       end
     end
 
@@ -65,7 +68,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
       describe 'given a message from an unknown contributor' do
         before { allow(Sentry).to receive(:capture_exception).with(an_instance_of(SignalAdapter::UnknownContributorError)) }
 
-        it { should_not(change { Message.count }) }
+        it { is_expected.not_to(change(Message, :count)) }
 
         it 'sends an error to Sentry so that our admins get notified' do
           subject.call
@@ -81,10 +84,10 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
           allow(Setting).to receive(:onboarding_success_text).and_return('')
         end
 
-        it { should_not(change { Message.count }) }
+        it { is_expected.not_to(change(Message, :count)) }
 
         it 'sends welcome message' do
-          should have_enqueued_job(SignalAdapter::Outbound::Text).with do |text, recipient|
+          expect(subject).to have_enqueued_job(SignalAdapter::Outbound::Text).with do |text, recipient|
             expect(text).to eq("Welcome!\n")
             expect(recipient.id).to eq(contributor.id)
           end
@@ -107,7 +110,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         end
 
         it 'is expected to create a message' do
-          should(change { Message.count }.from(0).to(1))
+          expect(subject).to(change(Message, :count).from(0).to(1))
         end
 
         it 'is expected to assign the correct contributor' do
@@ -125,7 +128,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         end
 
         it 'creates a message for the known contributor' do
-          should(change { Message.count }.from(0).to(1))
+          expect(subject).to(change(Message, :count).from(0).to(1))
         end
 
         it 'raises an error for the unknown contributor so that our admins get notified' do
@@ -147,6 +150,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         describe 'that is supported',
                  vcr: { cassette_name: :receive_signal_messages_containing_supported_attachment } do
           let(:attached_file) { Message.first.files.first.attachment }
+
           it 'is expected to save the attachments as attached files' do
             subject.call
             expect(attached_file).to be_attached
@@ -160,7 +164,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
           end
 
           it 'bounces a warning to the contributor' do
-            should have_enqueued_job(SignalAdapter::Outbound::Text).with(
+            expect(subject).to have_enqueued_job(SignalAdapter::Outbound::Text).with(
               contributor_id: contributor.id,
               text: 'We cannot process this content'
             )
@@ -176,6 +180,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
       end
 
       let!(:contributor) { create(:contributor, signal_phone_number: '+4915112345789', signal_onboarding_completed_at: Time.zone.now) }
+
       it { is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(contributor.id, SignalAdapter::Outbound) }
     end
 
@@ -185,6 +190,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
         allow(Setting).to receive(:signal_cli_rest_api_endpoint).and_return('http://signal:8080')
       end
+
       let!(:contributor) do
         create(:contributor, signal_phone_number: '+4915112345789', signal_onboarding_completed_at: Time.zone.now,
                              unsubscribed_at: 1.week.ago)

@@ -9,19 +9,21 @@ RSpec.describe WhatsAppAdapter::TwilioOutbound do
   let(:contributor) { create(:contributor, email: nil) }
 
   describe '::send_welcome_message!' do
+    subject { -> { described_class.send_welcome_message!(contributor) } }
+
     let(:expected_job_args) do
       { contributor_id: contributor.id, text: ["*#{onboarding_success_heading}*", onboarding_success_text].join("\n\n") }
     end
     let(:onboarding_success_heading) { 'Thanks for onboarding' }
     let(:onboarding_success_text) { 'We will start sending messages soon.' }
-    subject { -> { described_class.send_welcome_message!(contributor) } }
+
     before do
       message # we don't count the extra ::send here
       allow(Setting).to receive(:onboarding_success_heading).and_return(onboarding_success_heading)
       allow(Setting).to receive(:onboarding_success_text).and_return(onboarding_success_text)
     end
 
-    it { should_not enqueue_job(WhatsAppAdapter::Outbound::Text) }
+    it { is_expected.not_to enqueue_job(WhatsAppAdapter::Outbound::Text) }
 
     context 'contributor has a phone number' do
       let(:contributor) do
@@ -32,16 +34,17 @@ RSpec.describe WhatsAppAdapter::TwilioOutbound do
         )
       end
 
-      it { should enqueue_job(WhatsAppAdapter::Outbound::Text).with(expected_job_args) }
+      it { is_expected.to enqueue_job(WhatsAppAdapter::Outbound::Text).with(expected_job_args) }
     end
   end
 
   describe '::send!' do
     subject { -> { described_class.send!(message) } }
+
     before { message } # we don't count the extra ::send here
 
     context '`whats_app_phone_number` blank' do
-      it { should_not enqueue_job(WhatsAppAdapter::Outbound::Text) }
+      it { is_expected.not_to enqueue_job(WhatsAppAdapter::Outbound::Text) }
     end
 
     context 'given a WhatsApp contributor' do
@@ -102,6 +105,7 @@ RSpec.describe WhatsAppAdapter::TwilioOutbound do
 
         context 'contributor has sent a reply within 24 hours' do
           before { create(:message, sender: contributor) }
+
           it 'enqueues a File job with file, contributor, text' do
             expect { subject.call }.to(have_enqueued_job(WhatsAppAdapter::Outbound::File).on_queue('default').with do |params|
               expect(params[:message]).to eq(message)
@@ -120,11 +124,11 @@ RSpec.describe WhatsAppAdapter::TwilioOutbound do
       context  'contributor has responded' do
         before { contributor.update(whats_app_message_template_responded_at: 1.second.ago) }
 
-        it { is_expected.to eq(true) }
+        it { is_expected.to be(true) }
       end
 
       context 'contributor has not responded, and has no messages within 24 hours' do
-        it { is_expected.to eq(false) }
+        it { is_expected.to be(false) }
       end
     end
 
@@ -132,11 +136,11 @@ RSpec.describe WhatsAppAdapter::TwilioOutbound do
       context 'has been received' do
         before { create(:message, sender: contributor) }
 
-        it { is_expected.to eq(true) }
+        it { is_expected.to be(true) }
       end
 
       context 'has not been received' do
-        it { is_expected.to eq(false) }
+        it { is_expected.to be(false) }
       end
     end
   end

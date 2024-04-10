@@ -7,8 +7,8 @@ RSpec.describe PasswordInput::PasswordInput, type: :component do
 
   let(:params) { { id: 'password', minlength: 33 } }
 
-  it { should have_css('.PasswordInput') }
-  it { should have_css('button', text: 'Passwort einblenden') }
+  it { is_expected.to have_css('.PasswordInput') }
+  it { is_expected.to have_css('button', text: 'Passwort einblenden') }
 
-  it { should have_css('input[type="password"][required][minlength="33"]') }
+  it { is_expected.to have_css('input[type="password"][required][minlength="33"]') }
 end

@@ -20,16 +20,19 @@ RSpec.describe ProfileHeader::ProfileHeader, type: :component do
   it { is_expected.to have_css('.ProfileHeader') }
   it { is_expected.to have_text('Editorial Basic') }
   it { is_expected.to have_selector(:element, 'h2', 'data-testid': 'contact_person', text: 'ContactFor Organization') }
+
   it {
-    is_expected.to have_selector(:element, 'h2', 'data-testid': 'price_per_month',
-                                                 text: number_to_currency(organization.business_plan.price_per_month).to_s)
+    expect(subject).to have_selector(:element, 'h2', 'data-testid': 'price_per_month',
+                                                     text: number_to_currency(organization.business_plan.price_per_month).to_s)
   }
+
   it {
-    is_expected.to have_selector(:element, 'h2', 'data-testid': 'valid_until',
-                                                 text: I18n.l(organization.business_plan.valid_until, format: '%m/%Y').to_s)
+    expect(subject).to have_selector(:element, 'h2', 'data-testid': 'valid_until',
+                                                     text: I18n.l(organization.business_plan.valid_until, format: '%m/%Y').to_s)
   }
+
   it {
-    is_expected.to have_button("Plan jetzt upgraden und #{organization.upgrade_discount}% sparen")
+    expect(subject).to have_button("Plan jetzt upgraden und #{organization.upgrade_discount}% sparen")
   }
 
   context 'No contact person' do
@@ -41,16 +44,19 @@ RSpec.describe ProfileHeader::ProfileHeader, type: :component do
 
   context 'Price with discount' do
     before { organization.update!(upgraded_business_plan_at: 5.minutes.ago) }
+
     let(:price_with_discount) do
       number_to_currency(organization.business_plan.price_per_month -
       (organization.business_plan.price_per_month * organization.upgrade_discount / 100.to_f))
     end
+
     it {
-      is_expected.not_to have_selector(:element, 'h2', 'data-testid': 'price_per_month',
-                                                       text: number_to_currency(organization.business_plan.price_per_month).to_s)
+      expect(subject).not_to have_selector(:element, 'h2', 'data-testid': 'price_per_month',
+                                                           text: number_to_currency(organization.business_plan.price_per_month).to_s)
     }
+
     it {
-      is_expected.to have_selector(:element, 'h2', 'data-testid': 'price_per_month', text: price_with_discount)
+      expect(subject).to have_selector(:element, 'h2', 'data-testid': 'price_per_month', text: price_with_discount)
     }
   end
 

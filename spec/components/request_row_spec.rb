@@ -8,5 +8,5 @@ RSpec.describe RequestRow::RequestRow, type: :component do
   let(:the_request) { create(:request) }
   let(:params) { { request: the_request } }
 
-  it { should have_css('.RequestRow') }
+  it { is_expected.to have_css('.RequestRow') }
 end

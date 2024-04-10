@@ -13,8 +13,8 @@ RSpec.describe MoveMessageForm::MoveMessageForm, type: :component do
 
   let(:params) { { message: message } }
 
-  it { should have_css('form') }
-  it { should have_css('input[type="radio"]', count: 2) }
+  it { is_expected.to have_css('form') }
+  it { is_expected.to have_css('input[type="radio"]', count: 2) }
 
   it 'displays current request checked' do
     first = subject.css('input[type="radio"]').first

@@ -4,11 +4,13 @@ require 'rails_helper'
 
 RSpec.describe OnboardingTelegramFallback::OnboardingTelegramFallback, type: :component do
   subject { render_inline(described_class.new(**params)) }
+
   before do
     allow(Setting).to receive(:telegram_bot_username).and_return('TestingBot')
   end
+
   let(:params) { { telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN' } }
 
-  it { should have_css('strong', text: 'TestingBot') }
-  it { should have_css('strong', text: 'TELEGRAM_ONBOARDING_TOKEN') }
+  it { is_expected.to have_css('strong', text: 'TestingBot') }
+  it { is_expected.to have_css('strong', text: 'TELEGRAM_ONBOARDING_TOKEN') }
 end

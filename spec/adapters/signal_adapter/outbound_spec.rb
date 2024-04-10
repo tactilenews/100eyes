@@ -13,9 +13,10 @@ RSpec.describe SignalAdapter::Outbound do
 
   describe '::send_welcome_message!' do
     subject { -> { described_class.send_welcome_message!(contributor) } }
+
     before { message } # we don't count the extra ::send here
 
-    it { should_not enqueue_job(described_class::Text) }
+    it { is_expected.not_to enqueue_job(described_class::Text) }
 
     context 'contributor has a phone number' do
       let(:onboarding_completed_at) { nil }
@@ -28,19 +29,22 @@ RSpec.describe SignalAdapter::Outbound do
         )
       end
 
-      it { should_not enqueue_job(described_class::Text) }
+      it { is_expected.not_to enqueue_job(described_class::Text) }
 
       context 'and has completed onboarding' do
         let(:onboarding_completed_at) { Time.zone.now }
-        it { should enqueue_job(described_class::Text).with(expected_job_args) }
+
+        it { is_expected.to enqueue_job(described_class::Text).with(expected_job_args) }
       end
     end
   end
 
   describe '::send!' do
     subject { -> { described_class.send!(message) } }
+
     before { message } # we don't count the extra ::send here
-    it { should_not enqueue_job(described_class::Text) }
+
+    it { is_expected.not_to enqueue_job(described_class::Text) }
 
     describe 'contributor has a phone number' do
       let(:onboarding_completed_at) { nil }
@@ -54,11 +58,12 @@ RSpec.describe SignalAdapter::Outbound do
         )
       end
 
-      it { should_not enqueue_job(described_class::Text) }
+      it { is_expected.not_to enqueue_job(described_class::Text) }
 
       context 'and has completed onboarding' do
         let(:onboarding_completed_at) { Time.zone.now }
-        it { should enqueue_job(described_class::Text) }
+
+        it { is_expected.to enqueue_job(described_class::Text) }
       end
     end
   end

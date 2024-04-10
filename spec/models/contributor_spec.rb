@@ -13,9 +13,9 @@ RSpec.describe Contributor, type: :model do
     adam_zimmermann = create(:contributor, first_name: 'Adam', last_name: 'Zimmermann')
     adam_ackermann = create(:contributor, first_name: 'Adam', last_name: 'Ackermann')
 
-    expect(Contributor.first).to eq(adam_ackermann)
-    expect(Contributor.second).to eq(adam_zimmermann)
-    expect(Contributor.third).to eq(zora)
+    expect(described_class.first).to eq(adam_ackermann)
+    expect(described_class.second).to eq(adam_zimmermann)
+    expect(described_class.third).to eq(zora)
   end
 
   describe '.find_by_email' do
@@ -25,21 +25,21 @@ RSpec.describe Contributor, type: :model do
       let(:contributor) { create(:contributor, email: 'UPPER@EXAMPLE.ORG') }
       let(:address) { 'upper@example.org' }
 
-      it { should eq(contributor) }
+      it { is_expected.to eq(contributor) }
     end
 
     describe 'with uppercase address' do
       let(:contributor) { create(:contributor, email: 'lower@example.org') }
       let(:address) { 'LOWER@EXAMPLE.ORG' }
 
-      it { should eq(contributor) }
+      it { is_expected.to eq(contributor) }
     end
 
     describe 'with multiple addresses' do
       let(:contributor) { create(:contributor, email: 'zora@example.org') }
       let(:address) { ['other@example.org', 'zora@example.org'] }
 
-      it { should eq(contributor) }
+      it { is_expected.to eq(contributor) }
     end
   end
 
@@ -51,25 +51,27 @@ RSpec.describe Contributor, type: :model do
     end
 
     describe 'two contributor accounts without email' do
-      before(:each) { create(:contributor, email: nil) }
       subject { build(:contributor, email: nil) }
-      it { should be_valid }
+
+      before { create(:contributor, email: nil) }
+
+      it { is_expected.to be_valid }
     end
 
     describe 'no email' do
       subject { -> { build(:contributor, email: '').save! } }
 
-      it { should_not raise_error }
-      it { should change { Contributor.count }.from(0).to(1) }
-      it { should change { Contributor.pluck(:email) }.from([]).to([nil]) }
+      it { is_expected.not_to raise_error }
+      it { is_expected.to change(described_class, :count).from(0).to(1) }
+      it { is_expected.to change { described_class.pluck(:email) }.from([]).to([nil]) }
 
       describe 'given an existing invalid contributor with empty string as email address' do
-        before(:each) do
+        before do
           build(:contributor, email: '').save!(validate: false)
         end
 
-        it { should_not raise_error }
-        it { should change { Contributor.count }.from(1).to(2) }
+        it { is_expected.not_to raise_error }
+        it { is_expected.to change(described_class, :count).from(1).to(2) }
       end
     end
   end
@@ -139,17 +141,17 @@ RSpec.describe Contributor, type: :model do
     describe 'given a blank threema_id' do
       subject { -> { build(:contributor, threema_id: '').save! } }
 
-      it { should_not raise_error }
-      it { should change { Contributor.count }.from(0).to(1) }
-      it { should change { Contributor.pluck(:threema_id) }.from([]).to([nil]) }
+      it { is_expected.not_to raise_error }
+      it { is_expected.to change(described_class, :count).from(0).to(1) }
+      it { is_expected.to change { described_class.pluck(:threema_id) }.from([]).to([nil]) }
 
       describe 'given an existing invalid contributor with empty string as threema_id' do
-        before(:each) do
+        before do
           build(:contributor, threema_id: '').save!(validate: false)
         end
 
-        it { should_not raise_error }
-        it { should change { Contributor.count }.from(1).to(2) }
+        it { is_expected.not_to raise_error }
+        it { is_expected.to change(described_class, :count).from(1).to(2) }
       end
     end
 
@@ -201,7 +203,7 @@ RSpec.describe Contributor, type: :model do
           allow(threema_lookup_double).to receive(:key).and_return(nil)
         end
 
-        it 'it raises an error' do
+        it 'raises an error' do
           expect do
             create(:contributor, threema_id: '12345678')
           end.to raise_error(ActiveRecord::RecordInvalid, /Threema ID ist ungültig, bitte überprüfen./)
@@ -243,17 +245,20 @@ RSpec.describe Contributor, type: :model do
 
     describe 'given a contributor without telegram or email' do
       let(:contributor) { create(:contributor, telegram_id: nil, email: nil) }
-      it { should be_empty }
+
+      it { is_expected.to be_empty }
     end
 
     describe 'given a contributor with email' do
       let(:contributor) { create(:contributor, email: 'contributor@example.org') }
-      it { should contain_exactly(:email) }
+
+      it { is_expected.to contain_exactly(:email) }
     end
 
     describe 'given a contributor with telegram and email' do
       let(:contributor) { create(:contributor, telegram_id: '123', email: 'contributor@example.org') }
-      it { should contain_exactly(:telegram, :email) }
+
+      it { is_expected.to contain_exactly(:telegram, :email) }
     end
   end
 
@@ -262,17 +267,20 @@ RSpec.describe Contributor, type: :model do
 
     describe 'given a contributor with a telegram onboarding token' do
       let(:contributor) { create(:contributor, telegram_id: nil, telegram_onboarding_token: 'ABC') }
-      it { should be(true) }
+
+      it { is_expected.to be(true) }
     end
 
     describe 'given a contributor with a telegram_id and telegram_id' do
       let(:contributor) { create(:contributor, telegram_id: '123') }
-      it { should be(true) }
+
+      it { is_expected.to be(true) }
     end
 
     describe 'given a contributor without telegram_id and telegram_id' do
       let(:contributor) { create(:contributor, telegram_id: nil) }
-      it { should be(false) }
+
+      it { is_expected.to be(false) }
     end
   end
 
@@ -281,12 +289,14 @@ RSpec.describe Contributor, type: :model do
 
     describe 'given a contributor with an email address' do
       let(:contributor) { create(:contributor, email: 'contributor@example.org') }
-      it { should be(true) }
+
+      it { is_expected.to be(true) }
     end
 
     describe 'given a contributor without an email address' do
       let(:contributor) { create(:contributor, email: nil) }
-      it { should be(false) }
+
+      it { is_expected.to be(false) }
     end
   end
 
@@ -295,12 +305,14 @@ RSpec.describe Contributor, type: :model do
 
     describe 'given a contributor with an avatar' do
       let(:contributor) { create(:contributor, :with_an_avatar) }
-      it { should be(true) }
+
+      it { is_expected.to be(true) }
     end
 
     describe 'given a contributor without an avatar' do
       let(:contributor) { create(:contributor) }
-      it { should be(false) }
+
+      it { is_expected.to be(false) }
     end
   end
 
@@ -309,25 +321,29 @@ RSpec.describe Contributor, type: :model do
 
     describe 'given a contributor with tags' do
       let(:contributor) { create(:contributor, tag_list: 'teacher') }
-      it { should be(true) }
+
+      it { is_expected.to be(true) }
     end
 
     describe 'given a contributor without tags' do
       let(:contributor) { create(:contributor) }
-      it { should be(false) }
+
+      it { is_expected.to be(false) }
     end
   end
 
   describe '.all_tags_with_count' do
-    subject { Contributor.all_tags_with_count.pluck(:name, :count) }
+    subject { described_class.all_tags_with_count.pluck(:name, :count) }
 
     context 'given a contributor with a tag' do
       let!(:contributor) { create(:contributor, tag_list: %w[Homeowner]) }
-      it { should eq([['Homeowner', 1]]) }
+
+      it { is_expected.to eq([['Homeowner', 1]]) }
 
       context 'and a request with the same tag' do
         let!(:request) { create(:request, tag_list: %w[Homeowner]) }
-        it { should eq([['Homeowner', 1]]) }
+
+        it { is_expected.to eq([['Homeowner', 1]]) }
       end
     end
   end
@@ -346,24 +362,28 @@ RSpec.describe Contributor, type: :model do
         ]
       end
 
-      before(:each) do
+      before do
         messages # make sure all records are written to the database
       end
 
-      it { should include(messages[0]) }
-      it { should_not include(messages[1]) }
-      it 'should be orderd by `created_at`' do
-        should eq([messages[0], messages[2], messages[4]])
+      it { is_expected.to include(messages[0]) }
+      it { is_expected.not_to include(messages[1]) }
+
+      it 'is orderd by `created_at`' do
+        expect(subject).to eq([messages[0], messages[2], messages[4]])
       end
+
       it 'does not include messages of other contributors' do
-        should_not include(messages[3])
+        expect(subject).not_to include(messages[3])
       end
-      it { should include(messages[4]) }
+
+      it { is_expected.to include(messages[4]) }
     end
   end
 
   describe '#reply' do
     subject { -> { contributor.reply(message_inbound_adapter) } }
+
     describe 'given a PostmarkAdapter::Inbound' do
       let(:mail) do
         mail = Mail.new do |m|
@@ -376,14 +396,14 @@ RSpec.describe Contributor, type: :model do
       end
       let(:message_inbound_adapter) { PostmarkAdapter::Inbound.new(mail) }
 
-      it { should_not raise_error }
-      it { should_not(change { Message.count }) }
+      it { is_expected.not_to raise_error }
+      it { is_expected.not_to(change(Message, :count)) }
 
       describe 'given a recent request' do
-        before(:each) { the_request }
+        before { the_request }
 
-        it { should change { Message.count }.from(0).to(1) }
-        it { should_not(change { Photo.count }) }
+        it { is_expected.to change(Message, :count).from(0).to(1) }
+        it { is_expected.not_to(change(Photo, :count)) }
 
         context 'ActivityNotifications' do
           it_behaves_like 'an ActivityNotification', 'MessageReceived'
@@ -414,14 +434,14 @@ RSpec.describe Contributor, type: :model do
 
       let!(:contributor) { create(:contributor, :with_an_avatar, telegram_id: 4711) }
 
-      it { should_not raise_error }
-      it { should_not(change { Message.count }) }
+      it { is_expected.not_to raise_error }
+      it { is_expected.not_to(change(Message, :count)) }
 
       describe 'given a recent request' do
-        before(:each) { the_request }
+        before { the_request }
 
-        it { should change { Message.count }.from(0).to(1) }
-        it { should_not(change { Photo.count }) }
+        it { is_expected.to change(Message, :count).from(0).to(1) }
+        it { is_expected.not_to(change(Photo, :count)) }
 
         context 'ActivityNotifications' do
           it_behaves_like 'an ActivityNotification', 'MessageReceived'
@@ -430,7 +450,20 @@ RSpec.describe Contributor, type: :model do
     end
 
     describe 'given a ThreemaAdapter::Inbound' do
+      subject do
+        lambda do
+          message_inbound_adapter = ThreemaAdapter::Inbound.new
+          message_inbound_adapter.consume(threema_message) do |message|
+            message.contributor.reply(message_inbound_adapter)
+          end
+        end
+      end
+
       let(:threema_mock) { instance_double(Threema::Receive::Text, content: 'Hello World!') }
+      let(:threema_id) { 'V5EA564T' }
+      let!(:contributor) do
+        build(:contributor, threema_id: threema_id).tap { |contributor| contributor.save(validate: false) }
+      end
       let(:threema) { instance_double(Threema) }
       let(:threema_message) do
         ActionController::Parameters.new({
@@ -444,27 +477,15 @@ RSpec.describe Contributor, type: :model do
                                            'nickname' => 'matt.rider'
                                          })
       end
-      subject do
-        lambda do
-          message_inbound_adapter = ThreemaAdapter::Inbound.new
-          message_inbound_adapter.consume(threema_message) do |message|
-            message.contributor.reply(message_inbound_adapter)
-          end
-        end
-      end
-      let(:threema_id) { 'V5EA564T' }
-      let!(:contributor) do
-        build(:contributor, threema_id: threema_id).tap { |contributor| contributor.save(validate: false) }
-      end
 
       before do
         allow(Threema).to receive(:new).and_return(threema)
         allow(threema).to receive(:receive).with({ payload: threema_message }).and_return(threema_mock)
-        allow(threema_mock).to receive(:instance_of?) { false }
+        allow(threema_mock).to receive(:instance_of?).and_return(false)
       end
 
-      it { should_not raise_error }
-      it { should_not(change { Message.count }) }
+      it { is_expected.not_to raise_error }
+      it { is_expected.not_to(change(Message, :count)) }
 
       describe 'given a recent request' do
         before do
@@ -472,8 +493,8 @@ RSpec.describe Contributor, type: :model do
           allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::Text).and_return(true)
         end
 
-        it { is_expected.to(change { Message.count }.from(0).to(1)) }
-        it { should_not(change { Photo.count }) }
+        it { is_expected.to(change(Message, :count).from(0).to(1)) }
+        it { is_expected.not_to(change(Photo, :count)) }
 
         context 'ActivityNotifications' do
           it_behaves_like 'an ActivityNotification', 'MessageReceived'
@@ -515,14 +536,14 @@ RSpec.describe Contributor, type: :model do
         )
       end
 
-      it { should_not raise_error }
-      it { should_not(change { Message.count }) }
+      it { is_expected.not_to raise_error }
+      it { is_expected.not_to(change(Message, :count)) }
 
       describe 'given a recent request' do
-        before(:each) { the_request }
+        before { the_request }
 
-        it { should change { Message.count }.from(0).to(1) }
-        it { should_not(change { Photo.count }) }
+        it { is_expected.to change(Message, :count).from(0).to(1) }
+        it { is_expected.not_to(change(Photo, :count)) }
 
         context 'ActivityNotifications' do
           it_behaves_like 'an ActivityNotification', 'MessageReceived'
@@ -533,50 +554,55 @@ RSpec.describe Contributor, type: :model do
 
   describe '#active_request' do
     subject { contributor.active_request }
-    it { should be(nil) }
+
+    it { is_expected.to be_nil }
 
     describe 'once a request was sent as a message to the contributor' do
-      before(:each) { create(:message, request: the_request, recipient: contributor) }
-      it { should eq(the_request) }
+      before { create(:message, request: the_request, recipient: contributor) }
+
+      it { is_expected.to eq(the_request) }
     end
 
     describe 'if a request was broadcasted' do
-      before(:each) { the_request.update(broadcasted_at: 1.day.ago) }
+      before { the_request.update(broadcasted_at: 1.day.ago) }
+
       describe 'and afterwards a contributor joins' do
-        before(:each) { contributor }
-        it { should eq(the_request) }
+        before { contributor }
+
+        it { is_expected.to eq(the_request) }
       end
     end
 
     describe 'when many requests are sent to the contributor' do
-      before(:each) do
+      before do
         another_request = create(:request, broadcasted_at: 1.day.ago)
         create(:message, request: the_request, recipient: contributor)
         create(:message, request: another_request, recipient: contributor)
       end
 
-      it { should eq(the_request) }
+      it { is_expected.to eq(the_request) }
     end
 
     describe 'when there is a planned request' do
-      before(:each) do
+      before do
         planned_request = create(:request, broadcasted_at: nil, schedule_send_for: 1.day.from_now)
         create(:message, request: the_request, recipient: contributor)
         create(:message, request: planned_request, recipient: contributor)
       end
 
-      it { should eq(the_request) }
+      it { is_expected.to eq(the_request) }
     end
   end
 
   describe '#recent_replies' do
     subject { contributor.recent_replies }
+
     let(:old_date) { ActiveSupport::TimeZone['Berlin'].parse('2011-04-12 2pm') }
     let(:old_message) { create(:message, created_at: old_date, sender: contributor, request: the_request) }
     let(:another_request) { create(:request) }
     let(:old_request) { create(:request, created_at: (old_date - 1.day)) }
 
-    before(:each) do
+    before do
       create_list(:message, 3, sender: contributor, request: the_request)
       create(:message, sender: contributor, request: old_request)
       create(:message, sender: contributor, request: another_request)
@@ -595,7 +621,8 @@ RSpec.describe Contributor, type: :model do
 
     describe 'number of database calls' do
       subject { -> { contributor.recent_replies.first.request } }
-      it { should make_database_queries(count: 2) }
+
+      it { is_expected.to make_database_queries(count: 2) }
     end
   end
 
@@ -606,21 +633,21 @@ RSpec.describe Contributor, type: :model do
 
     context 'returns count of' do
       it 'all contributors if no tag_list present' do
-        expect(Contributor.with_tags).to contain_exactly(*contributors, *teachers, teaching_pig_farmer)
+        expect(described_class.with_tags).to contain_exactly(*contributors, *teachers, teaching_pig_farmer)
       end
 
       it 'contributors with a specific tag' do
-        expect(Contributor.with_tags(['teacher'])).to contain_exactly(*teachers, teaching_pig_farmer)
+        expect(described_class.with_tags(['teacher'])).to contain_exactly(*teachers, teaching_pig_farmer)
       end
 
       it 'aggregate contributors with a specific tag' do
-        expect(Contributor.with_tags(['teacher', 'pig farmer'])).to contain_exactly(teaching_pig_farmer)
+        expect(described_class.with_tags(['teacher', 'pig farmer'])).to contain_exactly(teaching_pig_farmer)
       end
     end
   end
 
   describe 'scope ::active' do
-    subject { Contributor.active }
+    subject { described_class.active }
 
     context 'given some inactive and active contributors' do
       let!(:active_contributor) { create(:contributor, deactivated_at: nil) }
@@ -628,13 +655,13 @@ RSpec.describe Contributor, type: :model do
       let!(:inactive_contributor) { create(:contributor, deactivated_at: 1.hour.ago) }
 
       it 'returns only active contributors' do
-        should eq([active_contributor])
+        expect(subject).to eq([active_contributor])
       end
     end
   end
 
   describe 'scope ::inactive' do
-    subject { Contributor.inactive }
+    subject { described_class.inactive }
 
     context 'given some inactive and active contributors' do
       let!(:active_contributor) { create(:contributor, deactivated_at: nil) }
@@ -642,13 +669,13 @@ RSpec.describe Contributor, type: :model do
       let!(:inactive_contributor) { create(:contributor, deactivated_at: 1.hour.ago) }
 
       it 'returns only inactive contributors' do
-        should eq([inactive_contributor])
+        expect(subject).to eq([inactive_contributor])
       end
     end
   end
 
   describe 'scope ::unsubscribed' do
-    subject { Contributor.unsubscribed }
+    subject { described_class.unsubscribed }
 
     context 'given some inactive and active contributors' do
       let!(:active_contributor) { create(:contributor, deactivated_at: nil) }
@@ -656,50 +683,55 @@ RSpec.describe Contributor, type: :model do
       let!(:inactive_contributor) { create(:contributor, deactivated_at: 1.hour.ago) }
 
       it 'returns only inactive contributors' do
-        should eq([unsubscribed_contributor])
+        expect(subject).to eq([unsubscribed_contributor])
       end
     end
   end
 
   describe '.active' do
     subject { contributor.active }
-    it { should be(true) }
+
+    it { is_expected.to be(true) }
 
     describe 'given "deactivated_at" timestamp' do
       let(:contributor) { create(:contributor, deactivated_at: 1.day.ago) }
-      it { should be(false) }
+
+      it { is_expected.to be(false) }
     end
   end
 
   describe '.inactive' do
     subject { contributor.inactive }
 
-    it { should be(false) }
+    it { is_expected.to be(false) }
 
     describe 'given "deactivated_at" timestamp' do
       let(:contributor) { create(:contributor, deactivated_at: 1.day.ago) }
-      it { should be(true) }
+
+      it { is_expected.to be(true) }
     end
   end
 
   describe '.active=' do
     describe 'given active contributor' do
       let(:contributor) { create(:contributor, deactivated_at: nil) }
+
       describe 'false' do
         it { expect { contributor.active = false }.to change { contributor.deactivated_at.is_a?(ActiveSupport::TimeWithZone) }.to(true) }
-        it { expect { contributor.active = false }.to change { contributor.active? }.to(false) }
-        it { expect { contributor.active = '0' }.to change { contributor.active? }.to(false) }
-        it { expect { contributor.active = 'off' }.to change { contributor.active? }.to(false) }
+        it { expect { contributor.active = false }.to change(contributor, :active?).to(false) }
+        it { expect { contributor.active = '0' }.to change(contributor, :active?).to(false) }
+        it { expect { contributor.active = 'off' }.to change(contributor, :active?).to(false) }
       end
     end
 
     describe 'given deactivated contributor' do
       let(:contributor) { create(:contributor, deactivated_at: 1.day.ago) }
+
       describe 'true' do
         it { expect { contributor.active = true }.to change { contributor.deactivated_at.is_a?(ActiveSupport::TimeWithZone) }.to(false) }
-        it { expect { contributor.active = true }.to change { contributor.active? }.to(true) }
-        it { expect { contributor.active = '1' }.to change { contributor.active? }.to(true) }
-        it { expect { contributor.active = 'on' }.to change { contributor.active? }.to(true) }
+        it { expect { contributor.active = true }.to change(contributor, :active?).to(true) }
+        it { expect { contributor.active = '1' }.to change(contributor, :active?).to(true) }
+        it { expect { contributor.active = 'on' }.to change(contributor, :active?).to(true) }
       end
     end
   end
@@ -709,16 +741,20 @@ RSpec.describe Contributor, type: :model do
 
     describe 'given a contributor who has given consent' do
       let(:contributor) { build(:contributor, data_processing_consented_at: 1.day.ago) }
-      it { should be(true) }
+
+      it { is_expected.to be(true) }
       specify { expect(contributor).to be_valid }
     end
 
     describe 'given a contributor who has not given consent' do
       let(:contributor) { build(:contributor, data_processing_consented_at: nil) }
-      it { should be(false) }
+
+      it { is_expected.to be(false) }
       specify { expect(contributor).not_to be_valid }
+
       context 'but the editor guarantees the consent' do
         before { contributor.editor_guarantees_data_consent = true }
+
         specify { expect(contributor).to be_valid }
       end
     end
@@ -727,24 +763,27 @@ RSpec.describe Contributor, type: :model do
   describe '.data_processing_consent=' do
     describe 'given contributor who has given consent' do
       let(:contributor) { create(:contributor, data_processing_consent: 1.day.ago) }
+
       describe 'false' do
-        it { expect { contributor.data_processing_consent = false }.to change { contributor.data_processing_consented_at }.to(nil) }
-        it { expect { contributor.data_processing_consent = false }.to change { contributor.data_processing_consented_at? }.to(false) }
-        it { expect { contributor.data_processing_consent = '0' }.to change { contributor.data_processing_consent? }.to(false) }
-        it { expect { contributor.data_processing_consent = 'off' }.to change { contributor.data_processing_consent? }.to(false) }
+        it { expect { contributor.data_processing_consent = false }.to change(contributor, :data_processing_consented_at).to(nil) }
+        it { expect { contributor.data_processing_consent = false }.to change(contributor, :data_processing_consented_at?).to(false) }
+        it { expect { contributor.data_processing_consent = '0' }.to change(contributor, :data_processing_consent?).to(false) }
+        it { expect { contributor.data_processing_consent = 'off' }.to change(contributor, :data_processing_consent?).to(false) }
       end
     end
 
     describe 'given contributor who has not given consent' do
       let(:contributor) { build(:contributor, data_processing_consented_at: nil) }
+
       describe 'true' do
         it {
           expect { contributor.data_processing_consent = true }
             .to change { contributor.data_processing_consented_at.is_a?(ActiveSupport::TimeWithZone) }.to(true)
         }
-        it { expect { contributor.data_processing_consent = true }.to change { contributor.data_processing_consent? }.to(true) }
-        it { expect { contributor.data_processing_consent = '1' }.to change { contributor.data_processing_consent? }.to(true) }
-        it { expect { contributor.data_processing_consent = 'on' }.to change { contributor.data_processing_consent? }.to(true) }
+
+        it { expect { contributor.data_processing_consent = true }.to change(contributor, :data_processing_consent?).to(true) }
+        it { expect { contributor.data_processing_consent = '1' }.to change(contributor, :data_processing_consent?).to(true) }
+        it { expect { contributor.data_processing_consent = 'on' }.to change(contributor, :data_processing_consent?).to(true) }
       end
     end
   end
@@ -754,13 +793,15 @@ RSpec.describe Contributor, type: :model do
 
     describe 'given a contributor who has given additional consent' do
       let(:contributor) { build(:contributor, additional_consent_given_at: 1.day.ago) }
-      it { should be(true) }
+
+      it { is_expected.to be(true) }
       specify { expect(contributor).to be_valid }
     end
 
     describe 'given a contributor who has not given additional consent' do
       let(:contributor) { build(:contributor, additional_consent_given_at: nil) }
-      it { should be(false) }
+
+      it { is_expected.to be(false) }
       specify { expect(contributor).to be_valid }
     end
   end
@@ -768,42 +809,49 @@ RSpec.describe Contributor, type: :model do
   describe '.additional_consent=' do
     describe 'given contributor who has given additional consent' do
       let(:contributor) { create(:contributor, additional_consent: 1.day.ago) }
+
       describe 'false' do
-        it { expect { contributor.additional_consent = false }.to change { contributor.additional_consent_given_at }.to(nil) }
-        it { expect { contributor.additional_consent = false }.to change { contributor.additional_consent_given_at? }.to(false) }
-        it { expect { contributor.additional_consent = '0' }.to change { contributor.additional_consent? }.to(false) }
-        it { expect { contributor.additional_consent = 'off' }.to change { contributor.additional_consent? }.to(false) }
+        it { expect { contributor.additional_consent = false }.to change(contributor, :additional_consent_given_at).to(nil) }
+        it { expect { contributor.additional_consent = false }.to change(contributor, :additional_consent_given_at?).to(false) }
+        it { expect { contributor.additional_consent = '0' }.to change(contributor, :additional_consent?).to(false) }
+        it { expect { contributor.additional_consent = 'off' }.to change(contributor, :additional_consent?).to(false) }
       end
     end
 
     describe 'given contributor who has not given additional consent' do
       let(:contributor) { build(:contributor, additional_consent_given_at: nil) }
+
       describe 'true' do
         it {
           expect { contributor.additional_consent = true }
             .to change { contributor.additional_consent_given_at.is_a?(ActiveSupport::TimeWithZone) }.to(true)
         }
-        it { expect { contributor.additional_consent = true }.to change { contributor.additional_consent? }.to(true) }
-        it { expect { contributor.additional_consent = '1' }.to change { contributor.additional_consent? }.to(true) }
-        it { expect { contributor.additional_consent = 'on' }.to change { contributor.additional_consent? }.to(true) }
+
+        it { expect { contributor.additional_consent = true }.to change(contributor, :additional_consent?).to(true) }
+        it { expect { contributor.additional_consent = '1' }.to change(contributor, :additional_consent?).to(true) }
+        it { expect { contributor.additional_consent = 'on' }.to change(contributor, :additional_consent?).to(true) }
       end
     end
   end
 
   describe '.avatar_url=', vcr: { cassette_name: :download_roberts_telegram_profile_picture } do
-    let(:url) { 'https://t.me/i/userpic/320/2CixclGZED6EeKGQHKm9wk2v7xKy3LWCJGHJPkgcih0.jpg' }
     subject { -> { contributor.avatar_url = url } }
+
+    let(:url) { 'https://t.me/i/userpic/320/2CixclGZED6EeKGQHKm9wk2v7xKy3LWCJGHJPkgcih0.jpg' }
+
     it { is_expected.to(change { contributor.avatar.attached? }.from(false).to(true)) }
 
     context 'given a bogus url' do
       let(:url) { 'not a url' }
+
       it { is_expected.not_to(change { contributor.avatar.attached? }.from(false)) }
     end
 
     context 'with existing avatar' do
       let(:contributor) { create(:contributor, :with_an_avatar) }
+
       it {
-        is_expected.to(
+        expect(subject).to(
           change { contributor.avatar.blob.filename.to_param }
             .from('example-image.png')
             .to('2CixclGZED6EeKGQHKm9wk2v7xKy3LWCJGHJPkgcih0.jpg')
@@ -813,23 +861,27 @@ RSpec.describe Contributor, type: :model do
   end
 
   describe '.send_welcome_message!', telegram_bot: :rails do
+    subject { -> { contributor.send_welcome_message! } }
+
     let(:contributor) { create(:contributor, telegram_id: nil, email: nil, threema_id: nil) }
+
     before do
       allow(Setting).to receive(:onboarding_success_heading).and_return('Welcome new contributor!')
       allow(Setting).to receive(:onboarding_success_text).and_return('You onboarded successfully.')
     end
-    subject { -> { contributor.send_welcome_message! } }
 
-    it { should_not have_enqueued_job }
+    it { is_expected.not_to have_enqueued_job }
 
     context 'signed up via telegram' do
       let(:expected_job_args) { { contributor_id: contributor.id, text: "<b>Welcome new contributor!</b>\nYou onboarded successfully." } }
       let(:contributor) { create(:contributor, telegram_id: nil, telegram_onboarding_token: 'ABCDEF', email: nil) }
-      it { should_not have_enqueued_job }
+
+      it { is_expected.not_to have_enqueued_job }
 
       context 'and connected' do
         let(:contributor) { create(:contributor, telegram_id: 4711, telegram_onboarding_token: 'ABCDEF', email: nil) }
-        it { should enqueue_job(TelegramAdapter::Outbound::Text).with(expected_job_args) }
+
+        it { is_expected.to enqueue_job(TelegramAdapter::Outbound::Text).with(expected_job_args) }
       end
     end
 
@@ -838,13 +890,15 @@ RSpec.describe Contributor, type: :model do
       let(:contributor) do
         build(:contributor, threema_id: 'AAAAAAAA', email: nil, telegram_id: nil).tap { |contributor| contributor.save(validate: false) }
       end
-      it { should enqueue_job(ThreemaAdapter::Outbound::Text).with(expected_job_args) }
+
+      it { is_expected.to enqueue_job(ThreemaAdapter::Outbound::Text).with(expected_job_args) }
     end
 
     context 'signed up via email' do
       let(:contributor) { create(:contributor, email: 'text@example.org') }
+
       it {
-        should enqueue_job.with(
+        expect(subject).to enqueue_job.with(
           'PostmarkAdapter::Outbound',
           'welcome_email',
           'deliver_now',

@@ -13,7 +13,7 @@ RSpec.describe '/contributors' do
   end
 
   describe 'GET /index' do
-    it 'should be successful' do
+    it 'is successful' do
       get profile_url(as: user)
       expect(response).to be_successful
     end
@@ -26,7 +26,7 @@ RSpec.describe '/contributors' do
       subject { -> { post profile_user_path, params: params } }
 
       it 'does not change user count' do
-        expect { subject.call }.not_to(change { User.count })
+        expect { subject.call }.not_to(change(User, :count))
       end
     end
 
@@ -34,7 +34,7 @@ RSpec.describe '/contributors' do
       subject { -> { post profile_user_path(as: user), params: params } }
 
       it 'creates a user' do
-        expect { subject.call }.to(change { User.count }.from(2).to(3))
+        expect { subject.call }.to(change(User, :count).from(2).to(3))
       end
 
       it 'redirects to profile page' do

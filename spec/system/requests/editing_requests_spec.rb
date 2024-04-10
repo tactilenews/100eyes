@@ -7,7 +7,7 @@ RSpec.describe 'Editing requests', js: true do
   let(:sent_request) { create(:request) }
   let(:request_scheduled_in_future) { create(:request, schedule_send_for: 2.minutes.from_now) }
 
-  before(:each) do
+  before do
     # `broadcast!` is stubbed in tests
     allow(Request).to receive(:broadcast!).and_call_original
     create(:contributor)

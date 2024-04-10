@@ -8,5 +8,5 @@ RSpec.describe OnboardingEmailForm::OnboardingEmailForm, type: :component do
   let(:contributor) { build(:contributor) }
   let(:params) { { contributor: contributor } }
 
-  it { should have_css('.OnboardingEmailForm') }
+  it { is_expected.to have_css('.OnboardingEmailForm') }
 end

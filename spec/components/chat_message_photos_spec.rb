@@ -6,5 +6,6 @@ RSpec.describe ChatMessagePhotos::ChatMessagePhotos, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
   let(:params) { { photos: [] } }
-  it { should have_css('.ChatMessagePhotos') }
+
+  it { is_expected.to have_css('.ChatMessagePhotos') }
 end

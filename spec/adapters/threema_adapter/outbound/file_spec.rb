@@ -23,10 +23,6 @@ RSpec.describe ThreemaAdapter::Outbound::File do
   end
 
   describe '#perform' do
-    before do
-      message.reload
-      allow(Threema).to receive(:new).and_return(threema_double)
-    end
     subject do
       lambda {
         adapter.perform(contributor_id: message.recipient.id,
@@ -35,6 +31,11 @@ RSpec.describe ThreemaAdapter::Outbound::File do
                         caption: message.text,
                         render_type: :media)
       }
+    end
+
+    before do
+      message.reload
+      allow(Threema).to receive(:new).and_return(threema_double)
     end
 
     it 'sends the file' do

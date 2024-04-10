@@ -7,20 +7,20 @@ RSpec.describe OnboardingChannelButtons::OnboardingChannelButtons, type: :compon
 
   let(:params) { { channels: %w[threema telegram email] } }
 
-  it { should have_css('.Button').exactly(3).times }
-  it { should_not have_css('.OnboardingChannelButtons--twoColumn') }
+  it { is_expected.to have_css('.Button').exactly(3).times }
+  it { is_expected.not_to have_css('.OnboardingChannelButtons--twoColumn') }
 
   context 'if Signal is set up' do
     let(:params) { { channels: %w[threema telegram email signal] } }
 
-    it { should have_css('.Button').exactly(4).times }
-    it { should have_css('.OnboardingChannelButtons--twoColumn') }
+    it { is_expected.to have_css('.Button').exactly(4).times }
+    it { is_expected.to have_css('.OnboardingChannelButtons--twoColumn') }
   end
 
   context 'if WhatsApp is set up' do
     let(:params) { { channels: %w[threema telegram email signal whats_app] } }
 
-    it { should have_css('.Button').exactly(5).times }
-    it { should_not have_css('.OnboardingChannelButtons--twoColumn') }
+    it { is_expected.to have_css('.Button').exactly(5).times }
+    it { is_expected.not_to have_css('.OnboardingChannelButtons--twoColumn') }
   end
 end

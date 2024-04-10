@@ -8,10 +8,10 @@ RSpec.describe RepliesMailbox, type: :mailbox do
   let(:from_address) { 'zora@example.org' }
   let(:params) { { from: from_address, body: 'Meiner Katze geht es gut!' } }
 
-  it { should_not(change { Message.count }) }
+  it { is_expected.not_to(change(Message, :count)) }
 
   it {
-    should have_enqueued_job.on_queue('default').with(
+    expect(subject).to have_enqueued_job.on_queue('default').with(
       'PostmarkAdapter::Outbound',
       'bounce_email',
       'deliver_now',
@@ -27,22 +27,24 @@ RSpec.describe RepliesMailbox, type: :mailbox do
 
   describe 'given a contributor' do
     let(:contributor) { create(:contributor, email: 'zora@example.org') }
-    before(:each) { contributor }
 
-    it { should_not(change { Message.count }) }
+    before { contributor }
+
+    it { is_expected.not_to(change(Message, :count)) }
 
     describe 'given an active request' do
       let(:request) { create(:request, title: 'Wie geht es euren Haustieren in Corona-Zeiten?') }
-      before(:each) { create(:message, request: request, sender: nil, recipient: contributor, broadcasted: true) }
 
-      it { should(change { Message.count }.from(1).to(2)) }
+      before { create(:message, request: request, sender: nil, recipient: contributor, broadcasted: true) }
+
+      it { is_expected.to(change(Message, :count).from(1).to(2)) }
 
       describe 'after email processing' do
         let(:replies) { Message.where(sender: contributor).pluck(:text) }
 
-        before(:each) { subject.call }
+        before { subject.call }
 
-        it { should(change { Message.count }.from(2).to(3)) }
+        it { is_expected.to(change(Message, :count).from(2).to(3)) }
 
         describe 'MessageReceived ActivityNotification' do
           context 'creates an ActivityNotification' do

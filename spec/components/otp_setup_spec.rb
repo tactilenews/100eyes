@@ -6,5 +6,6 @@ RSpec.describe OtpSetup::OtpSetup, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
   let(:params) { { user: create(:user) } }
-  it { should have_css('.OtpSetup') }
+
+  it { is_expected.to have_css('.OtpSetup') }
 end

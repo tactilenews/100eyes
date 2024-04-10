@@ -8,5 +8,5 @@ RSpec.describe OnboardingSignalForm::OnboardingSignalForm, type: :component do
   let(:contributor) { build(:contributor) }
   let(:params) { { contributor: contributor } }
 
-  it { should have_css('.OnboardingSignalForm') }
+  it { is_expected.to have_css('.OnboardingSignalForm') }
 end

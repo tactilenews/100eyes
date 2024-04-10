@@ -6,5 +6,6 @@ RSpec.describe Box::Box, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
   let(:params) { {} }
-  it { should have_css('.Box') }
+
+  it { is_expected.to have_css('.Box') }
 end

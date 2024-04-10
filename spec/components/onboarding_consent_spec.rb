@@ -10,9 +10,11 @@ RSpec.describe OnboardingConsent::OnboardingConsent, type: :component do
 
   describe 'data processing consent checkbox' do
     it {
-      should have_field('Einwilligung zur Datenverarbeitung', type: :checkbox, id: 'contributor[data_processing_consent]', checked: false)
+      expect(subject).to have_field('Einwilligung zur Datenverarbeitung', type: :checkbox, id: 'contributor[data_processing_consent]',
+                                                                          checked: false)
     }
-    it { should have_link(href: Setting.onboarding_data_protection_link) }
+
+    it { is_expected.to have_link(href: Setting.onboarding_data_protection_link) }
   end
 
   describe 'additional consent checkbox' do
@@ -22,18 +24,20 @@ RSpec.describe OnboardingConsent::OnboardingConsent, type: :component do
     end
 
     context 'if additional consent checkbox is enabled' do
-      it { should have_text(Setting.onboarding_additional_consent_heading) }
-      it { should have_field('Great expectations.', type: :checkbox, id: 'contributor[additional_consent]', checked: false) }
+      it { is_expected.to have_text(Setting.onboarding_additional_consent_heading) }
+      it { is_expected.to have_field('Great expectations.', type: :checkbox, id: 'contributor[additional_consent]', checked: false) }
     end
 
     context 'if additional consent checkbox is disabled' do
       before { allow(Setting).to receive(:onboarding_ask_for_additional_consent).and_return(false) }
-      it { should_not have_field(:checkbox, id: 'contributor[additional_consent]') }
+
+      it { is_expected.not_to have_field(:checkbox, id: 'contributor[additional_consent]') }
     end
 
     context 'if consent heading is empty' do
       before { allow(Setting).to receive(:onboarding_additional_consent_heading).and_return('  ') }
-      it { should_not have_field(:checkbox, id: 'contributor[additional_consent]') }
+
+      it { is_expected.not_to have_field(:checkbox, id: 'contributor[additional_consent]') }
     end
   end
 end

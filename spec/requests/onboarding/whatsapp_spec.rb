@@ -8,12 +8,14 @@ RSpec.describe 'Onboarding::Whatsapp', type: :routing do
 
     describe 'when no Whatsapp number was configured' do
       before { allow(Setting).to receive(:whats_app_server_phone_number).and_return('') }
-      it { should_not be_routable }
+
+      it { is_expected.not_to be_routable }
     end
 
     describe 'but when a Whatsapp number was configured' do
       before { allow(Setting).to receive(:whats_app_server_phone_number).and_return('+49123456789') }
-      it { should be_routable }
+
+      it { is_expected.to be_routable }
     end
   end
 
@@ -22,12 +24,14 @@ RSpec.describe 'Onboarding::Whatsapp', type: :routing do
 
     describe 'when no Whatsapp number was configured' do
       before { allow(Setting).to receive(:whats_app_server_phone_number).and_return('') }
-      it { should_not be_routable }
+
+      it { is_expected.not_to be_routable }
     end
 
     describe 'but when a Whatsapp number was configured' do
       before { allow(Setting).to receive(:whats_app_server_phone_number).and_return('+49123456789') }
-      it { should be_routable }
+
+      it { is_expected.to be_routable }
     end
   end
 end

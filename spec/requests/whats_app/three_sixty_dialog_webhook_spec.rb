@@ -4,6 +4,8 @@ require 'rails_helper'
 require 'webmock/rspec'
 
 RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
+  subject { -> { post whats_app_three_sixty_dialog_webhook_path, params: params } }
+
   let(:whats_app_phone_number) { '+491511234567' }
   let(:params) do
     { contacts: [{ profile: { name: 'Matthew Rider' },
@@ -34,8 +36,6 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
     }
   end
   let(:latest_message) { contributor.received_messages.first.text }
-
-  subject { -> { post whats_app_three_sixty_dialog_webhook_path, params: params } }
 
   describe '#messages' do
     before do
@@ -69,6 +69,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
 
     describe 'errors' do
       let(:exception) { WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: '501', message: 'Unsupported message type') }
+
       before do
         params[:messages] = [
           { errors: [{
@@ -121,6 +122,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
 
       context 'responding to template' do
         before { contributor.update(whats_app_message_template_sent_at: Time.current) }
+
         let(:text) { latest_message }
 
         context 'request to receive latest message' do
@@ -140,6 +142,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
 
       context 'request for more info' do
         before { params[:messages].first[:text][:body] = 'Mehr Infos' }
+
         let(:text) { [Setting.about, "_#{I18n.t('adapter.shared.unsubscribe.instructions')}_"].join("\n\n") }
 
         it 'marks that contributor has responded to template message' do
@@ -195,6 +198,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
                 sha256: 'sha256_hash'
               }
             end
+
             before do
               message[:type] = 'image'
               message[:image] = image
@@ -225,6 +229,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
                 sha256: 'sha256_hash'
               }
             end
+
             before do
               message[:type] = 'voice'
               message[:voice] = voice
@@ -253,6 +258,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
                 sha256: 'sha256_hash'
               }
             end
+
             before do
               message[:type] = 'video'
               message[:video] = video
@@ -283,6 +289,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
                 sha256: 'sha256_hash'
               }
             end
+
             before do
               message[:type] = 'audio'
               message[:audio] = audio
@@ -397,6 +404,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
                 sha256: 'sha256_hash'
               }
             end
+
             before do
               message[:type] = 'document'
               message[:document] = document
@@ -414,6 +422,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
                 longitude: '43.2048'
               }
             end
+
             before do
               message[:type] = 'location'
               message[:location] = location
@@ -449,6 +458,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
                 type: 'contacts'
               }
             end
+
             before do
               message[:type] = 'contacts'
               message[:contacts] = contacts

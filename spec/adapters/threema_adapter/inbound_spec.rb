@@ -21,10 +21,11 @@ RSpec.describe ThreemaAdapter::Inbound do
   end
   let(:threema_mock) { instance_double(Threema::Receive::Text, content: 'Hello World!') }
   let(:threema) { instance_double(Threema) }
+
   before do
     allow(Threema).to receive(:new).and_return(threema)
     allow(threema).to receive(:receive).with({ payload: threema_message }).and_return(threema_mock)
-    allow(threema_mock).to receive(:instance_of?) { false }
+    allow(threema_mock).to receive(:instance_of?).and_return(false)
   end
 
   describe '#consume' do
@@ -44,7 +45,7 @@ RSpec.describe ThreemaAdapter::Inbound do
       context 'Threema::Receive::DeliveryReceipt' do
         let(:threema_mock) { instance_double(Threema::Receive::DeliveryReceipt, content: 'x\00x\\0') }
 
-        it { is_expected.to be(nil) }
+        it { is_expected.to be_nil }
       end
     end
 
@@ -61,6 +62,7 @@ RSpec.describe ThreemaAdapter::Inbound do
 
       context 'if contributor has lowercase Threema ID' do
         let(:threema_id) { 'v5ea564t' }
+
         it { is_expected.to eq(contributor) }
       end
     end
@@ -69,18 +71,20 @@ RSpec.describe ThreemaAdapter::Inbound do
       let(:threema_mock) do
         instance_double(Threema::Receive::File, name: 'my voice', content: 'x\00x\\0', mime_type: 'audio/aac', caption: 'some caption')
       end
+
       before do
         allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::Text).and_return(false)
         allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::File).and_return(true)
       end
 
       describe '#file' do
-        let(:file) { message.files.first }
         subject { file.attachment }
+
+        let(:file) { message.files.first }
 
         describe 'handling different content types' do
           context 'audio' do
-            it { should be_attached }
+            it { is_expected.to be_attached }
 
             it 'preserves the content_type' do
               expect(subject.blob.content_type).to eq('audio/aac')
@@ -92,7 +96,8 @@ RSpec.describe ThreemaAdapter::Inbound do
               instance_double(Threema::Receive::File, name: 'my image', content: 'x\00x\\0', mime_type: 'image/jpeg', caption: nil)
             end
 
-            it { should be_attached }
+            it { is_expected.to be_attached }
+
             it 'preserves the content_type' do
               expect(subject.blob.content_type).to eq('image/jpeg')
             end
@@ -104,7 +109,8 @@ RSpec.describe ThreemaAdapter::Inbound do
                                                       caption: 'look at this cool video')
             end
 
-            it { should be_attached }
+            it { is_expected.to be_attached }
+
             it 'preserves the content_type' do
               expect(subject.blob.content_type).to eq('video/mp4')
             end
@@ -125,7 +131,8 @@ RSpec.describe ThreemaAdapter::Inbound do
             message.save!
           end
         end
-        it { should change { ActiveStorage::Attachment.where(record_type: 'Message::File').count }.from(0).to(1) }
+
+        it { is_expected.to change { ActiveStorage::Attachment.where(record_type: 'Message::File').count }.from(0).to(1) }
       end
     end
 
@@ -170,6 +177,11 @@ RSpec.describe ThreemaAdapter::Inbound do
 
   describe '#on' do
     describe 'UNKNOWN_CONTRIBUTOR' do
+      subject do
+        adapter.consume(threema_message)
+        unknown_contributor_callback
+      end
+
       let(:unknown_contributor_callback) { spy('unknown_contributor_callback') }
 
       before do
@@ -178,22 +190,23 @@ RSpec.describe ThreemaAdapter::Inbound do
         end
       end
 
-      subject do
-        adapter.consume(threema_message)
-        unknown_contributor_callback
-      end
-
-      describe 'if the sender is a contributor ' do
+      describe 'if the sender is a contributor' do
         it { is_expected.not_to have_received(:call) }
       end
 
       describe 'if the sender is unknown' do
         before { threema_message[:from] = 'NOT_KNOWN' }
+
         it { is_expected.to have_received(:call).with('NOT_KNOWN') }
       end
     end
 
     describe 'UNSUBSCRIBE_CONTRIBUTOR' do
+      subject do
+        adapter.consume(threema_message)
+        unsubscribe_contributor_callback
+      end
+
       let(:unsubscribe_contributor_callback) { spy('unsubscribe_contributor_callback') }
 
       before do
@@ -201,11 +214,6 @@ RSpec.describe ThreemaAdapter::Inbound do
         adapter.on(ThreemaAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
           unsubscribe_contributor_callback.call(contributor)
         end
-      end
-
-      subject do
-        adapter.consume(threema_message)
-        unsubscribe_contributor_callback
       end
 
       context 'any text other than the keyword Abbestellen' do
@@ -220,6 +228,11 @@ RSpec.describe ThreemaAdapter::Inbound do
     end
 
     describe 'RESUBSCRIBE_CONTRIBUTOR' do
+      subject do
+        adapter.consume(threema_message)
+        resubscribe_contributor_callback
+      end
+
       let(:resubscribe_contributor_callback) { spy('resubscribe_contributor_callback') }
 
       before do
@@ -227,11 +240,6 @@ RSpec.describe ThreemaAdapter::Inbound do
         adapter.on(ThreemaAdapter::RESUBSCRIBE_CONTRIBUTOR) do |contributor|
           resubscribe_contributor_callback.call(contributor)
         end
-      end
-
-      subject do
-        adapter.consume(threema_message)
-        resubscribe_contributor_callback
       end
 
       context 'any text other than the keyword Bestellen' do
@@ -246,17 +254,17 @@ RSpec.describe ThreemaAdapter::Inbound do
     end
 
     describe 'UNSUPPORTED_CONTENT' do
+      subject do
+        adapter.consume(threema_message)
+        unsupported_content_callback
+      end
+
       let(:unsupported_content_callback) { spy('unsupported_content_callback') }
 
       before do
         adapter.on(ThreemaAdapter::UNSUPPORTED_CONTENT) do |contributor|
           unsupported_content_callback.call(contributor)
         end
-      end
-
-      subject do
-        adapter.consume(threema_message)
-        unsupported_content_callback
       end
 
       context 'if the message is a plaintext message' do

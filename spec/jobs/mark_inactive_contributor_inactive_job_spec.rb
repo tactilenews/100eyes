@@ -21,6 +21,7 @@ RSpec.describe MarkInactiveContributorInactiveJob do
       let(:contributor) { create(:contributor) }
 
       it { is_expected.to change { contributor.reload.deactivated_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone)) }
+
       it_behaves_like 'an ActivityNotification', 'ContributorMarkedInactive'
       it 'enqueues a job to inform admin' do
         expect { subject.call }.to have_enqueued_job.on_queue('default').with(

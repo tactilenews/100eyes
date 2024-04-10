@@ -7,35 +7,42 @@ RSpec.describe TelegramAdapter::Outbound do
   let(:contributor) { create(:contributor, telegram_id: 4, email: nil) }
 
   describe '::send!' do
-    before { message } # we don't count the extra ::send here
     subject { -> { described_class.send!(message) } }
 
-    it { should enqueue_job(described_class::Text) }
+    before { message } # we don't count the extra ::send here
+
+    it { is_expected.to enqueue_job(described_class::Text) }
 
     context 'contributor has no telegram_id' do
       let(:contributor) { create(:contributor, telegram_id: nil, email: nil) }
-      it { should_not enqueue_job(described_class::Text) }
+
+      it { is_expected.not_to enqueue_job(described_class::Text) }
     end
 
     context 'contributor has telegram_onboarding_token' do
       let(:contributor) { create(:contributor, telegram_id: nil, telegram_onboarding_token: nil, email: nil) }
-      it { should_not enqueue_job(described_class::Text) }
+
+      it { is_expected.not_to enqueue_job(described_class::Text) }
     end
 
     context 'message has files attached' do
       before { message.reload }
+
       let(:message) { create(:message, :with_file, broadcasted: true, recipient: contributor) }
 
-      it { should enqueue_job(described_class::Photo) }
+      it { is_expected.to enqueue_job(described_class::Photo) }
     end
   end
 
   describe '::send_welcome_message!' do
     subject { -> { described_class.send_welcome_message!(contributor) } }
-    it { should enqueue_job(described_class::Text) }
+
+    it { is_expected.to enqueue_job(described_class::Text) }
+
     context 'contributor has no telegram_id' do
       let(:contributor) { create(:contributor, telegram_id: nil, email: nil) }
-      it { should_not enqueue_job(described_class) }
+
+      it { is_expected.not_to enqueue_job(described_class) }
     end
   end
 end

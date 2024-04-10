@@ -35,6 +35,7 @@ RSpec.describe BroadcastRequestJob do
 
     context 'given a request has been rescheduled for the future' do
       before { request.update(schedule_send_for: 1.day.from_now) }
+
       let(:expected_params) { { request_id: request.id } }
 
       it 'enqueues a job to broadcast the request, and broadcast it when called again' do

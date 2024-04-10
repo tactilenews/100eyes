@@ -31,6 +31,7 @@ RSpec.describe TelegramAdapter::Outbound::Text do
     }
   end
   let(:text) { 'Forgot to ask: How are you?' }
+
   before { allow(Telegram.bot).to receive(:send_message).and_return(successful_response) }
 
   describe '#perform' do

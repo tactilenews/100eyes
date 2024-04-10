@@ -20,6 +20,7 @@ RSpec.describe JsonWebToken, type: :model do
 
     context 'With passed in expiration' do
       let(:expires_in) { 30.minutes.from_now.to_i }
+
       it 'respects expiration' do
         expect(JWT).to receive(:encode).with({ data: payload, exp: expires_in }, secret_key, algorithm).and_return(:jwt_mock)
 

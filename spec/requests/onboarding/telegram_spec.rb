@@ -4,9 +4,11 @@ require 'rails_helper'
 
 RSpec.describe 'Onboarding::Telegram', type: :request do
   describe 'GET /onboarding/telegram' do
+    subject { -> { get onboarding_telegram_path, params: params } }
+
     let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
     let(:params) { { jwt: jwt } }
-    subject { -> { get onboarding_telegram_path, params: params } }
+
     before { allow(SecureRandom).to receive(:alphanumeric).with(8).and_return('TELEGRAM_ONBOARDING_TOKEN') }
 
     it 'renders hidden <input value="TELEGRAM_ONBOARDING_TOKEN">' do
@@ -17,14 +19,18 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
 
     describe 'with unsigned jwt' do
       let(:jwt) { 'INCORRECT_TOKEN' }
+
       describe 'http status' do
         subject { super().call && response }
+
         it { is_expected.to have_http_status(:unauthorized) }
       end
     end
   end
 
   describe 'POST /onboarding/telegram' do
+    subject { -> { post onboarding_telegram_path, params: params } }
+
     let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding', organization_id: create(:organization).id }) }
     let(:params) { { jwt: jwt } }
     let(:data_processing_consent) { true }
@@ -42,8 +48,6 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
 
     let(:params) { { jwt: jwt, contributor: attrs, context: :contributor_signup } }
 
-    subject { -> { post onboarding_telegram_path, params: params } }
-
     it 'creates contributor' do
       expect { subject.call }.to change(Contributor, :count).by(1)
 
@@ -60,7 +64,7 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
       )
     end
 
-    it { should_not enqueue_job(TelegramAdapter::Outbound) }
+    it { is_expected.not_to enqueue_job(TelegramAdapter::Outbound) }
 
     it 'redirects to telegram link page' do
       subject.call
@@ -136,6 +140,7 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
 
       describe 'http status' do
         subject { super().call && response }
+
         it { is_expected.to have_http_status(:unauthorized) }
       end
 
@@ -155,22 +160,24 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
   end
 
   describe 'GET /onboarding/telegram/fallback' do
+    subject { action.call && response }
+
     let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
     let(:json_web_token) { create(:json_web_token, invalidated_jwt: jwt) }
     let!(:contributor) do
       create(:contributor, telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN', telegram_id: nil, json_web_token: json_web_token)
     end
     let(:action) { -> { get onboarding_telegram_fallback_path(telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN') } }
-    subject { action.call && response }
 
     describe 'redirects' do
       it 'are skipped' do
-        is_expected.to have_http_status(:ok)
+        expect(subject).to have_http_status(:ok)
       end
 
       describe '(sanity check: / redirects to /link)' do
         let(:action) { -> { get onboarding_telegram_path(jwt: jwt) } }
-        it { is_expected.to have_http_status(302) }
+
+        it { is_expected.to have_http_status(:found) }
       end
     end
   end
