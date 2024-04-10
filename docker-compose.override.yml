@@ -27,7 +27,7 @@ services:
 
   assets:
     <<: *x-dev-defaults
-    # As we have mounted the app directory into the container and webpacker expects the
+    # As we have mounted the app directory into the container and esbuild expects the
     # node_module folder therein: In case there is no node_module folder on the host machine
     # run npm install to build node_modules in this mounted directory (app). Then just run npm run dev.
     command: >
