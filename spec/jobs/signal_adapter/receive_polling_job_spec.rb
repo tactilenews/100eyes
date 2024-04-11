@@ -46,6 +46,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         create(:request)
 
         allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
+        allow(Setting).to receive(:signal_cli_rest_api_endpoint).and_return('http://localhost:8080')
         allow(job).to receive(:ping_monitoring_service).and_return(nil)
       end
 

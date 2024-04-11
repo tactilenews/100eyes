@@ -10,7 +10,7 @@ VCR.configure do |c|
   c.filter_sensitive_data('*100EYES') { ENV.fetch('THREEMARB_API_IDENTITY', nil) }
   c.filter_sensitive_data('THREEMARB_API_SECRET') { ENV.fetch('THREEMARB_API_SECRET', nil) }
   c.filter_sensitive_data('THREEMARB_PRIVATE') { ENV.fetch('THREEMARB_PRIVATE', nil) }
-  c.filter_sensitive_data('SIGNAL_SERVER_PHONE_NUMBER') { ENV.fetch('SIGNAL_SERVER_PHONE_NUMBER', nil) }
+  c.filter_sensitive_data('SIGNAL_SERVER_PHONE_NUMBER') { Setting.signal_server_phone_number }
 
   c.configure_rspec_metadata!
 
