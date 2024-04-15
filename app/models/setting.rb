@@ -2,7 +2,6 @@
 
 # RailsSettings Model
 class Setting < RailsSettings::Base
-  Dotenv.overload('.env.local.test') if Rails.env.test?
   cache_prefix { 'v1' }
 
   delegate :onboarding_logo, to: :class

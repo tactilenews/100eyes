@@ -9,7 +9,7 @@ RSpec.describe 'Configuring Onboarding Channels' do
   let(:jwt) do
     JsonWebToken.encode(jwt_payload)
   end
-  let(:configured_channels) { %i[email signal whats_app] }
+  let(:configured_channels) { %i[email signal whats_app telegram] }
 
   it 'allows activating and deactivating onboarding channels' do
     visit settings_path(as: admin)

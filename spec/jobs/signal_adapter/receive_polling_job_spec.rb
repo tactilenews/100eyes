@@ -45,7 +45,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
       before do
         create(:request)
 
-        allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
+        allow(Setting).to receive(:signal_cli_rest_api_endpoint).and_return('http://localhost:8080')
         allow(job).to receive(:ping_monitoring_service).and_return(nil)
       end
 
@@ -171,7 +171,6 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
 
     describe 'given a known contributor requests to unsubscribe', vcr: { cassette_name: :receive_signal_message_to_unsubscribe } do
       before do
-        allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
         allow(Setting).to receive(:signal_cli_rest_api_endpoint).and_return('http://signal:8080')
       end
 
@@ -182,7 +181,6 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
     describe 'given a contributor who has unsubscribed and requests to resubscribe',
              vcr: { cassette_name: :receive_signal_message_to_resubscribe } do
       before do
-        allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
         allow(Setting).to receive(:signal_cli_rest_api_endpoint).and_return('http://signal:8080')
       end
       let!(:contributor) do
@@ -201,9 +199,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
       before do
         create(:request)
 
-        unless Setting.signal_server_phone_number
-          allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
-        end
+        allow(Setting).to receive(:signal_server_phone_number).and_return('+4912345678') unless Setting.signal_server_phone_number
         allow(job).to receive(:ping_monitoring_service).and_return(nil)
         stub_request(:get, %r{v1/receive}).to_return(status: 400, body: error_message)
       end
