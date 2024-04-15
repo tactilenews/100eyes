@@ -1,9 +1,8 @@
 ---
 roles:
-- geerlingguy.docker
-- geerlingguy.pip
 - gantsign.inotify
 
 collections:
 - community.general
+- community.docker
 - devsec.hardening

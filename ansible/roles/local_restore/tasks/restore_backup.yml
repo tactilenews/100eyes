@@ -19,14 +19,9 @@
     src: "{{ backup_host_folder.path }}/tmp/100eyes-storage.tgz"
     dest: "{{ playbook_dir }}/.."
 
-- name: Install docker-compose python package
-  ansible.builtin.pip:
-    name: docker-compose
-
 - name: Run `docker-compose up`
-  community.general.docker_compose:
+  community.docker.docker_compose_v2:
     project_src: "{{ playbook_dir }}/.."
-    debug: yes
     state: present
     services:
       - db
@@ -50,9 +45,8 @@
     - pg_restore -d app_development -U postgres --no-owner --role=postgres < /tmp/100eyes-db-dump
 
 - name: Run `docker-compose down`
-  community.general.docker_compose:
+  community.docker.docker_compose_v2:
     project_src: "{{ playbook_dir }}/.."
-    debug: yes
     state: absent
     files:
       - docker-compose.yml

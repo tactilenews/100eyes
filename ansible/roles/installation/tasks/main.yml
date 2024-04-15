@@ -57,19 +57,18 @@
     THREE_SIXTY_DIALOG_PARTNER_USERNAME: "{{ rails.three_sixty_dialog.partner.username | default('') }}"
     THREE_SIXTY_DIALOG_PARTNER_PASSWORD: "{{ rails.three_sixty_dialog.partner.password | default('') }}"
 
-  community.general.docker_compose:
+  community.docker.docker_compose_v2:
     project_src: /home/ansible
-    build: no
-    debug: yes
-    pull: yes
-    restarted: yes
+    build: never
+    pull: always
+    state: restarted
     files:
       - docker-compose.yml
       - docker-compose.prod.yml
       - docker-compose.traefik.yml
 
 - name: Prune outdated images
-  community.general.docker_prune:
+  community.docker.docker_prune:
     images: yes
 
 - name: Create and migrate database

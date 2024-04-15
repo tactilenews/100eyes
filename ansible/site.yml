@@ -20,17 +20,6 @@
     - role: initial_setup
     - role: gantsign.inotify
       inotify_max_user_watches: 524288
-    - role: geerlingguy.pip
-      vars:
-        pip_install_packages:
-          - name: "docker < 7.0.0"
-          - name: docker-compose
-          - name: passlib
-    - role: geerlingguy.docker
-      vars:
-        docker_compose_version: "1.27.4"
-        docker_users:
-          - ansible
     - role: installation
       tags:
         - hundred-eyes
