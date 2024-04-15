@@ -1,9 +1,41 @@
 import { Controller } from '@hotwired/stimulus';
 import Tagify from '@yaireo/tagify';
+import sanitize from '../../assets/javascript/helpers/sanitize.js';
 
 const tagColor = tagData => {
   return tagData.color ? tagData.color : 'var(--color-text)';
 };
+
+function tagTemplate(tagData) {
+  // This is a simplified copy of the default template that ships with
+  // Tagify. The main difference is that tag names are sanitized before
+  // being rendered.
+
+  const color = tagColor(tagData);
+
+  // `tagData.name` is an unsanitized tag name from our database.
+  // `tagData.value` is provided by Tagify and has already been sanitized.
+  // https://github.com/yairEO/tagify/blob/8a9efbd680dc05f3f398bf91025f949a69551fbf/src/tagify.js#L1443
+  const label = sanitize(tagData.name) || tagData.value;
+
+  return `
+    <tag
+      tabIndex="-1"
+      class="tagify__tag"
+      style="--tag-color:${tagColor(tagData)}"
+    >
+      <x
+        title=""
+        class="tagify__tag__removeBtn"
+        role="button"
+        aria-label="remove tag"
+      ></x>
+      <div>
+        <span class="tagify__tag-text">${label}</span>
+      </div>
+    </tag>
+  `;
+}
 
 function dropdownItemTemplate(tagData) {
   const { one, other } = this.settings.labels.members;
@@ -11,25 +43,19 @@ function dropdownItemTemplate(tagData) {
   const color = tagColor(tagData);
 
   return `
-    <div ${this.getAttributes(tagData)}
+    <div
       class="${this.settings.classNames.dropdownItem} TagsInput-dropdownItem"
       tabindex="0"
       role="option"
     >
       <span class="tagify__tag" style="--tag-color: ${color}">
         <div>
-          <span class="tagify__tag-text">${tagData.name}</span>
+          <span class="tagify__tag-text">${sanitize(tagData.name)}</span>
         </div>
       </span>
       <span class="TagsInput-count">${tagData.count} ${membersLabel}<span>
     </div>
   `;
-}
-
-function transformTag(tagData) {
-  const color = tagColor(tagData);
-
-  tagData.style = `--tag-color: ${color}`;
 }
 
 export default class extends Controller {
@@ -60,9 +86,9 @@ export default class extends Controller {
 
       templates: {
         dropdownItem: dropdownItemTemplate,
+        tag: tagTemplate,
       },
 
-      transformTag,
       labels: {
         members: JSON.parse(this.membersLabelValue),
       },
