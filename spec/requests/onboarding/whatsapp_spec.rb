@@ -12,7 +12,6 @@ RSpec.describe 'Onboarding::Whatsapp', type: :routing do
     end
 
     describe 'but when a Whatsapp number was configured' do
-      before { allow(Setting).to receive(:whats_app_configured?).and_return(true) }
       it { should be_routable }
     end
   end
@@ -26,7 +25,6 @@ RSpec.describe 'Onboarding::Whatsapp', type: :routing do
     end
 
     describe 'but when a Whatsapp number was configured' do
-      before { allow(Setting).to receive(:whats_app_configured?).and_return(true) }
       it { should be_routable }
     end
   end

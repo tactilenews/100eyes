@@ -3,10 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Onboarding::Telegram', type: :request do
-  before do
-    allow(Setting).to receive(:telegram_configured?).and_return(true)
-  end
-
   describe 'GET /onboarding/telegram' do
     let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
     let(:params) { { jwt: jwt } }

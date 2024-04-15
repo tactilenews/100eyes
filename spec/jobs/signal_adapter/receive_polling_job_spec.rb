@@ -199,7 +199,6 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
       before do
         create(:request)
 
-        allow(Setting).to receive(:signal_server_phone_number).and_return('+4912345678') unless Setting.signal_server_phone_number
         allow(job).to receive(:ping_monitoring_service).and_return(nil)
         stub_request(:get, %r{v1/receive}).to_return(status: 400, body: error_message)
       end

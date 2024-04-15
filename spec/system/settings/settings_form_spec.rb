@@ -4,19 +4,6 @@ require 'rails_helper'
 
 RSpec.describe 'Permissions' do
   let(:user) { create(:user) }
-  let(:configured_channels) do
-    {
-      threema: { configured: true, allow_onboarding: true },
-      telegram: { configured: false, allow_onboarding: false },
-      email: { configured: true, allow_onboarding: true },
-      signal: { configured: true, allow_onboarding: true },
-      whats_app: { configured: false, allow_onboarding: false }
-    }
-  end
-
-  before do
-    allow(Setting).to receive(:channels).and_return(configured_channels)
-  end
 
   it 'Exposes certain fields only to admin' do
     visit settings_path(as: user)
