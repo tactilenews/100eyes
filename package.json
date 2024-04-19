@@ -9,9 +9,9 @@
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.1",
-    "@hotwired/turbo": "^7.2.2",
+    "@hotwired/turbo": "^8.0.4",
     "@rails/ujs": "^6.1.5",
-    "@yaireo/tagify": "^3.25.0",
+    "@yaireo/tagify": "^4.24.0",
     "apexcharts": "^3.36.3",
     "clipboard-polyfill": "^3.0.3",
     "dialog-polyfill": "^0.5.6"
@@ -24,7 +24,7 @@
     "npm-run-all": "^4.1.5",
     "postcss": "^8.4.38",
     "postcss-cli": "^9.1.0",
-    "postcss-easy-import": "^3.0.0",
+    "postcss-easy-import": "^4.0.0",
     "postcss-preset-env": "^7.8.2",
     "prettier": "^2.7.1"
   }
