@@ -5,6 +5,7 @@ module ThreemaAdapter
   UNSUBSCRIBE_CONTRIBUTOR = :unsubscribe_contributor
   RESUBSCRIBE_CONTRIBUTOR = :resubscribe_contributor
   UNSUPPORTED_CONTENT = :unsupported_content
+  HANDLE_DELIVERY_RECEIPT = :handle_delivery_receipt
 
   class Inbound
     UNSUPPORTED_CONTENT_TYPES = %w[application text/x-vcard].freeze
@@ -20,10 +21,11 @@ module ThreemaAdapter
 
     def consume(threema_message)
       decrypted_message = Threema.new.receive(payload: threema_message)
-      return if delivery_receipt?(decrypted_message)
 
       @sender = initialize_sender(threema_message)
       return unless @sender
+
+      trigger(HANDLE_DELIVERY_RECEIPT, decrypted_message) if delivery_receipt?(decrypted_message)
 
       @message = initialize_message(decrypted_message)
       return unless @message

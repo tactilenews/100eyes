@@ -58,7 +58,7 @@ module ThreemaAdapter
       end
 
       def send_text(message)
-        ThreemaAdapter::Outbound::Text.perform_later(contributor_id: message.recipient.id, text: message.text)
+        ThreemaAdapter::Outbound::Text.perform_later(contributor_id: message.recipient.id, text: message.text, message: message)
       end
     end
   end

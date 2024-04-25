@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/threemarb/threema.git
-  revision: f29f1f94917a29799c61ac950c31981606ada19d
-  branch: master
+  revision: 320be41c35082c25a4f138c5012198b6ec28ec80
+  branch: 39_improve_delivery_receipt_class
   specs:
     threema (0.1.0)
       case_transform
@@ -231,9 +231,9 @@ GEM
     marcel (1.0.4)
     matrix (0.4.2)
     method_source (1.0.0)
-    mime-types (3.4.1)
+    mime-types (3.5.2)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2022.0105)
+    mime-types-data (3.2024.0305)
     mimemagic (0.4.3)
       nokogiri (~> 1)
       rake
@@ -242,7 +242,7 @@ GEM
     mini_portile2 (2.8.5)
     minitest (5.16.3)
     msgpack (1.7.1)
-    multipart-post (2.2.3)
+    multipart-post (2.4.0)
     nio4r (2.5.8)
     nokogiri (1.16.3)
       mini_portile2 (~> 2.8.2)

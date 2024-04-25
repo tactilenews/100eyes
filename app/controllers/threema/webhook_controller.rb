@@ -24,6 +24,10 @@ class Threema::WebhookController < ApplicationController
       ResubscribeContributorJob.perform_later(contributor.id, ThreemaAdapter::Outbound)
     end
 
+    adapter.on(ThreemaAdapter::HANDLE_DELIVERY_RECEIPT) do |delivery_receipt|
+      handle_delivery_receipt(delivery_receipt)
+    end
+
     adapter.consume(threema_webhook_params) do |message|
       message.contributor.reply(adapter)
     end
@@ -42,5 +46,29 @@ class Threema::WebhookController < ApplicationController
   def handle_unknown_contributor(threema_id)
     exception = ThreemaAdapter::UnknownContributorError.new(threema_id: threema_id)
     ErrorNotifier.report(exception)
+  end
+
+  def handle_delivery_receipt(delivery_receipt)
+    return if delivery_receipt.message_ids.blank?
+
+    messages = Message.where(external_id: delivery_receipt.message_ids)
+    messages.each do |message|
+      delivery_receipt.message_ids.each do |message_id|
+        next unless message.external_id.eql?(message_id)
+
+        if delivery_receipt.respond_to?(:received_at) && delivery_receipt.received_at.present?
+          message.update(received_at: delivery_receipt.received_at)
+        end
+        next unless delivery_receipt.respond_to?(:read_at) && delivery_receipt.read_at.present?
+
+        handle_read_receipt(message, delivery_receipt)
+      end
+    end
+  end
+
+  def handle_read_receipt(message, delivery_receipt)
+    message.read_at = delivery_receipt.read_at
+    message.received_at = delivery_receipt.read_at if message.received_at.blank?
+    message.save
   end
 end
