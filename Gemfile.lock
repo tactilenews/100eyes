@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/threemarb/threema.git
-  revision: 320be41c35082c25a4f138c5012198b6ec28ec80
+  revision: 7f6e30111abee4111bd133960041902f9b683130
   branch: 39_improve_delivery_receipt_class
   specs:
     threema (0.1.0)

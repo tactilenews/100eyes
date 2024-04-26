@@ -56,19 +56,16 @@ class Threema::WebhookController < ApplicationController
       delivery_receipt.message_ids.each do |message_id|
         next unless message.external_id.eql?(message_id)
 
-        if delivery_receipt.respond_to?(:received_at) && delivery_receipt.received_at.present?
-          message.update(received_at: delivery_receipt.received_at)
-        end
-        next unless delivery_receipt.respond_to?(:read_at) && delivery_receipt.read_at.present?
+        local_datetime = Time.zone.at(delivery_receipt.timestamp).to_datetime
 
-        handle_read_receipt(message, delivery_receipt)
+        message.update(received_at: local_datetime) if delivery_receipt.status.eql?(:received)
+
+        next unless delivery_receipt.status.eql?(:read)
+
+        message.read_at = local_datetime
+        message.received_at = local_datetime if message.received_at.blank?
+        message.save
       end
     end
-  end
-
-  def handle_read_receipt(message, delivery_receipt)
-    message.read_at = delivery_receipt.read_at
-    message.received_at = delivery_receipt.read_at if message.received_at.blank?
-    message.save
   end
 end

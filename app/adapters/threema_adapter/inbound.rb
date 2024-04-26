@@ -25,7 +25,10 @@ module ThreemaAdapter
       @sender = initialize_sender(threema_message)
       return unless @sender
 
-      trigger(HANDLE_DELIVERY_RECEIPT, decrypted_message) if delivery_receipt?(decrypted_message)
+      if delivery_receipt?(decrypted_message)
+        trigger(HANDLE_DELIVERY_RECEIPT, decrypted_message)
+        return
+      end
 
       @message = initialize_message(decrypted_message)
       return unless @message
