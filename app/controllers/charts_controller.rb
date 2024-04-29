@@ -24,6 +24,14 @@ class ChartsController < ApplicationController
                   { name: t('shared.editorial'), data: joined_outbound([:day_of_week]).map { |key, value| { x: key, y: value } } }]
   end
 
+  def interaction_rates_by_tag
+    render json: [{
+      name: t('shared.interactions_rate'), data: ActsAsTaggableOn::Tag.order(taggings_count: :desc).map do |tag|
+        { x: tag.name, y: Message.replies.where(sender: Contributor.with_tags(tag.name)).count }
+      end
+    }]
+  end
+
   private
 
   def joined_inbound(group_keys)

@@ -122,6 +122,7 @@ Rails.application.routes.draw do
     get 'day-and-time-replies'
     get 'day-and-time-requests'
     get 'day-requests-replies'
+    get 'interaction-rates-by-tag'
   end
 
   get '/profile', to: 'profile#index'

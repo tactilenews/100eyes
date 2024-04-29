@@ -38,5 +38,9 @@ RSpec.describe 'Dashboard' do
 
     # DayActivityLinechart section
     expect(page).to have_css('section.DayActivityLinechart')
+
+    # InteractionRatesByTag section
+    expect(page).to have_css('section.InteractionRatesByTag')
+    expect(page).to have_content('Interaktionsquoten nach Tag')
   end
 end

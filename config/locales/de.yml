@@ -389,7 +389,8 @@ de:
       heading: "Bist du sicher, dass du „%{request_title}” dauerhaft löschen möchtest?"
       cancel: abbrechen
       confirm: löschen
-
+    interaction_rates_by_tag:
+      heading: Interaktionsquoten nach Tag
   mailer:
     unsubscribe:
       text: "Sofern Sie keine E-Mails mehr von uns erhalten möchten, können Sie sie unter diesem Link abbestellen: {{{ pm:unsubscribe }}}"
@@ -950,3 +951,4 @@ de:
   shared:
     community: Community
     editorial: Redaktion
+    interactions_rate: Interaktionsquote
