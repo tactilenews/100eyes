@@ -3,10 +3,9 @@
 require 'factory_bot_rails'
 require 'faker'
 
-contributors_count = 100
-request_count = 200
-message_count = request_count * (contributors_count * 0.5).to_i
-message_time = Faker::Time.backward(days: 14)
+contributors_count = 30
+request_count = 30
+replies_count = 30
 
 users = User.all
 
@@ -29,6 +28,9 @@ FactoryBot.modify do
   end
 end
 
+Rails.logger.debug 'Seeding contributors..'
+contributors = FactoryBot.create_list(:contributor, contributors_count)
+
 FactoryBot.modify do
   factory :request do
     title { Faker::Lorem.question }
@@ -37,31 +39,21 @@ FactoryBot.modify do
   end
 end
 
-Rails.logger.debug 'Seeding requests..'
-requests = FactoryBot.build_list(:request, request_count) do |request|
-  request.class.skip_callback(:create, :after, :broadcast_request, raise: false)
-  request.save!
-end
-
-Rails.logger.debug 'Seeding contributors..'
-contributors = FactoryBot.create_list(:contributor, contributors_count)
-
 FactoryBot.modify do
   factory :message do
-    created_at { message_time }
-    updated_at { message_time }
     sender_type { 'Contributor' }
     text { Faker::Lorem.paragraph }
     unknown_content { false }
     broadcasted { false }
     sender { contributors.sample }
     recipient { nil }
-    request { requests.sample }
   end
 end
 
-Rails.logger.debug 'Seeding messages..'
-FactoryBot.build_list(:message, message_count) do |message|
-  message.class.skip_callback(:create, :after, :send_if_outbound, raise: false)
-  message.save!
+Rails.logger.debug 'Seeding requests..'
+FactoryBot.build_list(:request, request_count) do |request|
+  Message.skip_callback(:commit, :after, :send_if_outbound, raise: false)
+  request.save!
+  Rails.logger.debug 'Seeding requests replies...'
+  FactoryBot.create_list(:message, replies_count, request: request)
 end
