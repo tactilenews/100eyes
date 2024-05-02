@@ -19,7 +19,7 @@ RSpec.describe 'Onboarding::Whatsapp', type: :routing do
       it { is_expected.not_to be_routable }
     end
 
-    describe 'but when a Whatsapp number and allow_onboarding has not been disallowed' do
+    describe 'but when a Whatsapp number is configured and onboarding has not been disallowed' do
       it { should be_routable }
     end
   end
@@ -40,7 +40,7 @@ RSpec.describe 'Onboarding::Whatsapp', type: :routing do
       it { is_expected.not_to be_routable }
     end
 
-    describe 'but when a Whatsapp number was configured and allow_onboarding has not been disallowed' do
+    describe 'but when a Whatsapp number is configured and onboarding has not been disallowed' do
       it { should be_routable }
     end
   end
