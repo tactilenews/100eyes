@@ -56,6 +56,26 @@ class Setting < RailsSettings::Base
     postmark_api_token.present?
   end
 
+  def self.whats_app_onboarding_allowed?
+    whats_app_configured? && channels.dig(:whats_app, :allow_onboarding)
+  end
+
+  def self.signal_onboarding_allowed?
+    signal_configured? && channels.dig(:signal, :allow_onboarding)
+  end
+
+  def self.threema_onboarding_allowed?
+    threema_configured? && channels.dig(:threema, :allow_onboarding)
+  end
+
+  def self.telegram_onboarding_allowed?
+    telegram_configured? && channels.dig(:telegram, :allow_onboarding)
+  end
+
+  def self.email_onboarding_allowed?
+    email_configured? && channels.dig(:email, :allow_onboarding)
+  end
+
   field :project_name, default: ENV['HUNDRED_EYES_PROJECT_NAME'] || '100eyes'
   field :application_host, readonly: true, default: ENV['APPLICATION_HOSTNAME'] || 'localhost:3000'
 
