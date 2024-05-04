@@ -10,6 +10,7 @@ de:
     chat_message:
       expand: weiterlesen
       collapse: weniger
+      conversations: Verlauf
       copy: kopieren
       edit: Nachricht bearbeiten
       highlight: markieren
@@ -20,10 +21,13 @@ de:
       created_by: Manuell hinzugefügt von %{name}
       anonymous_creator: anonymer User
       sent_by_x_at: "%{name} am <time>%{date}</time>"
+      about: "&nbsp;zu \"%{request_link}\""
     chat_messages_group:
+      conversations: Verlauf
       reply: nachfragen
       add_message: Antwort manuell hinzufügen
     chat_form:
+      reply_to_reference: "Zur Nachricht am %{date}:"
       placeholder: Gib hier deine Nachfrage ein…
       submit: Absenden
     message_form:
