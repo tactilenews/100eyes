@@ -2,10 +2,11 @@
 
 module ChatForm
   class ChatForm < ApplicationComponent
-    def initialize(contributor:)
+    def initialize(contributor:, reply_to:)
       super
 
       @contributor = contributor
+      @reply_to = reply_to
     end
 
     private

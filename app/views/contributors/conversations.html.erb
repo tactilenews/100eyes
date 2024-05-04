@@ -1,0 +1,14 @@
+<%= c 'main' do %>
+  <%= c 'page_header', styles: [:largeMarginBottom, :flexboxColumn] do %>
+    <%= c 'contributor_header', contributor: @contributor %>
+  <% end %>
+
+  <%= c 'section', style: :xlargeSpaceBetween do %>
+    <%= c 'stack' do %>
+      <div class="ChatMessagesGroup-messages">
+        <%= c 'chat_messages', messages: @messages, switch_display: :request, styles: [:compact] %>
+      </div>
+      <%= c 'chat_form', contributor: @contributor, reply_to: @reply_to %>
+    <% end %>
+  <% end %>
+<% end %>

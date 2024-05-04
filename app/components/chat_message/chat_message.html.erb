@@ -9,13 +9,15 @@
   data-chat-message-copy-url-value="<%= request_url(message.request, anchor: id) %>"
   id="<%= id %>"
 >
-    <% if message.text.present? %>
-      <header class="ChatMessage-header">
-        <% if message.sender %>
-          <%= c 'avatar', record: message.sender, style: :small, class: "ChatMessage-avatar" %>
-        <% else %>
-          <%= c 'avatar', style: :small, class: "ChatMessage-avatar" %>
-        <% end %>
+    <header class="ChatMessage-header">
+      <% sent_by_x_at = t('.sent_by_x_at', name: message.sender ? message.sender.first_name : Setting.project_name, date: date_time(message.updated_at)).html_safe %>
+      <%= message.sent_from_contributor? ? link_to(sent_by_x_at, conversations_contributor_path(id: message.contributor.id, anchor: id), 'data-turbo': false) : sent_by_x_at %>
+      <% request_link = link_to message.request.title, request_path(id: message.request, anchor: "contributor-#{message.contributor.id}" ), 'data-turbo': false %>
+      <%= t('.about', request_link: request_link).html_safe %>
+    </header>
+
+    <section class="ChatMessage-body">
+      <% if message.text.present? %>
         <div class="ChatMessage-text">
           <%= c 'plaintext_message',
             message: message.text,
@@ -41,60 +43,24 @@
             <% end %>
           </div>
         </div>
-      </header>
-    <% end %>
-
-    <% unless photos.empty? %>
-      <% if message.text.blank? %>
-        <header class="ChatMessage-header">
-          <% if message.sender %>
-            <%= c 'avatar', record: message.sender, style: :small, class: "ChatMessage-avatar" %>
-          <% else %>
-            <%= c 'avatar', style: :small, class: "ChatMessage-avatar" %>
-          <% end %>
-          <%= c 'chat_message_photos', photos: photos %>
-        </header>
-      <% else %>
-          <%= c 'chat_message_photos', photos: photos %>
       <% end %>
-    <% end %>
-
-    <% unless files.empty? %>
-      <% if image? %>
-        <% if message.text.blank? %>
-          <header class="ChatMessage-header">
-            <% if message.sender %>
-              <%= c 'avatar', record: message.sender, style: :small, class: "ChatMessage-avatar" %>
-            <% else %>
-              <%= c 'avatar', style: :small, class: "ChatMessage-avatar" %>
-            <% end %>
-            <%= c 'chat_message_photos', photos: image_files %>
-          </header>
-        <% else %>
+      <% unless photos.empty? %>
+        <%= c 'chat_message_photos', photos: photos %>
+      <% end %>
+      <% unless files.empty? %>
+        <% if image? %>
           <%= c 'chat_message_photos', photos: image_files %>
         <% end %>
-      <% end %>
-
-      <% if audio? %>
-        <header class="ChatMessage-header">
-          <% if message.sender %>
-            <%= c 'avatar', record: message.sender, style: :small, class: "ChatMessage-avatar" %>
-          <% else %>
-            <%= c 'avatar', style: :small, class: "ChatMessage-avatar" %>
-          <% end %>
+        <% if audio? %>
           <%= c 'chat_message_audio', audios: audio_files %>
-        </header>
+        <% end %>
+        <% if video? %>
+          <%= c 'chat_message_video', videos: video_files %>
+        <% end %>
       <% end %>
-
-      <% if video? %>
-        <%= c 'chat_message_video', videos: video_files %>
-      <% end %>
-    <% end %>
+    </section>
 
     <footer class="ChatMessage-footer">
-      <p class="ChatMessage-senderNameMessageUpdatedAt">
-        <%= t('.sent_by_x_at', name: message.sender ? message.sender.first_name : Setting.project_name, date: date_time(message.updated_at)).html_safe %>
-      </p>
       <% unless hide_actions %>
         <%= c 'copy_button',
           label: I18n.t('components.chat_message.copy'),
@@ -120,7 +86,13 @@
             <%= I18n.t('components.chat_message.move') %>
           <% end %>
         <% end %>
-        
+
+        <% if message.sent_from_contributor? %>
+          <%= link_to conversations_contributor_path(id: message.contributor, reply_to: message.id, anchor: "chat-form" ), 'data-turbo': false do %>
+            <%= c 'icon', icon: 'reply-arrow', styles: [:inline] %>
+            <%= I18n.t('components.chat_messages_group.reply') %>
+          <% end %>
+        <% end %>
       <% end %>
     </footer>
 

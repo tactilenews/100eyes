@@ -102,6 +102,13 @@ class Contributor < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
+  def conversations
+    Message
+      .where(recipient: self)
+      .or(Message.where(sender: self))
+      .reorder(created_at: :asc)
+  end
+
   def conversation_about(request)
     Message
       .where(request: request, sender: self)
@@ -114,7 +121,9 @@ class Contributor < ApplicationRecord
   end
 
   def active_request
-    received_requests.first || Request.broadcasted.first
+    # active_request is always the request of the contributors last received message or the last broadcasted request
+    # (first has to be used as the default order of messages and request is set to created_at desc)
+    received_messages.first&.request || Request.broadcasted.first
   end
 
   def telegram?

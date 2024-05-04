@@ -12,9 +12,9 @@
       <% end %>
 
       <div class="ChatMessagesGroup-actions">
-        <a href="<%= conversation_link %>">
-          <%= c 'icon', icon: 'reply-arrow', styles: [:inline] %>
-          <%= I18n.t('components.chat_messages_group.reply') %>
+        <a href="<%= conversations_contributor_path(id: contributor.id) %>">
+          <%= c 'icon', icon: 'filter-tool', styles: [:inline] %>
+          <%= I18n.t('components.chat_messages_group.conversations') %>
         </a>
         <a href="<%= add_message_link %>">
           <%= c 'icon', icon: 'add', styles: [:inline] %>
