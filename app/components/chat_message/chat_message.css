@@ -66,6 +66,10 @@
   color: var(--color-text-light);
 }
 
+.ChatMessage-header a {
+  text-decoration: underline;
+}
+
 .ChatMessage-footer {
   margin-top: var(--spacing-unit-s);
   color: var(--color-text-light);

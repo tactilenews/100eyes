@@ -88,7 +88,7 @@
         <% end %>
 
         <% if message.sent_from_contributor? %>
-          <%= link_to conversations_contributor_path(id: message.contributor, reply_to: message.id, anchor: "chat-form" ), 'data-turbo': false do %>
+          <%= c 'button', link: conversations_contributor_path(id: message.contributor, reply_to: message.id, anchor: "chat-form" ), 'data-turbo': false, style: :inline do %>
             <%= c 'icon', icon: 'reply-arrow', styles: [:inline] %>
             <%= I18n.t('components.chat_messages_group.reply') %>
           <% end %>
