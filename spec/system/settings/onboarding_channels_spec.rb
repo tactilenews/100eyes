@@ -14,7 +14,7 @@ RSpec.describe 'Configuring Onboarding Channels' do
   it 'allows activating and deactivating onboarding channels' do
     visit settings_path(as: admin)
 
-    # With no Threema configured in .env.local.test
+    # With no Threema configured in .env.test.local
     within('.OnboardingChannelsCheckboxes') do
       Setting.channels.each_key do |key|
         if key.to_sym.in?(configured_channels)
