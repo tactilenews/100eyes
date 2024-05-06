@@ -88,7 +88,7 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
   config.include ActionView::Helpers::NumberHelper, type: :system
   config.include ActionView::Helpers::NumberHelper, type: :requests
-
+  config.include Rails.application.routes.url_helpers, type: :component
   config.include Helpers
 end
 

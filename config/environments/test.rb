@@ -7,7 +7,6 @@
 
 Telegram.reset_bots
 Telegram::Bot::ClientStub.stub_all!
-Dotenv.overload('.env.local.test')
 
 require_relative '../../app/models/setting'
 
