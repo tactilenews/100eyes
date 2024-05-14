@@ -127,4 +127,7 @@ Rails.application.routes.draw do
   get '/profile', to: 'profile#index'
   post '/profile/user', to: 'profile#create_user'
   put '/profile/upgrade_business_plan', to: 'profile#upgrade_business_plan'
+
+  match '/500', to: 'errors#internal_server_error', via: :all
+  match '/404', to: 'errors#not_found', via: :all
 end
