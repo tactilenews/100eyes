@@ -51,6 +51,12 @@ class Contributor < ApplicationRecord
     tag_list.blank? ? all : tagged_with(tag_list)
   }
 
+  scope :with_email, -> { where.not(email: nil) }
+  scope :with_threema, -> { where.not(threema_id: nil) }
+  scope :with_telegram, -> { where.not(telegram_id: nil) }
+  scope :with_signal, -> { where.not(signal_phone_number: nil, signal_onboarding_completed_at: nil) }
+  scope :with_whats_app, -> { where.not(whats_app_phone_number: nil) }
+
   before_validation do
     self.email = nil if email.blank?
     self.threema_id = nil if threema_id.blank?
