@@ -827,6 +827,12 @@ de:
       header:
         one: 'Konnte %{model} nicht speichern: ein Fehler.'
         other: 'Konnte %{model} nicht speichern: %{count} Fehler.'
+    not_found:
+      header: Die Seite, die du suchst, existiert nicht.
+      text: Vielleicht hast du sich bei der Adresse vertippt oder die Seite ist umgezogen.
+    internal_server_error:
+      header: 100eyes hat einen Fehler.
+      text: Unser Otter Till-E arbeitet gern an einer Lösung, wenn du ihm schreibst support@100eyes.
   helpers:
     select:
       prompt: Bitte wählen
