@@ -28,10 +28,10 @@
   <% end %>
 
   <%= c 'section', styles: [:wide] do %>
-    <%= paginate @requests, params: { path: requests_path } %>
+    <%= paginate @requests, params: { path: requests_path, query: { filter: @filter } } %>
     <% @requests.each do |request| %>
       <%= c 'request_row', request: request %>
     <% end %>
-    <%= paginate @requests, params: { path: requests_path } %>
+    <%= paginate @requests, params: { path: requests_path, query: { filter: @filter } } %>
   <% end %>
 <% end %>
