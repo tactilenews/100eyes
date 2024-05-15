@@ -550,19 +550,28 @@ RSpec.describe Contributor, type: :model do
 
     describe 'when many requests are sent to the contributor' do
       before(:each) do
-        another_request = create(:request, broadcasted_at: 1.day.ago)
-        create(:message, request: the_request, recipient: contributor)
-        create(:message, request: another_request, recipient: contributor)
+        previous_request = create(:request, broadcasted_at: 1.day.ago)
+        create(:message, request: the_request, recipient: contributor, created_at: the_request.broadcasted_at)
+        create(:message, request: previous_request, recipient: contributor, created_at: previous_request.broadcasted_at)
       end
 
       it { should eq(the_request) }
     end
 
+    describe 'when most recently a manual message is sent out belonging to a previous request' do
+      let(:previous_request) { create(:request, broadcasted_at: 1.day.ago) }
+      before(:each) do
+        create(:message, request: the_request, recipient: contributor, created_at: the_request.broadcasted_at)
+        create(:message, request: previous_request, recipient: contributor)
+      end
+
+      it { should eq(previous_request) }
+    end
+
     describe 'when there is a planned request' do
       before(:each) do
-        planned_request = create(:request, broadcasted_at: nil, schedule_send_for: 1.day.from_now)
+        create(:request, broadcasted_at: nil, schedule_send_for: 1.day.from_now)
         create(:message, request: the_request, recipient: contributor)
-        create(:message, request: planned_request, recipient: contributor)
       end
 
       it { should eq(the_request) }
