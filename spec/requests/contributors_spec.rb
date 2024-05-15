@@ -201,13 +201,7 @@ RSpec.describe '/contributors', type: :request do
           let(:newest_message) { Message.reorder(created_at: :desc).first }
           it do
             expect(response)
-              .to redirect_to(
-                contributor_request_path(
-                  contributor_id: contributor.id,
-                  id: the_request.id,
-                  anchor: "message-#{newest_message.id}"
-                )
-              )
+              .to redirect_to(newest_message.chat_message_link)
           end
         end
       end
