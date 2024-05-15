@@ -2,7 +2,7 @@
 
 module ChatForm
   class ChatForm < ApplicationComponent
-    def initialize(contributor:, reply_to:)
+    def initialize(contributor:, reply_to: nil)
       super
 
       @contributor = contributor
@@ -11,6 +11,6 @@ module ChatForm
 
     private
 
-    attr_reader :contributor
+    attr_reader :contributor, :reply_to
   end
 end

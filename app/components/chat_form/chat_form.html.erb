@@ -1,6 +1,8 @@
 <%= form_with(scope: :contributor, url: message_contributor_path(contributor), class: 'ChatForm', id: 'chat-form', local: true) do %>
-  <%= select_tag('message[reply_to_id]', options_for_select(contributor.replies.map {|reply| ["Zur Frage: #{reply.request.title}", reply.id]}, @reply_to&.id), disabled: true)  %>
-  <%= hidden_field_tag 'message[reply_to_id]', @reply_to&.id %>
-  <%= c 'textarea', id: 'message[text]', value: @reply_to && t('.reply_to_reference', date: date_time(@reply_to.updated_at)), required: true, placeholder: t('components.chat_form.placeholder') %>
+  <% if reply_to.present? %>
+    <%= select_tag('message[reply_to_id]', options_for_select(contributor.replies.map {|reply| ["Zur Frage: #{reply.request.title}", reply.id]}, reply_to&.id), disabled: true)  %>
+    <%= hidden_field_tag 'message[reply_to_id]', reply_to&.id %>
+  <% end %>
+  <%= c 'textarea', id: 'message[text]', value: reply_to && t('.reply_to_reference', date: date_time(reply_to.updated_at)), required: true, placeholder: t('components.chat_form.placeholder') %>
   <%= c 'button', label: t('components.chat_form.submit'), type: :submit %>
 <% end %>
