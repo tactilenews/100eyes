@@ -19,7 +19,8 @@
         <li>
           <a
             class="Link"
-            href="<%= request_path(reply.request, anchor: "message-#{reply.id}") %>"
+            data-turbo="false"
+            href="<%= conversations_contributor_path(id: reply.contributor.id, anchor: reply.id) %>"
           >
             <strong><%= reply.request.title %></strong>
           </a>
@@ -29,5 +30,8 @@
         </li>
       <% end %>
     </ul>
+    <p>
+      <%= link_to t(".show_all", count: replies.count ), conversations_contributor_path(id: contributor.id), class: "Link" %>
+    </p>
   <% end %>
 <% end %>

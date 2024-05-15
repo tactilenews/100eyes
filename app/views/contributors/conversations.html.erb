@@ -1,9 +1,14 @@
 <%= c 'main' do %>
   <%= c 'page_header', styles: [:largeMarginBottom, :flexboxColumn] do %>
     <%= c 'contributor_header', contributor: @contributor %>
+    <%= c 'flex', style: :small_gap do %>
+      <% if @contributor.tags.any? %>
+        <%= c 'tags_list', tags: @contributor.tags %>
+      <% end %>
+    <% end %>
   <% end %>
-
   <%= c 'section', style: :xlargeSpaceBetween do %>
+    <%= c 'contributor_metrics', contributor_for_info: @contributor, style: :cards %>
     <%= c 'stack' do %>
       <div class="ChatMessagesGroup-messages">
         <%= c 'chat_messages', messages: @messages, switch_display: :request, styles: [:compact] %>

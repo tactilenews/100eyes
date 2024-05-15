@@ -65,6 +65,16 @@ de:
       photos:
         one: empfangenes Bild
         other: empfangene Bilder
+    contributor_metrics:
+      requests:
+        one: wurde beantwortet
+        other: wurden beantwortet
+      replies:
+        one: empfangene Nachricht
+        other: empfangene Nachrichten
+      photos:
+        one: empfangenes Bild
+        other: empfangene Bilder
     request_notification:
       action: Neu laden
       message_template:
@@ -253,6 +263,7 @@ de:
       change_avatar: Profilbild ändern
     requests_feed:
       heading: Letzte Antworten
+      show_all: Alle Antworten anzeigen (%{count})
       no_replies: "%{name} hat bisher auf keine Recherche geantwortet."
     contributor_core_data_form:
       heading: Stammdaten bearbeiten

@@ -66,13 +66,18 @@
   color: var(--color-text-light);
 }
 
-.ChatMessage-header a {
+.ChatMessage:hover .ChatMessage-header a {
   text-decoration: underline;
 }
 
 .ChatMessage-footer {
   margin-top: var(--spacing-unit-s);
   color: var(--color-text-light);
+  visibility: hidden;
+}
+
+.ChatMessage:hover .ChatMessage-footer {
+  visibility: visible;
 }
 
 .ChatMessage-footer .Button {

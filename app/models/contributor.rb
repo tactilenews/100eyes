@@ -16,6 +16,7 @@ class Contributor < ApplicationRecord
   has_many :replied_to_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :replies
   has_many :received_requests, -> { broadcasted.reorder(broadcasted_at: :desc).distinct }, source: :request, through: :received_messages
   has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
+  has_many :photos, through: :replies
   belongs_to :organization, optional: true
   belongs_to :deactivated_by_user, class_name: 'User', optional: true
 
@@ -207,6 +208,17 @@ class Contributor < ApplicationRecord
   end
 
   alias additional_consent additional_consent?
+
+  def stats
+    {
+      counts: {
+        received_requests: received_requests.select(:request_id).distinct.count,
+        replied_to_requests: replied_to_requests.select(:request_id).distinct.count,
+        replies: replies.count,
+        photos: replies.sum(:photos_count)
+      }
+    }
+  end
 
   private
 
