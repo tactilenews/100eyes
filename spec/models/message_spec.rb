@@ -83,7 +83,7 @@ RSpec.describe Message, type: :model do
       subject { message.chat_message_link }
       let(:params) { { id: 8, recipient: nil, sender: contributor } }
       it 'should link to message within the contributors conversations' do
-        should eq('/contributors/7/conversations/6#message-8')
+        should eq('/contributors/7/conversations#message-8')
       end
     end
   end
