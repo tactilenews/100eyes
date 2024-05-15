@@ -262,7 +262,7 @@ de:
       avatar: Profilbild
       change_avatar: Profilbild ändern
     requests_feed:
-      heading: Letzte Antworten
+      heading: Letzte beantwortete Fragen
       show_all: Alle Antworten anzeigen (%{count})
       no_replies: "%{name} hat bisher auf keine Recherche geantwortet."
     contributor_core_data_form:
@@ -627,7 +627,7 @@ de:
     destroy:
       successful: "Deine Frage „%{request_title}” wurde erfolgreich gelöscht"
       broadcasted_request_unallowed: "Frage %{request_title} wurde bereits gesendet und kann nicht gelöscht werden"
-    replies: Alle Antworten
+    replies: Alle Antworten der Community
     created_at: Frage gestellt %{datetime}
     planned_for: Frage geplant für %{datetime}
     no_replies: Bisher hat noch niemand auf diese Frage geantwortet. Schau doch später noch einmal rein!
@@ -932,6 +932,10 @@ de:
       time_only: "%H:%M Uhr"
       today: "heute, %H:%M"
     pm: nachmittags
+
+  contributors:
+    conversations:
+      heading: Deine Unterhaltung mit %{name}
 
   notifications:
     onboarding_completed:

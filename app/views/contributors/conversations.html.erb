@@ -9,6 +9,7 @@
   <% end %>
   <%= c 'section', style: :xlargeSpaceBetween do %>
     <%= c 'contributor_metrics', contributor_for_info: @contributor, style: :cards %>
+    <h2><%= t('.heading', name: @contributor.name ) %></h2>
     <%= c 'stack' do %>
       <div class="ChatMessagesGroup-messages">
         <%= c 'chat_messages', messages: @messages, switch_display: :request, styles: [:compact] %>
