@@ -1,10 +1,10 @@
 GIT
   remote: https://github.com/threemarb/threema.git
-  revision: 7f6e30111abee4111bd133960041902f9b683130
-  branch: 39_improve_delivery_receipt_class
+  revision: c8da2843cf154c868f1555f9293f8965562ab727
+  branch: master
   specs:
     threema (0.1.0)
-      case_transform
+      activesupport (<= 7.0.8)
       dotenv
       mime-types
       mimemagic
@@ -117,8 +117,6 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
-    case_transform (0.2)
-      activesupport
     chunky_png (1.4.0)
     clearance (2.6.1)
       actionmailer (>= 5.0)

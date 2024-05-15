@@ -68,7 +68,7 @@ gem 'rack-attack', '~> 6.6'
 # Channel adapters
 gem 'postmark-rails'
 gem 'telegram-bot'
-gem 'threema', git: 'https://github.com/threemarb/threema.git', branch: '39_improve_delivery_receipt_class'
+gem 'threema', git: 'https://github.com/threemarb/threema.git', branch: 'master'
 gem 'twilio-ruby'
 
 # User management
