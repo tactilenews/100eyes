@@ -67,13 +67,16 @@ RSpec.describe 'Activity Notifications' do
       # ChatMessageSent
       click_link('Zur Antwort', href: request_path(request, anchor: "message-#{reply.id}"))
       expect(page).to have_text("I'm a reply to #{request.title}")
-      find("a[href='#{contributor_request_path(contributor_without_avatar, request)}']", text: 'nachfragen').trigger('click')
+      find('p', text: "I'm a reply to #{request.title}").hover
+      reply_path = conversations_contributor_path(id: contributor_without_avatar, reply_to: reply.id, anchor: "chat-form" )
+      expect(page).to have_selector("a[href='#{reply_path}']")
+      find("a[href='#{reply_path}']", text: 'nachfragen').trigger('click')
 
-      expect(page).to have_text('Nachrichtenverlauf')
+      expect(page).to have_text("Deine Unterhaltung mit #{contributor_without_avatar.name}")
       fill_in 'message[text]', with: "Thanks for your reply #{contributor_without_avatar.name}!"
       click_button 'Absenden'
 
-      expect(page).to have_current_path(contributor_request_path(contributor_without_avatar, request))
+      expect(page).to have_current_path(conversations_contributor_path(contributor_without_avatar))
       expect(page).to have_text("Nachricht an #{contributor_without_avatar.name} wurde verschickt")
       expect(page).to have_text("Thanks for your reply #{contributor_without_avatar.name}!")
 
@@ -97,7 +100,6 @@ RSpec.describe 'Activity Notifications' do
       # I should be grouped
       reply_two = create(:message, :inbound, request: request, sender: contributor_two,
                                              text: "I'm a reply from #{contributor_two.name}")
-
       visit dashboard_path(as: user)
       expect(page).to have_text(
         "#{contributor_two.name} und #{contributor_without_avatar.name} haben auf die Frage „#{request.title}” geantwortet."
@@ -116,14 +118,18 @@ RSpec.describe 'Activity Notifications' do
                                 href: request_path(request, anchor: "message-#{reply_by_same_contributor.id}"))
 
       click_link('Zur Antwort', href: request_path(request, anchor: "message-#{reply_by_same_contributor.id}"))
-      expect(page).to have_text("I'm a reply from the same contributor: #{contributor_two.name}")
-      find("a[href='#{contributor_request_path(contributor_two, request)}']", text: 'nachfragen').trigger('click')
+      reply_text = "I'm a reply from the same contributor: #{contributor_two.name}"
+      expect(page).to have_text(reply_text)
+      find('p', text: reply_text).hover
+      reply_path = conversations_contributor_path(id: contributor_two, reply_to: reply_by_same_contributor.id, anchor: "chat-form" )
+      expect(page).to have_selector("a[href='#{reply_path}']")
+      find("a[href='#{reply_path}']", text: 'nachfragen').trigger('click')
 
-      expect(page).to have_text('Nachrichtenverlauf')
+      expect(page).to have_text("Deine Unterhaltung mit #{contributor_two.name}")
       fill_in 'message[text]', with: "Thanks for your reply #{contributor_two.name}!"
       click_button 'Absenden'
 
-      expect(page).to have_current_path(contributor_request_path(contributor_two, request))
+      expect(page).to have_current_path(conversations_contributor_path(contributor_two))
       expect(page).to have_text("Nachricht an #{contributor_two.name} wurde verschickt")
       expect(page).to have_text("Thanks for your reply #{contributor_two.name}!")
 
@@ -140,14 +146,19 @@ RSpec.describe 'Activity Notifications' do
       )
 
       click_link('Zur Antwort', href: request_path(request, anchor: "message-#{reply_by_same_contributor.id}"))
-      expect(page).to have_text("I'm a reply from #{contributor_two.name}")
-      find("a[href='#{contributor_request_path(contributor_two, request)}']", text: 'nachfragen').trigger('click')
 
-      expect(page).to have_text('Nachrichtenverlauf')
+      reply_text = "I'm a reply from the same contributor: #{contributor_two.name}"
+      expect(page).to have_text(reply_text).once
+      find('p', text: reply_text).hover
+      reply_path = conversations_contributor_path(id: contributor_two, reply_to: reply_by_same_contributor.id, anchor: "chat-form" )
+      expect(page).to have_selector("a[href='#{reply_path}']")
+      find("a[href='#{reply_path}']", text: 'nachfragen').trigger('click')
+
+      expect(page).to have_text("Deine Unterhaltung mit #{contributor_two.name}")
       fill_in 'message[text]', with: "This is another chat message to #{contributor_two.name}, but it doesn't count in the dashboard!"
       click_button 'Absenden'
 
-      expect(page).to have_current_path(contributor_request_path(contributor_two, request))
+      expect(page).to have_current_path(conversations_contributor_path(contributor_two))
       expect(page).to have_text("Nachricht an #{contributor_two.name} wurde verschickt")
       expect(page).to have_text("This is another chat message to #{contributor_two.name}, but it doesn't count in the dashboard!")
 
@@ -167,14 +178,20 @@ RSpec.describe 'Activity Notifications' do
       )
 
       click_link('Zur Antwort', href: request_path(request, anchor: "message-#{reply_by_same_contributor.id}"))
-      expect(page).to have_text("I'm a reply from #{contributor_two.name}")
-      find("a[href='#{contributor_request_path(contributor_two, request)}']", text: 'nachfragen').trigger('click')
 
-      expect(page).to have_text('Nachrichtenverlauf')
+      reply_text = "I'm a reply from the same contributor: #{contributor_two.name}"
+      expect(page).to have_text(reply_text)
+      find('p', text: reply_text).hover
+      reply_path = conversations_contributor_path(id: contributor_two, reply_to: reply_by_same_contributor.id, anchor: "chat-form" )
+      expect(page).to have_selector("a[href='#{reply_path}']")
+      find("a[href='#{reply_path}']", text: 'nachfragen').trigger('click')
+
+      expect(page).to have_text("Deine Unterhaltung mit #{contributor_two.name}")
+
       fill_in 'message[text]', with: "This is a chat message from #{coworker.name} to #{contributor_two.name}"
       click_button 'Absenden'
 
-      expect(page).to have_current_path(contributor_request_path(contributor_two, request))
+      expect(page).to have_current_path(conversations_contributor_path(contributor_two))
       expect(page).to have_text("Nachricht an #{contributor_two.name} wurde verschickt")
 
       Timecop.travel(5.minutes.from_now)
