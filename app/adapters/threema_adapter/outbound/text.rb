@@ -22,11 +22,15 @@ module ThreemaAdapter
         @threema_instance ||= Threema.new
       end
 
-      def perform(contributor_id:, text: nil)
+      def perform(contributor_id:, text: nil, message: nil)
         recipient = Contributor.find(contributor_id)
         return unless recipient
 
-        self.class.threema_instance.send(type: :text, threema_id: recipient.threema_id.upcase, text: text)
+        message_id = self.class.threema_instance.send(type: :text, threema_id: recipient.threema_id.upcase, text: text)
+
+        return unless message
+
+        message.update(external_id: message_id)
       end
     end
   end

@@ -61,12 +61,50 @@ RSpec.describe Threema::WebhookController do
       it_behaves_like 'an ActivityNotification', 'MessageReceived'
 
       describe 'DeliveryReceipt' do
-        let(:threema_mock) { instance_double(Threema::Receive::DeliveryReceipt, content: 'x\00x\\0') }
+        let(:threema_mock) do
+          instance_double(
+            Threema::Receive::DeliveryReceipt, content: 'x\00x\\0', message_ids: message_ids, status: status, timestamp: timestamp
+          )
+        end
+        let(:messages) { [create(:message, external_id: SecureRandom.alphanumeric(16))] }
+        let(:message_ids) { messages.pluck(:external_id) }
+        let(:status) { :received }
+        let(:timestamp) { Time.current.to_i }
         before { allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::DeliveryReceipt).and_return(true) }
 
         it 'returns 200 to avoid retries' do
           subject
           expect(response).to have_http_status(200)
+        end
+
+        context 'given a received status for a known message' do
+          it 'updates the received_at attr' do
+            expect { subject }.to change { messages.first.reload.received_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+          end
+        end
+
+        context 'given a read status for a known message' do
+          let(:status) { :read }
+
+          it 'updates the read_at attr' do
+            expect { subject }.to change { messages.first.reload.read_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+          end
+
+          it 'updates receive_at if blank' do
+            expect { subject }.to change { messages.first.reload.received_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+          end
+        end
+
+        context 'given multiple message_ids' do
+          let(:messages) { create_list(:message, 3, external_id: SecureRandom.alphanumeric(16)) }
+          let(:message_ids) { messages.pluck(:external_id) }
+          let(:status) { :read }
+
+          it 'updates all messages' do
+            expect { subject }.to change { messages.first.reload.read_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone)).and \
+              change { messages.second.reload.read_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone)).and \
+                change { messages.third.reload.read_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+          end
         end
       end
 

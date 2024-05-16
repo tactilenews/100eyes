@@ -52,13 +52,14 @@ module ThreemaAdapter
             file_path: ActiveStorage::Blob.service.path_for(file.attachment.blob.key),
             file_name: file.attachment.blob.filename.to_s,
             caption: index.zero? ? message.text : nil,
-            render_type: :media
+            render_type: :media,
+            message: message
           )
         end
       end
 
       def send_text(message)
-        ThreemaAdapter::Outbound::Text.perform_later(contributor_id: message.recipient.id, text: message.text)
+        ThreemaAdapter::Outbound::Text.perform_later(contributor_id: message.recipient.id, text: message.text, message: message)
       end
     end
   end

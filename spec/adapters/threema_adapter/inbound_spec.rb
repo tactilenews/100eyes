@@ -21,6 +21,11 @@ RSpec.describe ThreemaAdapter::Inbound do
   end
   let(:threema_mock) { instance_double(Threema::Receive::Text, content: 'Hello World!') }
   let(:threema) { instance_double(Threema) }
+  let(:messages) { [create(:message, external_id: SecureRandom.alphanumeric(16))] }
+  let(:message_ids) { messages.pluck(:external_id) }
+  let(:status) { :received }
+  let(:timestamp) { Time.current.to_i }
+
   before do
     allow(Threema).to receive(:new).and_return(threema)
     allow(threema).to receive(:receive).with({ payload: threema_message }).and_return(threema_mock)
@@ -42,7 +47,11 @@ RSpec.describe ThreemaAdapter::Inbound do
       before { allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::DeliveryReceipt).and_return(true) }
 
       context 'Threema::Receive::DeliveryReceipt' do
-        let(:threema_mock) { instance_double(Threema::Receive::DeliveryReceipt, content: 'x\00x\\0') }
+        let(:threema_mock) do
+          instance_double(
+            Threema::Receive::DeliveryReceipt, content: 'x\00x\\0', message_ids: message_ids, status: status, timestamp: timestamp
+          )
+        end
 
         it { is_expected.to be(nil) }
       end
@@ -300,6 +309,31 @@ RSpec.describe ThreemaAdapter::Inbound do
 
           it { is_expected.to have_received(:call).with(contributor) }
         end
+      end
+    end
+
+    describe 'HANDLE_DELIVERY_RECEIPT' do
+      let(:handle_delivery_receipt_callback) { spy('handle_delivery_receipt_callback') }
+      let(:threema_mock) do
+        instance_double(
+          Threema::Receive::DeliveryReceipt, content: 'x\00x\\0', message_ids: message_ids, status: status, timestamp: timestamp
+        )
+      end
+
+      before do
+        allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::DeliveryReceipt).and_return(true)
+        adapter.on(ThreemaAdapter::HANDLE_DELIVERY_RECEIPT) do |delivery_receipt|
+          handle_delivery_receipt_callback.call(delivery_receipt)
+        end
+      end
+
+      subject do
+        adapter.consume(threema_message)
+        handle_delivery_receipt_callback
+      end
+
+      describe 'if the message is a delivery receipt' do
+        it { should have_received(:call) }
       end
     end
   end
