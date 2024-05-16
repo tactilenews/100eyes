@@ -56,6 +56,8 @@ export default class extends Controller {
   }
 
   setCopyValue() {
+    if (!this.hasCopyButtonTarget) return;
+
     const text = this.textTarget.innerText;
 
     const sender = this.senderNameValue;
@@ -69,6 +71,8 @@ export default class extends Controller {
   }
 
   setCopyUrlValue() {
+    if (!this.hasCopyButtonTarget) return;
+
     this.copyButtonTarget.dataset.copyButtonCopyValue = this.copyUrlValue;
   }
 
