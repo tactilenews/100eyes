@@ -13,7 +13,8 @@ class UserDashboard < Administrate::BaseDashboard
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
     deactivated_at: Field::DateTime,
-    active: Field::Boolean
+    active: Field::Boolean,
+    organization: Field::BelongsTo
   }.freeze
 
   COLLECTION_ATTRIBUTES = %i[
@@ -24,6 +25,7 @@ class UserDashboard < Administrate::BaseDashboard
     admin
     otp_enabled
     active
+    organization
   ].freeze
 
   SHOW_PAGE_ATTRIBUTES = %i[
@@ -36,6 +38,7 @@ class UserDashboard < Administrate::BaseDashboard
     created_at
     updated_at
     deactivated_at
+    organization
   ].freeze
 
   FORM_ATTRIBUTES = %i[
@@ -45,6 +48,7 @@ class UserDashboard < Administrate::BaseDashboard
     admin
     otp_enabled
     active
+    organization
   ].freeze
 
   COLLECTION_FILTERS = {}.freeze

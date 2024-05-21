@@ -37,7 +37,7 @@ module Admin
     end
 
     def update_params
-      params.permit(:id, user: %i[first_name last_name email admin otp_enabled active])
+      params.permit(:id, user: %i[first_name last_name email admin otp_enabled active organization_id])
     end
   end
 end
