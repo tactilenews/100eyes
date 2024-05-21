@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class ContributorsController < ApplicationController
+  before_action :contributors
   before_action :set_contributor, only: %i[update destroy show edit message]
   before_action :count_params, only: :count
   before_action :contributors_params, only: :index
@@ -18,10 +19,10 @@ class ContributorsController < ApplicationController
     @state = state_params
     @tag_list = tag_list_params
 
-    @active_count = Contributor.active.count
-    @inactive_count = Contributor.inactive.count
-    @unsubscribed_count = Contributor.unsubscribed.count
-    @available_tags = Contributor.all_tags_with_count.to_json
+    @active_count = @contributors.active.count
+    @inactive_count = @contributors.inactive.count
+    @unsubscribed_count = @contributors.unsubscribed.count
+    @available_tags = @contributors.all_tags_with_count.to_json
 
     @contributors = filtered_contributors
     @contributors = @contributors.with_tags(tag_list_params)
@@ -63,6 +64,10 @@ class ContributorsController < ApplicationController
 
   private
 
+  def contributors
+    @contributors = current_user.organization.contributors
+  end
+
   def set_contributor
     @contributor = Contributor.find(params[:id])
   end
@@ -95,11 +100,11 @@ class ContributorsController < ApplicationController
   def filtered_contributors
     case @state
     when :inactive
-      Contributor.inactive
+      @contributors.inactive
     when :unsubscribed
-      Contributor.unsubscribed
+      @contributors.unsubscribed
     else
-      Contributor.active
+      @contributors.active
     end
   end
 
