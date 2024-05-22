@@ -453,9 +453,7 @@ RSpec.describe Contributor, type: :model do
         end
       end
       let(:threema_id) { 'V5EA564T' }
-      let!(:contributor) do
-        build(:contributor, threema_id: threema_id).tap { |contributor| contributor.save(validate: false) }
-      end
+      let!(:contributor) { create(:contributor, :skip_validations, threema_id: threema_id) }
 
       before do
         allow(Threema).to receive(:new).and_return(threema)
@@ -835,9 +833,7 @@ RSpec.describe Contributor, type: :model do
 
     context 'signed up via threema' do
       let(:expected_job_args) { { contributor_id: contributor.id, text: "*Welcome new contributor!*\nYou onboarded successfully." } }
-      let(:contributor) do
-        build(:contributor, threema_id: 'AAAAAAAA', email: nil, telegram_id: nil).tap { |contributor| contributor.save(validate: false) }
-      end
+      let(:contributor) { create(:contributor, :skip_validations, threema_id: 'AAAAAAAA', email: nil, telegram_id: nil) }
       it { should enqueue_job(ThreemaAdapter::Outbound::Text).with(expected_job_args) }
     end
 

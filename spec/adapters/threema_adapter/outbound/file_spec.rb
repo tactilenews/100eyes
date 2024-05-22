@@ -6,9 +6,7 @@ RSpec.describe ThreemaAdapter::Outbound::File do
   let(:adapter) { described_class.new }
   let(:threema_double) { instance_double(Threema) }
   let(:threema_id) { 'V5EA564T' }
-  let(:contributor) do
-    build(:contributor, threema_id: threema_id, email: nil).tap { |contributor| contributor.save(validate: false) }
-  end
+  let(:contributor) { create(:contributor, :skip_validations, threema_id: threema_id, email: nil) }
   let(:message) { create(:message, :with_file, recipient: contributor) }
   let(:file_path) { ActiveStorage::Blob.service.path_for(message.files.first.attachment.blob.key) }
   let(:expected_params) do

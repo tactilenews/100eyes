@@ -5,9 +5,7 @@ require 'rails_helper'
 RSpec.describe ContributorChannelSettings::ContributorChannelSettings, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
-  let(:contributor) do
-    build(:contributor, email: nil, **attrs).tap { |contributor| contributor.save(validate: false) }
-  end
+  let(:contributor) { create(:contributor, email: nil, **attrs) }
   let(:attrs) { {} }
   let(:params) { { contributor: contributor } }
 
@@ -24,6 +22,7 @@ RSpec.describe ContributorChannelSettings::ContributorChannelSettings, type: :co
   end
 
   context 'given a Threema contributor' do
+    let(:contributor) { create(:contributor, :skip_validations, email: nil, **attrs) }
     let(:attrs) { { threema_id: 12_345_678 } }
     it { should have_css('h2', text: 'Threema') }
   end
