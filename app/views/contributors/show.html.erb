@@ -4,7 +4,7 @@
       <%= t 'contributor.skip_to_profile' %>
     </a>
 
-    <% @contributors.each do |contributor| %>
+    <% @contributors_sidebar.each do |contributor| %>
 
       <%= c 'sidebar_item', active: contributor == @contributor do %>
         <%= c 'contributor_row', contributor: contributor, style: :compact %>

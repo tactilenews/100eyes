@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :contributor do
-    first_name { 'John' }
-    last_name { 'Doe' }
+    first_name { Faker::Name.first_name }
+    last_name { Faker::Name.last_name }
     data_processing_consent { true }
     email { Faker::Internet.email }
 
