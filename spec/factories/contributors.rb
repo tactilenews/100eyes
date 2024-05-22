@@ -45,6 +45,10 @@ FactoryBot.define do
         contributor.whats_app_phone_number = Faker::PhoneNumber.cell_phone_in_e164
       end
     end
+
+    trait :skip_validations do
+      to_create { |instance| instance.save(validate: false) }
+    end
   end
 end
 # rubocop:enable Metrics/BlockLength

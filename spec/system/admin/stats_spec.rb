@@ -8,10 +8,8 @@ RSpec.describe 'Stats' do
     let(:mock_validator) { instance_double(ThreemaValidator) }
 
     before do
-      allow(ThreemaValidator).to receive(:new).and_return(mock_validator)
-      allow(mock_validator).to receive(:validate).and_return(nil)
       create_list(:contributor, 3)
-      create_list(:contributor, 2, :threema_contributor)
+      create_list(:contributor, 2, :threema_contributor, :skip_validations)
       create_list(:contributor, 4, :telegram_contributor)
       create_list(:contributor, 6, :signal_contributor)
       create_list(:contributor, 12, :whats_app_contributor)
