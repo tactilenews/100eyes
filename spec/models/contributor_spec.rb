@@ -558,7 +558,7 @@ RSpec.describe Contributor, type: :model do
       it { should eq(the_request) }
     end
 
-    describe 'when most recently a manual message is sent out belonging to a previous request' do
+    describe 'when most recently a direct message is sent out belonging to a previous request' do
       let(:previous_request) { create(:request, broadcasted_at: 1.day.ago) }
       before(:each) do
         create(:message, request: the_request, recipient: contributor, created_at: the_request.broadcasted_at)
