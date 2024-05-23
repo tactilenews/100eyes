@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_03_11_085038) do
+ActiveRecord::Schema.define(version: 2024_05_23_122945) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -217,6 +217,8 @@ ActiveRecord::Schema.define(version: 2024_03_11_085038) do
     t.bigint "user_id"
     t.datetime "schedule_send_for"
     t.datetime "broadcasted_at"
+    t.bigint "organization_id"
+    t.index ["organization_id"], name: "index_requests_on_organization_id"
     t.index ["user_id"], name: "index_requests_on_user_id"
   end
 
@@ -288,6 +290,7 @@ ActiveRecord::Schema.define(version: 2024_03_11_085038) do
   add_foreign_key "organizations", "business_plans"
   add_foreign_key "organizations", "users", column: "contact_person_id"
   add_foreign_key "photos", "messages"
+  add_foreign_key "requests", "organizations"
   add_foreign_key "requests", "users"
   add_foreign_key "taggings", "tags"
   add_foreign_key "users", "organizations"
