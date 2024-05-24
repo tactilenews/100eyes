@@ -29,11 +29,6 @@ module ContributorMetrics
           value: stats[:counts][:replies],
           label: I18n.t('components.contributor_metrics.replies', count: stats[:counts][:replies]),
           icon: 'a-chat'
-        },
-        {
-          value: stats[:counts][:photos],
-          label: I18n.t('components.contributor_metrics.photos', count: stats[:counts][:photos]),
-          icon: 'camera'
         }
       ]
     end
