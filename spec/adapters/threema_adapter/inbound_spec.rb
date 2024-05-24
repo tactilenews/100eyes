@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe ThreemaAdapter::Inbound do
   let(:threema_id) { 'V5EA564T' }
-  let!(:contributor) { build(:contributor, threema_id: threema_id).tap { |contributor| contributor.save(validate: false) } }
+  let!(:contributor) { create(:contributor, :skip_validations, threema_id: threema_id) }
 
   let(:adapter) { described_class.new }
   let(:threema_message) do
