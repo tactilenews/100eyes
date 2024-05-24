@@ -62,6 +62,7 @@
 }
 
 .ChatMessage-header {
+  display: block;
   margin-bottom: var(--spacing-unit-s);
   color: var(--color-text-light);
 }
