@@ -4,6 +4,7 @@
   padding: var(--spacing-unit-s);
   border-radius: var(--border-radius-l);
   border: 1px solid transparent;
+  font-size: var(--font-size-s);
 }
 
 .ChatMessage:target {
