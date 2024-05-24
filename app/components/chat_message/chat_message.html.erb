@@ -10,10 +10,7 @@
   id="<%= id %>"
 >
     <header class="ChatMessage-header">
-      <% sent_by_x_at = t('.sent_by_x_at', name: message.sender ? message.sender.first_name : Setting.project_name, date: date_time(message.updated_at)).html_safe %>
-      <%= message.sent_from_contributor? ? link_to(sent_by_x_at, conversations_contributor_path(id: message.contributor.id, anchor: id), 'data-turbo': false) : sent_by_x_at %>
-      <% request_link = link_to message.request.title, request_path(id: message.request, anchor: "contributor-#{message.contributor.id}" ), 'data-turbo': false %>
-      <%= t('.about', request_link: request_link).html_safe %>
+      <%= sent_by_reference -%><%= t('.about') -%><%= request_link %>
     </header>
 
     <section class="ChatMessage-body">
@@ -88,7 +85,7 @@
         <% end %>
 
         <% if message.sent_from_contributor? %>
-          <%= c 'button', link: conversations_contributor_path(id: message.contributor, reply_to: message.id, anchor: "chat-form" ), 'data-turbo': false, style: :inline do %>
+          <%= c 'button', link: conversations_contributor_path(id: message.contributor, reply_to: message.id, anchor: "chat-form" ), style: :inline do %>
             <%= c 'icon', icon: 'reply-arrow', styles: [:inline] %>
             <%= I18n.t('components.chat_messages_group.reply') %>
           <% end %>
