@@ -18,7 +18,10 @@ class RequestsController < ApplicationController
 
   def create
     resize_image_files if request_params[:files].present?
-    @request = Request.new(request_params.merge(user: current_user))
+    @request = Request.new(
+      request_params.merge(user: current_user,
+                           organization: current_user.organization)
+    )
     if @request.save
       if @request.planned?
         redirect_to requests_path(filter: :planned), flash: {
