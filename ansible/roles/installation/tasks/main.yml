@@ -56,12 +56,13 @@
     THREE_SIXTY_DIALOG_PARTNER_ID: "{{ rails.three_sixty_dialog.partner.id | default('') }}"
     THREE_SIXTY_DIALOG_PARTNER_USERNAME: "{{ rails.three_sixty_dialog.partner.username | default('') }}"
     THREE_SIXTY_DIALOG_PARTNER_PASSWORD: "{{ rails.three_sixty_dialog.partner.password | default('') }}"
-
   community.docker.docker_compose_v2:
     project_src: /home/ansible
+    recreate: always
     build: never
     pull: always
-    state: restarted
+    state: present
+    wait: true
     files:
       - docker-compose.yml
       - docker-compose.prod.yml
@@ -73,5 +74,5 @@
 
 - name: Create and migrate database
   command:
-    cmd: docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec app bin/rails db:migrate
+    cmd: docker compose -f docker-compose.yml -f docker-compose.prod.yml exec app bin/rails db:migrate
     chdir: /home/ansible
