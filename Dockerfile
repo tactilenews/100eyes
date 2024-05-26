@@ -1,4 +1,4 @@
-FROM ruby:3.0.2-alpine3.12
+FROM ruby:3.0.5-alpine3.16
 
 ARG git_commit_sha
 ARG git_commit_date
@@ -10,8 +10,8 @@ RUN apk --update add \
     git \
     nodejs \
     npm \
-    postgresql-dev=~12 \
-    postgresql-client=~12 \
+    postgresql-dev \
+    postgresql-client \
     tzdata \
     libxslt-dev \
     libxml2-dev \
