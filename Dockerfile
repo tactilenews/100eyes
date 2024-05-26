@@ -8,7 +8,7 @@ RUN apk --update add \
     build-base \
     bash \
     git \
-    nodejs \
+    nodejs-current \
     npm \
     postgresql-dev \
     postgresql-client \
