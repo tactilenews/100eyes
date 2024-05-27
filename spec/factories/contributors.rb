@@ -20,7 +20,7 @@ FactoryBot.define do
     trait :threema_contributor do
       after(:build) do |contributor|
         contributor.email = nil
-        contributor.threema_id = Faker::String.random(length: 8)
+        contributor.threema_id = Faker::Alphanumeric.alpha(number: 8)
       end
     end
 
