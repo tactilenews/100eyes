@@ -19,7 +19,7 @@
     - ../docker-compose.prod.yml
     - ../docker-compose.traefik.yml
 
-- name: Run `docker-compose up`
+- name: Run `docker compose up`
   environment:
     DOCKER_IMAGE_TAG: "{{ docker_image_tag }}"
     RAILS_ENV: "{{ rails.environment }}"
