@@ -22,12 +22,20 @@
       inotify_max_user_watches: 524288
     - role: geerlingguy.pip
       pip_install_packages:
+        - name: docker
+          state: absent
+        - name: docker-compose
+          state: absent
         - name: passlib
+      tags:
+        - docker
     - role: geerlingguy.docker
       docker_packages_state: latest
       vars:
         docker_users:
           - ansible
+      tags:
+        - docker
     - role: installation
       tags:
         - hundred-eyes
