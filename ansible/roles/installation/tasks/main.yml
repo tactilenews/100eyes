@@ -61,7 +61,6 @@
     recreate: always
     build: never
     pull: always
-    state: present
     wait: true
     files:
       - docker-compose.yml
