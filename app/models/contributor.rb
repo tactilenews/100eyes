@@ -208,7 +208,7 @@ class Contributor < ApplicationRecord
   private
 
   def notify_recipient
-    OnboardingCompleted.with(contributor_id: id).deliver_later(User.all)
+    OnboardingCompleted.with(contributor_id: id).deliver_later(organization.users)
   end
 end
 # rubocop:enable Metrics/ClassLength

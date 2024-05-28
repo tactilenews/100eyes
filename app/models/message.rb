@@ -72,10 +72,10 @@ class Message < ApplicationRecord
 
   def notify_recipient
     if reply?
-      MessageReceived.with(contributor_id: sender_id, request_id: request.id, message_id: id).deliver_later(User.all)
+      MessageReceived.with(contributor_id: sender_id, request_id: request.id, message_id: id).deliver_later(request.organization.users)
     elsif !broadcasted?
       ChatMessageSent.with(contributor_id: recipient.id, request_id: request.id, user_id: sender_id,
-                           message_id: id).deliver_later(User.all)
+                           message_id: id).deliver_later(request.organization.users)
     end
   end
 
