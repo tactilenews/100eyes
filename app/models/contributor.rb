@@ -155,7 +155,7 @@ class Contributor < ApplicationRecord
   end
 
   def recent_replies
-    result = replies.includes(:request).reorder(created_at: :desc)
+    result = replies.includes(:recipient, :request).reorder(created_at: :desc)
     result = result.group_by(&:request).values # array or groups
     result = result.map(&:first) # choose most recent message per group
     result.sort_by(&:created_at).reverse # ensure descending order
