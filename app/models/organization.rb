@@ -9,6 +9,7 @@ class Organization < ApplicationRecord
   has_many :users, class_name: 'User', dependent: :destroy
   has_many :contributors, dependent: :destroy
   has_many :requests, dependent: :destroy
+  has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
 
   before_update :notify_admin
 
