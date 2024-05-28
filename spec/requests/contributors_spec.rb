@@ -70,6 +70,10 @@ RSpec.describe '/contributors', type: :request do
       expect(contributor.tag_list).to match_array(%w[programmer student])
     end
 
+    it 'does not update the deactivated_by_user_id' do
+      expect { subject.call }.not_to(change { contributor.reload.deactivated_by_user_id })
+    end
+
     context 'removing tags' do
       let(:updated_attrs) do
         { tag_list: 'ops' }

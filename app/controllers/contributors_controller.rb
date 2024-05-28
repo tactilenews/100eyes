@@ -36,7 +36,7 @@ class ContributorsController < ApplicationController
 
   def update
     @contributor.editor_guarantees_data_consent = true
-    @contributor.deactivated_by_user = deactivate_by_user_state
+    @contributor.deactivated_by_user = deactivate_by_user_state if contributor_params[:active]
 
     if @contributor.update(contributor_params)
       redirect_to contributor_url, flash: { success: I18n.t('contributor.saved', name: @contributor.name) }
