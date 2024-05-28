@@ -10,7 +10,11 @@ class UnsubscribeContributorJob < ApplicationJob
 
     contributor.update!(unsubscribed_at: Time.current)
     adapter.send_unsubsribed_successfully_message!(contributor)
-    ContributorMarkedInactive.with(contributor_id: contributor.id).deliver_later(contributor.organization.users)
+    organization = contributor.organization
+    ContributorMarkedInactive.with(
+      contributor_id: contributor.id,
+      organization_id: organization.id
+    ).deliver_later(organization.users + User.admin.all)
     User.admin.find_each do |admin|
       PostmarkAdapter::Outbound.contributor_unsubscribed!(admin, contributor)
     end

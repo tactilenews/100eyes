@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_05_23_122945) do
+ActiveRecord::Schema.define(version: 2024_05_28_094251) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -65,8 +65,10 @@ ActiveRecord::Schema.define(version: 2024_05_23_122945) do
     t.bigint "message_id"
     t.bigint "request_id"
     t.bigint "user_id"
+    t.bigint "organization_id"
     t.index ["contributor_id"], name: "index_activity_notifications_on_contributor_id"
     t.index ["message_id"], name: "index_activity_notifications_on_message_id"
+    t.index ["organization_id"], name: "index_activity_notifications_on_organization_id"
     t.index ["read_at"], name: "index_activity_notifications_on_read_at"
     t.index ["recipient_type", "recipient_id"], name: "index_activity_notifications_on_recipient"
     t.index ["request_id"], name: "index_activity_notifications_on_request_id"
@@ -280,6 +282,7 @@ ActiveRecord::Schema.define(version: 2024_05_23_122945) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "activity_notifications", "contributors"
   add_foreign_key "activity_notifications", "messages"
+  add_foreign_key "activity_notifications", "organizations"
   add_foreign_key "activity_notifications", "requests"
   add_foreign_key "activity_notifications", "users"
   add_foreign_key "contributors", "organizations"
