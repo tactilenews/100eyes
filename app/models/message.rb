@@ -63,14 +63,26 @@ class Message < ApplicationRecord
 
   private
 
+  # rubocop:disable Metrics/AbcSize
   def notify_recipient
     if reply?
-      MessageReceived.with(contributor_id: sender_id, request_id: request.id, message_id: id).deliver_later(User.all)
+      MessageReceived.with(
+        contributor_id: sender_id,
+        request_id: request.id,
+        message_id: id,
+        organization_id: organization.id
+      ).deliver_later(organization.users + User.admin.all)
     elsif !broadcasted?
-      ChatMessageSent.with(contributor_id: recipient.id, request_id: request.id, user_id: sender_id,
-                           message_id: id).deliver_later(User.all)
+      ChatMessageSent.with(
+        contributor_id: recipient.id,
+        request_id: request.id,
+        user_id: sender_id,
+        message_id: id,
+        organization_id: organization.id
+      ).deliver_later(organization.users + User.admin.all)
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   def send_if_outbound
     return if manually_created? || reply?

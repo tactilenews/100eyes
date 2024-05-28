@@ -24,7 +24,10 @@ class ResubscribeContributorJob < ApplicationJob
 
     contributor.update!(unsubscribed_at: nil)
     adapter.send_welcome_message!(contributor, organization)
-    ContributorSubscribed.with(contributor_id: contributor.id).deliver_later(User.all)
+    ContributorSubscribed.with(
+      contributor_id: contributor.id,
+      organization_id: organization.id
+    ).deliver_later(organization.users + User.admin.all)
     User.admin.find_each do |admin|
       PostmarkAdapter::Outbound.contributor_resubscribed!(admin, contributor, organization)
     end
