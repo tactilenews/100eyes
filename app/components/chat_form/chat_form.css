@@ -4,6 +4,11 @@
   align-items: flex-end;
 }
 
+.ChatForm h3 {
+  width: 100%;
+  padding: var(--spacing-unit-s);
+}
+
 .ChatForm > button {
   margin-top: var(--spacing-unit);
 }
