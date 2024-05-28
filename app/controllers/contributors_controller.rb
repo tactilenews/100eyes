@@ -3,6 +3,7 @@
 class ContributorsController < ApplicationController
   before_action :contributors
   before_action :set_contributor, only: %i[update destroy show edit message]
+  before_action :contributors_sidebar, only: %i[show update]
   before_action :count_params, only: :count
   before_action :contributors_params, only: :index
 
@@ -30,17 +31,11 @@ class ContributorsController < ApplicationController
     @contributors = @contributors.with_attached_avatar.includes(:tags).page(contributors_params[:page])
   end
 
-  def show
-    @contributors = Contributor
-                    .active
-                    .or(Contributor.where(id: @contributor.id))
-                    .with_attached_avatar
-  end
+  def show; end
 
   def edit; end
 
   def update
-    @contributors = Contributor.with_attached_avatar
     @contributor.editor_guarantees_data_consent = true
     @contributor.deactivated_by_user = deactivate_by_user_state
 
@@ -70,6 +65,13 @@ class ContributorsController < ApplicationController
 
   def set_contributor
     @contributor = Contributor.find(params[:id])
+  end
+
+  def contributors_sidebar
+    @contributors_sidebar ||= Contributor
+                              .active
+                              .or(Contributor.where(id: @contributor.id))
+                              .with_attached_avatar
   end
 
   def contributors_params

@@ -13,6 +13,6 @@ RSpec.describe RequestsFeed::RequestsFeed, type: :component do
 
   context 'given a contributor with replies' do
     let!(:reply) { create(:message, sender: contributor, request: create(:request, title: 'Lorem Ipsum')) }
-    it { should have_link('Lorem Ipsum', href: "/requests/#{reply.request.id}#contributor-#{contributor.id}") }
+    it { should have_link('Lorem Ipsum', href: "/requests/#{reply.request.id}#message-#{reply.id}") }
   end
 end

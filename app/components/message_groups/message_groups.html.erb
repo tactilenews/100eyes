@@ -4,7 +4,7 @@
       <%= I18n.t 'request.no_replies' %>
     <% end %>
   <% else %>
-    <%= c 'stack' do %>
+    <%= c 'stack', data: { controller: 'message-groups' } do %>
       <%= c 'heading', tag: :h2 do %>
         <%= I18n.t 'request.replies' %>
       <% end %>

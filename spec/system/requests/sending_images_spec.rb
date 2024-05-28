@@ -13,7 +13,7 @@ RSpec.describe 'Sending image files', js: true do
       create(:contributor, email: 'adam@example.org')
       create(:contributor, signal_phone_number: '+4912345678', signal_onboarding_completed_at: Time.current)
       create(:contributor, telegram_id: 125_689)
-      build(:contributor, threema_id: '12345678').tap { |contributor| contributor.save(validate: false) }
+      create(:contributor, :skip_validations, threema_id: '12345678')
     end
 
     it 'sending a request with image files' do
