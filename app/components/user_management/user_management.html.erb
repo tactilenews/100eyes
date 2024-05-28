@@ -6,7 +6,7 @@
 
   <%= c 'flex', style: :firstBaseline do %>
     <ul class="UserManagement-usersList">
-      <% organization.users.active.each do |user| %>
+      <% active_non_admin_users.each do |user| %>
         <li class="UserManagement-usersListItem">
           <strong><%= user.name %></strong>
         </li>
