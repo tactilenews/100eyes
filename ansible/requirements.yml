@@ -6,4 +6,5 @@ roles:
 
 collections:
 - community.general
+- community.docker
 - devsec.hardening

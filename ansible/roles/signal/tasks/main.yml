@@ -66,4 +66,4 @@
   ansible.builtin.cron:
     name: "Receive signal messages"
     minute: "*" # job gets run every minute
-    job: "/usr/local/bin/docker-compose -f /home/ansible/docker-compose.yml -f /home/ansible/docker-compose.prod.yml exec -T app bin/rails signal:receive_messages"
+    job: "/usr/bin/docker compose -f /home/ansible/docker-compose.yml -f /home/ansible/docker-compose.prod.yml exec -T app bin/rails signal:receive_messages"

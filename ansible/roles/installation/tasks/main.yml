@@ -19,7 +19,7 @@
     - ../docker-compose.prod.yml
     - ../docker-compose.traefik.yml
 
-- name: Run `docker-compose up`
+- name: Run `docker compose up`
   environment:
     DOCKER_IMAGE_TAG: "{{ docker_image_tag }}"
     RAILS_ENV: "{{ rails.environment }}"
@@ -56,23 +56,22 @@
     THREE_SIXTY_DIALOG_PARTNER_ID: "{{ rails.three_sixty_dialog.partner.id | default('') }}"
     THREE_SIXTY_DIALOG_PARTNER_USERNAME: "{{ rails.three_sixty_dialog.partner.username | default('') }}"
     THREE_SIXTY_DIALOG_PARTNER_PASSWORD: "{{ rails.three_sixty_dialog.partner.password | default('') }}"
-
-  community.general.docker_compose:
+  community.docker.docker_compose_v2:
     project_src: /home/ansible
-    build: no
-    debug: yes
-    pull: yes
-    restarted: yes
+    recreate: always
+    build: never
+    pull: always
+    wait: true
     files:
       - docker-compose.yml
       - docker-compose.prod.yml
       - docker-compose.traefik.yml
 
 - name: Prune outdated images
-  community.general.docker_prune:
+  community.docker.docker_prune:
     images: yes
 
 - name: Create and migrate database
   command:
-    cmd: docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec app bin/rails db:migrate
+    cmd: docker compose -f docker-compose.yml -f docker-compose.prod.yml exec app bin/rails db:migrate
     chdir: /home/ansible
