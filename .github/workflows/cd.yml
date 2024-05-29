@@ -64,4 +64,4 @@ jobs:
             --inventory ansible/inventories/staging
             --skip-tags skip_ci
             --verbose
-            --tags docker
+            --tags installation
