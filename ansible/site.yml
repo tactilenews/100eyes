@@ -23,15 +23,11 @@
     - role: geerlingguy.pip
       pip_install_packages:
         - name: passlib
-      tags:
-        - docker
     - role: geerlingguy.docker
       docker_packages_state: latest
       vars:
         docker_users:
           - ansible
-      tags:
-        - docker
     - role: installation
       tags:
-        - installation
+        - hundred-eyes
