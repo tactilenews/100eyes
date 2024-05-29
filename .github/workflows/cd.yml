@@ -1,7 +1,7 @@
 name: Continuous Deployment
 
 on:
-  push:
+  pull_request:
     branches: [ main ]
 
 jobs:
@@ -64,3 +64,4 @@ jobs:
             --inventory ansible/inventories/staging
             --skip-tags skip_ci
             --verbose
+            --tags docker
