@@ -68,7 +68,7 @@ RSpec.describe 'Activity Notifications' do
       click_link('Zur Antwort', href: request_path(request, anchor: "message-#{reply.id}"))
       expect(page).to have_text("I'm a reply to #{request.title}")
       find('p', text: "I'm a reply to #{request.title}").hover
-      reply_path = conversations_contributor_path(id: contributor_without_avatar, reply_to: reply.id, anchor: "chat-form" )
+      reply_path = conversations_contributor_path(id: contributor_without_avatar, reply_to: reply.id, anchor: 'chat-form')
       expect(page).to have_selector("a[href='#{reply_path}']")
       find("a[href='#{reply_path}']", text: 'nachfragen').trigger('click')
 
@@ -121,7 +121,7 @@ RSpec.describe 'Activity Notifications' do
       reply_text = "I'm a reply from the same contributor: #{contributor_two.name}"
       expect(page).to have_text(reply_text)
       find('p', text: reply_text).hover
-      reply_path = conversations_contributor_path(id: contributor_two, reply_to: reply_by_same_contributor.id, anchor: "chat-form" )
+      reply_path = conversations_contributor_path(id: contributor_two, reply_to: reply_by_same_contributor.id, anchor: 'chat-form')
       expect(page).to have_selector("a[href='#{reply_path}']")
       find("a[href='#{reply_path}']", text: 'nachfragen').trigger('click')
 
@@ -150,7 +150,7 @@ RSpec.describe 'Activity Notifications' do
       reply_text = "I'm a reply from the same contributor: #{contributor_two.name}"
       expect(page).to have_text(reply_text).once
       find('p', text: reply_text).hover
-      reply_path = conversations_contributor_path(id: contributor_two, reply_to: reply_by_same_contributor.id, anchor: "chat-form" )
+      reply_path = conversations_contributor_path(id: contributor_two, reply_to: reply_by_same_contributor.id, anchor: 'chat-form')
       expect(page).to have_selector("a[href='#{reply_path}']")
       find("a[href='#{reply_path}']", text: 'nachfragen').trigger('click')
 
@@ -182,7 +182,7 @@ RSpec.describe 'Activity Notifications' do
       reply_text = "I'm a reply from the same contributor: #{contributor_two.name}"
       expect(page).to have_text(reply_text)
       find('p', text: reply_text).hover
-      reply_path = conversations_contributor_path(id: contributor_two, reply_to: reply_by_same_contributor.id, anchor: "chat-form" )
+      reply_path = conversations_contributor_path(id: contributor_two, reply_to: reply_by_same_contributor.id, anchor: 'chat-form')
       expect(page).to have_selector("a[href='#{reply_path}']")
       find("a[href='#{reply_path}']", text: 'nachfragen').trigger('click')
 
