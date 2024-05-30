@@ -6,10 +6,12 @@ require 'faker'
 contributors_count = 30
 request_count = 30
 replies_count = 30
+file_replies_count = 3
+photo_replies_count = 3
 
 users = User.all
 
-# images = 10.times.map { URI(Faker::Avatar.image(size: '50x50', format: 'png', set: 'set5')) }
+images = 10.times.map { URI(Faker::Avatar.image(size: '50x50', format: 'png', set: 'set5')) }
 
 FactoryBot.modify do
   factory :contributor do
@@ -18,13 +20,13 @@ FactoryBot.modify do
     last_name { Faker::Name.last_name }
     note { Faker::Movies::HitchhikersGuideToTheGalaxy.quote }
 
-    # after(:build) do |contributor|
-    #   image = images.sample
-    #   contributor.avatar.attach(
-    #     io: image.open,
-    #     filename: File.basename(image.path)
-    #   )
-    # end
+    after(:build) do |contributor|
+      image = images.sample
+      contributor.avatar.attach(
+        io: image.open,
+        filename: File.basename(image.path)
+      )
+    end
   end
 end
 
@@ -56,4 +58,6 @@ FactoryBot.build_list(:request, request_count) do |request|
   request.save!
   Rails.logger.debug 'Seeding requests replies...'
   FactoryBot.create_list(:message, replies_count, request: request)
+  FactoryBot.create_list(:message, file_replies_count, :with_file, request: request)
+  FactoryBot.create_list(:message, photo_replies_count, :with_a_photo, request: request)
 end
