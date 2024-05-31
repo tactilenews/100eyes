@@ -332,6 +332,40 @@ RSpec.describe Contributor, type: :model do
     end
   end
 
+  describe '#conversations' do
+    let(:received_message)  do
+      create(:message, text: 'Message with the contributor as recipient', recipient: contributor)
+    end
+    let(:sent_message) do
+      create(:message, sender: contributor)
+    end
+    it 'includes messages received by the contributor' do
+      received_message
+      expect(contributor.conversations).to include(received_message)
+    end
+
+    it 'includes messages sent by the contributor' do
+      sent_message
+      expect(contributor.conversations).to include(sent_message)
+    end
+
+    it 'sorts the messages so that the oldest first' do
+      received_message
+      sent_message
+      expect(contributor.conversations.first).to eql(received_message)
+      expect(contributor.conversations.last).to eql(sent_message)
+    end
+
+    it 'does not include messages not being sent or received by the contributor' do
+      other_contributor = create(:contributor)
+      received_message = create(:message, text: 'Message with the contributor as recipient', recipient: other_contributor,
+                                          request: the_request)
+      sent_message = create(:message, request: the_request, sender: other_contributor)
+      expect(contributor.conversations).not_to include(sent_message)
+      expect(contributor.conversations).not_to include(received_message)
+    end
+  end
+
   describe '#conversation_about' do
     subject { contributor.conversation_about(the_request) }
 

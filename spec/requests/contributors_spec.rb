@@ -38,6 +38,19 @@ RSpec.describe '/contributors', type: :request do
     end
   end
 
+  describe 'GET /conversations' do
+    it 'returns the conversation of the contributor' do
+      received_message = create(:message, text: 'the received message', recipient: contributor,
+                                          request: the_request)
+      sent_message = create(:message, text: 'the sent message', request: the_request, sender: contributor)
+      get conversations_contributor_path(contributor, as: user)
+      expect(response).to be_successful
+      parsed = Capybara::Node::Simple.new(response.body)
+      expect(parsed).to have_text(received_message.text)
+      expect(parsed).to have_text(sent_message.text)
+    end
+  end
+
   describe 'PATCH /update' do
     let(:new_attrs) do
       {
