@@ -38,11 +38,15 @@ services:
 
   job-worker:
     <<: *x-dev-defaults
+    depends_on: [ db ]
 
   db:
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
     ports: [ '5432:5432' ]
+    image: postgres:14.3-alpine3.16
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
   mailserver:
     image: maildev/maildev:2.0.2
@@ -63,3 +67,7 @@ services:
       # Set connection timeout to avoid timeout exception during debugging
       # https://docs.browserless.io/docs/docker.html#connection-timeout
       CONNECTION_TIMEOUT: 600000
+
+volumes:
+  postgres_data:
+ 
