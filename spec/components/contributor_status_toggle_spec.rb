@@ -33,6 +33,19 @@ RSpec.describe ContributorStatusToggle::ContributorStatusToggle, type: :componen
       it { should have_css('strong', text: deactivated_by.name) }
     end
 
+    context 'marked inactive by an admin' do
+      let(:deactivated_by) { create(:user, admin: true) }
+      before { contributor.update(deactivated_by_user_id: deactivated_by.id, deactivated_by_admin: true) }
+
+      it 'does not display admin name' do
+        expect(subject).not_to have_css('strong', text: deactivated_by.name)
+      end
+
+      it "displays 'Admin' to make clear it was deactivated by and admin" do
+        expect(subject).to have_css('strong', text: 'Admin')
+      end
+    end
+
     context 'through WhatsApp who requested to unsubscribe' do
       before { contributor.update(whats_app_phone_number: '+49151234567', email: nil, unsubscribed_at: 1.minute.ago) }
 
