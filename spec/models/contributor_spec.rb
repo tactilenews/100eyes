@@ -680,24 +680,42 @@ RSpec.describe Contributor, type: :model do
     end
   end
 
-  describe '.active=' do
-    describe 'given active contributor' do
-      let(:contributor) { create(:contributor, deactivated_at: nil) }
-      describe 'false' do
-        it { expect { contributor.active = false }.to change { contributor.deactivated_at.is_a?(ActiveSupport::TimeWithZone) }.to(true) }
-        it { expect { contributor.active = false }.to change { contributor.active? }.to(false) }
-        it { expect { contributor.active = '0' }.to change { contributor.active? }.to(false) }
-        it { expect { contributor.active = 'off' }.to change { contributor.active? }.to(false) }
+  describe '.deactivate!(user_id:, admin: false)' do
+    describe 'given an active contributor' do
+      subject { contributor.deactivate!(user_id: user.id) }
+      let(:contributor) { create(:contributor) }
+      let(:user) { create(:user) }
+
+      it 'deactivates the contributor' do
+        expect { subject }.to change { contributor.reload.deactivated_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+      end
+
+      it 'sets the deactivated_by_user_id to user_id' do
+        expect { subject }.to change { contributor.reload.deactivated_by_user_id }.from(nil).to(user.id)
+      end
+    end
+  end
+
+  describe '.reactivate!' do
+    subject { contributor.reactivate! }
+
+    describe 'given a deactivated contributor' do
+      let(:contributor) { create(:contributor, deactivated_at: 1.day.ago) }
+
+      it 'reactivates the contributor' do
+        expect { subject }.to change { contributor.reload.deactivated_at }.from(kind_of(ActiveSupport::TimeWithZone)).to(nil)
       end
     end
 
-    describe 'given deactivated contributor' do
-      let(:contributor) { create(:contributor, deactivated_at: 1.day.ago) }
-      describe 'true' do
-        it { expect { contributor.active = true }.to change { contributor.deactivated_at.is_a?(ActiveSupport::TimeWithZone) }.to(false) }
-        it { expect { contributor.active = true }.to change { contributor.active? }.to(true) }
-        it { expect { contributor.active = '1' }.to change { contributor.active? }.to(true) }
-        it { expect { contributor.active = 'on' }.to change { contributor.active? }.to(true) }
+    describe 'given a deactivated contributor by a user' do
+      let(:contributor) { create(:contributor, deactivated_at: 1.day.ago, deactivated_by_user: user) }
+      let(:user) { create(:user) }
+
+      it 'reactivates the contributor, keeping attrs in sync' do
+        expect { subject }.to change { contributor.reload.deactivated_at }.from(kind_of(ActiveSupport::TimeWithZone)).to(nil)
+                                                                          .and change {
+                                                                                 contributor.reload.deactivated_by_user_id
+                                                                               }.from(user.id).to(nil)
       end
     end
   end

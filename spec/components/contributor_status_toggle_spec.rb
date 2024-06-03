@@ -5,8 +5,7 @@ require 'rails_helper'
 RSpec.describe ContributorStatusToggle::ContributorStatusToggle, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
-  let(:contributor) { create(:contributor, active: active) }
-  let(:active) { true }
+  let(:contributor) { create(:contributor) }
   let(:deactivated_by) { nil }
   let(:params) { { contributor: contributor, deactivated_by: deactivated_by } }
 
@@ -20,7 +19,7 @@ RSpec.describe ContributorStatusToggle::ContributorStatusToggle, type: :componen
   end
 
   context 'given an inactive contributor' do
-    let(:active) { false }
+    let!(:contributor) { create(:contributor, :inactive) }
 
     it { should have_css('input[type="hidden"][value="on"]', visible: false) }
     it { should have_css('h2', text: 'Mitglied reaktivieren') }
