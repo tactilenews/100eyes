@@ -159,7 +159,7 @@ class Contributor < ApplicationRecord
   end
 
   def active?
-    deactivated_at.nil? && deactivated_by_user_id.nil? && !deactivated_by_admin
+    deactivated_at.nil? && unsubscribed_at.nil?
   end
 
   alias active active?

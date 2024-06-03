@@ -667,6 +667,14 @@ RSpec.describe Contributor, type: :model do
       let(:contributor) { create(:contributor, deactivated_at: 1.day.ago) }
       it { should be(false) }
     end
+
+    describe 'given "unsubscribed_at" timestamp' do
+      let(:contributor) { create(:contributor, unsubscribed_at: 1.day.ago) }
+
+      it 'should return false' do
+        expect(subject).to be(false)
+      end
+    end
   end
 
   describe '.inactive' do
