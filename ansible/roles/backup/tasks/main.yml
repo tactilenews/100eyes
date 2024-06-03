@@ -5,7 +5,7 @@
 
 - name: Query id of database container
   command:
-    cmd: docker-compose -f docker-compose.yml -f docker-compose.prod.yml ps -q db
+    cmd: docker compose -f docker-compose.yml -f docker-compose.prod.yml ps -q db
     chdir: /home/ansible
   register: get_container_id
   tags:
