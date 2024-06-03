@@ -15,17 +15,12 @@ services:
   app:
     <<: *x-defaults
     command: bundle exec rails server
-    depends_on: [ db, job-worker ]
+    depends_on: [ job-worker ]
 
   job-worker:
     <<: *x-defaults
     command: bundle exec rails jobs:work
-    depends_on: [ db, signal ]
-
-  db:
-    image: postgres:12.2-alpine
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+    depends_on: [ signal ]
 
   signal:
     image: bbernhard/signal-cli-rest-api:0.81
@@ -36,5 +31,4 @@ services:
       - "8080:8080" #map docker port 8080 to host port 8080.
     volumes:
       - ./signal-cli-config:/home/.local/share/signal-cli
-volumes:
-  postgres_data:
+
