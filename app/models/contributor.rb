@@ -159,7 +159,7 @@ class Contributor < ApplicationRecord
   end
 
   def active?
-    deactivated_at.nil?
+    deactivated_at.nil? && deactivated_by_user_id.nil? && !deactivated_by_admin
   end
 
   alias active active?
@@ -181,8 +181,19 @@ class Contributor < ApplicationRecord
     avatar.attach(io: remote_file_location.open, filename: File.basename(remote_file_location.path))
   end
 
-  def active=(value)
-    self.deactivated_at = ActiveModel::Type::Boolean.new.cast(value) ? nil : Time.current
+  def deactivate!(user_id:, admin: false)
+    self.deactivated_by_admin = admin
+    update!(deactivated_at: Time.current, deactivated_by_user_id: user_id)
+  end
+
+  def reactivate!
+    return if active?
+
+    update!(
+      deactivated_at: nil,
+      deactivated_by_user_id: nil,
+      deactivated_by_admin: false
+    )
   end
 
   def data_processing_consent=(value)
