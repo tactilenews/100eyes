@@ -24,6 +24,7 @@ class Request < ApplicationRecord
   validates :text, length: { maximum: 1500 }, presence: true, unless: -> { files.attached? }
 
   acts_as_taggable_on :tags
+  acts_as_taggable_tenant :organization_id
 
   after_create :broadcast_request
 

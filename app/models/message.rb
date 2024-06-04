@@ -34,6 +34,7 @@ class Message < ApplicationRecord
 
   after_create_commit :send_if_outbound, :notify_recipient
 
+  
   def reply?
     sent_from_contributor?
   end

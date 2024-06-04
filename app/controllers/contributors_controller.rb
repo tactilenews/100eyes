@@ -23,7 +23,7 @@ class ContributorsController < ApplicationController
     @active_count = @contributors.active.count
     @inactive_count = @contributors.inactive.count
     @unsubscribed_count = @contributors.unsubscribed.count
-    @available_tags = @contributors.all_tags_with_count.to_json
+    @available_tags = current_user.organization.all_tags_with_count.to_json
 
     @contributors = filtered_contributors
     @contributors = @contributors.with_tags(tag_list_params)
