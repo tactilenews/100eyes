@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2024_06_06_111346) do
+=======
+ActiveRecord::Schema.define(version: 2024_06_04_094245) do
+>>>>>>> 3021c6a2 (Scope search to organizations)
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
