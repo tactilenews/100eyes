@@ -82,31 +82,9 @@ class Setting < RailsSettings::Base
   field :git_commit_sha, readonly: true, default: ENV.fetch('GIT_COMMIT_SHA', nil)
   field :git_commit_date, readonly: true, default: ENV.fetch('GIT_COMMIT_DATE', nil)
 
-  field :onboarding_logo_blob_id, type: :integer
-  field :onboarding_hero_blob_id, type: :integer
-  field :onboarding_title, default: 'Hallo und herzlich willkommen!'
-  field :onboarding_byline, default: ''
-  field :onboarding_data_processing_consent_additional_info, default: ''
-  field :onboarding_page, default: File.read(File.join('config', 'locales', 'onboarding', 'page.md'))
-  field :onboarding_success_heading, default: File.read(File.join('config', 'locales', 'onboarding', 'success_heading.txt'))
-  field :onboarding_success_text, default: File.read(File.join('config', 'locales', 'onboarding', 'success_text.txt'))
-  field :onboarding_unauthorized_heading,
-        default: File.read(File.join('config', 'locales', 'onboarding', 'unauthorized_heading.txt'))
-  field :onboarding_unauthorized_text, default: File.read(File.join('config', 'locales', 'onboarding', 'unauthorized_text.txt'))
-  field :onboarding_data_protection_link, default: 'https://tactile.news/100eyes-datenschutz/'
-  field :onboarding_imprint_link, default: 'https://tactile.news/impressum/'
-  field :onboarding_show_gdpr_modal, type: :boolean, readonly: true, default: ENV['ONBOARDING_SHOW_GDPR_MODAL'] || false
-
-  field :onboarding_ask_for_additional_consent, type: :boolean, default: false
-  field :onboarding_additional_consent_heading, default: ''
-  field :onboarding_additional_consent_text, default: ''
-
-  field :telegram_unknown_content_message, default: File.read(File.join('config', 'locales', 'telegram', 'unknown_content.txt'))
-  field :telegram_contributor_not_found_message, default: File.read(File.join('config', 'locales', 'telegram', 'unknown_contributor.txt'))
   field :telegram_bot_api_key, readonly: true, default: ENV.fetch('TELEGRAM_BOT_API_KEY', nil)
   field :telegram_bot_username, readonly: true, default: ENV.fetch('TELEGRAM_BOT_USERNAME', nil)
 
-  field :threema_unknown_content_message, default: File.read(File.join('config', 'locales', 'threema', 'unknown_content.txt'))
   field :threemarb_api_identity, readonly: true, default: ENV.fetch('THREEMARB_API_IDENTITY', nil)
 
   field :signal_server_phone_number, readonly: true, default: ENV.fetch('SIGNAL_SERVER_PHONE_NUMBER', nil)
@@ -114,8 +92,6 @@ class Setting < RailsSettings::Base
   field :signal_cli_rest_api_endpoint, readonly: true, default: ENV['SIGNAL_CLI_REST_API_ENDPOINT'] || 'http://localhost:8080'
   field :signal_cli_rest_api_attachment_path, readonly: true,
                                               default: ENV['SIGNAL_CLI_REST_API_ATTACHMENT_PATH'] || 'signal-cli-config/attachments/'
-  field :signal_unknown_content_message, default: File.read(File.join('config', 'locales', 'signal', 'unknown_content.txt'))
-
   field :twilio_account_sid, readonly: true, default: ENV.fetch('TWILIO_ACCOUNT_SID', nil)
   field :twilio_api_key_sid, readonly: true, default: ENV.fetch('TWILIO_API_KEY_SID', nil)
   field :twilio_api_key_secret, readonly: true, default: ENV.fetch('TWILIO_API_KEY_SECRET', nil)
@@ -145,7 +121,6 @@ class Setting < RailsSettings::Base
   field :mailserver_port, readonly: true, default: ENV['MAILSERVER_PORT'] || 1025
 
   field :channel_image
-  field :about, default: File.read(File.join('config', 'locales', 'about.txt'))
   field :channels, type: :hash, default: {
     threema: { configured: threema_configured?, allow_onboarding: threema_configured? },
     telegram: { configured: telegram_configured?, allow_onboarding: telegram_configured? },

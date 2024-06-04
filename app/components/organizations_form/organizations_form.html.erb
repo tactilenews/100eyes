@@ -1,0 +1,45 @@
+<%= c 'form', multipart: true, **attrs do %>
+  <%= c 'section' do %>
+    <%= c('heading', tag: :h2) { t('setting.form.groups.project_settings') } %>
+    <%= c('organizations_field', organization: organization, type: :input, attr: :project_name) %>
+  <% end %>
+
+  <%= c 'section' do %>
+    <%= c('heading', tag: :h2) { t('setting.form.groups.onboarding') } %>
+    <%= c('organizations_field', organization: organization, type: :image_input, attr: :onboarding_logo) %>
+    <%= c('organizations_field', organization: organization, type: :input, attr: :onboarding_byline) %>
+    <%= c('organizations_field', organization: organization, type: :image_input, attr: :onboarding_hero) %>
+    <%= c('organizations_field', organization: organization, type: :input, attr: :onboarding_title) %>
+    <%= c('organizations_field', organization: organization, type: :textarea, attr: :onboarding_page) %>
+  <% end %>
+
+  <%= c 'stack' do %>
+    <%= c('heading', tag: :h2) { t('setting.form.groups.onboarding_success') } %>
+    <%= c('organizations_field', organization: organization, type: :input, attr: :onboarding_success_heading) %>
+    <%= c('organizations_field', organization: organization, type: :textarea, attr: :onboarding_success_text) %>
+  <% end %>
+
+  <%= c 'stack' do %>
+    <%= c('heading', tag: :h2) { t('setting.form.groups.onboarding_unauthorized') } %>
+    <%= c('organizations_field', organization: organization, type: :input, attr: :onboarding_unauthorized_heading) %>
+    <%= c('organizations_field', organization: organization, type: :textarea, attr: :onboarding_unauthorized_text) %>
+  <% end %>
+
+  <%= c 'stack' do %>
+    <%= c('heading', tag: :h2) { t('setting.form.groups.signal') } %>
+    <%= c('organizations_field', organization: organization, type: :textarea, attr: :signal_unknown_content_message) %>
+  <% end %>
+
+  <%= c 'stack' do %>
+    <%= c('heading', tag: :h2) { t('setting.form.groups.telegram') } %>
+    <%= c('organizations_field', organization: organization, type: :textarea, attr: :telegram_unknown_content_message) %>
+    <%= c('organizations_field', organization: organization, type: :textarea, attr: :telegram_contributor_not_found_message) %>
+  <% end %>
+
+  <%= c 'stack' do %>
+    <%= c('heading', tag: :h2) { t('setting.form.groups.threema') } %>
+    <%= c('organizations_field', organization: organization, type: :textarea, attr: :threema_unknown_content_message) %>
+  <% end %>
+
+  <%= c 'submit_button', label: t('save') %>
+<% end %>

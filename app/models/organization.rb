@@ -13,6 +13,9 @@ class Organization < ApplicationRecord
 
   before_update :notify_admin
 
+  has_one_attached :onboarding_logo
+  has_one_attached :onboarding_hero
+
   def all_tags_with_count
     ActsAsTaggableOn::Tag
       .for_tenant(id)
