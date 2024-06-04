@@ -9,7 +9,8 @@ class Contributor < ApplicationRecord
 
   after_create_commit :notify_recipient
 
-  multisearchable against: %i[first_name last_name username note]
+  multisearchable against: %i[first_name last_name username note],
+                  additional_attributes: ->(contributor) { { organization_id: contributor.organization_id } }
 
   has_many :replies, class_name: 'Message', as: :sender, dependent: :destroy
   has_many :received_messages, class_name: 'Message', inverse_of: :recipient, foreign_key: 'recipient_id', dependent: :destroy

@@ -5,7 +5,8 @@ class Message < ApplicationRecord
 
   default_scope { order(created_at: :desc) }
 
-  multisearchable against: :text, if: :reply?
+  multisearchable against: :text, if: :reply?,
+                  additional_attributes: ->(message) { { organization_id: message.request.organization_id } }
 
   belongs_to :sender, polymorphic: true, optional: true
   belongs_to :recipient, class_name: 'Contributor', optional: true
@@ -34,7 +35,6 @@ class Message < ApplicationRecord
 
   after_create_commit :send_if_outbound, :notify_recipient
 
-  
   def reply?
     sent_from_contributor?
   end
