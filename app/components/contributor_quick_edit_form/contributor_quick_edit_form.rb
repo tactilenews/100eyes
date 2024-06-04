@@ -13,7 +13,7 @@ module ContributorQuickEditForm
     attr_reader :contributor
 
     def available_tags
-      Contributor.all_tags_with_count.to_json
+      contributor.organization.all_tags_with_count.to_json
     end
   end
 end
