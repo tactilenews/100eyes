@@ -16,7 +16,7 @@
   <%= c 'section', styles: [:wide, :xlargeSpaceBetween, :noMarginTop] do %>
     <%= c 'contributor_header', organization: @organization, contributor: @contributor %>
 
-    <%= c 'contributor_quick_edit_form', contributor: @contributor %>
+    <%= c 'contributor_quick_edit_form', organization: @organization, contributor: @contributor %>
 
     <hr>
 

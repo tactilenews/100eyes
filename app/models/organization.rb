@@ -94,6 +94,24 @@ class Organization < ApplicationRecord
     Threema.new(api_identity: threemarb_api_identity, api_secret: threemarb_api_secret, private_key: threemarb_private)
   end
 
+  def all_tags_with_count
+    ActsAsTaggableOn::Tag
+      .for_tenant(id)
+      .joins(:taggings)
+      .select('tags.id, tags.name, count(taggings.id) as taggings_count')
+      .group('tags.id')
+      .all
+      .map do |tag|
+        {
+          id: tag.id,
+          name: tag.name,
+          value: tag.name,
+          count: tag.taggings_count,
+          color: Contributor.tag_color_from_id(tag.id)
+        }
+      end
+  end
+
   private
 
   def notify_admin

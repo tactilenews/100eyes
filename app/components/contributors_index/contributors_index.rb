@@ -2,7 +2,7 @@
 
 module ContributorsIndex
   class ContributorsIndex < ApplicationComponent
-    def initialize(organization:, contributors:, state:, active_count:, inactive_count:, unsubscribed_count:, filter_count:, tag_list: nil)
+    def initialize(organization:, contributors:, state:, active_count:, inactive_count:, unsubscribed_count:, filter_count:, available_tags:, tag_list: nil)
       super
 
       @organization = organization
@@ -13,15 +13,12 @@ module ContributorsIndex
       @inactive_count = inactive_count
       @unsubscribed_count = unsubscribed_count
       @filter_count = filter_count
+      @available_tags = available_tags
     end
 
     private
 
-    attr_reader :organization, :contributors, :tag_list, :state, :active_count, :inactive_count, :unsubscribed_count, :filter_count
-
-    def available_tags
-      Contributor.all_tags_with_count.to_json
-    end
+    attr_reader :organization, :contributors, :tag_list, :state, :active_count, :inactive_count, :unsubscribed_count, :filter_count, :available_tags
 
     def active_contributors_count
       tag_list.present? && state == :active ? filter_count : active_count
