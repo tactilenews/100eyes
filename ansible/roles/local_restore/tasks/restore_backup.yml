@@ -6,7 +6,7 @@
 
 - name: Copy database dump into shared volume of db container
   copy:
-    src: "{{ backup_host_folder.path }}/tmp/100eyes-db-dump"
+    src: "{{ backup_host_folder.path }}/tmp/100eyes-db-dump.gz"
     dest: "{{ playbook_dir }}/../tmp/db"
 
 - name: Wipe out local storage folder
@@ -23,6 +23,7 @@
   community.docker.docker_compose_v2:
     project_src: "{{ playbook_dir }}/.."
     state: present
+    wait: true
     services:
       - db
     files:
@@ -30,19 +31,14 @@
       - docker-compose.override.yml
       - docker-compose.local-backup.yml
 
-- name: Wait for database to become available
-  wait_for:
-    port: 5432
-    delay: 1
-
 - name: Re-create empty databse and restore database backup
   command:
     cmd: "docker compose exec -T db bash -c \"{{ item }}\""
     chdir: "{{ playbook_dir }}/.."
-  loop:
+  with_items:
     - dropdb app_development -U postgres --if-exists
     - createdb app_development -U postgres
-    - pg_restore -d app_development -U postgres --no-owner --role=postgres < /tmp/100eyes-db-dump
+    - gunzip < /tmp/100eyes-db-dump.gz | psql -d app_development -U postgres
 
 - name: Run `docker compose down`
   community.docker.docker_compose_v2:

@@ -3,42 +3,22 @@
   debug:
     msg: "Backing up to folder: {{ backup_directory }}"
 
-- name: Query id of database container
-  command:
-    cmd: docker compose -f docker-compose.yml -f docker-compose.prod.yml ps -q db
-    chdir: /home/ansible
-  register: get_container_id
-  tags:
-    - work-in-progress
+- name: Install pg_dump
+  ansible.builtin.apt:
+    pkg:
+      - postgresql-client-common
+      - postgresql-client-14
+    state: present
 
-- name: Save container id of database
-  set_fact:
-    db_container_id: "{{ get_container_id.stdout }}"
-  tags:
-    - work-in-progress
-
-- debug:
-    msg: "{{ db_container_id }}"
-  tags:
-    - work-in-progress
-
-- name: Template .pgass file
-  template:
-    src: pgpass.j2
-    dest: /home/ansible/.pgpass
-    mode: '0600'
-
-- name: Copy .pgpass into container
-  command:
-    cmd: "docker cp /home/ansible/.pgpass {{ db_container_id }}:/root/"
-
-- name: Run pg_dump inside the container
-  command:
-    cmd: "docker exec {{ db_container_id }} pg_dump {{ postgres_db }} --host {{ postgres_host }} --port {{ postgres_port }} --username {{ postgres_user }} -Fc --file /tmp/100eyes-db-dump"
-
-- name: Copy database dump from container to host
-  command:
-    cmd: "docker cp {{ db_container_id }}:/tmp/100eyes-db-dump /tmp/100eyes-db-dump"
+- name: Dump the database to a file
+  community.postgresql.postgresql_db:
+    name: "{{ postgres_db }}"
+    login_host: "{{ postgres_host }}"
+    login_user: "{{ postgres_user }}"
+    login_password: "{{ postgres_password }}"
+    port: "{{ postgres_port }}"
+    state: dump
+    target: /tmp/100eyes-db-dump.gz
 
 - name: Archive storage folder into a single file
   community.general.archive:
@@ -50,50 +30,35 @@
 # for downloading it.
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/fetch_module.html#notes
 
-- name: Make storage archive read accessible for all users.
-  ansible.builtin.file:
-    path: /tmp/100eyes-storage.tgz
-    mode: '0444'
-
 - name: Archive signal-cli-config folder into a single file
   ansible.builtin.archive:
     path: /home/ansible/signal-cli-config
     dest: /tmp/100eyes-signal-cli-config.tgz
 
-- name: Make signal-cli-config archive read accessible for all users.
+- name: Make backup files read accessible for all users.
   ansible.builtin.file:
-    path: /tmp/100eyes-signal-cli-config.tgz
+    path: "{{ item }}"
     mode: '0444'
+  with_items:
+    - /tmp/100eyes-db-dump.gz
+    - /tmp/100eyes-storage.tgz
+    - /tmp/100eyes-signal-cli-config.tgz
 
-- name: Download database dump
+- name: Download backup files
   fetch:
-    src: /tmp/100eyes-db-dump
+    src: "{{ item }}"
     dest: "{{ backup_directory }}"
   become: no
+  with_items:
+    - /tmp/100eyes-db-dump.gz
+    - /tmp/100eyes-storage.tgz
+    - /tmp/100eyes-signal-cli-config.tgz
 
-- name: Download storage archive
-  fetch:
-    src: /tmp/100eyes-storage.tgz
-    dest: "{{ backup_directory }}"
-  become: no
-
-- name: Download signal-cli-config archive
-  fetch:
-    src: /tmp/100eyes-signal-cli-config.tgz
-    dest: "{{ backup_directory }}"
-  become: no
-
-- name: Remove database dump
+- name: Remove backup files
   ansible.builtin.file:
-    path: /tmp/100eyes-db-dump
+    path: "{{ item }}"
     state: absent
-
-- name: Remove storage archive
-  ansible.builtin.file:
-    path: /tmp/100eyes-storage.tgz
-    state: absent
-
-- name: Remove signal-cli-config archive
-  ansible.builtin.file:
-    path: /tmp/100eyes-signal-cli-config.tgz
-    state: absent
+  with_items:
+    - /tmp/100eyes-db-dump.gz
+    - /tmp/100eyes-storage.tgz
+    - /tmp/100eyes-signal-cli-config.tgz
