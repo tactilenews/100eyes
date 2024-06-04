@@ -44,6 +44,9 @@ Rails.application.routes.draw do
   get '/settings', to: 'settings#index'
   post '/settings', to: 'settings#update'
 
+  get '/organizations', to: 'organizations#index'
+  post '/organizations', to: 'organizations#update'
+
   namespace :threema do
     post '/webhook', to: 'webhook#message'
   end

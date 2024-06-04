@@ -1,0 +1,10 @@
+<%= c 'main' do %>
+  <%= c 'page_header', styles: [:largeMarginBottom, :flexboxColumn, :noGap] do %>
+    <%= c 'heading', style: :alpha do %>
+      <%= t 'settings.header' %>
+    <% end %>
+    <p><%= t('settings.subheading')%></p>
+  <% end %>
+
+  <%= c 'organizations_form', organization: @organization %>
+<% end %>
