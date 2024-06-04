@@ -2,6 +2,7 @@
 
 FactoryBot.define do
   factory :user do
+    organization
     sequence :email do |n|
       "user#{n}@example.org"
     end

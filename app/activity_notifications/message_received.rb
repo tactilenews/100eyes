@@ -3,14 +3,15 @@
 class MessageReceived < Noticed::Base
   deliver_by :database, format: :to_database, association: :notifications_as_recipient
 
-  param :contributor_id, :request_id, :message_id
+  param :contributor_id, :request_id, :message_id, :organization_id
 
   def to_database
     {
       type: self.class.name,
       contributor_id: params[:contributor_id],
       request_id: params[:request_id],
-      message_id: params[:message_id]
+      message_id: params[:message_id],
+      organization_id: params[:organization_id]
     }
   end
 

@@ -7,12 +7,11 @@ RSpec.describe Request, type: :model do
   let(:user) { create(:user) }
 
   let(:request) do
-    Request.new(
-      title: 'Hitchhiker’s Guide',
-      text: 'What is the answer to life, the universe, and everything?',
-      user: user,
-      schedule_send_for: Time.current
-    )
+    build(:request,
+          title: 'Hitchhiker’s Guide',
+          text: 'What is the answer to life, the universe, and everything?',
+          user: user,
+          schedule_send_for: Time.current)
   end
 
   subject { request }
@@ -290,12 +289,11 @@ RSpec.describe Request, type: :model do
 
     describe 'creates message only for contributors tagged with tag_list' do
       let(:request) do
-        Request.new(
-          title: 'Hitchhiker’s Guide',
-          text: 'What is the answer to life, the universe, and everything?',
-          tag_list: 'programmer',
-          user: user
-        )
+        build(:request,
+              title: 'Hitchhiker’s Guide',
+              text: 'What is the answer to life, the universe, and everything?',
+              tag_list: 'programmer',
+              user: user)
       end
       before(:each) do
         create(:contributor, id: 1, email: 'somebody@example.org', tag_list: ['programmer'])

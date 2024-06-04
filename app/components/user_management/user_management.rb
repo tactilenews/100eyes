@@ -9,5 +9,9 @@ module UserManagement
     end
 
     attr_reader :organization
+
+    def active_non_admin_users
+      organization.users.active.reject(&:admin?)
+    end
   end
 end

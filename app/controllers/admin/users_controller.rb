@@ -4,7 +4,6 @@ module Admin
   class UsersController < Admin::ApplicationController
     def create
       user = User.new(resource_params)
-      user.organization = Organization.last unless user.admin?
 
       if user.save
         redirect_to admin_users_path(user), flash: { success: 'User was successfully created.' }
@@ -37,7 +36,7 @@ module Admin
     end
 
     def update_params
-      params.permit(:id, user: %i[first_name last_name email admin otp_enabled active])
+      params.permit(:id, user: %i[first_name last_name email admin otp_enabled active organization_id])
     end
   end
 end

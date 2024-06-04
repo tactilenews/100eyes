@@ -40,7 +40,7 @@ class ProfileController < ApplicationController
   end
 
   def organization
-    @organization ||= current_user.admin? ? Organization.last : current_user.organization
+    @organization ||= current_user.organization
   end
 
   def business_plans

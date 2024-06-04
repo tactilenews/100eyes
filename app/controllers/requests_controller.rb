@@ -9,8 +9,8 @@ class RequestsController < ApplicationController
 
   def index
     @filter = filter_param
-    @sent_requests_count = Request.broadcasted.count
-    @planned_requests_count = Request.planned.count
+    @sent_requests_count = current_user.organization.requests.broadcasted.count
+    @planned_requests_count = current_user.organization.requests.planned.count
     @requests = filtered_requests.page(params[:page])
   end
 
@@ -18,7 +18,10 @@ class RequestsController < ApplicationController
 
   def create
     resize_image_files if request_params[:files].present?
-    @request = Request.new(request_params.merge(user: current_user))
+    @request = Request.new(
+      request_params.merge(user: current_user,
+                           organization: current_user.organization)
+    )
     if @request.save
       if @request.planned?
         redirect_to requests_path(filter: :planned), flash: {
@@ -36,6 +39,7 @@ class RequestsController < ApplicationController
 
   def new
     @request = Request.new
+    @available_tags = current_user.organization.all_tags_with_count.to_json
   end
 
   def edit; end
@@ -156,9 +160,9 @@ class RequestsController < ApplicationController
 
   def filtered_requests
     if @filter == :planned
-      Request.planned.reorder(schedule_send_for: :desc).includes(:tags)
+      current_user.organization.requests.planned.reorder(schedule_send_for: :desc).includes(:tags)
     else
-      Request.broadcasted.includes(:tags)
+      current_user.organization.requests.broadcasted.includes(:tags)
     end
   end
 end

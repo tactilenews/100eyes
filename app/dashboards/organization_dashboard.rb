@@ -45,4 +45,8 @@ class OrganizationDashboard < Administrate::BaseDashboard
   ].freeze
 
   COLLECTION_FILTERS = {}.freeze
+
+  def display_resource(organization)
+    organization.name
+  end
 end
