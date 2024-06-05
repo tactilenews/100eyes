@@ -5,7 +5,7 @@
 }
 
 .ChatForm h3 {
-  width: 100%;
+  align-self: flex-start;
   padding: var(--spacing-unit-s) 0;
 }
 
