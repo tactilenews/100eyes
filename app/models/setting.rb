@@ -40,6 +40,42 @@ class Setting < RailsSettings::Base
     twilio_configured? || three_sixty_dialog_configured?
   end
 
+  def self.signal_configured?
+    signal_server_phone_number.present?
+  end
+
+  def self.threema_configured?
+    threemarb_api_identity.present?
+  end
+
+  def self.telegram_configured?
+    telegram_bot_api_key.present?
+  end
+
+  def self.email_configured?
+    postmark_api_token.present?
+  end
+
+  def self.whats_app_onboarding_allowed?
+    whats_app_configured? && channels.dig(:whats_app, :allow_onboarding)
+  end
+
+  def self.signal_onboarding_allowed?
+    signal_configured? && channels.dig(:signal, :allow_onboarding)
+  end
+
+  def self.threema_onboarding_allowed?
+    threema_configured? && channels.dig(:threema, :allow_onboarding)
+  end
+
+  def self.telegram_onboarding_allowed?
+    telegram_configured? && channels.dig(:telegram, :allow_onboarding)
+  end
+
+  def self.email_onboarding_allowed?
+    email_configured? && channels.dig(:email, :allow_onboarding)
+  end
+
   field :project_name, default: ENV['HUNDRED_EYES_PROJECT_NAME'] || '100eyes'
   field :application_host, readonly: true, default: ENV['APPLICATION_HOSTNAME'] || 'localhost:3000'
 
@@ -111,11 +147,11 @@ class Setting < RailsSettings::Base
   field :channel_image
   field :about, default: File.read(File.join('config', 'locales', 'about.txt'))
   field :channels, type: :hash, default: {
-    threema: true,
-    telegram: true,
-    email: true,
-    signal: true,
-    whats_app: true
+    threema: { configured: threema_configured?, allow_onboarding: threema_configured? },
+    telegram: { configured: telegram_configured?, allow_onboarding: telegram_configured? },
+    email: { configured: email_configured?, allow_onboarding: email_configured? },
+    signal: { configured: signal_configured?, allow_onboarding: signal_configured? },
+    whats_app: { configured: whats_app_configured?, allow_onboarding: whats_app_configured? }
   }
 
   private

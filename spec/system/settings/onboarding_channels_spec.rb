@@ -9,16 +9,22 @@ RSpec.describe 'Configuring Onboarding Channels' do
   let(:jwt) do
     JsonWebToken.encode(jwt_payload)
   end
+  let(:configured_channels) { %i[email signal whats_app telegram] }
 
   it 'allows activating and deactivating onboarding channels' do
     visit settings_path(as: admin)
 
-    # All activated by default
+    # With no Threema configured in .env.test.local
     within('.OnboardingChannelsCheckboxes') do
       Setting.channels.each_key do |key|
-        expect(page).to have_field(key.to_s.camelize, id: "setting[channels][#{key}]", checked: true)
+        if key.to_sym.in?(configured_channels)
+          expect(page).to have_field(key.to_s.camelize, id: "setting[channels][#{key}][allow_onboarding]", checked: true)
+        else
+          expect(page).not_to have_field(key.to_s.camelize, id: "setting[channels][#{key}][allow_onboarding]")
+        end
       end
 
+      # Uncheck email
       uncheck 'Email'
     end
 
@@ -26,18 +32,23 @@ RSpec.describe 'Configuring Onboarding Channels' do
     expect(page).to have_current_path(settings_path, ignore_query: true)
 
     within('.OnboardingChannelsCheckboxes') do
-      Setting.channels.keys.map(&:to_sym).each do |key|
-        checked_status = !key.eql?(:email)
-        expect(page).to have_field(key.to_s.camelize, id: "setting[channels][#{key}]", checked: checked_status)
+      configured_channels.each do |channel|
+        if channel.eql?(:email)
+          expect(page).to have_field(channel.to_s.camelize, id: "setting[channels][#{channel}][allow_onboarding]", checked: false)
+        else
+          expect(page).to have_field(channel.to_s.camelize, id: "setting[channels][#{channel}][allow_onboarding]", checked: true)
+        end
       end
     end
 
     visit onboarding_path(jwt: jwt)
 
     within('.OnboardingChannelButtons') do
-      Setting.channels.keys.map(&:to_sym).each do |key|
-        unless key.eql?(:email)
-          expect(page).to have_link(key.to_s.camelize, class: 'Button', href: "/onboarding/#{key.to_s.dasherize}?jwt=#{jwt}")
+      configured_channels.each do |channel|
+        if channel.eql?(:email)
+          expect(page).not_to have_link(channel.to_s.camelize)
+        else
+          expect(page).to have_link(channel.to_s.camelize, class: 'Button', href: "/onboarding/#{channel.to_s.dasherize}?jwt=#{jwt}")
         end
       end
     end

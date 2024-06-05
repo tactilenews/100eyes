@@ -17,24 +17,30 @@ Rails.application.routes.draw do
     get '/success', to: 'onboarding#success'
 
     scope module: :onboarding do
-      get '/email', to: 'email#show'
-      post '/email', to: 'email#create'
+      constraints(-> { Setting.email_onboarding_allowed? }) do
+        get '/email', to: 'email#show'
+        post '/email', to: 'email#create'
+      end
 
-      constraints(-> { Setting.signal_server_phone_number.present? }) do
+      constraints(-> { Setting.signal_onboarding_allowed? }) do
         get '/signal/', to: 'signal#show'
         get '/signal/link/', to: 'signal#link', as: 'signal_link'
         post '/signal/', to: 'signal#create'
       end
 
-      get '/threema/', to: 'threema#show'
-      post '/threema/', to: 'threema#create'
+      constraints(-> { Setting.threema_onboarding_allowed? }) do
+        get '/threema/', to: 'threema#show'
+        post '/threema/', to: 'threema#create'
+      end
 
-      get '/telegram/', to: 'telegram#show'
-      get '/telegram/link/:telegram_onboarding_token', to: 'telegram#link', as: 'telegram_link'
-      get '/telegram/fallback/:telegram_onboarding_token', to: 'telegram#fallback', as: 'telegram_fallback'
-      post '/telegram/', to: 'telegram#create'
+      constraints(-> { Setting.telegram_onboarding_allowed? }) do
+        get '/telegram/', to: 'telegram#show'
+        get '/telegram/link/:telegram_onboarding_token', to: 'telegram#link', as: 'telegram_link'
+        get '/telegram/fallback/:telegram_onboarding_token', to: 'telegram#fallback', as: 'telegram_fallback'
+        post '/telegram/', to: 'telegram#create'
+      end
 
-      constraints(-> { Setting.whats_app_server_phone_number.present? || Setting.three_sixty_dialog_client_api_key.present? }) do
+      constraints(-> { Setting.whats_app_onboarding_allowed? }) do
         get '/whats-app/', to: 'whats_app#show'
         post '/whats-app/', to: 'whats_app#create'
       end

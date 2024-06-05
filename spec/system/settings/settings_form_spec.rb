@@ -10,7 +10,7 @@ RSpec.describe 'Permissions' do
 
     # Channels
     Setting.channels.each do |key, _value|
-      expect(page).not_to have_field(key.to_s.camelize, id: "setting[channels][#{key}]")
+      expect(page).not_to have_field(key.to_s.camelize, id: "setting[channels][#{key}][allow_onboarding]")
     end
 
     # Data protection link
@@ -36,9 +36,13 @@ RSpec.describe 'Permissions' do
     user.update(admin: true)
     visit settings_path(as: user)
 
-    # Channels
-    Setting.channels.each do |key, _value|
-      expect(page).to have_field(key.to_s.camelize, id: "setting[channels][#{key}]")
+    # Channels, display only configured channels
+    Setting.channels.each do |key, value|
+      if value[:configured]
+        expect(page).to have_field(key.to_s.camelize, id: "setting[channels][#{key}][allow_onboarding]", checked: value[:configured])
+      else
+        expect(page).not_to have_field(key.to_s.camelize, id: "setting[channels][#{key}][allow_onboarding]")
+      end
     end
 
     # Data protection link
