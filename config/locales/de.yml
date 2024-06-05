@@ -24,7 +24,7 @@ de:
       about: " zu "
     chat_messages_group:
       conversations: Verlauf
-      reply: nachfragen
+      reply: antworten
       add_message: Antwort manuell hinzufügen
     chat_form:
       reply_to_reference: "Zur Nachricht: \"%{text}\""
