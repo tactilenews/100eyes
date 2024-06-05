@@ -13,10 +13,3 @@
   margin-top: var(--spacing-unit);
 }
 
-.ChatForm select {
-  width: 100%;
-  padding: var(--spacing-unit-s);
-  margin-bottom: var(--spacing-unit-xs);
-  color: var(--color-text-light);
-  font-size: var(--font-size-m);
-}
