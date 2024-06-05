@@ -3,14 +3,15 @@
 require 'factory_bot_rails'
 require 'faker'
 
-contributors_count = 100
-request_count = 200
-message_count = request_count * (contributors_count * 0.5).to_i
-message_time = Faker::Time.backward(days: 14)
+contributors_count = 30
+request_count = 30
+replies_count = 30
+file_replies_count = 3
+photo_replies_count = 3
 
 users = User.all
 
-# images = 10.times.map { URI(Faker::Avatar.image(size: '50x50', format: 'png', set: 'set5')) }
+images = 10.times.map { URI(Faker::Avatar.image(size: '50x50', format: 'png', set: 'set5')) }
 
 FactoryBot.modify do
   factory :contributor do
@@ -19,15 +20,18 @@ FactoryBot.modify do
     last_name { Faker::Name.last_name }
     note { Faker::Movies::HitchhikersGuideToTheGalaxy.quote }
 
-    # after(:build) do |contributor|
-    #   image = images.sample
-    #   contributor.avatar.attach(
-    #     io: image.open,
-    #     filename: File.basename(image.path)
-    #   )
-    # end
+    after(:build) do |contributor|
+      image = images.sample
+      contributor.avatar.attach(
+        io: image.open,
+        filename: File.basename(image.path)
+      )
+    end
   end
 end
+
+Rails.logger.debug 'Seeding contributors..'
+contributors = FactoryBot.create_list(:contributor, contributors_count)
 
 FactoryBot.modify do
   factory :request do
@@ -37,31 +41,23 @@ FactoryBot.modify do
   end
 end
 
-Rails.logger.debug 'Seeding requests..'
-requests = FactoryBot.build_list(:request, request_count) do |request|
-  request.class.skip_callback(:create, :after, :broadcast_request, raise: false)
-  request.save!
-end
-
-Rails.logger.debug 'Seeding contributors..'
-contributors = FactoryBot.create_list(:contributor, contributors_count)
-
 FactoryBot.modify do
   factory :message do
-    created_at { message_time }
-    updated_at { message_time }
     sender_type { 'Contributor' }
     text { Faker::Lorem.paragraph }
     unknown_content { false }
     broadcasted { false }
     sender { contributors.sample }
     recipient { nil }
-    request { requests.sample }
   end
 end
 
-Rails.logger.debug 'Seeding messages..'
-FactoryBot.build_list(:message, message_count) do |message|
-  message.class.skip_callback(:create, :after, :send_if_outbound, raise: false)
-  message.save!
+Rails.logger.debug 'Seeding requests..'
+FactoryBot.build_list(:request, request_count) do |request|
+  Message.skip_callback(:commit, :after, :send_if_outbound, raise: false)
+  request.save!
+  Rails.logger.debug 'Seeding requests replies...'
+  FactoryBot.create_list(:message, replies_count, request: request)
+  FactoryBot.create_list(:message, file_replies_count, :with_file, request: request)
+  FactoryBot.create_list(:message, photo_replies_count, :with_a_photo, request: request)
 end
