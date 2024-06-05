@@ -30,7 +30,7 @@ RSpec.describe ChatForm::ChatForm, type: :component do
     end
 
     it 'should have the message prefilled' do
-      expect(subject).to have_css('textarea', text: I18n.t('components.chat_form.reply_to_reference', date: date_time(reply_to.updated_at)))
+      expect(subject).to have_css('textarea', text: I18n.t('components.chat_form.reply_to_reference', text: reply_to.text.truncate(50)))
     end
   end
 end

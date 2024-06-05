@@ -27,7 +27,7 @@ de:
       reply: nachfragen
       add_message: Antwort manuell hinzufügen
     chat_form:
-      reply_to_reference: "Zur Nachricht am %{date}:"
+      reply_to_reference: "Zur Nachricht: \"%{text}\""
       placeholder: Gib hier deine Nachfrage ein. Referenziere falls nötig die entsprechende Nachricht...
       submit: Absenden
     message_form:

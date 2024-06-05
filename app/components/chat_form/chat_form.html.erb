@@ -3,6 +3,6 @@
     <h3><%= "Zur Frage: #{reply_to.request.title}" %></h3>
     <%= hidden_field_tag 'message[reply_to_id]', reply_to&.id %>
   <% end %>
-  <%= c 'textarea', id: 'message[text]', value: reply_to && t('.reply_to_reference', date: date_time(reply_to.updated_at)), required: true, placeholder: t('components.chat_form.placeholder') %>
+  <%= c 'textarea', id: 'message[text]', value: reply_to && t('.reply_to_reference', text: reply_to.text.truncate(50)), required: true, placeholder: t('components.chat_form.placeholder') %>
   <%= c 'button', label: t('components.chat_form.submit'), type: :submit %>
 <% end %>
