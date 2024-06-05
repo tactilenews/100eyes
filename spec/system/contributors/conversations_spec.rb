@@ -25,7 +25,7 @@ RSpec.describe 'Conversation interactions', js: false do
   it 'can navigate to the requests view and back' do
     expect(page).to have_text(first_received_message.text)
     first_message_request_path = request_path(first_received_message.request, anchor: "contributor-#{contributor.id}")
-    puts first_received_message.request.title
+    
     find("a[href='#{first_message_request_path}']", text: first_received_message.request.title).trigger('click')
 
     expect(page).to have_current_path(first_message_request_path.split('#').first)
