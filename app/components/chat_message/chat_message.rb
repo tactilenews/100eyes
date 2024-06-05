@@ -66,7 +66,7 @@ module ChatMessage
     end
 
     def request_link
-      link_to message.request.title, request_path(id: message.request, anchor: "contributor-#{message.contributor.id}")
+      link_to message.request.title, request_path(id: message.request, anchor: "message-#{message.id}")
     end
 
     def warnings
