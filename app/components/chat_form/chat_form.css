@@ -6,7 +6,7 @@
 
 .ChatForm h3 {
   width: 100%;
-  padding: var(--spacing-unit-s);
+  padding: var(--spacing-unit-s) 0;
 }
 
 .ChatForm > button {
