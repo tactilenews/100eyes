@@ -6,11 +6,12 @@ RSpec.describe ContributorThreemaSettings::ContributorThreemaSettings, type: :co
   subject { render_inline(described_class.new(**params)) }
 
   let(:contributor) do
-    build(:contributor,
-          first_name: 'Max',
-          last_name: 'Mustermann',
-          threema_id: '12345678',
-          created_at: '2021-01-01').tap { |contributor| contributor.save(validate: false) }
+    create(:contributor,
+           :skip_validations,
+           first_name: 'Max',
+           last_name: 'Mustermann',
+           threema_id: '12345678',
+           created_at: '2021-01-01')
   end
   let(:params) { { contributor: contributor } }
 

@@ -19,14 +19,9 @@
     src: "{{ backup_host_folder.path }}/tmp/100eyes-storage.tgz"
     dest: "{{ playbook_dir }}/.."
 
-- name: Install docker-compose python package
-  ansible.builtin.pip:
-    name: docker-compose
-
-- name: Run `docker-compose up`
-  community.general.docker_compose:
+- name: Run `docker compose up`
+  community.docker.docker_compose_v2:
     project_src: "{{ playbook_dir }}/.."
-    debug: yes
     state: present
     services:
       - db
@@ -42,17 +37,16 @@
 
 - name: Re-create empty databse and restore database backup
   command:
-    cmd: "docker-compose exec -T db bash -c \"{{ item }}\""
+    cmd: "docker compose exec -T db bash -c \"{{ item }}\""
     chdir: "{{ playbook_dir }}/.."
   loop:
     - dropdb app_development -U postgres --if-exists
     - createdb app_development -U postgres
     - pg_restore -d app_development -U postgres --no-owner --role=postgres < /tmp/100eyes-db-dump
 
-- name: Run `docker-compose down`
-  community.general.docker_compose:
+- name: Run `docker compose down`
+  community.docker.docker_compose_v2:
     project_src: "{{ playbook_dir }}/.."
-    debug: yes
     state: absent
     files:
       - docker-compose.yml

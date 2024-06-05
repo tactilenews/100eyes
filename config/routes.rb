@@ -103,6 +103,7 @@ Rails.application.routes.draw do
       resources :delayed_jobs, only: %i[index show destroy]
       resources :business_plans, only: %i[index show edit update]
       resources :organizations, only: %i[index show edit update]
+      resources :stats, only: [:index]
     end
   end
 

@@ -282,7 +282,7 @@ RSpec.describe Request, type: :model do
       end
 
       it { should change { Message.count }.from(0).to(2) }
-      it { should change { Message.pluck(:recipient_id) }.from([]).to([2, 1]) }
+      it { should change { Message.pluck(:recipient_id).sort }.from([]).to([1, 2]) }
       it { should change { Message.pluck(:sender_id) }.from([]).to([request.user.id, request.user.id]) }
       it { should change { Message.pluck(:broadcasted) }.from([]).to([true, true]) }
       it { should change { Message::File.count }.from(0).to(2) }

@@ -108,7 +108,7 @@ RSpec.describe '/contributors', type: :request do
     end
 
     context 'given a manually created contributor' do
-      let(:contributor) { build(:contributor, data_processing_consent: false, first_name: 'John').tap { |c| c.save(validate: false) } }
+      let(:contributor) { create(:contributor, :skip_validations, data_processing_consent: false, first_name: 'John') }
 
       it 'updates contributor' do
         expect { subject.call }.to(change { contributor.reload.first_name }.from('John').to('Zora'))
@@ -135,7 +135,7 @@ RSpec.describe '/contributors', type: :request do
     context 'given a Threema contributor' do
       let(:threema) { instance_double(Threema) }
       let(:threema_lookup_double) { instance_double(Threema::Lookup) }
-      let(:contributor) { build(:contributor, threema_id: 'VALID123').tap { |contributor| contributor.save(validate: false) } }
+      let(:contributor) { create(:contributor, :skip_validations, threema_id: 'VALID123') }
       let(:new_attrs) { { threema_id: 'INVALID!' } }
 
       before do
