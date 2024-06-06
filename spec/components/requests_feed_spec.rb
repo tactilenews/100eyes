@@ -15,7 +15,7 @@ RSpec.describe RequestsFeed::RequestsFeed, type: :component do
     let!(:reply) { create(:message, sender: contributor, request: create(:request, title: 'Lorem Ipsum')) }
 
     it 'should have a link to the reply' do
-      should have_link('Lorem Ipsum', href: conversations_contributor_path(id: contributor.id, anchor: reply.id))
+      should have_link('Lorem Ipsum', href: conversations_contributor_path(id: contributor.id, anchor: "message-#{reply.id}"))
     end
 
     it 'should have a link to the conversations' do
