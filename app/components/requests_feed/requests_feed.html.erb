@@ -17,13 +17,9 @@
     <ul>
       <% replies.each do |reply| %>
         <li>
-          <a
-            class="Link"
-            data-turbo="false"
-            href="<%= conversations_contributor_path(id: reply.contributor.id, anchor: reply.id) %>"
-          >
+          <%= link_to conversations_contributor_path(id: reply.contributor.id, anchor: "message-#{reply.id}"), class: "Link", data: { turbo: false } do %>
             <strong><%= reply.request.title %></strong>
-          </a>
+          <% end %>
           <p class="text-small text-light">
             <%= date_time(reply.created_at) %>
           </p>
