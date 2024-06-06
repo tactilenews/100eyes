@@ -63,7 +63,7 @@ module ChatMessage
       name = message.sender ? message.sender.first_name : Setting.project_name
       sent_by_x_at = I18n.t('components.chat_message.sent_by_x_at', name: name, date: date_time(message.updated_at)).html_safe # rubocop:disable Rails/OutputSafety
       if message.sent_from_contributor?
-        link_to_unless(current_page?(check_parameters: false), sent_by_x_at, conversations_contributor_path(id: message.contributor.id, anchor: id), data: { turbo: false })
+        link_to_unless(current_page?(conversations_contributor_path(id: message.contributor.id),check_parameters: false), sent_by_x_at, conversations_contributor_path(id: message.contributor.id, anchor: id), data: { turbo: false })
       else
         content_tag(:p, sent_by_x_at)
       end
