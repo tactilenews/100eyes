@@ -70,7 +70,7 @@ RSpec.describe 'Activity Notifications' do
       find('p', text: "I'm a reply to #{request.title}").hover
       reply_path = conversations_contributor_path(id: contributor_without_avatar, reply_to: reply.id, anchor: 'chat-form')
       expect(page).to have_selector("a[href='#{reply_path}']")
-      find("a[href='#{reply_path}']", text: 'nachfragen').trigger('click')
+      find("a[href='#{reply_path}']", text: 'antworten').trigger('click')
 
       expect(page).to have_text("Deine Unterhaltung mit #{contributor_without_avatar.name}")
       fill_in 'message[text]', with: "Thanks for your reply #{contributor_without_avatar.name}!"
@@ -123,7 +123,7 @@ RSpec.describe 'Activity Notifications' do
       find('p', text: reply_text).hover
       reply_path = conversations_contributor_path(id: contributor_two, reply_to: reply_by_same_contributor.id, anchor: 'chat-form')
       expect(page).to have_selector("a[href='#{reply_path}']")
-      find("a[href='#{reply_path}']", text: 'nachfragen').trigger('click')
+      find("a[href='#{reply_path}']", text: 'antworten').trigger('click')
 
       expect(page).to have_text("Deine Unterhaltung mit #{contributor_two.name}")
       fill_in 'message[text]', with: "Thanks for your reply #{contributor_two.name}!"
@@ -152,7 +152,7 @@ RSpec.describe 'Activity Notifications' do
       find('p', text: reply_text).hover
       reply_path = conversations_contributor_path(id: contributor_two, reply_to: reply_by_same_contributor.id, anchor: 'chat-form')
       expect(page).to have_selector("a[href='#{reply_path}']")
-      find("a[href='#{reply_path}']", text: 'nachfragen').trigger('click')
+      find("a[href='#{reply_path}']", text: 'antworten').trigger('click')
 
       expect(page).to have_text("Deine Unterhaltung mit #{contributor_two.name}")
       fill_in 'message[text]', with: "This is another chat message to #{contributor_two.name}, but it doesn't count in the dashboard!"
@@ -184,7 +184,7 @@ RSpec.describe 'Activity Notifications' do
       find('p', text: reply_text).hover
       reply_path = conversations_contributor_path(id: contributor_two, reply_to: reply_by_same_contributor.id, anchor: 'chat-form')
       expect(page).to have_selector("a[href='#{reply_path}']")
-      find("a[href='#{reply_path}']", text: 'nachfragen').trigger('click')
+      find("a[href='#{reply_path}']", text: 'antworten').trigger('click')
 
       expect(page).to have_text("Deine Unterhaltung mit #{contributor_two.name}")
 
