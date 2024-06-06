@@ -93,3 +93,6 @@ gem 'groupdate'
 
 # Pagination
 gem 'kaminari', '~> 1.2'
+
+# Slugged routes
+gem 'friendly_id'

@@ -176,6 +176,8 @@ GEM
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
+    friendly_id (5.5.1)
+      activerecord (>= 4.0.0)
     globalid (1.0.0)
       activesupport (>= 5.0)
     groupdate (6.1.0)
@@ -452,6 +454,7 @@ DEPENDENCIES
   dotenv-rails
   factory_bot_rails
   faker
+  friendly_id
   groupdate
   image_processing (~> 1.12)
   jwt
@@ -490,4 +493,4 @@ RUBY VERSION
    ruby 3.0.0p0
 
 BUNDLED WITH
-   2.5.7
+   2.5.11

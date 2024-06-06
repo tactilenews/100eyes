@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_03_11_085038) do
+ActiveRecord::Schema.define(version: 2024_06_06_111346) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -65,8 +65,10 @@ ActiveRecord::Schema.define(version: 2024_03_11_085038) do
     t.bigint "message_id"
     t.bigint "request_id"
     t.bigint "user_id"
+    t.bigint "organization_id"
     t.index ["contributor_id"], name: "index_activity_notifications_on_contributor_id"
     t.index ["message_id"], name: "index_activity_notifications_on_message_id"
+    t.index ["organization_id"], name: "index_activity_notifications_on_organization_id"
     t.index ["read_at"], name: "index_activity_notifications_on_read_at"
     t.index ["recipient_type", "recipient_id"], name: "index_activity_notifications_on_recipient"
     t.index ["request_id"], name: "index_activity_notifications_on_request_id"
@@ -140,6 +142,17 @@ ActiveRecord::Schema.define(version: 2024_03_11_085038) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
+  create_table "friendly_id_slugs", force: :cascade do |t|
+    t.string "slug", null: false
+    t.integer "sluggable_id", null: false
+    t.string "sluggable_type", limit: 50
+    t.string "scope"
+    t.datetime "created_at"
+    t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
+    t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
+    t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
+  end
+
   create_table "json_web_tokens", force: :cascade do |t|
     t.string "invalidated_jwt"
     t.datetime "created_at", precision: 6, null: false
@@ -188,8 +201,47 @@ ActiveRecord::Schema.define(version: 2024_03_11_085038) do
     t.bigint "business_plan_id", null: false
     t.bigint "contact_person_id"
     t.datetime "upgraded_business_plan_at"
+    t.string "project_name"
+    t.integer "onboarding_logo_blob_id"
+    t.integer "onboarding_hero_blob_id"
+    t.string "onboarding_title"
+    t.string "onboarding_byline"
+    t.string "onboarding_data_processing_consent_additional_info"
+    t.string "onboarding_page"
+    t.string "onboarding_success_heading"
+    t.string "onboarding_success_text"
+    t.string "onboarding_unauthorized_heading"
+    t.string "onboarding_unauthorized_text"
+    t.string "onboarding_data_protection_link"
+    t.string "onboarding_imprint_link"
+    t.boolean "onboarding_show_gdpr_modal"
+    t.boolean "onboarding_ask_for_additional_consent", default: false
+    t.string "onboarding_additional_consent_heading"
+    t.string "onboarding_additional_consent_text"
+    t.string "telegram_unknown_content_message"
+    t.string "telegram_contributor_not_found_message"
+    t.string "telegram_bot_api_key"
+    t.string "telegram_bot_username"
+    t.string "threema_unknown_content_message"
+    t.string "threemarb_api_identity"
+    t.string "signal_server_phone_number"
+    t.string "signal_monitoring_url"
+    t.string "signal_unknown_content_message"
+    t.string "twilio_account_sid"
+    t.string "twilio_api_key_sid"
+    t.string "twilio_api_key_secret"
+    t.string "whats_app_server_phone_number"
+    t.string "three_sixty_dialog_partner_token"
+    t.string "three_sixty_dialog_client_api_key"
+    t.string "three_sixty_dialog_client_id"
+    t.string "three_sixty_dialog_client_waba_account_id"
+    t.string "email_from_address"
+    t.integer "channel_image_blob_id"
+    t.string "about"
+    t.string "slug"
     t.index ["business_plan_id"], name: "index_organizations_on_business_plan_id"
     t.index ["contact_person_id"], name: "index_organizations_on_contact_person_id"
+    t.index ["slug"], name: "index_organizations_on_slug", unique: true
   end
 
   create_table "pg_search_documents", force: :cascade do |t|
@@ -198,6 +250,8 @@ ActiveRecord::Schema.define(version: 2024_03_11_085038) do
     t.bigint "searchable_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "organization_id"
+    t.index ["organization_id"], name: "index_pg_search_documents_on_organization_id"
     t.index ["searchable_type", "searchable_id"], name: "index_pg_search_documents_on_searchable_type_and_searchable_id"
   end
 
@@ -217,6 +271,8 @@ ActiveRecord::Schema.define(version: 2024_03_11_085038) do
     t.bigint "user_id"
     t.datetime "schedule_send_for"
     t.datetime "broadcasted_at"
+    t.bigint "organization_id"
+    t.index ["organization_id"], name: "index_requests_on_organization_id"
     t.index ["user_id"], name: "index_requests_on_user_id"
   end
 
@@ -236,6 +292,7 @@ ActiveRecord::Schema.define(version: 2024_03_11_085038) do
     t.integer "tagger_id"
     t.string "context", limit: 128
     t.datetime "created_at"
+    t.string "tenant", limit: 128
     t.index ["context"], name: "index_taggings_on_context"
     t.index ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true
     t.index ["tag_id"], name: "index_taggings_on_tag_id"
@@ -245,6 +302,7 @@ ActiveRecord::Schema.define(version: 2024_03_11_085038) do
     t.index ["taggable_type"], name: "index_taggings_on_taggable_type"
     t.index ["tagger_id", "tagger_type"], name: "index_taggings_on_tagger_id_and_tagger_type"
     t.index ["tagger_id"], name: "index_taggings_on_tagger_id"
+    t.index ["tenant"], name: "index_taggings_on_tenant"
   end
 
   create_table "tags", id: :serial, force: :cascade do |t|
@@ -278,6 +336,7 @@ ActiveRecord::Schema.define(version: 2024_03_11_085038) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "activity_notifications", "contributors"
   add_foreign_key "activity_notifications", "messages"
+  add_foreign_key "activity_notifications", "organizations"
   add_foreign_key "activity_notifications", "requests"
   add_foreign_key "activity_notifications", "users"
   add_foreign_key "contributors", "organizations"
@@ -287,7 +346,9 @@ ActiveRecord::Schema.define(version: 2024_03_11_085038) do
   add_foreign_key "messages", "requests"
   add_foreign_key "organizations", "business_plans"
   add_foreign_key "organizations", "users", column: "contact_person_id"
+  add_foreign_key "pg_search_documents", "organizations"
   add_foreign_key "photos", "messages"
+  add_foreign_key "requests", "organizations"
   add_foreign_key "requests", "users"
   add_foreign_key "taggings", "tags"
   add_foreign_key "users", "organizations"
