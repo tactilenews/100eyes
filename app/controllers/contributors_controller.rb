@@ -5,7 +5,6 @@ class ContributorsController < ApplicationController
   before_action :contributors_sidebar, only: %i[show update]
   before_action :count_params, only: :count
   before_action :contributors_params, only: :index
-  before_action :toggle_active_state, only: :update
 
   def message
     request = contributor.active_request
@@ -37,6 +36,7 @@ class ContributorsController < ApplicationController
 
   def update
     @contributor.editor_guarantees_data_consent = true
+    toggle_active_state if toggle_active_state_params[:active]
 
     if @contributor.update(contributor_params)
       redirect_to contributor_url, flash: { success: I18n.t('contributor.saved', name: @contributor.name) }
@@ -70,8 +70,6 @@ class ContributorsController < ApplicationController
   end
 
   def toggle_active_state
-    return unless toggle_active_state_params[:active]
-
     if ActiveModel::Type::Boolean.new.cast(toggle_active_state_params[:active])
       @contributor.reactivate!
     else

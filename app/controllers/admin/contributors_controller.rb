@@ -5,9 +5,10 @@ module Admin
     include AdministrateExportable::Exporter
 
     before_action :set_contributor, only: :update
-    before_action :toggle_active_state, only: :update
 
     def update
+      toggle_active_state
+
       if @contributor.update(update_params[:contributor])
         redirect_to admin_contributor_path(@contributor), flash: { success: 'Contributor was successfully updated.' }
       else
@@ -26,13 +27,15 @@ module Admin
                     contributor: %i[note first_name last_name])
     end
 
-    def toggle_active_state
-      return unless update_params[:contributor][:active]
+    def toggle_active_state_params
+      params.require(:contributor).permit(:active)
+    end
 
-      if ActiveModel::Type::Boolean.new.cast(update_params[:contributor][:active])
+    def toggle_active_state
+      if ActiveModel::Type::Boolean.new.cast(toggle_active_state_params[:active])
         @contributor.reactivate!
       else
-        @contributor.deactivate!(user_id: current_user.id, admin: true)
+        @contributor.deactivate!(admin: true)
       end
     end
   end

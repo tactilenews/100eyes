@@ -181,7 +181,7 @@ class Contributor < ApplicationRecord
     avatar.attach(io: remote_file_location.open, filename: File.basename(remote_file_location.path))
   end
 
-  def deactivate!(user_id:, admin: false)
+  def deactivate!(user_id: nil, admin: false)
     self.deactivated_by_admin = admin
     update!(deactivated_at: Time.current, deactivated_by_user_id: user_id)
   end
