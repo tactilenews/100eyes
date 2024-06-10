@@ -3,7 +3,6 @@
 class SettingsController < ApplicationController
   def index; end
 
-  # rubocop:disable Metrics/AbcSize
   def update
     settings_channel_param.each do |key, values_params|
       values_hash = values_params.to_h.each_with_object({}) do |(k, value), accumlator|
@@ -18,7 +17,6 @@ class SettingsController < ApplicationController
     flash[:success] = I18n.t('settings.success')
     redirect_to settings_url
   end
-  # rubocop:enable Metrics/AbcSize
 
   private
 
