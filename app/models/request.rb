@@ -8,7 +8,7 @@ class Request < ApplicationRecord
   acts_as_tenant :organization
 
   belongs_to :user
-  belongs_to :organization
+  acts_as_tenant :organization
   has_many :messages, dependent: :destroy
   has_many :contributors, through: :messages, source: :recipient
   has_many :photos, through: :messages
