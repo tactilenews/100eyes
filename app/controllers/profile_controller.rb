@@ -39,10 +39,6 @@ class ProfileController < ApplicationController
     params.require(:profile).permit(:business_plan_id)
   end
 
-  def organization
-    @organization ||= current_user.admin? ? Organization.last : current_user.organization
-  end
-
   def business_plans
     @business_plans ||= BusinessPlan.order(:price_per_month)
   end

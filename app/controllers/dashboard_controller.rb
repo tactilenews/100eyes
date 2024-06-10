@@ -23,7 +23,7 @@ class DashboardController < ApplicationController
         record: notifications.first.to_notification.record_for_avatar,
         group_message: notifications.first.to_notification.group_message(notifications: notifications),
         created_at: notifications.first.created_at,
-        url: notifications.first.to_notification.url(current_user.organization),
+        url: notifications.first.to_notification.url(@organization),
         link_text: notifications.first.to_notification.link_text
       }
     end
