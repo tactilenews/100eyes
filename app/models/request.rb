@@ -5,6 +5,7 @@ class Request < ApplicationRecord
   include PgSearch::Model
 
   multisearchable against: %i[title text]
+  acts_as_tenant :organization
 
   belongs_to :user
   has_many :messages, dependent: :destroy

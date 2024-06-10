@@ -34,7 +34,7 @@
               %>
             </span>
 
-            <%= c 'inline_metrics', metrics: request_metrics, path: stats_request_path(request) %>
+            <%= c 'inline_metrics', metrics: request_metrics, path: stats_request_path(request.organization, request) %>
           </div>
         <% end %>
       <% end %>

@@ -36,6 +36,6 @@ class OtpAuthController < ApplicationController
   end
 
   def redirect_if_signed_in
-    redirect_to dashboard_path if signed_in?
+    redirect_to current_user.admin? ? admin_root_path : dashboard_path(user.organization) if signed_in?
   end
 end

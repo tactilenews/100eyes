@@ -28,8 +28,8 @@ class ContributorSubscribed < Noticed::Base
   end
   # rubocop:enable Rails/OutputSafety
 
-  def url
-    contributor_path(record.contributor_id)
+  def url(organization)
+    contributor_path(organization, record.contributor_id)
   end
 
   def link_text

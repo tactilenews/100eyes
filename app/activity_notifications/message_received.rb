@@ -35,8 +35,8 @@ class MessageReceived < Noticed::Base
   end
   # rubocop:enable Rails/OutputSafety
 
-  def url
-    request_path(record.request, anchor: "message-#{record.message.id}")
+  def url(organization)
+    request_path(organization, record.request, anchor: "message-#{record.message.id}")
   end
 
   def link_text
