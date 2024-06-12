@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
 class OrganizationsController < ApplicationController
-  def index
-    @organization = current_user.organization
-  end
+  def index; end
 
   def update
-    flash[:success] = I18n.t('settings.success')
-    redirect_to organizations_url
+    if @organization.update!(organizations_params)
+      flash[:success] = I18n.t('settings.success')
+      redirect_to settings_path
+    else
+      render :index, status: :unprocessable_entity
+    end
   end
 
   def organizations_params

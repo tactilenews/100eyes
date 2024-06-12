@@ -22,6 +22,13 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :global do
+    constraints Clearance::Constraints::SignedIn.new(&:admin?) do
+      get '/settings', to: 'settings#index'
+      post '/settings', to: 'settings#update'
+    end
+  end
+
   namespace :admin do
     constraints Clearance::Constraints::SignedIn.new(&:admin?) do
       root to: 'users#index'
@@ -39,7 +46,7 @@ Rails.application.routes.draw do
     end
   end
 
-  scope ':organization' do
+  scope ':organization_slug' do
     root to: 'dashboard#index', as: 'dashboard'
 
     concern :paginatable do
@@ -84,8 +91,8 @@ Rails.application.routes.draw do
       end
     end
 
-    get '/settings', to: 'settings#index'
-    post '/settings', to: 'settings#update'
+    get '/settings', to: 'organizations#index'
+    patch '/settings', to: 'organizations#update'
 
     namespace :threema do
       post '/webhook', to: 'webhook#message'

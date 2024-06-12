@@ -1,4 +1,4 @@
-<%= c 'form', model: Setting.new, multipart: true, **attrs do %>
+<%= c 'form', model: ::Setting.new, url: global_settings_path, multipart: true, **attrs do %>
   <%= c 'section' do %>
     <%= c('heading', tag: :h2) { t('setting.form.groups.project_settings') } %>
     <%= c('settings_field', type: :input, attr: :project_name) %>
@@ -11,29 +11,25 @@
     <%= c('settings_field', type: :image_input, attr: :onboarding_hero) %>
     <%= c('settings_field', type: :input, attr: :onboarding_title) %>
     <%= c('settings_field', type: :textarea, attr: :onboarding_page) %>
-    <% if current_user.admin? %>
-      <%= c 'onboarding_channels_checkboxes' %>
-      <%= c('settings_field', type: :url_input, attr: :onboarding_data_protection_link) %>
-      <%= c('settings_field', type: :textarea, attr: :onboarding_data_processing_consent_additional_info) %>
-      <%= c('settings_field', type: :url_input, attr: :onboarding_imprint_link) %>
-    <% end %>
+    <%= c 'onboarding_channels_checkboxes' %>
+    <%= c('settings_field', type: :url_input, attr: :onboarding_data_protection_link) %>
+    <%= c('settings_field', type: :textarea, attr: :onboarding_data_processing_consent_additional_info) %>
+    <%= c('settings_field', type: :url_input, attr: :onboarding_imprint_link) %>
   <% end %>
 
-  <% if current_user.admin? %>
-    <%= c 'stack' do %>
-      <%= c('heading', tag: :h2) { t 'setting.form.groups.onboarding_additional_consent' } %>
+  <%= c 'stack' do %>
+    <%= c('heading', tag: :h2) { t 'setting.form.groups.onboarding_additional_consent' } %>
 
-      <%= c('field',
-        object: Setting.new,
-        attr: :onboarding_ask_for_additional_consent,
-        styles: [:horizontal, :leftAligned],
-      ) do |field| %>
-        <%= c 'checkbox', **field.input_defaults, checked: Setting.onboarding_ask_for_additional_consent %>
-      <% end %>
-
-      <%= c('settings_field', type: :input, attr: :onboarding_additional_consent_heading) %>
-      <%= c('settings_field', type: :input, attr: :onboarding_additional_consent_text) %>
+    <%= c('field',
+      object: Setting.new,
+      attr: :onboarding_ask_for_additional_consent,
+      styles: [:horizontal, :leftAligned],
+    ) do |field| %>
+      <%= c 'checkbox', **field.input_defaults, checked: Setting.onboarding_ask_for_additional_consent %>
     <% end %>
+
+    <%= c('settings_field', type: :input, attr: :onboarding_additional_consent_heading) %>
+    <%= c('settings_field', type: :input, attr: :onboarding_additional_consent_text) %>
   <% end %>
 
   <%= c 'stack' do %>
@@ -64,12 +60,10 @@
     <%= c('settings_field', type: :textarea, attr: :threema_unknown_content_message) %>
   <% end %>
 
-  <% if current_user.admin? %>
-    <%= c 'stack' do %>
-      <%= c('heading', tag: :h2) { t('setting.form.groups.all') } %>
-      <%= c('settings_field', type: :image_input, attr: :channel_image) %>
-      <%= c('settings_field', type: :textarea, attr: :about) %>
-    <% end %>
+  <%= c 'stack' do %>
+    <%= c('heading', tag: :h2) { t('setting.form.groups.all') } %>
+    <%= c('settings_field', type: :image_input, attr: :channel_image) %>
+    <%= c('settings_field', type: :textarea, attr: :about) %>
   <% end %>
 
   <%= c 'submit_button', label: t('save') %>

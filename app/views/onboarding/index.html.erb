@@ -7,11 +7,11 @@
 
   <%= c 'section', styles: [:narrow] do %>
     <%= c 'heading', styles: [:alpha, :serif], tag: :h1 do %>
-      <%= Setting.onboarding_title %>
+      <%= @organization.onboarding_title || Setting.onboarding_title %>
     <% end %>
 
     <div class="text-serif">
-      <%= c 'markdown', raw: Setting.onboarding_page %>
+      <%= c 'markdown', raw:  @organization.onboarding_page || Setting.onboarding_page %>
     </div>
 
     <%= c 'onboarding_channel_buttons', channels: @channels %>

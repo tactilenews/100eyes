@@ -13,7 +13,9 @@ class OrganizationDashboard < Administrate::BaseDashboard
     users: Field::HasMany,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
-    upgraded_business_plan_at: Field::DateTime
+    upgraded_business_plan_at: Field::DateTime,
+    telegram_bot_api_key: Field::String,
+    telegram_bot_username: Field::String,
   }.freeze
 
   COLLECTION_ATTRIBUTES = %i[
@@ -42,6 +44,8 @@ class OrganizationDashboard < Administrate::BaseDashboard
     upgrade_discount
     contact_person
     name
+    telegram_bot_api_key
+    telegram_bot_username
   ].freeze
 
   COLLECTION_FILTERS = {}.freeze

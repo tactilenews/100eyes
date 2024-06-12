@@ -3,7 +3,7 @@
 module Admin
   class OrganizationsController < Admin::ApplicationController
     def update
-      organization = Organization.find(update_params[:id])
+      organization = Organization.friendly.find(update_params[:id])
       organization.business_plan.update(valid_from: nil, valid_until: nil)
       business_plan = BusinessPlan.find(update_params[:organization][:business_plan_id])
       business_plan.update(valid_from: Time.current, valid_until: 1.year.from_now)
@@ -20,7 +20,8 @@ module Admin
 
     def update_params
       params.permit(:id,
-                    organization: %i[id business_plan_id upgrade_discount contact_person_id name])
+                    organization: %i[id business_plan_id upgrade_discount contact_person_id name telegram_bot_api_key
+                                     telegram_bot_username])
     end
   end
 end
