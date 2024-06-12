@@ -332,6 +332,40 @@ RSpec.describe Contributor, type: :model do
     end
   end
 
+  describe '#conversations' do
+    let(:received_message)  do
+      create(:message, text: 'Message with the contributor as recipient', recipient: contributor)
+    end
+    let(:sent_message) do
+      create(:message, sender: contributor)
+    end
+    it 'includes messages received by the contributor' do
+      received_message
+      expect(contributor.conversations).to include(received_message)
+    end
+
+    it 'includes messages sent by the contributor' do
+      sent_message
+      expect(contributor.conversations).to include(sent_message)
+    end
+
+    it 'sorts the messages so that the oldest first' do
+      received_message
+      sent_message
+      expect(contributor.conversations.first).to eql(received_message)
+      expect(contributor.conversations.last).to eql(sent_message)
+    end
+
+    it 'does not include messages not being sent or received by the contributor' do
+      other_contributor = create(:contributor)
+      received_message = create(:message, text: 'Message with the contributor as recipient', recipient: other_contributor,
+                                          request: the_request)
+      sent_message = create(:message, request: the_request, sender: other_contributor)
+      expect(contributor.conversations).not_to include(sent_message)
+      expect(contributor.conversations).not_to include(received_message)
+    end
+  end
+
   describe '#conversation_about' do
     subject { contributor.conversation_about(the_request) }
 
@@ -548,19 +582,28 @@ RSpec.describe Contributor, type: :model do
 
     describe 'when many requests are sent to the contributor' do
       before(:each) do
-        another_request = create(:request, broadcasted_at: 1.day.ago)
-        create(:message, request: the_request, recipient: contributor)
-        create(:message, request: another_request, recipient: contributor)
+        previous_request = create(:request, broadcasted_at: 1.day.ago)
+        create(:message, request: the_request, recipient: contributor, created_at: the_request.broadcasted_at)
+        create(:message, request: previous_request, recipient: contributor, created_at: previous_request.broadcasted_at)
       end
 
       it { should eq(the_request) }
     end
 
+    describe 'when most recently a direct message is sent out belonging to a previous request' do
+      let(:previous_request) { create(:request, broadcasted_at: 1.day.ago) }
+      before(:each) do
+        create(:message, request: the_request, recipient: contributor, created_at: the_request.broadcasted_at)
+        create(:message, request: previous_request, recipient: contributor)
+      end
+
+      it { should eq(previous_request) }
+    end
+
     describe 'when there is a planned request' do
       before(:each) do
-        planned_request = create(:request, broadcasted_at: nil, schedule_send_for: 1.day.from_now)
+        create(:request, broadcasted_at: nil, schedule_send_for: 1.day.from_now)
         create(:message, request: the_request, recipient: contributor)
-        create(:message, request: planned_request, recipient: contributor)
       end
 
       it { should eq(the_request) }

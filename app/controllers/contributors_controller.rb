@@ -1,13 +1,18 @@
 # frozen_string_literal: true
 
 class ContributorsController < ApplicationController
-  before_action :set_contributor, only: %i[update destroy show edit message]
+  before_action :set_contributor, only: %i[update destroy show edit message conversations]
   before_action :contributors_sidebar, only: %i[show update]
   before_action :count_params, only: :count
   before_action :contributors_params, only: :index
 
   def message
-    request = contributor.active_request
+    request = if message_params[:reply_to_id].present?
+                reply_to = contributor.replies.find(message_params[:reply_to_id])
+                reply_to.request
+              else
+                contributor.active_request
+              end
     render(plain: 'No active request for this contributor', status: :bad_request) and return unless request
 
     text = message_params[:text]
@@ -56,6 +61,11 @@ class ContributorsController < ApplicationController
     render json: { count: Contributor.with_tags(params[:tag_list]).count }
   end
 
+  def conversations
+    @messages = @contributor.conversations.includes(%i[files photos request recipient sender])
+    @reply_to = @contributor.replies.find(params[:reply_to]) if params[:reply_to].present?
+  end
+
   private
 
   def set_contributor
@@ -79,7 +89,7 @@ class ContributorsController < ApplicationController
   end
 
   def message_params
-    params.require(:message).permit(:text)
+    params.require(:message).permit(:text, :reply_to_id)
   end
 
   def count_params

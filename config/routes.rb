@@ -76,6 +76,7 @@ Rails.application.routes.draw do
     resources :requests, only: %i[show], to: 'requests#show_contributor_messages'
 
     member do
+      get 'conversations'
       post 'message'
     end
 

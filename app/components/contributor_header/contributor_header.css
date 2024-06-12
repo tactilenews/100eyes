@@ -8,3 +8,11 @@
   flex-grow: 0;
   flex-shrink: 0;
 }
+
+.ContributorHeader-contributor {
+  font-weight: 500;
+}
+
+.ContributorHeader-contributor:hover {
+  text-decoration: underline;
+}
