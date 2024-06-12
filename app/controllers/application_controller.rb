@@ -34,13 +34,14 @@ class ApplicationController < ActionController::Base
   end
 
   def set_organization
-    return unless signed_in?
+    return unless signed_in? && current_user.otp_enabled?
 
-    @organization = Organization.friendly.find(params[:organization])
-    if current_user.admin? || organization.eql?(current_user.organization)
-      set_current_tenant(current_user.organization)
-    else
-      redirect_to dashboard_path(current_user.organization)
-    end
+    @organization = Organization.friendly.find(params[:organization_slug]) || Organization.first
+
+    raise ActionController::RoutingError, 'Not Found' unless current_user.admin? || @organization.eql?(current_user.organization)
+
+    set_current_tenant(@organization)
+  rescue ActiveRecord::RecordNotFound
+    raise ActionController::RoutingError, 'Not Found'
   end
 end

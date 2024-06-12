@@ -3,6 +3,7 @@
 class OtpAuthController < ApplicationController
   skip_before_action :require_login
   skip_before_action :require_otp_setup
+  skip_before_action :set_organization
   before_action :redirect_if_signed_in, :redirect_unless_user_set, :reset_when_inactive
 
   layout 'minimal'
@@ -36,6 +37,9 @@ class OtpAuthController < ApplicationController
   end
 
   def redirect_if_signed_in
-    redirect_to current_user.admin? ? admin_root_path : dashboard_path(user.organization) if signed_in?
+    return unless signed_in?
+
+    redirect_path = current_user.admin? ? admin_root_path : dashboard_path(user.organization)
+    redirect_to redirect_path
   end
 end

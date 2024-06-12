@@ -3,6 +3,7 @@
 class SessionsController < Clearance::SessionsController
   skip_before_action :require_login
   skip_before_action :require_otp_setup
+  skip_before_action :set_organization
 
   def create
     user = authenticate(params)
