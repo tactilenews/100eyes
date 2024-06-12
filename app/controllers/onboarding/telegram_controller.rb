@@ -13,10 +13,12 @@ module Onboarding
 
     def link
       @telegram_onboarding_token = telegram_onboarding_token
+      @telegram_bot_username = @organization.telegram_bot_username || Setting.telegram_bot_username
     end
 
     def fallback
       @telegram_onboarding_token = telegram_onboarding_token
+      @telegram_bot_username = @organization.telegram_bot_username || Setting.telegram_bot_username
     end
 
     private

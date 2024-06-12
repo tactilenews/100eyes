@@ -19,7 +19,7 @@ module TelegramAdapter
 
         @message = message
 
-        response = Telegram.bot.send_message(
+        response = Telegram.bots[contributor.organization.slug.underscore.to_sym || :default].send_message(
           chat_id: contributor.telegram_id,
           text: text,
           parse_mode: :HTML

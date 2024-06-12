@@ -9,6 +9,14 @@ Rails.application.routes.draw do
   resource :otp_setup, controller: :otp_setup, only: %i[show create]
   resource :otp_auth, controller: :otp_auth, only: %i[show create]
 
+  telegram_webhook Telegram::WebhookController
+
+  if Organization.table_exists?
+    Organization.find_each do |organization|
+      telegram_webhook Telegram::WebhookController, organization.slug.underscore.to_sym
+    end
+  end
+
   namespace :admin do
     constraints Clearance::Constraints::SignedIn.new(&:admin?) do
       root to: 'users#index'

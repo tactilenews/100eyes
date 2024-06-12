@@ -8,5 +8,14 @@ Rails.application.configure do
         username: Setting.telegram_bot_username
       }
     }
+    Organization.find_each do |organization|
+      Telegram.bots_config[organization.slug.underscore.to_sym] = {
+        token: organization.telegram_bot_api_key,
+        username: organization.telegram_bot_username
+      }
+    end
+
+  rescue ActiveRecord::NoDatabaseError
+    nil
   end
 end

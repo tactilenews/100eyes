@@ -2,6 +2,8 @@
 
 require 'active_support/core_ext/integer/time'
 require_relative '../../app/models/setting'
+
+# rubocop:disable Metrics/BlockLength
 Rails.application.configure do
   config.after_initialize do
     Bullet.enable        = true
@@ -77,6 +79,8 @@ Rails.application.configure do
   config.hosts << Setting.application_host
   config.action_mailer.default_url_options = { host: Setting.application_host }
 
+  routes.default_url_options = { host: Setting.application_host, protocol: 'https' }
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
 end
+# rubocop:enable Metrics/BlockLength
