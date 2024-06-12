@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  root to: redirect('/about')
+
   resource :session, controller: 'sessions', only: %i[create]
   get '/sign_in' => 'sessions#new', as: 'sign_in'
   delete '/sign_out' => 'sessions#destroy', as: 'sign_out'
@@ -8,6 +10,9 @@ Rails.application.routes.draw do
 
   resource :otp_setup, controller: :otp_setup, only: %i[show create]
   resource :otp_auth, controller: :otp_auth, only: %i[show create]
+
+  get '/health', to: 'health#index'
+  get '/about', to: 'about#index'
 
   telegram_webhook Telegram::WebhookController
 
@@ -43,8 +48,6 @@ Rails.application.routes.draw do
 
     get '/dashboard', to: 'dashboard#index'
     get '/search', to: 'search#index'
-    get '/health', to: 'health#index'
-    get '/about', to: 'about#index'
 
     namespace :onboarding, module: nil do
       get '/', to: 'onboarding#index'
