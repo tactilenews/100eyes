@@ -16,6 +16,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
     upgraded_business_plan_at: Field::DateTime,
     telegram_bot_api_key: Field::String,
     telegram_bot_username: Field::String,
+    slug: OrganizationLinkField
   }.freeze
 
   COLLECTION_ATTRIBUTES = %i[
@@ -26,6 +27,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
     contributors
     users
     upgraded_business_plan_at
+    slug
   ].freeze
 
   SHOW_PAGE_ATTRIBUTES = %i[
