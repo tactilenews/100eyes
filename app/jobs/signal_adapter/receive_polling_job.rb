@@ -12,7 +12,7 @@ module SignalAdapter
 
     # rubocop:disable Metrics/MethodLength
     def perform(*_args)
-      return if Setting.signal_server_phone_number.blank?
+      return if signal_server_phone_number_not_configured?
 
       signal_messages = request_new_messages
       adapter = SignalAdapter::Inbound.new
@@ -54,12 +54,19 @@ module SignalAdapter
 
     private
 
-    def request_new_messages
-      url = URI.parse("#{Setting.signal_cli_rest_api_endpoint}/v1/receive/#{Setting.signal_server_phone_number}")
-      res = Net::HTTP.get_response(url)
-      raise SignalAdapter::ServerError if res.instance_of?(Net::HTTPBadRequest)
+    def signal_server_phone_number_not_configured?
+      Organization.all? { |org| org.signal_server_phone_number.blank? } && Setting.signal_server_phone_number.blank?
+    end
 
-      JSON.parse(res.body)
+    def request_new_messages
+      registered_signal_server_phone_numbers = Organization.pluck(:signal_server_phone_number).compact << Setting.signal_server_phone_number
+      registered_signal_server_phone_numbers.collect do |phone_number|
+        url = URI.parse("#{Setting.signal_cli_rest_api_endpoint}/v1/receive/#{phone_number}")
+        res = Net::HTTP.get_response(url)
+        raise SignalAdapter::ServerError if res.instance_of?(Net::HTTPBadRequest)
+
+        JSON.parse(res.body)
+      end
     end
 
     def ping_monitoring_service

@@ -5,10 +5,11 @@ module SignalAdapter
     class Text < ApplicationJob
       queue_as :default
 
-      attr_reader :recipient, :text
+      attr_reader :recipient, :text, :organization
 
-      def perform(contributor_id:, text:)
+      def perform(contributor_id:, text:, organization_id: nil)
         @recipient = Contributor.find_by(id: contributor_id)
+        @organization = Organization.find_by(id: organization_id)
         return unless @recipient
 
         @text = text
@@ -27,7 +28,7 @@ module SignalAdapter
 
       def data
         {
-          number: Setting.signal_server_phone_number,
+          number: organization&.signal_server_phone_number || Setting.signal_server_phone_number,
           recipients: [recipient.signal_phone_number],
           message: text
         }

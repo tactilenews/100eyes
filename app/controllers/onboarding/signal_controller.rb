@@ -17,7 +17,7 @@ module Onboarding
     end
 
     def complete_onboarding(contributor)
-      SignalAdapter::CreateContactJob.perform_later(contributor)
+      SignalAdapter::CreateContactJob.perform_later(contributor, @organization)
     end
   end
 end

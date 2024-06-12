@@ -10,7 +10,8 @@ module SignalAdapter
         if message.files.present?
           SignalAdapter::Outbound::File.perform_later(message: message)
         else
-          SignalAdapter::Outbound::Text.perform_later(contributor_id: recipient.id, text: message.text)
+          SignalAdapter::Outbound::Text.perform_later(organization_id: message.request.organization.id, contributor_id: recipient.id,
+                                                      text: message.text)
         end
       end
 
