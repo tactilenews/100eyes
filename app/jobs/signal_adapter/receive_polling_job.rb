@@ -10,15 +10,15 @@ module SignalAdapter
       throw(:abort) unless queue_empty?
     end
 
-    # rubocop:disable Metrics/MethodLength
+    # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     def perform(*_args)
       return if signal_server_phone_number_not_configured?
 
       signal_messages = request_new_messages
       adapter = SignalAdapter::Inbound.new
 
-      adapter.on(SignalAdapter::CONNECT) do |contributor|
-        handle_connect(contributor)
+      adapter.on(SignalAdapter::CONNECT) do |contributor, organization|
+        handle_connect(contributor, organization)
       end
 
       adapter.on(SignalAdapter::UNKNOWN_CONTRIBUTOR) do |signal_phone_number|
@@ -50,12 +50,12 @@ module SignalAdapter
 
       ping_monitoring_service && return
     end
-    # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
     private
 
     def signal_server_phone_number_not_configured?
-      Organization.all? { |org| org.signal_server_phone_number.blank? } && Setting.signal_server_phone_number.blank?
+      Organization.all.all? { |org| org.signal_server_phone_number.blank? } && Setting.signal_server_phone_number.blank?
     end
 
     def request_new_messages
@@ -66,7 +66,7 @@ module SignalAdapter
         raise SignalAdapter::ServerError if res.instance_of?(Net::HTTPBadRequest)
 
         JSON.parse(res.body)
-      end
+      end.flatten
     end
 
     def ping_monitoring_service
@@ -80,9 +80,9 @@ module SignalAdapter
       Delayed::Job.where(queue: queue_name, failed_at: nil).none?
     end
 
-    def handle_connect(contributor)
+    def handle_connect(contributor, organization)
       contributor.update!(signal_onboarding_completed_at: Time.zone.now)
-      SignalAdapter::Outbound.send_welcome_message!(contributor)
+      SignalAdapter::Outbound.send_welcome_message!(contributor, organization)
       SignalAdapter::AttachContributorsAvatarJob.perform_later(contributor)
     end
 

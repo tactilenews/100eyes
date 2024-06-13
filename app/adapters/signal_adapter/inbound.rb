@@ -54,8 +54,11 @@ module SignalAdapter
     end
 
     def initialize_sender(signal_message)
+      organization = Organization.find_by(signal_server_phone_number: signal_message[:account])
+      return unless organization
+
       signal_phone_number = signal_message.dig(:envelope, :source)
-      sender = Contributor.find_by(signal_phone_number: signal_phone_number)
+      sender = organization.contributors.find_by(signal_phone_number: signal_phone_number)
 
       unless sender
         trigger(UNKNOWN_CONTRIBUTOR, signal_phone_number)
@@ -63,7 +66,7 @@ module SignalAdapter
       end
 
       if sender.signal_onboarding_completed_at.blank?
-        trigger(CONNECT, sender)
+        trigger(CONNECT, sender, organization)
         return nil
       end
 

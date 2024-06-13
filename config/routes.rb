@@ -31,7 +31,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     constraints Clearance::Constraints::SignedIn.new(&:admin?) do
-      root to: 'users#index'
+      root to: 'organizations#index'
 
       resources :users
       resources :contributors, only: %i[index show edit update destroy] do
@@ -94,6 +94,21 @@ Rails.application.routes.draw do
     get '/settings', to: 'organizations#index'
     patch '/settings', to: 'organizations#update'
 
+    constraints Clearance::Constraints::SignedIn.new(&:admin?) do
+      namespace :settings, module: nil do
+        scope :signal, module: :settings do
+          get '/', to: 'signal#edit', as: 'signal_server_phone_number'
+          patch '/', to: 'signal#update'
+          get '/register', to: 'signal#captcha_form'
+          post '/register', to: 'signal#register'
+          get '/verify', to: 'signal#verify_form'
+          post '/verify', to: 'signal#verify'
+        end
+      end
+    end
+
+    get '/requests/contributors-count', to: 'requests#contributors_count'
+
     namespace :threema do
       post '/webhook', to: 'webhook#message'
     end
@@ -105,8 +120,6 @@ Rails.application.routes.draw do
       get '/onboarding-successful', to: 'three_sixty_dialog_webhook#create_api_key'
       post '/three-sixty-dialog-webhook', to: 'three_sixty_dialog_webhook#message'
     end
-
-    telegram_webhook Telegram::WebhookController
 
     resources :requests, only: %i[index show new create edit update destroy], concerns: :paginatable do
       member do
@@ -121,10 +134,6 @@ Rails.application.routes.draw do
 
       member do
         post 'message'
-      end
-
-      collection do
-        get 'count'
       end
     end
 
