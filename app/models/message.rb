@@ -54,7 +54,7 @@ class Message < ApplicationRecord
   end
 
   def conversation_link
-    Rails.application.routes.url_helpers.contributor_request_path(id: request.id, contributor_id: contributor.id)
+    Rails.application.routes.url_helpers.contributor_request_path(request.organization, id: request.id, contributor_id: contributor.id)
   end
 
   def chat_message_link

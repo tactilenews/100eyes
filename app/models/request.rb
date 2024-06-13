@@ -8,7 +8,7 @@ class Request < ApplicationRecord
                   additional_attributes: ->(request) { { organization_id: request.organization_id } }
 
   belongs_to :user
-  acts_as_tenant :organization
+  belongs_to :organization
   has_many :messages, dependent: :destroy
   has_many :contributors, through: :messages, source: :recipient
   has_many :photos, through: :messages
@@ -70,7 +70,8 @@ class Request < ApplicationRecord
 
   def self.broadcast!(request)
     BroadcastRequestJob.delay(run_at: request.schedule_send_for).perform_later(request.id)
-    RequestScheduled.with(request_id: request.id, organization_id: request.organization.id).deliver_later(organization.users + User.all)
+    RequestScheduled.with(request_id: request.id,
+                          organization_id: request.organization.id).deliver_later(request.organization.users + User.all)
   end
 
   def self.attach_files(files)

@@ -16,6 +16,8 @@ class Organization < ApplicationRecord
   has_one_attached :onboarding_logo
   has_one_attached :onboarding_hero
 
+  phony_normalize :signal_server_phone_number, default_country_code: 'DE'
+
   def all_tags_with_count
     ActsAsTaggableOn::Tag
       .for_tenant(id)
