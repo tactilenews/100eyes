@@ -10,7 +10,7 @@ module SignalAdapter
       throw(:abort) unless queue_empty?
     end
 
-    # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+    # rubocop:disable Metrics/MethodLength
     def perform(*_args)
       return if signal_server_phone_number_not_configured?
 
@@ -50,7 +50,7 @@ module SignalAdapter
 
       ping_monitoring_service && return
     end
-    # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+    # rubocop:enable Metrics/MethodLength
 
     private
 
