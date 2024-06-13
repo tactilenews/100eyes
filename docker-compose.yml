@@ -23,7 +23,8 @@ services:
     depends_on: [ signal ]
 
   signal:
-    image: bbernhard/signal-cli-rest-api:0.81
+    # With 0.81 getting ProtocolInvalidKeyIdException after registering signal
+    image: bbernhard/signal-cli-rest-api:0.84
     environment:
       - MODE=native
         #- AUTO_RECEIVE_SCHEDULE=0 22 * * * #enable this parameter on demand (see description below)
