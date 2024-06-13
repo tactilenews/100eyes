@@ -9,8 +9,8 @@ class RequestsController < ApplicationController
 
   def index
     @filter = filter_param
-    @sent_requests_count = Request.broadcasted.count
-    @planned_requests_count = Request.planned.count
+    @sent_requests_count = @organization.requests.broadcasted.count
+    @planned_requests_count = @organization.requests.planned.count
     @requests = filtered_requests.page(params[:page])
   end
 
@@ -18,16 +18,17 @@ class RequestsController < ApplicationController
 
   def create
     resize_image_files if request_params[:files].present?
-    @request = Request.new(request_params.merge(user: current_user))
+    @request = @organization.requests.new(request_params.merge(user: current_user, organization: @organization))
     if @request.save
       if @request.planned?
         redirect_to requests_path(filter: :planned), flash: {
           success: I18n.t('request.schedule_request_success',
-                          count: Contributor.active.with_tags(@request.tag_list).count,
+                          count: @organization.contributors.active.with_tags(@request.tag_list).count,
                           scheduled_datetime: I18n.l(@request.schedule_send_for, format: :long))
         }
       else
-        redirect_to @request, flash: { success: I18n.t('request.success', count: @request.stats[:counts][:recipients]) }
+        redirect_to request_path(@organization, @request),
+                    flash: { success: I18n.t('request.success', count: @request.stats[:counts][:recipients]) }
       end
     else
       render :new, status: :unprocessable_entity
@@ -35,8 +36,8 @@ class RequestsController < ApplicationController
   end
 
   def new
-    @request = Request.new
-    @available_tags = current_user.organization.all_tags_with_count.to_json
+    @request = @organization.requests.new
+    @available_tags = @organization.all_tags_with_count.to_json
   end
 
   def edit; end
@@ -106,6 +107,10 @@ class RequestsController < ApplicationController
     render(InlineMetrics::InlineMetrics.new(metrics: metrics), content_type: 'text/html')
   end
 
+  def contributors_count
+    render json: { count: @organization.contributors.with_tags(params[:tag_list]).count }
+  end
+
   private
 
   def set_contributor
@@ -113,7 +118,7 @@ class RequestsController < ApplicationController
   end
 
   def set_request
-    @request = Request.find(params[:id])
+    @request = @organization.requests.find(params[:id])
   end
 
   def request_params
@@ -157,9 +162,9 @@ class RequestsController < ApplicationController
 
   def filtered_requests
     if @filter == :planned
-      Request.planned.reorder(schedule_send_for: :desc).includes(:tags)
+      @organization.requests.planned.reorder(schedule_send_for: :desc).includes(:tags)
     else
-      Request.broadcasted.includes(:tags)
+      @organization.requests.broadcasted.includes(:tags)
     end
   end
 end
