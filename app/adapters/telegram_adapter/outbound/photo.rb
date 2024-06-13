@@ -41,7 +41,7 @@ module TelegramAdapter
 
       def optional_caption(index)
         if message.text.length >= 1024
-          TelegramAdapter::Outbound::Text.perform_later(text: message.text, telegram_id: telegram_id, message: message)
+          TelegramAdapter::Outbound::Text.perform_later(text: message.text, contributor_id: message.recipient.id, message: message)
           ''
         else
           index.zero? ? message.text : ''
