@@ -2,18 +2,19 @@
 
 module ContributorQuickEditForm
   class ContributorQuickEditForm < ApplicationComponent
-    def initialize(contributor:)
+    def initialize(contributor:, organization:)
       super
 
       @contributor = contributor
+      @organization = organization
     end
 
     private
 
-    attr_reader :contributor
+    attr_reader :contributor, :organization
 
     def available_tags
-      contributor.organization.all_tags_with_count.to_json
+      organization.all_tags_with_count.to_json
     end
   end
 end
