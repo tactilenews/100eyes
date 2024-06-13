@@ -80,8 +80,6 @@ GEM
       zeitwerk (~> 2.3)
     acts-as-taggable-on (9.0.1)
       activerecord (>= 6.0, < 7.1)
-    acts_as_tenant (1.0.1)
-      rails (>= 6.0)
     addressable (2.8.1)
       public_suffix (>= 2.0.2, < 6.0)
     administrate (0.18.0)
@@ -441,7 +439,6 @@ DEPENDENCIES
   active_model_otp
   activestorage-validator (~> 0.2.2)
   acts-as-taggable-on
-  acts_as_tenant
   administrate
   administrate_exportable
   bootsnap (>= 1.4.2)

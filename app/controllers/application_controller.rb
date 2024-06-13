@@ -3,7 +3,6 @@
 class ApplicationController < ActionController::Base
   include Clearance::Controller
   before_action :require_login, :require_otp_setup
-  set_current_tenant_through_filter
   before_action :set_organization
 
   def require_otp_setup
@@ -39,8 +38,6 @@ class ApplicationController < ActionController::Base
     @organization = Organization.friendly.find(params[:organization_slug]) || Organization.first
 
     raise ActionController::RoutingError, 'Not Found' unless current_user.admin? || @organization.eql?(current_user.organization)
-
-    set_current_tenant(@organization)
   rescue ActiveRecord::RecordNotFound
     raise ActionController::RoutingError, 'Not Found'
   end

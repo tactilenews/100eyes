@@ -96,6 +96,3 @@ gem 'kaminari', '~> 1.2'
 
 # Slugged routes
 gem 'friendly_id'
-
-# Multi-tenancy
-gem 'acts_as_tenant'
