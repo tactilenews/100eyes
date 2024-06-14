@@ -38,6 +38,19 @@ RSpec.describe '/contributors', type: :request do
     end
   end
 
+  describe 'GET /conversations' do
+    it 'returns the conversation of the contributor' do
+      received_message = create(:message, text: 'the received message', recipient: contributor,
+                                          request: the_request)
+      sent_message = create(:message, text: 'the sent message', request: the_request, sender: contributor)
+      get conversations_contributor_path(contributor, as: user)
+      expect(response).to be_successful
+      parsed = Capybara::Node::Simple.new(response.body)
+      expect(parsed).to have_text(received_message.text)
+      expect(parsed).to have_text(sent_message.text)
+    end
+  end
+
   describe 'PATCH /update' do
     let(:new_attrs) do
       {
@@ -68,6 +81,10 @@ RSpec.describe '/contributors', type: :request do
       expect(contributor.email).to eq('zora@example.org')
       expect(contributor.additional_email).to eq('zora@zimmermann.de')
       expect(contributor.tag_list).to match_array(%w[programmer student])
+    end
+
+    it 'does not update the deactivated_by_user_id' do
+      expect { subject.call }.not_to(change { contributor.reload.deactivated_by_user_id })
     end
 
     context 'removing tags' do
@@ -201,13 +218,7 @@ RSpec.describe '/contributors', type: :request do
           let(:newest_message) { Message.reorder(created_at: :desc).first }
           it do
             expect(response)
-              .to redirect_to(
-                contributor_request_path(
-                  contributor_id: contributor.id,
-                  id: the_request.id,
-                  anchor: "message-#{newest_message.id}"
-                )
-              )
+              .to redirect_to(newest_message.chat_message_link)
           end
         end
       end

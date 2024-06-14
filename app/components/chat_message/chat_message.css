@@ -4,6 +4,7 @@
   padding: var(--spacing-unit-s);
   border-radius: var(--border-radius-l);
   border: 1px solid transparent;
+  font-size: var(--font-size-s);
 }
 
 .ChatMessage:target {
@@ -11,8 +12,7 @@
   box-shadow: var(--input-focus-shadow);
 }
 
-.ChatMessage-header {
-  display: flex;
+.ChatMessage-body {
   position: relative;
 }
 
@@ -61,9 +61,28 @@
   width: 5em;
 }
 
+.ChatMessage-header {
+  display: block;
+  margin-bottom: var(--spacing-unit-s);
+  color: var(--color-text-light);
+}
+
+.ChatMessagesGroup-messages .ChatMessage-requestReference {
+  display: none;
+}
+
+.ChatMessage:hover .ChatMessage-header a {
+  text-decoration: underline;
+}
+
 .ChatMessage-footer {
   margin-top: var(--spacing-unit-s);
   color: var(--color-text-light);
+  visibility: hidden;
+}
+
+.ChatMessage:hover .ChatMessage-footer {
+  visibility: visible;
 }
 
 .ChatMessage-footer .Button {

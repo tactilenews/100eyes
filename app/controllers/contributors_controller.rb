@@ -1,12 +1,17 @@
 # frozen_string_literal: true
 
 class ContributorsController < ApplicationController
-  before_action :set_contributor, only: %i[update destroy show edit message]
+  before_action :set_contributor, only: %i[update destroy show edit message conversations]
   before_action :contributors_sidebar, only: %i[show update]
   before_action :contributors_params, only: :index
 
   def message
-    request = contributor.active_request
+    request = if message_params[:reply_to_id].present?
+                reply_to = contributor.replies.find(message_params[:reply_to_id])
+                reply_to.request
+              else
+                contributor.active_request
+              end
     render(plain: 'No active request for this contributor', status: :bad_request) and return unless request
 
     text = message_params[:text]
@@ -35,7 +40,7 @@ class ContributorsController < ApplicationController
 
   def update
     @contributor.editor_guarantees_data_consent = true
-    @contributor.deactivated_by_user = deactivate_by_user_state
+    toggle_active_state if toggle_active_state_params[:active]
 
     if @contributor.update(contributor_params)
       redirect_to contributor_url, flash: { success: I18n.t('contributor.saved', name: @contributor.name) }
@@ -51,6 +56,11 @@ class ContributorsController < ApplicationController
     redirect_to contributors_url, notice: I18n.t('contributor.destroyed', name: @contributor.name)
   end
 
+  def conversations
+    @messages = @contributor.conversations.includes(%i[files photos request recipient sender])
+    @reply_to = @contributor.replies.find(params[:reply_to]) if params[:reply_to].present?
+  end
+
   private
 
   def set_contributor
@@ -64,17 +74,29 @@ class ContributorsController < ApplicationController
                                            .with_attached_avatar
   end
 
+  def toggle_active_state
+    if ActiveModel::Type::Boolean.new.cast(toggle_active_state_params[:active])
+      @contributor.reactivate!
+    else
+      @contributor.deactivate!(user_id: current_user.id)
+    end
+  end
+
   def contributors_params
     params.permit(:state, :page, tag_list: [])
   end
 
   def contributor_params
     params.require(:contributor).permit(:note, :first_name, :last_name, :avatar, :email, :threema_id, :phone, :zip_code, :city, :tag_list,
-                                        :active, :additional_email)
+                                        :additional_email)
+  end
+
+  def toggle_active_state_params
+    params.require(:contributor).permit(:active)
   end
 
   def message_params
-    params.require(:message).permit(:text)
+    params.require(:message).permit(:text, :reply_to_id)
   end
 
   def state_params
@@ -112,10 +134,6 @@ class ContributorsController < ApplicationController
     # as displaying an invalid avatar will result in rendering errors.
     old_avatar = @organization.contributors.with_attached_avatar.find(@contributor.id).avatar
     contributor.avatar = old_avatar.blob
-  end
-
-  def deactivate_by_user_state
-    ActiveModel::Type::Boolean.new.cast(contributor_params[:active]) ? nil : current_user
   end
 
   attr_reader :contributor

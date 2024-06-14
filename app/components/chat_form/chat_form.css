@@ -4,6 +4,11 @@
   align-items: flex-end;
 }
 
+.ChatForm h3 {
+  align-self: flex-start;
+  padding: var(--spacing-unit-s) 0;
+}
+
 .ChatForm > button {
   margin-top: var(--spacing-unit);
 }

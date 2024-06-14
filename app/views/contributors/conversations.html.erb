@@ -1,0 +1,16 @@
+<%= c 'main' do %>
+  <%= c 'page_header', styles: [:largeMarginBottom, :flexboxColumn] do %>
+    <%= c 'contributor_header', contributor: @contributor %>
+    <%= c 'flex', style: :small_gap do %>
+      <% if @contributor.tags.any? %>
+        <%= c 'tags_list', tags: @contributor.tags %>
+      <% end %>
+    <% end %>
+  <% end %>
+  <%= c 'section', style: :xlargeSpaceBetween do %>
+    <%= c 'contributor_metrics', contributor_for_info: @contributor, style: :cards %>
+    <h2><%= t('.heading', name: @contributor.name ) %></h2>
+      <%= c 'chat_messages', messages: @messages, styles: [:compact] %>
+      <%= c 'chat_form', contributor: @contributor, reply_to: @reply_to %>
+  <% end %>
+<% end %>

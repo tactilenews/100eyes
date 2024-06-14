@@ -5,8 +5,7 @@ require 'rails_helper'
 RSpec.describe ContributorStatusToggle::ContributorStatusToggle, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
-  let(:contributor) { create(:contributor, active: active) }
-  let(:active) { true }
+  let(:contributor) { create(:contributor) }
   let(:deactivated_by) { nil }
   let(:params) { { contributor: contributor, deactivated_by: deactivated_by } }
 
@@ -20,7 +19,7 @@ RSpec.describe ContributorStatusToggle::ContributorStatusToggle, type: :componen
   end
 
   context 'given an inactive contributor' do
-    let(:active) { false }
+    let!(:contributor) { create(:contributor, :inactive) }
 
     it { should have_css('input[type="hidden"][value="on"]', visible: false) }
     it { should have_css('h2', text: 'Mitglied reaktivieren') }
@@ -32,6 +31,19 @@ RSpec.describe ContributorStatusToggle::ContributorStatusToggle, type: :componen
       before { contributor.update(deactivated_by_user_id: deactivated_by.id) }
 
       it { should have_css('strong', text: deactivated_by.name) }
+    end
+
+    context 'marked inactive by an admin' do
+      let(:deactivated_by) { create(:user, admin: true) }
+      before { contributor.update(deactivated_by_user_id: deactivated_by.id, deactivated_by_admin: true) }
+
+      it 'does not display admin name' do
+        expect(subject).not_to have_css('strong', text: deactivated_by.name)
+      end
+
+      it "displays 'Admin' to make clear it was deactivated by and admin" do
+        expect(subject).to have_css('strong', text: 'Admin')
+      end
     end
 
     context 'through WhatsApp who requested to unsubscribe' do

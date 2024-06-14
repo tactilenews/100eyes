@@ -92,6 +92,13 @@ class Contributor < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
+  def conversations
+    Message
+      .where(recipient: self)
+      .or(Message.where(sender: self))
+      .reorder(created_at: :asc)
+  end
+
   def conversation_about(request)
     Message
       .where(request: request, sender: self)
@@ -104,7 +111,9 @@ class Contributor < ApplicationRecord
   end
 
   def active_request
-    received_requests.first || Request.broadcasted.first
+    # active_request is always the request of the contributors last received message or the last broadcasted request
+    # (first has to be used as the default order of messages and request is set to created_at desc)
+    received_messages.first&.request || Request.broadcasted.first
   end
 
   def telegram?
@@ -136,14 +145,14 @@ class Contributor < ApplicationRecord
   end
 
   def recent_replies
-    result = replies.includes(:request).reorder(created_at: :desc)
+    result = replies.includes(:recipient, :request).reorder(created_at: :desc)
     result = result.group_by(&:request).values # array or groups
     result = result.map(&:first) # choose most recent message per group
     result.sort_by(&:created_at).reverse # ensure descending order
   end
 
   def active?
-    deactivated_at.nil?
+    deactivated_at.nil? && unsubscribed_at.nil?
   end
 
   alias active active?
@@ -165,8 +174,19 @@ class Contributor < ApplicationRecord
     avatar.attach(io: remote_file_location.open, filename: File.basename(remote_file_location.path))
   end
 
-  def active=(value)
-    self.deactivated_at = ActiveModel::Type::Boolean.new.cast(value) ? nil : Time.current
+  def deactivate!(user_id: nil, admin: false)
+    self.deactivated_by_admin = admin
+    update!(deactivated_at: Time.current, deactivated_by_user_id: user_id)
+  end
+
+  def reactivate!
+    return if active?
+
+    update!(
+      deactivated_at: nil,
+      deactivated_by_user_id: nil,
+      deactivated_by_admin: false
+    )
   end
 
   def data_processing_consent=(value)
@@ -188,6 +208,16 @@ class Contributor < ApplicationRecord
   end
 
   alias additional_consent additional_consent?
+
+  def stats
+    {
+      counts: {
+        received_requests: received_requests.select(:request_id).distinct.count,
+        replied_to_requests: replied_to_requests.select(:request_id).distinct.count,
+        replies: replies.count
+      }
+    }
+  end
 
   private
 

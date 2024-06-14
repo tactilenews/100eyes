@@ -26,7 +26,3 @@
 .ChatMessagesGroup-actions > * + * {
   margin-left: var(--spacing-unit-s);
 }
-
-.ChatMessagesGroup-messages {
-  font-size: var(--font-size-s);
-}

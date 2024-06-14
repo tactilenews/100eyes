@@ -332,6 +332,40 @@ RSpec.describe Contributor, type: :model do
     end
   end
 
+  describe '#conversations' do
+    let(:received_message)  do
+      create(:message, text: 'Message with the contributor as recipient', recipient: contributor)
+    end
+    let(:sent_message) do
+      create(:message, sender: contributor)
+    end
+    it 'includes messages received by the contributor' do
+      received_message
+      expect(contributor.conversations).to include(received_message)
+    end
+
+    it 'includes messages sent by the contributor' do
+      sent_message
+      expect(contributor.conversations).to include(sent_message)
+    end
+
+    it 'sorts the messages so that the oldest first' do
+      received_message
+      sent_message
+      expect(contributor.conversations.first).to eql(received_message)
+      expect(contributor.conversations.last).to eql(sent_message)
+    end
+
+    it 'does not include messages not being sent or received by the contributor' do
+      other_contributor = create(:contributor)
+      received_message = create(:message, text: 'Message with the contributor as recipient', recipient: other_contributor,
+                                          request: the_request)
+      sent_message = create(:message, request: the_request, sender: other_contributor)
+      expect(contributor.conversations).not_to include(sent_message)
+      expect(contributor.conversations).not_to include(received_message)
+    end
+  end
+
   describe '#conversation_about' do
     subject { contributor.conversation_about(the_request) }
 
@@ -548,19 +582,28 @@ RSpec.describe Contributor, type: :model do
 
     describe 'when many requests are sent to the contributor' do
       before(:each) do
-        another_request = create(:request, broadcasted_at: 1.day.ago)
-        create(:message, request: the_request, recipient: contributor)
-        create(:message, request: another_request, recipient: contributor)
+        previous_request = create(:request, broadcasted_at: 1.day.ago)
+        create(:message, request: the_request, recipient: contributor, created_at: the_request.broadcasted_at)
+        create(:message, request: previous_request, recipient: contributor, created_at: previous_request.broadcasted_at)
       end
 
       it { should eq(the_request) }
     end
 
+    describe 'when most recently a direct message is sent out belonging to a previous request' do
+      let(:previous_request) { create(:request, broadcasted_at: 1.day.ago) }
+      before(:each) do
+        create(:message, request: the_request, recipient: contributor, created_at: the_request.broadcasted_at)
+        create(:message, request: previous_request, recipient: contributor)
+      end
+
+      it { should eq(previous_request) }
+    end
+
     describe 'when there is a planned request' do
       before(:each) do
-        planned_request = create(:request, broadcasted_at: nil, schedule_send_for: 1.day.from_now)
+        create(:request, broadcasted_at: nil, schedule_send_for: 1.day.from_now)
         create(:message, request: the_request, recipient: contributor)
-        create(:message, request: planned_request, recipient: contributor)
       end
 
       it { should eq(the_request) }
@@ -667,6 +710,14 @@ RSpec.describe Contributor, type: :model do
       let(:contributor) { create(:contributor, deactivated_at: 1.day.ago) }
       it { should be(false) }
     end
+
+    describe 'given "unsubscribed_at" timestamp' do
+      let(:contributor) { create(:contributor, unsubscribed_at: 1.day.ago) }
+
+      it 'should return false' do
+        expect(subject).to be(false)
+      end
+    end
   end
 
   describe '.inactive' do
@@ -680,24 +731,42 @@ RSpec.describe Contributor, type: :model do
     end
   end
 
-  describe '.active=' do
-    describe 'given active contributor' do
-      let(:contributor) { create(:contributor, deactivated_at: nil) }
-      describe 'false' do
-        it { expect { contributor.active = false }.to change { contributor.deactivated_at.is_a?(ActiveSupport::TimeWithZone) }.to(true) }
-        it { expect { contributor.active = false }.to change { contributor.active? }.to(false) }
-        it { expect { contributor.active = '0' }.to change { contributor.active? }.to(false) }
-        it { expect { contributor.active = 'off' }.to change { contributor.active? }.to(false) }
+  describe '.deactivate!(user_id:, admin: false)' do
+    describe 'given an active contributor' do
+      subject { contributor.deactivate!(user_id: user.id) }
+      let(:contributor) { create(:contributor) }
+      let(:user) { create(:user) }
+
+      it 'deactivates the contributor' do
+        expect { subject }.to change { contributor.reload.deactivated_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+      end
+
+      it 'sets the deactivated_by_user_id to user_id' do
+        expect { subject }.to change { contributor.reload.deactivated_by_user_id }.from(nil).to(user.id)
+      end
+    end
+  end
+
+  describe '.reactivate!' do
+    subject { contributor.reactivate! }
+
+    describe 'given a deactivated contributor' do
+      let(:contributor) { create(:contributor, deactivated_at: 1.day.ago) }
+
+      it 'reactivates the contributor' do
+        expect { subject }.to change { contributor.reload.deactivated_at }.from(kind_of(ActiveSupport::TimeWithZone)).to(nil)
       end
     end
 
-    describe 'given deactivated contributor' do
-      let(:contributor) { create(:contributor, deactivated_at: 1.day.ago) }
-      describe 'true' do
-        it { expect { contributor.active = true }.to change { contributor.deactivated_at.is_a?(ActiveSupport::TimeWithZone) }.to(false) }
-        it { expect { contributor.active = true }.to change { contributor.active? }.to(true) }
-        it { expect { contributor.active = '1' }.to change { contributor.active? }.to(true) }
-        it { expect { contributor.active = 'on' }.to change { contributor.active? }.to(true) }
+    describe 'given a deactivated contributor by a user' do
+      let(:contributor) { create(:contributor, deactivated_at: 1.day.ago, deactivated_by_user: user) }
+      let(:user) { create(:user) }
+
+      it 'reactivates the contributor, keeping attrs in sync' do
+        expect { subject }.to change { contributor.reload.deactivated_at }.from(kind_of(ActiveSupport::TimeWithZone)).to(nil)
+                                                                          .and change {
+                                                                                 contributor.reload.deactivated_by_user_id
+                                                                               }.from(user.id).to(nil)
       end
     end
   end

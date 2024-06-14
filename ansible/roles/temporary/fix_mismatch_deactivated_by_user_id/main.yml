@@ -1,0 +1,5 @@
+---
+- name: Data manipulation to update Setting channels structure
+  command:
+    cmd: docker compose -f docker-compose.yml -f docker-compose.prod.yml exec app bin/rails contributors:fix_mismatch_deactivated_by_user_id
+    chdir: /home/ansible
