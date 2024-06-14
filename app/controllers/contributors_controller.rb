@@ -41,7 +41,7 @@ class ContributorsController < ApplicationController
 
   def update
     @contributor.editor_guarantees_data_consent = true
-    @contributor.deactivated_by_user = deactivate_by_user_state
+    toggle_active_state if toggle_active_state_params[:active]
 
     if @contributor.update(contributor_params)
       redirect_to contributor_url, flash: { success: I18n.t('contributor.saved', name: @contributor.name) }
@@ -79,13 +79,25 @@ class ContributorsController < ApplicationController
                               .with_attached_avatar
   end
 
+  def toggle_active_state
+    if ActiveModel::Type::Boolean.new.cast(toggle_active_state_params[:active])
+      @contributor.reactivate!
+    else
+      @contributor.deactivate!(user_id: current_user.id)
+    end
+  end
+
   def contributors_params
     params.permit(:state, :page, tag_list: [])
   end
 
   def contributor_params
     params.require(:contributor).permit(:note, :first_name, :last_name, :avatar, :email, :threema_id, :phone, :zip_code, :city, :tag_list,
-                                        :active, :additional_email)
+                                        :additional_email)
+  end
+
+  def toggle_active_state_params
+    params.require(:contributor).permit(:active)
   end
 
   def message_params
@@ -131,10 +143,6 @@ class ContributorsController < ApplicationController
     # as displaying an invalid avatar will result in rendering errors.
     old_avatar = Contributor.with_attached_avatar.find(@contributor.id).avatar
     contributor.avatar = old_avatar.blob
-  end
-
-  def deactivate_by_user_state
-    ActiveModel::Type::Boolean.new.cast(contributor_params[:active]) ? nil : current_user
   end
 
   attr_reader :contributor

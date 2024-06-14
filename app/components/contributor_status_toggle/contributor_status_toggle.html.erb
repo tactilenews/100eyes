@@ -19,7 +19,7 @@
         <%= t('.inactive.heading') %>
       <% end %>
 
-      <% if contributor.deactivated_by_user.present? %>
+      <% if contributor.deactivated_by_user.present? && !contributor.deactivated_by_user.admin? %>
         <p>
           <%= t('.inactive.text',
                  name: contributor.name,

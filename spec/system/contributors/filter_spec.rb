@@ -4,9 +4,9 @@ require 'rails_helper'
 
 RSpec.describe 'Filter contributors' do
   let(:user) { create(:user) }
-  let!(:active_contributor) { create(:contributor, active: true, tag_list: ['entwickler']) }
-  let!(:inactive_contributor) { create(:contributor, active: false, tag_list: ['entwickler']) }
-  let!(:another_contributor) { create(:contributor, active: true) }
+  let!(:active_contributor) { create(:contributor, tag_list: ['entwickler']) }
+  let!(:inactive_contributor) { create(:contributor, :inactive, tag_list: ['entwickler']) }
+  let!(:another_contributor) { create(:contributor) }
 
   it 'Editor lists contributors' do
     visit contributors_path(as: user)

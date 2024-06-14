@@ -8,6 +8,10 @@ FactoryBot.define do
     data_processing_consent { true }
     email { Faker::Internet.email }
 
+    trait :inactive do
+      deactivated_at { Time.current }
+    end
+
     trait :with_an_avatar do
       after(:build) do |contributor|
         contributor.avatar.attach(
