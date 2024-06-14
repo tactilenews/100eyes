@@ -74,8 +74,6 @@ module SignalAdapter
     end
 
     def handle_connect(contributor)
-      contributor.update!(signal_onboarding_completed_at: Time.zone.now)
-      SignalAdapter::Outbound.send_welcome_message!(contributor)
       SignalAdapter::AttachContributorsAvatarJob.perform_later(contributor)
     end
 

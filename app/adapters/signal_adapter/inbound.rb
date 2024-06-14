@@ -62,10 +62,7 @@ module SignalAdapter
         return nil
       end
 
-      if sender.signal_onboarding_completed_at.blank?
-        trigger(CONNECT, sender)
-        return nil
-      end
+      trigger(CONNECT, sender) if sender.replies.blank?
 
       sender
     end
