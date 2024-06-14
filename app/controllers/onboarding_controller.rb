@@ -29,7 +29,7 @@ class OnboardingController < ApplicationController
 
     if @contributor.save
       complete_onboarding(@contributor)
-      @contributor.send_welcome_message!
+      @contributor.send_welcome_message!(@organization)
       redirect_to_success
     else
       render :show, status: :unprocessable_entity

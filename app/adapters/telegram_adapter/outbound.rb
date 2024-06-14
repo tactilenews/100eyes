@@ -20,7 +20,7 @@ module TelegramAdapter
         end
       end
 
-      def send_welcome_message!(contributor)
+      def send_welcome_message!(contributor, _organization)
         return unless contributor&.telegram_id
 
         welcome_message = ["<b>#{Setting.onboarding_success_heading}</b>", Setting.onboarding_success_text].join("\n")

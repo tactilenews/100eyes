@@ -20,8 +20,9 @@ class ResubscribeContributorJob < ApplicationJob
     end
 
     contributor.update!(unsubscribed_at: nil)
-    adapter.send_welcome_message!(contributor)
+    # TODO: Refactor to pass organization into job
     organization = contributor.organization
+    adapter.send_welcome_message!(contributor, organization)
     ContributorSubscribed.with(
       contributor_id: contributor.id,
       organization_id: organization.id
