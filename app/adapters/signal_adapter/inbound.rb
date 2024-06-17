@@ -7,12 +7,13 @@ module SignalAdapter
   UNSUBSCRIBE_CONTRIBUTOR = :unsubscribe_contributor
   RESUBSCRIBE_CONTRIBUTOR = :resubscribe_contributor
   HANDLE_DELIVERY_RECEIPT = :handle_delivery_receipt
+  UNKNOWN_ORGANIZATION = :unknown_organization
 
   class Inbound
     UNKNOWN_CONTENT_KEYS = %w[mentions contacts sticker].freeze
     SUPPORTED_ATTACHMENT_TYPES = %w[image/jpg image/jpeg image/png image/gif audio/oog audio/aac audio/mp4 audio/mpeg video/mp4].freeze
 
-    attr_reader :sender, :text, :message
+    attr_reader :sender, :text, :message, :organization
 
     def initialize
       @callbacks = {}
@@ -24,6 +25,9 @@ module SignalAdapter
 
     def consume(signal_message)
       signal_message = signal_message.with_indifferent_access
+
+      @organization = initialize_organization(signal_message)
+      return unless organization
 
       @sender = initialize_sender(signal_message)
       return unless @sender
@@ -53,10 +57,19 @@ module SignalAdapter
       @callbacks[event].call(*args)
     end
 
-    def initialize_sender(signal_message)
-      organization = Organization.find_by(signal_server_phone_number: signal_message[:account])
-      return unless organization
+    def initialize_organization(signal_message)
+      signal_server_phone_number = signal_message[:account]
+      organization = Organization.find_by(signal_server_phone_number: signal_server_phone_number)
 
+      unless organization
+        trigger(UNKNOWN_ORGANIZATION, signal_server_phone_number)
+        nil
+      end
+
+      organization
+    end
+
+    def initialize_sender(signal_message)
       signal_phone_number = signal_message.dig(:envelope, :source)
       sender = organization.contributors.find_by(signal_phone_number: signal_phone_number)
 

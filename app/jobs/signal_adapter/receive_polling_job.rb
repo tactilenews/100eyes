@@ -17,13 +17,16 @@ module SignalAdapter
       signal_messages = request_new_messages
       adapter = SignalAdapter::Inbound.new
 
+      adapter.on(SignalAdapter::UNKNOWN_ORGANIZATION) do |signal_server_phone_number|
+        handle_unknown_organization(signal_server_phone_number)
+      end
+
       adapter.on(SignalAdapter::CONNECT) do |contributor, organization|
         handle_connect(contributor, organization)
       end
 
       adapter.on(SignalAdapter::UNKNOWN_CONTRIBUTOR) do |signal_phone_number|
-        exception = SignalAdapter::UnknownContributorError.new(signal_phone_number: signal_phone_number)
-        ErrorNotifier.report(exception)
+        handle_unknown_contributor(signal_phone_number)
       end
 
       adapter.on(SignalAdapter::UNKNOWN_CONTENT) do |contributor|
@@ -93,6 +96,16 @@ module SignalAdapter
 
       latest_received_message.update(received_at: datetime) if delivery_receipt[:isDelivery]
       latest_received_message.update(read_at: datetime) if delivery_receipt[:isRead]
+    end
+
+    def handle_unknown_contributor(signal_phone_number)
+      exception = SignalAdapter::UnknownContributorError.new(signal_phone_number: signal_phone_number)
+      ErrorNotifier.report(exception)
+    end
+
+    def handle_unknown_organization(signal_server_phone_number)
+      exception = SignalAdapter::UnknownOrganizationError.new(signal_server_phone_number: signal_server_phone_number)
+      ErrorNotifier.report(exception)
     end
   end
 end
