@@ -21,7 +21,7 @@ module Admin
     def update_params
       params.permit(:id,
                     organization: %i[id business_plan_id upgrade_discount contact_person_id name telegram_bot_api_key
-                                     telegram_bot_username])
+                                     telegram_bot_username whats_app_server_phone_number])
     end
   end
 end

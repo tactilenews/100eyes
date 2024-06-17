@@ -16,7 +16,8 @@ class OrganizationDashboard < Administrate::BaseDashboard
     upgraded_business_plan_at: Field::DateTime,
     telegram_bot_api_key: Field::String,
     telegram_bot_username: Field::String,
-    slug: OrganizationLinkField
+    slug: OrganizationLinkField,
+    whats_app_server_phone_number: Field::String
   }.freeze
 
   COLLECTION_ATTRIBUTES = %i[
@@ -28,6 +29,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
     users
     upgraded_business_plan_at
     slug
+    whats_app_server_phone_number
   ].freeze
 
   SHOW_PAGE_ATTRIBUTES = %i[
@@ -39,6 +41,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
     created_at
     updated_at
     upgraded_business_plan_at
+    whats_app_server_phone_number
   ].freeze
 
   FORM_ATTRIBUTES = %i[
@@ -48,6 +51,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
     name
     telegram_bot_api_key
     telegram_bot_username
+    whats_app_server_phone_number
   ].freeze
 
   COLLECTION_FILTERS = {}.freeze

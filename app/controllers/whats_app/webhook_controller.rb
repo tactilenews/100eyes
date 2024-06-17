@@ -11,34 +11,13 @@ module WhatsApp
     SUCCESSFUL_DELIVERY = %w[delivered read].freeze
     INVALID_MESSAGE_RECIPIENT_ERROR_CODE = 63_024 # https://www.twilio.com/docs/api/errors/63024
     FREEFORM_MESSAGE_NOT_ALLOWED_ERROR_CODE = 63_016 # https://www.twilio.com/docs/api/errors/63016
+    attr_reader :adapter
 
     def message
       head :ok
-      adapter = WhatsAppAdapter::TwilioInbound.new
+      @adapter = WhatsAppAdapter::TwilioInbound.new
 
-      adapter.on(WhatsAppAdapter::TwilioInbound::UNKNOWN_CONTRIBUTOR) do |whats_app_phone_number|
-        handle_unknown_contributor(whats_app_phone_number)
-      end
-
-      adapter.on(WhatsAppAdapter::TwilioInbound::REQUEST_FOR_MORE_INFO) do |contributor|
-        handle_request_for_more_info(contributor)
-      end
-
-      adapter.on(WhatsAppAdapter::TwilioInbound::REQUEST_TO_RECEIVE_MESSAGE) do |contributor, twilio_message_sid|
-        handle_request_to_receive_message(contributor, twilio_message_sid)
-      end
-
-      adapter.on(WhatsAppAdapter::TwilioInbound::UNSUPPORTED_CONTENT) do |contributor|
-        WhatsAppAdapter::TwilioOutbound.send_unsupported_content_message!(contributor)
-      end
-
-      adapter.on(WhatsAppAdapter::TwilioInbound::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
-        UnsubscribeContributorJob.perform_later(contributor.id, WhatsAppAdapter::Outbound)
-      end
-
-      adapter.on(WhatsAppAdapter::TwilioInbound::RESUBSCRIBE_CONTRIBUTOR) do |contributor|
-        ResubscribeContributorJob.perform_later(contributor.id, WhatsAppAdapter::Outbound)
-      end
+      handle_callbacks
 
       whats_app_message_params = message_params.to_h.transform_keys(&:underscore)
       adapter.consume(whats_app_message_params) { |message| message.contributor.reply(adapter) }
@@ -73,7 +52,7 @@ module WhatsApp
 
     def message_params
       params.permit(:AccountSid, :ApiVersion, :Body, :ButtonText, :ButtonPayload, :From, :Latitude, :Longitude,
-                    :MediaContentType0, :MediaUrl0, :MessageSid, :NumMedia, :NumSegments,
+                    :MediaContentType0, :MediaUrl0, :MessageSid, :MessageType, :NumMedia, :NumSegments,
                     :OriginalRepliedMessageSender, :OriginalRepliedMessageSid, :ProfileName,
                     :ReferralNumMedia, :SmsMessageSid, :SmsSid, :SmsStatus, :To, :WaId)
     end
@@ -90,6 +69,41 @@ module WhatsApp
     def set_contributor
       whats_app_phone_number = status_params['To'].split('whatsapp:').last
       @contributor = Contributor.find_by(whats_app_phone_number: whats_app_phone_number)
+    end
+
+    def handle_callbacks
+      adapter.on(WhatsAppAdapter::TwilioInbound::UNKNOWN_ORGANIZATION) do |whats_app_server_phone_number|
+        handle_unknown_organization(whats_app_server_phone_number)
+      end
+
+      adapter.on(WhatsAppAdapter::TwilioInbound::UNKNOWN_CONTRIBUTOR) do |whats_app_phone_number|
+        handle_unknown_contributor(whats_app_phone_number)
+      end
+
+      adapter.on(WhatsAppAdapter::TwilioInbound::REQUEST_FOR_MORE_INFO) do |contributor, organization|
+        WhatsAppAdapter::TwilioOutbound.send_more_info_message!(contributor, organization)
+      end
+
+      adapter.on(WhatsAppAdapter::TwilioInbound::REQUEST_TO_RECEIVE_MESSAGE) do |contributor, twilio_message_sid|
+        handle_request_to_receive_message(contributor, twilio_message_sid)
+      end
+
+      adapter.on(WhatsAppAdapter::TwilioInbound::UNSUPPORTED_CONTENT) do |contributor, organization|
+        WhatsAppAdapter::TwilioOutbound.send_unsupported_content_message!(contributor, organization)
+      end
+
+      adapter.on(WhatsAppAdapter::TwilioInbound::UNSUBSCRIBE_CONTRIBUTOR) do |contributor, organization|
+        UnsubscribeContributorJob.perform_later(organization.id, contributor.id, WhatsAppAdapter::Outbound)
+      end
+
+      adapter.on(WhatsAppAdapter::TwilioInbound::RESUBSCRIBE_CONTRIBUTOR) do |contributor, organization|
+        ResubscribeContributorJob.perform_later(organization.id, contributor.id, WhatsAppAdapter::Outbound)
+      end
+    end
+
+    def handle_unknown_organization(whats_app_server_phone_number)
+      exception = WhatsAppAdapter::UnknownOrganizationError.new(whats_app_server_phone_number: whats_app_server_phone_number)
+      ErrorNotifier.report(exception)
     end
 
     def handle_unknown_contributor(whats_app_phone_number)

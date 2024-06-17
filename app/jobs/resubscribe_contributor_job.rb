@@ -5,8 +5,11 @@ class ResubscribeContributorJob < ApplicationJob
 
   class ResubscribeError < StandardError; end
 
-  def perform(contributor_id, adapter)
-    contributor = Contributor.find_by(id: contributor_id)
+  def perform(organization_id, contributor_id, adapter)
+    organization = Organization.find_by(id: organization_id)
+    return unless organization
+
+    contributor = organization.contributors.find_by(id: contributor_id)
     return unless contributor
 
     if contributor.deactivated_by_user.present? || contributor.deactivated_by_admin?

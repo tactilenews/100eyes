@@ -16,6 +16,12 @@ Rails.application.routes.draw do
 
   telegram_webhook Telegram::WebhookController
 
+  namespace :whats_app do
+    post '/webhook', to: 'webhook#message'
+    post '/errors', to: 'webhook#errors'
+    post '/status', to: 'webhook#status'
+  end
+
   if Organization.table_exists?
     Organization.find_each do |organization|
       telegram_webhook Telegram::WebhookController, organization.slug.underscore.to_sym
@@ -114,9 +120,6 @@ Rails.application.routes.draw do
     end
 
     namespace :whats_app do
-      post '/webhook', to: 'webhook#message'
-      post '/errors', to: 'webhook#errors'
-      post '/status', to: 'webhook#status'
       get '/onboarding-successful', to: 'three_sixty_dialog_webhook#create_api_key'
       post '/three-sixty-dialog-webhook', to: 'three_sixty_dialog_webhook#message'
     end

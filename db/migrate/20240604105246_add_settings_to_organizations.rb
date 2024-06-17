@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/BlockLength
+# rubocop:disable Metrics/AbcSize, Metrics/MethodLength
 class AddSettingsToOrganizations < ActiveRecord::Migration[6.1]
   def change
     change_table :organizations, bulk: true do |t|
@@ -30,18 +30,11 @@ class AddSettingsToOrganizations < ActiveRecord::Migration[6.1]
       t.string :signal_server_phone_number
       t.string :signal_monitoring_url
       t.string :signal_unknown_content_message
-      t.string :twilio_account_sid
-      t.string :twilio_api_key_sid
-      t.string :twilio_api_key_secret
       t.string :whats_app_server_phone_number
-      t.string :three_sixty_dialog_partner_token
-      t.string :three_sixty_dialog_client_api_key
-      t.string :three_sixty_dialog_client_id
-      t.string :three_sixty_dialog_client_waba_account_id
       t.string :email_from_address
       t.integer :channel_image_blob_id
       t.string :about
     end
   end
 end
-# rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/BlockLength
+# rubocop:enable Metrics/AbcSize, Metrics/MethodLength

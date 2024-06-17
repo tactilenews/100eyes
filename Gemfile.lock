@@ -433,7 +433,7 @@ GEM
 
 PLATFORMS
   ruby
-  x86_64-linux-musl
+  x86_64-linux
 
 DEPENDENCIES
   active_model_otp
