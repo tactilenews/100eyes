@@ -22,12 +22,6 @@ Rails.application.routes.draw do
     post '/status', to: 'webhook#status'
   end
 
-  if Organization.table_exists?
-    Organization.find_each do |organization|
-      telegram_webhook Telegram::WebhookController, organization.slug.underscore.to_sym
-    end
-  end
-
   namespace :global do
     constraints Clearance::Constraints::SignedIn.new(&:admin?) do
       get '/settings', to: 'settings#index'
