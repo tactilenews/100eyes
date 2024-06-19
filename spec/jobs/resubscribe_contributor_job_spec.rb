@@ -13,7 +13,7 @@ RSpec.describe ResubscribeContributorJob do
 
       it_behaves_like 'a Contributor resubscribes', SignalAdapter::Outbound::Text do
         let(:contributor) do
-          create(:contributor, signal_phone_number: '+491234567', signal_onboarding_completed_at: Time.current, unsubscribed_at: 1.day.ago)
+          create(:contributor, signal_phone_number: '+491234567', unsubscribed_at: 1.day.ago)
         end
       end
 
@@ -22,7 +22,6 @@ RSpec.describe ResubscribeContributorJob do
           let(:contributor) do
             create(:contributor,
                    signal_phone_number: '+491234567',
-                   signal_onboarding_completed_at: Time.current,
                    unsubscribed_at: 1.day.ago,
                    deactivated_at: Time.current,
                    deactivated_by_user: create(:user))
@@ -35,7 +34,6 @@ RSpec.describe ResubscribeContributorJob do
           let(:contributor) do
             create(:contributor,
                    signal_phone_number: '+491234567',
-                   signal_onboarding_completed_at: Time.current,
                    unsubscribed_at: 1.day.ago,
                    deactivated_at: Time.current,
                    deactivated_by_admin: true)

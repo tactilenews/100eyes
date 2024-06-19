@@ -18,8 +18,8 @@
         <%= c 'input', field.input_defaults.merge(required: true) %>
       <% end %>
 
-      <%= c 'field', object: contributor, attr: :signal_phone_number do |field| %>
-        <%= c 'input', field.input_defaults.merge(placeholder: '', required: true, type: :tel) %>
+      <%= c 'field', object: contributor, attr: :signal_username do |field| %>
+        <%= c 'input', field.input_defaults.merge(placeholder: '', required: true) %>
       <% end %>
 
       <%= c 'onboarding_consent', contributor: contributor %>

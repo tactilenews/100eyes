@@ -18,22 +18,15 @@ RSpec.describe SignalAdapter::Outbound do
     it { should_not enqueue_job(described_class::Text) }
 
     context 'contributor has a phone number' do
-      let(:onboarding_completed_at) { nil }
       let(:contributor) do
         create(
           :contributor,
           signal_phone_number: '+491511234567',
-          signal_onboarding_completed_at: onboarding_completed_at,
           email: nil
         )
       end
 
-      it { should_not enqueue_job(described_class::Text) }
-
-      context 'and has completed onboarding' do
-        let(:onboarding_completed_at) { Time.zone.now }
-        it { should enqueue_job(described_class::Text).with(expected_job_args) }
-      end
+      it { should enqueue_job(described_class::Text) }
     end
   end
 
@@ -43,23 +36,15 @@ RSpec.describe SignalAdapter::Outbound do
     it { should_not enqueue_job(described_class::Text) }
 
     describe 'contributor has a phone number' do
-      let(:onboarding_completed_at) { nil }
-
       let(:contributor) do
         create(
           :contributor,
           email: nil,
-          signal_phone_number: '+491511234567',
-          signal_onboarding_completed_at: onboarding_completed_at
+          signal_phone_number: '+491511234567'
         )
       end
 
-      it { should_not enqueue_job(described_class::Text) }
-
-      context 'and has completed onboarding' do
-        let(:onboarding_completed_at) { Time.zone.now }
-        it { should enqueue_job(described_class::Text) }
-      end
+      it { should enqueue_job(described_class::Text) }
     end
   end
 end

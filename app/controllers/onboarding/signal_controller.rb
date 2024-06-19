@@ -11,9 +11,5 @@ module Onboarding
     def attr_name
       :signal_phone_number
     end
-
-    def complete_onboarding(contributor)
-      SignalAdapter::CreateContactJob.perform_later(contributor)
-    end
   end
 end

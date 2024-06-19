@@ -2,8 +2,8 @@
 
 module SignalAdapter
   class UnknownContributorError < StandardError
-    def initialize(signal_phone_number:)
-      super("Received a message on signal from an unknown sender: #{signal_phone_number}")
+    def initialize(signal_uuid:)
+      super("Received a message on signal from an unknown sender: #{signal_uuid}")
     end
   end
 end

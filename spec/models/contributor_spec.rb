@@ -537,14 +537,9 @@ RSpec.describe Contributor, type: :model do
         end
       end
 
-      let(:onboarding_completed_at) { Time.zone.now }
       let(:phone_number) { '+4912345789' }
       let!(:contributor) do
-        create(
-          :contributor,
-          signal_phone_number: phone_number,
-          signal_onboarding_completed_at: onboarding_completed_at
-        )
+        create(:contributor, signal_phone_number: phone_number)
       end
 
       it { should_not raise_error }

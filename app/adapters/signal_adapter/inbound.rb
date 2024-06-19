@@ -25,11 +25,11 @@ module SignalAdapter
     def consume(signal_message)
       signal_message = signal_message.with_indifferent_access
 
-      @sender = initialize_sender(signal_message)
-      return unless @sender
-
       delivery_receipt = initialize_delivery_receipt(signal_message)
       return if delivery_receipt
+
+      @sender = initialize_sender(signal_message)
+      return unless @sender
 
       remove_emoji = signal_message.dig(:envelope, :dataMessage, :reaction, :isRemove)
       return if remove_emoji
@@ -53,26 +53,29 @@ module SignalAdapter
       @callbacks[event].call(*args)
     end
 
-    def initialize_sender(signal_message)
-      signal_phone_number = signal_message.dig(:envelope, :source)
-      sender = Contributor.find_by(signal_phone_number: signal_phone_number)
-
-      unless sender
-        trigger(UNKNOWN_CONTRIBUTOR, signal_phone_number)
-        return nil
-      end
-
-      trigger(CONNECT, sender) if sender.replies.blank?
-
-      sender
-    end
-
     def initialize_delivery_receipt(signal_message)
       delivery_receipt = signal_message.dig(:envelope, :receiptMessage)
       return nil unless delivery_receipt
 
-      trigger(HANDLE_DELIVERY_RECEIPT, delivery_receipt, sender)
+      signal_phone_number = signal_message.dig(:envelope, :sourceNumber)
+      sender = Contributor.find_by(signal_phone_number: signal_phone_number)
+      Rails.logger.debug sender, signal_phone_number
+      return unless sender
+
+      trigger(HANDLE_DELIVERY_RECEIPT, signal_message, sender)
       delivery_receipt
+    end
+
+    def initialize_sender(signal_message)
+      signal_uuid = signal_message.dig(:envelope, :sourceUuid)
+      sender = Contributor.find_by(signal_uuid: signal_uuid)
+
+      unless sender
+        trigger(UNKNOWN_CONTRIBUTOR, signal_uuid)
+        return nil
+      end
+
+      sender
     end
 
     def initialize_message(signal_message)

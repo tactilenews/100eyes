@@ -178,8 +178,7 @@ RSpec.describe SignalAdapter::Inbound do
     create(
       :contributor,
       id: 4711,
-      signal_phone_number: phone_number,
-      signal_onboarding_completed_at: onboarding_completed_at
+      signal_phone_number: phone_number
     )
   end
 
@@ -195,14 +194,7 @@ RSpec.describe SignalAdapter::Inbound do
       it { should be_a(Message) }
 
       context 'from an unknown contributor' do
-        let(:onboarding_completed_at) { nil }
         let!(:phone_number) { '+495555555' }
-
-        it { should be(nil) }
-      end
-
-      context 'from a contributor with incomplete onboarding' do
-        let(:onboarding_completed_at) { nil }
 
         it { should be(nil) }
       end
@@ -378,12 +370,12 @@ RSpec.describe SignalAdapter::Inbound do
         it { should_not have_received(:call) }
       end
 
-      context 'if the sender is a contributor with incomplete onboarding' do
-        let(:onboarding_completed_at) { nil }
+      context 'if the sender is a contributor with no replies' do
         it { should have_received(:call).with(contributor) }
       end
 
-      context 'if the sender is a contributor who has completed onboarding' do
+      context 'if the sender is a contributor with replies' do
+        before { create(:message, sender: contributor) }
         it { should_not have_received(:call) }
       end
     end

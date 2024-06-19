@@ -73,41 +73,15 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         end
       end
 
-      describe 'given a message from a contributor with incomplete onboarding' do
+      describe 'given a message from a contributor for the first time' do
         let!(:contributor) { create(:contributor, signal_phone_number: '+4915112345789') }
 
-        before do
-          allow(Setting).to receive(:onboarding_success_heading).and_return('Welcome!')
-          allow(Setting).to receive(:onboarding_success_text).and_return('')
-        end
-
-        it { should_not(change { Message.count }) }
-
-        it 'sends welcome message' do
-          should have_enqueued_job(SignalAdapter::Outbound::Text).with do |text, recipient|
-            expect(text).to eq("Welcome!\n")
-            expect(recipient.id).to eq(contributor.id)
-          end
-        end
-
-        it 'sets signal_onboarding_completed_at' do
-          subject.call
-          expect(contributor.reload.signal_onboarding_completed_at).to be_present
+        it 'creates a message' do
+          expect { subject.call }.to change(Message, :count).by(1)
         end
 
         it 'enqueues a job to attach contributors avatar' do
           expect { subject.call }.to have_enqueued_job(SignalAdapter::AttachContributorsAvatarJob).with(contributor)
-        end
-      end
-
-      describe 'given a message from a contributor with completed onboarding' do
-        before do
-          create(:contributor, signal_phone_number: '+4915112345789', signal_onboarding_completed_at: Time.zone.now)
-          create(:contributor, signal_phone_number: '+4915155555555', signal_onboarding_completed_at: Time.zone.now)
-        end
-
-        it 'is expected to create a message' do
-          should(change { Message.count }.from(0).to(1))
         end
 
         it 'is expected to assign the correct contributor' do
@@ -121,7 +95,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
       describe 'given multiple messages from known and unknown contributors', vcr: { cassette_name: :receive_multiple_signal_messages } do
         before do
           allow(Sentry).to receive(:capture_exception).with(an_instance_of(SignalAdapter::UnknownContributorError))
-          create(:contributor, signal_phone_number: '+4915112345789', signal_onboarding_completed_at: Time.zone.now)
+          create(:contributor, signal_phone_number: '+4915112345789')
         end
 
         it 'creates a message for the known contributor' do
@@ -135,7 +109,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
       end
 
       describe 'given a message with attachments' do
-        let!(:contributor) { create(:contributor, signal_phone_number: '+4915112345678', signal_onboarding_completed_at: Time.zone.now) }
+        let!(:contributor) { create(:contributor, signal_phone_number: '+4915112345678') }
 
         before do
           allow(File).to receive(:open).and_call_original
@@ -174,7 +148,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         allow(Setting).to receive(:signal_cli_rest_api_endpoint).and_return('http://signal:8080')
       end
 
-      let!(:contributor) { create(:contributor, signal_phone_number: '+4915112345789', signal_onboarding_completed_at: Time.zone.now) }
+      let!(:contributor) { create(:contributor, signal_phone_number: '+4915112345789') }
       it { is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(contributor.id, SignalAdapter::Outbound) }
     end
 
@@ -184,8 +158,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         allow(Setting).to receive(:signal_cli_rest_api_endpoint).and_return('http://signal:8080')
       end
       let!(:contributor) do
-        create(:contributor, signal_phone_number: '+4915112345789', signal_onboarding_completed_at: Time.zone.now,
-                             unsubscribed_at: 1.week.ago)
+        create(:contributor, signal_phone_number: '+4915112345789', unsubscribed_at: 1.week.ago)
       end
 
       it { is_expected.to have_enqueued_job(ResubscribeContributorJob).with(contributor.id, SignalAdapter::Outbound) }

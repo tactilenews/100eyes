@@ -75,6 +75,8 @@ RSpec.describe 'Onboarding::Signal', type: :request do
     end
 
     describe 'but when a signal server phone number is configured and onboarding has not been disallowed' do
+      let(:welcome_message) { [Setting.onboarding_success_heading, Setting.onboarding_success_text].join("\n") }
+      let(:signal_adapter_outbound_spy) { spy(SignalAdapter::Outbound) }
       before do
         allow(Setting).to receive(:signal_server_phone_number).and_return('+4491234567890')
         allow(Setting).to receive(:signal_onboarding_allowed?).and_return(true)
@@ -96,13 +98,19 @@ RSpec.describe 'Onboarding::Signal', type: :request do
         )
       end
 
-      it 'does not send welcome message' do
-        should_not enqueue_job(SignalAdapter::Outbound).with(message: Message.new(text: anything), recipient: anything)
+      it 'sends welcome message' do
+        subject.call
+        contributor = Contributor.find_by(signal_phone_number: '+4915112345678')
+
+        expect(SignalAdapter::Outbound::Text).to have_been_enqueued.with(
+          contributor_id: contributor.id,
+          text: welcome_message
+        )
       end
 
-      it 'redirects to onboarding signal link page' do
+      it 'redirects to success page' do
         subject.call
-        expect(response).to redirect_to onboarding_signal_link_path
+        expect(response).to redirect_to onboarding_success_path(jwt: nil)
       end
 
       it 'invalidates the jwt' do
@@ -159,7 +167,7 @@ RSpec.describe 'Onboarding::Signal', type: :request do
 
         it 'redirects to success page so that an attacker cannot make a phone number listing' do
           subject.call
-          expect(response).to redirect_to onboarding_signal_link_path
+          expect(response).to redirect_to onboarding_success_path(jwt: nil)
         end
 
         it 'invalidates the jwt' do
