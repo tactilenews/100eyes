@@ -106,7 +106,6 @@ ActiveRecord::Schema.define(version: 2024_06_21_100548) do
     t.datetime "data_processing_consented_at"
     t.string "telegram_onboarding_token"
     t.string "signal_phone_number"
-    t.datetime "signal_onboarding_completed_at"
     t.string "additional_email"
     t.datetime "additional_consent_given_at"
     t.bigint "organization_id"

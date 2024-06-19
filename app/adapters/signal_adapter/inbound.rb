@@ -72,7 +72,12 @@ module SignalAdapter
 
       delivery_receipt = signal_message.dig(:envelope, :receiptMessage)
 
-      trigger(HANDLE_DELIVERY_RECEIPT, delivery_receipt, sender)
+      signal_phone_number = signal_message.dig(:envelope, :sourceNumber)
+      sender = Contributor.find_by(signal_phone_number: signal_phone_number)
+      Rails.logger.debug sender, signal_phone_number
+      return unless sender
+
+      trigger(HANDLE_DELIVERY_RECEIPT, signal_message, sender)
       delivery_receipt
     end
 

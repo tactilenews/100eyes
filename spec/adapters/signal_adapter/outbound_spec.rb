@@ -23,7 +23,6 @@ RSpec.describe SignalAdapter::Outbound do
         create(
           :contributor,
           signal_phone_number: '+491511234567',
-          signal_onboarding_completed_at: onboarding_completed_at,
           email: nil
         )
       end
@@ -84,8 +83,7 @@ RSpec.describe SignalAdapter::Outbound do
         create(
           :contributor,
           email: nil,
-          signal_phone_number: '+491511234567',
-          signal_onboarding_completed_at: onboarding_completed_at
+          signal_phone_number: '+491511234567'
         )
       end
 
