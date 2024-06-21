@@ -4,18 +4,21 @@
 module PostmarkAdapter
   class Outbound < ApplicationMailer
     default template_name: :mailer
-    default from: -> { default_from }
     rescue_from Postmark::InactiveRecipientError do |exception|
       ErrorNotifier.report(exception, context: { recipients: exception.recipients }, tags: { support: 'yes' })
+
       exception.recipients.each do |email_address|
-        contributor = Contributor.find_by(email: email_address)
+        organization = Organization.find_by(email_from_address: arguments.first[:from])
+        next unless organization
+
+        contributor = organization.contributors.find_by(email: email_address)
         next unless contributor
 
-        MarkInactiveContributorInactiveJob.perform_later(contributor_id: contributor.id)
+        MarkInactiveContributorInactiveJob.perform_later(organization_id: organization.id, contributor_id: contributor.id)
       end
     end
 
-    attr_reader :msg
+    attr_reader :msg, :organization
 
     class << self
       def send!(message)
@@ -24,10 +27,10 @@ module PostmarkAdapter
         with(message: message).message_email.deliver_later
       end
 
-      def send_welcome_message!(contributor, _organization)
+      def send_welcome_message!(contributor, organization)
         return unless contributor&.email
 
-        with(contributor: contributor).welcome_email.deliver_later
+        with(contributor: contributor, organization: organization).welcome_email.deliver_later
       end
 
       def send_business_plan_upgraded_message!(admin, organization)
@@ -50,10 +53,10 @@ module PostmarkAdapter
         with(admin: admin, organization: organization).user_count_exceeds_plan_limit_email.deliver_later
       end
 
-      def contributor_marked_as_inactive!(admin, contributor)
-        return unless admin&.email && admin&.admin? && contributor&.id
+      def contributor_marked_as_inactive!(admin, contributor, organization)
+        return unless admin&.email && admin&.admin? && contributor&.id && organization&.id
 
-        with(admin: admin, contributor: contributor).contributor_marked_as_inactive_email.deliver_later
+        with(admin: admin, contributor: contributor, organization: organization).contributor_marked_as_inactive_email.deliver_later
       end
 
       def contributor_unsubscribed!(admin, contributor)
@@ -82,15 +85,16 @@ module PostmarkAdapter
 
     def welcome_email
       contributor = params[:contributor]
+      @organization = params[:organization]
       subject = Setting.onboarding_success_heading
       message_stream = Setting.postmark_transactional_stream
       @text = [subject, Setting.onboarding_success_text].join("\n")
-      mail(to: contributor.email, subject: subject, message_stream: message_stream)
+      mail(from: email_from_address, to: contributor.email, subject: subject, message_stream: message_stream)
     end
 
     def business_plan_upgraded_email
       admin = params[:admin]
-      organization = params[:organization]
+      @organization = params[:organization]
       price_per_month_with_discount = params[:price_per_month_with_discount]
       subject = I18n.t('adapter.postmark.business_plan_upgraded.subject',
                        organization_name: organization.name,
@@ -102,23 +106,24 @@ module PostmarkAdapter
                     valid_through: I18n.l(organization.upgraded_business_plan_at + 6.months, format: '%m/%Y'))
       message_stream = Setting.postmark_transactional_stream
       @text = [subject, text].join("\n")
-      mail(to: admin.email, subject: subject, message_stream: message_stream)
+      mail(from: email_from_address, to: admin.email, subject: subject, message_stream: message_stream)
     end
 
     def user_count_exceeds_plan_limit_email
       admin = params[:admin]
-      organization = params[:organization]
+      @organization = params[:organization]
       subject = I18n.t('adapter.postmark.user_count_exceeds_plan_limit.subject',
                        organization_name: organization.name,
                        business_plan_name: organization.business_plan.name,
                        users_limit: organization.business_plan.number_of_users)
       message_stream = Setting.postmark_transactional_stream
       @text = [subject, I18n.t('adapter.postmark.user_count_exceeds_plan_limit.text', organization_name: organization.name)].join("\n")
-      mail(to: admin.email, subject: subject, message_stream: message_stream)
+      mail(from: email_from_address, to: admin.email, subject: subject, message_stream: message_stream)
     end
 
     def contributor_marked_as_inactive_email
       contributor = params[:contributor]
+      @organization = params[:organization]
       admin = params[:admin]
       subject = I18n.t('adapter.postmark.contributor_marked_as_inactive_email.subject', project_name: Setting.project_name,
                                                                                         contributor_name: contributor.name,
@@ -126,7 +131,7 @@ module PostmarkAdapter
       text = I18n.t('adapter.postmark.contributor_marked_as_inactive_email.text', contributor_name: contributor.name)
       message_stream = Setting.postmark_transactional_stream
       @text = [subject, text].join("\n")
-      mail(to: admin.email, subject: subject, message_stream: message_stream)
+      mail(from: email_from_address, to: admin.email, subject: subject, message_stream: message_stream)
     end
 
     def contributor_unsubscribed_email
@@ -139,7 +144,7 @@ module PostmarkAdapter
       text = I18n.t('adapter.postmark.contributor_marked_as_inactive_email.text', contributor_name: contributor.name, channel: channel)
       message_stream = Setting.postmark_transactional_stream
       @text = [subject, text].join("\n")
-      mail(to: admin.email, subject: subject, message_stream: message_stream)
+      mail(from: email_from_address, to: admin.email, subject: subject, message_stream: message_stream)
     end
 
     def contributor_resubscribed_email
@@ -153,7 +158,7 @@ module PostmarkAdapter
       )
       message_stream = Setting.postmark_transactional_stream
       @text = [subject, text].join("\n")
-      mail(to: admin.email, subject: subject, message_stream: message_stream)
+      mail(from: email_from_address, to: admin.email, subject: subject, message_stream: message_stream)
     end
 
     def welcome_message_updated_email
@@ -163,7 +168,7 @@ module PostmarkAdapter
       text = I18n.t('adapter.postmark.welcome_message_updated.text')
       message_stream = Setting.postmark_transactional_stream
       @text = [subject, text].join("\n")
-      mail(to: admin.email, subject: subject, message_stream: message_stream)
+      mail(from: email_from_address, to: admin.email, subject: subject, message_stream: message_stream)
     end
 
     def message_email
@@ -183,7 +188,8 @@ module PostmarkAdapter
       email_subject = I18n.t('adapter.postmark.new_message_email.subject')
       message_stream = Setting.postmark_broadcasts_stream
       attach_files if msg.files.present?
-      mail(to: msg.recipient.email, subject: email_subject, message_stream: message_stream)
+      mail(from: email_from_address(organization: msg.request.organization), to: msg.recipient.email, subject: email_subject,
+           message_stream: message_stream)
     end
 
     def reply_message_email
@@ -193,10 +199,14 @@ module PostmarkAdapter
               })
       email_subject = "Re: #{I18n.t('adapter.postmark.new_message_email.subject')}"
       message_stream = Setting.postmark_transactional_stream
-      mail(to: msg.recipient.email, subject: email_subject, message_stream: message_stream)
+      Rails.logger.debug email_from_address(organization: msg.request.organization)
+      mail(from: email_from_address(organization: msg.request.organization), to: msg.recipient.email, subject: email_subject,
+           message_stream: message_stream)
     end
 
-    def default_from
+    def email_from_address(organization: nil)
+      return "\"#{organization.project_name}\" <#{organization.email_from_address}>" if organization
+
       "\"#{Setting.project_name}\" <#{Setting.email_from_address}>"
     end
 
