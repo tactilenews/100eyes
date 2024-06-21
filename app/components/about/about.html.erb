@@ -2,7 +2,7 @@
   <div>
     <%= c('heading', tag: :h1) { t('.heading') } %>
 
-    <% if Setting.git_commit_sha.present? && Setting.git_commit_date.present? %>
+    <% if ENV.fetch('GIT_COMMIT_SHA', nil).present? && ENV.fetch('GIT_COMMIT_SHA', nil).present? %>
       <p class="text-small text-light">
         <%= t('.version', version: version, date: date) %>
       </p>
@@ -11,15 +11,15 @@
 
   <dl>
     <dt><%= t('.email_from_address') %></dt>
-    <dd><%= Setting.email_from_address %></dd>
+    <dd><%= organization.email_from_address %></dd>
 
     <dt><%= t('.telegram_bot_username') %></dt>
-    <dd><%= Setting.telegram_bot_username %></dd>
+    <dd><%= organization.telegram_bot_username %></dd>
 
     <dt><%= t('.threemarb_api_identity') %></dt>
-    <dd><%= Setting.threemarb_api_identity %></dd>
+    <dd><%= organization.threemarb_api_identity %></dd>
 
     <dt><%= t('.signal_server_phone_number') %></dt>
-    <dd><%= Setting.signal_server_phone_number&.phony_formatted || t('.signal_not_set_up') %></dd>
+    <dd><%= organization.signal_server_phone_number&.phony_formatted || t('.signal_not_set_up') %></dd>
   </dl>
 <% end %>

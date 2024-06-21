@@ -14,13 +14,10 @@ module TelegramAdapter
       invoice successful_payment passport_data
     ].freeze
 
-    attr_reader :sender, :text, :message, :photos, :file
+    attr_reader :sender, :text, :message, :photos, :file, :organization
 
-    def self.from(raw_data)
-      new(JSON.parse(raw_data.download))
-    end
-
-    def initialize
+    def initialize(organization)
+      @organization = organization
       @callbacks = {}
     end
 
@@ -50,18 +47,18 @@ module TelegramAdapter
       yield(@message) if block_given?
     end
 
+    private
+
     def avatar_url(contributor)
       return unless contributor.telegram_id
 
-      profile_photos = Telegram.bot.get_user_profile_photos(user_id: contributor.telegram_id, limit: 1).with_indifferent_access
+      profile_photos = organization.telegram_bot.get_user_profile_photos(user_id: contributor.telegram_id, limit: 1).with_indifferent_access
       first_photo = profile_photos.dig(:result, :photos, 0)
       return unless first_photo
 
       largest_size = first_photo.max { |a, b| a[:file_size] <=> b[:file_size] }
       file_url(largest_size)
     end
-
-    private
 
     def trigger(event, *args)
       return unless @callbacks.key?(event)
@@ -72,7 +69,7 @@ module TelegramAdapter
     def initialize_sender(telegram_message)
       telegram_id = telegram_message.dig(:from, :id)
       username = telegram_message.dig(:from, :username)
-      sender = Contributor.find_by(telegram_id: telegram_id)
+      sender = organization.contributors.find_by(telegram_id: telegram_id)
       if sender
         sender.username = username
         return sender
@@ -84,7 +81,7 @@ module TelegramAdapter
       end
 
       telegram_onboarding_token = text.delete_prefix('/start').strip.upcase
-      sender = Contributor.find_by(telegram_id: nil, telegram_onboarding_token: telegram_onboarding_token)
+      sender = organization.contributors.find_by(telegram_id: nil, telegram_onboarding_token: telegram_onboarding_token)
 
       if sender
         sender.username = username
@@ -154,9 +151,10 @@ module TelegramAdapter
         ErrorNotifier.report(exception)
         nil
       else
-        file = Telegram.bot.get_file(file_id: telegram_file[:file_id]).with_indifferent_access
+
+        file = organization.telegram_bot.get_file(file_id: telegram_file[:file_id]).with_indifferent_access
         file_path = file.dig(:result, :file_path)
-        URI("https://api.telegram.org/file/bot#{Telegram.bot.token}/#{file_path}")
+        URI("https://api.telegram.org/file/bot#{organization.telegram_bot.token}/#{file_path}")
       end
     end
 

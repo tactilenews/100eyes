@@ -10,22 +10,25 @@ module TelegramAdapter
         contributor = message&.recipient
         return unless contributor
 
-        MarkInactiveContributorInactiveJob.perform_later(contributor_id: contributor.id)
+        MarkInactiveContributorInactiveJob.perform_later(organization_id: job.arguments.first[:organization_id],
+                                                         contributor_id: contributor.id)
       end
 
-      def perform(contributor_id:, text:, message: nil)
-        contributor = Contributor.find_by(id: contributor_id)
-        return unless contributor
+      def perform(organization_id:, contributor_id:, text:, message: nil)
+        organization = Organization.find(organization_id)
+        contributor = organization.contributors.find(contributor_id)
 
         @message = message
 
-        response = Telegram.bot.send_message(
+        response = organization.telegram_bot.send_message(
           chat_id: contributor.telegram_id,
           text: text,
           parse_mode: :HTML
         )
         response = response.with_indifferent_access
         mark_message_as_received(response) if response[:ok] && message
+      rescue ActiveRecord::RecordNotFound => e
+        ErrorNotifier.report(e)
       end
 
       attr_reader :message

@@ -28,6 +28,6 @@ http_interactions:
       - '1030'
     body:
       encoding: UTF-8
-      string: '[{"envelope":{"source":"+4915112345789","sourceDevice":2,"timestamp":1626884435591,"dataMessage":{"timestamp":1626884435591,"message":"Abbestellen","expiresInSeconds":0,"viewOnce":false}}}]'
+      string: '[{"envelope":{"source":"+4915112345789","sourceDevice":2,"timestamp":1626884435591,"dataMessage":{"timestamp":1626884435591,"message":"Abbestellen","expiresInSeconds":0,"viewOnce":false}},"account":"+4912345678"}]'
   recorded_at: Sat, 11 Nov 2023 08:30:21 GMT
 recorded_with: VCR 6.1.0

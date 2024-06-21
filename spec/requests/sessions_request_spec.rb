@@ -6,6 +6,8 @@ RSpec.describe 'Sessions', type: :request do
   let!(:user) { create(:user, email: 'zora@example.org', password: '12345678', otp_enabled: otp_enabled) }
   let(:otp_enabled) { false }
 
+  before { create(:organization) }
+
   describe 'GET /sign_in' do
     before(:each) { get sign_in_path(as: user) }
     subject { response }

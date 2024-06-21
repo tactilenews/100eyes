@@ -2,9 +2,10 @@
 
 module Excerpt
   class Excerpt < ApplicationComponent
-    def initialize(title:, text:, link:, date:, sender: nil, **)
+    def initialize(organization:, title:, text:, link:, date:, sender: nil, **)
       super
 
+      @organization = organization
       @sender = sender
       @title = title
       @text = text
@@ -14,6 +15,6 @@ module Excerpt
 
     private
 
-    attr_reader :sender, :title, :text, :link, :date
+    attr_reader :organization, :sender, :title, :text, :link, :date
   end
 end

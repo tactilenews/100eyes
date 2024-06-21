@@ -1,12 +1,97 @@
 # frozen_string_literal: true
 
 class Organization < ApplicationRecord
+  attr_encrypted_options.merge!(key: Base64.decode64(ENV.fetch('ATTR_ENCRYPTED_KEY', nil)))
+  attr_encrypted :threemarb_api_secret, :threemarb_private
+  attr_encrypted :twilio_api_key_secret
+  attr_encrypted :three_sixty_dialog_partner_password, :three_sixty_dialog_partner_token, :three_sixty_dialog_client_api_key
+  attr_encrypted :telegram_bot_api_key
+
   belongs_to :business_plan
   belongs_to :contact_person, class_name: 'User', optional: true
   has_many :users, class_name: 'User', dependent: :destroy
   has_many :contributors, dependent: :destroy
+  has_many :requests, dependent: :destroy
+
+  has_one_attached :onboarding_logo
+  has_one_attached :onboarding_hero
+  has_one_attached :channel_image
 
   before_update :notify_admin
+  after_commit :notify_admin_of_welcome_message_change
+
+  validates :telegram_bot_username, uniqueness: true
+
+  # As currently constructed, we only have one organization per instance.
+  def self.singleton
+    first
+  end
+
+  def channels_onboarding_allowed
+    {
+      email: email_onboarding_allowed?,
+      signal: signal_onboarding_allowed?,
+      telegram: telegram_onboarding_allowed?,
+      threema: threema_onboarding_allowed?,
+      whats_app: whats_app_onboarding_allowed?
+    }.select { |_k, v| v }.keys
+  end
+
+  def onboarding_allowed=(value)
+    self[:onboarding_allowed] = value.is_a?(String) ? JSON.parse(value) : value
+  end
+
+  def whats_app_configured?
+    twilio_configured? || three_sixty_dialog_configured?
+  end
+
+  def twilio_configured?
+    whats_app_server_phone_number.present? && twilio_api_key_sid.present? && twilio_api_key_secret.present? && twilio_account_sid.present?
+  end
+
+  def three_sixty_dialog_configured?
+    three_sixty_dialog_client_api_key.present?
+  end
+
+  def telegram_configured?
+    telegram_bot_api_key.present?
+  end
+
+  def onboarding_allowed?(value)
+    onboarding_allowed.with_indifferent_access[value]
+  end
+
+  def email_onboarding_allowed?
+    ENV.fetch('POSTMARK_API_TOKEN', nil).present? && onboarding_allowed?(:email)
+  end
+
+  def signal_onboarding_allowed?
+    signal_server_phone_number.present? && onboarding_allowed?(:signal)
+  end
+
+  def threema_onboarding_allowed?
+    threemarb_api_identity.present? && onboarding_allowed?(:threema)
+  end
+
+  def telegram_onboarding_allowed?
+    telegram_configured? && onboarding_allowed?(:telegram)
+  end
+
+  def whats_app_onboarding_allowed?
+    whats_app_configured? && onboarding_allowed?(:whats_app)
+  end
+
+  def telegram_bot
+    Telegram.bots[id]
+  end
+
+  def twilio_instance
+    Twilio::REST::Client.new(twilio_api_key_sid, twilio_api_key_secret, twilio_account_sid)
+  end
+
+  def threema_instance
+    Threema.new(api_identity: threemarb_api_identity, api_secret: threemarb_api_secret, private_key: threemarb_private)
+  end
 
   private
 
@@ -15,6 +100,14 @@ class Organization < ApplicationRecord
 
     User.admin.find_each do |admin|
       PostmarkAdapter::Outbound.send_business_plan_upgraded_message!(admin, self)
+    end
+  end
+
+  def notify_admin_of_welcome_message_change
+    return unless saved_change_to_onboarding_success_heading? || saved_change_to_onboarding_success_text?
+
+    User.admin.find_each do |admin|
+      PostmarkAdapter::Outbound.welcome_message_updated!(admin, self)
     end
   end
 end

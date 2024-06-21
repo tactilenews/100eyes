@@ -6,13 +6,17 @@ RSpec.describe 'Onboarding::Email', type: :request do
   let(:email) { 'zora@example.org' }
   let(:data_processing_consent) { true }
   let(:additional_consent) { true }
-  let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding', organization_id: create(:organization).id }) }
+  let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding', organization_id: organization.id }) }
   let(:params) { { jwt: jwt } }
+  let(:organization) { create(:organization, onboarding_allowed: onboarding_allowed) }
+  let(:onboarding_allowed) { { email: false } }
 
   describe 'GET /onboarding/email' do
     subject { -> { get onboarding_email_path(jwt: jwt) } }
 
-    before { allow(Setting).to receive(:email_onboarding_allowed?).and_return(false) }
+    before do
+      allow(ENV).to receive(:fetch).with('POSTMARK_API_TOKEN', nil).and_return('valid_api_token')
+    end
 
     describe 'when postmark is configured, but onboarding has been disallowed by an admin' do
       it 'returns a 404 not found' do
@@ -23,7 +27,7 @@ RSpec.describe 'Onboarding::Email', type: :request do
     end
 
     describe 'but when postmark is configured and onboarding has not been disallowed' do
-      before { allow(Setting).to receive(:email_onboarding_allowed?).and_return(true) }
+      let(:onboarding_allowed) { { email: true } }
 
       it 'returns a 200 ok' do
         subject.call
@@ -48,7 +52,9 @@ RSpec.describe 'Onboarding::Email', type: :request do
 
     subject { -> { post onboarding_email_path, params: params } }
 
-    before { allow(Setting).to receive(:email_onboarding_allowed?).and_return(false) }
+    before do
+      allow(ENV).to receive(:fetch).with('POSTMARK_API_TOKEN', nil).and_return('valid_api_token')
+    end
 
     describe 'when postmark is configured, but onboarding has been disallowed by an admin' do
       it 'returns a 404 not found' do
@@ -59,7 +65,7 @@ RSpec.describe 'Onboarding::Email', type: :request do
     end
 
     describe 'but when postmark is configured and onboarding has not been disallowed' do
-      before { allow(Setting).to receive(:email_onboarding_allowed?).and_return(true) }
+      let(:onboarding_allowed) { { email: true } }
 
       it 'creates contributor' do
         expect { subject.call }.to change(Contributor, :count).by(1)
@@ -182,6 +188,7 @@ RSpec.describe 'Onboarding::Email', type: :request do
 
       describe 'with unsigned jwt' do
         let(:jwt) { 'INCORRECT_TOKEN' }
+        before { create(:organization) }
 
         it 'renders unauthorized page' do
           subject.call
@@ -197,6 +204,8 @@ RSpec.describe 'Onboarding::Email', type: :request do
       describe 'with invalidated jwt' do
         let!(:invalidated_jwt) { create(:json_web_token, invalidated_jwt: 'INVALID_JWT') }
         let(:jwt) { 'INVALID_JWT' }
+
+        before { create(:organization) }
 
         it 'renders unauthorized page' do
           subject.call

@@ -27,6 +27,6 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '[{"envelope":{"source":"+4915112345789","sourceNumber":"+4915112345789","sourceUuid":"valid_uuid","sourceDevice":2,"timestamp":1626884435591,"dataMessage":{"timestamp":1626884435591,"message":"Hello
-        World!","expiresInSeconds":0,"viewOnce":false}}}]'
+        World!","expiresInSeconds":0,"viewOnce":false}},"account":"+4912345678"}]'
   recorded_at: Wed, 21 Jul 2021 16:20:49 GMT
 recorded_with: VCR 6.0.0

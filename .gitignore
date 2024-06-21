@@ -41,6 +41,7 @@ backups/
 !/ansible/backups/.keep
 
 .env
+.env.development
 traefik/
 
 signal-cli-config/

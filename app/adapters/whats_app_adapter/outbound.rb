@@ -16,7 +16,11 @@ module WhatsAppAdapter
       private
 
       def business_solution_provider
-        Setting.three_sixty_dialog_client_api_key.present? ? WhatsAppAdapter::ThreeSixtyDialogOutbound : WhatsAppAdapter::TwilioOutbound
+        if Organization.singleton.three_sixty_dialog_client_api_key.present?
+          WhatsAppAdapter::ThreeSixtyDialogOutbound
+        else
+          WhatsAppAdapter::TwilioOutbound
+        end
       end
     end
   end

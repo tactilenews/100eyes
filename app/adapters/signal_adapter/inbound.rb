@@ -7,12 +7,13 @@ module SignalAdapter
   UNSUBSCRIBE_CONTRIBUTOR = :unsubscribe_contributor
   RESUBSCRIBE_CONTRIBUTOR = :resubscribe_contributor
   HANDLE_DELIVERY_RECEIPT = :handle_delivery_receipt
+  UNKNOWN_ORGANIZATION = :unknown_organization
 
   class Inbound
     UNKNOWN_CONTENT_KEYS = %w[mentions contacts sticker].freeze
     SUPPORTED_ATTACHMENT_TYPES = %w[image/jpg image/jpeg image/png image/gif audio/oog audio/aac audio/mp4 audio/mpeg video/mp4].freeze
 
-    attr_reader :sender, :message
+    attr_reader :sender, :message, :organization
 
     def initialize
       @callbacks = {}
@@ -24,6 +25,9 @@ module SignalAdapter
 
     def consume(signal_message)
       signal_message = signal_message.with_indifferent_access
+
+      @organization = initialize_organization(signal_message)
+      return unless organization
 
       @sender = initialize_contributing_sender(signal_message)
 
@@ -57,13 +61,25 @@ module SignalAdapter
       @callbacks[event].call(*args)
     end
 
+    def initialize_organization(signal_message)
+      signal_server_phone_number = signal_message[:account]
+      organization = Organization.find_by(signal_server_phone_number: signal_server_phone_number)
+
+      unless organization
+        trigger(UNKNOWN_ORGANIZATION, signal_server_phone_number)
+        nil
+      end
+
+      organization
+    end
+
     def initialize_contributing_sender(signal_message)
       signal_phone_number = signal_message.dig(:envelope, :sourceNumber)
       signal_uuid = signal_message.dig(:envelope, :sourceUuid)
       if signal_phone_number
-        Contributor.find_by(signal_phone_number: signal_phone_number)
+        organization.contributors.find_by(signal_phone_number: signal_phone_number)
       else
-        Contributor.find_by(signal_uuid: signal_uuid)
+        organization.contributors.find_by(signal_uuid: signal_uuid)
       end
     end
 
@@ -79,9 +95,10 @@ module SignalAdapter
     def initialize_onboarding_sender(signal_message)
       signal_uuid = signal_message.dig(:envelope, :sourceUuid)
       signal_onboarding_token = signal_message.dig(:envelope, :dataMessage, :message)
+
       return nil unless signal_onboarding_token
 
-      sender = Contributor.find_by(signal_onboarding_token: signal_onboarding_token.strip)
+      sender = organization.contributors.find_by(signal_onboarding_token: signal_onboarding_token.strip)
 
       unless sender
         trigger(UNKNOWN_CONTRIBUTOR, signal_message.dig(:envelope, :source))
@@ -89,9 +106,10 @@ module SignalAdapter
       end
       return unless signal_uuid
 
-      trigger(CONNECT, sender, signal_uuid)
+      trigger(CONNECT, sender, signal_uuid, organization)
     end
 
+    # rubocop:disable Metrics/AbcSize
     def initialize_message(signal_message)
       is_data_message = signal_message.dig(:envelope, :dataMessage)
       return nil unless is_data_message
@@ -100,8 +118,8 @@ module SignalAdapter
       reaction = data_message[:reaction]
 
       message_text = reaction ? reaction[:emoji] : data_message[:message]
-      trigger(UNSUBSCRIBE_CONTRIBUTOR, sender) if unsubscribe_text?(message_text)
-      trigger(RESUBSCRIBE_CONTRIBUTOR, sender) if resubscribe_text?(message_text)
+      trigger(UNSUBSCRIBE_CONTRIBUTOR, sender, organization) if unsubscribe_text?(message_text)
+      trigger(RESUBSCRIBE_CONTRIBUTOR, sender, organization) if resubscribe_text?(message_text)
 
       message = Message.new(text: message_text, sender: sender)
       message.raw_data.attach(
@@ -112,11 +130,12 @@ module SignalAdapter
 
       if data_message.entries.any? { |key, value| UNKNOWN_CONTENT_KEYS.include?(key) && value.present? }
         message.unknown_content = true
-        trigger(UNKNOWN_CONTENT, sender)
+        trigger(UNKNOWN_CONTENT, sender, organization)
       end
 
       message
     end
+    # rubocop:enable Metrics/AbcSize
 
     def initialize_files(signal_message)
       attachments = signal_message.dig(:envelope, :dataMessage, :attachments)
@@ -124,7 +143,7 @@ module SignalAdapter
 
       if attachments.any? { |attachment| SUPPORTED_ATTACHMENT_TYPES.exclude?(attachment[:contentType]) }
         @message.unknown_content = true
-        trigger(UNKNOWN_CONTENT, sender)
+        trigger(UNKNOWN_CONTENT, sender, organization)
         attachments = attachments.select { |attachment| SUPPORTED_ATTACHMENT_TYPES.include?(attachment[:contentType]) }
       end
 
@@ -140,7 +159,7 @@ module SignalAdapter
       filename = attachment[:filename] || "attachment.#{extension}"
 
       file.attachment.attach(
-        io: File.open(Setting.signal_cli_rest_api_attachment_path + attachment[:id]),
+        io: File.open(ENV.fetch('SIGNAL_CLI_REST_API_ATTACHMENT_PATH', 'signal-cli-config/attachments/') + attachment[:id]),
         filename: filename,
         content_type: content_type,
         identify: false
@@ -164,7 +183,7 @@ module SignalAdapter
     end
 
     def delivery_receipt?(signal_message)
-      signal_message.dig(:envelope, :receiptMessage)
+      signal_message.dig(:envelope, :receiptMessage).present?
     end
   end
 end

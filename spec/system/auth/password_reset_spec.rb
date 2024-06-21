@@ -3,10 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe 'Password Reset' do
+  let(:organization) { create(:organization) }
   let(:email) { Faker::Internet.email }
   let(:password) { Faker::Internet.password(min_length: 8, max_length: 128) }
   let(:new_password) { Faker::Internet.password(min_length: 8, max_length: 128) }
-  let!(:user) { create(:user, email: email, password: password, otp_enabled: otp_enabled) }
+  let!(:user) { create(:user, email: email, password: password, otp_enabled: otp_enabled, organization: organization) }
 
   describe 'without 2FA set up' do
     let(:otp_enabled) { false }

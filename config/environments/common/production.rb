@@ -111,13 +111,13 @@ Rails.application.configure do
   config.action_mailbox.ingress = :postmark
 
   config.action_mailer.postmark_settings = {
-    api_token: Setting.postmark_api_token
+    api_token: ENV.fetch('POSTMARK_API_TOKEN', nil)
   }
 
   # TODO: refactor this once these issues are resolved
   # https://discuss.rubyonrails.org/t/define-host-so-absolute-urls-work-in-development-and-test/75085/
   # https://github.com/rails/rails/issues/39566
   routes.default_url_options = {
-    host: Setting.application_host, protocol: 'https'
+    host: ENV.fetch('APPLICATION_HOSTNAME', 'localhost:3000'), protocol: 'https'
   }
 end

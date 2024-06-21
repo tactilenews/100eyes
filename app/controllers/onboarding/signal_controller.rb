@@ -27,5 +27,9 @@ module Onboarding
     def signal_onboarding_token
       params.require(:signal_onboarding_token)
     end
+
+    def onboarding_allowed?
+      @organization.channels_onboarding_allowed.include?(:signal)
+    end
   end
 end

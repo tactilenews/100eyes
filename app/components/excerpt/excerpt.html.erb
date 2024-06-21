@@ -1,6 +1,6 @@
 <a class="<%= class_attr %>" href="<%= link %>">
   <% if sender %>
-    <%= c 'avatar', record: sender %>
+    <%= c 'avatar', organization: organization, record: sender %>
   <% end %>
   <div class="Excerpt-infoWrapper">
     <div class="Excerpt-header">

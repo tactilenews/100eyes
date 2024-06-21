@@ -9,7 +9,7 @@ module PostmarkAdapter
         text: I18n.t('adapter.postmark.contributor_not_found_email.text'),
         mail: {
           subject: I18n.t('adapter.postmark.contributor_not_found_email.subject'),
-          message_stream: Setting.postmark_transactional_stream,
+          message_stream: ENV.fetch('POSTMARK_TRANSACTIONAL_STREAM', 'outbound'),
           to: mail.from.first
         }
       }

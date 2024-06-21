@@ -1,6 +1,6 @@
 <%= c 'main' do %>
   <%= c 'page_header', styles: [:largeMarginBottom, :flexboxColumn] do %>
-    <%= c 'contributor_header', contributor: @contributor %>
+    <%= c 'contributor_header', organization: @organization, contributor: @contributor %>
     <%= c 'flex', style: :small_gap do %>
       <% if @contributor.tags.any? %>
         <%= c 'tags_list', tags: @contributor.tags %>

@@ -33,5 +33,9 @@ module Onboarding
     def telegram_onboarding_token
       params.require(:telegram_onboarding_token)
     end
+
+    def onboarding_allowed?
+      @organization.channels_onboarding_allowed.include?(:telegram)
+    end
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_06_21_100548) do
+ActiveRecord::Schema.define(version: 2024_06_27_182314) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -127,6 +127,9 @@ ActiveRecord::Schema.define(version: 2024_06_21_100548) do
     t.index ["whats_app_phone_number"], name: "index_contributors_on_whats_app_phone_number", unique: true
   end
 
+  create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
+  end
+
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
     t.integer "attempts", default: 0, null: false
@@ -190,8 +193,57 @@ ActiveRecord::Schema.define(version: 2024_06_21_100548) do
     t.bigint "business_plan_id", null: false
     t.bigint "contact_person_id"
     t.datetime "upgraded_business_plan_at"
+    t.string "project_name", default: "100eyes"
+    t.string "onboarding_title", default: "Hallo und herzlich willkommen!"
+    t.string "onboarding_byline", default: ""
+    t.string "onboarding_data_processing_consent_additional_info", default: ""
+    t.string "onboarding_page", default: "Wir freuen uns, dass Sie an unserer Dialog-Recherche zur Schweinehaltung in Deutschland teilnehmen. Denn dort zeigen sich überall schwerwiegende Probleme: Schlachthofskandale, menschenunwürdige Arbeitsbedingungen, Tierqualen, dazu ein rapider Preisverfall, der Schweinebauern ruiniert. So kann es nicht weitergehen. Das weiß jeder, der mit diesem Markt zu tun hat.\n\nLösungsvorschläge gibt es bisher keine. Deswegen starten wir diese Dialog-Recherche mit Ihrer Hilfe. Statt mit ein bis drei Betroffenen oder Experten ein Interview zu führen und dann einen Beitrag zu veröffentlichen, wollen wir mit vielen verschiedenen Menschen das Gespräch suchen. Und das über einen Zeitraum von vier Wochen. Damit wir ein breiteres Bild bekommen und Dinge besser verstehen.\n\nEs ist ein Experiment. Danke, dass Sie sich darauf einlassen.\n\n### Wer?\nHinter dem #Schweinesystem stecken Menschen, keine Maschinen: Die Journalisten Katharina Jakob und Jens Eber, der Filmemacher Oliver Eberhardt sowie das Dialog-Recherche-Team Isabelle Buckow, Astrid Csuraji und Dr. Jakob Vicari von tactile.news. [Auf unserer Webseite](https://tactile.news/ueber-uns) stellen wir unsere Idee vom Dialog-Journalismus ausführlicher vor.\n\n### Wie?\nWir stellen Ihnen in den nächsten vier, fünf Wochen immer mal wieder eine Frage. Am liebsten per Telegram Messenger. Wenn Sie den nicht nutzen und auch nicht installieren wollen (er ist sehr ähnlich wie WhatsApp), kommunizieren Sie mit uns per E-Mail. Es bleibt Ihnen überlassen, ob Sie jede Frage beantworten oder auch welche auslassen.\n\n### Wo?\nDamit wir Sie künftig auf dem Kanal Ihrer Wahl erreichen, teilen Sie uns bitte mit, ob wir Sie per E-Mail oder Telegram anschreiben sollen.\n"
+    t.string "onboarding_success_heading", default: "Vielen Dank für Ihre Anmeldung bei 100eyes.\n"
+    t.string "onboarding_success_text", default: "Unsere Dialog-Recherche startet bald. Wir melden uns dann bei Ihnen.\n\nUm unseren Kanal Abzubestellen, schreibe „abbestellen“.\n"
+    t.string "onboarding_unauthorized_heading", default: "Leider ist dieser Einladungs-Link nicht mehr gültig.\n"
+    t.string "onboarding_unauthorized_text", default: "Das ist aber nicht Ihre Schuld! Bitte kontaktieren Sie uns unter support@100ey.es, um einen neuen Link zu erhalten.\n\n"
+    t.string "onboarding_data_protection_link", default: "https://tactile.news/100eyes-datenschutz/"
+    t.string "onboarding_imprint_link", default: "https://tactile.news/impressum/"
+    t.boolean "onboarding_show_gdpr_modal", default: false
+    t.boolean "onboarding_ask_for_additional_consent", default: false
+    t.string "onboarding_additional_consent_heading", default: ""
+    t.string "onboarding_additional_consent_text", default: ""
+    t.string "telegram_unknown_content_message", default: "Unsere Software kann derzeit Textnachrichten, Sprachnachrichten und Bilder verarbeiten, jedoch noch keine weiteren Inhalte wie z.B. Sticker, Dateianhänge oder Kontakte. Für die Zwischenzeit bitten wir Sie, Nachrichten mit solchen Inhalten an @FrauCsu (Astrid Csuraji) zu schicken. Herzlichen Dank!\n"
+    t.string "telegram_contributor_not_found_message", default: "Vielen Dank für Ihre Nachricht. Leider können wir Ihr Telegram-Konto noch nicht zuordnen.\n\nDafür benötigen wir den 8-stellige Code, den Sie während der Registrierung erhalten haben: Bitte schreiben Sie uns einfach eine Nachricht über Telegram hier in diesen Chat. Die Nachricht darf nur den Code enthalten und keinen weiteren Text.\n\nFalls das nicht klappt, melden Sie sich gerne unter support@tactile.news, dann lösen wir das Problem schnell. Vielen Dank.\n"
+    t.string "encrypted_telegram_bot_api_key"
+    t.string "encrypted_telegram_bot_api_key_iv"
+    t.string "telegram_bot_username"
+    t.string "threema_unknown_content_message", default: "Unsere Software kann derzeit Textnachrichten, Sprachnachrichten und Bilder verarbeiten, jedoch noch keine weiteren Inhalte wie z.B. Kontakte oder Dateianhänge. Für die Zwischenzeit bitten wir Sie, Nachrichten mit solchen Inhalten an Astrid Csuraji, ThreemaID 4N4Y3T2E zu schicken. Herzlichen Dank!\n"
+    t.string "threemarb_api_identity"
+    t.string "encrypted_threemarb_api_secret"
+    t.string "encrypted_threemarb_api_secret_iv"
+    t.string "encrypted_threemarb_private"
+    t.string "encrypted_threemarb_private_iv"
+    t.string "twilio_api_key_sid"
+    t.string "encrypted_twilio_api_key_secret"
+    t.string "encrypted_twilio_api_key_secret_iv"
+    t.string "signal_server_phone_number"
+    t.string "signal_monitoring_url"
+    t.string "signal_unknown_content_message", default: "Unsere Software kann derzeit Textnachrichten, Sprachnachrichten, Bilder und Reaktionen auf Nachrichten verarbeiten, jedoch noch keine weiteren Inhalte wie z.B. Sticker oder Kontakte. In der Zwischenzeit senden Sie bitte Nachrichten mit solchen Inhalten an <KONTAKTDATEN EINFÜGEN>. Herzlichen Dank!\n"
+    t.string "twilio_account_sid"
+    t.string "whats_app_server_phone_number"
+    t.string "three_sixty_dialog_whats_app_template_namespace"
+    t.string "three_sixty_dialog_partner_id"
+    t.string "three_sixty_dialog_partner_username"
+    t.string "encrypted_three_sixty_dialog_partner_password"
+    t.string "encrypted_three_sixty_dialog_partner_password_iv"
+    t.string "encrypted_three_sixty_dialog_partner_token"
+    t.string "encrypted_three_sixty_dialog_partner_token_iv"
+    t.string "encrypted_three_sixty_dialog_client_api_key"
+    t.string "encrypted_three_sixty_dialog_client_api_key_iv"
+    t.string "three_sixty_dialog_client_id"
+    t.string "three_sixty_dialog_client_waba_account_id"
+    t.string "email_from_address"
+    t.string "whats_app_profile_about", default: ""
+    t.jsonb "onboarding_allowed", default: {"email"=>true, "signal"=>true, "threema"=>true, "telegram"=>true, "whats_app"=>true}
     t.index ["business_plan_id"], name: "index_organizations_on_business_plan_id"
     t.index ["contact_person_id"], name: "index_organizations_on_contact_person_id"
+    t.index ["telegram_bot_username"], name: "index_organizations_on_telegram_bot_username", unique: true
   end
 
   create_table "pg_search_documents", force: :cascade do |t|
@@ -219,6 +271,8 @@ ActiveRecord::Schema.define(version: 2024_06_21_100548) do
     t.bigint "user_id"
     t.datetime "schedule_send_for"
     t.datetime "broadcasted_at"
+    t.bigint "organization_id"
+    t.index ["organization_id"], name: "index_requests_on_organization_id"
     t.index ["user_id"], name: "index_requests_on_user_id"
   end
 
@@ -290,6 +344,7 @@ ActiveRecord::Schema.define(version: 2024_06_21_100548) do
   add_foreign_key "organizations", "business_plans"
   add_foreign_key "organizations", "users", column: "contact_person_id"
   add_foreign_key "photos", "messages"
+  add_foreign_key "requests", "organizations"
   add_foreign_key "requests", "users"
   add_foreign_key "taggings", "tags"
   add_foreign_key "users", "organizations"

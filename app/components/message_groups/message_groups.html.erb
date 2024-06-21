@@ -9,7 +9,7 @@
         <%= I18n.t 'request.replies' %>
       <% end %>
       <% message_groups.each do |contributor, messages| %>
-        <%= c 'chat_messages_group', contributor: contributor, messages: messages, request: request %>
+        <%= c 'chat_messages_group', organization: request.organization, contributor: contributor, messages: messages, request: request %>
       <% end %>
     <% end %>
   <% end %>

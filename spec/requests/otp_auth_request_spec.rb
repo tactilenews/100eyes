@@ -6,6 +6,7 @@ RSpec.describe 'OTP Auth', type: :request do
   include ActiveSupport::Testing::TimeHelpers
 
   let!(:user) { create(:user, email: 'zora@example.org', password: '12345678', otp_enabled: true) }
+  before { create(:organization) }
 
   describe 'GET /otp_auth' do
     before(:each) { get otp_auth_path(as: user) }

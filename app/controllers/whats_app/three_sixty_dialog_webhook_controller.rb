@@ -5,6 +5,7 @@ module WhatsApp
     include WhatsAppHandleCallbacks
 
     skip_before_action :require_login, :verify_authenticity_token
+    before_action :organization
 
     # rubocop:disable Metrics/AbcSize
     def message
@@ -20,7 +21,7 @@ module WhatsApp
       end
 
       adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::REQUEST_FOR_MORE_INFO) do |contributor|
-        handle_request_for_more_info(contributor)
+        handle_request_for_more_info(contributor, @organization)
       end
 
       adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::REQUEST_TO_RECEIVE_MESSAGE) do |contributor|
@@ -28,32 +29,37 @@ module WhatsApp
       end
 
       adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::UNSUPPORTED_CONTENT) do |contributor|
-        WhatsAppAdapter::ThreeSixtyDialogOutbound.send_unsupported_content_message!(contributor)
+        WhatsAppAdapter::ThreeSixtyDialogOutbound.send_unsupported_content_message!(contributor, @organization)
       end
 
+      # TODO: Update to API that passes in organization_id
       adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
-        UnsubscribeContributorJob.perform_later(contributor.id, WhatsAppAdapter::Outbound)
+        UnsubscribeContributorJob.perform_later(@organization.id, contributor.id, WhatsAppAdapter::Outbound)
       end
 
       adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::RESUBSCRIBE_CONTRIBUTOR) do |contributor|
-        ResubscribeContributorJob.perform_later(contributor.id, WhatsAppAdapter::Outbound)
+        ResubscribeContributorJob.perform_later(@organization.id, contributor.id, WhatsAppAdapter::Outbound)
       end
 
-      adapter.consume(message_params.to_h) { |message| message.contributor.reply(adapter) }
+      adapter.consume(@organization, message_params.to_h) { |message| message.contributor.reply(adapter) }
     end
     # rubocop:enable Metrics/AbcSize
 
     def create_api_key
       channel_ids = create_api_key_params[:channels].split('[').last.split(']').last.split(',')
       client_id = create_api_key_params[:client]
-      Setting.three_sixty_dialog_client_id = client_id
+      organization.update!(three_sixty_dialog_client_id: client_id)
       channel_ids.each do |channel_id|
-        WhatsAppAdapter::CreateApiKey.perform_later(channel_id: channel_id)
+        WhatsAppAdapter::CreateApiKey.perform_later(organization_id: @organization.id, channel_id: channel_id)
       end
       render 'onboarding/success'
     end
 
     private
+
+    def organization
+      @organization ||= Organization.find(params['organization_id'])
+    end
 
     def message_params
       params.permit({ three_sixty_dialog_webhook:

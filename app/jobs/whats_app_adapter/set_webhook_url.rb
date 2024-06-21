@@ -4,15 +4,16 @@ require 'net/http'
 
 module WhatsAppAdapter
   class SetWebhookUrl < ApplicationJob
-    def perform
-      return if Setting.three_sixty_dialog_client_api_key.blank?
+    def perform(organization_id:)
+      organization = Organization.find_by(id: organization_id)
+      return unless organization && organization.three_sixty_dialog_client_api_key.present?
 
-      base_uri = Setting.three_sixty_dialog_whats_app_rest_api_endpoint
+      base_uri = ENV.fetch('THREE_SIXTY_DIALOG_PARTNER_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')
       url = URI.parse("#{base_uri}/configs/webhook")
-      headers = { 'D360-API-KEY' => Setting.three_sixty_dialog_client_api_key, 'Content-Type' => 'application/json' }
+      headers = { 'D360-API-KEY' => organization.three_sixty_dialog_client_api_key, 'Content-Type' => 'application/json' }
       request = Net::HTTP::Post.new(url.to_s, headers)
 
-      request.body = { url: "https://#{Setting.application_host}/whats_app/three-sixty-dialog-webhook" }.to_json
+      request.body = { url: "https://#{ENV.fetch('APPLICATION_HOSTNAME', 'localhost:3000')}/whats_app/three-sixty-dialog-webhook" }.to_json
       response = Net::HTTP.start(url.host, url.port, use_ssl: true) do |http|
         http.request(request)
       end

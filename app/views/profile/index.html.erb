@@ -2,7 +2,7 @@
   <%= c 'profile_header', organization: @organization, business_plans: @business_plans %>
   <%= c 'user_management', organization: @organization %>
   <%= c 'profile_contributors_section', organization: @organization %>
-  <% unless Setting.whats_app_configured? %>
-    <%= c 'whats_app_setup' %>
+  <% unless @organization.whats_app_configured? %>
+    <%= c 'whats_app_setup', organization_id: @organization.id %>
   <% end %>
 <% end %>

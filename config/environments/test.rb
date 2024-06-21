@@ -65,5 +65,5 @@ Rails.application.configure do
   # CUSTOM
   config.active_job.queue_adapter = :test
   config.middleware.use Clearance::BackDoor
-  config.action_mailer.default_url_options = { host: Setting.application_host }
+  config.action_mailer.default_url_options = { host: ENV.fetch('APPLICATION_HOSTNAME', 'localhost:3000') }
 end

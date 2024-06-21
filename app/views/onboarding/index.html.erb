@@ -1,17 +1,17 @@
-<%= c 'onboarding_header' %>
+<%= c 'onboarding_header', organization: @organization %>
 
 <%= c 'main' do %>
   <%= c 'wrapper' do %>
-    <%= c 'onboarding_hero' %>
+    <%= c 'onboarding_hero', organization: @organization %>
   <% end %>
 
   <%= c 'section', styles: [:narrow] do %>
     <%= c 'heading', styles: [:alpha, :serif], tag: :h1 do %>
-      <%= Setting.onboarding_title %>
+      <%= @organization.onboarding_title %>
     <% end %>
 
     <div class="text-serif">
-      <%= c 'markdown', raw: Setting.onboarding_page %>
+      <%= c 'markdown', raw: @organization.onboarding_page %>
     </div>
 
     <%= c 'onboarding_channel_buttons', channels: @channels %>
@@ -19,4 +19,4 @@
   <% end %>
 <% end %>
 
-<%= c 'onboarding_footer' %>
+<%= c 'onboarding_footer', organization: @organization %>

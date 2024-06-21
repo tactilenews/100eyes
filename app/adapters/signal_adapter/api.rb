@@ -3,7 +3,7 @@
 module SignalAdapter
   class Api
     class << self
-      def perform_request(request, contributor)
+      def perform_request(organization, request, contributor)
         uri = request.uri
         response = Net::HTTP.start(uri.host, uri.port) do |http|
           http.request(request)
@@ -13,7 +13,10 @@ module SignalAdapter
           yield response if block_given?
         else
           error_message = JSON.parse(response.body)['error']
-          MarkInactiveContributorInactiveJob.perform_later(contributor_id: contributor.id) if error_message.match?(/Unregistered user/)
+          if error_message.match?(/Unregistered user/)
+            MarkInactiveContributorInactiveJob.perform_later(organization_id: organization.id,
+                                                             contributor_id: contributor.id)
+          end
           exception = SignalAdapter::BadRequestError.new(error_code: response.code, message: error_message)
           context = {
             code: response.code,

@@ -9,8 +9,9 @@ module WhatsAppAdapter
     UNSUBSCRIBE_CONTRIBUTOR = :unsubscribe_contributor
     RESUBSCRIBE_CONTRIBUTOR = :resubscribe_contributor
     UNSUPPORTED_CONTENT_TYPES = %w[application text/vcard latitude longitude].freeze
+    UNKNOWN_ORGANIZATION = :unknown_organization
 
-    attr_reader :sender, :text, :message
+    attr_reader :sender, :text, :message, :organization
 
     def initialize
       @callbacks = {}
@@ -22,6 +23,9 @@ module WhatsAppAdapter
 
     def consume(whats_app_message)
       whats_app_message = whats_app_message.with_indifferent_access
+
+      @organization = initialize_organization(whats_app_message)
+      return unless @organization
 
       @sender = initialize_sender(whats_app_message)
       return unless @sender
@@ -47,9 +51,21 @@ module WhatsAppAdapter
       @callbacks[event].call(*args)
     end
 
+    def initialize_organization(whats_app_message)
+      whats_app_server_phone_number = whats_app_message[:to].split('whatsapp:').last
+      organization = Organization.find_by(whats_app_server_phone_number: whats_app_server_phone_number)
+
+      unless organization
+        trigger(UNKNOWN_ORGANIZATION, whats_app_server_phone_number)
+        nil
+      end
+
+      organization
+    end
+
     def initialize_sender(whats_app_message)
       whats_app_phone_number = whats_app_message[:wa_id].phony_normalized
-      sender = Contributor.find_by(whats_app_phone_number: whats_app_phone_number)
+      sender = organization.contributors.find_by(whats_app_phone_number: whats_app_phone_number)
 
       unless sender
         trigger(UNKNOWN_CONTRIBUTOR, whats_app_phone_number)
@@ -63,11 +79,12 @@ module WhatsAppAdapter
       message_text = whats_app_message[:body]
       original_replied_message_sid = whats_app_message[:original_replied_message_sid]
 
-      trigger(REQUEST_FOR_MORE_INFO, sender) if request_for_more_info?(message_text)
-      trigger(UNSUBSCRIBE_CONTRIBUTOR, sender) if unsubscribe_text?(message_text)
-      trigger(RESUBSCRIBE_CONTRIBUTOR, sender) if resubscribe_text?(message_text)
-      trigger(REQUEST_TO_RECEIVE_MESSAGE, sender, original_replied_message_sid) if request_to_receive_message?(sender, whats_app_message)
-
+      trigger(REQUEST_FOR_MORE_INFO, sender, organization) if request_for_more_info?(message_text)
+      trigger(UNSUBSCRIBE_CONTRIBUTOR, sender, organization) if unsubscribe_text?(message_text)
+      trigger(RESUBSCRIBE_CONTRIBUTOR, sender, organization) if resubscribe_text?(message_text)
+      if request_to_receive_message?(sender, whats_app_message)
+        trigger(REQUEST_TO_RECEIVE_MESSAGE, sender, original_replied_message_sid, organization)
+      end
       message = Message.new(text: message_text, sender: sender)
       message.raw_data.attach(
         io: StringIO.new(JSON.generate(whats_app_message)),
@@ -81,7 +98,7 @@ module WhatsAppAdapter
       return unless unsupported_content?(whats_app_message)
 
       message.unknown_content = true
-      trigger(UNSUPPORTED_CONTENT, sender)
+      trigger(UNSUPPORTED_CONTENT, sender, organization)
     end
 
     def initialize_file(whats_app_message)

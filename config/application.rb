@@ -53,6 +53,7 @@ module App
     # us to preview raw message data, which is often stored as JSON, directly
     # in the browser.
     config.active_storage.content_types_allowed_inline << 'application/json'
+    # This only works if all tenants use the same twilio subaccount.
     config.middleware.use Rack::TwilioWebhookAuthentication,
                           ENV['TWILIO_AUTH_TOKEN'],
                           '/whats_app/webhook',

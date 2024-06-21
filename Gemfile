@@ -84,6 +84,8 @@ gem 'sentry-ruby'
 # Admin
 gem 'administrate'
 gem 'administrate_exportable'
+gem 'administrate-field-active_storage'
+gem 'administrate-field-jsonb'
 
 # Notifications
 gem 'noticed', '~> 1.6'
@@ -93,3 +95,8 @@ gem 'groupdate'
 
 # Pagination
 gem 'kaminari', '~> 1.2'
+
+# Encrypt attrs
+gem 'attr_encrypted'
+
+gem 'data_migrate', '~> 9.2.0'

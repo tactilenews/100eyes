@@ -49,6 +49,7 @@ traefik:
 rails:
   environment: production
   hundred_eyes_project_name: 100eyes
+  attr_encrypted_key: # (REQUIRED) To save encrypted attrs to db
   threema:
     api_identity: 
     api_secret: 

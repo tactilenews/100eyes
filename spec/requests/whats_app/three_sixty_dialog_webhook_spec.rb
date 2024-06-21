@@ -4,6 +4,9 @@ require 'rails_helper'
 require 'webmock/rspec'
 
 RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
+  let(:organization) do
+    create(:organization, whats_app_server_phone_number: '+4915133311445', three_sixty_dialog_client_api_key: 'valid_api_key')
+  end
   let(:whats_app_phone_number) { '+491511234567' }
   let(:params) do
     { contacts: [{ profile: { name: 'Matthew Rider' },
@@ -23,6 +26,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
   end
   let(:text_payload) do
     {
+      organization_id: organization.id,
       payload: {
         recipient_type: 'individual',
         to: contributor.whats_app_phone_number.split('+').last,
@@ -35,14 +39,12 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
   end
   let(:latest_message) { contributor.received_messages.first.text }
 
-  subject { -> { post whats_app_three_sixty_dialog_webhook_path, params: params } }
+  subject { -> { post whats_app_three_sixty_dialog_webhook_path(organization), params: params } }
 
   describe '#messages' do
     before do
       allow(Sentry).to receive(:capture_exception)
-      allow(Setting).to receive(:whats_app_server_phone_number).and_return('4915133311445')
       allow(Request).to receive(:broadcast!).and_call_original
-      allow(Setting).to receive(:three_sixty_dialog_client_api_key).and_return('valid_api_key')
     end
 
     describe 'statuses' do
@@ -106,16 +108,16 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
     end
 
     describe 'given a contributor' do
-      let!(:contributor) { create(:contributor, whats_app_phone_number: whats_app_phone_number) }
-      let(:request) { create(:request) }
+      let(:contributor) { create(:contributor, whats_app_phone_number: whats_app_phone_number, organization: organization) }
+      let(:request) { create(:request, organization: organization) }
 
       before do
-        create(:message, request: request, recipient: contributor)
+        create(:message, :outbound, request: request, recipient: contributor)
       end
 
       context 'no message template sent' do
         it 'creates a messsage' do
-          expect { subject.call }.to change(Message, :count).from(2).to(3)
+          expect { subject.call }.to change(Message, :count).from(1).to(2)
         end
       end
 
@@ -140,7 +142,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
 
       context 'request for more info' do
         before { params[:messages].first[:text][:body] = 'Mehr Infos' }
-        let(:text) { [Setting.about, "_#{I18n.t('adapter.shared.unsubscribe.instructions')}_"].join("\n\n") }
+        let(:text) { [organization.whats_app_profile_about, "_#{I18n.t('adapter.shared.unsubscribe.instructions')}_"].join("\n\n") }
 
         it 'marks that contributor has responded to template message' do
           expect { subject.call }.to change {
@@ -166,7 +168,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
       context 'request to unsubscribe' do
         before { params[:messages].first[:text][:body] = 'Abbestellen' }
 
-        it { is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(contributor.id, WhatsAppAdapter::Outbound) }
+        it { is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(organization.id, contributor.id, WhatsAppAdapter::Outbound) }
       end
 
       context 'request to re-subscribe' do
@@ -175,17 +177,21 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
           params[:messages].first[:text][:body] = 'Bestellen'
         end
 
-        it { is_expected.to have_enqueued_job(ResubscribeContributorJob).with(contributor.id, WhatsAppAdapter::Outbound) }
+        it { is_expected.to have_enqueued_job(ResubscribeContributorJob).with(organization.id, contributor.id, WhatsAppAdapter::Outbound) }
       end
 
       context 'files' do
         let(:message) { params[:messages].first }
-        let(:fetch_file_url) { "#{Setting.three_sixty_dialog_whats_app_rest_api_endpoint}/media/some_valid_id" }
+        let(:fetch_file_url) { 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693/media/some_valid_id' }
 
         before { message.delete(:text) }
 
         context 'supported content' do
-          before { stub_request(:get, fetch_file_url).to_return(status: 200, body: 'downloaded_file') }
+          before do
+            allow(ENV).to receive(:fetch).with('THREE_SIXTY_DIALOG_PARTNER_REST_API_ENDPOINT',
+                                               'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693').and_return('https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')
+            stub_request(:get, fetch_file_url).to_return(status: 200, body: 'downloaded_file')
+          end
 
           context 'image' do
             let(:image) do
@@ -205,7 +211,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
             end
 
             it 'creates a new Message' do
-              expect { subject.call }.to change(Message, :count).from(2).to(3)
+              expect { subject.call }.to change(Message, :count).from(1).to(2)
             end
 
             it 'attaches the file to the message with its mime_type' do
@@ -235,7 +241,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
             end
 
             it 'creates a new Message' do
-              expect { subject.call }.to change(Message, :count).from(2).to(3)
+              expect { subject.call }.to change(Message, :count).from(1).to(2)
             end
 
             it 'attaches the file to the message' do
@@ -263,7 +269,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
             end
 
             it 'creates a new Message' do
-              expect { subject.call }.to change(Message, :count).from(2).to(3)
+              expect { subject.call }.to change(Message, :count).from(1).to(2)
             end
 
             it 'attaches the file to the message with its mime_type' do
@@ -293,7 +299,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
             end
 
             it 'creates a new Message' do
-              expect { subject.call }.to change(Message, :count).from(2).to(3)
+              expect { subject.call }.to change(Message, :count).from(1).to(2)
             end
 
             it 'attaches the file to the message with its mime_type' do
@@ -381,8 +387,8 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
         end
 
         context 'unsupported content' do
+          before { organization.update!(contact_person: contact_person) }
           let(:contact_person) { create(:user) }
-          let!(:organization) { create(:organization, contact_person: contact_person, contributors: [contributor]) }
           let(:text) do
             I18n.t('adapter.whats_app.unsupported_content_template', first_name: contributor.first_name,
                                                                      contact_person: contributor.organization.contact_person.name)

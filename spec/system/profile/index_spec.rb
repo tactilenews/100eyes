@@ -27,13 +27,8 @@ RSpec.describe 'Profile' do
   end
   let!(:inactive_contributor) { create(:contributor, deactivated_at: 1.hour.ago, organization: organization) }
   before do
-    allow(Setting).to receive(:channel_image).and_return(ActiveStorage::Blob.new(filename: 'channel_image.jpg'))
+    organization.channel_image.attach(io: Rails.root.join('example-image.png').open, filename: 'example-image.png')
     current_plan.update(valid_from: Time.current, valid_until: Time.current + 6.months)
-    allow(Setting).to receive(:whats_app_server_phone_number).and_return(nil)
-    allow(Setting).to receive(:twilio_api_key_sid).and_return(nil)
-    allow(Setting).to receive(:twilio_api_key_secret).and_return(nil)
-    allow(Setting).to receive(:twilio_account_sid).and_return(nil)
-    allow(Setting).to receive(:three_sixty_dialog_client_api_key).and_return(nil)
   end
 
   after { Timecop.return }
@@ -167,32 +162,34 @@ RSpec.describe 'Profile' do
     visit profile_path(as: user)
     expect(page).to have_content("Preis: #{number_to_currency(editorial_enterprise.price_per_month)}/Monat")
 
-    # WhatsApp setup
+    # WhatsApp not set up
+    expect(page).to have_selector(:element, 'section', 'data-testid': 'whats-app-setup')
+
     within('.WhatsAppSetup') do
       expect(page).to have_content('WhatsApp-Integration')
       expect(page).to have_button('WhatsApp einrichten')
     end
 
     # Twilio configured
-    allow(Setting).to receive(:whats_app_server_phone_number).and_return('+491234567')
-    allow(Setting).to receive(:twilio_api_key_sid).and_return('valid_api_key_sid')
-    allow(Setting).to receive(:twilio_api_key_secret).and_return('valid_api_key_secrety')
-    allow(Setting).to receive(:twilio_account_sid).and_return('valid_account_sid')
+    organization.update!(
+      whats_app_server_phone_number: '+491234567',
+      twilio_api_key_sid: Faker::Internet.uuid,
+      twilio_api_key_secret: SecureRandom.alphanumeric(16),
+      twilio_account_sid: Faker::Internet.uuid,
+      three_sixty_dialog_client_api_key: nil
+    )
+
     visit profile_path(as: user)
 
     expect(page).not_to have_selector(:element, 'section', 'data-testid': 'whats-app-setup')
 
-    allow(Setting).to receive(:whats_app_server_phone_number).and_return(nil)
-    allow(Setting).to receive(:twilio_api_key_sid).and_return(nil)
-    allow(Setting).to receive(:twilio_api_key_secret).and_return(nil)
-    allow(Setting).to receive(:twilio_account_sid).and_return(nil)
-
-    visit profile_path(as: user)
-
-    expect(page).to have_selector(:element, 'section', 'data-testid': 'whats-app-setup')
-
     # 360dialog configured
-    allow(Setting).to receive(:three_sixty_dialog_client_api_key).and_return('valid_client_api_key')
+    organization.update!(
+      twilio_api_key_sid: nil,
+      twilio_api_key_secret: nil,
+      twilio_account_sid: nil,
+      three_sixty_dialog_client_api_key: SecureRandom.alphanumeric(26)
+    )
 
     visit profile_path(as: user)
 

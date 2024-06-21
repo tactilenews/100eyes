@@ -2,6 +2,7 @@
 
 FactoryBot.define do
   factory :request do
+    organization
     title { 'I need a title' }
     text { 'I am a request' }
     broadcasted_at { Time.current }
