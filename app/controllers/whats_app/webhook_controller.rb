@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
+# TODO: Reduce ClassLength, extract status and error to own classes(?)
+# rubocop:disable Metrics/ClassLength
 module WhatsApp
   class WebhookController < ApplicationController
     include WhatsAppHandleCallbacks
 
     skip_before_action :require_login, :verify_authenticity_token
+    before_action :set_organization, only: :status
     before_action :set_contributor, only: :status
 
     UNSUCCESSFUL_DELIVERY = %w[undelivered failed].freeze
@@ -66,9 +69,18 @@ module WhatsApp
                     :EventType, :From, :MessageSid, :MessageStatus, :SmsSid, :SmsStatus, :StructuredMessage, :To)
     end
 
+    def set_organization
+      whats_app_server_phone_number = status_params['From'].split('whatsapp:').last
+      @organization = Organization.find_by(whats_app_server_phone_number: whats_app_server_phone_number)
+      handle_unknown_organization(whats_app_server_phone_number) unless @organization
+      @organization
+    end
+
     def set_contributor
+      return unless @organization
+
       whats_app_phone_number = status_params['To'].split('whatsapp:').last
-      @contributor = Contributor.find_by(whats_app_phone_number: whats_app_phone_number)
+      @contributor = @organization.contributors.find_by(whats_app_phone_number: whats_app_phone_number)
     end
 
     def handle_callbacks
@@ -148,7 +160,7 @@ module WhatsApp
       return unless @contributor
 
       if status_params['ErrorCode'].to_i.eql?(INVALID_MESSAGE_RECIPIENT_ERROR_CODE)
-        MarkInactiveContributorInactiveJob.perform_later(contributor_id: @contributor.id)
+        MarkInactiveContributorInactiveJob.perform_later(organization_id: @organization.id, contributor_id: @contributor.id)
         return
       end
       if status_params['ErrorCode'].to_i.eql?(FREEFORM_MESSAGE_NOT_ALLOWED_ERROR_CODE) && status_params['MessageStatus'].eql?('failed')
@@ -177,3 +189,4 @@ module WhatsApp
     end
   end
 end
+# rubocop:enable Metrics/ClassLength

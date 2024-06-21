@@ -3,7 +3,10 @@
 class MarkInactiveContributorInactiveJob < ApplicationJob
   queue_as :mark_inactive_contributor_inactive
 
-  def perform(contributor_id:)
+  def perform(organization_id:, contributor_id:)
+    organization = Organization.find_by(id: organization_id)
+    return unless organization
+
     contributor = Contributor.where(id: contributor_id).first
     return unless contributor
 
@@ -14,7 +17,7 @@ class MarkInactiveContributorInactiveJob < ApplicationJob
       organization_id: contributor.organization.id
     ).deliver_later(contributor.organization.users + User.admin.all)
     User.admin.find_each do |admin|
-      PostmarkAdapter::Outbound.contributor_marked_as_inactive!(admin, contributor)
+      PostmarkAdapter::Outbound.contributor_marked_as_inactive!(admin, contributor, organization)
     end
   end
 end

@@ -10,6 +10,7 @@ module TelegramAdapter
         contributor = message&.recipient
         return unless contributor
 
+        # TODO: update to API that passes in the organization
         MarkInactiveContributorInactiveJob.perform_later(contributor_id: contributor.id)
       end
 

@@ -9,11 +9,14 @@ module ThreemaAdapter
         tags = {}
         if exception.message.match?(/Can't find public key for Threema ID/)
           tags = { support: 'yes' }
-          threema_id = exception.message.split('Threema ID').last.strip
-          contributor = Contributor.where('lower(threema_id) = ?', threema_id.downcase).first
-          return unless contributor
+          organization = Organization.find_by(id: arguments.first[:organization_id])
+          next unless organization
 
-          MarkInactiveContributorInactiveJob.perform_later(contributor_id: contributor.id)
+          threema_id = exception.message.split('Threema ID').last.strip
+          contributor = organization.contributors.where('lower(threema_id) = ?', threema_id.downcase).first
+          next unless contributor
+
+          MarkInactiveContributorInactiveJob.perform_later(organization_id: organization.id, contributor_id: contributor.id)
         end
         ErrorNotifier.report(exception, tags: tags)
       end
