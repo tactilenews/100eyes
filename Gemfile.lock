@@ -99,6 +99,8 @@ GEM
       ffi (~> 1.14)
       ffi-compiler (~> 1.0)
     ast (2.4.2)
+    attr_encrypted (4.1.0)
+      encryptor (~> 3.0.0)
     bcrypt (3.1.18)
     bootsnap (1.16.0)
       msgpack (~> 1.2)
@@ -155,6 +157,7 @@ GEM
       railties (>= 6.1)
     email_validator (2.2.3)
       activemodel
+    encryptor (3.0.0)
     erubi (1.11.0)
     factory_bot (6.2.0)
       activesupport (>= 5.0.0)
@@ -433,7 +436,7 @@ GEM
 
 PLATFORMS
   ruby
-  x86_64-linux
+  x86_64-linux-musl
 
 DEPENDENCIES
   active_model_otp
@@ -441,6 +444,7 @@ DEPENDENCIES
   acts-as-taggable-on
   administrate
   administrate_exportable
+  attr_encrypted
   bootsnap (>= 1.4.2)
   browser
   bullet
@@ -493,4 +497,4 @@ RUBY VERSION
    ruby 3.0.0p0
 
 BUNDLED WITH
-   2.5.12
+   2.5.13

@@ -23,10 +23,10 @@ class AddSettingsToOrganizations < ActiveRecord::Migration[6.1]
       t.string :onboarding_additional_consent_text
       t.string :telegram_unknown_content_message
       t.string :telegram_contributor_not_found_message
-      t.string :telegram_bot_api_key
-      t.string :telegram_bot_username
       t.string :threema_unknown_content_message
       t.string :threemarb_api_identity
+      t.string :encrypted_threemarb_api_secret
+      t.string :encrypted_threemarb_api_secret_iv
       t.string :signal_server_phone_number
       t.string :signal_monitoring_url
       t.string :signal_unknown_content_message

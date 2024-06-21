@@ -22,6 +22,10 @@ Rails.application.routes.draw do
     post '/status', to: 'webhook#status'
   end
 
+  namespace :threema do
+    post '/webhook', to: 'webhook#message'
+  end
+
   namespace :global do
     constraints Clearance::Constraints::SignedIn.new(&:admin?) do
       get '/settings', to: 'settings#index'
@@ -108,10 +112,6 @@ Rails.application.routes.draw do
     end
 
     get '/requests/contributors-count', to: 'requests#contributors_count'
-
-    namespace :threema do
-      post '/webhook', to: 'webhook#message'
-    end
 
     namespace :whats_app do
       get '/onboarding-successful', to: 'three_sixty_dialog_webhook#create_api_key'

@@ -96,3 +96,6 @@ gem 'kaminari', '~> 1.2'
 
 # Slugged routes
 gem 'friendly_id'
+
+# Encrypt attrs
+gem 'attr_encrypted'

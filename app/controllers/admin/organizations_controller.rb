@@ -20,8 +20,8 @@ module Admin
 
     def update_params
       params.permit(:id,
-                    organization: %i[id business_plan_id upgrade_discount contact_person_id name telegram_bot_api_key
-                                     telegram_bot_username whats_app_server_phone_number])
+                    organization: %i[id business_plan_id upgrade_discount contact_person_id name
+                                     whats_app_server_phone_number threemarb_api_identity threemarb_api_secret])
     end
   end
 end

@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Organization < ApplicationRecord
+  attr_encrypted_options.merge!(key: Base64.decode64(ENV.fetch('ATTR_ENCRYPTED_KEY', nil)))
+  attr_encrypted :threemarb_api_secret
+
   extend FriendlyId
   friendly_id :name, use: :slugged
 
