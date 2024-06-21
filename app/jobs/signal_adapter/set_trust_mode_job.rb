@@ -18,17 +18,21 @@ module SignalAdapter
       when Net::HTTPSuccess
         Rails.logger.debug 'Updated config'
       else
-        error_message = JSON.parse(response.body)['error']
-        MarkInactiveContributorInactiveJob.perform_later(contributor_id: contributor.id) if error_message.match?(/Unregistered user/)
-        exception = SignalAdapter::BadRequestError.new(error_code: response.code, message: error_message)
-        context = {
-          code: response.code,
-          message: response.message,
-          headers: response.to_hash,
-          body: error_message
-        }
-        ErrorNotifier.report(exception, context: context)
+        handle_error(JSON.parse(response.body)['error'])
       end
+    end
+
+    private
+
+    def handle_error(error_message)
+      exception = SignalAdapter::BadRequestError.new(error_code: response.code, message: error_message)
+      context = {
+        code: response.code,
+        message: response.message,
+        headers: response.to_hash,
+        body: error_message
+      }
+      ErrorNotifier.report(exception, context: context)
     end
   end
 end
