@@ -18,7 +18,7 @@ class ResubscribeContributorJob < ApplicationJob
         "Contributor #{contributor.name} has been deactivated by #{deactivated_by} and has tried to re-subscribe"
       )
       ErrorNotifier.report(exception)
-      adapter.send_resubscribe_error_message!(contributor)
+      adapter.send_resubscribe_error_message!(contributor, organization)
       return
     end
 

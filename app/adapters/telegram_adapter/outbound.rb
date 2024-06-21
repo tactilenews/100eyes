@@ -27,6 +27,7 @@ module TelegramAdapter
         TelegramAdapter::Outbound::Text.perform_later(contributor_id: contributor.id, text: welcome_message)
       end
 
+      # TODO: update to API that passes in the organization
       def send_unsubsribed_successfully_message!(contributor)
         return unless contributor&.telegram_id
 
@@ -35,6 +36,7 @@ module TelegramAdapter
         TelegramAdapter::Outbound::Text.perform_later(contributor_id: contributor.id, text: text)
       end
 
+      # TODO: update to API that passes in the organization
       def send_resubscribe_error_message!(contributor)
         return unless contributor&.telegram_id
 

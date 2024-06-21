@@ -12,7 +12,7 @@ class UnsubscribeContributorJob < ApplicationJob
     return if contributor.unsubscribed_at.present?
 
     contributor.update!(unsubscribed_at: Time.current)
-    adapter.send_unsubsribed_successfully_message!(contributor)
+    adapter.send_unsubsribed_successfully_message!(contributor, organization)
     organization = contributor.organization
     ContributorMarkedInactive.with(
       contributor_id: contributor.id,
