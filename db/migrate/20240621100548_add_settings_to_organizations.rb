@@ -1,5 +1,9 @@
+# frozen_string_literal: true
+
 class AddSettingsToOrganizations < ActiveRecord::Migration[6.1]
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def change
+    # rubocop:disable Metrics/BlockLength
     change_table :organizations, bulk: true do |t|
       t.string :project_name
       t.integer :onboarding_logo_blob_id
@@ -43,5 +47,7 @@ class AddSettingsToOrganizations < ActiveRecord::Migration[6.1]
 
       # TODO: Add channels hash
     end
+    # rubocop:enable Metrics/BlockLength
   end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 end
