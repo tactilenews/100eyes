@@ -62,8 +62,6 @@ Rails.application.routes.draw do
     post '/three-sixty-dialog-webhook', to: 'three_sixty_dialog_webhook#message'
   end
 
-  telegram_webhook Telegram::WebhookController
-
   resources :requests, only: %i[index show new create edit update destroy], concerns: :paginatable do
     member do
       get 'notifications', format: /json/
