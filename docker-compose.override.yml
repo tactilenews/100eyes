@@ -1,5 +1,3 @@
-version: '3.7'
-
 x-dev-defaults: &x-dev-defaults
   build:
     context: .
@@ -70,4 +68,4 @@ services:
 
 volumes:
   postgres_data:
- 
+
