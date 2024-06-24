@@ -1,5 +1,3 @@
-version: '3.7'
-
 x-prod-defaults: &x-prod-defaults
   image: "tactilenews/hundred-eyes:${DOCKER_IMAGE_TAG:-latest}"
   environment:
