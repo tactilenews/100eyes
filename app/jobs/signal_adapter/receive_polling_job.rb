@@ -39,8 +39,8 @@ module SignalAdapter
     end
 
     def handle_callbacks
-      adapter.on(SignalAdapter::CONNECT) do |contributor|
-        handle_connect(contributor)
+      adapter.on(SignalAdapter::CONNECT) do |contributor, signal_uuid|
+        handle_connect(contributor, signal_uuid)
       end
 
       adapter.on(SignalAdapter::UNKNOWN_CONTRIBUTOR) do |signal_uuid|
@@ -77,16 +77,14 @@ module SignalAdapter
     end
 
     def handle_connect(contributor, signal_uuid)
-      contributor.update!(signal_uuid)
+      contributor.update!(signal_uuid: signal_uuid, signal_onboarding_completed_at: Time.current)
       SignalAdapter::CreateContactJob.perform_later(contributor_id: contributor.id)
       SignalAdapter::AttachContributorsAvatarJob.perform_later(contributor_id: contributor.id)
+      SignalAdapter::Outbound.send_welcome_message!(contributor)
     end
 
     def handle_delivery_receipt(signal_message, contributor)
       delivery_receipt = signal_message.dig(:envelope, :receiptMessage)
-      signal_uuid = signal_message.dig(:envelope, :sourceUuid)
-      handle_connect(contributor, signal_uuid) if contributor.signal_uuid.blank?
-
       datetime = Time.zone.at(delivery_receipt[:when] / 1000).to_datetime
       latest_received_message = contributor.received_messages.first
       return unless latest_received_message

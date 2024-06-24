@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_06_18_054327) do
+ActiveRecord::Schema.define(version: 2024_06_21_100548) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -106,6 +106,7 @@ ActiveRecord::Schema.define(version: 2024_06_18_054327) do
     t.datetime "data_processing_consented_at"
     t.string "telegram_onboarding_token"
     t.string "signal_phone_number"
+    t.datetime "signal_onboarding_completed_at"
     t.string "additional_email"
     t.datetime "additional_consent_given_at"
     t.bigint "organization_id"
@@ -116,7 +117,7 @@ ActiveRecord::Schema.define(version: 2024_06_18_054327) do
     t.datetime "whats_app_message_template_sent_at"
     t.datetime "unsubscribed_at"
     t.string "signal_uuid"
-    t.string "signal_username"
+    t.string "signal_onboarding_token"
     t.index ["email"], name: "index_contributors_on_email", unique: true
     t.index ["organization_id"], name: "index_contributors_on_organization_id"
     t.index ["signal_phone_number"], name: "index_contributors_on_signal_phone_number", unique: true

@@ -42,7 +42,7 @@ module SignalAdapter
       end
 
       def contributor_can_receive_messages?(recipient)
-        recipient&.signal_phone_number.present?
+        (recipient&.signal_phone_number.present? || recipient&.signal_uuid.present?) && recipient&.signal_onboarding_completed_at.present?
       end
     end
   end
