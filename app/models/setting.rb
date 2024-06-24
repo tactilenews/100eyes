@@ -108,6 +108,7 @@ class Setting < RailsSettings::Base
 
   field :threema_unknown_content_message, default: File.read(File.join('config', 'locales', 'threema', 'unknown_content.txt'))
   field :threemarb_api_identity, readonly: true, default: ENV.fetch('THREEMARB_API_IDENTITY', nil)
+  field :threemarb_private, readonly: true, default: ENV.fetch('THREEMARB_PRIVATE', nil)
 
   field :signal_server_phone_number, readonly: true, default: ENV.fetch('SIGNAL_SERVER_PHONE_NUMBER', nil)
   field :signal_monitoring_url, readonly: true, default: ENV.fetch('SIGNAL_MONITORING_URL', nil)

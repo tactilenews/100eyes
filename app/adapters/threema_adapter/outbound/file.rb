@@ -13,6 +13,7 @@ module ThreemaAdapter
           contributor = Contributor.where('lower(threema_id) = ?', threema_id.downcase).first
           return unless contributor
 
+          # TODO: update to API that passes in the organization
           MarkInactiveContributorInactiveJob.perform_later(contributor_id: contributor.id)
         end
         ErrorNotifier.report(exception, tags: tags)
@@ -21,6 +22,8 @@ module ThreemaAdapter
       def self.threema_instance
         @threema_instance ||= Threema.new
       end
+
+      # TODO: update to API that passes in the organization
 
       def perform(contributor_id:, file_path:, file_name: nil, caption: nil, render_type: nil, message: nil)
         recipient = Contributor.find_by(id: contributor_id)

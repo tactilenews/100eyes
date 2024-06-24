@@ -4,9 +4,11 @@ class Request < ApplicationRecord
   include PlaceholderHelper
   include PgSearch::Model
 
-  multisearchable against: %i[title text]
+  multisearchable against: %i[title text],
+                  additional_attributes: ->(request) { { organization_id: request.organization_id } }
 
   belongs_to :user
+  belongs_to :organization
   has_many :messages, dependent: :destroy
   has_many :contributors, through: :messages, source: :recipient
   has_many :photos, through: :messages
@@ -23,6 +25,7 @@ class Request < ApplicationRecord
   validates :text, length: { maximum: 1500 }, presence: true, unless: -> { files.attached? }
 
   acts_as_taggable_on :tags
+  acts_as_taggable_tenant :organization_id
 
   after_create :broadcast_request
 
@@ -66,23 +69,9 @@ class Request < ApplicationRecord
   end
 
   def self.broadcast!(request)
-    if request.planned?
-      BroadcastRequestJob.delay(run_at: request.schedule_send_for).perform_later(request.id)
-      RequestScheduled.with(request_id: request.id).deliver_later(User.all)
-    else
-      Contributor.active.with_tags(request.tag_list).each do |contributor|
-        message = Message.new(
-          sender: request.user,
-          recipient: contributor,
-          text: request.personalized_text(contributor),
-          request: request,
-          broadcasted: true
-        )
-        message.files = attach_files(request.files) if request.files.attached?
-        message.save!
-      end
-      request.update(broadcasted_at: Time.current)
-    end
+    BroadcastRequestJob.delay(run_at: request.schedule_send_for).perform_later(request.id)
+    RequestScheduled.with(request_id: request.id,
+                          organization_id: request.organization.id).deliver_later(request.organization.users + User.all)
   end
 
   def self.attach_files(files)

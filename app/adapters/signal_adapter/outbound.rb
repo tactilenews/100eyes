@@ -10,7 +10,8 @@ module SignalAdapter
         if message.files.present?
           SignalAdapter::Outbound::File.perform_later(message: message)
         else
-          SignalAdapter::Outbound::Text.perform_later(contributor_id: recipient.id, text: message.text)
+          SignalAdapter::Outbound::Text.perform_later(organization_id: message.request.organization.id, contributor_id: recipient.id,
+                                                      text: message.text)
         end
       end
 
@@ -20,24 +21,25 @@ module SignalAdapter
         SignalAdapter::Outbound::Text.perform_later(contributor_id: contributor.id, text: Setting.signal_unknown_content_message)
       end
 
-      def send_welcome_message!(contributor)
+      def send_welcome_message!(contributor, organization)
         return unless contributor_can_receive_messages?(contributor)
 
         welcome_message = [Setting.onboarding_success_heading, Setting.onboarding_success_text].join("\n")
-        SignalAdapter::Outbound::Text.perform_later(contributor_id: contributor.id, text: welcome_message)
+        SignalAdapter::Outbound::Text.perform_later(organization_id: organization.id, contributor_id: contributor.id, text: welcome_message)
       end
 
-      def send_unsubsribed_successfully_message!(contributor)
+      def send_unsubsribed_successfully_message!(contributor, organization)
         return unless contributor_can_receive_messages?(contributor)
 
         text = [I18n.t('adapter.shared.unsubscribe.successful'), I18n.t('adapter.shared.resubscribe.instructions')].join("\n\n")
-        SignalAdapter::Outbound::Text.perform_later(contributor_id: contributor.id, text: text)
+        SignalAdapter::Outbound::Text.perform_later(organization_id: organization.id, contributor_id: contributor.id, text: text)
       end
 
-      def send_resubscribe_error_message!(contributor)
+      def send_resubscribe_error_message!(contributor, organization)
         return unless contributor_can_receive_messages?(contributor)
 
-        SignalAdapter::Outbound::Text.perform_later(contributor_id: contributor.id,
+        SignalAdapter::Outbound::Text.perform_later(organization_id: organization.id,
+                                                    contributor_id: contributor.id,
                                                     text: I18n.t('adapter.shared.resubscribe.failure'))
       end
 

@@ -15,7 +15,7 @@ module WhatsAppAdapter
         end
       end
 
-      def send_welcome_message!(contributor)
+      def send_welcome_message!(contributor, _organization)
         return unless contributor_can_receive_messages?(contributor)
 
         welcome_message = ["*#{Setting.onboarding_success_heading}*", Setting.onboarding_success_text].join("\n\n")

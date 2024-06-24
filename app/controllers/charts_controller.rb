@@ -27,13 +27,15 @@ class ChartsController < ApplicationController
   private
 
   def joined_inbound(group_keys)
-    group_messages(Message.unscoped.replies, group_keys).count
+    group_messages(Message.unscoped.replies.where(request_id: @organization.requests.pluck(:id)), group_keys).count
   end
 
   def joined_outbound(group_keys)
-    grouped_requests = group_messages(Request.unscoped, group_keys).count
-    grouped_messages = group_messages(Message.unscoped.where(sender_type: [User.name, nil], broadcasted: false),
-                                      group_keys).count
+    grouped_requests = group_messages(@organization.requests.unscoped, group_keys).count
+    grouped_messages = group_messages(
+      Message.unscoped.where(sender_type: [User.name, nil], broadcasted: false, request_id: @organization.requests.pluck(:id)),
+      group_keys
+    ).count
     grouped_requests.merge(grouped_messages) { |_key, oldval, newval| oldval + newval }
   end
 

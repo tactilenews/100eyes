@@ -16,7 +16,7 @@ business_plan = BusinessPlan.create!(
   valid_until: Time.current + 6.months
 )
 organization = Organization.create_or_find_by!(
-  name: '100eyes',
+  name: 'tactile.news',
   upgrade_discount: 10,
   business_plan: business_plan
 )

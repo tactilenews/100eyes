@@ -13,7 +13,7 @@ class BroadcastRequestJob < ApplicationJob
       return
     end
 
-    Contributor.active.with_tags(request.tag_list).each do |contributor|
+    request.organization.contributors.active.with_tags(request.tag_list).each do |contributor|
       message = Message.new(
         sender: request.user,
         recipient: contributor,

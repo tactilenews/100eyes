@@ -4,8 +4,9 @@ require 'net/http'
 
 module SignalAdapter
   class CreateContactJob < ApplicationJob
-    def perform(contributor)
-      url = URI.parse("#{Setting.signal_cli_rest_api_endpoint}/v1/contacts/#{Setting.signal_server_phone_number}")
+    def perform(contributor, organization)
+      signal_server_phone_number = organization.signal_server_phone_number || Setting.signal_server_phone_number
+      url = URI.parse("#{Setting.signal_cli_rest_api_endpoint}/v1/contacts/#{signal_server_phone_number}")
       header = {
         Accept: 'application/json',
         'Content-Type': 'application/json'

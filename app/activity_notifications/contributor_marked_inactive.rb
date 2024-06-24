@@ -3,12 +3,13 @@
 class ContributorMarkedInactive < Noticed::Base
   deliver_by :database, format: :to_database, association: :notifications_as_recipient
 
-  param :contributor_id
+  param :contributor_id, :organization_id
 
   def to_database
     {
       type: self.class.name,
-      contributor_id: params[:contributor_id]
+      contributor_id: params[:contributor_id],
+      organization_id: params[:organization_id]
     }
   end
 
@@ -28,8 +29,8 @@ class ContributorMarkedInactive < Noticed::Base
   end
   # rubocop:enable Rails/OutputSafety
 
-  def url
-    contributor_path(record.contributor_id)
+  def url(organization)
+    contributor_path(organization, record.contributor_id)
   end
 
   def link_text

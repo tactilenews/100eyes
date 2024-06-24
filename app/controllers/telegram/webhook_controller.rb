@@ -13,6 +13,7 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
     end
 
     adapter.consume(payload) do |m|
+      # TODO: Refactor to pass organization to welcome message
       m.contributor.send_welcome_message!
     end
   end
@@ -25,6 +26,8 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
     adapter.on(TelegramAdapter::CONNECT) do |contributor|
       contributor.save!
       contributor_connected = true
+      # TODO: Refactor to pass organization to welcome message
+
       contributor.send_welcome_message!
     end
 

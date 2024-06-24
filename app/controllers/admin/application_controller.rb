@@ -10,5 +10,19 @@ module Admin
     def switch_locale(&action)
       I18n.with_locale(:en, &action)
     end
+
+    def requested_resource
+      @requested_resource ||= find_resource(params[:id]).tap do |resource|
+        authorize_resource(resource)
+      end
+    end
+
+    def find_resource(param)
+      if resource_name.eql?(:organization)
+        scoped_resource.friendly.find(param)
+      else
+        scoped_resource.find(param)
+      end
+    end
   end
 end

@@ -3,12 +3,13 @@
 class RequestScheduled < Noticed::Base
   deliver_by :database, format: :to_database, association: :notifications_as_recipient
 
-  param :request_id
+  param :request_id, :organization_id
 
   def to_database
     {
       type: self.class.name,
-      request_id: params[:request_id]
+      request_id: params[:request_id],
+      organization_id: params[:organization_id]
     }
   end
 
@@ -31,13 +32,13 @@ class RequestScheduled < Noticed::Base
   end
   # rubocop:enable Rails/OutputSafety
 
-  def url
+  def url(organization)
     filter = if record.request.broadcasted_at.present?
                :sent
              else
                :planned
              end
-    requests_path(filter: filter, anchor: "request-#{record.request_id}")
+    requests_path(organization, filter: filter, anchor: "request-#{record.request_id}")
   end
 
   def link_text

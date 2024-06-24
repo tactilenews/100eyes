@@ -2,15 +2,16 @@
 
 module RequestNotification
   class RequestNotification < ApplicationComponent
-    def initialize(request_for_info:, **)
+    def initialize(request_for_info:, organization:, **)
       super
 
       @request_for_info = request_for_info
+      @organization = organization
     end
 
     private
 
-    attr_reader :request_for_info
+    attr_reader :request_for_info, :organization
 
     def last_updated_at
       Time.zone.now.iso8601

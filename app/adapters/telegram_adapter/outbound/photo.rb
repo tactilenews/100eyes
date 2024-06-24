@@ -10,6 +10,7 @@ module TelegramAdapter
         contributor = message&.recipient
         return unless contributor
 
+        # TODO: update to API that passes in the organization
         MarkInactiveContributorInactiveJob.perform_later(contributor_id: contributor.id)
       end
 
@@ -28,7 +29,7 @@ module TelegramAdapter
             caption: optional_caption(index)
           }
         end
-        response = Telegram.bot.send_media_group(
+        response = Telegram.bots[contributor.organization.slug.underscore.to_sym || :default].send_media_group(
           chat_id: telegram_id,
           media: media_array,
           parse_mode: :HTML

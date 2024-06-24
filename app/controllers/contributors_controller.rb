@@ -3,7 +3,6 @@
 class ContributorsController < ApplicationController
   before_action :set_contributor, only: %i[update destroy show edit message conversations]
   before_action :contributors_sidebar, only: %i[show update]
-  before_action :count_params, only: :count
   before_action :contributors_params, only: :index
 
   def message
@@ -24,10 +23,10 @@ class ContributorsController < ApplicationController
     @state = state_params
     @tag_list = tag_list_params
 
-    @active_count = Contributor.active.count
-    @inactive_count = Contributor.inactive.count
-    @unsubscribed_count = Contributor.unsubscribed.count
-    @available_tags = Contributor.all_tags_with_count.to_json
+    @active_count = @organization.contributors.active.count
+    @inactive_count = @organization.contributors.inactive.count
+    @unsubscribed_count = @organization.contributors.unsubscribed.count
+    @available_tags = @organization.all_tags_with_count.to_json
 
     @contributors = filtered_contributors
     @contributors = @contributors.with_tags(tag_list_params)
@@ -57,10 +56,6 @@ class ContributorsController < ApplicationController
     redirect_to contributors_url, notice: I18n.t('contributor.destroyed', name: @contributor.name)
   end
 
-  def count
-    render json: { count: Contributor.with_tags(params[:tag_list]).count }
-  end
-
   def conversations
     @messages = @contributor.conversations.includes(%i[files photos request recipient sender])
     @reply_to = @contributor.replies.find(params[:reply_to]) if params[:reply_to].present?
@@ -69,14 +64,14 @@ class ContributorsController < ApplicationController
   private
 
   def set_contributor
-    @contributor = Contributor.find(params[:id])
+    @contributor = @organization.contributors.find(params[:id])
   end
 
   def contributors_sidebar
-    @contributors_sidebar ||= Contributor
-                              .active
-                              .or(Contributor.where(id: @contributor.id))
-                              .with_attached_avatar
+    @contributors_sidebar ||= @organization.contributors
+                                           .active
+                                           .or(@organization.contributors.where(id: @contributor.id))
+                                           .with_attached_avatar
   end
 
   def toggle_active_state
@@ -104,10 +99,6 @@ class ContributorsController < ApplicationController
     params.require(:message).permit(:text, :reply_to_id)
   end
 
-  def count_params
-    params.permit(tag_list: [])
-  end
-
   def state_params
     value = contributors_params[:state]&.to_sym
 
@@ -119,11 +110,11 @@ class ContributorsController < ApplicationController
   def filtered_contributors
     case @state
     when :inactive
-      Contributor.inactive
+      @organization.contributors.inactive
     when :unsubscribed
-      Contributor.unsubscribed
+      @organization.contributors.unsubscribed
     else
-      Contributor.active
+      @organization.contributors.active
     end
   end
 
@@ -141,7 +132,7 @@ class ContributorsController < ApplicationController
 
     # Reset the avatar attachment to it's previous, valid state,
     # as displaying an invalid avatar will result in rendering errors.
-    old_avatar = Contributor.with_attached_avatar.find(@contributor.id).avatar
+    old_avatar = @organization.contributors.with_attached_avatar.find(@contributor.id).avatar
     contributor.avatar = old_avatar.blob
   end
 
