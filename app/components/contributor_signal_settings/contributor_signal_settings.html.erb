@@ -4,23 +4,11 @@
   <% end %>
 
   <% if contributor.signal_onboarding_completed_at.present? %>
-    <p>
-      <%= t('.complete.text',
-        name: contributor.name,
-        phone_number: contributor.signal_phone_number&.phony_formatted || contributor.signal_uuid
-      ) %>
-    </p>
+    <p><%= completed_onboarding_text %></p>
   <% else %>
     <%= c 'callout', style: :warning do %>
       <%= c 'stack', space: :small do %>
-        <p>
-          <%= t('.incomplete.text',
-            name: contributor.name,
-            first_name: contributor.first_name,
-            date: l(contributor.created_at.to_date),
-            phone_number: contributor.signal_phone_number&.phony_formatted  || contributor.signal_uuid
-          ) %>
-        </p>
+        <p><%= incomplete_onboarding_text %></p>
 
         <%= c 'copy_button',
           style: :secondary,

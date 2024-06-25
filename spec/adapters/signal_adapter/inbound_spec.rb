@@ -8,11 +8,31 @@ RSpec.describe SignalAdapter::Inbound do
     {
       envelope: {
         source: '+4912345789',
+        sourceNumber: '+4912345789',
+        sourceUuid: 'valid_uuid',
         sourceDevice: 2,
         timestamp: 1_626_708_555_697,
         dataMessage: {
           timestamp: 1_626_708_555_697,
           message: 'Hello 100eyes',
+          expiresInSeconds: 0,
+          viewOnce: false
+        }
+      }
+    }
+  end
+
+  let(:signal_message_with_uuid) do
+    {
+      envelope: {
+        source: 'valid_uuid',
+        sourceNumber: nil,
+        sourceUuid: 'valid_uuid',
+        sourceDevice: 2,
+        timestamp: 1_626_708_555_697,
+        dataMessage: {
+          timestamp: 1_626_708_555_697,
+          message: signal_onboarding_token,
           expiresInSeconds: 0,
           viewOnce: false
         }
@@ -178,7 +198,8 @@ RSpec.describe SignalAdapter::Inbound do
     create(
       :contributor,
       id: 4711,
-      signal_phone_number: phone_number
+      signal_phone_number: phone_number,
+      signal_onboarding_completed_at: onboarding_completed_at
     )
   end
 
@@ -194,6 +215,7 @@ RSpec.describe SignalAdapter::Inbound do
       it { should be_a(Message) }
 
       context 'from an unknown contributor' do
+        let(:onboarding_completed_at) { nil }
         let!(:phone_number) { '+495555555' }
 
         it { should be(nil) }
@@ -238,6 +260,37 @@ RSpec.describe SignalAdapter::Inbound do
         it 'is expected to store message text and attached file' do
           expect(message.text).to eq('Hello 100eyes')
           expect(message.files.first.attachment).to be_attached
+        end
+      end
+
+      describe 'given a message to complete onboarding' do
+        let(:signal_message) { signal_message_with_uuid }
+        let(:signal_uuid) { nil }
+        let(:onboarding_completed_at) { nil }
+
+        let!(:contributor) do
+          create(
+            :contributor,
+            signal_uuid: signal_uuid,
+            signal_onboarding_completed_at: onboarding_completed_at,
+            signal_onboarding_token: 'NQ272QQK'
+          )
+        end
+
+        context 'unknown contributor' do
+          let(:signal_onboarding_token) { 'some other message' }
+
+          it 'does not create a message' do
+            expect(subject).to be(nil)
+          end
+        end
+
+        context 'known contributor' do
+          let(:signal_onboarding_token) { 'NQ272QQK' }
+
+          it 'does not create a message' do
+            expect(subject).to be(nil)
+          end
         end
       end
     end
@@ -353,10 +406,14 @@ RSpec.describe SignalAdapter::Inbound do
   describe '#on' do
     describe 'CONNECT' do
       let(:connect_callback) { spy('connect_callback') }
+      let(:signal_message) { signal_message_with_uuid }
+      let(:signal_uuid) { signal_message.dig(:envelope, :sourceUuid) }
+
+      let!(:contributor) { create(:contributor, signal_onboarding_token: 'NQ272QQK') }
 
       before do
-        adapter.on(SignalAdapter::CONNECT) do |contributor|
-          connect_callback.call(contributor)
+        adapter.on(SignalAdapter::CONNECT) do |contributor, signal_uuid|
+          connect_callback.call(contributor, signal_uuid)
         end
       end
 
@@ -366,26 +423,26 @@ RSpec.describe SignalAdapter::Inbound do
       end
 
       context 'if the sender is unknown' do
-        let(:phone_number) { nil }
+        let(:signal_onboarding_token) { 'whatever message' }
         it { should_not have_received(:call) }
       end
 
-      context 'if the sender is a contributor with no replies' do
-        it { should have_received(:call).with(contributor) }
-      end
-
-      context 'if the sender is a contributor with replies' do
-        before { create(:message, sender: contributor) }
-        it { should_not have_received(:call) }
+      context 'if the sender is a contributor with incomplete onboarding' do
+        let(:signal_onboarding_token) { 'NQ272QQK' }
+        it { should have_received(:call).with(contributor, signal_uuid) }
       end
     end
 
     describe 'UNKNOWN_CONTRIBUTOR' do
       let(:unknown_contributor_callback) { spy('unknown_contributor_callback') }
+      let(:signal_message) { signal_message_with_uuid }
+      let(:signal_uuid) { signal_message.dig(:envelope, :sourceUuid) }
+      let(:source) { signal_message.dig(:envelope, :source) }
+      let!(:contributor) { create(:contributor, signal_onboarding_token: 'NQ272QQK') }
 
       before do
-        adapter.on(SignalAdapter::UNKNOWN_CONTRIBUTOR) do |signal_phone_number|
-          unknown_contributor_callback.call(signal_phone_number)
+        adapter.on(SignalAdapter::UNKNOWN_CONTRIBUTOR) do |source|
+          unknown_contributor_callback.call(source)
         end
       end
 
@@ -394,18 +451,14 @@ RSpec.describe SignalAdapter::Inbound do
         unknown_contributor_callback
       end
 
-      describe 'if the sender is a contributor ' do
+      context 'if the sender is a contributor with incomplete onboarding' do
+        let(:signal_onboarding_token) { 'NQ272QQK' }
         it { should_not have_received(:call) }
       end
 
-      describe 'if the sender has not completed onboarding' do
-        let(:onboarding_completed_at) { nil }
-        it { should_not have_received(:call) }
-      end
-
-      describe 'if the sender is unknown' do
-        before { signal_message[:envelope][:source] = '+4955443322' }
-        it { should have_received(:call).with('+4955443322') }
+      context 'if the sender is unknown' do
+        let(:signal_onboarding_token) { 'whatever message' }
+        it { should have_received(:call).with(source) }
       end
     end
 

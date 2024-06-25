@@ -25,11 +25,15 @@ module SignalAdapter
     def consume(signal_message)
       signal_message = signal_message.with_indifferent_access
 
-      @sender = initialize_sender(signal_message)
-      return unless @sender
+      @sender = initialize_contributing_sender(signal_message)
 
       delivery_receipt = initialize_delivery_receipt(signal_message)
       return if delivery_receipt
+
+      unless @sender
+        initialize_onboarding_sender(signal_message)
+        return
+      end
 
       remove_emoji = signal_message.dig(:envelope, :dataMessage, :reaction, :isRemove)
       return if remove_emoji
@@ -53,18 +57,29 @@ module SignalAdapter
       @callbacks[event].call(*args)
     end
 
-    def initialize_sender(signal_message)
+    def initialize_contributing_sender(signal_message)
       signal_phone_number = signal_message.dig(:envelope, :sourceNumber)
       signal_uuid = signal_message.dig(:envelope, :sourceUuid)
-      sender = if signal_phone_number
-                 Contributor.find_by(signal_phone_number: signal_phone_number)
-               else
-                 Contributor.find_by(signal_uuid: signal_uuid)
-               end
-      return sender if sender
+      if signal_phone_number
+        Contributor.find_by(signal_phone_number: signal_phone_number)
+      else
+        Contributor.find_by(signal_uuid: signal_uuid)
+      end
+    end
 
+    def initialize_delivery_receipt(signal_message)
+      return nil unless delivery_receipt?(signal_message) && sender
+
+      delivery_receipt = signal_message.dig(:envelope, :receiptMessage)
+
+      trigger(HANDLE_DELIVERY_RECEIPT, delivery_receipt, sender)
+      delivery_receipt
+    end
+
+    def initialize_onboarding_sender(signal_message)
+      signal_uuid = signal_message.dig(:envelope, :sourceUuid)
       signal_onboarding_token = signal_message.dig(:envelope, :dataMessage, :message)
-      return nil unless signal_onboarding_token
+      return nil unless signal_onboarding_token && signal_uuid
 
       sender = Contributor.find_by(signal_onboarding_token: signal_onboarding_token.strip)
 
@@ -73,21 +88,7 @@ module SignalAdapter
         return nil
       end
 
-      if sender.signal_onboarding_completed_at.blank?
-        trigger(CONNECT, sender, signal_uuid)
-        return nil
-      end
-
-      sender
-    end
-
-    def initialize_delivery_receipt(signal_message)
-      return nil unless is_delivery_receipt?(signal_message)
-
-      delivery_receipt = signal_message.dig(:envelope, :receiptMessage)
-
-      trigger(HANDLE_DELIVERY_RECEIPT, delivery_receipt, sender)
-      delivery_receipt
+      trigger(CONNECT, sender, signal_uuid)
     end
 
     def initialize_message(signal_message)

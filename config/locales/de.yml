@@ -242,11 +242,14 @@ de:
     contributor_signal_settings:
       heading: "Ausgewählter Kanal: Signal"
       complete:
-        text: |
-          %{name} hat sich mit der Handynummer %{phone_number} angemeldet.
+        text: 
+          phone_number: |
+            %{name} hat sich mit der Handynummer %{phone_number} angemeldet.
+          uuid: |
+            %{name} hat sich mit der UUID %{uuid} angemeldet.
       incomplete:
         text: |
-          %{name} hat sich am %{date} via Signal mit der Handynummer %{phone_number} angemeldet, die Anmeldung aber noch nicht abgeschlossen.
+          %{name} hat sich am %{date} via Signal angemeldet, die Anmeldung aber noch nicht abgeschlossen.
           Sende %{first_name} einen Link mit Hinweisen zum Abschließen der Anmeldung.
         action: Link kopieren
     contributor_whats_app_settings:
