@@ -79,7 +79,7 @@ module SignalAdapter
     def initialize_onboarding_sender(signal_message)
       signal_uuid = signal_message.dig(:envelope, :sourceUuid)
       signal_onboarding_token = signal_message.dig(:envelope, :dataMessage, :message)
-      return nil unless signal_onboarding_token && signal_uuid
+      return nil unless signal_onboarding_token
 
       sender = Contributor.find_by(signal_onboarding_token: signal_onboarding_token.strip)
 
@@ -87,6 +87,7 @@ module SignalAdapter
         trigger(UNKNOWN_CONTRIBUTOR, signal_message.dig(:envelope, :source))
         return nil
       end
+      return unless signal_uuid
 
       trigger(CONNECT, sender, signal_uuid)
     end

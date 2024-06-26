@@ -29,6 +29,7 @@ http_interactions:
       string: '[{
         "envelope": {
             "source": "+4915100000000",
+            "sourceNumber": "+4915100000000",
             "sourceDevice": 1,
             "timestamp": 1630589332148,
             "dataMessage": {
@@ -42,6 +43,7 @@ http_interactions:
       {
         "envelope": {
             "source": "+4915112345789",
+            "sourceNumber": "+4915112345789",
             "sourceDevice": 1,
             "timestamp": 1630589338630,
             "dataMessage": {

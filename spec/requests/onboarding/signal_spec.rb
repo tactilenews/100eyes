@@ -146,7 +146,6 @@ RSpec.describe 'Onboarding::Signal', type: :request do
           expect(contributor).to have_attributes(
             first_name: 'Zora',
             last_name: 'Zimmermann',
-            signal_phone_number: '+4915112345678',
             data_processing_consent: data_processing_consent,
             additional_consent: additional_consent
           )

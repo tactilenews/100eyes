@@ -73,23 +73,37 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         end
       end
 
-      describe 'given a message from a contributor for the first time' do
-        let!(:contributor) { create(:contributor, signal_phone_number: '+4915112345789') }
+      describe 'given a message from a contributor for the first time',
+               vcr: { cassette_name: :receive_signal_message_to_complete_onboarding } do
+        let!(:contributor) { create(:contributor, signal_onboarding_token: signal_onboarding_token) }
+        let(:signal_uuid) { 'valid_uuid' }
+        let(:signal_onboarding_token) { 'CM1TOEC7' }
 
-        it 'creates a message' do
-          expect { subject.call }.to change(Message, :count).by(1)
+        it 'does not create a message' do
+          expect { subject.call }.not_to change(Message, :count)
+        end
+
+        it 'enqueues a job to create the contact' do
+          expect { subject.call }.to have_enqueued_job(SignalAdapter::CreateContactJob).with(contributor_id: contributor.id)
         end
 
         it 'enqueues a job to attach contributors avatar' do
-          expect { subject.call }.to have_enqueued_job(SignalAdapter::AttachContributorsAvatarJob).with(contributor)
+          expect { subject.call }.to have_enqueued_job(SignalAdapter::AttachContributorsAvatarJob).with(contributor_id: contributor.id)
         end
 
-        it 'is expected to assign the correct contributor' do
-          subject.call
-          expect(Message.first.contributor.signal_phone_number).to eq('+4915112345789')
+        it 'is expected to complete the onboarding' do
+          expect { subject.call }.to change { contributor.reload.signal_uuid }.from(nil).to(signal_uuid)
+                                                                              .and change {
+                                                                                     contributor.reload.signal_onboarding_completed_at
+                                                                                   }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
         end
 
-        it_behaves_like 'an ActivityNotification', 'MessageReceived'
+        it 'sends the welcome message' do
+          expect { subject.call }.to have_enqueued_job(SignalAdapter::Outbound::Text).with(
+            contributor_id: contributor.id,
+            text: [Setting.onboarding_success_heading, Setting.onboarding_success_text].join("\n")
+          )
+        end
       end
 
       describe 'given multiple messages from known and unknown contributors', vcr: { cassette_name: :receive_multiple_signal_messages } do
@@ -109,7 +123,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
       end
 
       describe 'given a message with attachments' do
-        let!(:contributor) { create(:contributor, signal_phone_number: '+4915112345678') }
+        let!(:contributor) { create(:contributor, signal_phone_number: '+4915112345678', signal_onboarding_completed_at: 2.weeks.ago) }
 
         before do
           allow(File).to receive(:open).and_call_original
@@ -148,7 +162,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         allow(Setting).to receive(:signal_cli_rest_api_endpoint).and_return('http://signal:8080')
       end
 
-      let!(:contributor) { create(:contributor, signal_phone_number: '+4915112345789') }
+      let!(:contributor) { create(:contributor, signal_phone_number: '+4915112345789', signal_onboarding_completed_at: 2.weeks.ago) }
       it { is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(contributor.id, SignalAdapter::Outbound) }
     end
 
@@ -158,7 +172,8 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         allow(Setting).to receive(:signal_cli_rest_api_endpoint).and_return('http://signal:8080')
       end
       let!(:contributor) do
-        create(:contributor, signal_phone_number: '+4915112345789', unsubscribed_at: 1.week.ago)
+        create(:contributor, signal_phone_number: '+4915112345789', unsubscribed_at: 1.week.ago,
+                             signal_onboarding_completed_at: 2.weeks.ago)
       end
 
       it { is_expected.to have_enqueued_job(ResubscribeContributorJob).with(contributor.id, SignalAdapter::Outbound) }

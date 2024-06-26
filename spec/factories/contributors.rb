@@ -42,6 +42,13 @@ FactoryBot.define do
       end
     end
 
+    trait :signal_contributor_uuid do
+      after(:build) do |contributor|
+        contributor.email = nil
+        contributor.signal_uuid = Faker::Internet.uuid
+      end
+    end
+
     trait :whats_app_contributor do
       after(:build) do |contributor|
         contributor.email = nil
