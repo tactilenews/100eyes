@@ -152,4 +152,26 @@ RSpec.describe 'Charts' do
       end
     end
   end
+
+  describe 'GET /charts/interaction-rates-by-tag' do
+    subject { -> { get charts_interaction_rates_by_tag_path(as: user) } }
+
+    let(:adventskalender_contributors) { create_list(:contributor, 3, tag_list: %w[Adventskalender]) }
+    let(:kinder_contributors) { create_list(:contributor, 3, tag_list: %w[Kinder]) }
+
+    before do
+      create(:message, sender: adventskalender_contributors.first)
+      create(:message, sender: adventskalender_contributors.last)
+      create(:message, sender: kinder_contributors.second)
+    end
+
+    let(:expected_series) do
+      [{ data: [{ x: 'Adventskalender', y: 2 }, { x: 'Kinder', y: 1 }] }]
+    end
+
+    it 'responds with a series of each day and outbound grouped messages' do
+      subject.call
+      expect(response.body).to eq(expected_series.to_json)
+    end
+  end
 end
