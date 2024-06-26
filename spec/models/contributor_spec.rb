@@ -255,6 +255,16 @@ RSpec.describe Contributor, type: :model do
       let(:contributor) { create(:contributor, telegram_id: '123', email: 'contributor@example.org') }
       it { should contain_exactly(:telegram, :email) }
     end
+
+    describe 'given a contributor with signal_phone_number' do
+      let(:contributor) { create(:contributor, :signal_contributor) }
+      it { should contain_exactly(:signal) }
+    end
+
+    describe 'given a contributor with signal_uuid' do
+      let(:contributor) { create(:contributor, :signal_contributor_uuid) }
+      it { should contain_exactly(:signal) }
+    end
   end
 
   describe '#telegram?' do
@@ -514,22 +524,24 @@ RSpec.describe Contributor, type: :model do
     end
 
     describe 'given a SignalAdapter::Inbound' do
+      let(:signal_message) do
+        {
+          envelope: {
+            source: '+4912345789',
+            sourceNumber: '+4912345789',
+            sourceDevice: 2,
+            timestamp: 1_626_708_555_697,
+            dataMessage: {
+              timestamp: 1_626_708_555_697,
+              message: 'Hello 100eyes',
+              expiresInSeconds: 0,
+              viewOnce: false
+            }
+          }
+        }
+      end
       subject do
         lambda do
-          signal_message =
-            {
-              envelope: {
-                source: '+4912345789',
-                sourceDevice: 2,
-                timestamp: 1_626_708_555_697,
-                dataMessage: {
-                  timestamp: 1_626_708_555_697,
-                  message: 'Hello 100eyes',
-                  expiresInSeconds: 0,
-                  viewOnce: false
-                }
-              }
-            }
           message_inbound_adapter = SignalAdapter::Inbound.new
           message_inbound_adapter.consume(signal_message) do |message|
             message.contributor.reply(message_inbound_adapter)
@@ -554,6 +566,12 @@ RSpec.describe Contributor, type: :model do
         context 'ActivityNotifications' do
           it_behaves_like 'an ActivityNotification', 'MessageReceived'
         end
+      end
+
+      describe 'givena a contributor with signal_uuid' do
+        let!(:contributor) { create(:contributor, signal_uuid: 'valid_uuid') }
+
+        before { signal_message[:envelope][:sourceUuid] = 'valid_uuid' }
       end
     end
   end
