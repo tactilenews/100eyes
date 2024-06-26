@@ -1,0 +1,34 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:8080/v1/receive/SIGNAL_SERVER_PHONE_NUMBER
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - signal:8080
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Date:
+      - Wed, 26 Jun 2024 10:27:17 GMT
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: UTF-8
+      string: '[{"envelope":{"source":"valid_uuid","sourceNumber":null,"sourceUuid":"valid_uuid","sourceName":"Matthew
+        Rider","sourceDevice":1,"timestamp":1719396464361,"dataMessage":{"timestamp":1719396464361,"message":"CM1TOEC7","expiresInSeconds":0,"viewOnce":false}},"account":"+4915888627934"}]'
+  recorded_at: Wed, 26 Jun 2024 10:27:17 GMT
+recorded_with: VCR 6.1.0

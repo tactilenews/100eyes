@@ -12,7 +12,7 @@ module SignalAdapter
     UNKNOWN_CONTENT_KEYS = %w[mentions contacts sticker].freeze
     SUPPORTED_ATTACHMENT_TYPES = %w[image/jpg image/jpeg image/png image/gif audio/oog audio/aac audio/mp4 audio/mpeg video/mp4].freeze
 
-    attr_reader :sender, :text, :message
+    attr_reader :sender, :message
 
     def initialize
       @callbacks = {}
@@ -25,11 +25,15 @@ module SignalAdapter
     def consume(signal_message)
       signal_message = signal_message.with_indifferent_access
 
-      @sender = initialize_sender(signal_message)
-      return unless @sender
+      @sender = initialize_contributing_sender(signal_message)
 
       delivery_receipt = initialize_delivery_receipt(signal_message)
       return if delivery_receipt
+
+      unless @sender
+        initialize_onboarding_sender(signal_message)
+        return
+      end
 
       remove_emoji = signal_message.dig(:envelope, :dataMessage, :reaction, :isRemove)
       return if remove_emoji
@@ -53,29 +57,39 @@ module SignalAdapter
       @callbacks[event].call(*args)
     end
 
-    def initialize_sender(signal_message)
-      signal_phone_number = signal_message.dig(:envelope, :source)
-      sender = Contributor.find_by(signal_phone_number: signal_phone_number)
-
-      unless sender
-        trigger(UNKNOWN_CONTRIBUTOR, signal_phone_number)
-        return nil
+    def initialize_contributing_sender(signal_message)
+      signal_phone_number = signal_message.dig(:envelope, :sourceNumber)
+      signal_uuid = signal_message.dig(:envelope, :sourceUuid)
+      if signal_phone_number
+        Contributor.find_by(signal_phone_number: signal_phone_number)
+      else
+        Contributor.find_by(signal_uuid: signal_uuid)
       end
-
-      if sender.signal_onboarding_completed_at.blank?
-        trigger(CONNECT, sender)
-        return nil
-      end
-
-      sender
     end
 
     def initialize_delivery_receipt(signal_message)
+      return nil unless delivery_receipt?(signal_message) && sender
+
       delivery_receipt = signal_message.dig(:envelope, :receiptMessage)
-      return nil unless delivery_receipt
 
       trigger(HANDLE_DELIVERY_RECEIPT, delivery_receipt, sender)
       delivery_receipt
+    end
+
+    def initialize_onboarding_sender(signal_message)
+      signal_uuid = signal_message.dig(:envelope, :sourceUuid)
+      signal_onboarding_token = signal_message.dig(:envelope, :dataMessage, :message)
+      return nil unless signal_onboarding_token
+
+      sender = Contributor.find_by(signal_onboarding_token: signal_onboarding_token.strip)
+
+      unless sender
+        trigger(UNKNOWN_CONTRIBUTOR, signal_message.dig(:envelope, :source))
+        return nil
+      end
+      return unless signal_uuid
+
+      trigger(CONNECT, sender, signal_uuid)
     end
 
     def initialize_message(signal_message)
@@ -147,6 +161,10 @@ module SignalAdapter
       has_non_text_content = message.files.any? || message.unknown_content
       text = message.text
       has_non_text_content || (text.present? && !unsubscribe_text?(text) && !resubscribe_text?(text))
+    end
+
+    def delivery_receipt?(signal_message)
+      signal_message.dig(:envelope, :receiptMessage)
     end
   end
 end

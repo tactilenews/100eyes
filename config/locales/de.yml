@@ -84,16 +84,14 @@ de:
       byline: eine Dialog-Recherche von <a class="Link" href="https://tactile.news" target="_blank">tactile.news</a>
     onboarding_signal_link:
       heading: Fast geschafft.
-      text: Damit wir Ihnen zukünftig auf Signal schreiben können, müssen Sie uns zuerst kontaktieren.
-      action: Senden Sie uns hierzu eine Nachricht auf Signal. Ein kurzes „Hallo” reicht aus! Unsere Nummer ist <strong>%{number}</strong>.
-      link: Zur Signal-App
-      copy: Handynummer kopieren
-      help:  Über den Button gelangen Sie direkt zu unserem Kontakt in der Signal-App. Alternativ können Sie unsere Nummer kopieren.
+      text: Verbinden Sie Ihr Signal-Konto in der Signal-App, um die Anmeldung abzuschließen.
+      steps:
+        - "Finden Sie uns auf Signal. Suchen Sie dazu nach <strong>%{signal_server_phone_number}</strong>."
+        - "Wenn Sie unser Signal-Konto gefunden haben, geben Sie diesen Code ein: <strong>%{token}</strong>"
     onboarding_signal_form:
       heading: Mit Signal teilnehmen
       text: Geben Sie bitte unten die Handynummer ein, mit der Sie bei Signal registriert sind.
       submit: Anmeldung abschließen
-
     onboarding_whats_app_form:
       heading: Mit WhatsApp teilnehmen
       text: Geben Sie bitte unten die Handynummer ein, mit der Sie bei WhatsApp registriert sind.
@@ -244,11 +242,14 @@ de:
     contributor_signal_settings:
       heading: "Ausgewählter Kanal: Signal"
       complete:
-        text: |
-          %{name} hat sich mit der Handynummer %{phone_number} angemeldet.
+        text: 
+          phone_number: |
+            %{name} hat sich mit der Handynummer %{phone_number} angemeldet.
+          uuid: |
+            %{name} hat sich mit der UUID %{uuid} angemeldet.
       incomplete:
         text: |
-          %{name} hat sich am %{date} via Signal mit der Handynummer %{phone_number} angemeldet, die Anmeldung aber noch nicht abgeschlossen.
+          %{name} hat sich am %{date} via Signal angemeldet, die Anmeldung aber noch nicht abgeschlossen.
           Sende %{first_name} einen Link mit Hinweisen zum Abschließen der Anmeldung.
         action: Link kopieren
     contributor_whats_app_settings:

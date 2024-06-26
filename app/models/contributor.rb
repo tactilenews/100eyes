@@ -54,7 +54,7 @@ class Contributor < ApplicationRecord
   scope :with_email, -> { where.not(email: nil) }
   scope :with_threema, -> { where.not(threema_id: nil) }
   scope :with_telegram, -> { where.not(telegram_id: nil) }
-  scope :with_signal, -> { where.not(signal_phone_number: nil, signal_onboarding_completed_at: nil) }
+  scope :with_signal, -> { where.not(signal_phone_number: nil, signal_uuid: nil) }
   scope :with_whats_app, -> { where.not(whats_app_phone_number: nil) }
 
   before_validation do
@@ -145,11 +145,15 @@ class Contributor < ApplicationRecord
   end
 
   def signal?
-    signal_phone_number.present?
+    signal_phone_number.present? || signal_uuid.present?
   end
 
   def whats_app?
     whats_app_phone_number.present?
+  end
+
+  def signal_attr
+    signal_phone_number || signal_uuid
   end
 
   def avatar?

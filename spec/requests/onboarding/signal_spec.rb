@@ -46,13 +46,14 @@ RSpec.describe 'Onboarding::Signal', type: :request do
       {
         first_name: 'Zora',
         last_name: 'Zimmermann',
-        signal_phone_number: signal_phone_number,
+        signal_onboarding_token: signal_onboarding_token,
         data_processing_consent: data_processing_consent,
         additional_consent: additional_consent
       }
     end
 
     let(:params) { { jwt: jwt, contributor: attrs, context: :contributor_signup } }
+    let(:signal_onboarding_token) { SecureRandom.alphanumeric(8).upcase }
 
     subject { -> { post onboarding_signal_path, params: params } }
 
@@ -75,6 +76,8 @@ RSpec.describe 'Onboarding::Signal', type: :request do
     end
 
     describe 'but when a signal server phone number is configured and onboarding has not been disallowed' do
+      let(:welcome_message) { [Setting.onboarding_success_heading, Setting.onboarding_success_text].join("\n") }
+      let(:signal_adapter_outbound_spy) { spy(SignalAdapter::Outbound) }
       before do
         allow(Setting).to receive(:signal_server_phone_number).and_return('+4491234567890')
         allow(Setting).to receive(:signal_onboarding_allowed?).and_return(true)
@@ -87,7 +90,7 @@ RSpec.describe 'Onboarding::Signal', type: :request do
         expect(contributor).to have_attributes(
           first_name: 'Zora',
           last_name: 'Zimmermann',
-          signal_phone_number: '+4915112345678',
+          signal_onboarding_token: signal_onboarding_token,
           data_processing_consent: data_processing_consent,
           additional_consent: additional_consent
         )
@@ -96,13 +99,9 @@ RSpec.describe 'Onboarding::Signal', type: :request do
         )
       end
 
-      it 'does not send welcome message' do
-        should_not enqueue_job(SignalAdapter::Outbound).with(message: Message.new(text: anything), recipient: anything)
-      end
-
-      it 'redirects to onboarding signal link page' do
+      it 'redirects to success page' do
         subject.call
-        expect(response).to redirect_to onboarding_signal_link_path
+        expect(response).to redirect_to onboarding_signal_link_path(jwt: nil, signal_onboarding_token: signal_onboarding_token)
       end
 
       it 'invalidates the jwt' do
@@ -114,23 +113,6 @@ RSpec.describe 'Onboarding::Signal', type: :request do
 
       context 'creates an ActivityNotification' do
         it_behaves_like 'an ActivityNotification', 'OnboardingCompleted'
-      end
-
-      context 'given invalid phone number' do
-        let(:signal_phone_number) { 'invalid-phone-number' }
-
-        it 'displays validation errors' do
-          subject.call
-          parsed = Capybara::Node::Simple.new(response.body)
-          fields = parsed.all('.Field')
-          signal_phone_number_field = fields.find { |f| f.has_text? 'Handynummer' }
-          expect(signal_phone_number_field).to have_text('ist keine gültige Nummer')
-        end
-
-        it 'has 422 status code' do
-          subject.call
-          expect(response).to have_http_status(:unprocessable_entity)
-        end
       end
 
       context 'without data processing consent' do
@@ -154,26 +136,6 @@ RSpec.describe 'Onboarding::Signal', type: :request do
         end
       end
 
-      describe 'if a contributor exists with the same phone number' do
-        let!(:contributor) { create(:contributor, **attrs.merge(json_web_token: create(:json_web_token, invalidated_jwt: :jwt))) }
-
-        it 'redirects to success page so that an attacker cannot make a phone number listing' do
-          subject.call
-          expect(response).to redirect_to onboarding_signal_link_path
-        end
-
-        it 'invalidates the jwt' do
-          expect { subject.call }.to change(JsonWebToken, :count).by(1)
-
-          json_web_token = JsonWebToken.where(invalidated_jwt: jwt)
-          expect(json_web_token).to exist
-        end
-
-        it 'does not create new contributor' do
-          expect { subject.call }.not_to change(Contributor, :count)
-        end
-      end
-
       context 'without additional consent' do
         let(:additional_consent) { false }
 
@@ -184,7 +146,6 @@ RSpec.describe 'Onboarding::Signal', type: :request do
           expect(contributor).to have_attributes(
             first_name: 'Zora',
             last_name: 'Zimmermann',
-            signal_phone_number: '+4915112345678',
             data_processing_consent: data_processing_consent,
             additional_consent: additional_consent
           )

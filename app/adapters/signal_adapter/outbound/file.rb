@@ -28,7 +28,7 @@ module SignalAdapter
         end
         {
           number: Setting.signal_server_phone_number,
-          recipients: [message.recipient.signal_phone_number],
+          recipients: [message.recipient.signal_attr],
           message: message.text,
           base64_attachments: base64_files
         }

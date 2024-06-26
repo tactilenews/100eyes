@@ -11,7 +11,8 @@ RSpec.describe 'Stats' do
       create_list(:contributor, 3)
       create_list(:contributor, 2, :threema_contributor, :skip_validations)
       create_list(:contributor, 4, :telegram_contributor)
-      create_list(:contributor, 6, :signal_contributor)
+      create_list(:contributor, 2, :signal_contributor)
+      create_list(:contributor, 4, :signal_contributor_uuid)
       create_list(:contributor, 12, :whats_app_contributor)
     end
 

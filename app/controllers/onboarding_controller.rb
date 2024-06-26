@@ -4,6 +4,7 @@ class OnboardingController < ApplicationController
   skip_before_action :require_login
   before_action :verify_jwt, except: :success
   before_action :resume_telegram_onboarding, only: %i[index show]
+  before_action :resume_signal_onboarding, only: %i[index show]
   before_action :redirect_if_contributor_exists, only: :create
 
   rescue_from ActionController::BadRequest, with: :render_unauthorized
@@ -28,7 +29,6 @@ class OnboardingController < ApplicationController
     @contributor.tag_list = tag_list_from_jwt
 
     if @contributor.save
-      complete_onboarding(@contributor)
       @contributor.send_welcome_message!
       redirect_to_success
     else
@@ -84,10 +84,8 @@ class OnboardingController < ApplicationController
 
   def verify_jwt
     return unless jwt
-    raise ActionController::BadRequest unless resume_telegram_onboarding?
+    raise ActionController::BadRequest unless resume_telegram_onboarding? || resume_signal_onboarding?
   end
-
-  def complete_onboarding(contributor); end
 
   def resume_telegram_onboarding
     return unless resume_telegram_onboarding?
@@ -99,6 +97,18 @@ class OnboardingController < ApplicationController
   def resume_telegram_onboarding?
     contributor = jwt&.contributor
     contributor&.telegram_id.blank? && contributor&.telegram_onboarding_token.present?
+  end
+
+  def resume_signal_onboarding
+    return unless resume_signal_onboarding?
+
+    token = jwt.contributor.signal_onboarding_token
+    redirect_to onboarding_signal_link_path(signal_onboarding_token: token)
+  end
+
+  def resume_signal_onboarding?
+    contributor = jwt&.contributor
+    contributor&.signal_uuid.blank? && contributor&.signal_onboarding_token.present?
   end
 
   def jwt

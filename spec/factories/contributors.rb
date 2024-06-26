@@ -39,7 +39,13 @@ FactoryBot.define do
       after(:build) do |contributor|
         contributor.email = nil
         contributor.signal_phone_number = Faker::PhoneNumber.cell_phone_in_e164
-        contributor.signal_onboarding_completed_at = Time.current
+      end
+    end
+
+    trait :signal_contributor_uuid do
+      after(:build) do |contributor|
+        contributor.email = nil
+        contributor.signal_uuid = Faker::Internet.uuid
       end
     end
 

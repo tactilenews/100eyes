@@ -28,7 +28,7 @@ module SignalAdapter
       def data
         {
           number: Setting.signal_server_phone_number,
-          recipients: [recipient.signal_phone_number],
+          recipients: [recipient.signal_attr],
           message: text
         }
       end

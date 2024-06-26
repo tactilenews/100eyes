@@ -1,39 +1,14 @@
 <%= c 'stack', **attrs do %>
-
   <%= c 'stack', class: 'text-serif text-center', space: :xsmall do %>
     <%= c 'heading', tag: :h1 do %>
-      <%= t('components.onboarding_signal_link.heading') %>
+      <%= t 'components.onboarding_signal_link.heading' %>
     <% end %>
 
-    <p>
-      <%= t('components.onboarding_signal_link.text').html_safe %>
-    </p>
-
-    <p>
-      <%= t('components.onboarding_signal_link.action',
-        number: Setting.signal_server_phone_number.phony_formatted(spaces: ' ')
-      ).html_safe %>
-    </p>
+    <p><%= t 'components.onboarding_signal_link.text' %></p>
   <% end %>
 
-  <%= c 'stack', space: :small do %>
-    <%= c 'button',
-      styles: [:block, :primary],
-      link: "https://signal.me/#p/#{Setting.signal_server_phone_number}",
-      label: t('components.onboarding_signal_link.link'),
-      target: '_blank',
-      rel: 'noopener noreferrer'
-    %>
-
-    <%= c 'copy_button',
-      styles: [:block, :secondary],
-      label: t('components.onboarding_signal_link.copy'),
-      copy: Setting.signal_server_phone_number
-    %>
-
-    <p class="text-small text-light text-center">
-      <%= t('components.onboarding_signal_link.help') %>
-    </p>
-  <% end %>
-
+  <%= c 'steps_list',
+    class: 'text-serif',
+    steps: fallback_steps.map(&:html_safe)
+  %>
 <% end %>

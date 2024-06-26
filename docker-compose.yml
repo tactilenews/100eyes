@@ -21,7 +21,7 @@ services:
     depends_on: [ signal ]
 
   signal:
-    image: bbernhard/signal-cli-rest-api:0.81
+    image: bbernhard/signal-cli-rest-api:0.162-dev
     environment:
       - MODE=native
         #- AUTO_RECEIVE_SCHEDULE=0 22 * * * #enable this parameter on demand (see description below)
