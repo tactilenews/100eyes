@@ -25,7 +25,7 @@ de:
     chat_messages_group:
       conversations: Verlauf
       reply: antworten
-      add_message: Antwort manuell hinzufügen
+      add_message: Notiz hinzufügen
     chat_form:
       reply_to_reference: "Zur Nachricht: \"%{text}\""
       placeholder: Gib hier deine Nachfrage ein. Referenziere falls nötig die entsprechende Nachricht...
@@ -671,7 +671,7 @@ de:
       success: Die Nachricht wurde erfolgreich verschoben
       error: Die Nachricht konnte nicht verschoben werden
     create:
-      heading: Antwort manuell hinzufügen
+      heading: Notiz hinzufügen
       text: Hier kannst du manuell Antworten von <strong>%{name}</strong> zur Frage <strong>„%{title}”</strong> hinzufügen.
       success: Die Antwort wurde hinzugefügt
       error: Die Antwort konnte nicht hinzugefügt werden
