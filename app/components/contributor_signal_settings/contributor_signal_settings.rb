@@ -16,7 +16,7 @@ module ContributorSignalSettings
       if contributor.signal_phone_number.present?
         t('.complete.text.phone_number',
           name: contributor.name,
-          phone_number: contributor.signal_phone_number&.phony_formatted)
+          phone_number: contributor.signal_phone_number.phony_formatted)
       else
 
         t('.complete.text.uuid',

@@ -152,6 +152,10 @@ class Contributor < ApplicationRecord
     whats_app_phone_number.present?
   end
 
+  def signal_attr
+    signal_phone_number || signal_uuid
+  end
+
   def avatar?
     avatar.attached?
   end
