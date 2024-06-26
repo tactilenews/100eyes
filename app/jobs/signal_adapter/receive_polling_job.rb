@@ -43,8 +43,8 @@ module SignalAdapter
         handle_connect(contributor, signal_uuid)
       end
 
-      adapter.on(SignalAdapter::UNKNOWN_CONTRIBUTOR) do |signal_uuid|
-        exception = SignalAdapter::UnknownContributorError.new(signal_uuid: signal_uuid)
+      adapter.on(SignalAdapter::UNKNOWN_CONTRIBUTOR) do |signal_attr|
+        exception = SignalAdapter::UnknownContributorError.new(signal_attr: signal_attr)
         ErrorNotifier.report(exception)
       end
 
