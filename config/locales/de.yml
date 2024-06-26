@@ -87,7 +87,7 @@ de:
       text: Verbinden Sie Ihr Signal-Konto in der Signal-App, um die Anmeldung abzuschließen.
       steps:
         - "Finden Sie uns auf Signal. Suchen Sie dazu nach <strong>%{signal_server_phone_number}</strong>."
-        - "Wenn Sie unser Signal-Konto gefunden haben, geben Sie diesen Code ein, sobald sie danach gefragt werden: <strong>%{token}</strong>"
+        - "Wenn Sie unser Signal-Konto gefunden haben, geben Sie diesen Code ein: <strong>%{token}</strong>"
     onboarding_signal_form:
       heading: Mit Signal teilnehmen
       text: Geben Sie bitte unten die Handynummer ein, mit der Sie bei Signal registriert sind.
