@@ -17,7 +17,7 @@ RSpec.describe UnsubscribeContributorJob do
       let(:adapter) { SignalAdapter::Outbound }
 
       it_behaves_like 'a Contributor unsubscribes', SignalAdapter::Outbound::Text do
-        let(:contributor) { create(:contributor, signal_phone_number: '+491234567') }
+        let(:contributor) { create(:contributor, signal_phone_number: '+491234567', signal_onboarding_completed_at: Time.current) }
       end
     end
 
