@@ -23,6 +23,7 @@ module SignalAdapter
       @callbacks[callback] = block
     end
 
+    # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     def consume(signal_message)
       signal_message = signal_message.with_indifferent_access
 
@@ -56,6 +57,7 @@ module SignalAdapter
 
       yield(@message) if block_given?
     end
+    # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
     private
 
@@ -100,7 +102,6 @@ module SignalAdapter
 
       signal_phone_number = signal_message.dig(:envelope, :sourceNumber)
       sender = organization.contributors.find_by(signal_phone_number: signal_phone_number)
-      Rails.logger.debug sender, signal_phone_number
       return unless sender
 
       trigger(HANDLE_DELIVERY_RECEIPT, signal_message, sender)
@@ -121,15 +122,6 @@ module SignalAdapter
       return unless signal_uuid
 
       trigger(CONNECT, sender, signal_uuid)
-    end
-
-    def initialize_delivery_receipt(signal_message)
-      return nil unless is_delivery_receipt?(signal_message)
-
-      delivery_receipt = signal_message.dig(:envelope, :receiptMessage)
-
-      trigger(HANDLE_DELIVERY_RECEIPT, delivery_receipt, sender)
-      delivery_receipt
     end
 
     def initialize_message(signal_message)
