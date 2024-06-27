@@ -4,16 +4,17 @@ module Avatar
   class Avatar < ApplicationComponent
     delegate :avatar, :avatar?, to: :record, prefix: true
 
-    def initialize(record: nil, expandable: false, **)
+    def initialize(organization:, record: nil, expandable: false, **)
       super
 
+      @organization = organization
       @record = record || User.new
       @expandable = expandable
     end
 
     private
 
-    attr_reader :record
+    attr_reader :record, :organization
 
     def key
       record&.id

@@ -28,7 +28,7 @@ RSpec.shared_examples 'a Contributor unsubscribes' do |adapter|
       'contributor_unsubscribed_email',
       'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
       {
-        params: { admin: an_instance_of(User), contributor: contributor },
+        params: { admin: an_instance_of(User), contributor: contributor, organization: organization },
         args: []
       }
     ).exactly(2).times

@@ -153,14 +153,4 @@ class Setting < RailsSettings::Base
     signal: { configured: signal_configured?, allow_onboarding: signal_configured? },
     whats_app: { configured: whats_app_configured?, allow_onboarding: whats_app_configured? }
   }
-
-  private
-
-  def notify_admin_of_welcome_message_change
-    return unless var.match?(/onboarding_success/) && saved_change_to_value?
-
-    User.admin.find_each do |admin|
-      PostmarkAdapter::Outbound.welcome_message_updated!(admin)
-    end
-  end
 end

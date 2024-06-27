@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# There is an issue to remove this as it is no longer used
+# after the conversations feature was released.
 module Chat
   class Chat < ApplicationComponent
     def initialize(messages:, contributor:, request:)

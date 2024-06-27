@@ -7,14 +7,14 @@
     <% @contributors_sidebar.each do |contributor| %>
 
       <%= c 'sidebar_item', active: contributor == @contributor do %>
-        <%= c 'contributor_row', contributor: contributor, style: :compact %>
+        <%= c 'contributor_row', organization: @organization, contributor: contributor, style: :compact %>
       <% end %>
 
     <% end %>
   <% end %>
 
   <%= c 'section', styles: [:wide, :xlargeSpaceBetween, :noMarginTop] do %>
-    <%= c 'contributor_header', contributor: @contributor %>
+    <%= c 'contributor_header', organization: @organization, contributor: @contributor %>
 
     <%= c 'contributor_quick_edit_form', contributor: @contributor %>
 
@@ -29,7 +29,7 @@
     <hr>
 
     <% unless @contributor.unsubscribed_at.present? %>
-      <%= c 'contributor_status_toggle', contributor: @contributor %>
+      <%= c 'contributor_status_toggle', organization: @organization, contributor: @contributor %>
     <% end %>
   <% end %>
 <% end %>

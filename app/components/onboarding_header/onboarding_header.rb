@@ -21,7 +21,7 @@ module OnboardingHeader
     end
 
     def project_name
-      Setting.project_name
+      organization.project_name
     end
 
     def byline

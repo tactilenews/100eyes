@@ -36,6 +36,7 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
       respond_with :message, text: Setting.telegram_contributor_not_found_message
     end
 
+    # TODO: Update to API that passes in organization_id
     adapter.on(TelegramAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
       UnsubscribeContributorJob.perform_later(contributor.id, TelegramAdapter::Outbound)
     end

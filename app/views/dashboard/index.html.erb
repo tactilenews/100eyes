@@ -8,7 +8,7 @@
 
 
   <%= c 'section', styles: [:wide, :largeBottomMargin], class: 'ActivityNotifications' do %>
-    <%= c 'activity_notifications', activity_notifications: @activity_notifications %>
+    <%= c 'activity_notifications', organization: @organization, activity_notifications: @activity_notifications %>
   <% end %>
 
   <%= c 'section', styles: [:wide, :largeBottomMargin], class: 'CommunityMetrics' do %>
