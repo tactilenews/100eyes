@@ -6,8 +6,6 @@ class AddSettingsToOrganizations < ActiveRecord::Migration[6.1]
     # rubocop:disable Metrics/BlockLength
     change_table :organizations, bulk: true do |t|
       t.string :project_name
-      t.integer :onboarding_logo_blob_id
-      t.integer :onboarding_hero_blob_id
       t.string :onboarding_title
       t.string :onboarding_byline
       t.string :onboarding_data_processing_consent_additional_info
@@ -42,7 +40,6 @@ class AddSettingsToOrganizations < ActiveRecord::Migration[6.1]
       t.string :three_sixty_dialog_client_id
       t.string :three_sixty_dialog_client_waba_account_id
       t.string :email_from_address
-      t.integer :channel_image_blob_id
       t.string :about
 
       # TODO: Add channels hash

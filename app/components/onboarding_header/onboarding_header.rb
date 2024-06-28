@@ -2,10 +2,18 @@
 
 module OnboardingHeader
   class OnboardingHeader < ApplicationComponent
+    def initialize(organization:)
+      super
+
+      @organization = organization
+    end
+
+    attr_reader :organization
+
     private
 
     def logo
-      blob = Setting.onboarding_logo
+      blob = organization.onboarding_logo
 
       return nil if blob.blank?
 
@@ -25,7 +33,7 @@ module OnboardingHeader
     end
 
     def byline
-      Setting.onboarding_byline
+      organization.onboarding_byline
     end
   end
 end

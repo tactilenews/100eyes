@@ -7,13 +7,18 @@ namespace :organizations do
       organization = Organization.first
       return unless organization
 
-      Setting.each_key do |setting|
+      attrs = Setting.keys
+      attrs.each do |setting|
         next unless organization.respond_to?(setting)
 
         organization.send("#{setting}=", Setting.send(setting))
         organization.save!
         print '.'
       end
+
+      organization.onboarding_logo.attach(Setting.onboarding_logo) if Setting.onboarding_logo
+      organization.onboarding_hero.attach(Setting.onboarding_hero) if Setting.onboarding_hero
+      organization.channel_image.attach(Setting.channel_image) if Setting.channel_image
     end
   end
 end

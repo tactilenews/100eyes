@@ -6,6 +6,10 @@ class Organization < ApplicationRecord
   has_many :users, class_name: 'User', dependent: :destroy
   has_many :contributors, dependent: :destroy
 
+  has_one_attached :onboarding_logo
+  has_one_attached :onboarding_hero
+  has_one_attached :channel_image
+
   before_update :notify_admin
   after_commit :notify_admin_of_welcome_message_change
 
