@@ -19,6 +19,8 @@ namespace :organizations do
       organization.onboarding_logo.attach(Setting.onboarding_logo) if Setting.onboarding_logo
       organization.onboarding_hero.attach(Setting.onboarding_hero) if Setting.onboarding_hero
       organization.channel_image.attach(Setting.channel_image) if Setting.channel_image
+      organization.update!(threemarb_api_secret: ENV.fetch('THREEMARB_API_SECRET', nil),
+                           threemarb_private: ENV.fetch('THREEMARB_PRIVATE', nil))
     end
   end
 end

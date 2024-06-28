@@ -26,8 +26,10 @@ class AddSettingsToOrganizations < ActiveRecord::Migration[6.1]
       t.string :telegram_bot_username
       t.string :threema_unknown_content_message
       t.string :threemarb_api_identity
-      t.string :threemarb_api_secret
-      t.string :threemarb_private
+      t.string :encrypted_threemarb_api_secret
+      t.string :encrypted_threemarb_api_secret_iv
+      t.string :encrypted_threemarb_private
+      t.string :encrypted_threemarb_private_iv
       t.string :twilio_api_key_sid
       t.string :twilio_api_key_secret
       t.string :signal_server_phone_number

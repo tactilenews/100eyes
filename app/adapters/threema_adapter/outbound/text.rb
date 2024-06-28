@@ -22,6 +22,8 @@ module ThreemaAdapter
       end
 
       def self.threema_instance(organization)
+        # TODO: Handle organization that has not been configured
+
         @threema_instance ||= Threema.new(
           api_identity: organization.threemarb_api_identity,
           api_secret: organization.threemarb_api_secret,

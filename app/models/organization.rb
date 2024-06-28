@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class Organization < ApplicationRecord
+  attr_encrypted_options.merge!(key: Base64.decode64(ENV.fetch('ATTR_ENCRYPTED_KEY', nil)))
+  attr_encrypted :threemarb_api_secret
+  attr_encrypted :threemarb_private
+
   belongs_to :business_plan
   belongs_to :contact_person, class_name: 'User', optional: true
   has_many :users, class_name: 'User', dependent: :destroy

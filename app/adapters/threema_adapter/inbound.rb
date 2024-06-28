@@ -29,6 +29,7 @@ module ThreemaAdapter
         api_secret: @organization.threemarb_api_secret,
         private_key: @organization.threemarb_private
       )
+      # TODO: Handle organization that has not been configured
       decrypted_message = threema.receive(payload: threema_message)
 
       @sender = initialize_sender(threema_message)
