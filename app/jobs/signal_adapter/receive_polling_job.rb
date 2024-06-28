@@ -83,8 +83,7 @@ module SignalAdapter
       SignalAdapter::Outbound.send_welcome_message!(contributor)
     end
 
-    def handle_delivery_receipt(signal_message, contributor)
-      delivery_receipt = signal_message.dig(:envelope, :receiptMessage)
+    def handle_delivery_receipt(delivery_receipt, contributor)
       datetime = Time.zone.at(delivery_receipt[:when] / 1000).to_datetime
       latest_received_message = contributor.received_messages.first
       return unless latest_received_message
