@@ -2,8 +2,6 @@
 roles:
 - geerlingguy.docker
 - name: geerlingguy.pip
-  pip_install_packages:
-    - name: passlib
 - gantsign.inotify
 
 collections:

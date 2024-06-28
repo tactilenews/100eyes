@@ -8,3 +8,6 @@
 - name: Install required system packages
   apt: name={{ sys_packages }} state=latest
 
+- name: Install passlib
+  pip_install_packages:
+    - name: passlib
