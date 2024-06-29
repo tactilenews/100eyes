@@ -1,0 +1,33 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://localhost:8080/v1/receive/SIGNAL_SERVER_PHONE_NUMBER
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - localhost:8080
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/plain; charset=utf-8
+      Date:
+      - Sat, 29 Jun 2024 12:45:05 GMT
+      Content-Length:
+      - '2'
+    body:
+      encoding: UTF-8
+      string: "[{\"envelope\":{\"source\":\"4c941782-a59c-4428-a19f-8d7628b6ca42\",\"sourceNumber\":null,\"sourceUuid\":\"4c941782-a59c-4428-a19f-8d7628b6ca42\",\"sourceName\":\"Robert Schäfer\",\"sourceDevice\":1,\"timestamp\":1719664644151,\"receiptMessage\":{\"when\":1719664644151,\"isDelivery\":true,\"isRead\":false,\"isViewed\":false,\"timestamps\":[1719664633851]}},\"account\":\"+4912345678\"},{\"envelope\":{\"source\":\"4c941782-a59c-4428-a19f-8d7628b6ca42\",\"sourceNumber\":null,\"sourceUuid\":\"4c941782-a59c-4428-a19f-8d7628b6ca42\",\"sourceName\":\"Robert Schäfer\",\"sourceDevice\":1,\"timestamp\":1719664644344,\"receiptMessage\":{\"when\":1719664644344,\"isDelivery\":false,\"isRead\":true,\"isViewed\":false,\"timestamps\":[1719664633851]}},\"account\":\"+4912345678\"},{\"envelope\":{\"source\":\"4c941782-a59c-4428-a19f-8d7628b6ca42\",\"sourceNumber\":null,\"sourceUuid\":\"4c941782-a59c-4428-a19f-8d7628b6ca42\",\"sourceName\":\"Robert Schäfer\",\"sourceDevice\":2,\"timestamp\":1719664635059,\"receiptMessage\":{\"when\":1719664635059,\"isDelivery\":true,\"isRead\":false,\"isViewed\":false,\"timestamps\":[1719664633851]}},\"account\":\"+4912345678\"}]"
+  recorded_at: Sat, 29 Jun 2024 12:45:05 GMT
+recorded_with: VCR 6.1.0
