@@ -155,6 +155,17 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
           end
         end
       end
+
+      describe 'given a delivery receipt', vcr: { cassette_name: :receive_signal_delivery_receipt } do
+        # Use signal-ci directly to send out a message to the `signal_uuid` below
+        let(:contributor) do
+          create(:contributor, signal_uuid: '4c941782-a59c-4428-a19f-8d7628b6ca42', signal_onboarding_completed_at: 2.weeks.ago)
+        end
+        let!(:message) { create(:message, recipient: contributor) }
+        it 'updates message.received_at (#1914)' do
+          expect { subject.call }.to change { message.reload.received_at }.from(nil).to(Time.zone.at(1_719_664_635))
+        end
+      end
     end
 
     describe 'given a known contributor requests to unsubscribe', vcr: { cassette_name: :receive_signal_message_to_unsubscribe } do
