@@ -34,9 +34,8 @@ class ApplicationController < ActionController::Base
 
   private
 
+  # TODO: Refactor this in Phase II to handle multi-tenancy
   def set_organization
-    return unless current_user
-
-    @organization = current_user.organization
+    @organization = Organization.singleton
   end
 end

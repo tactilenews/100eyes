@@ -17,6 +17,11 @@ class Organization < ApplicationRecord
   before_update :notify_admin
   after_commit :notify_admin_of_welcome_message_change
 
+  # As currently constructed, we only have one organization per instance.
+  def self.singleton
+    last
+  end
+
   private
 
   def notify_admin
