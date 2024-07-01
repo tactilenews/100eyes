@@ -16,6 +16,7 @@ RSpec.shared_examples 'a Contributor resubscribes' do |adapter|
         expect(params[:payload][:to]).to eq(contributor.whats_app_phone_number.split('+').last)
         expect(params[:payload][:template][:name]).to eq('welcome_message')
       else
+        expect(params[:organization_id]).to eq(organization.id)
         expect(params[:contributor_id]).to eq(contributor.id)
         expect(params[:text]).to match(welcome_message)
       end

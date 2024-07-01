@@ -14,7 +14,8 @@ RSpec.describe ResubscribeContributorJob do
 
       it_behaves_like 'a Contributor resubscribes', SignalAdapter::Outbound::Text do
         let(:contributor) do
-          create(:contributor, signal_phone_number: '+491234567', unsubscribed_at: 1.day.ago, organization: organization)
+          create(:contributor, :signal_contributor, signal_onboarding_completed_at: 1.week.ago, unsubscribed_at: 1.day.ago,
+                                                    organization: organization)
         end
       end
 
@@ -22,7 +23,8 @@ RSpec.describe ResubscribeContributorJob do
         it_behaves_like 'a resubscribe failure', SignalAdapter::Outbound::Text do
           let(:contributor) do
             create(:contributor,
-                   signal_phone_number: '+491234567',
+                   :signal_contributor,
+                   signal_onboarding_completed_at: 1.week.ago,
                    unsubscribed_at: 1.day.ago,
                    deactivated_at: Time.current,
                    deactivated_by_user: create(:user),
@@ -35,7 +37,8 @@ RSpec.describe ResubscribeContributorJob do
         it_behaves_like 'a resubscribe failure', SignalAdapter::Outbound::Text do
           let(:contributor) do
             create(:contributor,
-                   signal_phone_number: '+491234567',
+                   :signal_contributor_uuid,
+                   signal_onboarding_completed_at: 1.week.ago,
                    unsubscribed_at: 1.day.ago,
                    deactivated_at: Time.current,
                    deactivated_by_admin: true,
@@ -91,7 +94,10 @@ RSpec.describe ResubscribeContributorJob do
       end
 
       it_behaves_like 'a Contributor resubscribes', ThreemaAdapter::Outbound::Text do
-        let(:contributor) { create(:contributor, threema_id: threema_id, unsubscribed_at: 1.month.ago) }
+        let(:contributor) do
+          create(:contributor, threema_id: threema_id, unsubscribed_at: 1.month.ago,
+                               organization: organization)
+        end
       end
 
       describe 'which has been marked inactive by a user' do
@@ -166,6 +172,7 @@ RSpec.describe ResubscribeContributorJob do
         end
       end
 
+      # TODO: Adapt for multi-tenancy
       context '360dialog' do
         before { allow(Setting).to receive(:three_sixty_dialog_client_api_key).and_return('valid_api_key') }
 
