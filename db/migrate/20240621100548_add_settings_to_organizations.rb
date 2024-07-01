@@ -31,7 +31,8 @@ class AddSettingsToOrganizations < ActiveRecord::Migration[6.1]
       t.string :encrypted_threemarb_private
       t.string :encrypted_threemarb_private_iv
       t.string :twilio_api_key_sid
-      t.string :twilio_api_key_secret
+      t.string :encrypted_twilio_api_key_secret
+      t.string :encrypted_twilio_api_key_secret_iv
       t.string :signal_server_phone_number
       t.string :signal_monitoring_url
       t.string :signal_unknown_content_message

@@ -96,8 +96,8 @@ module WhatsApp
         WhatsAppAdapter::TwilioOutbound.send_more_info_message!(contributor, organization)
       end
 
-      adapter.on(WhatsAppAdapter::TwilioInbound::REQUEST_TO_RECEIVE_MESSAGE) do |contributor, twilio_message_sid|
-        handle_request_to_receive_message(contributor, twilio_message_sid)
+      adapter.on(WhatsAppAdapter::TwilioInbound::REQUEST_TO_RECEIVE_MESSAGE) do |contributor, twilio_message_sid, organization|
+        handle_request_to_receive_message(contributor, twilio_message_sid, organization)
       end
 
       adapter.on(WhatsAppAdapter::TwilioInbound::UNSUPPORTED_CONTENT) do |contributor, organization|
@@ -123,15 +123,15 @@ module WhatsApp
       ErrorNotifier.report(exception)
     end
 
-    def handle_request_to_receive_message(contributor, twilio_message_sid)
+    def handle_request_to_receive_message(contributor, twilio_message_sid, organization)
       contributor.update!(whats_app_message_template_responded_at: Time.current, whats_app_message_template_sent_at: nil)
 
-      message = (send_requested_message(contributor, twilio_message_sid) if twilio_message_sid)
+      message = (send_requested_message(contributor, twilio_message_sid, organization) if twilio_message_sid)
       WhatsAppAdapter::TwilioOutbound.send!(message || contributor.received_messages.first)
     end
 
-    def send_requested_message(contributor, twilio_message_sid)
-      message_text = fetch_message_from_twilio(twilio_message_sid)
+    def send_requested_message(contributor, twilio_message_sid, organization)
+      message_text = fetch_message_from_twilio(twilio_message_sid, organization)
 
       request_title = message_text.scan(/„[^"]*“/).first&.gsub('„', '')&.gsub('“', '')
       request = Request.find_by(title: request_title)
@@ -140,7 +140,8 @@ module WhatsApp
     end
 
     def fetch_message_from_twilio(twilio_message_sid)
-      twilio_instance = Twilio::REST::Client.new(Setting.twilio_api_key_sid, Setting.twilio_api_key_secret, Setting.twilio_account_sid)
+      twilio_instance = Twilio::REST::Client.new(organization.twilio_api_key_sid, organization.twilio_api_key_secret,
+                                                 organization.twilio_account_sid)
       message = twilio_instance.messages(twilio_message_sid).fetch
       message.body
     rescue Twilio::REST::RestError => e

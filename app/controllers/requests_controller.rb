@@ -18,7 +18,7 @@ class RequestsController < ApplicationController
 
   def create
     resize_image_files if request_params[:files].present?
-    @request = Request.new(request_params.merge(user: current_user))
+    @request = @organization.requests.new(request_params.merge(user: current_user))
     if @request.save
       if @request.planned?
         redirect_to requests_path(filter: :planned), flash: {
@@ -78,7 +78,7 @@ class RequestsController < ApplicationController
   def messages_by_contributor
     @message_groups = @request.messages_by_contributor
     render(
-      MessageGroups::MessageGroups.new(organization: @organization, request: @request,
+      MessageGroups::MessageGroups.new(request: @request,
                                        message_groups: @message_groups), content_type: 'text/html'
     )
   end

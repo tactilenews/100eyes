@@ -4,7 +4,7 @@ namespace :organizations do
   desc 'Migrate global settings to organization scope'
   task scope_settings_to_organization: :environment do
     ActiveRecord::Base.transaction do
-      organization = Organization.first
+      organization = Organization.singleton
       return unless organization
 
       attrs = Setting.keys
