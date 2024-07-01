@@ -22,7 +22,7 @@
         <%= c 'threema_id_input', field.input_defaults.merge(required: true) %>
       <% end %>
 
-      <%= c 'onboarding_consent', contributor: contributor %>
+      <%= c 'onboarding_consent', organization: organization, contributor: contributor %>
 
       <%= c 'button',
         type: 'submit',

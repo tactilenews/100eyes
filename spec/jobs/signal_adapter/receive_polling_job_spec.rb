@@ -30,12 +30,10 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
     subject { -> { job.perform } }
 
     let(:job) { described_class.new }
-    let(:organization) { create(:organization) }
+    let!(:organization) { create(:organization, signal_server_phone_number: signal_server_phone_number) }
 
     describe 'without a registered signal phone number on the server' do
-      before do
-        allow(Setting).to receive(:signal_server_phone_number).and_return(nil)
-      end
+      let(:signal_server_phone_number) { nil }
 
       it 'stops immediately as there are no messages to receive' do
         expect(job).not_to receive(:ping_monitoring_service)
@@ -44,6 +42,8 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
     end
 
     describe 'given a registered signal phone number on the server', vcr: { cassette_name: :receive_signal_messages } do
+      let(:signal_server_phone_number) { '+4912345678' }
+
       before do
         create(:request)
 
@@ -77,7 +77,8 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
 
       describe 'given a message from a contributor for the first time',
                vcr: { cassette_name: :receive_signal_message_to_complete_onboarding } do
-        let!(:contributor) { create(:contributor, signal_onboarding_token: signal_onboarding_token) }
+        let(:organization) { create(:organization, signal_server_phone_number: '+4912345678') }
+        let!(:contributor) { create(:contributor, signal_onboarding_token: signal_onboarding_token, organization: organization) }
         let(:signal_uuid) { 'valid_uuid' }
         let(:signal_onboarding_token) { 'CM1TOEC7' }
 
@@ -102,8 +103,9 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
 
         it 'sends the welcome message' do
           expect { subject.call }.to have_enqueued_job(SignalAdapter::Outbound::Text).with(
+            organization_id: organization.id,
             contributor_id: contributor.id,
-            text: [Setting.onboarding_success_heading, Setting.onboarding_success_text].join("\n")
+            text: [organization.onboarding_success_heading, organization.onboarding_success_text].join("\n")
           )
         end
       end
@@ -161,60 +163,62 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
       describe 'given a delivery receipt', vcr: { cassette_name: :receive_signal_delivery_receipt } do
         # Use signal-ci directly to send out a message to the `signal_uuid` below
         let(:contributor) do
-          create(:contributor, signal_uuid: '4c941782-a59c-4428-a19f-8d7628b6ca42', signal_onboarding_completed_at: 2.weeks.ago)
+          create(:contributor, signal_uuid: '4c941782-a59c-4428-a19f-8d7628b6ca42', signal_onboarding_completed_at: 2.weeks.ago,
+                               organization: organization)
         end
         let!(:message) { create(:message, recipient: contributor) }
         it 'updates message.received_at (#1914)' do
           expect { subject.call }.to change { message.reload.received_at }.from(nil).to(Time.zone.at(1_719_664_635))
         end
       end
-    end
 
-    describe 'given a known contributor requests to unsubscribe', vcr: { cassette_name: :receive_signal_message_to_unsubscribe } do
-      before do
-        allow(Setting).to receive(:signal_cli_rest_api_endpoint).and_return('http://signal:8080')
+      describe 'given a known contributor requests to unsubscribe', vcr: { cassette_name: :receive_signal_message_to_unsubscribe } do
+        before do
+          allow(Setting).to receive(:signal_cli_rest_api_endpoint).and_return('http://signal:8080')
+        end
+
+        let!(:contributor) do
+          create(:contributor, signal_phone_number: '+4915112345789', signal_onboarding_completed_at: 2.weeks.ago,
+                               organization: organization)
+        end
+        it { is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(organization.id, contributor.id, SignalAdapter::Outbound) }
       end
 
-      let!(:contributor) do
-        create(:contributor, signal_phone_number: '+4915112345789', signal_onboarding_completed_at: 2.weeks.ago, organization: organization)
-      end
-      it { is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(contributor.id, SignalAdapter::Outbound) }
-    end
+      describe 'given a contributor who has unsubscribed and requests to resubscribe',
+               vcr: { cassette_name: :receive_signal_message_to_resubscribe } do
+        before do
+          allow(Setting).to receive(:signal_cli_rest_api_endpoint).and_return('http://signal:8080')
+        end
+        let!(:contributor) do
+          create(:contributor, signal_phone_number: '+4915112345789', unsubscribed_at: 1.week.ago,
+                               signal_onboarding_completed_at: 2.weeks.ago)
+        end
 
-    describe 'given a contributor who has unsubscribed and requests to resubscribe',
-             vcr: { cassette_name: :receive_signal_message_to_resubscribe } do
-      before do
-        allow(Setting).to receive(:signal_cli_rest_api_endpoint).and_return('http://signal:8080')
-      end
-      let!(:contributor) do
-        create(:contributor, signal_phone_number: '+4915112345789', unsubscribed_at: 1.week.ago,
-                             signal_onboarding_completed_at: 2.weeks.ago)
+        it { is_expected.to have_enqueued_job(ResubscribeContributorJob).with(organization.id, contributor.id, SignalAdapter::Outbound) }
       end
 
-      it { is_expected.to have_enqueued_job(ResubscribeContributorJob).with(contributor.id, SignalAdapter::Outbound) }
-    end
+      describe 'given the Signal server is unavailable' do
+        let(:error_message) do
+          [['error', "Error while checking account #{organization.signal_server_phone_number}: [502] Bad response: 502 \n"]].to_json
+        end
 
-    describe 'given the Signal server is unavailable' do
-      let(:error_message) do
-        [['error', "Error while checking account #{Setting.signal_server_phone_number}: [502] Bad response: 502 \n"]].to_json
-      end
+        before do
+          create(:request)
 
-      before do
-        create(:request)
+          allow(job).to receive(:ping_monitoring_service).and_return(nil)
+          stub_request(:get, %r{v1/receive}).to_return(status: 400, body: error_message)
+        end
 
-        allow(job).to receive(:ping_monitoring_service).and_return(nil)
-        stub_request(:get, %r{v1/receive}).to_return(status: 400, body: error_message)
-      end
+        it 'raises an SignalAdapter::ServerError' do
+          expect { subject.call }.to raise_error(SignalAdapter::ServerError)
+        end
 
-      it 'raises an SignalAdapter::ServerError' do
-        expect { subject.call }.to raise_error(SignalAdapter::ServerError)
-      end
-
-      it 'stops immediately as a server error occurred' do
-        subject.call
-      rescue SignalAdapter::ServerError
-        expect(SignalAdapter::Inbound).not_to receive(:new)
-        expect(job).not_to receive(:ping_monitoring_service)
+        it 'stops immediately as a server error occurred' do
+          subject.call
+        rescue SignalAdapter::ServerError
+          expect(SignalAdapter::Inbound).not_to receive(:new)
+          expect(job).not_to receive(:ping_monitoring_service)
+        end
       end
     end
   end

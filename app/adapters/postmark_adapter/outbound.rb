@@ -86,9 +86,9 @@ module PostmarkAdapter
     def welcome_email
       contributor = params[:contributor]
       organization = params[:organization]
-      subject = Setting.onboarding_success_heading
+      subject = organization.onboarding_success_heading
       message_stream = Setting.postmark_transactional_stream
-      @text = [subject, Setting.onboarding_success_text].join("\n")
+      @text = [subject, organization.onboarding_success_text].join("\n")
       mail(from: email_from_address(organization: organization), to: contributor.email, subject: subject, message_stream: message_stream)
     end
 

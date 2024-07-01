@@ -15,6 +15,7 @@ module WhatsAppAdapter
         end
       end
 
+      # TODO: Update to accept org
       def send_welcome_message!(contributor)
         return unless contributor_can_receive_messages?(contributor)
 

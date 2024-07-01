@@ -4,7 +4,8 @@ require 'rails_helper'
 
 RSpec.describe TelegramAdapter::Outbound::Text do
   let(:adapter) { described_class.new }
-  let(:contributor) { create(:contributor, telegram_id: 4) }
+  let(:organization) { create(:organization) }
+  let(:contributor) { create(:contributor, telegram_id: 4, organization: organization) }
   let(:message) { create(:message, text: text, broadcasted: true, recipient: contributor) }
   let(:successful_response) do
     {
@@ -34,7 +35,7 @@ RSpec.describe TelegramAdapter::Outbound::Text do
   before { allow(Telegram.bot).to receive(:send_message).and_return(successful_response) }
 
   describe '#perform' do
-    subject { adapter.perform(contributor_id: contributor.id, text: text, message: message) }
+    subject { adapter.perform(organization_id: organization.id, contributor_id: contributor.id, text: text, message: message) }
 
     let(:expected_message) { { chat_id: 4, text: text, parse_mode: :HTML } }
 
@@ -58,7 +59,7 @@ RSpec.describe TelegramAdapter::Outbound::Text do
 
     context 'text message, no message' do
       let(:message) { nil }
-      let(:welcome_message) { [Setting.onboarding_success_heading, Setting.onboarding_success_text].join("\n") }
+      let(:welcome_message) { [organization.onboarding_success_heading, organization.onboarding_success_text].join("\n") }
       let(:text) { welcome_message }
 
       it 'does not throw an error' do

@@ -23,15 +23,13 @@ module SignalAdapter
       @callbacks[callback] = block
     end
 
-    # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     def consume(signal_message)
       signal_message = signal_message.with_indifferent_access
 
       @organization = initialize_organization(signal_message)
       return unless organization
 
-      @sender = initialize_sender(signal_message)
-      return unless @sender
+      @sender = initialize_contributing_sender(signal_message)
 
       delivery_receipt = initialize_delivery_receipt(signal_message)
       return if delivery_receipt
@@ -57,7 +55,6 @@ module SignalAdapter
 
       yield(@message) if block_given?
     end
-    # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
     private
 
@@ -79,21 +76,14 @@ module SignalAdapter
       organization
     end
 
-    def initialize_sender(signal_message)
-      signal_phone_number = signal_message.dig(:envelope, :source)
-      sender = organization.contributors.find_by(signal_phone_number: signal_phone_number)
-
-      unless sender
-        trigger(UNKNOWN_CONTRIBUTOR, signal_phone_number)
-        return nil
+    def initialize_contributing_sender(signal_message)
+      signal_phone_number = signal_message.dig(:envelope, :sourceNumber)
+      signal_uuid = signal_message.dig(:envelope, :sourceUuid)
+      if signal_phone_number
+        Contributor.find_by(signal_phone_number: signal_phone_number)
+      else
+        Contributor.find_by(signal_uuid: signal_uuid)
       end
-
-      if sender.signal_onboarding_completed_at.blank?
-        trigger(CONNECT, sender, organization)
-        return nil
-      end
-
-      sender
     end
 
     def initialize_delivery_receipt(signal_message)
@@ -104,13 +94,14 @@ module SignalAdapter
       sender = organization.contributors.find_by(signal_phone_number: signal_phone_number)
       return unless sender
 
-      trigger(HANDLE_DELIVERY_RECEIPT, signal_message, sender)
+      trigger(HANDLE_DELIVERY_RECEIPT, delivery_receipt, sender)
       delivery_receipt
     end
 
     def initialize_onboarding_sender(signal_message)
       signal_uuid = signal_message.dig(:envelope, :sourceUuid)
       signal_onboarding_token = signal_message.dig(:envelope, :dataMessage, :message)
+
       return nil unless signal_onboarding_token
 
       sender = organization.contributors.find_by(signal_onboarding_token: signal_onboarding_token.strip)
@@ -121,7 +112,7 @@ module SignalAdapter
       end
       return unless signal_uuid
 
-      trigger(CONNECT, sender, signal_uuid)
+      trigger(CONNECT, sender, signal_uuid, organization)
     end
 
     def initialize_message(signal_message)
@@ -133,7 +124,7 @@ module SignalAdapter
 
       message_text = reaction ? reaction[:emoji] : data_message[:message]
       trigger(UNSUBSCRIBE_CONTRIBUTOR, sender, organization) if unsubscribe_text?(message_text)
-      trigger(RESUBSCRIBE_CONTRIBUTOR, sender) if resubscribe_text?(message_text)
+      trigger(RESUBSCRIBE_CONTRIBUTOR, sender, organization) if resubscribe_text?(message_text)
 
       message = Message.new(text: message_text, sender: sender)
       message.raw_data.attach(

@@ -6,7 +6,8 @@ RSpec.describe 'Onboarding::Signal', type: :request do
   let(:signal_phone_number) { '+4915112345678' }
   let(:data_processing_consent) { true }
   let(:additional_consent) { true }
-  let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding', organization_id: create(:organization).id }) }
+  let!(:organization) { create(:organization) }
+  let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding', organization_id: organization.id }) }
   let(:params) { { jwt: jwt } }
 
   describe 'GET /onboarding/signal' do
@@ -76,10 +77,9 @@ RSpec.describe 'Onboarding::Signal', type: :request do
     end
 
     describe 'but when a signal server phone number is configured and onboarding has not been disallowed' do
-      let(:welcome_message) { [Setting.onboarding_success_heading, Setting.onboarding_success_text].join("\n") }
+      let(:welcome_message) { [organization.onboarding_success_heading, organization.onboarding_success_text].join("\n") }
       let(:signal_adapter_outbound_spy) { spy(SignalAdapter::Outbound) }
       before do
-        allow(Setting).to receive(:signal_server_phone_number).and_return('+4491234567890')
         allow(Setting).to receive(:signal_onboarding_allowed?).and_return(true)
       end
 

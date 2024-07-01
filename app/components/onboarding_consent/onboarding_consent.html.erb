@@ -13,8 +13,8 @@
       object: contributor,
       attr: :additional_consent,
       styles: [:leftAligned],
-      label: Setting.onboarding_additional_consent_heading,
-      help: Setting.onboarding_additional_consent_text
+      label: organization.onboarding_additional_consent_heading,
+      help: organization.onboarding_additional_consent_text
     ) do |field| %>
       <%= c 'checkbox', field.input_defaults %>
     <% end %>

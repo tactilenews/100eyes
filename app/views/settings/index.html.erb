@@ -6,5 +6,5 @@
     <p><%= t('settings.subheading')%></p>
   <% end %>
 
-  <%= c 'settings_form', current_user: current_user %>
+  <%= c 'settings_form', organization: @organization, current_user: current_user %>
 <% end %>

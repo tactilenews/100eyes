@@ -24,7 +24,7 @@ module SignalAdapter
       def send_welcome_message!(contributor, organization)
         return unless contributor_can_receive_messages?(contributor)
 
-        welcome_message = [Setting.onboarding_success_heading, Setting.onboarding_success_text].join("\n")
+        welcome_message = [organization.onboarding_success_heading, organization.onboarding_success_text].join("\n")
         SignalAdapter::Outbound::Text.perform_later(organization_id: organization.id, contributor_id: contributor.id, text: welcome_message)
       end
 
@@ -44,7 +44,7 @@ module SignalAdapter
       end
 
       def contributor_can_receive_messages?(recipient)
-        recipient&.signal_phone_number.present? && recipient.signal_onboarding_completed_at.present?
+        (recipient&.signal_phone_number.present? || recipient&.signal_uuid.present?) && recipient.signal_onboarding_completed_at.present?
       end
     end
   end

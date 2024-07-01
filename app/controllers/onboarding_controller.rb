@@ -29,7 +29,7 @@ class OnboardingController < ApplicationController
     @contributor.tag_list = tag_list_from_jwt
 
     if @contributor.save
-      @contributor.send_welcome_message!
+      @contributor.send_welcome_message!(@organization)
       redirect_to_success
     else
       render :show, status: :unprocessable_entity

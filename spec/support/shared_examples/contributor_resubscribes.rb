@@ -5,7 +5,7 @@ RSpec.shared_examples 'a Contributor resubscribes' do |adapter|
   let!(:admin) { create_list(:user, 2, admin: true) }
   let!(:non_admin_user) { create(:user) }
   let(:welcome_message) do
-    Setting.onboarding_success_text
+    organization.onboarding_success_text
   end
 
   it { is_expected.not_to change(Message, :count) }
@@ -28,7 +28,7 @@ RSpec.shared_examples 'a Contributor resubscribes' do |adapter|
       'contributor_resubscribed_email',
       'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
       {
-        params: { admin: an_instance_of(User), contributor: contributor },
+        params: { admin: an_instance_of(User), contributor: contributor, organization: organization },
         args: []
       }
     ).exactly(2).times

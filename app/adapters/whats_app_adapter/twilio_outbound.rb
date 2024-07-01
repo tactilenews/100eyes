@@ -17,7 +17,7 @@ module WhatsAppAdapter
       def send_welcome_message!(contributor, organization)
         return unless contributor_can_receive_messages?(contributor)
 
-        welcome_message = ["*#{Setting.onboarding_success_heading}*", Setting.onboarding_success_text].join("\n\n")
+        welcome_message = ["*#{organization.onboarding_success_heading}*", organization.onboarding_success_text].join("\n\n")
         WhatsAppAdapter::Outbound::Text.perform_later(organization_id: organization.id, contributor_id: contributor.id,
                                                       text: welcome_message)
       end

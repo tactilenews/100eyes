@@ -474,10 +474,7 @@ de:
     heading_afternoon: "Guten Tag, %{first_name}!"
     heading_evening: "Guten Abend, %{first_name}!"
 
-  setting:
-    setting:
-      one: Einstellung
-      other: Einstellungen
+  organization:
     form:
       groups:
         project_settings: Allgemein
@@ -546,6 +543,7 @@ de:
         label: Avatar für Messenger
       about:
         label: WhatsApp-Info-Text
+
   settings:
     header: Einstellungen
     subheading: Passe dein 100eyes System nach deinen Vorstellungen an

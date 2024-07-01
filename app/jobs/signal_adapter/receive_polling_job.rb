@@ -51,24 +51,24 @@ module SignalAdapter
         handle_unknown_organization(signal_server_phone_number)
       end
 
-      adapter.on(SignalAdapter::CONNECT) do |contributor, organization|
-        handle_connect(contributor, organization)
+      adapter.on(SignalAdapter::CONNECT) do |contributor, signal_uuid, organization|
+        handle_connect(contributor, signal_uuid, organization)
       end
 
-      adapter.on(SignalAdapter::UNKNOWN_CONTRIBUTOR) do |signal_phone_number|
-        handle_unknown_contributor(signal_phone_number)
+      adapter.on(SignalAdapter::UNKNOWN_CONTRIBUTOR) do |signal_attr|
+        handle_unknown_contributor(signal_attr)
       end
 
       adapter.on(SignalAdapter::UNKNOWN_CONTENT) do |contributor|
         SignalAdapter::Outbound.send_unknown_content_message!(contributor)
       end
 
-      adapter.on(SignalAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
-        UnsubscribeContributorJob.perform_later(prganization.id, contributor.id, SignalAdapter::Outbound)
+      adapter.on(SignalAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor, organization|
+        UnsubscribeContributorJob.perform_later(organization.id, contributor.id, SignalAdapter::Outbound)
       end
 
-      adapter.on(SignalAdapter::RESUBSCRIBE_CONTRIBUTOR) do |contributor|
-        ResubscribeContributorJob.perform_later(contributor.id, SignalAdapter::Outbound)
+      adapter.on(SignalAdapter::RESUBSCRIBE_CONTRIBUTOR) do |contributor, organization|
+        ResubscribeContributorJob.perform_later(organization.id, contributor.id, SignalAdapter::Outbound)
       end
 
       adapter.on(SignalAdapter::HANDLE_DELIVERY_RECEIPT) do |delivery_receipt, contributor|
@@ -87,10 +87,11 @@ module SignalAdapter
       Delayed::Job.where(queue: queue_name, failed_at: nil).none?
     end
 
-    def handle_connect(contributor, organization)
-      contributor.update!(signal_onboarding_completed_at: Time.zone.now)
+    def handle_connect(contributor, signal_uuid, organization)
+      contributor.update!(signal_uuid: signal_uuid, signal_onboarding_completed_at: Time.current)
+      SignalAdapter::CreateContactJob.perform_later(contributor_id: contributor.id)
+      SignalAdapter::AttachContributorsAvatarJob.perform_later(contributor_id: contributor.id)
       SignalAdapter::Outbound.send_welcome_message!(contributor, organization)
-      SignalAdapter::AttachContributorsAvatarJob.perform_later(contributor)
     end
 
     def handle_delivery_receipt(delivery_receipt, contributor)
@@ -102,8 +103,8 @@ module SignalAdapter
       latest_received_message.update(read_at: datetime) if delivery_receipt[:isRead]
     end
 
-    def handle_unknown_contributor(signal_phone_number)
-      exception = SignalAdapter::UnknownContributorError.new(signal_phone_number: signal_phone_number)
+    def handle_unknown_contributor(signal_attr)
+      exception = SignalAdapter::UnknownContributorError.new(signal_attr: signal_attr)
       ErrorNotifier.report(exception)
     end
 

@@ -15,13 +15,10 @@ module ThreemaAdapter
         end
       end
 
-      def welcome_message
-        ["*#{Setting.onboarding_success_heading.strip}*", Setting.onboarding_success_text].join("\n")
-      end
-
       def send_welcome_message!(contributor, organization)
         return unless contributor&.threema_id
 
+        welcome_message = ["*#{organization.onboarding_success_heading.strip}*", organization.onboarding_success_text].join("\n")
         ThreemaAdapter::Outbound::Text.perform_later(organization_id: organization.id, contributor_id: contributor.id,
                                                      text: welcome_message)
       end
