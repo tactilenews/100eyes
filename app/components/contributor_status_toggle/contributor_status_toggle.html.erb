@@ -24,7 +24,7 @@
           <%= t('.inactive.text',
                  name: contributor.name,
                  user_name: contributor.deactivated_by_user.name,
-                 project_name: Setting.project_name,
+                 project_name: organization.project_name,
                  first_name: contributor.first_name
           ).html_safe %>
         </p>
@@ -33,7 +33,7 @@
          <%= t('.inactive.text',
                  name: contributor.name,
                  user_name: 'Admin',
-                 project_name: Setting.project_name,
+                 project_name: organization.project_name,
                  first_name: contributor.first_name
           ).html_safe %>
         </p>
@@ -41,7 +41,7 @@
         <p>
           <%= t('.unsubscribed.text',
                 name: contributor.name,
-                project_name: Setting.project_name,
+                project_name: organization.project_name,
                 first_name: contributor.first_name
           ).html_safe %>
         </p>
@@ -49,7 +49,7 @@
         <p>
           <%= t('.automatically_marked_inactive.text',
                 name: contributor.name,
-                project_name: Setting.project_name,
+                project_name: organization.project_name,
                 first_name: contributor.first_name
           ).html_safe %>
         </p>

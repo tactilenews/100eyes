@@ -5,10 +5,13 @@ module SignalAdapter
     class Text < ApplicationJob
       queue_as :default
 
-      attr_reader :recipient, :text
+      attr_reader :recipient, :text, :organization
 
-      def perform(contributor_id:, text:)
-        @recipient = Contributor.find_by(id: contributor_id)
+      def perform(organization_id:, contributor_id:, text:)
+        @organization = Organization.find_by(id: organization_id)
+        return unless @organization
+
+        @recipient = @organization.contributors.find_by(id: contributor_id)
         return unless @recipient
 
         @text = text
@@ -18,7 +21,7 @@ module SignalAdapter
                                         'Content-Type': 'application/json'
                                       })
         request.body = data.to_json
-        SignalAdapter::Api.perform_request(request, recipient) do
+        SignalAdapter::Api.perform_request(organization, request, recipient) do
           # TODO: Do something on success. For example, mark the message as delivered?
           # Or should we use deliver receipts as the source of truth.
           Rails.logger.debug 'Great!'
@@ -27,7 +30,7 @@ module SignalAdapter
 
       def data
         {
-          number: Setting.signal_server_phone_number,
+          number: organization.signal_server_phone_number,
           recipients: [recipient.signal_attr],
           message: text
         }

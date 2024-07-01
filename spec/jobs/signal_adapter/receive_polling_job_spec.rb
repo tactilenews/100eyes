@@ -27,8 +27,10 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
   end
 
   describe '#perform' do
-    let(:job) { described_class.new }
     subject { -> { job.perform } }
+
+    let(:job) { described_class.new }
+    let(:organization) { create(:organization) }
 
     describe 'without a registered signal phone number on the server' do
       before do
@@ -173,7 +175,9 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         allow(Setting).to receive(:signal_cli_rest_api_endpoint).and_return('http://signal:8080')
       end
 
-      let!(:contributor) { create(:contributor, signal_phone_number: '+4915112345789', signal_onboarding_completed_at: 2.weeks.ago) }
+      let!(:contributor) do
+        create(:contributor, signal_phone_number: '+4915112345789', signal_onboarding_completed_at: 2.weeks.ago, organization: organization)
+      end
       it { is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(contributor.id, SignalAdapter::Outbound) }
     end
 

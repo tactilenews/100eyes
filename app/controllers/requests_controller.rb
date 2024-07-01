@@ -78,7 +78,8 @@ class RequestsController < ApplicationController
   def messages_by_contributor
     @message_groups = @request.messages_by_contributor
     render(
-      MessageGroups::MessageGroups.new(request: @request, message_groups: @message_groups), content_type: 'text/html'
+      MessageGroups::MessageGroups.new(organization: @organization, request: @request,
+                                       message_groups: @message_groups), content_type: 'text/html'
     )
   end
 

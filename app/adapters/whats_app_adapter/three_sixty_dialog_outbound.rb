@@ -151,6 +151,7 @@ module WhatsAppAdapter
         }
       end
 
+      # TODO: refactor to accept the organization
       def welcome_message_payload(recipient)
         {
           recipient_type: 'individual',

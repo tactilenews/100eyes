@@ -20,7 +20,8 @@ module Admin
 
     def update_params
       params.permit(:id,
-                    organization: %i[id business_plan_id upgrade_discount contact_person_id name])
+                    organization: %i[id business_plan_id upgrade_discount contact_person_id name
+                                     threemarb_api_identity threemarb_api_secret threemarb_private])
     end
   end
 end

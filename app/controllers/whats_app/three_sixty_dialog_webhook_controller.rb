@@ -31,6 +31,7 @@ module WhatsApp
         WhatsAppAdapter::ThreeSixtyDialogOutbound.send_unsupported_content_message!(contributor)
       end
 
+      # TODO: Update to API that passes in organization_id
       adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
         UnsubscribeContributorJob.perform_later(contributor.id, WhatsAppAdapter::Outbound)
       end

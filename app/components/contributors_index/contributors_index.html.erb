@@ -89,7 +89,7 @@
       </p>
     <% end %>
     <%= paginate contributors, params: { path: contributors_path, query: { state: state, tag_list: tag_list.present? ? @tag_list : nil } } %>
-      <%= c 'contributors_list', contributors: contributors, filter_active: tag_list.present? %>
+      <%= c 'contributors_list', organization: @organization, contributors: contributors, filter_active: tag_list.present? %>
     <%= paginate contributors, params: { path: contributors_path, query: { state: state, tag_list: tag_list.present? ? @tag_list : nil } } %>
   <% end %>
 <% end %>

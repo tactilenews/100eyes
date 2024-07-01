@@ -198,8 +198,7 @@ RSpec.describe SignalAdapter::Inbound do
     create(
       :contributor,
       id: 4711,
-      signal_phone_number: phone_number,
-      signal_onboarding_completed_at: onboarding_completed_at
+      signal_phone_number: phone_number
     )
   end
 
@@ -215,7 +214,6 @@ RSpec.describe SignalAdapter::Inbound do
       it { should be_a(Message) }
 
       context 'from an unknown contributor' do
-        let(:onboarding_completed_at) { nil }
         let!(:phone_number) { '+495555555' }
 
         it { should be(nil) }

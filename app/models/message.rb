@@ -45,7 +45,7 @@ class Message < ApplicationRecord
   def sender_name
     return sender.name if sender
 
-    Setting.project_name
+    request.organization.project_name
   end
 
   def contributor

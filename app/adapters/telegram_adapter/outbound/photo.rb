@@ -10,13 +10,17 @@ module TelegramAdapter
         contributor = message&.recipient
         return unless contributor
 
-        MarkInactiveContributorInactiveJob.perform_later(contributor_id: contributor.id)
+        MarkInactiveContributorInactiveJob.perform_later(organization_id: job.arguments.first[:organization_id],
+                                                         contributor_id: contributor.id)
       end
 
       attr_reader :telegram_id, :message
 
-      def perform(contributor_id:, media:, message:)
-        contributor = Contributor.find_by(id: contributor_id)
+      def perform(organization_id:, contributor_id:, media:, message:)
+        organization = Organization.find_by(id: organization_id)
+        return unless organization
+
+        contributor = organization.contributors.find_by(id: contributor_id)
         return unless contributor
 
         @telegram_id = contributor.telegram_id

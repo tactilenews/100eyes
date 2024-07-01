@@ -2,15 +2,16 @@
 
 module RequestForm
   class RequestForm < ApplicationComponent
-    def initialize(request:)
+    def initialize(organization:, request:)
       super
 
+      @organization = organization
       @request = request
     end
 
     private
 
-    attr_reader :request
+    attr_reader :organization, :request
 
     def available_tags
       Contributor.all_tags_with_count.to_json
