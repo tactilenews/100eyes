@@ -27,7 +27,7 @@ module ThreemaAdapter
         return unless contributor&.threema_id
 
         ThreemaAdapter::Outbound::Text.perform_later(organization_id: organization.id, contributor_id: contributor.id,
-                                                     text: Setting.threema_unknown_content_message)
+                                                     text: organization.threema_unknown_content_message)
       end
 
       def send_unsubsribed_successfully_message!(contributor, organization)
