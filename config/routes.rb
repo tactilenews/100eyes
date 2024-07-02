@@ -111,6 +111,19 @@ Rails.application.routes.draw do
     end
   end
 
+  constraints Clearance::Constraints::SignedIn.new(&:admin?) do
+    namespace :settings, module: nil do
+      scope :signal, module: :settings do
+        get '/', to: 'signal#edit', as: 'signal_server_phone_number'
+        patch '/', to: 'signal#update'
+        get '/register', to: 'signal#captcha_form'
+        post '/register', to: 'signal#register'
+        get '/verify', to: 'signal#verify_form'
+        post '/verify', to: 'signal#verify'
+      end
+    end
+  end
+
   resource :session, controller: 'sessions', only: %i[create]
   get '/sign_in' => 'sessions#new', as: 'sign_in'
   delete '/sign_out' => 'sessions#destroy', as: 'sign_out'
