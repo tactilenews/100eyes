@@ -6,7 +6,8 @@ RSpec.describe ThreemaAdapter::Outbound::File do
   let(:adapter) { described_class.new }
   let(:threema_double) { instance_double(Threema) }
   let(:threema_id) { 'V5EA564T' }
-  let(:contributor) { create(:contributor, :skip_validations, threema_id: threema_id, email: nil) }
+  let(:organization) { create(:organization, threemarb_api_identity: '*100EYES') }
+  let(:contributor) { create(:contributor, :skip_validations, threema_id: threema_id, email: nil, organization: organization) }
   let(:message) { create(:message, :with_file, recipient: contributor) }
   let(:file_path) { ActiveStorage::Blob.service.path_for(message.files.first.attachment.blob.key) }
   let(:expected_params) do
@@ -32,7 +33,8 @@ RSpec.describe ThreemaAdapter::Outbound::File do
     end
     subject do
       lambda {
-        adapter.perform(contributor_id: message.recipient.id,
+        adapter.perform(organization_id: organization.id,
+                        contributor_id: message.recipient.id,
                         file_path: file_path,
                         file_name: message.files.first.attachment.blob.filename.to_s,
                         caption: message.text,
@@ -49,7 +51,8 @@ RSpec.describe ThreemaAdapter::Outbound::File do
     context 'when a message is passed in' do
       subject do
         lambda {
-          adapter.perform(contributor_id: message.recipient.id,
+          adapter.perform(organization_id: organization.id,
+                          contributor_id: message.recipient.id,
                           file_path: file_path,
                           file_name: message.files.first.attachment.blob.filename.to_s,
                           caption: message.text,

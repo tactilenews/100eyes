@@ -5,7 +5,8 @@ require 'rails_helper'
 RSpec.describe Avatar::Avatar, type: :component do
   include Rails.application.routes.url_helpers
   subject { component }
-  let(:params) { { record: contributor } }
+  let(:organization) { create(:organization) }
+  let(:params) { { organization: organization, record: contributor } }
   let(:component) { render_inline(described_class.new(**params)) }
 
   describe 'img' do
@@ -71,7 +72,7 @@ RSpec.describe Avatar::Avatar, type: :component do
       it { should_not have_css('.Avatar a') }
 
       context 'if it is expandable' do
-        let(:params) { { record: contributor, expandable: true } }
+        let(:params) { { organization: organization, record: contributor, expandable: true } }
         it { should_not have_css('.Avatar a') }
       end
     end
@@ -82,7 +83,7 @@ RSpec.describe Avatar::Avatar, type: :component do
       it { should_not have_css('.Avatar a') }
 
       context 'if it is expandable' do
-        let(:params) { { record: contributor, expandable: true } }
+        let(:params) { { organization: organization, record: contributor, expandable: true } }
         it { should have_css('.Avatar a[aria-label="In Originalgröße anzeigen"]') }
       end
     end

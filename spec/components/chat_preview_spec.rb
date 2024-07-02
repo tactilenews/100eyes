@@ -4,11 +4,9 @@ require 'rails_helper'
 
 RSpec.describe ChatPreview::ChatPreview, type: :component do
   subject { render_inline(described_class.new(**params)) }
-  before do
-    allow(Setting).to receive(:project_name).and_return('TestingProject')
-  end
+  let(:organization) { create(:organization, project_name: 'TestingProject') }
 
-  let(:params) { {} }
+  let(:params) { { organization: organization } }
   it { should have_css('.ChatPreview') }
 
   it { should have_css('.ChatPreview-header', text: 'TestingProject') }

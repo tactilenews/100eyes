@@ -6,13 +6,13 @@ require 'webmock/rspec'
 RSpec.describe SignalAdapter::Outbound::File do
   let(:adapter) { described_class.new }
   let(:contributor) { create(:contributor, signal_phone_number: '+4915112345678', email: nil) }
-  let(:message) { create(:message, :with_file, recipient: contributor, text: 'Hello Signal') }
+  let(:request) { create(:request, organization: create(:organization, signal_server_phone_number: 'SIGNAL_SERVER_PHONE_NUMBER')) }
+  let(:message) { create(:message, :with_file, recipient: contributor, text: 'Hello Signal', request: request) }
   let(:perform) { -> { adapter.perform(message: message) } }
 
   describe 'perform' do
     subject { perform }
     before do
-      allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
       allow(Setting).to receive(:signal_cli_rest_api_endpoint).and_return('http://signal:8080')
       allow(Sentry).to receive(:capture_exception)
     end

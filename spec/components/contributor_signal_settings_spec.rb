@@ -13,8 +13,11 @@ RSpec.describe ContributorSignalSettings::ContributorSignalSettings, type: :comp
            first_name: 'Max',
            last_name: 'Mustermann',
            signal_phone_number: '+4915112345678',
+           signal_onboarding_completed_at: onboarding_completed_at,
            created_at: '2021-01-01')
   end
+
+  let(:onboarding_completed_at) { Time.zone.now }
 
   it { should have_css('h2', text: 'Signal') }
   it { should have_css('p', text: 'Max Mustermann hat sich mit der Handynummer 0151 1234 5678 angemeldet.') }

@@ -11,11 +11,15 @@ RSpec.describe WhatsAppAdapter::Outbound::File do
   let(:mock_twilio_rest_client) { instance_double(Twilio::REST::Client) }
   let(:message_list_double) { instance_double(Twilio::REST::Api::V2010::AccountContext::MessageList) }
   let(:messages_double) { double(Twilio::REST::Api::V2010::AccountContext::MessageInstance, sid: twilio_message_sid_from_first_file) }
+  let(:organization) do
+    create(:organization, twilio_account_sid: valid_account_sid, twilio_api_key_sid: valid_api_key_sid,
+                          twilio_api_key_secret: valid_api_key_secret)
+  end
   let(:subsequent_messages_double) do
     double(Twilio::REST::Api::V2010::AccountContext::MessageInstance, sid: 'subsequent_valid_twilio_message_sid')
   end
   let(:contributor) do
-    create(:contributor, whats_app_phone_number: whats_app_phone_number, email: nil)
+    create(:contributor, :whats_app_contributor, organization: organization)
   end
 
   let(:message) do
@@ -26,7 +30,7 @@ RSpec.describe WhatsAppAdapter::Outbound::File do
 
   let(:expected_params) do
     {
-      from: "whatsapp:#{Setting.whats_app_server_phone_number}",
+      from: "whatsapp:#{organization.whats_app_server_phone_number}",
       body: message.text,
       to: "whatsapp:#{contributor.whats_app_phone_number}",
       media_url: Rails.application.routes.url_helpers.rails_blob_url(message.files.first.attachment.blob, host: Setting.application_host)
@@ -34,7 +38,7 @@ RSpec.describe WhatsAppAdapter::Outbound::File do
   end
   let(:subsequent_expected_params) do
     {
-      from: "whatsapp:#{Setting.whats_app_server_phone_number}",
+      from: "whatsapp:#{organization.whats_app_server_phone_number}",
       body: '',
       to: "whatsapp:#{contributor.whats_app_phone_number}",
       media_url: Rails.application.routes.url_helpers.rails_blob_url(message.files.second.attachment.blob, host: Setting.application_host)
@@ -43,12 +47,9 @@ RSpec.describe WhatsAppAdapter::Outbound::File do
   let(:twilio_message_sid_from_first_file) { 'valid_twilio_message_sid' }
 
   describe '#perform' do
-    subject { -> { adapter.perform(contributor_id: message.recipient.id, message: message) } }
+    subject { -> { adapter.perform(organization_id: organization.id, contributor_id: message.recipient.id, message: message) } }
 
     before do
-      allow(Setting).to receive(:twilio_account_sid).and_return(valid_account_sid)
-      allow(Setting).to receive(:twilio_api_key_sid).and_return(valid_api_key_sid)
-      allow(Setting).to receive(:twilio_api_key_secret).and_return(valid_api_key_secret)
       allow(Twilio::REST::Client).to receive(:new).with(valid_api_key_sid, valid_api_key_secret,
                                                         valid_account_sid).and_return(mock_twilio_rest_client)
       allow(mock_twilio_rest_client).to receive(:messages).and_return(message_list_double)

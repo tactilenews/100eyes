@@ -10,6 +10,8 @@ FactoryBot.define do
     onboarding_success_heading { File.read(File.join('config', 'locales', 'onboarding', 'success_heading.txt')) }
     onboarding_success_text { File.read(File.join('config', 'locales', 'onboarding', 'success_text.txt')) }
     onboarding_data_protection_link { 'https://tactile.news/100eyes-datenschutz/' }
+    signal_server_phone_number { Faker::PhoneNumber.cell_phone_in_e164 }
+    whats_app_server_phone_number { Faker::PhoneNumber.cell_phone_in_e164 }
 
     transient do
       users_count { 0 }

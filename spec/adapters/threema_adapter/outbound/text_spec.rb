@@ -5,7 +5,8 @@ require 'rails_helper'
 RSpec.describe ThreemaAdapter::Outbound::Text do
   let(:adapter) { described_class.new }
   let(:threema_id) { 'V5EA564T' }
-  let(:contributor) { create(:contributor, :skip_validations, threema_id: threema_id, email: nil) }
+  let(:organization) { create(:organization, threemarb_api_identity: '*100EYES') }
+  let(:contributor) { create(:contributor, :skip_validations, threema_id: threema_id, email: nil, organization: organization) }
   let(:message) { create(:message, recipient: contributor) }
   let(:threema_double) { instance_double(Threema) }
   let(:threema_lookup_double) { instance_double(Threema::Lookup) }
@@ -20,7 +21,7 @@ RSpec.describe ThreemaAdapter::Outbound::Text do
   end
 
   describe '#perform' do
-    subject { -> { adapter.perform(text: message.text, contributor_id: message.recipient.id) } }
+    subject { -> { adapter.perform(organization_id: organization.id, contributor_id: message.recipient.id, text: message.text) } }
 
     it 'sends the message' do
       expect(threema_double).to receive(:send).with(type: :text, threema_id: threema_id, text: message.text)
@@ -39,7 +40,11 @@ RSpec.describe ThreemaAdapter::Outbound::Text do
     end
 
     context 'when a message is passed in' do
-      subject { -> { adapter.perform(text: message.text, contributor_id: message.recipient.id, message: message) } }
+      subject do
+        lambda {
+          adapter.perform(organization_id: organization.id, contributor_id: message.recipient.id, text: message.text, message: message)
+        }
+      end
 
       it "saves the returned message id to the message's external_id" do
         expect { subject.call }.to change { message.reload.external_id }.from(nil).to(message_id)

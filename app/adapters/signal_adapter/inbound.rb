@@ -39,9 +39,6 @@ module SignalAdapter
         return
       end
 
-      delivery_receipt = initialize_delivery_receipt(signal_message)
-      return if delivery_receipt
-
       remove_emoji = signal_message.dig(:envelope, :dataMessage, :reaction, :isRemove)
       return if remove_emoji
 
@@ -80,19 +77,16 @@ module SignalAdapter
       signal_phone_number = signal_message.dig(:envelope, :sourceNumber)
       signal_uuid = signal_message.dig(:envelope, :sourceUuid)
       if signal_phone_number
-        Contributor.find_by(signal_phone_number: signal_phone_number)
+        organization.contributors.find_by(signal_phone_number: signal_phone_number)
       else
-        Contributor.find_by(signal_uuid: signal_uuid)
+        organization.contributors.find_by(signal_uuid: signal_uuid)
       end
     end
 
     def initialize_delivery_receipt(signal_message)
-      delivery_receipt = signal_message.dig(:envelope, :receiptMessage)
-      return nil unless delivery_receipt
+      return nil unless delivery_receipt?(signal_message) && sender
 
-      signal_phone_number = signal_message.dig(:envelope, :sourceNumber)
-      sender = organization.contributors.find_by(signal_phone_number: signal_phone_number)
-      return unless sender
+      delivery_receipt = signal_message.dig(:envelope, :receiptMessage)
 
       trigger(HANDLE_DELIVERY_RECEIPT, delivery_receipt, sender)
       delivery_receipt
@@ -184,6 +178,10 @@ module SignalAdapter
       has_non_text_content = message.files.any? || message.unknown_content
       text = message.text
       has_non_text_content || (text.present? && !unsubscribe_text?(text) && !resubscribe_text?(text))
+    end
+
+    def delivery_receipt?(signal_message)
+      signal_message.dig(:envelope, :receiptMessage).present?
     end
   end
 end

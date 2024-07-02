@@ -36,12 +36,12 @@ module ThreemaAdapter
         recipient = organization.contributors.find_by(id: contributor_id)
         return unless recipient
 
-        message_id = self.class.threema_instance.send(type: :file,
-                                                      threema_id: recipient.threema_id.upcase,
-                                                      file: file_path,
-                                                      render_type: render_type,
-                                                      file_name: file_name,
-                                                      caption: caption)
+        message_id = self.class.threema_instance(organization).send(type: :file,
+                                                                    threema_id: recipient.threema_id.upcase,
+                                                                    file: file_path,
+                                                                    render_type: render_type,
+                                                                    file_name: file_name,
+                                                                    caption: caption)
         return unless message
 
         message.update(external_id: message_id)

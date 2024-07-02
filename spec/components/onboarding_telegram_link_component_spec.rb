@@ -8,8 +8,10 @@ RSpec.describe OnboardingTelegramLink::OnboardingTelegramLink, type: :component 
     allow(Setting).to receive(:telegram_bot_username).and_return('TestingBot')
   end
 
-  let(:params) { { telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN' } }
+  let(:organization) { create(:organization) }
+  let(:params) { { organization: organization, telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN' } }
   it { should have_css('a[href="https://t.me/TestingBot?start=TELEGRAM_ONBOARDING_TOKEN"]') }
+  it { should have_css('p', text: organization.project_name) }
 
   context 'missing `telegram_onboarding_token`' do
     subject { -> { render_inline(described_class.new) } }

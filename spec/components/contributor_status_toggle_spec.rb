@@ -5,9 +5,10 @@ require 'rails_helper'
 RSpec.describe ContributorStatusToggle::ContributorStatusToggle, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
+  let(:organization) { create(:organization) }
   let(:contributor) { create(:contributor) }
   let(:deactivated_by) { nil }
-  let(:params) { { contributor: contributor, deactivated_by: deactivated_by } }
+  let(:params) { { organization: organization, contributor: contributor, deactivated_by: deactivated_by } }
 
   it { should have_css("form[action='/contributors/#{contributor.id}']") }
 
