@@ -14,7 +14,7 @@ class MessagesController < ApplicationController
       content_type: 'text/plain'
     )
     if @message.save!
-      redirect_to contributor_request_path(contributor_id: @contributor, id: @request), flash: { success: I18n.t('message.create.success') }
+      redirect_to @message.chat_message_link, flash: { success: I18n.t('message.create.success') }
     else
       render :new_message, flash: { error: I18n.t('message.create.error') }
     end
@@ -24,7 +24,7 @@ class MessagesController < ApplicationController
 
   def update
     if @message.update(text: params[:message][:text], creator: current_user)
-      redirect_to contributor_request_path(contributor_id: @contributor, id: @request), flash: { success: I18n.t('message.edit.success') }
+      redirect_to @message.chat_message_link, flash: { success: I18n.t('message.edit.success') }
     else
       flash.now[:error] = I18n.t('message.edit.error')
       render :edit

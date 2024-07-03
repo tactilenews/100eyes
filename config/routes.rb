@@ -73,8 +73,6 @@ Rails.application.routes.draw do
   end
 
   resources :contributors, only: %i[index show edit update], concerns: :paginatable do
-    resources :requests, only: %i[show], to: 'requests#show_contributor_messages'
-
     member do
       get 'conversations'
       post 'message'

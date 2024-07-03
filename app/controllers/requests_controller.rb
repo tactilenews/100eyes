@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 class RequestsController < ApplicationController
-  before_action :set_request, only: %i[show show_contributor_messages edit update notifications destroy messages_by_contributor stats]
-  before_action :set_contributor, only: %i[show_contributor_messages]
+  before_action :set_request, only: %i[show edit update notifications destroy messages_by_contributor stats]
   before_action :notifications_params, only: :notifications
   before_action :disallow_edit, only: %i[edit update]
   before_action :disallow_destroy, only: :destroy
@@ -63,10 +62,6 @@ class RequestsController < ApplicationController
     else
       render :edit, status: :unprocessable_entity
     end
-  end
-
-  def show_contributor_messages
-    @chat_messages = @contributor.conversation_about(@request)
   end
 
   def notifications

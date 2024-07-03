@@ -65,20 +65,6 @@ RSpec.describe Message, type: :model do
     let(:request) { create(:request, id: 6) }
     let(:message) { create(:message, request: request, **params) }
 
-    describe '#conversation_link' do
-      subject { message.conversation_link }
-
-      describe 'given a recipient' do
-        let(:params) { { sender: nil, recipient: contributor, broadcasted: true } }
-        it { should eq('/contributors/7/requests/6') }
-      end
-
-      describe 'given an inbound message' do
-        let(:params) { { recipient: nil, sender: contributor } }
-        it { should eq('/contributors/7/requests/6') }
-      end
-    end
-
     describe '#chat_message_link' do
       subject { message.chat_message_link }
       let(:params) { { id: 8, recipient: nil, sender: contributor } }

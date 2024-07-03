@@ -52,10 +52,6 @@ class Message < ApplicationRecord
     recipient || sender # If there is no recipient, then the message must be inbound and the sender must be a contributor
   end
 
-  def conversation_link
-    Rails.application.routes.url_helpers.contributor_request_path(id: request.id, contributor_id: contributor.id)
-  end
-
   def chat_message_link
     Rails.application.routes.url_helpers.conversations_contributor_path(id: contributor, anchor: "message-#{id}")
   end
