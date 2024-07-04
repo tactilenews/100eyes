@@ -22,13 +22,6 @@ RSpec.describe '/contributors', type: :request do
     end
   end
 
-  describe 'GET /requests/:id' do
-    it 'should be successful' do
-      get contributor_request_path(id: the_request.id, contributor_id: contributor.id, as: user)
-      expect(response).to be_successful
-    end
-  end
-
   describe 'GET /count' do
     let!(:teachers) { create_list(:contributor, 2, tag_list: 'teacher') }
 

@@ -12,10 +12,6 @@ module SearchResult
 
     attr_reader :result
 
-    def link
-      helpers.contributor_request_path(contributor_id: result.contributor_id, id: result.request_id)
-    end
-
     def type
       result.model_name.name
     end

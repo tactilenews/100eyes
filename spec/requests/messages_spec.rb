@@ -23,7 +23,7 @@ RSpec.describe '/messages', type: :request do
 
     it 'redirects to the conversation link the message belongs to' do
       subject.call
-      expect(response).to redirect_to(contributor_request_path(id: request.id, contributor_id: contributor.id))
+      expect(response).to redirect_to(Message.first.chat_message_link)
     end
 
     it 'shows success notification' do
@@ -51,7 +51,7 @@ RSpec.describe '/messages', type: :request do
 
     it 'redirects to the conversation link the message belongs to' do
       subject.call
-      expect(response).to redirect_to(contributor_request_path(id: message.request_id, contributor_id: message.sender_id))
+      expect(response).to redirect_to(message.chat_message_link)
     end
 
     context 'not manually created message' do
