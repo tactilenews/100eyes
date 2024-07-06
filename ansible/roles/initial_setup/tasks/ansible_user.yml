@@ -12,6 +12,12 @@
     line: '%wheel ALL=(ALL) ALL'
     validate: '/usr/sbin/visudo -cf %s'
 
+- name: Install passlib required for `password_hash` ansible filter
+  import_role:
+    name: geerlingguy.pip
+    pip_install_packages:
+      - name: passlib
+
 - name: Create a new regular user with sudo privileges
   user:
     name: "{{ create_user }}"

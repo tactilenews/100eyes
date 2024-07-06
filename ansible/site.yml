@@ -20,9 +20,6 @@
     - role: initial_setup
     - role: gantsign.inotify
       inotify_max_user_watches: 524288
-    - role: geerlingguy.pip
-      pip_install_packages:
-        - name: passlib
     - role: geerlingguy.docker
       docker_packages_state: latest
       vars:
