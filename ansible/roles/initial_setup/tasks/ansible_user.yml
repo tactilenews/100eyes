@@ -15,6 +15,7 @@
 - name: Install passlib required for `password_hash` ansible filter
   import_role:
     name: geerlingguy.pip
+  vars:
     pip_install_packages:
       - name: passlib
 
