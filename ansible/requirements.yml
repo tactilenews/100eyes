@@ -9,4 +9,5 @@ collections:
 ### community.docker hotfix version ###
 - name: community.docker
   version: 3.10.3
-- devsec.hardening
+- name: devsec.hardening
+  version: 10.0.0
