@@ -18,6 +18,7 @@
   vars:
     pip_install_packages:
       - name: passlib
+        state: forcereinstall
 
 - name: Create a new regular user with sudo privileges
   user:
