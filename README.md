@@ -76,6 +76,17 @@ We're using [our own fork](https://github.com/tactilenews/threema) of the `three
 bundle config local.threema .
 ```
 
+#### Telegram
+
+To test out Telegram webhooks, you need to first set the webhook. You can do this like so:
+
+```rb
+Telegram.bots_config
+{ <key>: <Telegram::Bot::Client> }
+bot = Telegram.bots[<key_of_bot>]
+bot.set_webhook(url: 'https://<localtunnel>/telegram/<route-to-telegram-bot>')
+```
+
 See this [blog post](https://rossta.net/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html) for more information.
 
 ### Testing
