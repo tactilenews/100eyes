@@ -53,6 +53,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Install passlib required for `password_hash` ansible filter
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: python3-passlib
+          version: 1.0
+
       - name: Run playbook
         uses: dawidd6/action-ansible-playbook@009b88e9b8894bd8838475d799b7dca5024e91d5
         with:
