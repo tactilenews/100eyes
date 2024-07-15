@@ -56,7 +56,7 @@ jobs:
       - name: Install passlib required for `password_hash` ansible filter
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
-          packages: python3-passlib
+          packages: python-passlib
           version: 1.0
 
       - name: Run playbook
@@ -69,4 +69,5 @@ jobs:
           options: |
             --inventory ansible/inventories/staging
             --skip-tags skip_ci
+            --tags setup
             --verbose

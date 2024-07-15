@@ -18,6 +18,8 @@
         # Effectively disable password expiration
         os_auth_pw_max_age: 99999
     - role: initial_setup
+      tags:
+        - setup
     - role: gantsign.inotify
       inotify_max_user_watches: 524288
     - role: geerlingguy.docker
