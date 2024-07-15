@@ -4,4 +4,3 @@
 - include_tasks: ansible_user.yml
 - include_tasks: upload_public_keys.yml
 - include_tasks: security.yml
-

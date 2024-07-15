@@ -4,7 +4,9 @@
     authorized_key:
       user: "{{ create_user }}"
       state: present
-      key: "{{ copy_local_key }}"
+      key: "{{ lookup('file', item) }}"
+    with_fileglob:
+      - "{{ lookup('env','HOME') + '/.ssh/*.pub' }}"
 
   - name: Set additional authorized keys
     authorized_key:
