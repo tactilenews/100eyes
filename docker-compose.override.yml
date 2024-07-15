@@ -17,10 +17,6 @@ x-dev-defaults: &x-dev-defaults
     - .:/app
 
 services:
-  telegram:
-    <<: *x-dev-defaults
-    command: rake telegram:bot:poller
-
   app:
     <<: *x-dev-defaults
     depends_on: [ db, mailserver, assets ]
