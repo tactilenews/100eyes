@@ -1,0 +1,15 @@
+<%= c 'section',
+   styles: [:wide, :largeBottomMargin],
+   **attrs,
+   data: { controller: 'interaction-rates-by-tag',
+           interaction_rates_by_tag_url_value: 'charts/interaction-rates-by-tag',
+         } do %>
+  <%= c 'heading', style: :beta do %>
+    <%= t '.heading' %>
+  <% end %>
+
+  <div
+    data-interaction-rates-by-tag-target="barChart"
+    class="InteractionRatesByTag-chart"
+  ></div>
+<% end %>
