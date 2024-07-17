@@ -112,7 +112,6 @@ class Contributor < ApplicationRecord
     Message
       .where(recipient: self)
       .or(Message.where(sender: self))
-      .reorder(created_at: :asc)
   end
 
   def conversation_about(request)
