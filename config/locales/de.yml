@@ -673,15 +673,15 @@ de:
       error: Die Nachricht konnte nicht verschoben werden
     create:
       heading: Notiz hinzufügen
-      text: Hier kannst du manuell Antworten von <strong>%{name}</strong> zur Frage <strong>„%{title}”</strong> hinzufügen.
-      success: Die Antwort wurde hinzugefügt
-      error: Die Antwort konnte nicht hinzugefügt werden
+      text: Hier kannst du manuell Notizen für <strong>%{name}</strong> zur Frage <strong>„%{title}”</strong> hinzufügen.
+      success: Die Notiz wurde hinzugefügt
+      error: Die Notiz konnte nicht hinzugefügt werden
     edit:
-      heading: Manuell hinzugefügte Antwort bearbeiten
-      text: Hier kannst du diese manuell hinzugefügte Antwort von <strong>%{name}</strong> zur Frage <strong>„%{title}”</strong> bearbeiten.
-      success: Die bearbeitete Antwort wurde gespeichert
-      error: Die bearbeitete Antwort konnte nicht gespeichet werden
-    only_manually_created: Diese Aktion kann nur auf manuell erstellten Nachrichten ausgeführt werden.
+      heading: Notiz bearbeiten
+      text: Hier kannst du die manuell hinzugefügte Notiz für <strong>%{name}</strong> zur Frage <strong>„%{title}”</strong> bearbeiten.
+      success: Die bearbeitete Notiz wurde gespeichert
+      error: Die bearbeitete Notiz konnte nicht gespeichet werden
+    only_manually_created: Diese Aktion kann nur auf manuell erstellten Notizen ausgeführt werden.
 
   profile:
     contributors_section:
