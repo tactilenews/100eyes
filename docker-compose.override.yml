@@ -8,7 +8,6 @@ x-dev-defaults: &x-dev-defaults
     MAILSERVER_HOST: mailserver
     MAILSERVER_PORT: 1025
     POSTGRES_HOST: db
-    WEBPACKER_DEV_SERVER_HOST: 0.0.0.0
     CHROME_URL: "http://chrome:3333"
 
   stdin_open: true
