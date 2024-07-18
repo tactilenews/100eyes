@@ -4,7 +4,6 @@ require 'rails_helper'
 
 RSpec.describe 'Activity Notifications' do
   context 'with recent activity' do
-    let(:organization) { create(:organization) }
     let(:email) { Faker::Internet.email }
     let(:coworker_email) { Faker::Internet.email }
     let(:password) { Faker::Internet.password(min_length: 8, max_length: 128) }
