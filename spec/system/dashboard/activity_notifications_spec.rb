@@ -4,8 +4,8 @@ require 'rails_helper'
 
 RSpec.describe 'Activity Notifications' do
   context 'with recent activity' do
-    let(:email) { Faker::Internet.safe_email }
-    let(:coworker_email) { Faker::Internet.safe_email }
+    let(:email) { Faker::Internet.email }
+    let(:coworker_email) { Faker::Internet.email }
     let(:password) { Faker::Internet.password(min_length: 8, max_length: 128) }
     let(:otp_enabled) { true }
     let(:user) { create(:user, first_name: 'Johnny', last_name: 'Appleseed', email: email, password: password, otp_enabled: otp_enabled) }
