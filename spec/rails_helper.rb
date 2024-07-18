@@ -7,7 +7,7 @@ require 'faker'
 
 ENV['RAILS_ENV'] ||= 'test'
 ENV['TWILIO_AUTH_TOKEN'] = 'valid_token'
-Faker::Config.locale = :de
+Faker::Config.default_locale = :de
 
 require File.expand_path('../config/environment', __dir__)
 # Prevent database truncation if the environment is production
