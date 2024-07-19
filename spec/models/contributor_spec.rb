@@ -359,7 +359,7 @@ RSpec.describe Contributor, type: :model do
       expect(contributor.conversations).to include(sent_message)
     end
 
-    it 'sorts the messages so that the newest first' do
+    it 'sorts the messages so that the newest comes first' do
       received_message
       sent_message
       expect(contributor.conversations.last).to eql(received_message)
