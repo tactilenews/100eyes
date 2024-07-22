@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'OTP Setup' do
-  let(:email) { Faker::Internet.safe_email }
+  let(:email) { Faker::Internet.email }
   let(:password) { Faker::Internet.password(min_length: 8, max_length: 128) }
   let(:new_password) { Faker::Internet.password(min_length: 8, max_length: 128) }
   let(:otp_enabled) { true }
