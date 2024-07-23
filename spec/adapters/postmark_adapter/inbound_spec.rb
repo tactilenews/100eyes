@@ -5,46 +5,9 @@ require 'rails_helper'
 RSpec.describe PostmarkAdapter::Inbound do
   let(:email_message) { described_class.new mail }
   let(:html_part) { 'This is a text body part' }
-
-  describe '::bounce!' do
-    subject { -> { described_class.bounce!(mail, organization) } }
-
-    let(:organization) { create(:organization) }
-    let(:mail) do
-      Mail.new do |m|
-        m.from 'contributor@example.org'
-        m.to '100eyes@example.org'
-        m.subject 'This is a test email'
-        m.body html_part
-      end
-    end
-    let(:bounce_email) do
-      {
-        subject: I18n.t('adapter.postmark.contributor_not_found_email.subject'),
-        message_stream: ENV.fetch('POSTMARK_TRANSACTIONAL_STREAM', 'outbound'),
-        to: mail.from.first
-      }
-    end
-    let(:expected_params) do
-      {
-        organization: organization,
-        text: I18n.t('adapter.postmark.contributor_not_found_email.text'),
-        mail: bounce_email
-      }
-    end
-
-    it 'schedules the bounce_email' do
-      expect { subject.call }.to have_enqueued_job.on_queue('default').with(
-        'PostmarkAdapter::Outbound',
-        'bounce_email',
-        'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
-        {
-          params: expected_params,
-          args: []
-        }
-      )
-    end
-  end
+  let(:organization) { create(:organization, email_from_address: email_from_address) }
+  let!(:contributor) { create(:contributor, email: 'contributor@example.org', organization: organization) }
+  let(:email_from_address) { '100eyes@example.org' }
 
   describe '#text' do
     subject { -> { email_message.text } }
@@ -132,6 +95,8 @@ RSpec.describe PostmarkAdapter::Inbound do
     end
 
     describe 'previous messages present in reply' do
+      let(:email_from_address) { '100eyes-test@roschaefer.de' }
+
       context 'given unchanged class and id attributes' do
         let(:mail) { Mail.read(Rails.root.join / 'spec/adapters/postmark_adapter/reply.eml') }
         it 'removes previous messages' do
@@ -196,7 +161,9 @@ RSpec.describe PostmarkAdapter::Inbound do
 
   describe '#file' do
     let(:mail) do
-      mail = Mail.new
+      mail = Mail.new do |m|
+        m.to '100eyes@example.org'
+      end
       mail.add_file Rails.root.join('README.md').to_s
       mail
     end
@@ -208,7 +175,9 @@ RSpec.describe PostmarkAdapter::Inbound do
     subject { email_message.photos }
     describe 'given a file attachment' do
       let(:mail) do
-        mail = Mail.new
+        mail = Mail.new do |m|
+          m.to '100eyes@example.org'
+        end
         mail.add_file Rails.root.join('README.md').to_s
         mail
       end
@@ -217,7 +186,9 @@ RSpec.describe PostmarkAdapter::Inbound do
 
     describe 'given an image attachment' do
       let(:mail) do
-        mail = Mail.new
+        mail = Mail.new do |m|
+          m.to '100eyes@example.org'
+        end
         mail.add_file Rails.root.join('example-image.png').to_s
         mail
       end
