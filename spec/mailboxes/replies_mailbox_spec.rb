@@ -5,8 +5,9 @@ require 'rails_helper'
 RSpec.describe RepliesMailbox, type: :mailbox do
   subject { -> { receive_inbound_email_from_mail(**params) } }
 
+  let(:organization) { create(:organization) }
   let(:from_address) { 'zora@example.org' }
-  let(:params) { { from: from_address, body: 'Meiner Katze geht es gut!' } }
+  let(:params) { { from: from_address, body: 'Meiner Katze geht es gut!', to: organization.email_from_address } }
 
   it { should_not(change { Message.count }) }
 
@@ -17,6 +18,7 @@ RSpec.describe RepliesMailbox, type: :mailbox do
       'deliver_now',
       {
         params: {
+          organization: organization,
           text: /Vielen Dank für Ihre Nachricht. Leider konnten wir Ihre E-Mail-Adresse nicht zuordnen./,
           mail: { subject: 'Wir können Ihre E-Mail Adresse nicht zuordnen', message_stream: 'outbound', to: 'zora@example.org' }
         },

@@ -408,6 +408,9 @@ RSpec.describe Contributor, type: :model do
 
   describe '#reply' do
     subject { -> { contributor.reply(message_inbound_adapter) } }
+
+    let!(:organization) { create(:organization, email_from_address: '100eyes@example.org') }
+
     describe 'given a PostmarkAdapter::Inbound' do
       let(:mail) do
         mail = Mail.new do |m|
@@ -424,6 +427,8 @@ RSpec.describe Contributor, type: :model do
       it { should_not(change { Message.count }) }
 
       describe 'given a recent request' do
+        let!(:contributor) { create(:contributor, email: 'contributor@example.org', organization: organization) }
+
         before(:each) { the_request }
 
         it { should change { Message.count }.from(0).to(1) }
