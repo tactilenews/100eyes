@@ -7,6 +7,7 @@ class Request < ApplicationRecord
   multisearchable against: %i[title text]
 
   belongs_to :user
+  belongs_to :organization
   has_many :messages, dependent: :destroy
   has_many :contributors, through: :messages, source: :recipient
   has_many :photos, through: :messages

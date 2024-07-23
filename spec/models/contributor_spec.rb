@@ -408,6 +408,9 @@ RSpec.describe Contributor, type: :model do
 
   describe '#reply' do
     subject { -> { contributor.reply(message_inbound_adapter) } }
+
+    let!(:organization) { create(:organization, email_from_address: '100eyes@example.org') }
+
     describe 'given a PostmarkAdapter::Inbound' do
       let(:mail) do
         mail = Mail.new do |m|
@@ -424,6 +427,8 @@ RSpec.describe Contributor, type: :model do
       it { should_not(change { Message.count }) }
 
       describe 'given a recent request' do
+        let!(:contributor) { create(:contributor, email: 'contributor@example.org', organization: organization) }
+
         before(:each) { the_request }
 
         it { should change { Message.count }.from(0).to(1) }
@@ -449,23 +454,25 @@ RSpec.describe Contributor, type: :model do
             },
             'chat' => { 'id' => 146_338_764 }
           }
-          message_inbound_adapter = TelegramAdapter::Inbound.new
+          message_inbound_adapter = TelegramAdapter::Inbound.new(organization)
           message_inbound_adapter.consume(telegram_message) do |message|
             message.contributor.reply(message_inbound_adapter)
           end
         end
       end
 
-      let!(:contributor) { create(:contributor, :with_an_avatar, telegram_id: 4711) }
+      let(:organization) { create(:organization) }
 
-      it { should_not raise_error }
-      it { should_not(change { Message.count }) }
+      let!(:contributor) { create(:contributor, :with_an_avatar, telegram_id: 4711, organization: organization) }
+
+      it { expect { subject.call }.not_to raise_error }
+      it { expect { subject.call }.not_to(change { Message.count }) }
 
       describe 'given a recent request' do
         before(:each) { the_request }
 
-        it { should change { Message.count }.from(0).to(1) }
-        it { should_not(change { Photo.count }) }
+        it { expect { subject.call }.to change { Message.count }.from(0).to(1) }
+        it { expect { subject.call }.not_to(change { Photo.count }) }
 
         context 'ActivityNotifications' do
           it_behaves_like 'an ActivityNotification', 'MessageReceived'
@@ -497,7 +504,8 @@ RSpec.describe Contributor, type: :model do
         end
       end
       let(:threema_id) { 'V5EA564T' }
-      let!(:contributor) { create(:contributor, :skip_validations, threema_id: threema_id) }
+      let(:organization) { create(:organization, threemarb_api_identity: '*100EYES') }
+      let!(:contributor) { create(:contributor, :skip_validations, threema_id: threema_id, organization: organization) }
 
       before do
         allow(Threema).to receive(:new).and_return(threema)
@@ -537,7 +545,8 @@ RSpec.describe Contributor, type: :model do
               expiresInSeconds: 0,
               viewOnce: false
             }
-          }
+          },
+          account: '+4912345678'
         }
       end
       subject do
@@ -549,9 +558,10 @@ RSpec.describe Contributor, type: :model do
         end
       end
 
+      let(:organization) { create(:organization, signal_server_phone_number: '+4912345678') }
       let(:phone_number) { '+4912345789' }
       let!(:contributor) do
-        create(:contributor, signal_phone_number: phone_number)
+        create(:contributor, signal_phone_number: phone_number, organization: organization)
       end
 
       it { should_not raise_error }
@@ -893,17 +903,20 @@ RSpec.describe Contributor, type: :model do
   end
 
   describe '.send_welcome_message!', telegram_bot: :rails do
-    let(:contributor) { create(:contributor, telegram_id: nil, email: nil, threema_id: nil) }
-    before do
-      allow(Setting).to receive(:onboarding_success_heading).and_return('Welcome new contributor!')
-      allow(Setting).to receive(:onboarding_success_text).and_return('You onboarded successfully.')
+    subject { -> { contributor.send_welcome_message!(organization) } }
+
+    let(:organization) do
+      create(:organization, onboarding_success_heading: 'Welcome new contributor!', onboarding_success_text: 'You onboarded successfully.')
     end
-    subject { -> { contributor.send_welcome_message! } }
+    let(:contributor) { create(:contributor, telegram_id: nil, email: nil, threema_id: nil) }
 
     it { should_not have_enqueued_job }
 
     context 'signed up via telegram' do
-      let(:expected_job_args) { { contributor_id: contributor.id, text: "<b>Welcome new contributor!</b>\nYou onboarded successfully." } }
+      let(:expected_job_args) do
+        { organization_id: organization.id, contributor_id: contributor.id,
+          text: "<b>Welcome new contributor!</b>\nYou onboarded successfully." }
+      end
       let(:contributor) { create(:contributor, telegram_id: nil, telegram_onboarding_token: 'ABCDEF', email: nil) }
       it { should_not have_enqueued_job }
 
@@ -914,8 +927,11 @@ RSpec.describe Contributor, type: :model do
     end
 
     context 'signed up via threema' do
-      let(:expected_job_args) { { contributor_id: contributor.id, text: "*Welcome new contributor!*\nYou onboarded successfully." } }
-      let(:contributor) { create(:contributor, :skip_validations, threema_id: 'AAAAAAAA', email: nil, telegram_id: nil) }
+      let(:expected_job_args) do
+        { organization_id: organization.id, contributor_id: contributor.id,
+          text: "*Welcome new contributor!*\nYou onboarded successfully." }
+      end
+      let(:contributor) { create(:contributor, :skip_validations, :threema_contributor, organization: organization) }
       it { should enqueue_job(ThreemaAdapter::Outbound::Text).with(expected_job_args) }
     end
 
@@ -927,7 +943,7 @@ RSpec.describe Contributor, type: :model do
           'welcome_email',
           'deliver_now',
           {
-            params: { contributor: contributor },
+            params: { organization: organization, contributor: contributor },
             args: []
           }
         )

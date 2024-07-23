@@ -1,5 +1,5 @@
 <main>
   <%= c 'interstitial' do %>
-    <%= c 'onboarding_signal_link', signal_onboarding_token: @signal_onboarding_token %>
+    <%= c 'onboarding_signal_link', organization: @organization, signal_onboarding_token: @signal_onboarding_token %>
   <% end %>
 </main>

@@ -6,7 +6,12 @@ RSpec.describe 'Onboarding::Threema', type: :request do
   let(:data_processing_consent) { true }
   let(:contributor) { create(:contributor) }
   let(:additional_consent) { true }
-  let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding', organization_id: create(:organization).id }) }
+  let(:threemarb_api_identity) { nil }
+  let!(:organization) do
+    create(:organization, threemarb_api_identity: threemarb_api_identity, onboarding_allowed: onboarding_allowed)
+  end
+  let(:onboarding_allowed) { { threema: true } }
+  let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding', organization_id: organization.id }) }
   let(:params) { { jwt: jwt } }
   let(:threema) { instance_double(Threema) }
   let(:threema_lookup_double) { instance_double(Threema::Lookup) }
@@ -28,9 +33,8 @@ RSpec.describe 'Onboarding::Threema', type: :request do
     end
 
     describe 'when a Threema api identity is configured, but onboarding has been disallowed by an admin' do
-      before do
-        allow(Setting).to receive(:threema_onboarding_allowed?).and_return(false)
-      end
+      let(:threemarb_api_identity) { '*100EYES' }
+      let(:onboarding_allowed) { { threema: false } }
 
       it 'returns a 404 not found' do
         subject.call
@@ -40,9 +44,7 @@ RSpec.describe 'Onboarding::Threema', type: :request do
     end
 
     describe 'but when a Threema api identity is configured and onboarding has not been disallowed' do
-      before do
-        allow(Setting).to receive(:threema_onboarding_allowed?).and_return(true)
-      end
+      let(:threemarb_api_identity) { '*100EYES' }
 
       it 'returns a 200 ok' do
         subject.call
@@ -76,9 +78,8 @@ RSpec.describe 'Onboarding::Threema', type: :request do
     end
 
     describe 'when a Threema api identity is configured, but onboarding has been disallowed by an admin' do
-      before do
-        allow(Setting).to receive(:threema_onboarding_allowed?).and_return(false)
-      end
+      let(:threemarb_api_identity) { '*100EYES' }
+      let(:onboarding_allowed) { { threema: false } }
 
       it 'returns a 404 not found' do
         subject.call
@@ -88,9 +89,8 @@ RSpec.describe 'Onboarding::Threema', type: :request do
     end
 
     describe 'but when a Threema api identity is configured and onboarding has not been disallowed' do
-      before do
-        allow(Setting).to receive(:threema_onboarding_allowed?).and_return(true)
-      end
+      let(:threemarb_api_identity) { '*100EYES' }
+
       it 'creates contributor' do
         expect { subject.call }.to change(Contributor, :count).by(1)
 
@@ -149,7 +149,7 @@ RSpec.describe 'Onboarding::Threema', type: :request do
       end
 
       describe 'given an existing threema ID' do
-        let!(:contributor) { create(:contributor, **attrs) }
+        let!(:contributor) { create(:contributor, **attrs, organization: organization) }
 
         it 'redirects to success page' do
           subject.call

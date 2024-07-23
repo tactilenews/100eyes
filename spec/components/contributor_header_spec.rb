@@ -5,8 +5,9 @@ require 'rails_helper'
 RSpec.describe ContributorHeader::ContributorHeader, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
+  let(:organization) { create(:organization) }
   let(:contributor) { create(:contributor, created_at: '2021-01-01') }
-  let(:params) { { contributor: contributor } }
+  let(:params) { { organization: organization, contributor: contributor } }
 
   it { should have_css('header') }
   it { should have_css('h1', text: contributor.name) }

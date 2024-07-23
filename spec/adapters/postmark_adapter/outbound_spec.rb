@@ -7,6 +7,7 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
     describe '#bounce_email' do
       let(:bounce_email) do
         described_class.with(
+          organization: create(:organization),
           mail: {
             to: 'contributor@example.org',
             subject: I18n.t('adapter.postmark.contributor_not_found_email.subject')
@@ -27,13 +28,14 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
     end
 
     describe '#welcome_email' do
-      before do
-        allow(Setting).to receive(:onboarding_success_heading).and_return('Welcome new contributor!')
-        allow(Setting).to receive(:onboarding_success_text).and_return('You onboarded successfully.')
+      let(:organization) do
+        create(:organization, onboarding_success_heading: 'Welcome new contributor!',
+                              onboarding_success_text: 'You onboarded successfully.')
       end
+
       let(:contributor) { create(:contributor, email: 'contributor@example.org') }
       let(:welcome_email) do
-        described_class.with(contributor: contributor).welcome_email
+        described_class.with(contributor: contributor, organization: organization).welcome_email
       end
 
       describe 'subject' do
@@ -48,15 +50,15 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
     end
   end
 
-  describe 'with(message: message)' do
-    let(:adapter) { described_class.with(message: message) }
-    let(:request) { create(:request, id: 4711) }
+  describe 'with(message: message, organization: message.organization)' do
+    let(:adapter) { described_class.with(message: message, organization: message.organization) }
+    let(:organization) { create(:organization, email_from_address: '100eyes-test-account@example.org', project_name: 'TestingProject') }
+    let(:request) { create(:request, id: 4711, organization: organization) }
     let(:recipient) { create(:contributor, email: email_address) }
     let(:email_address) { 'recipient@example.org' }
     let(:message) { create(:message, id: 42, text: text, recipient: recipient, broadcasted: broadcasted, request: request) }
     let(:text) { 'How do you do?' }
     let(:broadcasted) { false }
-    before { allow(Setting).to receive(:application_host).and_return('example.org') }
 
     describe '#message_email' do
       let(:message_email) { adapter.message_email }
@@ -67,17 +69,12 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
       end
 
       describe 'from' do
-        before do
-          allow(Setting).to receive(:email_from_address).and_return('100eyes-test-account@example.org')
-          allow(Setting).to receive(:project_name).and_return('TestingProject')
-        end
-
         subject { message_email[:from].formatted }
         it { should eq(['TestingProject <100eyes-test-account@example.org>']) }
 
         context 'with a comma / list separator in the project name' do
           before do
-            allow(Setting).to receive(:project_name).and_return('TestingProject, with a comma!')
+            organization.update(project_name: 'TestingProject, with a comma!')
           end
 
           it { should eq(['"TestingProject, with a comma!" <100eyes-test-account@example.org>']) }
@@ -105,11 +102,11 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
       describe '#message_stream' do
         subject { message_email.message_stream }
 
-        it { should eq(Setting.postmark_transactional_stream) }
+        it { should eq('outbound') }
 
         context 'given message is broadcasted as part of a request' do
           let(:broadcasted) { true }
-          it { should eq(Setting.postmark_broadcasts_stream) }
+          it { should eq('broadcasts') }
         end
       end
 
@@ -186,7 +183,7 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
           'message_email',
           'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
           {
-            params: { message: message },
+            params: { message: message, organization: message.organization },
             args: []
           }
         )
@@ -290,7 +287,7 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
     end
 
     describe '::contributor_marked_as_inactive!' do
-      subject { described_class.contributor_marked_as_inactive!(admin, contributor) }
+      subject { described_class.contributor_marked_as_inactive!(admin, contributor, organization) }
 
       context 'no admin' do
         let(:admin) { nil }
@@ -338,7 +335,7 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
             'contributor_marked_as_inactive_email',
             'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
             {
-              params: { admin: admin, contributor: contributor },
+              params: { admin: admin, contributor: contributor, organization: organization },
               args: []
             }
           )

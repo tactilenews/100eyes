@@ -4,34 +4,35 @@ module Avatar
   class Avatar < ApplicationComponent
     delegate :avatar, :avatar?, to: :record, prefix: true
 
-    def initialize(record: nil, expandable: false, **)
+    def initialize(organization:, record: nil, expandable: false, **)
       super
 
+      @organization = organization
       @record = record || User.new
       @expandable = expandable
     end
 
     private
 
-    attr_reader :record
+    attr_reader :record, :organization
 
     def key
       record&.id
     end
 
     def editorial_logo?
-      record.is_a?(User) && Setting.channel_image.present?
+      record.is_a?(User) && organization.channel_image.attached?
     end
 
     def editorial_logo
-      Setting.channel_image
+      organization.channel_image
     end
 
     def url
       thumbnail = if record_avatar?
                     record_avatar.variant(resize_to_fit: [200, 200])
                   else
-                    editorial_logo
+                    editorial_logo.variant(resize_to_fit: [200, 200])
                   end
       url_for(thumbnail)
     end

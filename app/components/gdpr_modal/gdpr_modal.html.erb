@@ -7,7 +7,7 @@
       <%= t('.heading') %>
     <% end %>
 
-    <p><%= t('.text', link: Setting.onboarding_data_protection_link).html_safe %></p>
+    <p><%= t('.text', link: organization.onboarding_data_protection_link).html_safe %></p>
 
     <form method="dialog">
       <%= c('button', style: :block, autofocus: true) do %>

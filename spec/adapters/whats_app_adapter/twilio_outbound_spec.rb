@@ -6,19 +6,21 @@ require 'webmock/rspec'
 RSpec.describe WhatsAppAdapter::TwilioOutbound do
   let(:adapter) { described_class.new }
   let(:message) { create(:message, text: 'WhatsApp as a channel is great, no?', broadcasted: true, recipient: contributor) }
+  let(:organization) do
+    create(:organization, onboarding_success_heading: onboarding_success_heading, onboarding_success_text: onboarding_success_text)
+  end
   let(:contributor) { create(:contributor, email: nil) }
 
   describe '::send_welcome_message!' do
     let(:expected_job_args) do
-      { contributor_id: contributor.id, text: ["*#{onboarding_success_heading}*", onboarding_success_text].join("\n\n") }
+      { organization_id: organization.id, contributor_id: contributor.id,
+        text: ["*#{onboarding_success_heading}*", onboarding_success_text].join("\n\n") }
     end
     let(:onboarding_success_heading) { 'Thanks for onboarding' }
     let(:onboarding_success_text) { 'We will start sending messages soon.' }
-    subject { -> { described_class.send_welcome_message!(contributor) } }
+    subject { -> { described_class.send_welcome_message!(contributor, organization) } }
     before do
       message # we don't count the extra ::send here
-      allow(Setting).to receive(:onboarding_success_heading).and_return(onboarding_success_heading)
-      allow(Setting).to receive(:onboarding_success_text).and_return(onboarding_success_text)
     end
 
     it { should_not enqueue_job(WhatsAppAdapter::Outbound::Text) }

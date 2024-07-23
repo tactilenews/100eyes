@@ -3,9 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe 'Editing requests', js: true do
+  let(:organization) { create(:organization) }
   let(:user) { create(:user) }
-  let(:sent_request) { create(:request) }
-  let(:request_scheduled_in_future) { create(:request, schedule_send_for: 2.minutes.from_now) }
+  let(:sent_request) { create(:request, organization: organization) }
+  let(:request_scheduled_in_future) { create(:request, schedule_send_for: 2.minutes.from_now, organization: organization) }
 
   before(:each) do
     # `broadcast!` is stubbed in tests

@@ -7,6 +7,16 @@ RSpec.describe WhatsApp::WebhookController do
   let(:mock_twilio_security_request_validator) { instance_double(Twilio::Security::RequestValidator) }
   let(:whats_app_phone_number) { '+491511234567' }
   let(:twilio_message_sid) { 'someValidMessageSid' }
+  let(:organization) do
+    create(:organization,
+           whats_app_server_phone_number: '+4915123456',
+           twilio_account_sid: valid_account_sid,
+           twilio_api_key_sid: valid_api_key_sid,
+           twilio_api_key_secret: valid_api_key_secret)
+  end
+  let(:valid_account_sid) { nil }
+  let(:valid_api_key_sid) { nil }
+  let(:valid_api_key_secret) { nil }
 
   describe '#message' do
     subject { -> { post whats_app_webhook_path, params: params } }
@@ -25,14 +35,13 @@ RSpec.describe WhatsApp::WebhookController do
         'SmsMessageSid' => twilio_message_sid,
         'SmsSid' => twilio_message_sid,
         'SmsStatus' => 'received',
-        'To' => "whatsapp:#{Setting.whats_app_server_phone_number}",
+        'To' => "whatsapp:#{organization.whats_app_server_phone_number}",
         'WaId' => '491511234567'
       }
     end
 
     before do
       allow(Sentry).to receive(:capture_exception)
-      allow(Setting).to receive(:whats_app_server_phone_number).and_return('4915133311445')
       allow(Twilio::Security::RequestValidator).to receive(:new).and_return(mock_twilio_security_request_validator)
       allow(Request).to receive(:broadcast!).and_call_original
     end
@@ -72,8 +81,10 @@ RSpec.describe WhatsApp::WebhookController do
     end
 
     describe 'given a contributor' do
-      let!(:contributor) { create(:contributor, whats_app_phone_number: whats_app_phone_number) }
-      let(:request) { create(:request) }
+      let!(:contributor) do
+        create(:contributor, whats_app_phone_number: whats_app_phone_number, organization: organization)
+      end
+      let(:request) { create(:request, organization: organization) }
 
       before do
         allow(mock_twilio_security_request_validator).to receive(:validate).and_return(true)
@@ -96,7 +107,12 @@ RSpec.describe WhatsApp::WebhookController do
         before { contributor.update(whats_app_message_template_sent_at: Time.current) }
         let(:message) { contributor.received_messages.first }
         let(:latest_message_job_args) do
-          { contributor_id: contributor.id, text: message.text, message: message }
+          {
+            organization_id: organization.id,
+            contributor_id: contributor.id,
+            text: message.text,
+            message: message
+          }
         end
 
         context 'request to receive latest message' do
@@ -105,8 +121,10 @@ RSpec.describe WhatsApp::WebhookController do
           end
 
           describe 'replying to message with quick reply button' do
-            let!(:previous_request) { create(:request, title: 'Previous request', text: 'I have previous text') }
-            let!(:newer_request) { create(:request, title: 'Newer request', text: 'I have newer text') }
+            let!(:previous_request) do
+              create(:request, title: 'Previous request', text: 'I have previous text', organization: organization)
+            end
+            let!(:newer_request) { create(:request, title: 'Newer request', text: 'I have newer text', organization: organization) }
             let(:valid_account_sid) { 'VALID_ACCOUNT_SID' }
             let(:valid_api_key_sid) { 'VALID_API_KEY_SID' }
             let(:valid_api_key_secret) { 'VALID_API_KEY_SECRET' }
@@ -125,7 +143,12 @@ RSpec.describe WhatsApp::WebhookController do
             describe 'previous request' do
               let(:message) { previous_request.messages.where(recipient_id: contributor.id).first }
               let(:requested_message_job_args) do
-                { contributor_id: contributor.id, text: message.text, message: message }
+                {
+                  organization_id: organization.id,
+                  contributor_id: contributor.id,
+                  text: message.text,
+                  message: message
+                }
               end
               let(:body_text) do
                 "Some template message with request title „#{previous_request.title}“. Wenn du antworten möchtest, klicke auf 'Antworten'."
@@ -141,7 +164,12 @@ RSpec.describe WhatsApp::WebhookController do
             describe 'newer request' do
               let(:message) { newer_request.messages.where(recipient_id: contributor.id).first }
               let(:requested_message_job_args) do
-                { contributor_id: contributor.id, text: message.text, message: message }
+                {
+                  organization_id: organization.id,
+                  contributor_id: contributor.id,
+                  text: message.text,
+                  message: message
+                }
               end
               let(:body_text) do
                 "Some template message with request title „#{newer_request.title}“. Wenn du antworten möchtest, klicke auf 'Antworten'."
@@ -167,9 +195,16 @@ RSpec.describe WhatsApp::WebhookController do
         end
 
         context 'request for more info' do
-          before { params['Body'] = 'Mehr Infos' }
+          before do
+            params['Body'] = 'Mehr Infos'
+            organization.update(whats_app_profile_about: 'Here is more info')
+          end
           let(:more_info_job_args) do
-            { contributor_id: contributor.id, text: [Setting.about, "_#{I18n.t('adapter.shared.unsubscribe.instructions')}_"].join("\n\n") }
+            {
+              organization_id: organization.id,
+              contributor_id: contributor.id,
+              text: ['Here is more info', "_#{I18n.t('adapter.shared.unsubscribe.instructions')}_"].join("\n\n")
+            }
           end
 
           it 'enqueues a job to send more info message' do
@@ -184,7 +219,9 @@ RSpec.describe WhatsApp::WebhookController do
         context 'request to unsubscribe' do
           before { params['Body'] = 'Abbestellen' }
 
-          it { is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(contributor.id, WhatsAppAdapter::Outbound) }
+          it {
+            is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(organization.id, contributor.id, WhatsAppAdapter::Outbound)
+          }
         end
 
         context 'request to re-subscribe' do
@@ -193,7 +230,9 @@ RSpec.describe WhatsApp::WebhookController do
             params['Body'] = 'Bestellen'
           end
 
-          it { is_expected.to have_enqueued_job(ResubscribeContributorJob).with(contributor.id, WhatsAppAdapter::Outbound) }
+          it {
+            is_expected.to have_enqueued_job(ResubscribeContributorJob).with(organization.id, contributor.id, WhatsAppAdapter::Outbound)
+          }
         end
       end
     end
@@ -211,7 +250,7 @@ RSpec.describe WhatsApp::WebhookController do
         'ChannelToAddress' => whats_app_phone_number.to_s,
         'ErrorCode' => '60228',
         'ErrorMessage' => 'Template was not found',
-        'From' => "whatsapp:#{Setting.whats_app_server_phone_number}",
+        'From' => "whatsapp:#{organization.whats_app_server_phone_number}",
         'MessageSid' => twilio_message_sid,
         'MessageStatus' => 'failed',
         'SmsSid' => twilio_message_sid,
@@ -264,7 +303,7 @@ RSpec.describe WhatsApp::WebhookController do
       end
 
       describe 'given a known contributor' do
-        let!(:contributor) { create(:contributor, whats_app_phone_number: whats_app_phone_number) }
+        let!(:contributor) { create(:contributor, whats_app_phone_number: whats_app_phone_number, organization: organization) }
 
         describe 'given a failed message delivery' do
           it 'reports the error with the error message' do
@@ -287,6 +326,7 @@ RSpec.describe WhatsApp::WebhookController do
 
             it {
               is_expected.to have_enqueued_job(MarkInactiveContributorInactiveJob).with do |params|
+                expect(params[:organization_id]).to eq(organization.id)
                 expect(params[:contributor_id]).to eq(contributor.id)
               end
             }
@@ -356,7 +396,7 @@ RSpec.describe WhatsApp::WebhookController do
             'ChannelInstallSid' => 'someChannelInstallSid',
             'ChannelPrefix' => 'whatsapp',
             'ChannelToAddress' => whats_app_phone_number.to_s,
-            'From' => "whatsapp:#{Setting.whats_app_server_phone_number}",
+            'From' => "whatsapp:#{organization.whats_app_server_phone_number}",
             'MessageSid' => twilio_message_sid,
             'MessageStatus' => 'delivered',
             'SmsSid' => twilio_message_sid,
@@ -372,7 +412,7 @@ RSpec.describe WhatsApp::WebhookController do
         end
 
         context 'given a known contributor' do
-          let!(:contributor) { create(:contributor, whats_app_phone_number: whats_app_phone_number) }
+          let!(:contributor) { create(:contributor, whats_app_phone_number: whats_app_phone_number, organization: organization) }
 
           context 'given a delivered status' do
             context 'given no message can be found by the twilio message sid' do

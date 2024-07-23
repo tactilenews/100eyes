@@ -3,10 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe 'Sign in' do
+  let(:organization) { create(:organization) }
   let(:email) { 'zora@example.org' }
   let(:password) { '12345678' }
   let(:otp_enabled) { true }
-  let!(:user) { create(:user, email: email, password: password, otp_enabled: otp_enabled) }
+  let!(:user) { create(:user, email: email, password: password, otp_enabled: otp_enabled, organization: organization) }
 
   it 'editor tries to visit protected page' do
     visit dashboard_path

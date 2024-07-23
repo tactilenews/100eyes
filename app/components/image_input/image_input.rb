@@ -38,7 +38,7 @@ module ImageInput
     end
 
     def blob
-      value
+      value&.blob
     end
 
     def blob?

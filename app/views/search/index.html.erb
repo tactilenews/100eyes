@@ -7,7 +7,7 @@
 
   <%= c 'section', style: :xlargeSpaceBetween do %>
     <% @results.each do |result| %>
-      <%= c 'search_result', result: result %>
+      <%= c 'search_result', organization: @organization, result: result %>
     <% end %>
   <% end %>
 <% end %>

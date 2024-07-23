@@ -3,13 +3,18 @@
 require 'rails_helper'
 
 RSpec.describe 'Onboarding::Telegram', type: :request do
+  let!(:organization) do
+    create(:organization, telegram_bot_api_key: telegram_bot_api_key, onboarding_allowed: onboarding_allowed)
+  end
+  let(:telegram_bot_api_key) { nil }
+  let(:onboarding_allowed) { { telegram: true } }
+
   describe 'GET /onboarding/telegram' do
     let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
     let(:params) { { jwt: jwt } }
     subject { -> { get onboarding_telegram_path, params: params } }
     before do
       allow(SecureRandom).to receive(:alphanumeric).with(8).and_return('TELEGRAM_ONBOARDING_TOKEN')
-      allow(Setting).to receive(:telegram_onboarding_allowed?).and_return(false)
     end
 
     describe 'when no telegram bot is configured' do
@@ -21,6 +26,9 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
     end
 
     describe 'when a telegram bot is configured, but onboarding has been disallowed by an admin' do
+      let(:telegram_bot_api_key) { 'valid_api_key' }
+      let(:onboarding_allowed) { { telegram: false } }
+
       it 'returns a 404 not found' do
         subject.call
 
@@ -29,7 +37,7 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
     end
 
     describe 'but when a telegram bot is configured and onboarding has not been disallowed' do
-      before { allow(Setting).to receive(:telegram_onboarding_allowed?).and_return(true) }
+      let(:telegram_bot_api_key) { 'valid_api_key' }
 
       it 'returns a 200 ok' do
         subject.call
@@ -54,7 +62,7 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
   end
 
   describe 'POST /onboarding/telegram' do
-    let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding', organization_id: create(:organization).id }) }
+    let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding', organization_id: organization.id }) }
     let(:params) { { jwt: jwt } }
     let(:data_processing_consent) { true }
     let(:additional_consent) { true }
@@ -73,8 +81,6 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
 
     subject { -> { post onboarding_telegram_path, params: params } }
 
-    before { allow(Setting).to receive(:telegram_onboarding_allowed?).and_return(false) }
-
     describe 'when no telegram bot is configured' do
       it 'returns a 404 not found' do
         subject.call
@@ -84,6 +90,9 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
     end
 
     describe 'when a telegram bot is configured, but onboarding has been disallowed by an admin' do
+      let(:telegram_bot_api_key) { 'valid_api_key' }
+      let(:onboarding_allowed) { { telegram: false } }
+
       it 'returns a 404 not found' do
         subject.call
 
@@ -92,7 +101,7 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
     end
 
     describe 'but when a telegram bot is configured and onboarding has not been disallowed' do
-      before { allow(Setting).to receive(:telegram_onboarding_allowed?).and_return(true) }
+      let(:telegram_bot_api_key) { 'valid_api_key' }
 
       it 'creates contributor' do
         expect { subject.call }.to change(Contributor, :count).by(1)
@@ -199,8 +208,6 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
   describe 'GET /onboarding/telegram/link' do
     subject { -> { get onboarding_telegram_link_path(telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN') } }
 
-    before { allow(Setting).to receive(:telegram_onboarding_allowed?).and_return(false) }
-
     describe 'when no telegram bot is configured' do
       it 'returns a 404 not found' do
         subject.call
@@ -210,6 +217,9 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
     end
 
     describe 'when a telegram bot is configured, but onboarding has been disallowed by an admin' do
+      let(:telegram_bot_api_key) { 'valid_api_key' }
+      let(:onboarding_allowed) { { telegram: false } }
+
       it 'returns a 404 not found' do
         subject.call
 
@@ -218,7 +228,8 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
     end
 
     describe 'but when a telegram bot is configured and onboarding has not been disallowed' do
-      before { allow(Setting).to receive(:telegram_onboarding_allowed?).and_return(true) }
+      let(:telegram_bot_api_key) { 'valid_api_key' }
+
       it 'is successful without JWT' do
         subject.call
         expect(response).to be_successful
@@ -230,12 +241,11 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
     let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
     let(:json_web_token) { create(:json_web_token, invalidated_jwt: jwt) }
     let!(:contributor) do
-      create(:contributor, telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN', telegram_id: nil, json_web_token: json_web_token)
+      create(:contributor, telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN', telegram_id: nil, json_web_token: json_web_token,
+                           organization: organization)
     end
     let(:action) { -> { get onboarding_telegram_fallback_path(telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN') } }
     subject { action.call && response }
-
-    before { allow(Setting).to receive(:telegram_onboarding_allowed?).and_return(false) }
 
     describe 'when no telegram bot is configured' do
       it 'returns a 404 not found' do
@@ -244,13 +254,16 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
     end
 
     describe 'when a telegram bot is configured, but onboarding has been disallowed by an admin' do
+      let(:telegram_bot_api_key) { 'valid_api_key' }
+      let(:onboarding_allowed) { { telegram: false } }
+
       it 'returns a 404 not found' do
         expect(subject).to have_http_status(:not_found)
       end
     end
 
     describe 'but when a telegram bot is configured and onboarding has not been disallowed' do
-      before { allow(Setting).to receive(:telegram_onboarding_allowed?).and_return(true) }
+      let(:telegram_bot_api_key) { 'valid_api_key' }
 
       describe 'redirects' do
         it 'are skipped' do

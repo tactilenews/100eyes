@@ -49,12 +49,18 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
                                                  type: 'image' }] } }
   end
 
-  let!(:contributor) { create(:contributor, whats_app_phone_number: phone_number) }
-  let(:fetch_file_url) { "#{Setting.three_sixty_dialog_whats_app_rest_api_endpoint}/media/some_valid_id" }
+  let(:organization) { create(:organization) }
+  let!(:contributor) { create(:contributor, whats_app_phone_number: phone_number, organization: organization) }
+  let(:fetch_file_url) { 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693/media/some_valid_id' }
+
+  before do
+    allow(ENV).to receive(:fetch).with('THREE_SIXTY_DIALOG_PARTNER_REST_API_ENDPOINT',
+                                       'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693').and_return('https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')
+  end
 
   describe '#consume' do
     let(:message) do
-      adapter.consume(whats_app_message) do |message|
+      adapter.consume(organization, whats_app_message) do |message|
         message
       end
     end
@@ -229,7 +235,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
       end
 
       subject do
-        adapter.consume(whats_app_message)
+        adapter.consume(organization, whats_app_message)
         unknown_contributor_callback
       end
 
@@ -253,7 +259,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
       end
 
       subject do
-        adapter.consume(whats_app_message)
+        adapter.consume(organization, whats_app_message)
         unsupported_content_callback
       end
 

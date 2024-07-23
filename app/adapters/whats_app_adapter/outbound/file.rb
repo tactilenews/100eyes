@@ -5,24 +5,23 @@ module WhatsAppAdapter
     class File < ApplicationJob
       queue_as :default
 
-      def self.twilio_instance
-        @twilio_instance = Twilio::REST::Client.new(Setting.twilio_api_key_sid, Setting.twilio_api_key_secret, Setting.twilio_account_sid)
-      end
-
-      def perform(contributor_id:, message:)
-        contributor = Contributor.find_by(id: contributor_id)
-        return unless contributor
+      def perform(organization_id:, contributor_id:, message:)
+        organization = Organization.find(organization_id)
+        contributor = organization.contributors.find(contributor_id)
 
         responses = message.files.each_with_index.map do |file, index|
-          self.class.twilio_instance.messages.create(
-            from: "whatsapp:#{Setting.whats_app_server_phone_number}",
+          organization.twilio_instance.messages.create(
+            from: "whatsapp:#{organization.whats_app_server_phone_number}",
             body: index.zero? ? message.text : '',
             to: "whatsapp:#{contributor.whats_app_phone_number}",
-            media_url: Rails.application.routes.url_helpers.rails_blob_url(file.attachment.blob, host: Setting.application_host)
+            media_url: Rails.application.routes.url_helpers.rails_blob_url(file.attachment.blob,
+                                                                           host: ENV.fetch('APPLICATION_HOSTNAME', 'localhost:3000'))
           )
         end
 
         message.update(external_id: responses.first.sid)
+      rescue ActiveRecord::RecordNotFound => e
+        ErrorNotifier.report(e)
       end
     end
   end

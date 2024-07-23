@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Auth' do
+  before { create(:organization) }
+
   describe 'as signed-out user' do
     it 'user tries to access' do
       visit admin_users_path

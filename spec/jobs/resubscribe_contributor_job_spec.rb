@@ -5,15 +5,17 @@ require 'rails_helper'
 RSpec.describe ResubscribeContributorJob do
   describe '#perform_later(contributor_id, adapter)' do
     let(:user) { create(:user) }
+    let(:organization) { create(:organization) }
 
-    subject { -> { described_class.new.perform(contributor.id, adapter) } }
+    subject { -> { described_class.new.perform(organization.id, contributor.id, adapter) } }
 
     context 'unsubscribed Signal contributor' do
       let(:adapter) { SignalAdapter::Outbound }
 
       it_behaves_like 'a Contributor resubscribes', SignalAdapter::Outbound::Text do
         let(:contributor) do
-          create(:contributor, signal_phone_number: '+491234567', signal_onboarding_completed_at: Time.current, unsubscribed_at: 1.day.ago)
+          create(:contributor, :signal_contributor, signal_onboarding_completed_at: 1.week.ago, unsubscribed_at: 1.day.ago,
+                                                    organization: organization)
         end
       end
 
@@ -21,11 +23,12 @@ RSpec.describe ResubscribeContributorJob do
         it_behaves_like 'a resubscribe failure', SignalAdapter::Outbound::Text do
           let(:contributor) do
             create(:contributor,
-                   signal_phone_number: '+491234567',
-                   signal_onboarding_completed_at: Time.current,
+                   :signal_contributor,
+                   signal_onboarding_completed_at: 1.week.ago,
                    unsubscribed_at: 1.day.ago,
                    deactivated_at: Time.current,
-                   deactivated_by_user: create(:user))
+                   deactivated_by_user: create(:user),
+                   organization: organization)
           end
         end
       end
@@ -34,11 +37,12 @@ RSpec.describe ResubscribeContributorJob do
         it_behaves_like 'a resubscribe failure', SignalAdapter::Outbound::Text do
           let(:contributor) do
             create(:contributor,
-                   signal_phone_number: '+491234567',
-                   signal_onboarding_completed_at: Time.current,
+                   :signal_contributor_uuid,
+                   signal_onboarding_completed_at: 1.week.ago,
                    unsubscribed_at: 1.day.ago,
                    deactivated_at: Time.current,
-                   deactivated_by_admin: true)
+                   deactivated_by_admin: true,
+                   organization: organization)
           end
         end
       end
@@ -48,7 +52,7 @@ RSpec.describe ResubscribeContributorJob do
       let(:adapter) { TelegramAdapter::Outbound }
 
       it_behaves_like 'a Contributor resubscribes', TelegramAdapter::Outbound::Text do
-        let(:contributor) { create(:contributor, telegram_id: 123_456_789, unsubscribed_at: 1.week.ago) }
+        let(:contributor) { create(:contributor, telegram_id: 123_456_789, unsubscribed_at: 1.week.ago, organization: organization) }
       end
 
       describe 'which has been marked inactive by a user' do
@@ -58,7 +62,8 @@ RSpec.describe ResubscribeContributorJob do
                    telegram_id: 123_456_789,
                    unsubscribed_at: 1.week.ago,
                    deactivated_at: Time.current,
-                   deactivated_by_user: create(:user))
+                   deactivated_by_user: create(:user),
+                   organization: organization)
           end
         end
       end
@@ -70,7 +75,8 @@ RSpec.describe ResubscribeContributorJob do
                    telegram_id: 123_456_789,
                    unsubscribed_at: 1.week.ago,
                    deactivated_at: Time.current,
-                   deactivated_by_admin: true)
+                   deactivated_by_admin: true,
+                   organization: organization)
           end
         end
       end
@@ -88,7 +94,10 @@ RSpec.describe ResubscribeContributorJob do
       end
 
       it_behaves_like 'a Contributor resubscribes', ThreemaAdapter::Outbound::Text do
-        let(:contributor) { create(:contributor, threema_id: threema_id, unsubscribed_at: 1.month.ago) }
+        let(:contributor) do
+          create(:contributor, threema_id: threema_id, unsubscribed_at: 1.month.ago,
+                               organization: organization)
+        end
       end
 
       describe 'which has been marked inactive by a user' do
@@ -98,7 +107,8 @@ RSpec.describe ResubscribeContributorJob do
                    threema_id: threema_id,
                    unsubscribed_at: 1.month.ago,
                    deactivated_at: Time.current,
-                   deactivated_by_user: create(:user))
+                   deactivated_by_user: create(:user),
+                   organization: organization)
           end
         end
       end
@@ -110,7 +120,8 @@ RSpec.describe ResubscribeContributorJob do
                    threema_id: threema_id,
                    unsubscribed_at: 1.month.ago,
                    deactivated_at: Time.current,
-                   deactivated_by_admin: true)
+                   deactivated_by_admin: true,
+                   organization: organization)
           end
         end
       end
@@ -120,15 +131,13 @@ RSpec.describe ResubscribeContributorJob do
     context 'unsubscribed WhatsApp contributor' do
       let(:adapter) { WhatsAppAdapter::Outbound }
       let(:whats_app_welcome_template) { I18n.t('adapter.whats_app.welcome_message').gsub('%{project_name}', '100eyes') }
-      before do
-        allow(Setting).to receive(:onboarding_success_text).and_return(whats_app_welcome_template)
-      end
 
       context 'Twilio' do
-        before { allow(Setting).to receive(:three_sixty_dialog_client_api_key).and_return(nil) }
-
         it_behaves_like 'a Contributor resubscribes', WhatsAppAdapter::Outbound::Text do
-          let(:contributor) { create(:contributor, whats_app_phone_number: '+491234567', unsubscribed_at: 5.days.ago) }
+          let(:contributor) do
+            create(:contributor, whats_app_phone_number: '+491234567', unsubscribed_at: 5.days.ago,
+                                 organization: organization)
+          end
         end
 
         describe 'which has been marked inactive by a user' do
@@ -138,7 +147,8 @@ RSpec.describe ResubscribeContributorJob do
                      whats_app_phone_number: '+491234567',
                      unsubscribed_at: 5.days.ago,
                      deactivated_at: Time.current,
-                     deactivated_by_user: create(:user))
+                     deactivated_by_user: create(:user),
+                     organization: organization)
             end
           end
         end
@@ -150,17 +160,21 @@ RSpec.describe ResubscribeContributorJob do
                      whats_app_phone_number: '+491234567',
                      unsubscribed_at: 5.days.ago,
                      deactivated_at: Time.current,
-                     deactivated_by_admin: true)
+                     deactivated_by_admin: true,
+                     organization: organization)
             end
           end
         end
       end
 
       context '360dialog' do
-        before { allow(Setting).to receive(:three_sixty_dialog_client_api_key).and_return('valid_api_key') }
+        before { organization.update!(three_sixty_dialog_client_api_key: 'valid_api_key') }
 
         it_behaves_like 'a Contributor resubscribes', WhatsAppAdapter::Outbound::ThreeSixtyDialogText do
-          let(:contributor) { create(:contributor, whats_app_phone_number: '+491234567', unsubscribed_at: 5.days.ago) }
+          let(:contributor) do
+            create(:contributor, whats_app_phone_number: '+491234567', unsubscribed_at: 5.days.ago,
+                                 organization: organization)
+          end
         end
 
         describe 'which has been marked inactive by a user' do
@@ -170,7 +184,8 @@ RSpec.describe ResubscribeContributorJob do
                      whats_app_phone_number: '+491234567',
                      unsubscribed_at: 5.days.ago,
                      deactivated_at: Time.current,
-                     deactivated_by_user: create(:user))
+                     deactivated_by_user: create(:user),
+                     organization: organization)
             end
           end
         end
@@ -182,7 +197,8 @@ RSpec.describe ResubscribeContributorJob do
                      whats_app_phone_number: '+491234567',
                      unsubscribed_at: 5.days.ago,
                      deactivated_at: Time.current,
-                     deactivated_by_admin: true)
+                     deactivated_by_admin: true,
+                     organization: organization)
             end
           end
         end

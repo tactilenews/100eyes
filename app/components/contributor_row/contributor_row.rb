@@ -2,16 +2,17 @@
 
 module ContributorRow
   class ContributorRow < ApplicationComponent
-    def initialize(contributor:, **)
+    def initialize(organization:, contributor:, **)
       super
 
+      @organization = organization
       @contributor = contributor
       @styles << :inactive unless contributor.active?
     end
 
     private
 
-    attr_reader :contributor
+    attr_reader :organization, :contributor
 
     def url
       contributor_path(contributor)

@@ -11,7 +11,7 @@
   <% elsif editorial_logo? %>
     <%= link_to_if(
       expandable?,
-      image_tag(url, alt: t('.editorial_logo', project_name: Setting.project_name), loading: 'lazy'),
+      image_tag(url, alt: t('.editorial_logo', project_name: organization.project_name), loading: 'lazy'),
       editorial_logo,
       target: '_blank',
       aria: { label: t('.expand') },

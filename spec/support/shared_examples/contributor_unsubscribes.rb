@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.shared_examples 'a Contributor unsubscribes' do |adapter|
-  let!(:request) { create(:request) }
+  let!(:request) { create(:request, organization: organization) }
   let!(:admin) { create_list(:user, 2, admin: true) }
   let!(:non_admin_user) { create(:user) }
   let(:unsubscribe_successful_message) do
@@ -28,7 +28,7 @@ RSpec.shared_examples 'a Contributor unsubscribes' do |adapter|
       'contributor_unsubscribed_email',
       'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
       {
-        params: { admin: an_instance_of(User), contributor: contributor },
+        params: { admin: an_instance_of(User), contributor: contributor, organization: organization },
         args: []
       }
     ).exactly(2).times

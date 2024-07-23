@@ -4,11 +4,14 @@ require 'net/http'
 
 module SignalAdapter
   class CreateContactJob < ApplicationJob
-    def perform(contributor_id:)
-      contributor = Contributor.find_by(id: contributor_id)
+    def perform(organization_id:, contributor_id:)
+      organization = Organization.find_by(id: organization_id)
+      return unless organization
+
+      contributor = organization.contributors.find_by(id: contributor_id)
       return unless contributor
 
-      url = URI.parse("#{Setting.signal_cli_rest_api_endpoint}/v1/contacts/#{Setting.signal_server_phone_number}")
+      url = URI.parse("#{ENV.fetch('SIGNAL_CLI_REST_API_ENDPOINT', 'http://localhost:8080')}/v1/contacts/#{organization.signal_server_phone_number}")
       header = {
         Accept: 'application/json',
         'Content-Type': 'application/json'
@@ -19,17 +22,20 @@ module SignalAdapter
       }
       req = Net::HTTP::Put.new(url.to_s, header)
       req.body = data.to_json
-      res = Net::HTTP.start(url.host, url.port) do |http|
+      response = Net::HTTP.start(url.host, url.port) do |http|
         http.request(req)
       end
-      res.value
-    rescue Net::HTTPServerException => e
-      ErrorNotifier.report(e, context: {
-                             code: e.response.code,
-                             message: e.response.message,
-                             headers: e.response.to_hash,
-                             body: e.response.body
-                           })
+      handle_response(response)
+    end
+
+    def handle_response(response)
+      case response.code.to_i
+      when 201
+        Rails.logger.debug 'Great!'
+      when 400..599
+        exception = SignalAdapter::ServerError
+        ErrorNotifier.report(exception)
+      end
     end
   end
 end

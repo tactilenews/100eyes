@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Image uploads' do
-  let(:user) { create(:user) }
-  before(:each) { allow(Setting).to receive(:project_name).and_return('Die Lokal-Community!') }
+  let!(:organization) { create(:organization, project_name: 'Die Lokal-Community!') }
+  let(:user) { create(:user, organization: organization) }
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
 
   it 'Upload new onboarding logo' do

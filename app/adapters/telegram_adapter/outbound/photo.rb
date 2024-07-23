@@ -10,14 +10,15 @@ module TelegramAdapter
         contributor = message&.recipient
         return unless contributor
 
-        MarkInactiveContributorInactiveJob.perform_later(contributor_id: contributor.id)
+        MarkInactiveContributorInactiveJob.perform_later(organization_id: job.arguments.first[:organization_id],
+                                                         contributor_id: contributor.id)
       end
 
       attr_reader :telegram_id, :message
 
-      def perform(contributor_id:, media:, message:)
-        contributor = Contributor.find_by(id: contributor_id)
-        return unless contributor
+      def perform(organization_id:, contributor_id:, media:, message:)
+        organization = Organization.find(organization_id)
+        contributor = organization.contributors.find(contributor_id)
 
         @telegram_id = contributor.telegram_id
         @message = message
@@ -28,13 +29,15 @@ module TelegramAdapter
             caption: optional_caption(index)
           }
         end
-        response = Telegram.bot.send_media_group(
+        response = organization.telegram_bot.send_media_group(
           chat_id: telegram_id,
           media: media_array,
           parse_mode: :HTML
         )
         response = response.with_indifferent_access
         mark_message_as_received(response) if response[:ok]
+      rescue ActiveRecord::RecordNotFound => e
+        ErrorNotifier.report(e)
       end
 
       private

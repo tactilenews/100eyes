@@ -5,7 +5,7 @@ Clearance.configure do |config|
   config.cookie_domain = ->(request) { request.host }
   config.cookie_expiration = ->(_cookies) { 1.day.from_now }
   config.secure_cookie = true if Rails.env.production?
-  config.mailer_sender = Setting.email_from_address
+  config.mailer_sender = ENV['EMAIL_FROM_ADDRESS']
   config.rotate_csrf_on_sign_in = true
   config.same_site = :lax
   config.redirect_url = '/dashboard'

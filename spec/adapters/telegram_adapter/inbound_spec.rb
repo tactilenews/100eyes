@@ -4,50 +4,33 @@ require 'rails_helper'
 require 'telegram/bot/rspec/integration/rails'
 
 RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
-  let(:adapter) { described_class.new }
-  let(:contributor) { create(:contributor, :with_an_avatar, telegram_id: telegram_id) }
+  let(:adapter) { described_class.new(organization) }
+  let(:organization) { create(:organization, telegram_bot_api_key: 'TELEGRAM_BOT_API_KEY', telegram_bot_username: 'TELEGRAM_BOT_USERNAME') }
+  let(:contributor) { create(:contributor, :with_an_avatar, telegram_id: telegram_id, organization: organization) }
   let(:telegram_id) { 146_338_764 }
   let(:telegram_message) do
     { 'chat' => { 'id' => 42 },
       'from' => { 'id' => telegram_id } }
   end
+  let(:bot) { Telegram.bots[organization.id] }
+
   before { contributor }
 
-  before(:all) do
-    Telegram::Bot::ClientStub.stub_all!(false)
-  end
-
   before do
-    config = {
-      # must be the filtered values from /spec/vcr_setup.rb
-      token: ENV['TELEGRAM_BOT_API_KEY'] || 'TELEGRAM_BOT_API_KEY',
-      username: ENV['TELEGRAM_BOT_USERNAME'] || 'TELEGRAM_BOT_USERNAME'
+    Telegram.reset_bots
+    Telegram::Bot::ClientStub.stub_all!(false)
+    Telegram.bots_config = {
+      organization.id => {
+        # must be the filtered values from /spec/vcr_setup.rb
+        token: organization.telegram_bot_api_key,
+        username: organization.telegram_bot_username
+      }
     }
-    bot = Telegram::Bot::Client.wrap(config, id: :default)
-    allow(Telegram).to receive(:bot).and_return(bot)
   end
 
-  after(:all) do
+  after do
     Telegram::Bot::ClientStub.stub_all!(true)
-  end
-
-  describe '#avatar_url', vcr: { cassette_name: :avatar_url_and_download_file } do
-    subject { adapter.avatar_url(contributor) }
-    let(:expected_url) { Regexp.new([Regexp.quote('https://api.telegram.org/file/bot'), '.*', Regexp.quote('/photos/file_7.jpg')].join) }
-    specify { expect(subject.to_s).to match(expected_url) }
-
-    context 'of a contributor without `telegram_id`' do
-      let(:telegram_id) { nil }
-      it { is_expected.to be(nil) }
-    end
-
-    context 'if contributor has no profile photo' do
-      before do
-        mock_response = { result: { photos: [] } }
-        allow(Telegram.bot).to receive(:get_user_profile_photos).and_return(mock_response)
-      end
-      it { is_expected.to be(nil) }
-    end
+    Telegram.reset_bots
   end
 
   describe '#consume' do
@@ -69,14 +52,12 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
         it { should be_nil }
 
         describe 'when UNKNOWN_CONTRIBUTOR is registered' do
-          subject do
-            proc do |block|
+          it do
+            expect do |block|
               adapter.on(TelegramAdapter::UNKNOWN_CONTRIBUTOR, &block)
               adapter.consume(telegram_message)
-            end
+            end.to yield_control
           end
-
-          it { should yield_control }
         end
       end
     end
@@ -127,7 +108,7 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
               message.save!
             end
           end
-          it { should change { ActiveStorage::Attachment.where(record_type: 'Message::File').count }.from(0).to(1) }
+          it { expect { subject.call }.to change { ActiveStorage::Attachment.where(record_type: 'Message::File').count }.from(0).to(1) }
         end
       end
     end
@@ -161,7 +142,7 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
             end
           end
 
-          it { is_expected.to(change { Message.count }.from(0).to(1)) }
+          it { expect { subject.call }.to(change { Message.count }.from(0).to(1)) }
 
           describe 'given the contributor sends a series of images as album', vcr: { cassette_name: :photo_album } do
             let(:telegram_message) { message_with_photo.merge(media_group_id: '42') }
@@ -196,16 +177,34 @@ RSpec.describe TelegramAdapter::Inbound, telegram_bot: :rails do
       subject { message.sender }
 
       context 'contributor exists' do
-        context 'but missing `avatar_url`', vcr: { cassette_name: :avatar_url_and_download_file } do
-          let(:contributor) { create(:contributor, telegram_id: telegram_id) }
+        context 'but has no `avatar` attached', vcr: { cassette_name: :avatar_url_and_download_file } do
+          let(:contributor) { create(:contributor, telegram_id: telegram_id, organization: organization) }
           let(:telegram_message) do
             { 'chat' => { 'id' => 42 }, 'from' => { 'id' => contributor.telegram_id }, 'text' => 'Do not save me without text' }
           end
           it { expect { subject.save! }.to(change { contributor.reload.avatar.attached? }.from(false).to(true)) }
+
+          describe 'avatar filename' do
+            before { subject.save! }
+            it { expect(contributor.reload.avatar.attachment.blob.filename.to_s).to eq('file_7.jpg') }
+          end
+
+          context 'sanity-check: if contributor has no telegram_id' do
+            let(:telegram_id) { nil }
+            it { expect { subject.save! }.not_to(change { contributor.reload.avatar.attached? }.from(false)) }
+          end
+
+          context 'if contributor has no profile photo on Telegram' do
+            before do
+              mock_response = { result: { photos: [] } }
+              allow(organization.telegram_bot).to receive(:get_user_profile_photos).and_return(mock_response)
+            end
+            it { expect { subject.save! }.not_to(change { contributor.reload.avatar.attached? }.from(false)) }
+          end
         end
 
         context 'but `username` is outdated' do
-          let(:contributor) { create(:contributor, :with_an_avatar, telegram_id: 42, username: 'bob') }
+          let(:contributor) { create(:contributor, :with_an_avatar, telegram_id: 42, username: 'bob', organization: organization) }
           let(:telegram_message) do
             { 'chat' => { 'id' => 42 }, 'from' => { 'id' => contributor.telegram_id, 'username' => 'alice' },
               'text' => 'Do not save me without text' }

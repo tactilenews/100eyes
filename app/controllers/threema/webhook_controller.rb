@@ -5,30 +5,14 @@ require 'openssl'
 class Threema::WebhookController < ApplicationController
   skip_before_action :require_login, :verify_authenticity_token
 
+  attr_reader :adapter
+
   def message
-    adapter = ThreemaAdapter::Inbound.new
+    @adapter = ThreemaAdapter::Inbound.new
 
-    adapter.on(ThreemaAdapter::UNKNOWN_CONTRIBUTOR) do |threema_id|
-      handle_unknown_contributor(threema_id)
-    end
+    handle_callbacks
 
-    adapter.on(ThreemaAdapter::UNSUPPORTED_CONTENT) do |contributor|
-      ThreemaAdapter::Outbound.send_unsupported_content_message!(contributor)
-    end
-
-    adapter.on(ThreemaAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
-      UnsubscribeContributorJob.perform_later(contributor.id, ThreemaAdapter::Outbound)
-    end
-
-    adapter.on(ThreemaAdapter::RESUBSCRIBE_CONTRIBUTOR) do |contributor|
-      ResubscribeContributorJob.perform_later(contributor.id, ThreemaAdapter::Outbound)
-    end
-
-    adapter.on(ThreemaAdapter::HANDLE_DELIVERY_RECEIPT) do |delivery_receipt|
-      handle_delivery_receipt(delivery_receipt)
-    end
-
-    adapter.consume(threema_webhook_params) do |message|
+    @adapter.consume(threema_webhook_params) do |message|
       message.contributor.reply(adapter)
     end
 
@@ -43,9 +27,32 @@ class Threema::WebhookController < ApplicationController
     params.permit(:from, :to, :messageId, :date, :nonce, :box, :mac, :nickname)
   end
 
-  def handle_unknown_contributor(threema_id)
-    exception = ThreemaAdapter::UnknownContributorError.new(threema_id: threema_id)
-    ErrorNotifier.report(exception)
+  def handle_callbacks
+    adapter.on(ThreemaAdapter::UNKNOWN_ORGANIZATION) do |threemarb_api_identity|
+      exception = ThreemaAdapter::UnknownOrganizationError.new(threemarb_api_identity: threemarb_api_identity)
+      ErrorNotifier.report(exception)
+    end
+
+    adapter.on(ThreemaAdapter::UNKNOWN_CONTRIBUTOR) do |threema_id|
+      exception = ThreemaAdapter::UnknownContributorError.new(threema_id: threema_id)
+      ErrorNotifier.report(exception)
+    end
+
+    adapter.on(ThreemaAdapter::HANDLE_DELIVERY_RECEIPT) do |delivery_receipt|
+      handle_delivery_receipt(delivery_receipt)
+    end
+
+    adapter.on(ThreemaAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor, organization|
+      UnsubscribeContributorJob.perform_later(organization.id, contributor.id, ThreemaAdapter::Outbound)
+    end
+
+    adapter.on(ThreemaAdapter::RESUBSCRIBE_CONTRIBUTOR) do |contributor, organization|
+      ResubscribeContributorJob.perform_later(organization.id, contributor.id, ThreemaAdapter::Outbound)
+    end
+
+    adapter.on(ThreemaAdapter::UNSUPPORTED_CONTENT) do |contributor, organization|
+      ThreemaAdapter::Outbound.send_unsupported_content_message!(contributor, organization)
+    end
   end
 
   def handle_delivery_receipt(delivery_receipt)
