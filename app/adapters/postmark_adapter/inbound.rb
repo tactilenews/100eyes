@@ -4,8 +4,9 @@ module PostmarkAdapter
   class Inbound
     attr_reader :sender, :text, :message, :photos, :unknown_content, :file
 
-    def self.bounce!(mail)
+    def self.bounce!(mail, organization)
       mailer_params = {
+        organization: organization,
         text: I18n.t('adapter.postmark.contributor_not_found_email.text'),
         mail: {
           subject: I18n.t('adapter.postmark.contributor_not_found_email.subject'),
@@ -13,7 +14,7 @@ module PostmarkAdapter
           to: mail.from.first
         }
       }
-      PostmarkAdapter::Outbound.with(mailer_params).bounce_email
+      PostmarkAdapter::Outbound.with(mailer_params).bounce_email.deliver_later
     end
 
     def self.from(raw_data)

@@ -4,6 +4,8 @@
 module PostmarkAdapter
   class Outbound < ApplicationMailer
     default template_name: :mailer
+    default from: -> { default_from }
+
     rescue_from Postmark::InactiveRecipientError do |exception|
       ErrorNotifier.report(exception, context: { recipients: exception.recipients }, tags: { support: 'yes' })
 
@@ -89,7 +91,7 @@ module PostmarkAdapter
       subject = organization.onboarding_success_heading
       message_stream = ENV.fetch('POSTMARK_TRANSACTIONAL_STREAM', 'outbound')
       @text = [subject, organization.onboarding_success_text].join("\n")
-      mail(from: email_from_address, to: contributor.email, subject: subject, message_stream: message_stream)
+      mail(to: contributor.email, subject: subject, message_stream: message_stream)
     end
 
     def business_plan_upgraded_email
@@ -105,7 +107,7 @@ module PostmarkAdapter
                     valid_through: I18n.l(organization.upgraded_business_plan_at + 6.months, format: '%m/%Y'))
       message_stream = ENV.fetch('POSTMARK_TRANSACTIONAL_STREAM', 'outbound')
       @text = [subject, text].join("\n")
-      mail(from: email_from_address, to: admin.email, subject: subject, message_stream: message_stream)
+      mail(to: admin.email, subject: subject, message_stream: message_stream)
     end
 
     def user_count_exceeds_plan_limit_email
@@ -116,7 +118,7 @@ module PostmarkAdapter
                        users_limit: organization.business_plan.number_of_users)
       message_stream = ENV.fetch('POSTMARK_TRANSACTIONAL_STREAM', 'outbound')
       @text = [subject, I18n.t('adapter.postmark.user_count_exceeds_plan_limit.text', organization_name: organization.name)].join("\n")
-      mail(from: email_from_address, to: admin.email, subject: subject, message_stream: message_stream)
+      mail(to: admin.email, subject: subject, message_stream: message_stream)
     end
 
     def contributor_marked_as_inactive_email
@@ -128,7 +130,7 @@ module PostmarkAdapter
       text = I18n.t('adapter.postmark.contributor_marked_as_inactive_email.text', contributor_name: contributor.name)
       message_stream = ENV.fetch('POSTMARK_TRANSACTIONAL_STREAM', 'outbound')
       @text = [subject, text].join("\n")
-      mail(from: email_from_address, to: admin.email, subject: subject, message_stream: message_stream)
+      mail(to: admin.email, subject: subject, message_stream: message_stream)
     end
 
     def contributor_unsubscribed_email
@@ -141,7 +143,7 @@ module PostmarkAdapter
       text = I18n.t('adapter.postmark.contributor_marked_as_inactive_email.text', contributor_name: contributor.name, channel: channel)
       message_stream = ENV.fetch('POSTMARK_TRANSACTIONAL_STREAM', 'outbound')
       @text = [subject, text].join("\n")
-      mail(from: email_from_address, to: admin.email, subject: subject, message_stream: message_stream)
+      mail(to: admin.email, subject: subject, message_stream: message_stream)
     end
 
     def contributor_resubscribed_email
@@ -155,7 +157,7 @@ module PostmarkAdapter
       )
       message_stream = ENV.fetch('POSTMARK_TRANSACTIONAL_STREAM', 'outbound')
       @text = [subject, text].join("\n")
-      mail(from: email_from_address, to: admin.email, subject: subject, message_stream: message_stream)
+      mail(to: admin.email, subject: subject, message_stream: message_stream)
     end
 
     def welcome_message_updated_email
@@ -165,7 +167,7 @@ module PostmarkAdapter
       text = I18n.t('adapter.postmark.welcome_message_updated.text')
       message_stream = ENV.fetch('POSTMARK_TRANSACTIONAL_STREAM', 'outbound')
       @text = [subject, text].join("\n")
-      mail(from: email_from_address, to: admin.email, subject: subject, message_stream: message_stream)
+      mail(to: admin.email, subject: subject, message_stream: message_stream)
     end
 
     def message_email
@@ -185,7 +187,7 @@ module PostmarkAdapter
       email_subject = I18n.t('adapter.postmark.new_message_email.subject')
       message_stream = ENV.fetch('POSTMARK_BROADCASTS_STREAM', 'broadcasts')
       attach_files if msg.files.present?
-      mail(from: email_from_address, to: msg.recipient.email, subject: email_subject,
+      mail(to: msg.recipient.email, subject: email_subject,
            message_stream: message_stream)
     end
 
@@ -196,11 +198,11 @@ module PostmarkAdapter
               })
       email_subject = "Re: #{I18n.t('adapter.postmark.new_message_email.subject')}"
       message_stream = ENV.fetch('POSTMARK_TRANSACTIONAL_STREAM', 'outbound')
-      mail(from: email_from_address, to: msg.recipient.email, subject: email_subject,
+      mail(to: msg.recipient.email, subject: email_subject,
            message_stream: message_stream)
     end
 
-    def email_from_address
+    def default_from
       "\"#{organization.project_name}\" <#{organization.email_from_address}>"
     end
 

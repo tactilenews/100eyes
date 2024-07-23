@@ -7,6 +7,7 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
     describe '#bounce_email' do
       let(:bounce_email) do
         described_class.with(
+          organization: create(:organization),
           mail: {
             to: 'contributor@example.org',
             subject: I18n.t('adapter.postmark.contributor_not_found_email.subject')
