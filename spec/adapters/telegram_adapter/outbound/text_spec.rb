@@ -4,7 +4,12 @@ require 'rails_helper'
 
 RSpec.describe TelegramAdapter::Outbound::Text do
   let(:adapter) { described_class.new }
-  let(:contributor) { create(:contributor, telegram_id: 4) }
+  let(:organization) do
+    create(:organization, name: '100eyes', telegram_bot_api_key: 'TELEGRAM_BOT_API_KEY', telegram_bot_username: 'USERNAME')
+  end
+  let(:contributor) { create(:contributor, telegram_id: 4, organization: organization) }
+  let(:organization_id) { organization.id }
+  let(:contributor_id) { contributor.id }
   let(:message) { create(:message, text: text, broadcasted: true, recipient: contributor) }
   let(:successful_response) do
     {
@@ -15,8 +20,8 @@ RSpec.describe TelegramAdapter::Outbound::Text do
           'from' => {
             'id' => 12_345_678,
             'is_bot' => true,
-            'first_name' => "@#{Telegram.bots[:default].username}",
-            'username' => Telegram.bots[:default].username
+            'first_name' => '@USERNAME',
+            'username' => 'USERNAME'
           },
           'chat' => {
             'id' => 12_345_678,
@@ -31,38 +36,79 @@ RSpec.describe TelegramAdapter::Outbound::Text do
     }
   end
   let(:text) { 'Forgot to ask: How are you?' }
-  before { allow(Telegram.bot).to receive(:send_message).and_return(successful_response) }
+
+  before do
+    Telegram.reset_bots
+    Telegram.bots_config = {
+      organization.id => { token: organization.telegram_bot_api_key, username: organization.telegram_bot_username }
+    }
+    allow(organization.telegram_bot).to receive(:send_message).and_return(successful_response)
+  end
+
+  it 'sanity-check: telegram bot is not nil' do
+    expect(organization.telegram_bot).to be_truthy
+  end
 
   describe '#perform' do
-    subject { adapter.perform(contributor_id: contributor.id, text: text, message: message) }
+    subject { -> { adapter.perform(organization_id: organization_id, contributor_id: contributor_id, text: text, message: message) } }
 
     let(:expected_message) { { chat_id: 4, text: text, parse_mode: :HTML } }
 
     it 'sends the message with TelegramBot' do
-      expect(Telegram.bot).to receive(:send_message).with(expected_message)
+      expect(organization.telegram_bot).to receive(:send_message).with(expected_message)
 
-      subject
+      subject.call
     end
 
     context 'successful delivery' do
       let(:external_id) { successful_response.with_indifferent_access[:result][:message_id].to_s }
 
       it 'marks the message as received' do
-        expect { subject }.to change { message.reload.received_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+        expect { subject.call }.to change { message.reload.received_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
       end
 
       it "saves the message's external id" do
-        expect { subject }.to change { message.reload.external_id }.from(nil).to(external_id)
+        expect { subject.call }.to change { message.reload.external_id }.from(nil).to(external_id)
       end
     end
 
     context 'text message, no message' do
       let(:message) { nil }
-      let(:welcome_message) { [Setting.onboarding_success_heading, Setting.onboarding_success_text].join("\n") }
+      let(:welcome_message) { [organization.onboarding_success_heading, organization.onboarding_success_text].join("\n") }
       let(:text) { welcome_message }
 
       it 'does not throw an error' do
-        expect { subject }.not_to raise_error
+        expect { subject.call }.not_to raise_error
+      end
+    end
+
+    describe 'Unknown organization' do
+      let(:organization_id) { 564_321 }
+
+      it 'reports the error' do
+        expect(Sentry).to receive(:capture_exception).with(ActiveRecord::RecordNotFound)
+
+        subject.call
+      end
+    end
+
+    describe 'Unknown contributor' do
+      let(:contributor_id) { 564_321 }
+
+      it 'reports the error' do
+        expect(Sentry).to receive(:capture_exception).with(ActiveRecord::RecordNotFound)
+
+        subject.call
+      end
+
+      context 'not part of organization' do
+        let(:contributor_id) { create(:contributor).id }
+
+        it 'reports the error' do
+          expect(Sentry).to receive(:capture_exception).with(ActiveRecord::RecordNotFound)
+
+          subject.call
+        end
       end
     end
   end

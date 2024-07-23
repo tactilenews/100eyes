@@ -5,15 +5,22 @@ require 'webmock/rspec'
 
 RSpec.describe SignalAdapter::Outbound::Text do
   let(:adapter) { described_class.new }
-  let(:contributor) { create(:contributor, signal_phone_number: '+4915112345678', email: nil) }
+  let(:organization) { create(:organization, signal_server_phone_number: 'SIGNAL_SERVER_PHONE_NUMBER') }
+  let(:contributor) { create(:contributor, signal_phone_number: '+4915112345678', email: nil, organization: organization) }
   let(:message) { create(:message, :with_file, text: 'Hello Signal') }
-  let(:perform) { -> { adapter.perform(contributor_id: contributor.id, text: message.text) } }
+  let(:organization_id) { organization.id }
+  let(:contributor_id) { contributor.id }
+  let(:perform) { -> { adapter.perform(organization_id: organization_id, contributor_id: contributor_id, text: message.text) } }
 
   describe 'perform' do
     subject { perform }
     before do
-      allow(Setting).to receive(:signal_server_phone_number).and_return('SIGNAL_SERVER_PHONE_NUMBER')
-      allow(Setting).to receive(:signal_cli_rest_api_endpoint).and_return('http://signal:8080')
+      allow(ENV).to receive(:fetch).with(
+        'SIGNAL_CLI_REST_API_ENDPOINT', 'http://localhost:8080'
+      ).and_return('http://signal:8080')
+      allow(ENV).to receive(:fetch).with(
+        'ATTR_ENCRYPTED_KEY', nil
+      ).and_return("f6mqCaVvZQHJaNJtKLEFbPaXflxpGsF9xVeWgWJb3tw=\n")
       allow(Sentry).to receive(:capture_exception)
     end
 
@@ -29,6 +36,36 @@ RSpec.describe SignalAdapter::Outbound::Text do
 
         it 'reports the error' do
           expect(Sentry).to receive(:capture_exception).with(SignalAdapter::BadRequestError.new(error_code: 400, message: error_message))
+
+          subject.call
+        end
+      end
+    end
+
+    describe 'Unknown organization' do
+      let(:organization_id) { 564_321 }
+
+      it 'reports the error' do
+        expect(Sentry).to receive(:capture_exception).with(ActiveRecord::RecordNotFound)
+
+        subject.call
+      end
+    end
+
+    describe 'Unknown contributor' do
+      let(:contributor_id) { 564_321 }
+
+      it 'reports the error' do
+        expect(Sentry).to receive(:capture_exception).with(ActiveRecord::RecordNotFound)
+
+        subject.call
+      end
+
+      context 'not part of organization' do
+        let(:contributor_id) { create(:contributor).id }
+
+        it 'reports the error' do
+          expect(Sentry).to receive(:capture_exception).with(ActiveRecord::RecordNotFound)
 
           subject.call
         end

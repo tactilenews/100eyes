@@ -3,6 +3,7 @@
 # rubocop:disable Metrics/BlockLength
 FactoryBot.define do
   factory :contributor do
+    organization
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
     data_processing_consent { true }
@@ -38,7 +39,7 @@ FactoryBot.define do
     trait :signal_contributor do
       after(:build) do |contributor|
         contributor.email = nil
-        contributor.signal_phone_number = Faker::PhoneNumber.cell_phone_in_e164
+        contributor.signal_phone_number = Faker::PhoneNumber.cell_phone
       end
     end
 
@@ -52,7 +53,7 @@ FactoryBot.define do
     trait :whats_app_contributor do
       after(:build) do |contributor|
         contributor.email = nil
-        contributor.whats_app_phone_number = Faker::PhoneNumber.cell_phone_in_e164
+        contributor.whats_app_phone_number = Faker::PhoneNumber.cell_phone
       end
     end
 

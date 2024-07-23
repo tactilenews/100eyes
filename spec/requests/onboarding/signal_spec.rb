@@ -3,16 +3,18 @@
 require 'rails_helper'
 
 RSpec.describe 'Onboarding::Signal', type: :request do
-  let(:signal_phone_number) { '+4915112345678' }
+  let(:signal_server_phone_number) { nil }
   let(:data_processing_consent) { true }
   let(:additional_consent) { true }
-  let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding', organization_id: create(:organization).id }) }
+  let!(:organization) do
+    create(:organization, signal_server_phone_number: signal_server_phone_number, onboarding_allowed: onboarding_allowed)
+  end
+  let(:onboarding_allowed) { { signal: true } }
+  let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding', organization_id: organization.id }) }
   let(:params) { { jwt: jwt } }
 
   describe 'GET /onboarding/signal' do
     subject { -> { get onboarding_signal_path(jwt: jwt) } }
-
-    before { allow(Setting).to receive(:signal_onboarding_allowed?).and_return(false) }
 
     describe 'when no signal server phone number is configured' do
       it 'returns a 404 not found' do
@@ -23,6 +25,9 @@ RSpec.describe 'Onboarding::Signal', type: :request do
     end
 
     describe 'when a signal server phone number is configured, but onboarding has been disallowed by an admin' do
+      let(:signal_server_phone_number) { '+4915112345678' }
+      let(:onboarding_allowed) { { signal: false } }
+
       it 'returns a 404 not found' do
         subject.call
 
@@ -31,7 +36,7 @@ RSpec.describe 'Onboarding::Signal', type: :request do
     end
 
     describe 'but when a signal server phone number is configured and onboarding has not been disallowed' do
-      before { allow(Setting).to receive(:signal_onboarding_allowed?).and_return(true) }
+      let(:signal_server_phone_number) { '+4915112345678' }
 
       it 'returns a 200 ok' do
         subject.call
@@ -57,8 +62,6 @@ RSpec.describe 'Onboarding::Signal', type: :request do
 
     subject { -> { post onboarding_signal_path, params: params } }
 
-    before { allow(Setting).to receive(:signal_onboarding_allowed?).and_return(false) }
-
     describe 'when no signal server phone number is configured' do
       it 'returns a 404 not found' do
         subject.call
@@ -68,6 +71,9 @@ RSpec.describe 'Onboarding::Signal', type: :request do
     end
 
     describe 'when a signal server phone number is configured, but onboarding has been disallowed by an admin' do
+      let(:signal_server_phone_number) { '+4915112345678' }
+      let(:onboarding_allowed) { { signal: false } }
+
       it 'returns a 404 not found' do
         subject.call
 
@@ -76,12 +82,7 @@ RSpec.describe 'Onboarding::Signal', type: :request do
     end
 
     describe 'but when a signal server phone number is configured and onboarding has not been disallowed' do
-      let(:welcome_message) { [Setting.onboarding_success_heading, Setting.onboarding_success_text].join("\n") }
-      let(:signal_adapter_outbound_spy) { spy(SignalAdapter::Outbound) }
-      before do
-        allow(Setting).to receive(:signal_server_phone_number).and_return('+4491234567890')
-        allow(Setting).to receive(:signal_onboarding_allowed?).and_return(true)
-      end
+      let(:signal_server_phone_number) { '+4915112345678' }
 
       it 'creates contributor' do
         expect { subject.call }.to change(Contributor, :count).by(1)

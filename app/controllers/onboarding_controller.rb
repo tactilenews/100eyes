@@ -2,6 +2,7 @@
 
 class OnboardingController < ApplicationController
   skip_before_action :require_login
+  before_action :ensure_onboarding_allowed
   before_action :verify_jwt, except: :success
   before_action :resume_telegram_onboarding, only: %i[index show]
   before_action :resume_signal_onboarding, only: %i[index show]
@@ -14,7 +15,7 @@ class OnboardingController < ApplicationController
 
   def index
     @jwt = jwt_param
-    @channels = Setting.channels.select { |_key, value| value[:configured] && value[:allow_onboarding] }.keys
+    @channels = @organization.channels_onboarding_allowed
   end
 
   def success; end
@@ -29,7 +30,7 @@ class OnboardingController < ApplicationController
     @contributor.tag_list = tag_list_from_jwt
 
     if @contributor.save
-      @contributor.send_welcome_message!
+      @contributor.send_welcome_message!(@organization)
       redirect_to_success
     else
       render :show, status: :unprocessable_entity
@@ -84,6 +85,7 @@ class OnboardingController < ApplicationController
 
   def verify_jwt
     return unless jwt
+
     raise ActionController::BadRequest unless resume_telegram_onboarding? || resume_signal_onboarding?
   end
 
@@ -133,5 +135,13 @@ class OnboardingController < ApplicationController
     decoded_token = JsonWebToken.decode(jwt_param)
     organization_id = decoded_token.first['data']['organization_id'].to_i
     Organization.find(organization_id)
+  end
+
+  def onboarding_allowed?
+    @organization.channels_onboarding_allowed.present?
+  end
+
+  def ensure_onboarding_allowed
+    raise ActionController::RoutingError, 'Not Found' unless onboarding_allowed?
   end
 end

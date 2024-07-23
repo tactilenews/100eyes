@@ -135,7 +135,7 @@
 
   <div class="RequestForm-column">
     <%= c 'device_frame', class: 'RequestForm-preview' do %>
-      <%= c 'chat_preview' do %>
+      <%= c 'chat_preview', organization: organization do %>
         <span data-request-form-target="preview"></span>
       <% end %>
     <% end %>

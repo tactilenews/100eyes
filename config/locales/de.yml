@@ -474,10 +474,7 @@ de:
     heading_afternoon: "Guten Tag, %{first_name}!"
     heading_evening: "Guten Abend, %{first_name}!"
 
-  setting:
-    setting:
-      one: Einstellung
-      other: Einstellungen
+  organization:
     form:
       groups:
         project_settings: Allgemein
@@ -487,17 +484,6 @@ de:
         onboarding: Onboarding
         onboarding_success: Nachricht nach erfolgreichem Onboarding
         onboarding_unauthorized: Nachricht bei abgelaufenem Einladungs-Link
-        onboarding_additional_consent: Zusätzliches Einverständnis während des Onboardings
-        all: Alle Kanäle
-      onboarding_ask_for_additional_consent:
-        label: Nach zusätzlichem Einverständnis fragen
-        help: Falls aktiviert, wird neuen Community-Mitgliedern eine zusätzliche, optionale Checkbox angezeigt. Diese kannst du beispielsweise nutzen, um das Einverständnis für den Versand von E-Mail-Newslettern o.ä. einzuholen.
-      onboarding_additional_consent_heading:
-        label: Überschrift
-      onboarding_additional_consent_text:
-        label: Text
-      onboarding_data_processing_consent_additional_info:
-        label: Platz für zusätzliche Erklärung zum Datenschutz
       project_name:
         label: Projekt-Name
         help: Der Projekt-Name wird Community-Mitgliedern z.B. während des Onboardings und als Absender von E-Mails angezeigt.
@@ -524,12 +510,6 @@ de:
       onboarding_hero:
         label: Header-Bild
         help: Bilddatei im JPEG-Format, Seitenverhältnis 2:1
-      onboarding_data_protection_link:
-        label: Link zur Datenschutzerklärung
-        help: Der Link wird während des Onboardings in der Fußzeile angezeigt. Vor der Anmeldung müssen neue Mitglieder der Erklärung außerdem explizit zustimmen.
-      onboarding_imprint_link:
-        label: Link zum Impressum
-        help: Der Link wird während des Onboardings in der Fußzeile angezeigt.
       signal_unknown_content_message:
         label: Fehler-Nachricht bei unbekannten Inhalten
         help: Wenn ein Mitglied via Signal Nachrichten versendet, die von 100eyes noch nicht unterstützt werden, erhält es diese Nachricht.
@@ -542,10 +522,7 @@ de:
       threema_unknown_content_message:
         label: Fehler-Nachricht bei unbekannten Inhalten
         help: Wenn ein Mitglied via Threema Nachrichten versendet, die von 100eyes noch nicht unterstützt werden, erhält es diese Nachricht.
-      channel_image:
-        label: Avatar für Messenger
-      about:
-        label: WhatsApp-Info-Text
+
   settings:
     header: Einstellungen
     subheading: Passe dein 100eyes System nach deinen Vorstellungen an

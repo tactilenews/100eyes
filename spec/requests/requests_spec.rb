@@ -4,6 +4,8 @@ require 'rails_helper'
 require 'telegram/bot/rspec/integration/rails'
 
 RSpec.describe 'Requests', telegram_bot: :rails do
+  before { create(:organization) }
+
   describe 'POST /requests' do
     before(:each) { allow(Request).to receive(:broadcast!).and_call_original } # is stubbed for every other test
     subject { -> { post requests_path(as: user), params: params } }

@@ -5,8 +5,9 @@ require 'rails_helper'
 RSpec.describe OnboardingEmailForm::OnboardingEmailForm, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
+  let(:organization) { create(:organization) }
   let(:contributor) { build(:contributor) }
-  let(:params) { { contributor: contributor } }
+  let(:params) { { organization: organization, contributor: contributor } }
 
   it { should have_css('.OnboardingEmailForm') }
 end

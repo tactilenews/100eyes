@@ -1,5 +1,6 @@
 <%= c 'page_header', class: 'ContributorHeader', styles: [:inheritBackgroundColor, :noPaddingLeftRight] do %>
   <%= c 'avatar',
+    organization: organization,
     record: contributor,
     expandable: true,
     style: :large,

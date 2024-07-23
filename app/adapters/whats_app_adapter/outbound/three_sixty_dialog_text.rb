@@ -5,9 +5,11 @@ module WhatsAppAdapter
     class ThreeSixtyDialogText < ApplicationJob
       queue_as :default
 
-      def perform(payload:)
-        url = URI.parse("#{Setting.three_sixty_dialog_whats_app_rest_api_endpoint}/messages")
-        headers = { 'D360-API-KEY' => Setting.three_sixty_dialog_client_api_key, 'Content-Type' => 'application/json' }
+      def perform(organization_id:, payload:)
+        organization = Organization.find(organization_id)
+
+        url = URI.parse("#{ENV.fetch('THREE_SIXTY_DIALOG_PARTNER_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')}/messages")
+        headers = { 'D360-API-KEY' => organization.three_sixty_dialog_client_api_key, 'Content-Type' => 'application/json' }
         request = Net::HTTP::Post.new(url.to_s, headers)
 
         request.body = payload.to_json
@@ -15,6 +17,8 @@ module WhatsAppAdapter
           http.request(request)
         end
         handle_response(response)
+      rescue ActiveRecord::RecordNotFound => e
+        ErrorNotifier.report(e)
       end
 
       private

@@ -97,8 +97,4 @@ RSpec.configure do |config|
   config.before(:each) do
     allow(Request).to receive(:broadcast!)
   end
-
-  config.after(:each) do
-    Setting.clear_cache
-  end
 end

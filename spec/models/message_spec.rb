@@ -91,14 +91,21 @@ RSpec.describe Message, type: :model do
 
   describe '#after_commit(on: :commit)' do
     let!(:user) { create(:user) }
-    let(:request) { create(:request, user: user) }
+    let(:request) { create(:request, user: user, organization: organization) }
     let(:message) { create(:message, sender: user, recipient: recipient, broadcasted: true, request: request) }
-    let(:recipient) { create(:contributor) }
+    let(:organization) do
+      create(:organization, name: '100eyes', telegram_bot_api_key: 'TELEGRAM_BOT_API_KEY', telegram_bot_username: 'USERNAME')
+    end
+    let(:recipient) { create(:contributor, organization: organization) }
 
     describe 'given a recipient with telegram' do
       before do
+        Telegram.reset_bots
+        Telegram.bots_config = {
+          organization.id => { token: organization.telegram_bot_api_key, username: organization.telegram_bot_username }
+        }
         recipient.update(telegram_id: 11)
-        allow(Telegram.bot).to receive(:send_message).and_return({})
+        allow(organization.telegram_bot).to receive(:send_message).and_return({})
       end
 
       describe '#blocked' do
@@ -110,7 +117,7 @@ RSpec.describe Message, type: :model do
 
         it { should be(false) }
         describe 'but if contributor blocked the telegram bot' do
-          before { allow(Telegram.bot).to receive(:send_message).and_raise(Telegram::Bot::Forbidden) }
+          before { allow(organization.telegram_bot).to receive(:send_message).and_raise(Telegram::Bot::Forbidden) }
           it { should be(true) }
         end
       end

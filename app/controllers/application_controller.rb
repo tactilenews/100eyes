@@ -3,6 +3,7 @@
 class ApplicationController < ActionController::Base
   include Clearance::Controller
   before_action :require_login, :require_otp_setup
+  before_action :set_organization
 
   def require_otp_setup
     redirect_to otp_setup_path if signed_in? && !current_user.otp_enabled?
@@ -29,5 +30,12 @@ class ApplicationController < ActionController::Base
   def delete_otp_session_variables
     session.delete(:otp_user_id)
     session.delete(:otp_time)
+  end
+
+  private
+
+  # TODO: Refactor this in Phase II to handle multi-tenancy
+  def set_organization
+    @organization = Organization.singleton
   end
 end

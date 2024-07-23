@@ -22,7 +22,7 @@
         <%= c 'input', field.input_defaults.merge(placeholder: '', required: true, type: :tel) %>
       <% end %>
 
-      <%= c 'onboarding_consent', contributor: contributor %>
+      <%= c 'onboarding_consent', organization: organization, contributor: contributor %>
 
       <%= c 'button',
         type: 'submit',

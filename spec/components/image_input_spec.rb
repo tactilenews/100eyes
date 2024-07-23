@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe ImageInput::ImageInput, type: :component do
   subject { render_inline(described_class.new(**params)) }
+  let(:organization) { create(:organization) }
   let(:params) { { id: :logo } }
 
   it { should have_css('.ImageInput') }
@@ -17,10 +18,13 @@ RSpec.describe ImageInput::ImageInput, type: :component do
   end
 
   context 'with existing upload' do
+    before do
+      organization.onboarding_logo.attach(io: file, filename: file.original_filename)
+    end
     let(:file) { fixture_file_upload('example-image.png') }
-    let(:blob) { ActiveStorage::Blob.create_and_upload!(io: file, filename: file.original_filename) }
+    let(:value) { organization.onboarding_logo }
 
-    let(:params) { { id: :logo, value: blob } }
+    let(:params) { { id: :logo, value: value } }
 
     it { should have_text('example-image.png') }
     it { should have_css('img[src$="/example-image.png"]') }

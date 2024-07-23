@@ -9,11 +9,15 @@ class RepliesMailbox < ApplicationMailbox
 
   private
 
+  def organization
+    @organization ||= Organization.find_by(email_from_address: mail.to)
+  end
+
   def ensure_sender_is_a_contributor
-    bounce_with PostmarkAdapter::Inbound.bounce!(mail) unless contributor
+    bounce_with PostmarkAdapter::Inbound.bounce!(mail, organization) unless contributor
   end
 
   def contributor
-    @contributor ||= Contributor.with_lowercased_email(mail.from)
+    @contributor ||= organization.contributors.with_lowercased_email(mail.from)
   end
 end

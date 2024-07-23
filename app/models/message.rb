@@ -27,6 +27,7 @@ class Message < ApplicationRecord
   scope :outbound, -> { where(sender_type: [User.name, nil]) }
 
   delegate :name, to: :creator, allow_nil: true, prefix: true
+  delegate :organization, to: :request
 
   has_many_attached :raw_data
   validates :raw_data, presence: true, if: -> { sent_from_contributor? }
@@ -45,7 +46,7 @@ class Message < ApplicationRecord
   def sender_name
     return sender.name if sender
 
-    Setting.project_name
+    organization.project_name
   end
 
   def contributor

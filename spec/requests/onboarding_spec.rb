@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Onboarding', type: :request do
+  before { create(:organization) }
+
   describe 'GET /onboarding/index' do
     let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
     let(:params) { { jwt: jwt } }

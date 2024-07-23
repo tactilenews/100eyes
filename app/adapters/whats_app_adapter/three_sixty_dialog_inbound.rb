@@ -10,7 +10,7 @@ module WhatsAppAdapter
     RESUBSCRIBE_CONTRIBUTOR = :resubscribe_contributor
     UNSUPPORTED_CONTENT_TYPES = %w[location contacts application].freeze
 
-    attr_reader :sender, :text, :message
+    attr_reader :sender, :text, :message, :organization
 
     def initialize
       @callbacks = {}
@@ -20,7 +20,8 @@ module WhatsAppAdapter
       @callbacks[callback] = block
     end
 
-    def consume(whats_app_message)
+    def consume(organization, whats_app_message)
+      @organization = organization
       whats_app_message = whats_app_message.with_indifferent_access
 
       @sender = initialize_sender(whats_app_message)
@@ -49,7 +50,7 @@ module WhatsAppAdapter
 
     def initialize_sender(whats_app_message)
       whats_app_phone_number = whats_app_message[:contacts].first[:wa_id].phony_normalized
-      sender = Contributor.find_by(whats_app_phone_number: whats_app_phone_number)
+      sender = organization.contributors.find_by(whats_app_phone_number: whats_app_phone_number)
 
       unless sender
         trigger(UNKNOWN_CONTRIBUTOR, whats_app_phone_number)
@@ -176,8 +177,8 @@ module WhatsAppAdapter
     end
 
     def fetch_file(file_id)
-      url = URI.parse("#{Setting.three_sixty_dialog_whats_app_rest_api_endpoint}/media/#{file_id}")
-      headers = { 'D360-API-KEY' => Setting.three_sixty_dialog_client_api_key, 'Content-Type' => 'application/json' }
+      url = URI.parse("#{ENV.fetch('THREE_SIXTY_DIALOG_PARTNER_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')}/media/#{file_id}")
+      headers = { 'D360-API-KEY' => organization.three_sixty_dialog_client_api_key, 'Content-Type' => 'application/json' }
       request = Net::HTTP::Get.new(url.to_s, headers)
       response = Net::HTTP.start(url.host, url.port, use_ssl: true) do |http|
         http.request(request)

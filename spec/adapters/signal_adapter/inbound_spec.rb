@@ -18,7 +18,8 @@ RSpec.describe SignalAdapter::Inbound do
           expiresInSeconds: 0,
           viewOnce: false
         }
-      }
+      },
+      account: organization.signal_server_phone_number
     }
   end
 
@@ -36,7 +37,8 @@ RSpec.describe SignalAdapter::Inbound do
           expiresInSeconds: 0,
           viewOnce: false
         }
-      }
+      },
+      account: organization.signal_server_phone_number
     }
   end
 
@@ -57,7 +59,7 @@ RSpec.describe SignalAdapter::Inbound do
           timestamps: [1_694_759_894_066]
         }
       },
-      account: Setting.signal_server_phone_number
+      account: organization.signal_server_phone_number
     }
   end
 
@@ -79,7 +81,8 @@ RSpec.describe SignalAdapter::Inbound do
             size: 89_549
           }]
         }
-      }
+      },
+      account: organization.signal_server_phone_number
     }
   end
 
@@ -109,7 +112,8 @@ RSpec.describe SignalAdapter::Inbound do
             }
           ]
         }
-      }
+      },
+      account: organization.signal_server_phone_number
     }
   end
 
@@ -125,7 +129,8 @@ RSpec.describe SignalAdapter::Inbound do
           expiresInSeconds: 3600,
           viewOnce: false
         }
-      }
+      },
+      account: organization.signal_server_phone_number
     }
   end
 
@@ -144,7 +149,8 @@ RSpec.describe SignalAdapter::Inbound do
           },
           viewOnce: false
         }
-      }
+      },
+      account: organization.signal_server_phone_number
     }
   end
 
@@ -166,7 +172,8 @@ RSpec.describe SignalAdapter::Inbound do
             isRemove: false
           }
         }
-      }
+      },
+      account: organization.signal_server_phone_number
     }
   end
 
@@ -180,14 +187,15 @@ RSpec.describe SignalAdapter::Inbound do
           action: 'STARTED',
           timestamp: 1_648_534_000_000
         }
-      }
+      },
+      account: organization.signal_server_phone_number
     }
   end
 
   before do
     allow(File).to receive(:open).and_call_original
     allow(File).to receive(:open)
-      .with("#{Setting.signal_cli_rest_api_attachment_path}zuNhdpIHpRU_9Du-B4oG")
+      .with('signal-cli-config/attachments/zuNhdpIHpRU_9Du-B4oG')
       .and_return(file_fixture('signal_message_with_attachment').open)
   end
 
@@ -199,9 +207,10 @@ RSpec.describe SignalAdapter::Inbound do
       :contributor,
       id: 4711,
       signal_phone_number: phone_number,
-      signal_onboarding_completed_at: onboarding_completed_at
+      organization: organization
     )
   end
+  let(:organization) { create(:organization) }
 
   describe '#consume' do
     let(:message) do
@@ -215,7 +224,6 @@ RSpec.describe SignalAdapter::Inbound do
       it { should be_a(Message) }
 
       context 'from an unknown contributor' do
-        let(:onboarding_completed_at) { nil }
         let!(:phone_number) { '+495555555' }
 
         it { should be(nil) }
@@ -409,11 +417,11 @@ RSpec.describe SignalAdapter::Inbound do
       let(:signal_message) { signal_message_with_uuid }
       let(:signal_uuid) { signal_message.dig(:envelope, :sourceUuid) }
 
-      let!(:contributor) { create(:contributor, signal_onboarding_token: 'NQ272QQK') }
+      let!(:contributor) { create(:contributor, signal_onboarding_token: 'NQ272QQK', organization: organization) }
 
       before do
-        adapter.on(SignalAdapter::CONNECT) do |contributor, signal_uuid|
-          connect_callback.call(contributor, signal_uuid)
+        adapter.on(SignalAdapter::CONNECT) do |contributor, signal_uuid, organization|
+          connect_callback.call(contributor, signal_uuid, organization)
         end
       end
 
@@ -429,14 +437,13 @@ RSpec.describe SignalAdapter::Inbound do
 
       context 'if the sender is a contributor with incomplete onboarding' do
         let(:signal_onboarding_token) { 'NQ272QQK' }
-        it { should have_received(:call).with(contributor, signal_uuid) }
+        it { should have_received(:call).with(contributor, signal_uuid, organization) }
       end
     end
 
     describe 'UNKNOWN_CONTRIBUTOR' do
       let(:unknown_contributor_callback) { spy('unknown_contributor_callback') }
       let(:signal_message) { signal_message_with_uuid }
-      let(:signal_uuid) { signal_message.dig(:envelope, :sourceUuid) }
       let(:source) { signal_message.dig(:envelope, :source) }
       let!(:contributor) { create(:contributor, signal_onboarding_token: 'NQ272QQK') }
 
@@ -449,11 +456,6 @@ RSpec.describe SignalAdapter::Inbound do
       subject do
         adapter.consume(signal_message)
         unknown_contributor_callback
-      end
-
-      context 'if the sender is a contributor with incomplete onboarding' do
-        let(:signal_onboarding_token) { 'NQ272QQK' }
-        it { should_not have_received(:call) }
       end
 
       context 'if the sender is unknown' do

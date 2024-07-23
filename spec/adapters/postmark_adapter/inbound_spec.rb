@@ -5,6 +5,9 @@ require 'rails_helper'
 RSpec.describe PostmarkAdapter::Inbound do
   let(:email_message) { described_class.new mail }
   let(:html_part) { 'This is a text body part' }
+  let(:organization) { create(:organization, email_from_address: email_from_address) }
+  let!(:contributor) { create(:contributor, email: 'contributor@example.org', organization: organization) }
+  let(:email_from_address) { '100eyes@example.org' }
 
   describe '#text' do
     subject { -> { email_message.text } }
@@ -92,6 +95,8 @@ RSpec.describe PostmarkAdapter::Inbound do
     end
 
     describe 'previous messages present in reply' do
+      let(:email_from_address) { '100eyes-test@roschaefer.de' }
+
       context 'given unchanged class and id attributes' do
         let(:mail) { Mail.read(Rails.root.join / 'spec/adapters/postmark_adapter/reply.eml') }
         it 'removes previous messages' do
@@ -156,7 +161,9 @@ RSpec.describe PostmarkAdapter::Inbound do
 
   describe '#file' do
     let(:mail) do
-      mail = Mail.new
+      mail = Mail.new do |m|
+        m.to '100eyes@example.org'
+      end
       mail.add_file Rails.root.join('README.md').to_s
       mail
     end
@@ -168,7 +175,9 @@ RSpec.describe PostmarkAdapter::Inbound do
     subject { email_message.photos }
     describe 'given a file attachment' do
       let(:mail) do
-        mail = Mail.new
+        mail = Mail.new do |m|
+          m.to '100eyes@example.org'
+        end
         mail.add_file Rails.root.join('README.md').to_s
         mail
       end
@@ -177,7 +186,9 @@ RSpec.describe PostmarkAdapter::Inbound do
 
     describe 'given an image attachment' do
       let(:mail) do
-        mail = Mail.new
+        mail = Mail.new do |m|
+          m.to '100eyes@example.org'
+        end
         mail.add_file Rails.root.join('example-image.png').to_s
         mail
       end

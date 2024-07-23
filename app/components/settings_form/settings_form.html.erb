@@ -1,75 +1,44 @@
-<%= c 'form', model: Setting.new, multipart: true, **attrs do %>
+<%= c 'form', model: organization, url: settings_path, multipart: true, **attrs do %>
   <%= c 'section' do %>
-    <%= c('heading', tag: :h2) { t('setting.form.groups.project_settings') } %>
-    <%= c('settings_field', type: :input, attr: :project_name) %>
+    <%= c('heading', tag: :h2) { t('organization.form.groups.project_settings') } %>
+    <%= c('settings_field', organization: organization, type: :input, attr: :project_name) %>
   <% end %>
 
-  <%= c 'section' do %>
-    <%= c('heading', tag: :h2) { t('setting.form.groups.onboarding') } %>
-    <%= c('settings_field', type: :image_input, attr: :onboarding_logo) %>
-    <%= c('settings_field', type: :input, attr: :onboarding_byline) %>
-    <%= c('settings_field', type: :image_input, attr: :onboarding_hero) %>
-    <%= c('settings_field', type: :input, attr: :onboarding_title) %>
-    <%= c('settings_field', type: :textarea, attr: :onboarding_page) %>
-    <% if current_user.admin? %>
-      <%= c 'onboarding_channels_checkboxes' %>
-      <%= c('settings_field', type: :url_input, attr: :onboarding_data_protection_link) %>
-      <%= c('settings_field', type: :textarea, attr: :onboarding_data_processing_consent_additional_info) %>
-      <%= c('settings_field', type: :url_input, attr: :onboarding_imprint_link) %>
-    <% end %>
+  <%= c 'section', data: { testid: 'onboarding-section' } do %>
+    <%= c('heading', tag: :h2) { t('organization.form.groups.onboarding') } %>
+    <%= c('settings_field', organization: organization, type: :image_input, attr: :onboarding_logo) %>
+    <%= c('settings_field', organization: organization, type: :input, attr: :onboarding_byline) %>
+    <%= c('settings_field', organization: organization, type: :image_input, attr: :onboarding_hero) %>
+    <%= c('settings_field', organization: organization, type: :input, attr: :onboarding_title) %>
+    <%= c('settings_field', organization: organization, type: :textarea, attr: :onboarding_page) %>
   <% end %>
 
-  <% if current_user.admin? %>
-    <%= c 'stack' do %>
-      <%= c('heading', tag: :h2) { t 'setting.form.groups.onboarding_additional_consent' } %>
-
-      <%= c('field',
-        object: Setting.new,
-        attr: :onboarding_ask_for_additional_consent,
-        styles: [:horizontal, :leftAligned],
-      ) do |field| %>
-        <%= c 'checkbox', **field.input_defaults, checked: Setting.onboarding_ask_for_additional_consent %>
-      <% end %>
-
-      <%= c('settings_field', type: :input, attr: :onboarding_additional_consent_heading) %>
-      <%= c('settings_field', type: :input, attr: :onboarding_additional_consent_text) %>
-    <% end %>
+  <%= c 'section', data: { testid: 'onboarding-success-section' } do %>
+    <%= c('heading', tag: :h2) { t('organization.form.groups.onboarding_success') } %>
+    <%= c('settings_field', organization: organization, type: :input, attr: :onboarding_success_heading) %>
+    <%= c('settings_field', organization: organization, type: :textarea, attr: :onboarding_success_text) %>
   <% end %>
 
-  <%= c 'stack' do %>
-    <%= c('heading', tag: :h2) { t('setting.form.groups.onboarding_success') } %>
-    <%= c('settings_field', type: :input, attr: :onboarding_success_heading) %>
-    <%= c('settings_field', type: :textarea, attr: :onboarding_success_text) %>
+  <%= c 'section', data: { testid: 'onboarding-unauthorized-section' } do %>
+    <%= c('heading', tag: :h2) { t('organization.form.groups.onboarding_unauthorized') } %>
+    <%= c('settings_field', organization: organization, type: :input, attr: :onboarding_unauthorized_heading) %>
+    <%= c('settings_field', organization: organization, type: :textarea, attr: :onboarding_unauthorized_text) %>
   <% end %>
 
-  <%= c 'stack' do %>
-    <%= c('heading', tag: :h2) { t('setting.form.groups.onboarding_unauthorized') } %>
-    <%= c('settings_field', type: :input, attr: :onboarding_unauthorized_heading) %>
-    <%= c('settings_field', type: :textarea, attr: :onboarding_unauthorized_text) %>
+  <%= c 'section', data: { testid: 'signal-section' } do %>
+    <%= c('heading', tag: :h2) { t('organization.form.groups.signal') } %>
+    <%= c('settings_field', organization: organization, type: :textarea, attr: :signal_unknown_content_message) %>
   <% end %>
 
-  <%= c 'stack' do %>
-    <%= c('heading', tag: :h2) { t('setting.form.groups.signal') } %>
-    <%= c('settings_field', type: :textarea, attr: :signal_unknown_content_message) %>
+  <%= c 'section', data: { testid: 'telegram-section' } do %>
+    <%= c('heading', tag: :h2) { t('organization.form.groups.telegram') } %>
+    <%= c('settings_field', organization: organization, type: :textarea, attr: :telegram_unknown_content_message) %>
+    <%= c('settings_field', organization: organization, type: :textarea, attr: :telegram_contributor_not_found_message) %>
   <% end %>
 
-  <%= c 'stack' do %>
-    <%= c('heading', tag: :h2) { t('setting.form.groups.telegram') } %>
-    <%= c('settings_field', type: :textarea, attr: :telegram_unknown_content_message) %>
-    <%= c('settings_field', type: :textarea, attr: :telegram_contributor_not_found_message) %>
-  <% end %>
-
-  <%= c 'stack' do %>
-    <%= c('heading', tag: :h2) { t('setting.form.groups.threema') } %>
-    <%= c('settings_field', type: :textarea, attr: :threema_unknown_content_message) %>
-  <% end %>
-
-  <% if current_user.admin? %>
-    <%= c 'stack' do %>
-      <%= c('heading', tag: :h2) { t('setting.form.groups.all') } %>
-      <%= c('settings_field', type: :image_input, attr: :channel_image) %>
-      <%= c('settings_field', type: :textarea, attr: :about) %>
-    <% end %>
+  <%= c 'section', data: { testid: 'threema-section' } do %>
+    <%= c('heading', tag: :h2) { t('organization.form.groups.threema') } %>
+    <%= c('settings_field', organization: organization, type: :textarea, attr: :threema_unknown_content_message) %>
   <% end %>
 
   <%= c 'submit_button', label: t('save') %>

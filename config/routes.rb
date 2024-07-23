@@ -17,38 +17,28 @@ Rails.application.routes.draw do
     get '/success', to: 'onboarding#success'
 
     scope module: :onboarding do
-      constraints(-> { Setting.email_onboarding_allowed? }) do
-        get '/email', to: 'email#show'
-        post '/email', to: 'email#create'
-      end
+      get '/email', to: 'email#show'
+      post '/email', to: 'email#create'
 
-      constraints(-> { Setting.signal_onboarding_allowed? }) do
-        get '/signal/', to: 'signal#show'
-        get '/signal/link/', to: 'signal#link', as: 'signal_link'
-        post '/signal/', to: 'signal#create'
-      end
+      get '/signal/', to: 'signal#show'
+      get '/signal/link/', to: 'signal#link', as: 'signal_link'
+      post '/signal/', to: 'signal#create'
 
-      constraints(-> { Setting.threema_onboarding_allowed? }) do
-        get '/threema/', to: 'threema#show'
-        post '/threema/', to: 'threema#create'
-      end
+      get '/threema/', to: 'threema#show'
+      post '/threema/', to: 'threema#create'
 
-      constraints(-> { Setting.telegram_onboarding_allowed? }) do
-        get '/telegram/', to: 'telegram#show'
-        get '/telegram/link/:telegram_onboarding_token', to: 'telegram#link', as: 'telegram_link'
-        get '/telegram/fallback/:telegram_onboarding_token', to: 'telegram#fallback', as: 'telegram_fallback'
-        post '/telegram/', to: 'telegram#create'
-      end
+      get '/telegram/', to: 'telegram#show'
+      get '/telegram/link/:telegram_onboarding_token', to: 'telegram#link', as: 'telegram_link'
+      get '/telegram/fallback/:telegram_onboarding_token', to: 'telegram#fallback', as: 'telegram_fallback'
+      post '/telegram/', to: 'telegram#create'
 
-      constraints(-> { Setting.whats_app_onboarding_allowed? }) do
-        get '/whats-app/', to: 'whats_app#show'
-        post '/whats-app/', to: 'whats_app#create'
-      end
+      get '/whats-app/', to: 'whats_app#show'
+      post '/whats-app/', to: 'whats_app#create'
     end
   end
 
   get '/settings', to: 'settings#index'
-  post '/settings', to: 'settings#update'
+  patch '/settings', to: 'settings#update'
 
   namespace :threema do
     post '/webhook', to: 'webhook#message'
@@ -58,11 +48,18 @@ Rails.application.routes.draw do
     post '/webhook', to: 'webhook#message'
     post '/errors', to: 'webhook#errors'
     post '/status', to: 'webhook#status'
-    get '/onboarding-successful', to: 'three_sixty_dialog_webhook#create_api_key'
-    post '/three-sixty-dialog-webhook', to: 'three_sixty_dialog_webhook#message'
   end
 
-  telegram_webhook Telegram::WebhookController
+  scope ':organization_id' do
+    namespace :whats_app do
+      get '/onboarding-successful', to: 'three_sixty_dialog_webhook#create_api_key'
+      post '/three-sixty-dialog-webhook', to: 'three_sixty_dialog_webhook#message'
+    end
+  end
+
+  Telegram.bots.each do |(_name, bot)|
+    telegram_webhook Telegram::WebhookController, bot, as: nil
+  end
 
   resources :requests, only: %i[index show new create edit update destroy], concerns: :paginatable do
     member do

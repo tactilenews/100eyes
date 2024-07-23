@@ -3,7 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe Request, type: :model do
-  let(:contributor) { create(:contributor) }
+  let(:organization) { create(:organization) }
+  let(:contributor) { create(:contributor, organization: organization) }
   let(:user) { create(:user) }
 
   let(:request) do
@@ -11,7 +12,8 @@ RSpec.describe Request, type: :model do
       title: 'Hitchhiker’s Guide',
       text: 'What is the answer to life, the universe, and everything?',
       user: user,
-      schedule_send_for: Time.current
+      schedule_send_for: Time.current,
+      organization: organization
     )
   end
 
@@ -40,6 +42,14 @@ RSpec.describe Request, type: :model do
         end
 
         it { is_expected.to be_valid }
+      end
+    end
+
+    context 'no organization' do
+      before { request.organization = nil }
+
+      it 'is not valid' do
+        expect(subject).not_to be_valid
       end
     end
 
@@ -294,12 +304,13 @@ RSpec.describe Request, type: :model do
           title: 'Hitchhiker’s Guide',
           text: 'What is the answer to life, the universe, and everything?',
           tag_list: 'programmer',
-          user: user
+          user: user,
+          organization: organization
         )
       end
       before(:each) do
-        create(:contributor, id: 1, email: 'somebody@example.org', tag_list: ['programmer'])
-        create(:contributor, id: 2, email: nil, telegram_id: 22)
+        create(:contributor, id: 1, email: 'somebody@example.org', tag_list: ['programmer'], organization: organization)
+        create(:contributor, id: 2, email: nil, telegram_id: 22, organization: organization)
       end
 
       it { should change { Message.count }.from(0).to(1) }

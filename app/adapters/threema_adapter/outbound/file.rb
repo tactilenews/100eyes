@@ -5,36 +5,40 @@ module ThreemaAdapter
     class File < ApplicationJob
       queue_as :default
 
-      rescue_from RuntimeError do |exception|
-        tags = {}
-        if exception.message.match?(/Can't find public key for Threema ID/)
-          tags = { support: 'yes' }
-          threema_id = exception.message.split('Threema ID').last.strip
-          contributor = Contributor.where('lower(threema_id) = ?', threema_id.downcase).first
-          return unless contributor
+      attr_reader :organization
 
-          MarkInactiveContributorInactiveJob.perform_later(contributor_id: contributor.id)
-        end
-        ErrorNotifier.report(exception, tags: tags)
-      end
+      def perform(organization_id:, contributor_id:, file_path:, file_name: nil, caption: nil, render_type: nil, message: nil)
+        @organization = Organization.find(organization_id)
+        recipient = organization.contributors.find(contributor_id)
 
-      def self.threema_instance
-        @threema_instance ||= Threema.new
-      end
-
-      def perform(contributor_id:, file_path:, file_name: nil, caption: nil, render_type: nil, message: nil)
-        recipient = Contributor.find_by(id: contributor_id)
-        return unless recipient
-
-        message_id = self.class.threema_instance.send(type: :file,
-                                                      threema_id: recipient.threema_id.upcase,
-                                                      file: file_path,
-                                                      render_type: render_type,
-                                                      file_name: file_name,
-                                                      caption: caption)
+        message_id = organization.threema_instance.send(type: :file,
+                                                        threema_id: recipient.threema_id.upcase,
+                                                        file: file_path,
+                                                        render_type: render_type,
+                                                        file_name: file_name,
+                                                        caption: caption)
         return unless message
 
         message.update(external_id: message_id)
+      rescue ActiveRecord::RecordNotFound => e
+        ErrorNotifier.report(e)
+      rescue RuntimeError => e
+        handle_runtime_error(e)
+      end
+
+      private
+
+      def handle_runtime_error(exception)
+        tags = {}
+        if exception.message.match?(/Can't find public key for Threema ID/)
+          tags = { support: 'yes' }
+
+          threema_id = exception.message.split('Threema ID').last.strip
+          contributor = organization.contributors.where('lower(threema_id) = ?', threema_id.downcase).first
+
+          MarkInactiveContributorInactiveJob.perform_later(organization_id: organization.id, contributor_id: contributor.id)
+        end
+        ErrorNotifier.report(exception, tags: tags)
       end
     end
   end

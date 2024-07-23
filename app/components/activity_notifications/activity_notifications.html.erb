@@ -6,7 +6,7 @@
       <ul role='list' class='ActivityNotifications-list'>
         <% activity_notifications.each do |notification_hash| %>
           <li class='ActivityNotifications-listItem' >
-            <%= c 'avatar', record: notification_hash[:record] %>
+            <%= c 'avatar', organization: organization, record: notification_hash[:record] %>
             <header class='ActivityNotifications-listItemHeader'>
               <p>
                 <%= notification_hash[:group_message] %>

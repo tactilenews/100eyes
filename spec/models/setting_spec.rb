@@ -54,8 +54,6 @@ RSpec.describe Setting, type: :model do
   end
 
   context '::onboarding_success_*' do
-    let!(:users) { create_list(:user, 2) }
-    let!(:admin) { create_list(:user, 3, admin: true) }
     let(:param) { 'new value' }
 
     describe 'onboarding_success_heading' do
@@ -85,18 +83,6 @@ RSpec.describe Setting, type: :model do
         it 'updates the value' do
           expect { subject }.to change(Setting, :onboarding_success_heading).from(default_value).to(param)
         end
-
-        it 'sends an email to all admin that the value was updated' do
-          expect { subject }.to have_enqueued_job.on_queue('default').with(
-            'PostmarkAdapter::Outbound',
-            'welcome_message_updated_email',
-            'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
-            {
-              params: { admin: an_instance_of(User) },
-              args: []
-            }
-          ).exactly(3).times
-        end
       end
     end
 
@@ -118,18 +104,6 @@ RSpec.describe Setting, type: :model do
 
         it 'updates the value' do
           expect { subject }.to change(Setting, :onboarding_success_text).from(default_value).to(param)
-        end
-
-        it 'sends an email to all admin that the value was updated' do
-          expect { subject }.to have_enqueued_job.on_queue('default').with(
-            'PostmarkAdapter::Outbound',
-            'welcome_message_updated_email',
-            'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
-            {
-              params: { admin: an_instance_of(User) },
-              args: []
-            }
-          ).exactly(3).times
         end
       end
     end

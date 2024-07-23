@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="<%= I18n.locale %>">
 <head>
-  <title><%= Setting.project_name %></title>
+  <title><%= @organization.project_name %></title>
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
 
@@ -15,8 +15,8 @@
 
 <%= yield %>
 
-<% if Setting.onboarding_show_gdpr_modal %>
-  <%= c 'gdpr_modal' %>
+<% if @organization.onboarding_show_gdpr_modal %>
+  <%= c 'gdpr_modal', organization: @organization %>
 <% end %>
 
 </body>

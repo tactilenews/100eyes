@@ -8,6 +8,6 @@
   <% end %>
 <% else %>
   <% contributors.each do |contributor| %>
-    <%= c 'contributor_row', contributor: contributor %>
+    <%= c 'contributor_row', organization: organization, contributor: contributor %>
   <% end %>
 <% end %>

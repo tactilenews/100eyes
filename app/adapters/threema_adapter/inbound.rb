@@ -1,15 +1,16 @@
 # frozen_string_literal: true
 
 module ThreemaAdapter
+  UNKNOWN_ORGANIZATION = :unknown_organization
   UNKNOWN_CONTRIBUTOR = :unknown_contributor
+  HANDLE_DELIVERY_RECEIPT = :handle_delivery_receipt
   UNSUBSCRIBE_CONTRIBUTOR = :unsubscribe_contributor
   RESUBSCRIBE_CONTRIBUTOR = :resubscribe_contributor
   UNSUPPORTED_CONTENT = :unsupported_content
-  HANDLE_DELIVERY_RECEIPT = :handle_delivery_receipt
 
   class Inbound
     UNSUPPORTED_CONTENT_TYPES = %w[application text/x-vcard].freeze
-    attr_reader :sender, :unknown_content, :message
+    attr_reader :sender, :unknown_content, :message, :organization
 
     def initialize
       @callbacks = {}
@@ -20,7 +21,16 @@ module ThreemaAdapter
     end
 
     def consume(threema_message)
-      decrypted_message = Threema.new.receive(payload: threema_message)
+      @organization = initialize_organization(threema_message[:to])
+      return unless @organization
+
+      threema = Threema.new(
+        api_identity: @organization.threemarb_api_identity,
+        api_secret: @organization.threemarb_api_secret,
+        private_key: @organization.threemarb_private
+      )
+      # TODO: Handle organization that has not been configured
+      decrypted_message = threema.receive(payload: threema_message)
 
       @sender = initialize_sender(threema_message)
       return unless @sender
@@ -51,13 +61,20 @@ module ThreemaAdapter
 
     private
 
-    def delivery_receipt?(decrypted_message)
-      decrypted_message.instance_of? Threema::Receive::DeliveryReceipt
+    def initialize_organization(threemarb_api_identity)
+      organization = Organization.find_by(threemarb_api_identity: threemarb_api_identity)
+
+      unless organization
+        trigger(UNKNOWN_ORGANIZATION, threemarb_api_identity)
+        nil
+      end
+
+      organization
     end
 
     def initialize_sender(threema_message)
       threema_id = threema_message[:from]
-      sender = Contributor.where('UPPER(threema_id) = ?', threema_id).first
+      sender = organization.contributors.where('UPPER(threema_id) = ?', threema_id).first
 
       unless sender
         trigger(UNKNOWN_CONTRIBUTOR, threema_id)
@@ -67,18 +84,8 @@ module ThreemaAdapter
       sender
     end
 
-    def initialize_message(decrypted_message)
-      text = initialize_text(decrypted_message)
-
-      trigger(UNSUBSCRIBE_CONTRIBUTOR, sender) if unsubscribe_text?(text)
-      trigger(RESUBSCRIBE_CONTRIBUTOR, sender) if resubscribe_text?(text)
-      message = Message.new(text: text, sender: sender)
-      message.raw_data.attach(
-        io: StringIO.new(decrypted_message.content),
-        filename: 'threema_api.json',
-        content_type: 'application/json'
-      )
-      message
+    def delivery_receipt?(decrypted_message)
+      decrypted_message.instance_of? Threema::Receive::DeliveryReceipt
     end
 
     def initialize_text(decrypted_message)
@@ -89,11 +96,25 @@ module ThreemaAdapter
       end
     end
 
+    def initialize_message(decrypted_message)
+      text = initialize_text(decrypted_message)
+
+      trigger(UNSUBSCRIBE_CONTRIBUTOR, sender, organization) if unsubscribe_text?(text)
+      trigger(RESUBSCRIBE_CONTRIBUTOR, sender, organization) if resubscribe_text?(text)
+      message = Message.new(text: text, sender: sender)
+      message.raw_data.attach(
+        io: StringIO.new(decrypted_message.content),
+        filename: 'threema_api.json',
+        content_type: 'application/json'
+      )
+      message
+    end
+
     def initialize_unsupported_content(decrypted_message)
       return unless file_type_unsupported?(decrypted_message)
 
       message.unknown_content = true
-      trigger(UNSUPPORTED_CONTENT, sender)
+      trigger(UNSUPPORTED_CONTENT, sender, organization)
     end
 
     def initialize_files(decrypted_message)

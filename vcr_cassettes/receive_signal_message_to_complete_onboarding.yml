@@ -29,6 +29,6 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '[{"envelope":{"source":"valid_uuid","sourceNumber":null,"sourceUuid":"valid_uuid","sourceName":"Matthew
-        Rider","sourceDevice":1,"timestamp":1719396464361,"dataMessage":{"timestamp":1719396464361,"message":"CM1TOEC7","expiresInSeconds":0,"viewOnce":false}},"account":"+4915888627934"}]'
+        Rider","sourceDevice":1,"timestamp":1719396464361,"dataMessage":{"timestamp":1719396464361,"message":"CM1TOEC7","expiresInSeconds":0,"viewOnce":false}},"account":"+4912345678"}]'
   recorded_at: Wed, 26 Jun 2024 10:27:17 GMT
 recorded_with: VCR 6.1.0

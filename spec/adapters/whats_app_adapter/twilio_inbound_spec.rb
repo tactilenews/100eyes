@@ -9,7 +9,8 @@ RSpec.describe WhatsAppAdapter::TwilioInbound do
   let(:whats_app_phone_number) { '+491511234567' }
   let(:twilio_message_sid) { 'someValidMessageSid' }
   let(:original_message_sid) { 'someUniqueSid' }
-  let!(:contributor) { create(:contributor, whats_app_phone_number: whats_app_phone_number) }
+  let(:organization) { create(:organization) }
+  let!(:contributor) { create(:contributor, whats_app_phone_number: whats_app_phone_number, organization: organization) }
   let(:whats_app_message) do
     {
       'AccountSid' => 'someAccount',
@@ -21,14 +22,14 @@ RSpec.describe WhatsAppAdapter::TwilioInbound do
       'MessageSid' => twilio_message_sid,
       'NumMedia' => '0',
       'NumSegments' => '1',
-      'OriginalRepliedMessageSender' => "whatsapp:#{Setting.whats_app_server_phone_number}",
+      'OriginalRepliedMessageSender' => "whatsapp:#{organization.whats_app_server_phone_number}",
       'OriginalRepliedMessageSid' => original_message_sid,
       'ProfileName' => 'Matthew Rider',
       'ReferralNumMedia' => '0',
       'SmsMessageSid' => twilio_message_sid,
       'SmsSid' => twilio_message_sid,
       'SmsStatus' => 'received',
-      'To' => "whatsapp:#{Setting.whats_app_server_phone_number}",
+      'To' => "whatsapp:#{organization.whats_app_server_phone_number}",
       'WaId' => '491511234567'
     }.transform_keys(&:underscore)
   end
@@ -41,14 +42,14 @@ RSpec.describe WhatsAppAdapter::TwilioInbound do
       'MessageSid' => twilio_message_sid,
       'NumMedia' => '0',
       'NumSegments' => '1',
-      'OriginalRepliedMessageSender' => "whatsapp:#{Setting.whats_app_server_phone_number}",
+      'OriginalRepliedMessageSender' => "whatsapp:#{organization.whats_app_server_phone_number}",
       'OriginalRepliedMessageSid' => original_message_sid,
       'ProfileName' => 'Matthew Rider',
       'ReferralNumMedia' => '0',
       'SmsMessageSid' => twilio_message_sid,
       'SmsSid' => twilio_message_sid,
       'SmsStatus' => 'received',
-      'To' => "whatsapp:#{Setting.whats_app_server_phone_number}",
+      'To' => "whatsapp:#{organization.whats_app_server_phone_number}",
       'WaId' => '491511234567'
     }.transform_keys(&:underscore)
   end

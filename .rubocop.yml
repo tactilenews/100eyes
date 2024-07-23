@@ -16,3 +16,15 @@ Metrics/BlockLength:
   Exclude:
     - '**/*_spec.rb'
     - 'config/routes.rb'
+
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'db/data/**'
+
+Metrics/PerceivedComplexity:
+  Exclude:
+      - 'db/data/**'
+
+Metrics/AbcSize:
+  Exclude:
+    - 'db/data/**'

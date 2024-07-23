@@ -13,7 +13,7 @@ module OtpSetup
     attr_reader :user
 
     def provisioning_url
-      user.provisioning_uri(nil, issuer: Setting.application_host)
+      user.provisioning_uri(nil, issuer: ENV.fetch('APPLICATION_HOSTNAME', 'localhost:3000'))
     end
   end
 end

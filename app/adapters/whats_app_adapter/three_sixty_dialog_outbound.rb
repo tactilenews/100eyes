@@ -15,46 +15,59 @@ module WhatsAppAdapter
         end
       end
 
-      def send_welcome_message!(contributor)
+      def send_welcome_message!(contributor, organization)
         return unless contributor_can_receive_messages?(contributor)
 
-        welcome_message = ["*#{Setting.onboarding_success_heading}*", Setting.onboarding_success_text].join("\n\n")
+        welcome_message = ["*#{organization.onboarding_success_heading}*", organization.onboarding_success_text].join("\n\n")
         payload = if freeform_message_permitted?(contributor)
                     text_payload(contributor, welcome_message)
                   else
-                    welcome_message_payload(contributor)
+                    welcome_message_payload(contributor, organization)
                   end
-        WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(payload: payload)
+        WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(organization_id: organization.id, payload: payload)
       end
 
-      def send_unsupported_content_message!(contributor)
+      def send_unsupported_content_message!(contributor, organization)
         return unless contributor_can_receive_messages?(contributor)
 
         text = I18n.t('adapter.whats_app.unsupported_content_template', first_name: contributor.first_name,
                                                                         contact_person: contributor.organization.contact_person.name)
-        WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(payload: text_payload(contributor, text))
+        WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(organization_id: organization.id,
+                                                                      payload: text_payload(
+                                                                        contributor, text
+                                                                      ))
       end
 
-      def send_more_info_message!(contributor)
+      def send_more_info_message!(contributor, organization)
         return unless contributor_can_receive_messages?(contributor)
 
-        text = [Setting.about, "_#{I18n.t('adapter.shared.unsubscribe.instructions')}_"].join("\n\n")
-        WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(payload: text_payload(contributor, text))
+        text = [organization.whats_app_profile_about, "_#{I18n.t('adapter.shared.unsubscribe.instructions')}_"].join("\n\n")
+        WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(organization_id: organization.id,
+                                                                      payload: text_payload(
+                                                                        contributor, text
+                                                                      ))
       end
 
-      def send_unsubsribed_successfully_message!(contributor)
+      def send_unsubsribed_successfully_message!(contributor, organization)
         return unless contributor_can_receive_messages?(contributor)
 
         text = [I18n.t('adapter.shared.unsubscribe.successful'),
                 "_#{I18n.t('adapter.shared.resubscribe.instructions')}_"].join("\n\n")
-        WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(payload: text_payload(contributor, text))
+
+        WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(organization_id: organization.id,
+                                                                      payload: text_payload(
+                                                                        contributor, text
+                                                                      ))
       end
 
-      def send_resubscribe_error_message!(contributor)
+      def send_resubscribe_error_message!(contributor, organization)
         return unless contributor_can_receive_messages?(contributor)
 
         text = I18n.t('adapter.shared.resubscribe.failure')
-        WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(payload: text_payload(contributor, text))
+        WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(organization_id: organization.id,
+                                                                      payload: text_payload(
+                                                                        contributor, text
+                                                                      ))
       end
 
       private
@@ -92,14 +105,20 @@ module WhatsAppAdapter
 
       def send_message_template(recipient, message)
         recipient.update(whats_app_message_template_sent_at: Time.current)
-        WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(payload: new_request_payload(recipient, message.request))
+        WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(organization_id: message.organization.id,
+                                                                      payload: new_request_payload(
+                                                                        recipient, message.request
+                                                                      ))
       end
 
       def send_message(recipient, message)
         files = message.files
 
         if files.blank?
-          WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(payload: text_payload(recipient, message.text))
+          WhatsAppAdapter::Outbound::ThreeSixtyDialogText.perform_later(organization_id: message.organization.id,
+                                                                        payload: text_payload(
+                                                                          recipient, message.text
+                                                                        ))
         else
           files.each do |_file|
             WhatsAppAdapter::UploadFile.perform_later(message_id: message.id)
@@ -114,7 +133,7 @@ module WhatsAppAdapter
           to: recipient.whats_app_phone_number.split('+').last,
           type: 'template',
           template: {
-            namespace: Setting.three_sixty_dialog_whats_app_template_namespace,
+            namespace: request.organization.three_sixty_dialog_whats_app_template_namespace,
             language: {
               policy: 'deterministic',
               code: 'de'
@@ -151,13 +170,13 @@ module WhatsAppAdapter
         }
       end
 
-      def welcome_message_payload(recipient)
+      def welcome_message_payload(recipient, organization)
         {
           recipient_type: 'individual',
           to: recipient.whats_app_phone_number.split('+').last,
           type: 'template',
           template: {
-            namespace: Setting.three_sixty_dialog_whats_app_template_namespace,
+            namespace: organization.three_sixty_dialog_whats_app_template_namespace,
             language: {
               policy: 'deterministic',
               code: 'de'
@@ -169,7 +188,7 @@ module WhatsAppAdapter
                 parameters: [
                   {
                     type: 'text',
-                    text: Setting.project_name
+                    text: organization.project_name
                   }
                 ]
               }

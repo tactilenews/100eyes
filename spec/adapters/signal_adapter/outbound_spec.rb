@@ -5,27 +5,25 @@ require 'webmock/rspec'
 
 RSpec.describe SignalAdapter::Outbound do
   let(:adapter) { described_class.new }
-  let(:message) { create(:message, text: 'Forgot to ask: How are you?', broadcasted: true, recipient: contributor) }
-  let(:contributor) { create(:contributor, email: nil) }
+  let(:message) { create(:message, text: 'Forgot to ask: How are you?', broadcasted: true, recipient: contributor, request: request) }
+  let(:request) { create(:request, organization: organization) }
+  let(:contributor) { create(:contributor, email: nil, organization: organization) }
+  let(:organization) { create(:organization) }
   let(:expected_job_args) do
-    { contributor_id: contributor.id, text: [Setting.onboarding_success_heading, Setting.onboarding_success_text].join("\n") }
+    { organization_id: organization.id, contributor_id: contributor.id,
+      text: [organization.onboarding_success_heading, organization.onboarding_success_text].join("\n") }
   end
   let(:onboarding_completed_at) { nil }
 
   describe '::send_welcome_message!' do
-    subject { -> { described_class.send_welcome_message!(contributor) } }
+    subject { -> { described_class.send_welcome_message!(contributor, organization) } }
     before { message } # we don't count the extra ::send here
 
     it { should_not enqueue_job(described_class::Text) }
 
     context 'contributor has a phone number' do
       let(:contributor) do
-        create(
-          :contributor,
-          signal_phone_number: '+491511234567',
-          signal_onboarding_completed_at: onboarding_completed_at,
-          email: nil
-        )
+        create(:contributor, :signal_contributor, signal_onboarding_completed_at: onboarding_completed_at, organization: organization)
       end
 
       context 'but has not completed onboarding' do
@@ -45,12 +43,7 @@ RSpec.describe SignalAdapter::Outbound do
 
     context 'contributor has a uuid' do
       let(:contributor) do
-        create(
-          :contributor,
-          signal_uuid: 'valid_uuid',
-          signal_onboarding_completed_at: onboarding_completed_at,
-          email: nil
-        )
+        create(:contributor, :signal_contributor_uuid, signal_onboarding_completed_at: onboarding_completed_at, organization: organization)
       end
 
       context 'but has not completed onboarding' do
@@ -73,7 +66,7 @@ RSpec.describe SignalAdapter::Outbound do
     subject { -> { described_class.send!(message) } }
 
     let(:expected_job_args) do
-      { contributor_id: contributor.id, text: message.text }
+      { organization_id: organization.id, contributor_id: contributor.id, text: message.text }
     end
     before { message } # we don't count the extra ::send here
 
@@ -81,12 +74,7 @@ RSpec.describe SignalAdapter::Outbound do
 
     describe 'contributor has a phone number' do
       let(:contributor) do
-        create(
-          :contributor,
-          email: nil,
-          signal_phone_number: '+491511234567',
-          signal_onboarding_completed_at: onboarding_completed_at
-        )
+        create(:contributor, :signal_contributor, signal_onboarding_completed_at: onboarding_completed_at, organization: organization)
       end
 
       context 'but has not completed onboarding' do
@@ -106,12 +94,7 @@ RSpec.describe SignalAdapter::Outbound do
 
     describe 'contributor has a uuid' do
       let(:contributor) do
-        create(
-          :contributor,
-          email: nil,
-          signal_uuid: 'valid_uuid',
-          signal_onboarding_completed_at: onboarding_completed_at
-        )
+        create(:contributor, :signal_contributor_uuid, signal_onboarding_completed_at: onboarding_completed_at, organization: organization)
       end
 
       context 'but has not completed onboarding' do

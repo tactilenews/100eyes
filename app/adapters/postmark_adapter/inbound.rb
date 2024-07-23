@@ -2,14 +2,15 @@
 
 module PostmarkAdapter
   class Inbound
-    attr_reader :sender, :text, :message, :photos, :unknown_content, :file
+    attr_reader :sender, :text, :organization, :message, :photos, :unknown_content, :file
 
-    def self.bounce!(mail)
+    def self.bounce!(mail, organization)
       mailer_params = {
+        organization: organization,
         text: I18n.t('adapter.postmark.contributor_not_found_email.text'),
         mail: {
           subject: I18n.t('adapter.postmark.contributor_not_found_email.subject'),
-          message_stream: Setting.postmark_transactional_stream,
+          message_stream: ENV.fetch('POSTMARK_TRANSACTIONAL_STREAM', 'outbound'),
           to: mail.from.first
         }
       }
@@ -23,6 +24,7 @@ module PostmarkAdapter
     def initialize(mail)
       @file = nil
       @text = initialize_text(mail)
+      @organization = initialize_organization(mail)
       @sender = initialize_contributor(mail)
       @message = initialize_message(mail)
       @photos, @unknown_content = initialize_photos_and_unknown_content(mail)
@@ -41,8 +43,12 @@ module PostmarkAdapter
       ActionController::Base.helpers.strip_tags(scrubbed.to_s)
     end
 
+    def initialize_organization(mail)
+      Organization.find_by(email_from_address: mail.to)
+    end
+
     def initialize_contributor(mail)
-      Contributor.with_lowercased_email(mail.from)
+      organization.contributors.with_lowercased_email(mail.from)
     end
 
     def initialize_message(mail)

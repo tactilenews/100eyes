@@ -4,7 +4,7 @@ require 'rails_helper'
 require 'telegram/bot/rspec/integration/rails'
 
 RSpec.describe '/contributors', type: :request do
-  let(:contributor) { create(:contributor) }
+  let!(:contributor) { create(:contributor) }
   let(:the_request) { create(:request) }
   let(:user) { create(:user) }
 

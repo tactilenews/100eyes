@@ -4,11 +4,29 @@ require 'rails_helper'
 require 'telegram/bot/rspec/integration/rails'
 
 RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
+  let(:organization) do
+    create(
+      :organization,
+      name: '100eyes',
+      telegram_bot_api_key: 'TELEGRAM_BOT_API_KEY',
+      telegram_bot_username: 'USERNAME',
+      telegram_contributor_not_found_message: 'Who are you?',
+      telegram_unknown_content_message: 'Cannot handle this, I\'m sorry :(',
+      onboarding_success_heading: 'Welcome new contributor!',
+      onboarding_success_text: ''
+    )
+  end
+  let(:bot) { organization.telegram_bot }
+  let(:controller_path) do
+    "/telegram/#{Telegram::Bot::RoutesHelper.token_hash(organization.telegram_bot_api_key)}"
+  end
+
   before do
-    allow(Setting).to receive(:telegram_contributor_not_found_message).and_return('Who are you?')
-    allow(Setting).to receive(:telegram_unknown_content_message).and_return("Cannot handle this, I'm sorry :(")
-    allow(Setting).to receive(:onboarding_success_heading).and_return('Welcome new contributor!')
-    allow(Setting).to receive(:onboarding_success_text).and_return('')
+    Telegram.reset_bots
+    Telegram.bots_config = {
+      organization.id => { token: organization.telegram_bot_api_key, username: organization.telegram_bot_username }
+    }
+    Rails.application.reload_routes!
   end
 
   describe '#start!' do
@@ -16,39 +34,47 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
     let(:chat_id) { 9876 }
     let(:message_options) { { from: { id: chat_id } } }
     subject { -> { perform_enqueued_jobs { dispatch_message message, message_options } } }
-    it { should_not(change { Message.count }) }
-    it { should respond_with_message 'Who are you?' }
+    it { expect { subject.call }.not_to(change { Message.count }) }
+    it { expect { subject.call }.to respond_with_message 'Who are you?' }
 
     context 'given a contributor' do
-      before { contributor }
+      before do
+        organization.reload
+        organization.contributors.reload
+        contributor
+      end
 
       context 'who just signed up' do
-        let(:contributor) { create(:contributor, :with_an_avatar, telegram_id: nil, telegram_onboarding_token: 'ABCDEF') }
-        it { should respond_with_message 'Who are you?' }
-        it { should_not(change { Message.count }) }
+        let(:contributor) do
+          create(:contributor, :with_an_avatar, telegram_id: nil, telegram_onboarding_token: 'ABCDEF', organization: organization)
+        end
+        it { expect { subject.call }.to respond_with_message 'Who are you?' }
+        it { expect { subject.call }.not_to(change { Message.count }) }
         context 'and sends the right telegram_onboarding_token' do
           let(:message) { '/start ABCDEF' }
-          it { should respond_with_message "<b>Welcome new contributor!</b>\n" }
-          it { should(change { Contributor.first.telegram_id }.from(nil).to(9876)) }
+          it { expect { subject.call }.to respond_with_message "<b>Welcome new contributor!</b>\n" }
+          it { expect { subject.call }.to(change { Contributor.first.telegram_id }.from(nil).to(9876)) }
         end
       end
 
       context 'who is already connected but not the person sending the telegram message' do
-        let(:contributor) { create(:contributor, :with_an_avatar, telegram_id: 9876, telegram_onboarding_token: 'ABCDEF') }
+        let(:contributor) do
+          create(:contributor, :with_an_avatar, telegram_id: 9876, telegram_onboarding_token: 'ABCDEF', organization: organization)
+        end
         let(:message_options) { { from: { id: 9877 } } }
-        it { should respond_with_message 'Who are you?' }
-        it { should_not(change { Contributor.first.telegram_id }) }
+        it { expect { subject.call }.to respond_with_message 'Who are you?' }
+        it { expect { subject.call }.not_to(change { Contributor.first.telegram_id }) }
       end
 
       context 'with a matching `telegram_id`' do
-        let(:contributor) { create(:contributor, :with_an_avatar, telegram_id: 9876) }
-        it { should respond_with_message "<b>Welcome new contributor!</b>\n" }
-        it { should_not(change(Contributor, :count)) }
+        let(:contributor) { create(:contributor, :with_an_avatar, telegram_id: 9876, organization: organization) }
+        it { expect { subject.call }.to respond_with_message "<b>Welcome new contributor!</b>\n" }
+        it { expect { subject.call }.not_to(change(Contributor, :count)) }
 
         context 'given a recent request' do
           let(:request) { create(:request) }
           before { request }
-          it { should_not(change { Message.count }) }
+          it { expect { subject.call }.not_to(change { Message.count }) }
 
           context 'sanity check' do
             let(:message) do
@@ -61,7 +87,7 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
                 'only a written message like this.'
               ].join(' ')
             end
-            it { should(change { Message.count }.from(0).to(1)) }
+            it { expect { subject.call }.to(change { Message.count }.from(0).to(1)) }
           end
         end
       end
@@ -80,58 +106,64 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
       let(:message_options) { { from: { id: chat_id } } }
 
       context 'who just signed up' do
-        let(:contributor) { create(:contributor, :with_an_avatar, telegram_id: nil, telegram_onboarding_token: 'GHIJKL') }
-        it { should respond_with_message 'Who are you?' }
+        let(:contributor) do
+          create(:contributor, :with_an_avatar, telegram_id: nil, telegram_onboarding_token: 'GHIJKL', organization: organization)
+        end
+        it { expect { subject.call }.to respond_with_message 'Who are you?' }
 
         context 'and sends telegram_onboarding_token' do
           let(:message) { " \n  GHIJKL  \t " }
-          it { should respond_with_message "<b>Welcome new contributor!</b>\n" }
-          it { should(change { contributor.reload.telegram_id }.from(nil).to(12_345)) }
+          it { expect { subject.call }.to respond_with_message "<b>Welcome new contributor!</b>\n" }
+          it { expect { subject.call }.to(change { contributor.reload.telegram_id }.from(nil).to(12_345)) }
 
           describe 'treats message case-insensitive' do
             let(:message) { " \n  GhIjKl  \t " }
-            it { should respond_with_message "<b>Welcome new contributor!</b>\n" }
-            it { should(change { contributor.reload.telegram_id }.from(nil).to(12_345)) }
+            it { expect { subject.call }.to respond_with_message "<b>Welcome new contributor!</b>\n" }
+            it { expect { subject.call }.to(change { contributor.reload.telegram_id }.from(nil).to(12_345)) }
           end
 
           context 'even if other contributors are not connected yet' do
             before { other_contributor }
             let(:other_contributor) { create(:contributor, :with_an_avatar, telegram_id: nil, telegram_onboarding_token: 'XYZXYZ') }
-            it { should(change { contributor.reload.telegram_id }.from(nil).to(12_345)) }
-            it { should_not(change { other_contributor.reload.telegram_id }) }
+            it { expect { subject.call }.to(change { contributor.reload.telegram_id }.from(nil).to(12_345)) }
+            it { expect { subject.call }.not_to(change { other_contributor.reload.telegram_id }) }
           end
         end
       end
 
       context 'who is already connected' do
         subject { -> { dispatch_message message, message_options } }
-        let(:contributor) { create(:contributor, :with_an_avatar, telegram_id: 12_345) }
+        let(:contributor) { create(:contributor, :with_an_avatar, telegram_id: 12_345, organization: organization) }
 
-        it { should_not(change { Message.count }) }
+        it { expect { subject.call }.not_to(change { Message.count }) }
 
         context 'given a recent request' do
-          before { create(:request) }
-          it { should(change { Message.count }.from(0).to(1)) }
-          it { should_not respond_with_message }
+          before { create(:request, organization: organization) }
+          it { expect { subject.call }.to(change { Message.count }.from(0).to(1)) }
+          it { expect { subject.call }.not_to respond_with_message }
           it_behaves_like 'an ActivityNotification', 'MessageReceived'
         end
 
         context ' message has a document' do
           let(:message_options) { { from: { id: 12_345 }, document: 'something' } }
-          it { should respond_with_message "Cannot handle this, I'm sorry :(" }
+          it { expect { subject.call }.to respond_with_message "Cannot handle this, I'm sorry :(" }
         end
 
         context 'who would like to unsubscribe' do
           let(:message) { 'Abbestellen' }
 
-          it { is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(contributor.id, TelegramAdapter::Outbound) }
+          it {
+            is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(organization.id, contributor.id, TelegramAdapter::Outbound)
+          }
         end
 
         context 'who has unsubsribed, and would like to re-subscribe' do
           let(:message) { 'Bestellen' }
           before { contributor.update!(unsubscribed_at: 1.day.ago) }
 
-          it { is_expected.to have_enqueued_job(ResubscribeContributorJob).with(contributor.id, TelegramAdapter::Outbound) }
+          it {
+            is_expected.to have_enqueued_job(ResubscribeContributorJob).with(organization.id, contributor.id, TelegramAdapter::Outbound)
+          }
         end
       end
     end

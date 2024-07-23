@@ -2,15 +2,16 @@
 
 module SearchResult
   class SearchResult < ApplicationComponent
-    def initialize(result: nil)
+    def initialize(organization:, result: nil)
       super
 
+      @organization = organization
       @result = result
     end
 
     private
 
-    attr_reader :result
+    attr_reader :organization, :result
 
     def type
       result.model_name.name

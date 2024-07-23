@@ -4,6 +4,15 @@ FactoryBot.define do
   factory :organization do
     name { '100eyes' }
     upgrade_discount { 10 }
+    project_name { '100eyes' }
+    onboarding_title { 'Hallo und herzlich willkommen!' }
+    onboarding_page { File.read(File.join('config', 'locales', 'onboarding', 'page.md')) }
+    onboarding_success_heading { File.read(File.join('config', 'locales', 'onboarding', 'success_heading.txt')) }
+    onboarding_success_text { File.read(File.join('config', 'locales', 'onboarding', 'success_text.txt')) }
+    onboarding_data_protection_link { 'https://tactile.news/100eyes-datenschutz/' }
+    signal_server_phone_number { Faker::PhoneNumber.cell_phone }
+    whats_app_server_phone_number { Faker::PhoneNumber.cell_phone }
+    telegram_bot_username { Faker::Internet.username }
 
     transient do
       users_count { 0 }

@@ -6,8 +6,9 @@ RSpec.describe ContributorRow::ContributorRow, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
   let(:styles) { [] }
+  let(:organization) { create(:organization) }
   let(:contributor) { create(:contributor, tag_list: 'Tag 1, Tag 2') }
-  let(:params) { { contributor: contributor, styles: styles } }
+  let(:params) { { organization: organization, contributor: contributor, styles: styles } }
 
   it { should have_css('.ContributorRow') }
   it { should have_text(contributor.name) }
