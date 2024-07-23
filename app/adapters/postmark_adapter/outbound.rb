@@ -51,7 +51,7 @@ module PostmarkAdapter
       end
 
       def contributor_marked_as_inactive!(admin, contributor)
-        return unless admin&.email && admin&.admin? && contributor&.id
+        return unless admin&.email && admin&.admin? && contributor&.id && admin.email != contributor.email
 
         with(admin: admin, contributor: contributor).contributor_marked_as_inactive_email.deliver_later
       end
