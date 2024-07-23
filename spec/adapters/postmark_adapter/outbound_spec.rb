@@ -310,7 +310,7 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
         end
       end
 
-      context 'user, not admin' do
+      context 'user without an admin role' do
         let(:admin) { build(:user) }
         let(:contributor) { create(:contributor) }
 
@@ -319,18 +319,18 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
         end
       end
 
-      context 'admin email equals contributo marked inactive email' do
-        let(:admin) { build(:user, id: 231_123, admin: true, email: 'my-email@example.org') }
-        let(:contributor) { build(:contributor, id: 231_123, email: 'my-email@example.org') }
+      context 'admin email equals contributor email' do
+        let(:admin) { create(:user, admin: true, email: 'my-email@example.org') }
+        let(:contributor) { create(:contributor, email: 'my-email@example.org') }
 
         it 'does not enqueue a Mailer' do
           expect { subject }.not_to have_enqueued_job
         end
       end
 
-      context 'with an admin and contributor' do
-        let(:admin) { create(:user, admin: true) }
-        let(:contributor) { create(:contributor) }
+      context 'with an admin and contributor without the same email address' do
+        let(:admin) { create(:user, admin: true, email: 'admin@example.org') }
+        let(:contributor) { create(:contributor, email: 'contributor@example.org') }
 
         it 'enqueues a Mailer' do
           expect { subject }.to have_enqueued_job.on_queue('default').with(
