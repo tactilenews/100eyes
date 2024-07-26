@@ -103,7 +103,7 @@ Rails.application.routes.draw do
       resources :messages, only: %i[index show destroy]
       resources :delayed_jobs, only: %i[index show destroy]
       resources :business_plans, only: %i[index show edit update]
-      resources :organizations, only: %i[index show edit update]
+      resources :organizations, only: %i[index show edit update create]
       resources :stats, only: [:index]
     end
   end
