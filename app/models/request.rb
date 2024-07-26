@@ -68,28 +68,10 @@ class Request < ApplicationRecord
       .transform_values { |messages| messages.sort_by(&:created_at) }
   end
 
-  # rubocop:disable Metrics/AbcSize
   def self.broadcast!(request)
-    if request.planned?
-      BroadcastRequestJob.delay(run_at: request.schedule_send_for).perform_later(request.id)
-      RequestScheduled.with(request_id: request.id,
-                            organization_id: request.organization.id).deliver_later(request.organization.users + User.admin.all)
-    else
-      request.organization.contributors.active.with_tags(request.tag_list).each do |contributor|
-        message = Message.new(
-          sender: request.user,
-          recipient: contributor,
-          text: request.personalized_text(contributor),
-          request: request,
-          broadcasted: true
-        )
-        message.files = attach_files(request.files) if request.files.attached?
-        message.save!
-      end
-      request.update(broadcasted_at: Time.current)
-    end
+    BroadcastRequestJob.delay(run_at: request.schedule_send_for).perform_later(request.id)
+    RequestScheduled.with(request_id: request.id).deliver_later(request.organization.users + User.admin.all) if request.planned?
   end
-  # rubocop:enable Metrics/AbcSize
 
   def self.attach_files(files)
     files.map do |file|
