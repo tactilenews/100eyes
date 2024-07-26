@@ -4,7 +4,8 @@ class Request < ApplicationRecord
   include PlaceholderHelper
   include PgSearch::Model
 
-  multisearchable against: %i[title text]
+  multisearchable against: %i[title text],
+                  additional_attributes: ->(request) { { organization_id: request.organization_id } }
 
   belongs_to :user
   belongs_to :organization

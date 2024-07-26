@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_07_26_062741) do
+ActiveRecord::Schema.define(version: 2024_07_26_065204) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -254,6 +254,8 @@ ActiveRecord::Schema.define(version: 2024_07_26_062741) do
     t.bigint "searchable_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "organization_id"
+    t.index ["organization_id"], name: "index_pg_search_documents_on_organization_id"
     t.index ["searchable_type", "searchable_id"], name: "index_pg_search_documents_on_searchable_type_and_searchable_id"
   end
 
@@ -348,6 +350,7 @@ ActiveRecord::Schema.define(version: 2024_07_26_062741) do
   add_foreign_key "messages", "requests"
   add_foreign_key "organizations", "business_plans"
   add_foreign_key "organizations", "users", column: "contact_person_id"
+  add_foreign_key "pg_search_documents", "organizations"
   add_foreign_key "photos", "messages"
   add_foreign_key "requests", "organizations"
   add_foreign_key "requests", "users"
