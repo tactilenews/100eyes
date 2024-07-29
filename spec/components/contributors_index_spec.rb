@@ -15,6 +15,7 @@ RSpec.describe ContributorsIndex::ContributorsIndex, type: :component do
       inactive_count: 1,
       unsubscribed_count: 0,
       filter_count: 0,
+      available_tags: [],
       tag_list: []
     }
   end

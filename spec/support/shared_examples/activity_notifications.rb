@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
-RSpec.shared_examples 'an ActivityNotification' do |event_type|
-  let!(:users) { create_list(:user, 5) }
+RSpec.shared_examples 'an ActivityNotification' do |event_type, users|
+  let(:create_users) { create_list(:user, 5, organization: organization) }
+  before do
+    create_users unless users
+  end
 
   context 'creates activity notifications' do
     it " of type #{event_type}" do

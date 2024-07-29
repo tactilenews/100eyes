@@ -124,13 +124,34 @@ RSpec.describe Message, type: :model do
     end
 
     describe 'ActivityNotification' do
-      subject { create(:message, request: request) }
+      subject { create(:message, :outbound, request: request) }
+
+      let!(:admin) { create(:user, admin: true) }
+
+      before do
+        organization.update!(users: create_list(:user, 5, organization: organization))
+      end
 
       it 'Message Received is not created for outbound messages' do
         expect { message }.not_to(change { ActivityNotification.where(type: 'MessageReceived').count })
       end
 
-      it_behaves_like 'an ActivityNotification', 'MessageReceived'
+      context 'But it is for inbound messages' do
+        subject { create(:message, :inbound, request: request) }
+
+        it 'creates a notification of type MessageReceived' do
+          expect { subject }.to change(ActivityNotification.where(type: 'MessageReceived'), :count).by(organization.users.count + User.admin.count)
+        end
+
+        it 'for each user and admin' do
+          subject
+          recipient_ids = ActivityNotification.where(type: 'MessageReceived').pluck(:recipient_id).uniq.sort
+          user_ids = organization.users.pluck(:id)
+          admin_id = admin.id
+          ids = (user_ids << admin_id).sort
+          expect(recipient_ids).to eq(ids)
+        end
+      end
     end
   end
 

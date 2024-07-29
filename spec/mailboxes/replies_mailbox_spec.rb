@@ -34,7 +34,7 @@ RSpec.describe RepliesMailbox, type: :mailbox do
     it { should_not(change { Message.count }) }
 
     describe 'given an active request' do
-      let(:request) { create(:request, title: 'Wie geht es euren Haustieren in Corona-Zeiten?') }
+      let(:request) { create(:request, title: 'Wie geht es euren Haustieren in Corona-Zeiten?', organization: organization) }
       before(:each) { create(:message, request: request, sender: nil, recipient: contributor, broadcasted: true) }
 
       it { should(change { Message.count }.from(1).to(2)) }
@@ -42,13 +42,29 @@ RSpec.describe RepliesMailbox, type: :mailbox do
       describe 'after email processing' do
         let(:replies) { Message.where(sender: contributor).pluck(:text) }
 
-        before(:each) { subject.call }
+        before do
+          organization.update!(users: create_list(:user, 5))
+          subject.call
+        end
 
         it { should(change { Message.count }.from(2).to(3)) }
 
         describe 'MessageReceived ActivityNotification' do
-          context 'creates an ActivityNotification' do
-            it_behaves_like 'an ActivityNotification', 'MessageReceived'
+          let!(:admin) { create(:user, admin: true) }
+
+          it 'creates a notification of type MessageReceived' do
+            expect do
+              subject.call
+            end.to change(ActivityNotification.where(type: 'MessageReceived'), :count).by(organization.users.count + User.admin.count)
+          end
+
+          it 'for each user and admin' do
+            subject.call
+            recipient_ids = ActivityNotification.where(type: 'MessageReceived').pluck(:recipient_id).uniq.sort
+            user_ids = organization.users.pluck(:id)
+            admin_id = admin.id
+            ids = (user_ids << admin_id).sort
+            expect(recipient_ids).to eq(ids)
           end
         end
 
