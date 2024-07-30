@@ -14,7 +14,7 @@ module ContributorQuickEditForm
     attr_reader :organization, :contributor
 
     def available_tags
-      organization.all_tags_with_count.to_json
+      organization.contributors_tags_with_count.to_json
     end
   end
 end

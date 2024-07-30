@@ -54,8 +54,8 @@ RSpec.describe Organization do
     end
   end
 
-  describe '#all_tags_with_count' do
-    subject { organization.all_tags_with_count.pluck(:name, :count) }
+  describe '#contributors_tags_with_count' do
+    subject { organization.contributors_tags_with_count.pluck(:name, :count) }
 
     context 'given a contributor with a tag' do
       let!(:contributor) { create(:contributor, tag_list: %w[Homeowner], organization: organization) }

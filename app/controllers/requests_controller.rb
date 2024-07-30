@@ -35,7 +35,7 @@ class RequestsController < ApplicationController
 
   def new
     @request = Request.new
-    @available_tags = @organization.all_tags_with_count.to_json
+    @available_tags = @organization.contributors_tags_with_count.to_json
   end
 
   def edit; end

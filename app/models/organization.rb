@@ -95,10 +95,11 @@ class Organization < ApplicationRecord
   end
 
   # TODO: Fix this so it filters by taggings.taggable_type
-  def all_tags_with_count
+  def contributors_tags_with_count
     ActsAsTaggableOn::Tag
       .for_tenant(id)
       .joins(:taggings)
+      .where(taggings: { taggable_type: Contributor.name })
       .select('tags.id, tags.name, count(taggings.id) as taggings_count')
       .group('tags.id')
       .all
@@ -108,7 +109,7 @@ class Organization < ApplicationRecord
           name: tag.name,
           value: tag.name,
           count: tag.taggings_count,
-          color: Contributor.tag_color_from_id(tag.id)
+          color: ApplicationController.helpers.color_from_id(tag_id)
         }
       end
   end
