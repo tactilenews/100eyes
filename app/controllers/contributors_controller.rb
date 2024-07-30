@@ -21,7 +21,6 @@ class ContributorsController < ApplicationController
   end
 
   def index
-    # binding.pry
     @state = state_params
     @tag_list = tag_list_params
 
