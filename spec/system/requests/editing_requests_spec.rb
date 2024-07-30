@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Editing requests', js: true do
   let(:organization) { create(:organization) }
-  let(:user) { create(:user) }
+  let(:user) { create(:user, organization: organization) }
   let(:sent_request) { create(:request, organization: organization) }
   let(:request_scheduled_in_future) { create(:request, schedule_send_for: 2.minutes.from_now, organization: organization) }
 
@@ -37,8 +37,8 @@ RSpec.describe 'Editing requests', js: true do
 
     formatted = I18n.l(scheduled_datetime, format: :long)
     success_message = "Ihre Frage wurde erfolgreich geplant, um am #{formatted} an ein Community-Mitglied gesendet zu werden."
-    expect(page).to have_content(success_message)
-    expect(page).to have_content('Did you get my scheduled request?')
     expect(page).to have_current_path(requests_path(filter: :planned))
+    expect(page).to have_content('Did you get my scheduled request?')
+    expect(page).to have_content(success_message)
   end
 end

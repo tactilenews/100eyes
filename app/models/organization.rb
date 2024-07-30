@@ -109,7 +109,7 @@ class Organization < ApplicationRecord
           name: tag.name,
           value: tag.name,
           count: tag.taggings_count,
-          color: ApplicationController.helpers.color_from_id(tag_id)
+          color: ApplicationController.helpers.color_from_id(tag.id)
         }
       end
   end

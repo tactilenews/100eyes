@@ -68,10 +68,6 @@ class Contributor < ApplicationRecord
     find_by('lower(email) in (?)', Array.wrap(email).map(&:downcase))
   end
 
-  def self.tag_color_from_id(tag_id)
-    ApplicationController.helpers.color_from_id(tag_id)
-  end
-
   def reply(message_decorator)
     request = active_request or return nil
     ActiveRecord::Base.transaction do

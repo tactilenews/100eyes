@@ -5,6 +5,7 @@ class RequestsController < ApplicationController
   before_action :notifications_params, only: :notifications
   before_action :disallow_edit, only: %i[edit update]
   before_action :disallow_destroy, only: :destroy
+  before_action :available_tags, only: %i[new edit]
 
   def index
     @filter = filter_param
@@ -35,7 +36,6 @@ class RequestsController < ApplicationController
 
   def new
     @request = Request.new
-    @available_tags = @organization.contributors_tags_with_count.to_json
   end
 
   def edit; end
@@ -59,7 +59,7 @@ class RequestsController < ApplicationController
 
   def destroy
     if @request.destroy
-      redirect_to requests_url(filter: :planned), notice: t('request.destroy.successful', request_title: @request.title)
+      redirect_to requests_url(filter: :planned), flash: { notice: t('request.destroy.successful', request_title: @request.title) }
     else
       render :edit, status: :unprocessable_entity
     end
@@ -110,6 +110,10 @@ class RequestsController < ApplicationController
 
   def set_request
     @request = Request.find(params[:id])
+  end
+
+  def available_tags
+    @available_tags ||= @organization.contributors_tags_with_count.to_json
   end
 
   def request_params
