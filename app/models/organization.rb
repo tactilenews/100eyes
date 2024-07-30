@@ -94,7 +94,6 @@ class Organization < ApplicationRecord
     Threema.new(api_identity: threemarb_api_identity, api_secret: threemarb_api_secret, private_key: threemarb_private)
   end
 
-  # TODO: Fix this so it filters by taggings.taggable_type
   def contributors_tags_with_count
     ActsAsTaggableOn::Tag
       .for_tenant(id)
