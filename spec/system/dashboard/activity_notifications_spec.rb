@@ -17,10 +17,11 @@ RSpec.describe 'Activity Notifications' do
       create(:user, first_name: 'Coworker', last_name: 'Extraordinaire', email: coworker_email, password: password,
                     otp_enabled: otp_enabled, organization: organization)
     end
-    let(:request) { create(:request) }
-    let(:contributor_without_avatar) { create(:contributor) }
+    let(:request) { create(:request, user: user, organization: organization) }
+    let(:contributor_without_avatar) { create(:contributor, organization: organization) }
     let(:another_contributor) { create(:contributor) }
 
+    before { organization.update(users: [user, coworker]) }
     after { Timecop.return }
 
     it 'displays the activity notifications on dashboard' do
@@ -32,7 +33,7 @@ RSpec.describe 'Activity Notifications' do
       expect(page).to have_text('Du hast im Moment keine neuen Benachrichtigungen.')
 
       # OnboardingCompleted
-      contributor = create(:contributor, :with_an_avatar)
+      contributor = create(:contributor, :with_an_avatar, organization: organization)
 
       Timecop.travel(1.minute.from_now)
       visit dashboard_path(as: user)
@@ -45,7 +46,7 @@ RSpec.describe 'Activity Notifications' do
       expect(page).to have_link('Zum Profil', href: contributor_path(contributor))
 
       # I shouldn't be grouped
-      contributor_two = create(:contributor, first_name: 'Timmy', last_name: 'Timmerson')
+      contributor_two = create(:contributor, first_name: 'Timmy', last_name: 'Timmerson', organization: organization)
 
       visit dashboard_path(as: user)
       expect(page).to have_css('svg.Avatar-initials')

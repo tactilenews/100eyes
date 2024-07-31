@@ -9,7 +9,8 @@ class Contributor < ApplicationRecord
 
   after_create_commit :notify_recipient
 
-  multisearchable against: %i[first_name last_name username note]
+  multisearchable against: %i[first_name last_name username note],
+                  additional_attributes: ->(contributor) { { organization_id: contributor.organization_id } }
 
   has_many :replies, class_name: 'Message', as: :sender, dependent: :destroy
   has_many :received_messages, class_name: 'Message', inverse_of: :recipient, foreign_key: 'recipient_id', dependent: :destroy
@@ -24,6 +25,7 @@ class Contributor < ApplicationRecord
   accepts_nested_attributes_for :json_web_token
 
   acts_as_taggable_on :tags
+  acts_as_taggable_tenant :organization_id
 
   default_scope { order(:first_name, :last_name) }
   scope :active, -> { where(deactivated_at: nil, unsubscribed_at: nil) }
@@ -64,28 +66,6 @@ class Contributor < ApplicationRecord
 
   def self.with_lowercased_email(email)
     find_by('lower(email) in (?)', Array.wrap(email).map(&:downcase))
-  end
-
-  def self.all_tags_with_count
-    ActsAsTaggableOn::Tag
-      .joins(:taggings)
-      .select('tags.id, tags.name, count(taggings.id) as taggings_count')
-      .group('tags.id')
-      .where(taggings: { taggable_type: name })
-      .all
-      .map do |tag|
-        {
-          id: tag.id,
-          name: tag.name,
-          value: tag.name,
-          count: tag.taggings_count,
-          color: Contributor.tag_color_from_id(tag.id)
-        }
-      end
-  end
-
-  def self.tag_color_from_id(tag_id)
-    ApplicationController.helpers.color_from_id(tag_id)
   end
 
   def reply(message_decorator)
@@ -241,7 +221,7 @@ class Contributor < ApplicationRecord
   private
 
   def notify_recipient
-    OnboardingCompleted.with(contributor_id: id).deliver_later(User.all)
+    OnboardingCompleted.with(contributor_id: id, organization_id: organization.id).deliver_later(organization.users + User.admin.all)
   end
 end
 # rubocop:enable Metrics/ClassLength

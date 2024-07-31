@@ -25,9 +25,9 @@ RSpec.describe 'Scheduling requests', js: true do
 
       formatted = I18n.l(scheduled_datetime, format: :long)
       success_message = "Ihre Frage wurde erfolgreich geplant, um am #{formatted} an ein Community-Mitglied gesendet zu werden."
-      expect(page).to have_content(success_message)
-      expect(page).to have_content('Did you get my scheduled request?')
       expect(page).to have_current_path(requests_path(filter: :planned))
+      expect(page).to have_content('Did you get my scheduled request?')
+      expect(page).to have_content(success_message)
     end
   end
 end

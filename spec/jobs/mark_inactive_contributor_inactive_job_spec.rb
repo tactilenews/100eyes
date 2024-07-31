@@ -32,7 +32,10 @@ RSpec.describe MarkInactiveContributorInactiveJob do
         end
 
         context 'that does belong to the organization' do
-          before { contributor.update(organization_id: organization.id) }
+          before do
+            contributor.update(organization_id: organization.id)
+            non_admin_user.update(organization_id: organization.id)
+          end
 
           it { is_expected.to change { contributor.reload.deactivated_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone)) }
           it_behaves_like 'an ActivityNotification', 'ContributorMarkedInactive'

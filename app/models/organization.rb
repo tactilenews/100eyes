@@ -12,6 +12,7 @@ class Organization < ApplicationRecord
   has_many :users, class_name: 'User', dependent: :destroy
   has_many :contributors, dependent: :destroy
   has_many :requests, dependent: :destroy
+  has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
 
   has_one_attached :onboarding_logo
   has_one_attached :onboarding_hero
@@ -91,6 +92,25 @@ class Organization < ApplicationRecord
 
   def threema_instance
     Threema.new(api_identity: threemarb_api_identity, api_secret: threemarb_api_secret, private_key: threemarb_private)
+  end
+
+  def contributors_tags_with_count
+    ActsAsTaggableOn::Tag
+      .for_tenant(id)
+      .joins(:taggings)
+      .where(taggings: { taggable_type: Contributor.name })
+      .select('tags.id, tags.name, count(taggings.id) as taggings_count')
+      .group('tags.id')
+      .all
+      .map do |tag|
+        {
+          id: tag.id,
+          name: tag.name,
+          value: tag.name,
+          count: tag.taggings_count,
+          color: ApplicationController.helpers.color_from_id(tag.id)
+        }
+      end
   end
 
   private

@@ -53,4 +53,18 @@ RSpec.describe Organization do
       end
     end
   end
+
+  describe '#contributors_tags_with_count' do
+    subject { organization.contributors_tags_with_count.pluck(:name, :count) }
+
+    context 'given a contributor with a tag' do
+      let!(:contributor) { create(:contributor, tag_list: %w[Homeowner], organization: organization) }
+      it { should eq([['Homeowner', 1]]) }
+
+      context 'and a request with the same tag' do
+        let!(:request) { create(:request, tag_list: %w[Homeowner], organization: organization) }
+        it { should eq([['Homeowner', 1]]) }
+      end
+    end
+  end
 end

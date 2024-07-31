@@ -4,7 +4,8 @@ class Request < ApplicationRecord
   include PlaceholderHelper
   include PgSearch::Model
 
-  multisearchable against: %i[title text]
+  multisearchable against: %i[title text],
+                  additional_attributes: ->(request) { { organization_id: request.organization_id } }
 
   belongs_to :user
   belongs_to :organization
@@ -24,6 +25,7 @@ class Request < ApplicationRecord
   validates :text, length: { maximum: 1500 }, presence: true, unless: -> { files.attached? }
 
   acts_as_taggable_on :tags
+  acts_as_taggable_tenant :organization_id
 
   after_create :broadcast_request
 
@@ -69,7 +71,7 @@ class Request < ApplicationRecord
   def self.broadcast!(request)
     if request.planned?
       BroadcastRequestJob.delay(run_at: request.schedule_send_for).perform_later(request.id)
-      RequestScheduled.with(request_id: request.id).deliver_later(User.all)
+      RequestScheduled.with(request_id: request.id, organization_id: request.organization.id).deliver_later(User.all)
     else
       Contributor.active.with_tags(request.tag_list).each do |contributor|
         message = Message.new(

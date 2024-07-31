@@ -91,12 +91,13 @@ RSpec.describe Message, type: :model do
 
   describe '#after_commit(on: :commit)' do
     let!(:user) { create(:user) }
-    let(:request) { create(:request, user: user, organization: organization) }
-    let(:message) { create(:message, sender: user, recipient: recipient, broadcasted: true, request: request) }
+    let!(:request) { create(:request, user: user, organization: organization) }
+    let(:message) { create(:message, sender: user, recipient: recipient, broadcasted: broadcasted, request: request) }
     let(:organization) do
       create(:organization, name: '100eyes', telegram_bot_api_key: 'TELEGRAM_BOT_API_KEY', telegram_bot_username: 'USERNAME')
     end
     let(:recipient) { create(:contributor, organization: organization) }
+    let(:broadcasted) { true }
 
     describe 'given a recipient with telegram' do
       before do
@@ -123,14 +124,55 @@ RSpec.describe Message, type: :model do
       end
     end
 
-    describe 'ActivityNotification' do
-      subject { create(:message, request: request) }
+    describe '#notify_recipient' do
+      subject { message }
 
-      it 'Message Received is not created for outbound messages' do
-        expect { message }.not_to(change { ActivityNotification.where(type: 'MessageReceived').count })
+      let!(:admin) { create(:user, admin: true) }
+
+      before do
+        Contributor.skip_callback(:commit, :after, :notify_recipient, raise: false)
+        organization.update!(users: create_list(:user, 5, organization: organization))
       end
 
-      it_behaves_like 'an ActivityNotification', 'MessageReceived'
+      after do
+        Contributor.set_callback(:commit, :after, :notify_recipient, raise: false)
+      end
+
+      context 'given an outbound message' do
+        it 'is broadcasted, it does not create an ActivityNotification' do
+          expect { subject }.not_to change(ActivityNotification, :count)
+        end
+
+        context 'is not broadcast' do
+          let(:broadcasted) { false }
+
+          it 'does not create a MessageReceived notification' do
+            expect { subject }.not_to(change { ActivityNotification.where(type: MessageReceived.name).count })
+          end
+
+          it 'it creates a ChatMessageSent notification for each user and admin' do
+            subject
+            recipient_ids = ActivityNotification.where(type: ChatMessageSent.name).pluck(:recipient_id).uniq.sort
+            user_ids = organization.users.pluck(:id)
+            admin_id = admin.id
+            ids = (user_ids << admin_id).sort
+            expect(recipient_ids).to eq(ids)
+          end
+        end
+      end
+
+      context 'given an inbound message' do
+        subject { create(:message, :inbound, request: request) }
+
+        it 'it creates a MessageReceived for each user and admin' do
+          subject
+          recipient_ids = ActivityNotification.where(type: MessageReceived.name).pluck(:recipient_id).uniq.sort
+          user_ids = organization.users.pluck(:id)
+          admin_id = admin.id
+          ids = (user_ids << admin_id).sort
+          expect(recipient_ids).to eq(ids)
+        end
+      end
     end
   end
 

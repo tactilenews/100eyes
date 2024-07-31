@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe ResubscribeContributorJob do
   describe '#perform_later(contributor_id, adapter)' do
-    let(:user) { create(:user) }
+    let(:user) { create(:user, organization: organization) }
     let(:organization) { create(:organization) }
 
     subject { -> { described_class.new.perform(organization.id, contributor.id, adapter) } }
@@ -27,7 +27,7 @@ RSpec.describe ResubscribeContributorJob do
                    signal_onboarding_completed_at: 1.week.ago,
                    unsubscribed_at: 1.day.ago,
                    deactivated_at: Time.current,
-                   deactivated_by_user: create(:user),
+                   deactivated_by_user: user,
                    organization: organization)
           end
         end
@@ -62,7 +62,7 @@ RSpec.describe ResubscribeContributorJob do
                    telegram_id: 123_456_789,
                    unsubscribed_at: 1.week.ago,
                    deactivated_at: Time.current,
-                   deactivated_by_user: create(:user),
+                   deactivated_by_user: user,
                    organization: organization)
           end
         end
@@ -107,7 +107,7 @@ RSpec.describe ResubscribeContributorJob do
                    threema_id: threema_id,
                    unsubscribed_at: 1.month.ago,
                    deactivated_at: Time.current,
-                   deactivated_by_user: create(:user),
+                   deactivated_by_user: user,
                    organization: organization)
           end
         end
@@ -147,7 +147,7 @@ RSpec.describe ResubscribeContributorJob do
                      whats_app_phone_number: '+491234567',
                      unsubscribed_at: 5.days.ago,
                      deactivated_at: Time.current,
-                     deactivated_by_user: create(:user),
+                     deactivated_by_user: user,
                      organization: organization)
             end
           end
@@ -184,7 +184,7 @@ RSpec.describe ResubscribeContributorJob do
                      whats_app_phone_number: '+491234567',
                      unsubscribed_at: 5.days.ago,
                      deactivated_at: Time.current,
-                     deactivated_by_user: create(:user),
+                     deactivated_by_user: user,
                      organization: organization)
             end
           end
