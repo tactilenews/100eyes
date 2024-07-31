@@ -35,7 +35,7 @@ class RequestsController < ApplicationController
   end
 
   def new
-    @request = Request.new
+    @request = Request.new(organization: @organization)
   end
 
   def edit; end

@@ -6,7 +6,7 @@ class Message < ApplicationRecord
   default_scope { order(created_at: :desc) }
 
   multisearchable against: :text, if: :reply?,
-                  additional_attributes: ->(message) { { organization_id: message.request.organization_id } }
+                  additional_attributes: ->(message) { { organization_id: message.organization.id } }
 
   belongs_to :sender, polymorphic: true, optional: true
   belongs_to :recipient, class_name: 'Contributor', optional: true
@@ -66,6 +66,7 @@ class Message < ApplicationRecord
 
   # rubocop:disable Metrics/AbcSize
   def notify_recipient
+    # binding.pry
     if reply?
       MessageReceived.with(
         contributor_id: sender_id,
