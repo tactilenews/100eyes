@@ -138,7 +138,7 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
         it { expect { subject.call }.not_to(change { Message.count }) }
 
         context 'given a recent request' do
-          before { create(:request, organization: organization) }
+          before { create(:request, organization: organization, user: create(:user, organization: organization)) }
           it { expect { subject.call }.to(change { Message.count }.from(0).to(1)) }
           it { expect { subject.call }.not_to respond_with_message }
           it_behaves_like 'an ActivityNotification', 'MessageReceived'

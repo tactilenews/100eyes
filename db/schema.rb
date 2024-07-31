@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_06_27_182314) do
+ActiveRecord::Schema.define(version: 2024_07_26_065204) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -65,8 +65,10 @@ ActiveRecord::Schema.define(version: 2024_06_27_182314) do
     t.bigint "message_id"
     t.bigint "request_id"
     t.bigint "user_id"
+    t.bigint "organization_id"
     t.index ["contributor_id"], name: "index_activity_notifications_on_contributor_id"
     t.index ["message_id"], name: "index_activity_notifications_on_message_id"
+    t.index ["organization_id"], name: "index_activity_notifications_on_organization_id"
     t.index ["read_at"], name: "index_activity_notifications_on_read_at"
     t.index ["recipient_type", "recipient_id"], name: "index_activity_notifications_on_recipient"
     t.index ["request_id"], name: "index_activity_notifications_on_request_id"
@@ -252,6 +254,8 @@ ActiveRecord::Schema.define(version: 2024_06_27_182314) do
     t.bigint "searchable_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "organization_id"
+    t.index ["organization_id"], name: "index_pg_search_documents_on_organization_id"
     t.index ["searchable_type", "searchable_id"], name: "index_pg_search_documents_on_searchable_type_and_searchable_id"
   end
 
@@ -292,6 +296,7 @@ ActiveRecord::Schema.define(version: 2024_06_27_182314) do
     t.integer "tagger_id"
     t.string "context", limit: 128
     t.datetime "created_at"
+    t.string "tenant", limit: 128
     t.index ["context"], name: "index_taggings_on_context"
     t.index ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true
     t.index ["tag_id"], name: "index_taggings_on_tag_id"
@@ -301,6 +306,7 @@ ActiveRecord::Schema.define(version: 2024_06_27_182314) do
     t.index ["taggable_type"], name: "index_taggings_on_taggable_type"
     t.index ["tagger_id", "tagger_type"], name: "index_taggings_on_tagger_id_and_tagger_type"
     t.index ["tagger_id"], name: "index_taggings_on_tagger_id"
+    t.index ["tenant"], name: "index_taggings_on_tenant"
   end
 
   create_table "tags", id: :serial, force: :cascade do |t|
@@ -334,6 +340,7 @@ ActiveRecord::Schema.define(version: 2024_06_27_182314) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "activity_notifications", "contributors"
   add_foreign_key "activity_notifications", "messages"
+  add_foreign_key "activity_notifications", "organizations"
   add_foreign_key "activity_notifications", "requests"
   add_foreign_key "activity_notifications", "users"
   add_foreign_key "contributors", "organizations"
@@ -343,6 +350,7 @@ ActiveRecord::Schema.define(version: 2024_06_27_182314) do
   add_foreign_key "messages", "requests"
   add_foreign_key "organizations", "business_plans"
   add_foreign_key "organizations", "users", column: "contact_person_id"
+  add_foreign_key "pg_search_documents", "organizations"
   add_foreign_key "photos", "messages"
   add_foreign_key "requests", "organizations"
   add_foreign_key "requests", "users"

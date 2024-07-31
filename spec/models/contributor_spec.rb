@@ -4,9 +4,11 @@ require 'rails_helper'
 
 RSpec.describe Contributor, type: :model do
   let(:the_request) do
-    create(:request, title: 'Hitchhiker’s Guide', text: 'What is the answer to life, the universe, and everything?')
+    create(:request, title: 'Hitchhiker’s Guide', text: 'What is the answer to life, the universe, and everything?',
+                     organization: organization, user: create(:user, organization: organization))
   end
-  let(:contributor) { create(:contributor, email: 'contributor@example.org') }
+  let(:organization) { create(:organization) }
+  let(:contributor) { create(:contributor, email: 'contributor@example.org', organization: organization) }
 
   it 'is sorted in alphabetical order' do
     zora = create(:contributor, first_name: 'Zora', last_name: 'Zimmermann')
@@ -325,20 +327,6 @@ RSpec.describe Contributor, type: :model do
     describe 'given a contributor without tags' do
       let(:contributor) { create(:contributor) }
       it { should be(false) }
-    end
-  end
-
-  describe '.all_tags_with_count' do
-    subject { Contributor.all_tags_with_count.pluck(:name, :count) }
-
-    context 'given a contributor with a tag' do
-      let!(:contributor) { create(:contributor, tag_list: %w[Homeowner]) }
-      it { should eq([['Homeowner', 1]]) }
-
-      context 'and a request with the same tag' do
-        let!(:request) { create(:request, tag_list: %w[Homeowner]) }
-        it { should eq([['Homeowner', 1]]) }
-      end
     end
   end
 
@@ -952,8 +940,22 @@ RSpec.describe Contributor, type: :model do
   end
 
   describe '#after_create_commit' do
-    subject { create(:contributor) }
+    subject { create(:contributor, organization: organization) }
 
-    it_behaves_like 'an ActivityNotification', 'OnboardingCompleted'
+    before do
+      users = create_list(:user, 5, organization: organization)
+      organization.update(users: users)
+    end
+
+    it 'behaves like an ActivityNotification' do
+      expect { subject }.to change(ActivityNotification.where(type: 'OnboardingCompleted'), :count).by(User.count)
+    end
+
+    it 'for each user' do
+      subject
+      recipient_ids = ActivityNotification.where(type: 'OnboardingCompleted').pluck(:recipient_id).uniq.sort
+      user_ids = User.pluck(:id).sort
+      expect(recipient_ids).to eq(user_ids)
+    end
   end
 end

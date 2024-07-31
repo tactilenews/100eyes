@@ -7,6 +7,6 @@
   <% end %>
 
   <%= c 'section' do %>
-    <%= c 'request_form', organization: @organization, request: @request %>
+    <%= c 'request_form', request: @request, available_tags: @available_tags %>
   <% end %>
 <% end %>

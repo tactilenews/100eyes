@@ -2,20 +2,16 @@
 
 module RequestForm
   class RequestForm < ApplicationComponent
-    def initialize(organization:, request:)
+    def initialize(request:, available_tags:)
       super
 
-      @organization = organization
       @request = request
+      @available_tags = available_tags
     end
 
     private
 
-    attr_reader :organization, :request
-
-    def available_tags
-      Contributor.all_tags_with_count.to_json
-    end
+    attr_reader :request, :available_tags
 
     def schedule_send_for_or_default
       datetime = request.planned? ? request.schedule_send_for : Time.current

@@ -12,8 +12,9 @@ RSpec.describe 'Profile' do
   let(:user_to_be_deactivated) { create(:user, first_name: 'User', last_name: 'ToBeDeactivated') }
   let(:current_plan) { business_plans[1] }
   let(:contact_person) { create(:user, first_name: 'Isaac', last_name: 'Bonga') }
+  let!(:contributors_of_organization) { create_list(:contributor, 5, organization: organization) }
   let(:organization) do
-    create(:organization, business_plan: current_plan, contact_person: contact_person, contributors_count: 5,
+    create(:organization, business_plan: current_plan, contact_person: contact_person,
                           upgrade_discount: 15).tap do |org|
       users = [user, contact_person, user_to_be_deactivated, create(:user)]
       org.users << users

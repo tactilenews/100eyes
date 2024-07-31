@@ -7,6 +7,7 @@ class ActivityNotification < ApplicationRecord
   belongs_to :request, optional: true
   belongs_to :message, optional: true
   belongs_to :user, optional: true
+  belongs_to :organization
 
   scope :last_four_weeks, -> { where(created_at: 4.weeks.ago..Time.current) }
 end

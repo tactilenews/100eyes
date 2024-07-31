@@ -3,12 +3,13 @@
 class RequestScheduled < Noticed::Base
   deliver_by :database, format: :to_database, association: :notifications_as_recipient
 
-  param :request_id
+  param :request_id, :organization_id
 
   def to_database
     {
       type: self.class.name,
-      request_id: params[:request_id]
+      request_id: params[:request_id],
+      organization_id: params[:organization_id]
     }
   end
 

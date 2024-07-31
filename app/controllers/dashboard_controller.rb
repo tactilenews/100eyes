@@ -13,6 +13,7 @@ class DashboardController < ApplicationController
 
   def activity_notifications
     grouped = current_user.notifications_as_recipient
+                          .where(organization_id: @organization.id)
                           .newest_first
                           .includes({ contributor: { avatar_attachment: :blob } }, :request, :message, :user)
                           .last_four_weeks
