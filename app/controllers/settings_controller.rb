@@ -4,9 +4,9 @@ class SettingsController < ApplicationController
   def index; end
 
   def update
-    if @organization.update!(organizations_params)
+    if organization.update!(organizations_params)
       flash[:success] = I18n.t('settings.success')
-      redirect_to settings_path
+      redirect_to organization_settings_path(@organization)
     else
       render :index, status: :unprocessable_entity
     end
