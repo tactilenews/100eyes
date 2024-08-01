@@ -10,10 +10,12 @@ Rails.application.routes.draw do
   get '/dashboard', to: 'dashboard#index'
   scope ':organization_id', as: 'organization', constraints: { organization_id: /\d+/ } do
     # TODO: Move each unscoped controller here if it has to be scoped by its organization
+    get '/settings', to: 'settings#index'
+    patch '/settings', to: 'settings#update'
   end
   get '/search', to: 'search#index'
   get '/health', to: 'health#index'
-  get '/about', to: 'about#index'
+  get '/about', to: 'about#index' # TODO: consider what to show at all here
 
   namespace :onboarding, module: nil do
     get '/', to: 'onboarding#index'
@@ -39,9 +41,6 @@ Rails.application.routes.draw do
       post '/whats-app/', to: 'whats_app#create'
     end
   end
-
-  get '/settings', to: 'settings#index'
-  patch '/settings', to: 'settings#update'
 
   namespace :threema do
     post '/webhook', to: 'webhook#message'
