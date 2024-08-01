@@ -46,11 +46,11 @@ class ApplicationController < ActionController::Base
   def organization
     return @organization if defined? @organization
 
-    if params[:organization_id].present?
-      @organization = Organization.find(params[:organization_id])
-    else
-      @organization = Organization.singleton
-    end
+    @organization = if params[:organization_id].present?
+                      Organization.find(params[:organization_id])
+                    else
+                      Organization.singleton
+                    end
   end
   helper_method :organization
 end
