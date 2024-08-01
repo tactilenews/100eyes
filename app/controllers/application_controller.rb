@@ -34,23 +34,11 @@ class ApplicationController < ActionController::Base
 
   private
 
-  # TODO: Remove this when every use of @organization is changed to use the helper method
   def set_organization
-    organization
-  end
-
-  # TODO: Remove the singleton usage when every route is scoped by the organization
-  #
-  # Helper method returning the memoized organization context helps to prevent prop drilling
-  #
-  def organization
-    return @organization if defined? @organization
-
     @organization = if params[:organization_id].present?
                       Organization.find(params[:organization_id])
                     else
                       Organization.singleton
                     end
   end
-  helper_method :organization
 end
