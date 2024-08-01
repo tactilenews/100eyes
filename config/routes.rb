@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   end
 
   get '/dashboard', to: 'dashboard#index'
-  scope ':organization_id', as: 'organization', constraints: { account_id: /\d+/ } do
+  scope ':organization_id', as: 'organization', constraints: { organization_id: /\d+/ } do
     # TODO: Move each unscoped controller here if it has to be scoped by its organization
   end
   get '/search', to: 'search#index'
