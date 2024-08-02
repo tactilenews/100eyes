@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Scheduling requests', js: true do
   let(:user) { create(:user) }
+  let(:organization) { create(:organization) }
 
   context 'given contributors' do
     before(:each) do
@@ -13,7 +14,7 @@ RSpec.describe 'Scheduling requests', js: true do
     end
 
     it 'schedules a future job' do
-      visit new_request_path(as: user)
+      visit new_organization_request_path(organization, as: user)
 
       fill_in 'Titel', with: 'Scheduled request'
       fill_in 'Was möchtest du wissen?', with: 'Did you get my scheduled request?'
@@ -25,7 +26,7 @@ RSpec.describe 'Scheduling requests', js: true do
 
       formatted = I18n.l(scheduled_datetime, format: :long)
       success_message = "Ihre Frage wurde erfolgreich geplant, um am #{formatted} an ein Community-Mitglied gesendet zu werden."
-      expect(page).to have_current_path(requests_path(filter: :planned))
+      expect(page).to have_current_path(organization_requests_path(organization, filter: :planned))
       expect(page).to have_content('Did you get my scheduled request?')
       expect(page).to have_content(success_message)
     end

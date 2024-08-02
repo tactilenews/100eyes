@@ -12,6 +12,14 @@ Rails.application.routes.draw do
     # TODO: Move each unscoped controller here if it has to be scoped by its organization
     get '/settings', to: 'settings#index'
     patch '/settings', to: 'settings#update'
+
+    resources :requests, only: %i[index show new create edit update destroy], concerns: :paginatable do
+      member do
+        get 'notifications', format: /json/
+        get 'messages-by-contributor'
+        get 'stats'
+      end
+    end
   end
   get '/search', to: 'search#index'
   get '/health', to: 'health#index'
@@ -61,14 +69,6 @@ Rails.application.routes.draw do
 
   Telegram.bots.each do |(_name, bot)|
     telegram_webhook Telegram::WebhookController, bot, as: nil
-  end
-
-  resources :requests, only: %i[index show new create edit update destroy], concerns: :paginatable do
-    member do
-      get 'notifications', format: /json/
-      get 'messages-by-contributor'
-      get 'stats'
-    end
   end
 
   resources :contributors, only: %i[index show edit update], concerns: :paginatable do
