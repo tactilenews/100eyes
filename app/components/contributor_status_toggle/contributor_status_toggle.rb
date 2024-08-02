@@ -1,16 +1,15 @@
 # frozen_string_literal: true
 
 module ContributorStatusToggle
-  class ContributorStatusToggle < ApplicationComponent
-    def initialize(organization:, contributor:, **)
+  class ContributorStatusToggle < OrganizationComponent
+    def initialize(contributor:, **)
       super
 
-      @organization = organization
       @contributor = contributor
     end
 
     private
 
-    attr_reader :organization, :contributor
+    attr_reader :contributor
   end
 end

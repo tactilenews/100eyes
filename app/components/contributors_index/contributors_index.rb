@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
 module ContributorsIndex
-  class ContributorsIndex < ApplicationComponent
-    def initialize(organization:, contributors:, state:, active_count:, inactive_count:, unsubscribed_count:, filter_count:, available_tags:, tag_list: nil)
+  class ContributorsIndex < OrganizationComponent
+    def initialize(contributors:, state:, active_count:, inactive_count:, unsubscribed_count:, filter_count:, available_tags:, tag_list: nil, **)
       super
 
-      @organization = organization
       @contributors = contributors
       @tag_list = tag_list
       @state = state
@@ -18,7 +17,7 @@ module ContributorsIndex
 
     private
 
-    attr_reader :organization, :contributors, :tag_list, :state, :active_count, :inactive_count, :unsubscribed_count, :filter_count, :available_tags
+    attr_reader :contributors, :tag_list, :state, :active_count, :inactive_count, :unsubscribed_count, :filter_count, :available_tags
 
     def active_contributors_count
       tag_list.present? && state == :active ? filter_count : active_count

@@ -2,10 +2,9 @@
 
 module ChatMessagesGroup
   class ChatMessagesGroup < ApplicationComponent
-    def initialize(organization:, contributor:, messages:, request:, **)
+    def initialize(contributor:, messages:, request:, **)
       super
 
-      @organization = organization
       @contributor = contributor
       @messages = messages
       @request = request
@@ -21,6 +20,10 @@ module ChatMessagesGroup
       new_message_path(contributor_id: @contributor, request_id: @request)
     end
 
-    attr_reader :organization, :contributor, :messages
+    def organization
+      @request.organization
+    end
+
+    attr_reader :contributor, :messages, :request
   end
 end

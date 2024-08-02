@@ -1,20 +1,19 @@
 # frozen_string_literal: true
 
 module Avatar
-  class Avatar < ApplicationComponent
+  class Avatar < OrganizationComponent
     delegate :avatar, :avatar?, to: :record, prefix: true
 
-    def initialize(organization:, record: nil, expandable: false, **)
+    def initialize(record: nil, expandable: false, **)
       super
 
-      @organization = organization
       @record = record || User.new
       @expandable = expandable
     end
 
     private
 
-    attr_reader :record, :organization
+    attr_reader :record
 
     def key
       record&.id

@@ -1,18 +1,17 @@
 # frozen_string_literal: true
 
 module ContributorRow
-  class ContributorRow < ApplicationComponent
-    def initialize(organization:, contributor:, **)
+  class ContributorRow < OrganizationComponent
+    def initialize(contributor:, **)
       super
 
-      @organization = organization
       @contributor = contributor
       @styles << :inactive unless contributor.active?
     end
 
     private
 
-    attr_reader :organization, :contributor
+    attr_reader :contributor
 
     def url
       contributor_path(contributor)

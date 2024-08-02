@@ -1,16 +1,15 @@
 # frozen_string_literal: true
 
 module ContributorHeader
-  class ContributorHeader < ApplicationComponent
-    def initialize(organization:, contributor:, **)
+  class ContributorHeader < OrganizationComponent
+    def initialize(contributor:, **)
       super
 
-      @organization = organization
       @contributor = contributor
     end
 
     private
 
-    attr_reader :organization, :contributor
+    attr_reader :contributor
   end
 end

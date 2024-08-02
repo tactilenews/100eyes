@@ -1,15 +1,7 @@
 # frozen_string_literal: true
 
 module About
-  class About < ApplicationComponent
-    def initialize(organization:)
-      super
-
-      @organization = organization
-    end
-
-    attr_reader :organization
-
+  class About < OrganizationComponent
     private
 
     def version
