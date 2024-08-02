@@ -2,8 +2,9 @@
 
 module NavBar
   class NavBar < OrganizationComponent
-    def initialize(organization:, current_user:, **)
+    def initialize(current_user:, **)
       super
+
       @current_user = current_user
     end
 
