@@ -5,9 +5,8 @@ require 'rails_helper'
 RSpec.describe ContributorHeader::ContributorHeader, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
-  let(:organization) { create(:organization) }
   let(:contributor) { create(:contributor, created_at: '2021-01-01') }
-  let(:params) { { organization: organization, contributor: contributor } }
+  let(:params) { { contributor: contributor } }
 
   it { should have_css('header') }
   it { should have_css('h1', text: contributor.name) }
@@ -19,6 +18,6 @@ RSpec.describe ContributorHeader::ContributorHeader, type: :component do
     it { should have_css('p', text: 'deaktiviert am 01.02.2021') }
   end
 
-  it { should have_css("a[href='/contributors/#{contributor.id}/edit']", text: 'Stammdaten bearbeiten') }
+  it { should have_css("a[href='/#{contributor.organization_id}/contributors/#{contributor.id}/edit']", text: 'Stammdaten bearbeiten') }
   it { should have_css('button', text: 'Profilbild ändern') }
 end

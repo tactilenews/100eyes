@@ -55,7 +55,7 @@ class Message < ApplicationRecord
   end
 
   def chat_message_link
-    Rails.application.routes.url_helpers.conversations_contributor_path(id: contributor, anchor: "message-#{id}")
+    Rails.application.routes.url_helpers.conversations_organization_contributor_path(organization, id: contributor, anchor: "message-#{id}")
   end
 
   def sent_from_contributor?

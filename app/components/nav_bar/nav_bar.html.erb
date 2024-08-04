@@ -25,7 +25,7 @@
         <% end %>
       </li>
       <li class="NavBar-item">
-        <%= link_to contributors_path do %>
+        <%= link_to organization_contributors_path(organization) do %>
           <%= t('.community', count: :many) %>
           <%= svg 'community' %>
         <% end %>

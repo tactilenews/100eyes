@@ -6,7 +6,7 @@
           <%= I18n.t 'components.hero.title' %>
         <% end %>
 
-        <%= c 'button', label: I18n.t('request.create'), link: new_organization_request_path(organization_id) %>
+        <%= c 'button', label: I18n.t('request.create'), link: new_organization_request_path(organization.id) %>
       <% end %>
     </div>
   <% end %>

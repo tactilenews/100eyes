@@ -17,7 +17,7 @@
     <ul>
       <% replies.each do |reply| %>
         <li>
-          <%= link_to conversations_contributor_path(id: reply.contributor.id, anchor: "message-#{reply.id}"), class: "Link", data: { turbo: false } do %>
+          <%= link_to conversations_organization_contributor_path(organization_id: reply.contributor.organization_id, id: reply.contributor.id, anchor: "message-#{reply.id}"), class: "Link", data: { turbo: false } do %>
             <strong><%= reply.request.title %></strong>
           <% end %>
           <p class="text-small text-light">
@@ -27,7 +27,7 @@
       <% end %>
     </ul>
     <p>
-      <%= link_to t(".show_all", count: replies.count ), conversations_contributor_path(id: contributor.id), class: "Link" %>
+      <%= link_to t(".show_all", count: replies.count ), conversations_organization_contributor_path(organization_id: contributor.organization_id, id: contributor.id), class: "Link" %>
     </p>
   <% end %>
 <% end %>

@@ -7,7 +7,7 @@ RSpec.describe 'Profile pictures' do
   let(:contributor) { create(:contributor) }
 
   it 'Editor uploads new picture' do
-    visit contributor_path(contributor, as: user)
+    visit organization_contributor_path(contributor.organization_id, contributor, as: user)
 
     expect(page).to have_css('.Avatar svg')
 
@@ -27,7 +27,7 @@ RSpec.describe 'Profile pictures' do
     let!(:unsubscribed_contributor) { create(:contributor, unsubscribed_at: Time.current) }
 
     it 'renders show with error message' do
-      visit contributor_path(contributor, as: user)
+      visit organization_contributor_path(contributor.organization_id, contributor, as: user)
 
       within('#contributors-sidebar') do
         active_contributors.each do |contributor|
