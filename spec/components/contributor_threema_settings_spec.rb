@@ -18,7 +18,7 @@ RSpec.describe ContributorThreemaSettings::ContributorThreemaSettings, type: :co
   it { should have_css('h2', text: 'Threema') }
   it { should have_css('p', text: 'Max Mustermann hat sich unter der folgenden Threema-ID angemeldet.') }
 
-  it { should have_css("form[action='/contributors/#{contributor.id}']") }
+  it { should have_css("form[action='/#{contributor.organization_id}/contributors/#{contributor.id}']") }
   it { should have_css('input[name="contributor[threema_id]"][value="12345678"]') }
   it { should have_css('button', text: 'Speichern') }
 end

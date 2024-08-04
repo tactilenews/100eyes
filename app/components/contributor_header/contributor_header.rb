@@ -2,15 +2,14 @@
 
 module ContributorHeader
   class ContributorHeader < ApplicationComponent
-    def initialize(organization:, contributor:, **)
+    def initialize(contributor:, **)
       super
 
-      @organization = organization
       @contributor = contributor
     end
 
     private
 
-    attr_reader :organization, :contributor
+    attr_reader :contributor
   end
 end

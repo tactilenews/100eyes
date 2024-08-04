@@ -20,6 +20,17 @@ Rails.application.routes.draw do
         get 'stats'
       end
     end
+
+    resources :contributors, only: %i[index show edit update], concerns: :paginatable do
+      member do
+        get 'conversations'
+        post 'message'
+      end
+
+      collection do
+        get 'count'
+      end
+    end
   end
   get '/search', to: 'search#index'
   get '/health', to: 'health#index'
@@ -69,17 +80,6 @@ Rails.application.routes.draw do
 
   Telegram.bots.each do |(_name, bot)|
     telegram_webhook Telegram::WebhookController, bot, as: nil
-  end
-
-  resources :contributors, only: %i[index show edit update], concerns: :paginatable do
-    member do
-      get 'conversations'
-      post 'message'
-    end
-
-    collection do
-      get 'count'
-    end
   end
 
   resources :invites, only: :create
