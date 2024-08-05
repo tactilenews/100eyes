@@ -8,6 +8,14 @@ Rails.application.routes.draw do
   end
 
   get '/dashboard', to: 'dashboard#index'
+  scope ':organization_id', as: 'organization', constraints: { organization_id: /\d+/ } do
+    # TODO: Move each unscoped controller here if it has to be scoped by its organization
+
+    namespace :whats_app do
+      get '/onboarding-successful', to: 'three_sixty_dialog_webhook#create_api_key'
+      post '/three-sixty-dialog-webhook', to: 'three_sixty_dialog_webhook#message'
+    end
+  end
   get '/search', to: 'search#index'
   get '/health', to: 'health#index'
   get '/about', to: 'about#index'
@@ -48,13 +56,6 @@ Rails.application.routes.draw do
     post '/webhook', to: 'webhook#message'
     post '/errors', to: 'webhook#errors'
     post '/status', to: 'webhook#status'
-  end
-
-  scope ':organization_id' do
-    namespace :whats_app do
-      get '/onboarding-successful', to: 'three_sixty_dialog_webhook#create_api_key'
-      post '/three-sixty-dialog-webhook', to: 'three_sixty_dialog_webhook#message'
-    end
   end
 
   Telegram.bots.each do |(_name, bot)|
