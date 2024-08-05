@@ -16,8 +16,8 @@ Rails.application.routes.draw do
       post '/three-sixty-dialog-webhook', to: 'three_sixty_dialog_webhook#message'
     end
     resources :invites, only: :create
+    get '/search', to: 'search#index'
   end
-  get '/search', to: 'search#index'
   get '/health', to: 'health#index'
   get '/about', to: 'about#index'
 
