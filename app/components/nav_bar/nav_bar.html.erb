@@ -58,7 +58,7 @@
         <% end %>
       </li>
       <li class="NavBar-item NavBar-search">
-        <%= form_with url: search_path, local: true, method: :get do %>
+        <%= form_with url: organization_search_path(organization), local: true, method: :get do %>
           <label for="q" aria-label="<%= t('search.placeholder') %>"></label>
           <%= c 'input',
             type: :search,

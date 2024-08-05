@@ -15,8 +15,8 @@ Rails.application.routes.draw do
       get '/onboarding-successful', to: 'three_sixty_dialog_webhook#create_api_key'
       post '/three-sixty-dialog-webhook', to: 'three_sixty_dialog_webhook#message'
     end
+    get '/search', to: 'search#index'
   end
-  get '/search', to: 'search#index'
   get '/health', to: 'health#index'
   get '/about', to: 'about#index'
 
