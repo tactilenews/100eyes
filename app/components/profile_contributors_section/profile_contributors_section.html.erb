@@ -11,7 +11,7 @@
     <%= c 'copy_button',
       class: 'Button--secondary ProfileContributorsSection-copyInviteButton',
       label: I18n.t('profile.contributors_section.copy_invite'),
-      url: invites_url,
+      url: organization_invites_url(organization),
       key: 'url',
       custom_icon: 'plus-sign'
     %>

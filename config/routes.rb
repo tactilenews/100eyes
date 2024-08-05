@@ -15,6 +15,7 @@ Rails.application.routes.draw do
       get '/onboarding-successful', to: 'three_sixty_dialog_webhook#create_api_key'
       post '/three-sixty-dialog-webhook', to: 'three_sixty_dialog_webhook#message'
     end
+    resources :invites, only: :create
   end
   get '/search', to: 'search#index'
   get '/health', to: 'health#index'
@@ -80,8 +81,6 @@ Rails.application.routes.draw do
       get 'count'
     end
   end
-
-  resources :invites, only: :create
 
   resources :messages, only: %i[new create edit update] do
     member do
