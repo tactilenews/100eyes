@@ -31,8 +31,8 @@ Rails.application.routes.draw do
         get 'count'
       end
     end
+    get '/search', to: 'search#index'
   end
-  get '/search', to: 'search#index'
   get '/health', to: 'health#index'
   get '/about', to: 'about#index' # TODO: consider what to show at all here
 
