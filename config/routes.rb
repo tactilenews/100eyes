@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   get '/dashboard', to: 'dashboard#index'
   scope ':organization_id', as: 'organization', constraints: { organization_id: /\d+/ } do
     # TODO: Move each unscoped controller here if it has to be scoped by its organization
+
+    resources :invites, only: :create
   end
   get '/search', to: 'search#index'
   get '/health', to: 'health#index'
@@ -82,8 +84,6 @@ Rails.application.routes.draw do
       get 'count'
     end
   end
-
-  resources :invites, only: :create
 
   resources :messages, only: %i[new create edit update] do
     member do
