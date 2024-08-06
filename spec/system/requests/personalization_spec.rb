@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Request personalization' do
   let(:user) { create(:user) }
+  let(:organization) { create(:organization) }
 
   context 'given two contributors'
   before(:each) do
@@ -15,7 +16,7 @@ RSpec.describe 'Request personalization' do
   end
 
   it 'sending a request with placeholders' do
-    visit new_request_path(as: user)
+    visit new_organization_request_path(organization, as: user)
 
     fill_in 'Titel', with: 'Personalizes request'
     fill_in 'Was möchtest du wissen?', with: 'Hi {{VORNAME}}, how are you?'

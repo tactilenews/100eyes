@@ -30,7 +30,7 @@
     <%= c 'request_metrics', request_for_info: @request, style: :cards %>
 
     <%= c 'stack' do %>
-      <%= c 'message_groups_skeleton', request_id: @request.id %>
+      <%= c 'message_groups_skeleton', organization_id: @request.organization_id, request_id: @request.id %>
     <% end %>
   <% end %>
 <% end %>

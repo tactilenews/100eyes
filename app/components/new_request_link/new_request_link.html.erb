@@ -1,4 +1,4 @@
-<%= c 'button', link: new_request_path, **attrs do %>
+<%= c 'button', link: new_organization_request_path(organization), **attrs do %>
   <%= svg 'plus-sign' %>
   <%= I18n.t('request.create') %>
 <% end %>
