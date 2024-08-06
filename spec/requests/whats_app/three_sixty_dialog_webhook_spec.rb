@@ -39,7 +39,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
   end
   let(:latest_message) { contributor.received_messages.first.text }
 
-  subject { -> { post whats_app_three_sixty_dialog_webhook_path(organization), params: params } }
+  subject { -> { post organization_whats_app_three_sixty_dialog_webhook_path(organization), params: params } }
 
   describe '#messages' do
     before do
