@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Hero::Hero, type: :component do
-  subject { render_inline(described_class.new(organization_id: organization, **params)) }
+  subject { render_inline(described_class.new(organization: organization, **params)) }
 
   let(:organization) { create(:organization) }
   let(:params) { {} }
