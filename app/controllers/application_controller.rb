@@ -34,8 +34,11 @@ class ApplicationController < ActionController::Base
 
   private
 
-  # TODO: Refactor this in Phase II to handle multi-tenancy
   def set_organization
-    @organization = Organization.singleton
+    @organization = if params[:organization_id].present?
+                      Organization.find(params[:organization_id])
+                    else
+                      Organization.singleton
+                    end
   end
 end
