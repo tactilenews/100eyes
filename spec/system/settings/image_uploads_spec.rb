@@ -13,7 +13,7 @@ RSpec.describe 'Image uploads' do
     expect(page).to have_css('header', text: 'DIE LOKAL-COMMUNITY!')
     expect(page).not_to have_css('img')
 
-    visit settings_path(as: user)
+    visit organization_settings_path(organization, as: user)
 
     # Image inputs in settings form are empty
     expect(page).to have_text('Kein Bild ausgewählt', count: 2)
@@ -34,7 +34,7 @@ RSpec.describe 'Image uploads' do
     visit onboarding_path(jwt: jwt)
     expect(page).not_to have_css('main img')
 
-    visit settings_path(as: user)
+    visit organization_settings_path(organization, as: user)
 
     new_onboarding_hero = File.expand_path('../../fixtures/files/example-image.png', __dir__)
     find_field('Header-Bild', visible: :all).attach_file(new_onboarding_hero)

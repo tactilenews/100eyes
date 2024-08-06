@@ -53,6 +53,7 @@ FactoryBot.define do
     trait :whats_app_contributor do
       after(:build) do |contributor|
         contributor.email = nil
+        # FIXME: Faker seems to create invalid phone numbers sometimes
         contributor.whats_app_phone_number = Faker::PhoneNumber.cell_phone
       end
     end
