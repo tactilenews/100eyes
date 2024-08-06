@@ -18,7 +18,7 @@ module ChatMessagesGroup
     end
 
     def add_message_link
-      new_message_path(contributor_id: @contributor, request_id: @request)
+      new_organization_message_path(organization_id: @request.organization_id, contributor_id: @contributor, request_id: @request)
     end
 
     attr_reader :organization, :contributor, :messages
