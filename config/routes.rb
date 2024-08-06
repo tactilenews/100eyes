@@ -10,13 +10,20 @@ Rails.application.routes.draw do
   get '/dashboard', to: 'dashboard#index'
   scope ':organization_id', as: 'organization', constraints: { organization_id: /\d+/ } do
     # TODO: Move each unscoped controller here if it has to be scoped by its organization
-
     namespace :whats_app do
       get '/onboarding-successful', to: 'three_sixty_dialog_webhook#create_api_key'
       post '/three-sixty-dialog-webhook', to: 'three_sixty_dialog_webhook#message'
     end
     resources :invites, only: :create
     get '/search', to: 'search#index'
+
+    resources :requests, only: %i[index show new create edit update destroy], concerns: :paginatable do
+      member do
+        get 'notifications', format: /json/
+        get 'messages-by-contributor'
+        get 'stats'
+      end
+    end
   end
   get '/health', to: 'health#index'
   get '/about', to: 'about#index'
@@ -59,16 +66,15 @@ Rails.application.routes.draw do
     post '/status', to: 'webhook#status'
   end
 
-  Telegram.bots.each do |(_name, bot)|
-    telegram_webhook Telegram::WebhookController, bot, as: nil
+  scope ':organization_id' do
+    namespace :whats_app do
+      get '/onboarding-successful', to: 'three_sixty_dialog_webhook#create_api_key'
+      post '/three-sixty-dialog-webhook', to: 'three_sixty_dialog_webhook#message'
+    end
   end
 
-  resources :requests, only: %i[index show new create edit update destroy], concerns: :paginatable do
-    member do
-      get 'notifications', format: /json/
-      get 'messages-by-contributor'
-      get 'stats'
-    end
+  Telegram.bots.each do |(_name, bot)|
+    telegram_webhook Telegram::WebhookController, bot, as: nil
   end
 
   resources :contributors, only: %i[index show edit update], concerns: :paginatable do
