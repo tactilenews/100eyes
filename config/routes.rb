@@ -15,8 +15,19 @@ Rails.application.routes.draw do
       get '/onboarding-successful', to: 'three_sixty_dialog_webhook#create_api_key'
       post '/three-sixty-dialog-webhook', to: 'three_sixty_dialog_webhook#message'
     end
+
     resources :invites, only: :create
+
     get '/search', to: 'search#index'
+
+    resources :messages, only: %i[new create edit update] do
+      member do
+        scope module: :messages, as: :message do
+          resource :highlight, only: :update, format: /json/
+          resource :request, only: %i[show update]
+        end
+      end
+    end
   end
   get '/health', to: 'health#index'
   get '/about', to: 'about#index'
@@ -79,15 +90,6 @@ Rails.application.routes.draw do
 
     collection do
       get 'count'
-    end
-  end
-
-  resources :messages, only: %i[new create edit update] do
-    member do
-      scope module: :messages, as: :message do
-        resource :highlight, only: :update, format: /json/
-        resource :request, only: %i[show update]
-      end
     end
   end
 
