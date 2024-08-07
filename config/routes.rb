@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  root to: redirect('/dashboard')
+  root to: redirect('/organizations')
 
   concern :paginatable do
     get '(page/:page)', action: :index, on: :collection, as: ''
   end
 
-  get '/dashboard', to: 'dashboard#index'
+  resources :organizations, only: :index
+
   scope ':organization_id', as: 'organization', constraints: { organization_id: /\d+/ } do
     # TODO: Move each unscoped controller here if it has to be scoped by its organization
 
@@ -17,6 +18,7 @@ Rails.application.routes.draw do
     end
     resources :invites, only: :create
     get '/search', to: 'search#index'
+    get '/dashboard', to: 'dashboard#index'
   end
   get '/health', to: 'health#index'
   get '/about', to: 'about#index'
