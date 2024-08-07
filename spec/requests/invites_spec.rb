@@ -3,10 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe 'Invites', type: :request do
-  let(:user) { create(:user, organization: create(:organization)) }
+  let(:organization) { create(:organization) }
+  let(:user) { create(:user, organization: organization) }
 
   describe 'POST /invites' do
-    subject { -> { post invites_path(as: user) } }
+    subject { -> { post organization_invites_path(organization, as: user) } }
 
     it 'responds with a url with a jwt search query' do
       subject.call
