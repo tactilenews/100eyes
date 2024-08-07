@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Auth' do
-  let(:organization){ create(:organization) }
+  let(:organization) { create(:organization) }
 
   describe 'as signed-out user' do
     it 'user tries to access' do
