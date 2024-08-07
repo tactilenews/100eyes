@@ -242,7 +242,7 @@ de:
     contributor_signal_settings:
       heading: "Ausgewählter Kanal: Signal"
       complete:
-        text: 
+        text:
           phone_number: |
             %{name} hat sich mit der Handynummer %{phone_number} angemeldet.
           uuid: |
@@ -947,3 +947,7 @@ de:
   shared:
     community: Community
     editorial: Redaktion
+
+  organizations:
+    index:
+      heading: "Hallo, %{first_name}!"

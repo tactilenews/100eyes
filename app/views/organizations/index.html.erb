@@ -1,0 +1,16 @@
+<%= c 'main', style: :lightestGrayBackground do %>
+  <%= c 'page_header', styles: [:wide, :inheritBackgroundColor, :xlargePaddingTop, :spaceBetween] do %>
+    <%= c 'heading' do %>
+      <%= t ".heading", first_name: current_user.first_name %>
+    <% end %>
+  <% end %>
+
+
+  <%= c 'section', styles: [:wide, :largeBottomMargin], class: 'OrganizationsList' do %>
+    <ul>
+      <% @organizations.each do |organization| %>
+        <li><%= link_to organization.name, organization_dashboard_path(@organization) %><li>
+      <% end %>
+    <ul>
+  <% end %>
+<% end %>
