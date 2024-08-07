@@ -11,14 +11,20 @@ RSpec.describe '/messages', type: :request do
 
   describe 'GET /new' do
     it 'should be successful' do
-      get new_organization_message_url(organization_id: request.organization_id, as: user, params: { request_id: request.id, contributor_id: contributor.id })
+      get new_organization_message_url(organization_id: request.organization_id, as: user,
+                                       params: { request_id: request.id, contributor_id: contributor.id })
       expect(response).to be_successful
     end
   end
 
   describe 'POST /messages' do
     let(:msg_attrs) { { text: 'Triangles are my favorite shape.' } }
-    subject { -> { post organization_messages_url(organization, as: user), params: { message: msg_attrs, request_id: request.id, contributor_id: contributor.id } } }
+    subject do
+      lambda {
+        post organization_messages_url(organization, as: user),
+             params: { message: msg_attrs, request_id: request.id, contributor_id: contributor.id }
+      }
+    end
 
     it { should change { Message.count }.from(0).to(1) }
 

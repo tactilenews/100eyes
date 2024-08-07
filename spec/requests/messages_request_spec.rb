@@ -9,7 +9,8 @@ RSpec.describe 'Messages', type: :request do
 
     subject do
       lambda do
-        patch(organization_message_highlight_url(message, organization_id: message.organization_id, format: :json, as: user), params: params)
+        patch(organization_message_highlight_url(message, organization_id: message.organization_id, format: :json, as: user),
+              params: params)
       end
     end
 
