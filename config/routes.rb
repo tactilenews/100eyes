@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  root to: redirect('/dashboard')
+  root to: redirect('/organizations')
 
   concern :paginatable do
     get '(page/:page)', action: :index, on: :collection, as: ''
   end
 
-  get '/dashboard', to: 'dashboard#index'
+  resources :organizations, only: :index
+
   scope ':organization_id', as: 'organization', constraints: { organization_id: /\d+/ } do
     # TODO: Move each unscoped controller here if it has to be scoped by its organization
 
@@ -15,6 +16,7 @@ Rails.application.routes.draw do
       get '/onboarding-successful', to: 'three_sixty_dialog_webhook#create_api_key'
       post '/three-sixty-dialog-webhook', to: 'three_sixty_dialog_webhook#message'
     end
+    get '/dashboard', to: 'dashboard#index'
   end
   get '/search', to: 'search#index'
   get '/health', to: 'health#index'
