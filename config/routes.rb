@@ -67,13 +67,6 @@ Rails.application.routes.draw do
     post '/status', to: 'webhook#status'
   end
 
-  scope ':organization_id' do
-    namespace :whats_app do
-      get '/onboarding-successful', to: 'three_sixty_dialog_webhook#create_api_key'
-      post '/three-sixty-dialog-webhook', to: 'three_sixty_dialog_webhook#message'
-    end
-  end
-
   Telegram.bots.each do |(_name, bot)|
     telegram_webhook Telegram::WebhookController, bot, as: nil
   end
