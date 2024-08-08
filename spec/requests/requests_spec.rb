@@ -109,8 +109,6 @@ RSpec.describe 'Requests', telegram_bot: :rails do
     subject do
       lambda {
         path = "/#{request.organization_id}/requests/#{request.id}?as=#{user.id}"
-        puts path
-        puts request.inspect
         delete path
       }
     end
