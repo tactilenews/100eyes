@@ -76,7 +76,7 @@ class OnboardingController < ApplicationController
   end
 
   def redirect_to_success
-    redirect_to onboarding_success_path(jwt: nil)
+    redirect_to organization_onboarding_success_path(@organization, jwt: nil)
   end
 
   def render_unauthorized
@@ -93,7 +93,7 @@ class OnboardingController < ApplicationController
     return unless resume_telegram_onboarding?
 
     token = jwt.contributor.telegram_onboarding_token
-    redirect_to onboarding_telegram_link_path(telegram_onboarding_token: token)
+    redirect_to organization_onboarding_telegram_link_path(@organization, telegram_onboarding_token: token)
   end
 
   def resume_telegram_onboarding?
@@ -105,7 +105,7 @@ class OnboardingController < ApplicationController
     return unless resume_signal_onboarding?
 
     token = jwt.contributor.signal_onboarding_token
-    redirect_to onboarding_signal_link_path(signal_onboarding_token: token)
+    redirect_to organization_onboarding_signal_link_path(@organization, signal_onboarding_token: token)
   end
 
   def resume_signal_onboarding?

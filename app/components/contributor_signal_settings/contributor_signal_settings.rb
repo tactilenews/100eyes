@@ -2,15 +2,16 @@
 
 module ContributorSignalSettings
   class ContributorSignalSettings < ApplicationComponent
-    def initialize(contributor:, **)
+    def initialize(organization:, contributor:, **)
       super
 
+      @organization = organization
       @contributor = contributor
     end
 
     private
 
-    attr_reader :contributor
+    attr_reader :contributor, :organization
 
     def completed_onboarding_text
       if contributor.signal_phone_number.present?

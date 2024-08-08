@@ -4,7 +4,7 @@
   <% end %>
 
   <% if contributor.telegram? %>
-    <%= c 'contributor_telegram_settings', contributor: contributor %>
+    <%= c 'contributor_telegram_settings', organization: organization, contributor: contributor %>
   <% end %>
 
   <% if contributor.threema? %>
@@ -12,7 +12,7 @@
   <% end %>
 
   <% if contributor.signal? %>
-    <%= c 'contributor_signal_settings', contributor: contributor %>
+    <%= c 'contributor_signal_settings', organization: organization, contributor: contributor %>
   <% end %>
 
   <% if contributor.whats_app? %>
