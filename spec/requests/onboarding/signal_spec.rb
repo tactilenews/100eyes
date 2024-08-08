@@ -102,8 +102,9 @@ RSpec.describe 'Onboarding::Signal', type: :request do
 
       it 'redirects to success page' do
         subject.call
-        expect(response).to redirect_to organization_onboarding_signal_link_path(organization, jwt: nil,
-                                                                                               signal_onboarding_token: signal_onboarding_token)
+        expect(response).to redirect_to organization_onboarding_signal_link_path(organization,
+                                                                                 jwt: nil,
+                                                                                 signal_onboarding_token: signal_onboarding_token)
       end
 
       it 'invalidates the jwt' do
