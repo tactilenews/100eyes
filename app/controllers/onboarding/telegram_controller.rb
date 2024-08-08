@@ -23,7 +23,7 @@ module Onboarding
 
     def redirect_to_success
       telegram_onboarding_token = @contributor.telegram_onboarding_token
-      redirect_to onboarding_telegram_link_path(telegram_onboarding_token: telegram_onboarding_token)
+      redirect_to organization_onboarding_telegram_link_path(@organization, telegram_onboarding_token: telegram_onboarding_token)
     end
 
     def attr_name

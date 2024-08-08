@@ -8,7 +8,7 @@ RSpec.describe 'Image uploads' do
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
 
   it 'Upload new onboarding logo' do
-    visit onboarding_path(jwt: jwt)
+    visit organization_onboarding_path(organization, jwt: jwt)
 
     expect(page).to have_css('header', text: 'DIE LOKAL-COMMUNITY!')
     expect(page).not_to have_css('img')
@@ -26,12 +26,12 @@ RSpec.describe 'Image uploads' do
     expect(page).to have_text('Kein Bild ausgewählt', count: 1)
     expect(page).to have_text('example-image.png')
 
-    visit onboarding_path(jwt: jwt)
+    visit organization_onboarding_path(organization, jwt: jwt)
     expect(page).to have_css('header img[alt="Die Lokal-Community!"]')
   end
 
   it 'Upload new onboarding hero' do
-    visit onboarding_path(jwt: jwt)
+    visit organization_onboarding_path(organization, jwt: jwt)
     expect(page).not_to have_css('main img')
 
     visit settings_path(as: user)
@@ -44,7 +44,7 @@ RSpec.describe 'Image uploads' do
     expect(page).to have_text('Kein Bild ausgewählt', count: 1)
     expect(page).to have_text('example-image.png')
 
-    visit onboarding_path(jwt: jwt)
+    visit organization_onboarding_path(organization, jwt: jwt)
     expect(page).to have_css('main img')
   end
 end
