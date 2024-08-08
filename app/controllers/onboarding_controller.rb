@@ -26,7 +26,7 @@ class OnboardingController < ApplicationController
 
   def create
     @contributor = Contributor.new(contributor_params.merge(json_web_token_attributes: { invalidated_jwt: jwt_param },
-                                                            organization: organization))
+                                                            organization: @organization))
     @contributor.tag_list = tag_list_from_jwt
 
     if @contributor.save
@@ -129,12 +129,6 @@ class OnboardingController < ApplicationController
 
   def jwt_param
     params.require(:jwt)
-  end
-
-  def organization
-    decoded_token = JsonWebToken.decode(jwt_param)
-    organization_id = decoded_token.first['data']['organization_id'].to_i
-    Organization.find(organization_id)
   end
 
   def onboarding_allowed?
