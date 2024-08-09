@@ -51,6 +51,6 @@ class MessagesController < ApplicationController
     return if @message.manually_created?
 
     flash[:error] = I18n.t('message.only_manually_created')
-    redirect_back fallback_location: dashboard_path
+    redirect_back fallback_location: organization_dashboard_path(@organization)
   end
 end
