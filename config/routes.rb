@@ -15,6 +15,15 @@ Rails.application.routes.draw do
       get '/onboarding-successful', to: 'three_sixty_dialog_webhook#create_api_key'
       post '/three-sixty-dialog-webhook', to: 'three_sixty_dialog_webhook#message'
     end
+
+    resources :messages, only: %i[new create edit update] do
+      member do
+        scope module: :messages, as: :message do
+          resource :highlight, only: :update, format: /json/
+          resource :request, only: %i[show update]
+        end
+      end
+    end
   end
   get '/search', to: 'search#index'
   get '/health', to: 'health#index'
@@ -82,15 +91,6 @@ Rails.application.routes.draw do
   end
 
   resources :invites, only: :create
-
-  resources :messages, only: %i[new create edit update] do
-    member do
-      scope module: :messages, as: :message do
-        resource :highlight, only: :update, format: /json/
-        resource :request, only: %i[show update]
-      end
-    end
-  end
 
   namespace :admin do
     constraints Clearance::Constraints::SignedIn.new(&:admin?) do
