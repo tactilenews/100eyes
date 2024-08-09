@@ -28,7 +28,7 @@
       </p>
 
       <p>
-      <%= link_to onboarding_telegram_fallback_path(telegram_onboarding_token: telegram_onboarding_token), class: 'Link' do %>
+      <%= link_to organization_onboarding_telegram_fallback_path(organization, telegram_onboarding_token: telegram_onboarding_token), class: 'Link' do %>
         <%= I18n.t('components.onboarding_telegram_link.didnt_work') %>
       <% end %>
       </p>

@@ -23,7 +23,7 @@
 
         <%= c 'copy_button',
           style: :secondary,
-          copy: onboarding_telegram_link_url(contributor.telegram_onboarding_token),
+          copy: organization_onboarding_telegram_link_url(organization, contributor.telegram_onboarding_token),
           label: t('.incomplete.action')
         %>
       <% end %>

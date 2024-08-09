@@ -9,10 +9,10 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
   let(:telegram_bot_api_key) { nil }
   let(:onboarding_allowed) { { telegram: true } }
 
-  describe 'GET /onboarding/telegram' do
+  describe 'GET /{organization_id}/onboarding/telegram' do
     let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
     let(:params) { { jwt: jwt } }
-    subject { -> { get onboarding_telegram_path, params: params } }
+    subject { -> { get organization_onboarding_telegram_path(organization), params: params } }
     before do
       allow(SecureRandom).to receive(:alphanumeric).with(8).and_return('TELEGRAM_ONBOARDING_TOKEN')
     end
@@ -61,7 +61,7 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
     end
   end
 
-  describe 'POST /onboarding/telegram' do
+  describe 'POST /{organization_id}/onboarding/telegram' do
     let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding', organization_id: organization.id }) }
     let(:params) { { jwt: jwt } }
     let(:data_processing_consent) { true }
@@ -79,7 +79,7 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
 
     let(:params) { { jwt: jwt, contributor: attrs, context: :contributor_signup } }
 
-    subject { -> { post onboarding_telegram_path, params: params } }
+    subject { -> { post organization_onboarding_telegram_path(organization), params: params } }
 
     describe 'when no telegram bot is configured' do
       it 'returns a 404 not found' do
@@ -123,7 +123,8 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
 
       it 'redirects to telegram link page' do
         subject.call
-        expect(response).to redirect_to onboarding_telegram_link_path(telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN')
+        expect(response).to redirect_to organization_onboarding_telegram_link_path(organization,
+                                                                                   telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN')
       end
 
       it 'invalidates the jwt' do
@@ -205,8 +206,8 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
     end
   end
 
-  describe 'GET /onboarding/telegram/link' do
-    subject { -> { get onboarding_telegram_link_path(telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN') } }
+  describe 'GET /{onboarding_id}/onboarding/telegram/link' do
+    subject { -> { get organization_onboarding_telegram_link_path(organization, telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN') } }
 
     describe 'when no telegram bot is configured' do
       it 'returns a 404 not found' do
@@ -237,14 +238,18 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
     end
   end
 
-  describe 'GET /onboarding/telegram/fallback' do
+  describe 'GET /{organization_id}/onboarding/telegram/fallback' do
     let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
     let(:json_web_token) { create(:json_web_token, invalidated_jwt: jwt) }
     let!(:contributor) do
       create(:contributor, telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN', telegram_id: nil, json_web_token: json_web_token,
                            organization: organization)
     end
-    let(:action) { -> { get onboarding_telegram_fallback_path(telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN') } }
+    let(:action) do
+      lambda {
+        get organization_onboarding_telegram_fallback_path(organization, telegram_onboarding_token: 'TELEGRAM_ONBOARDING_TOKEN')
+      }
+    end
     subject { action.call && response }
 
     describe 'when no telegram bot is configured' do
@@ -271,7 +276,7 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
         end
 
         describe '(sanity check: / redirects to /link)' do
-          let(:action) { -> { get onboarding_telegram_path(jwt: jwt) } }
+          let(:action) { -> { get organization_onboarding_telegram_path(organization, jwt: jwt) } }
           it { is_expected.to have_http_status(302) }
         end
       end

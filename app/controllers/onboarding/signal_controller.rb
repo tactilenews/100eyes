@@ -17,7 +17,7 @@ module Onboarding
 
     def redirect_to_success
       signal_onboarding_token = @contributor.signal_onboarding_token
-      redirect_to onboarding_signal_link_path(signal_onboarding_token: signal_onboarding_token, jwt: nil)
+      redirect_to organization_onboarding_signal_link_path(@organization, signal_onboarding_token: signal_onboarding_token, jwt: nil)
     end
 
     def attr_name
