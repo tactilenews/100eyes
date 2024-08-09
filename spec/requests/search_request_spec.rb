@@ -3,11 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe 'Searches', type: :request do
-  before { create(:organization) }
+  let(:organization) { create(:organization) }
 
   describe 'GET /index' do
     it 'returns http success' do
-      get search_path(as: create(:user))
+      get organization_search_path(organization, as: create(:user))
       expect(response).to have_http_status(:success)
     end
   end
