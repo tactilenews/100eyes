@@ -41,7 +41,7 @@ class ChatMessageSent < Noticed::Base
   # rubocop:enable Rails/OutputSafety
 
   def url
-    request_path(record.request, anchor: "message-#{record.message.id}")
+    organization_request_path(record.request.organization_id, record.request, anchor: "message-#{record.message.id}")
   end
 
   def link_text

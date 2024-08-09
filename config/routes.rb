@@ -15,6 +15,14 @@ Rails.application.routes.draw do
       get '/onboarding-successful', to: 'three_sixty_dialog_webhook#create_api_key'
       post '/three-sixty-dialog-webhook', to: 'three_sixty_dialog_webhook#message'
     end
+
+    resources :requests, only: %i[index show new create edit update destroy], concerns: :paginatable do
+      member do
+        get 'notifications', format: /json/
+        get 'messages-by-contributor'
+        get 'stats'
+      end
+    end
   end
   get '/search', to: 'search#index'
   get '/health', to: 'health#index'
@@ -60,14 +68,6 @@ Rails.application.routes.draw do
 
   Telegram.bots.each do |(_name, bot)|
     telegram_webhook Telegram::WebhookController, bot, as: nil
-  end
-
-  resources :requests, only: %i[index show new create edit update destroy], concerns: :paginatable do
-    member do
-      get 'notifications', format: /json/
-      get 'messages-by-contributor'
-      get 'stats'
-    end
   end
 
   resources :contributors, only: %i[index show edit update], concerns: :paginatable do

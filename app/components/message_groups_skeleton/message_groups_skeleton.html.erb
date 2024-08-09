@@ -1,4 +1,4 @@
-<%= tag.turbo_frame id: "message-groups", src: messages_by_contributor_request_path(request_id) do %>
+<%= tag.turbo_frame id: "message-groups", src: messages_by_contributor_organization_request_path(organization_id, request_id) do %>
   <div <%= attrs %>>
     <h2 class="MessageGroupsSkeleton-mainHeadingBackground"></h2>
     <header class="MessageGroupsSkeleton-header">

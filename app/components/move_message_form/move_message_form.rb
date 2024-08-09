@@ -34,7 +34,7 @@ module MoveMessageForm
     end
 
     def cancel_link
-      request_url(request, anchor: "message-#{message.id}")
+      organization_request_url(request.organization_id, request, anchor: "message-#{message.id}")
     end
   end
 end

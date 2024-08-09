@@ -6,7 +6,7 @@
   data-chat-message-truncated-class="ChatMessage--truncated"
   data-chat-message-expanded-class="ChatMessage--expanded"
   data-chat-message-highlighted-class="ChatMessage--highlighted"
-  data-chat-message-copy-url-value="<%= request_url(message.request, anchor: id) %>"
+  data-chat-message-copy-url-value="<%= organization_request_url(message.organization_id, message.request_id, anchor: id) %>"
   id="<%= id %>"
 >
     <header class="ChatMessage-header">

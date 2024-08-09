@@ -21,13 +21,14 @@ class RequestsController < ApplicationController
     @request = @organization.requests.new(request_params.merge(user: current_user))
     if @request.save
       if @request.planned?
-        redirect_to requests_path(filter: :planned), flash: {
+        redirect_to organization_requests_path(@organization, filter: :planned), flash: {
           success: I18n.t('request.schedule_request_success',
                           count: Contributor.active.with_tags(@request.tag_list).count,
                           scheduled_datetime: I18n.l(@request.schedule_send_for, format: :long))
         }
       else
-        redirect_to @request, flash: { success: I18n.t('request.success', count: @request.stats[:counts][:recipients]) }
+        redirect_to organization_request_path(@organization.id, @request),
+                    flash: { success: I18n.t('request.success', count: @request.stats[:counts][:recipients]) }
       end
     else
       render :new, status: :unprocessable_entity
@@ -44,13 +45,14 @@ class RequestsController < ApplicationController
     @request.files.purge_later if @request.files.attached? && request_params[:files].blank?
     if @request.update(request_params)
       if @request.planned?
-        redirect_to requests_path(filter: :planned), flash: {
+        redirect_to organization_requests_path(@request.organization_id, filter: :planned), flash: {
           success: I18n.t('request.schedule_request_success',
                           count: Contributor.active.with_tags(@request.tag_list).count,
                           scheduled_datetime: I18n.l(@request.schedule_send_for, format: :long))
         }
       else
-        redirect_to @request, flash: { success: I18n.t('request.success', count: @request.stats[:counts][:recipients]) }
+        redirect_to organization_request_path(@request.organization_id, @request),
+                    flash: { success: I18n.t('request.success', count: @request.stats[:counts][:recipients]) }
       end
     else
       render :edit, status: :unprocessable_entity
@@ -59,7 +61,8 @@ class RequestsController < ApplicationController
 
   def destroy
     if @request.destroy
-      redirect_to requests_url(filter: :planned), flash: { notice: t('request.destroy.successful', request_title: @request.title) }
+      redirect_to organization_requests_url(@request.organization, filter: :planned),
+                  flash: { notice: t('request.destroy.successful', request_title: @request.title) }
     else
       render :edit, status: :unprocessable_entity
     end
@@ -138,17 +141,18 @@ class RequestsController < ApplicationController
   def disallow_edit
     return if @request.planned?
 
-    redirect_to requests_path, flash: { error: I18n.t('request.editing_disallowed') }
+    redirect_to organization_requests_path(@request.organization), flash: { error: I18n.t('request.editing_disallowed') }
   end
 
   def disallow_destroy
     return if @request.planned?
 
-    redirect_to requests_path, flash: { error: I18n.t('request.destroy.broadcasted_request_unallowed', request_title: @request.title) }
+    redirect_to organization_requests_path(@request.organization),
+                flash: { error: I18n.t('request.destroy.broadcasted_request_unallowed', request_title: @request.title) }
   end
 
   def filter_param
-    value = params.permit(:filter)[:filter]&.to_sym
+    value = params.permit(:filter, :organization_id)[:filter]&.to_sym
 
     return :sent unless %i[sent planned].include?(value)
 
