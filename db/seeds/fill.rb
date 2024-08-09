@@ -15,6 +15,7 @@ images = 10.times.map { URI(Faker::Avatar.image(size: '50x50', format: 'png', se
 
 FactoryBot.modify do
   factory :contributor do
+    organization { Organization.singleton }
     data_processing_consent { true }
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
@@ -35,6 +36,7 @@ contributors = FactoryBot.create_list(:contributor, contributors_count)
 
 FactoryBot.modify do
   factory :request do
+    organization { Organization.singleton }
     title { Faker::Lorem.question }
     text { Faker::Lorem.paragraph }
     user { users.sample }
