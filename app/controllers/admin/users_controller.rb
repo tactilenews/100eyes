@@ -4,7 +4,6 @@ module Admin
   class UsersController < Admin::ApplicationController
     def create
       user = User.new(resource_params)
-      user.organization = Organization.last unless user.admin?
 
       if user.save
         redirect_to admin_users_path(user), flash: { success: 'User was successfully created.' }
