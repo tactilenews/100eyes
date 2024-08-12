@@ -35,10 +35,10 @@ class ApplicationController < ActionController::Base
   private
 
   def set_organization
-    @organization = if params[:organization_id].present?
-                      Organization.find(params[:organization_id])
-                    else
-                      Organization.singleton
-                    end
+    if params[:organization_id].present?
+      @organization = Organization.find(params[:organization_id])
+    else
+      redirect_to organizations_path
+    end
   end
 end

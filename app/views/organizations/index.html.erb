@@ -6,11 +6,5 @@
   <% end %>
 
 
-  <%= c 'section', styles: [:wide, :largeBottomMargin], class: 'OrganizationsList' do %>
-    <ul>
-      <% @organizations.each do |organization| %>
-        <li><%= link_to organization.name, organization_dashboard_path(@organization) %><li>
-      <% end %>
-    <ul>
-  <% end %>
+  <%= c 'set_organization_form', organizations: @organizations %>
 <% end %>
