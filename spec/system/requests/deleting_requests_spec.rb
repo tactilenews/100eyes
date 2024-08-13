@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Deleting requests' do
   let(:organization) { create(:organization) }
-  let(:user) { create(:user, organization: organization) }
+  let(:user) { create(:user, organizations: [organization]) }
   let!(:broadcasted_request) { create(:request, organization: organization, user: user) }
   let!(:planned_request) { create(:request, schedule_send_for: 1.hour.from_now, organization: organization, user: user) }
   let!(:another_planned_request) { create(:request, schedule_send_for: 5.minutes.from_now, organization: organization, user: user) }

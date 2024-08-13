@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Invites', type: :request do
   let(:organization) { create(:organization) }
-  let(:user) { create(:user, organization: organization) }
+  let(:user) { create(:user, organizations: [organization]) }
 
   describe 'POST /invites' do
     subject { -> { post organization_invites_path(organization, as: user) } }

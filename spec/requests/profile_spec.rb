@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe '/contributors' do
-  let!(:user) { create(:user, organization: organization) }
+  let!(:user) { create(:user, organizations: [organization]) }
   let(:contact_person) { create(:user) }
   let(:organization) { create(:organization, contact_person: contact_person, business_plan_name: 'Editorial pro') }
 
@@ -48,7 +48,7 @@ RSpec.describe '/contributors' do
       end
 
       describe 'exceeds number of users of plan' do
-        let!(:last_user_allocated_by_plan) { create(:user, organization: organization) }
+        let!(:last_user_allocated_by_plan) { create(:user, organizations: [organization]) }
         let!(:admin) { create(:user, admin: true) }
 
         it 'creates a user' do

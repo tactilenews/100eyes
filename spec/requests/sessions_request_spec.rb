@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Sessions', type: :request do
   let(:organization) { create(:organization) }
-  let!(:user) { create(:user, email: 'zora@example.org', password: '12345678', otp_enabled: otp_enabled, organization: organization) }
+  let!(:user) { create(:user, email: 'zora@example.org', password: '12345678', otp_enabled: otp_enabled, organizations: [organization]) }
   let(:otp_enabled) { false }
 
   describe 'GET /sign_in' do

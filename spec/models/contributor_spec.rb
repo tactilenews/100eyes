@@ -8,7 +8,7 @@ RSpec.describe Contributor, type: :model do
                      organization: organization, user: user)
   end
   let(:organization) { create(:organization) }
-  let(:user) { create(:user) }
+  let(:user) { create(:user, organizations: [organization]) }
   let(:contributor) { create(:contributor, email: 'contributor@example.org', organization: organization) }
 
   it 'is sorted in alphabetical order' do
@@ -952,7 +952,7 @@ RSpec.describe Contributor, type: :model do
     subject { create(:contributor, organization: organization) }
 
     before do
-      users = create_list(:user, 5, organization: organization)
+      users = create_list(:user, 5, organizations: [organization])
       organization.update(users: users)
       create(:user, admin: true)
     end

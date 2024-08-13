@@ -11,11 +11,11 @@ RSpec.describe 'Activity Notifications' do
     let(:otp_enabled) { true }
     let(:user) do
       create(:user, first_name: 'Johnny', last_name: 'Appleseed', email: email, password: password, otp_enabled: otp_enabled,
-                    organization: organization)
+                    organizations: [organization])
     end
     let!(:coworker) do
       create(:user, first_name: 'Coworker', last_name: 'Extraordinaire', email: coworker_email, password: password,
-                    otp_enabled: otp_enabled, organization: organization)
+                    otp_enabled: otp_enabled, organizations: [organization])
     end
     let(:request) { create(:request, user: user, organization: organization) }
     let(:contributor_without_avatar) { create(:contributor, organization: organization) }

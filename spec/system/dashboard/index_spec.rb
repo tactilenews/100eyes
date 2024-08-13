@@ -7,9 +7,10 @@ RSpec.describe 'Dashboard' do
   let(:email) { Faker::Internet.email }
   let(:password) { Faker::Internet.password(min_length: 8, max_length: 128) }
   let(:otp_enabled) { true }
+  let(:organization) { create(:organization) }
   let(:user) do
     create(:user, first_name: 'Dennis', last_name: 'Schroeder', email: email, password: password, otp_enabled: otp_enabled,
-                  organization: organization)
+                  organizations: [organization])
   end
   let(:contributor) { create(:contributor) }
 

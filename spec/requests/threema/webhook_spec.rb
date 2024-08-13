@@ -48,7 +48,7 @@ RSpec.describe Threema::WebhookController do
 
     context 'With known contributor' do
       let!(:contributor) { create(:contributor, :skip_validations, threema_id: 'V5EA564T', organization: organization) }
-      let!(:request) { create(:request, organization: organization, user: create(:user)) }
+      let!(:request) { create(:request, organization: organization, user: create(:user, organizations: [organization])) }
 
       before do
         allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::Text).and_return(true)
