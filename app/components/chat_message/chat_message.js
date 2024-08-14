@@ -9,6 +9,7 @@ export default class extends Controller {
     senderName: String,
     id: String,
     copyUrl: String,
+    highlightUrl: String,
   };
 
   connect() {
@@ -82,7 +83,7 @@ export default class extends Controller {
 
   toggleHighlighted() {
     Rails.ajax({
-      url: `/messages/${this.idValue}/highlight`,
+      url: this.highlightUrlValue,
       type: 'PATCH',
       data: `highlighted=${!this.isHighlighted()}`,
     });

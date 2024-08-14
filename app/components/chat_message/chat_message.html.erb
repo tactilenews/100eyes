@@ -7,6 +7,7 @@
   data-chat-message-expanded-class="ChatMessage--expanded"
   data-chat-message-highlighted-class="ChatMessage--highlighted"
   data-chat-message-copy-url-value="<%= request_url(message.request, anchor: id) %>"
+  data-chat-message-highlight-url-value="<%= organization_message_highlight_path(message.organization_id, message) %>"
   id="<%= id %>"
 >
     <header class="ChatMessage-header">
