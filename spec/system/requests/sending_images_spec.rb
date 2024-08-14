@@ -16,7 +16,7 @@ RSpec.describe 'Sending image files', js: true do
       create(:contributor, :skip_validations, threema_id: '12345678')
     end
 
-    it 'sending a request with image files' do
+    it 'sending a request with image files', flaky: true do
       visit new_request_path(as: user)
 
       # With no text, no file

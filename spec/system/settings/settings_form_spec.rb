@@ -7,7 +7,7 @@ RSpec.describe 'Settings' do
   let(:user) { create(:user, organization: organization) }
 
   it 'Exposes certain fields only to admin' do
-    visit settings_path(as: user)
+    visit organization_settings_path(organization, as: user)
 
     fill_in 'Projekt-Name', with: 'Updated project name'
 
@@ -60,7 +60,7 @@ RSpec.describe 'Settings' do
 
     click_on 'Speichern'
 
-    expect(page).to have_current_path(settings_path, ignore_query: true)
+    expect(page).to have_current_path(organization_settings_path(organization), ignore_query: true)
     expect(page).to have_content('Einstellungen erfolgreich gespeichert!')
     expect(page).to have_css("img[src*='example-image.png']")
     expect(page).to have_field('Unterzeile', with: 'This is my byline')
