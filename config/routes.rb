@@ -20,6 +20,9 @@ Rails.application.routes.draw do
 
     get '/search', to: 'search#index'
 
+    get '/settings', to: 'settings#index'
+    patch '/settings', to: 'settings#update'
+
     namespace :onboarding, module: nil do
       get '/', to: 'onboarding#index'
       get '/success', to: 'onboarding#success'
@@ -48,9 +51,6 @@ Rails.application.routes.draw do
 
   get '/health', to: 'health#index'
   get '/about', to: 'about#index'
-
-  get '/settings', to: 'settings#index'
-  patch '/settings', to: 'settings#update'
 
   namespace :threema do
     post '/webhook', to: 'webhook#message'
