@@ -28,9 +28,13 @@ Rails.application.routes.draw do
         end
       end
     end
+
+    get '/settings', to: 'settings#index'
+    patch '/settings', to: 'settings#update'
   end
+
   get '/health', to: 'health#index'
-  get '/about', to: 'about#index'
+  get '/about', to: 'about#index' # TODO: consider what to show at all here
 
   namespace :onboarding, module: nil do
     get '/', to: 'onboarding#index'
@@ -56,9 +60,6 @@ Rails.application.routes.draw do
       post '/whats-app/', to: 'whats_app#create'
     end
   end
-
-  get '/settings', to: 'settings#index'
-  patch '/settings', to: 'settings#update'
 
   namespace :threema do
     post '/webhook', to: 'webhook#message'
