@@ -10,7 +10,7 @@
       <%= t('.cancel') %>
     <% end %>
     <%= c 'button',
-      link: request_path(planned_request),
+      link: organization_request_path(planned_request.organization_id, planned_request),
       styles: [:block, :destroy],
       data: { method: :delete } do %>
       <%= t('.confirm') %>

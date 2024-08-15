@@ -38,7 +38,7 @@ class RequestScheduled < Noticed::Base
              else
                :planned
              end
-    requests_path(filter: filter, anchor: "request-#{record.request_id}")
+    organization_requests_path(record.request.organization_id, filter: filter, anchor: "request-#{record.request_id}")
   end
 
   def link_text

@@ -22,6 +22,13 @@ Rails.application.routes.draw do
 
     get '/settings', to: 'settings#index'
     patch '/settings', to: 'settings#update'
+    resources :requests, only: %i[index show new create edit update destroy], concerns: :paginatable do
+      member do
+        get 'notifications', format: /json/
+        get 'messages-by-contributor'
+        get 'stats'
+      end
+    end
   end
 
   get '/health', to: 'health#index'
@@ -64,14 +71,6 @@ Rails.application.routes.draw do
 
   Telegram.bots.each do |(_name, bot)|
     telegram_webhook Telegram::WebhookController, bot, as: nil
-  end
-
-  resources :requests, only: %i[index show new create edit update destroy], concerns: :paginatable do
-    member do
-      get 'notifications', format: /json/
-      get 'messages-by-contributor'
-      get 'stats'
-    end
   end
 
   resources :contributors, only: %i[index show edit update], concerns: :paginatable do
@@ -127,7 +126,7 @@ Rails.application.routes.draw do
   namespace :charts do
     get 'day-and-time-replies'
     get 'day-and-time-requests'
-    get 'day-requests-replies'
+s    get 'day-requests-replies'
   end
 
   get '/profile', to: 'profile#index'
