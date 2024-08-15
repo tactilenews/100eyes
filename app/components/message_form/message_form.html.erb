@@ -1,4 +1,4 @@
-<%= form_with(url: messages_path(contributor_id: contributor, request_id: request), class: 'MessageForm', local: true) do %>
+<%= form_with(url: organization_messages_path(organization_id: request.organization_id, contributor_id: contributor, request_id: request), class: 'MessageForm', local: true) do %>
   <%= c 'textarea', id: 'message[text]', required: true, placeholder: t('components.message_form.placeholder') %>
   <%= c 'button', label: t('components.message_form.submit'), type: :submit %>
 <% end %>

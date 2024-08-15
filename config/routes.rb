@@ -20,6 +20,15 @@ Rails.application.routes.draw do
 
     get '/search', to: 'search#index'
 
+    resources :messages, only: %i[new create edit update] do
+      member do
+        scope module: :messages, as: :message do
+          resource :highlight, only: :update, format: /json/
+          resource :request, only: %i[show update]
+        end
+      end
+    end
+
     get '/settings', to: 'settings#index'
     patch '/settings', to: 'settings#update'
     resources :requests, only: %i[index show new create edit update destroy], concerns: :paginatable do
@@ -81,15 +90,6 @@ Rails.application.routes.draw do
 
     collection do
       get 'count'
-    end
-  end
-
-  resources :messages, only: %i[new create edit update] do
-    member do
-      scope module: :messages, as: :message do
-        resource :highlight, only: :update, format: /json/
-        resource :request, only: %i[show update]
-      end
     end
   end
 

@@ -81,7 +81,7 @@ module ChatMessage
     end
 
     def move_link
-      message_request_path(message)
+      organization_message_request_path(message.organization_id, message)
     end
   end
 end
