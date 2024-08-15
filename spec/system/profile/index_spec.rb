@@ -35,7 +35,7 @@ RSpec.describe 'Profile' do
   after { Timecop.return }
 
   it 'allows viewing/updating business plan' do
-    visit dashboard_path(as: user)
+    visit organization_dashboard_path(organization, as: user)
 
     within('.NavBar') do
       find('a[aria-label="Zur Profilseite"]').click

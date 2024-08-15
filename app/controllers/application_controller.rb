@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
 
     super(user) do |status|
       if status.success?
-        redirect_to dashboard_path
+        redirect_to organizations_path
       else
         flash.now.alert = status.failure_message
         render template: 'sessions/new', status: :unauthorized

@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  root to: redirect('/dashboard')
+  root to: redirect('/organizations')
 
   concern :paginatable do
     get '(page/:page)', action: :index, on: :collection, as: ''
   end
+  post '/set-organization', to: 'organizations#set_organization'
 
-  get '/dashboard', to: 'dashboard#index'
+  resources :organizations, only: :index
+
   scope ':organization_id', as: 'organization', constraints: { organization_id: /\d+/ } do
     # TODO: Move each unscoped controller here if it has to be scoped by its organization
 
@@ -19,6 +21,7 @@ Rails.application.routes.draw do
     resources :invites, only: :create
 
     get '/search', to: 'search#index'
+    get '/dashboard', to: 'dashboard#index'
 
     resources :messages, only: %i[new create edit update] do
       member do
@@ -75,6 +78,12 @@ Rails.application.routes.draw do
         get 'count'
       end
     end
+
+    namespace :charts do
+      get 'day-and-time-replies'
+      get 'day-and-time-requests'
+      get 'day-requests-replies'
+    end
   end
 
   get '/health', to: 'health#index'
@@ -123,12 +132,6 @@ Rails.application.routes.draw do
 
   resource :otp_setup, controller: :otp_setup, only: %i[show create]
   resource :otp_auth, controller: :otp_auth, only: %i[show create]
-
-  namespace :charts do
-    get 'day-and-time-replies'
-    get 'day-and-time-requests'
-    get 'day-requests-replies'
-  end
 
   get '/profile', to: 'profile#index'
   post '/profile/user', to: 'profile#create_user'

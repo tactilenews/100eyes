@@ -11,6 +11,6 @@ module ContributorChannelSettings
 
     private
 
-    attr_reader :organization, :contributor
+    attr_reader :contributor, :organization
   end
 end

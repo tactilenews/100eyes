@@ -2,7 +2,7 @@
    styles: [:wide, :largeBottomMargin],
    **attrs,
    data: { controller: 'day-activity-linechart',
-           day_activity_linechart_url_value: 'charts/day-requests-replies',
+           day_activity_linechart_url_value: "/#{organization.id}/charts/day-requests-replies",
          } do %>
   <%= c 'heading', style: :beta do %>
     <%= t '.heading' %>

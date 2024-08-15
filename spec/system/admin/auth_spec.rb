@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Auth' do
-  before { create(:organization) }
+  let(:organization) { create(:organization) }
 
   describe 'as signed-out user' do
     it 'user tries to access' do
@@ -16,7 +16,7 @@ RSpec.describe 'Auth' do
     let(:user) { create(:user, admin: false) }
 
     it 'user visits the main app' do
-      visit dashboard_path(as: user)
+      visit organization_dashboard_path(organization, as: user)
       expect(page).not_to have_link('Admin')
     end
 
@@ -30,7 +30,7 @@ RSpec.describe 'Auth' do
     let(:user) { create(:user, admin: true) }
 
     it 'user visits the admin dashboard from the main app' do
-      visit dashboard_path(as: user)
+      visit organization_dashboard_path(organization, as: user)
 
       click_link 'Admin'
 

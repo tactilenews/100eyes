@@ -3,9 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe 'Charts' do
-  let(:user) { create(:user) }
+  let(:organization) { create(:organization) }
+  let(:user) { create(:user, organization: organization) }
   let(:last_friday_midnight) { Time.zone.today.beginning_of_day.prev_occurring(:friday) }
-  let(:request) { create(:request, broadcasted_at: last_friday_midnight) }
+  let(:request) { create(:request, broadcasted_at: last_friday_midnight, organization: organization) }
   let(:message) { create(:message, created_at: last_friday_midnight, request: request) }
   let(:data) do
     [
@@ -43,14 +44,14 @@ RSpec.describe 'Charts' do
     end
   end
 
-  describe 'GET /charts/day-and-time-replies' do
+  describe 'GET /{organization_id}/charts/day-and-time-replies' do
     before do
       message
       data_dup.first[:y] = 1
       friday[:data] = data_dup
     end
 
-    subject { -> { get charts_day_and_time_replies_path(as: user) } }
+    subject { -> { get organization_charts_day_and_time_replies_path(organization, as: user) } }
 
     it 'responds with a series of each day and inbound grouped messages' do
       subject.call
@@ -58,8 +59,8 @@ RSpec.describe 'Charts' do
     end
   end
 
-  describe 'GET /charts/day-and-time-requests' do
-    subject { -> { get charts_day_and_time_requests_path(as: user) } }
+  describe 'GET /{organization_id}/charts/day-and-time-requests' do
+    subject { -> { get organization_charts_day_and_time_requests_path(organization, as: user) } }
 
     context 'no request, no chat messages' do
       before { series.map { |hash| hash[:data] = [] } }
@@ -98,8 +99,8 @@ RSpec.describe 'Charts' do
     end
   end
 
-  describe 'GET /charts/day-requests-replies' do
-    subject { -> { get charts_day_requests_replies_path(as: user) } }
+  describe 'GET /{organization_id}/charts/day-requests-replies' do
+    subject { -> { get organization_charts_day_requests_replies_path(organization, as: user) } }
     let(:data) do
       I18n.t('date.day_names').rotate(1).map do |day|
         { x: day, y: 0 }
