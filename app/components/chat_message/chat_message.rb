@@ -60,13 +60,30 @@ module ChatMessage
     end
 
     def sent_by_reference
-      name = message.sender ? message.sender.first_name : message.organization.project_name
-      sent_by_x_at = I18n.t('components.chat_message.sent_by_x_at', name: name, date: date_time(message.updated_at)).html_safe # rubocop:disable Rails/OutputSafety
       if message.sent_from_contributor?
-        link_to_unless(current_page?(conversations_contributor_path(id: message.contributor.id), check_parameters: false), sent_by_x_at, conversations_contributor_path(id: message.contributor.id, anchor: id), data: { turbo: false })
+        link_to_unless(
+          current_page?(contributor_path, check_parameters: false),
+          sent_by_text,
+          contributor_path(anchor: id),
+          data: { turbo: false }
+        )
       else
-        content_tag(:p, sent_by_x_at)
+        content_tag(:p, sent_by_text)
       end
+    end
+
+    def sent_by_text
+      name = message.sender ? message.sender.first_name : message.organization.project_name
+      I18n.t('components.chat_message.sent_by_x_at',
+             name: name, date: date_time(message.updated_at)).html_safe # rubocop:disable Rails/OutputSafety
+    end
+
+    def contributor_path(anchor: nil)
+      conversations_organization_contributor_path(
+        organization_id: message.organization_id,
+        id: message.contributor.id,
+        anchor: anchor
+      )
     end
 
     def request_link

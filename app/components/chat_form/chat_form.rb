@@ -2,16 +2,17 @@
 
 module ChatForm
   class ChatForm < ApplicationComponent
-    def initialize(contributor:, reply_to: nil)
+    def initialize(organization:, contributor:, reply_to: nil)
       super
 
+      @organization = organization
       @contributor = contributor
       @reply_to = reply_to
     end
 
     private
 
-    attr_reader :contributor, :reply_to
+    attr_reader :organization, :contributor, :reply_to
 
     def prefilled_value
       return nil unless reply_to

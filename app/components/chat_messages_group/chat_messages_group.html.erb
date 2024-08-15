@@ -6,13 +6,13 @@
       </div>
 
       <%= c 'heading', tag: :h3 do %>
-        <a class="ChatMessagesGroup-contributor" href="<%= contributor_path(contributor) %>">
+        <a class="ChatMessagesGroup-contributor" href="<%= organization_contributor_path(organization, contributor) %>">
           <%= contributor.name %>
         </a>
       <% end %>
 
       <div class="ChatMessagesGroup-actions">
-        <a href="<%= conversations_contributor_path(id: contributor.id) %>">
+        <a href="<%= conversations_organization_contributor_path(organization, contributor) %>">
           <%= c 'icon', icon: 'conversations', styles: [:inline] %>
           <%= I18n.t('components.chat_messages_group.conversations') %>
         </a>
