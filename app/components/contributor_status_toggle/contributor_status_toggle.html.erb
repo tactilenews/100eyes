@@ -61,7 +61,7 @@
       <% end %>
     <% end %>
 
-    <%= c 'form', model: contributor do %>
+    <%= c 'form', model: [organization, contributor] do %>
       <input
         type="hidden"
         id="contributor[active]"
