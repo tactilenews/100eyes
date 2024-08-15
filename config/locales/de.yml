@@ -242,7 +242,7 @@ de:
     contributor_signal_settings:
       heading: "Ausgewählter Kanal: Signal"
       complete:
-        text: 
+        text:
           phone_number: |
             %{name} hat sich mit der Handynummer %{phone_number} angemeldet.
           uuid: |
@@ -382,7 +382,7 @@ de:
       filter_section:
         heading: Nach Tags filtern
         submit_button: filtern
-        clear_button: leeren
+        clear_button: zurücksetzen
       contributors_filter:
         active: Aktiv
         inactive: Inaktiv
