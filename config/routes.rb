@@ -31,6 +31,7 @@ Rails.application.routes.draw do
 
     get '/settings', to: 'settings#index'
     patch '/settings', to: 'settings#update'
+
     resources :requests, only: %i[index show new create edit update destroy], concerns: :paginatable do
       member do
         get 'notifications', format: /json/
@@ -38,35 +39,35 @@ Rails.application.routes.draw do
         get 'stats'
       end
     end
+
+    namespace :onboarding, module: nil do
+      get '/', to: 'onboarding#index'
+      get '/success', to: 'onboarding#success'
+
+      scope module: :onboarding do
+        get '/email', to: 'email#show'
+        post '/email', to: 'email#create'
+
+        get '/signal/', to: 'signal#show'
+        get '/signal/link/', to: 'signal#link', as: 'signal_link'
+        post '/signal/', to: 'signal#create'
+
+        get '/threema/', to: 'threema#show'
+        post '/threema/', to: 'threema#create'
+
+        get '/telegram/', to: 'telegram#show'
+        get '/telegram/link/:telegram_onboarding_token', to: 'telegram#link', as: 'telegram_link'
+        get '/telegram/fallback/:telegram_onboarding_token', to: 'telegram#fallback', as: 'telegram_fallback'
+        post '/telegram/', to: 'telegram#create'
+
+        get '/whats-app/', to: 'whats_app#show'
+        post '/whats-app/', to: 'whats_app#create'
+      end
+    end
   end
 
   get '/health', to: 'health#index'
-  get '/about', to: 'about#index' # TODO: consider what to show at all here
-
-  namespace :onboarding, module: nil do
-    get '/', to: 'onboarding#index'
-    get '/success', to: 'onboarding#success'
-
-    scope module: :onboarding do
-      get '/email', to: 'email#show'
-      post '/email', to: 'email#create'
-
-      get '/signal/', to: 'signal#show'
-      get '/signal/link/', to: 'signal#link', as: 'signal_link'
-      post '/signal/', to: 'signal#create'
-
-      get '/threema/', to: 'threema#show'
-      post '/threema/', to: 'threema#create'
-
-      get '/telegram/', to: 'telegram#show'
-      get '/telegram/link/:telegram_onboarding_token', to: 'telegram#link', as: 'telegram_link'
-      get '/telegram/fallback/:telegram_onboarding_token', to: 'telegram#fallback', as: 'telegram_fallback'
-      post '/telegram/', to: 'telegram#create'
-
-      get '/whats-app/', to: 'whats_app#show'
-      post '/whats-app/', to: 'whats_app#create'
-    end
-  end
+  get '/about', to: 'about#index'
 
   namespace :threema do
     post '/webhook', to: 'webhook#message'
@@ -126,7 +127,7 @@ Rails.application.routes.draw do
   namespace :charts do
     get 'day-and-time-replies'
     get 'day-and-time-requests'
-s    get 'day-requests-replies'
+    get 'day-requests-replies'
   end
 
   get '/profile', to: 'profile#index'
