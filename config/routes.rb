@@ -15,7 +15,9 @@ Rails.application.routes.draw do
       get '/onboarding-successful', to: 'three_sixty_dialog_webhook#create_api_key'
       post '/three-sixty-dialog-webhook', to: 'three_sixty_dialog_webhook#message'
     end
+
     resources :invites, only: :create
+
     get '/search', to: 'search#index'
 
     resources :requests, only: %i[index show new create edit update destroy], concerns: :paginatable do
@@ -25,9 +27,13 @@ Rails.application.routes.draw do
         get 'stats'
       end
     end
+
+    get '/settings', to: 'settings#index'
+    patch '/settings', to: 'settings#update'
   end
+
   get '/health', to: 'health#index'
-  get '/about', to: 'about#index'
+  get '/about', to: 'about#index' # TODO: consider what to show at all here
 
   namespace :onboarding, module: nil do
     get '/', to: 'onboarding#index'
@@ -53,9 +59,6 @@ Rails.application.routes.draw do
       post '/whats-app/', to: 'whats_app#create'
     end
   end
-
-  get '/settings', to: 'settings#index'
-  patch '/settings', to: 'settings#update'
 
   namespace :threema do
     post '/webhook', to: 'webhook#message'
