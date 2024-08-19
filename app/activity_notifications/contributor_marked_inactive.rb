@@ -30,7 +30,7 @@ class ContributorMarkedInactive < Noticed::Base
   # rubocop:enable Rails/OutputSafety
 
   def url
-    contributor_path(record.contributor_id)
+    organization_contributor_path(organization_id: record.organization_id, id: record.contributor_id)
   end
 
   def link_text

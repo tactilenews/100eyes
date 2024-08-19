@@ -61,15 +61,16 @@ RSpec.describe Message, type: :model do
   end
 
   describe 'deeplinks' do
+    let(:organization) { create(:organization) }
     let(:contributor) { create(:contributor, id: 7) }
-    let(:request) { create(:request, id: 6) }
+    let(:request) { create(:request, id: 6, organization: organization) }
     let(:message) { create(:message, request: request, **params) }
 
     describe '#chat_message_link' do
       subject { message.chat_message_link }
       let(:params) { { id: 8, recipient: nil, sender: contributor } }
       it 'should link to message within the contributors conversations' do
-        should eq('/contributors/7/conversations#message-8')
+        should eq("/#{message.organization_id}/contributors/7/conversations#message-8")
       end
     end
   end
