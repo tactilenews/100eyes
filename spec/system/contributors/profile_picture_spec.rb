@@ -3,11 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe 'Profile pictures' do
-  let(:user) { create(:user) }
-  let(:contributor) { create(:contributor) }
+  let(:organization) { create(:organization) }
+  let(:user) { create(:user, organization: organization) }
+  let(:contributor) { create(:contributor, organization: organization) }
 
   it 'Editor uploads new picture' do
-    visit contributor_path(contributor, as: user)
+    visit organization_contributor_path(organization, contributor, as: user)
 
     expect(page).to have_css('.Avatar svg')
 
@@ -27,7 +28,7 @@ RSpec.describe 'Profile pictures' do
     let!(:unsubscribed_contributor) { create(:contributor, unsubscribed_at: Time.current) }
 
     it 'renders show with error message' do
-      visit contributor_path(contributor, as: user)
+      visit organization_contributor_path(organization, contributor, as: user)
 
       within('#contributors-sidebar') do
         active_contributors.each do |contributor|
