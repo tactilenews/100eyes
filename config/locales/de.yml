@@ -51,8 +51,6 @@ de:
       sign_out: Abmelden
       profile_path: Zur Profilseite
       profile_link: Profil
-    hero:
-      title: Willkommen bei 100eyes. Nutze die Intelligenz der Community.
     footer:
       text: Ein Service der <a class="Link" href="https://tactile.news" target="_blank" rel="noopener noreferrer">tactile.news GmbH</a>
     request_metrics:
