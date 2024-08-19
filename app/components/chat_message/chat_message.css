@@ -89,9 +89,8 @@
   display: inline-block;
 }
 
-.ChatMessage-footer .Button:nth-child(n + 3) {
-  display: inline-block;
-  margin-left: var(--spacing-unit-s);
+.ChatMessage-footer > * {
+  margin-right: var(--spacing-unit-xs);
 }
 
 .ChatMessage-footer .ChatMessage-edit:hover {
