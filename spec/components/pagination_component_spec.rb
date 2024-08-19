@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Pagination::Pagination, type: :component do
   subject { render_inline(described_class.new(**params)) }
+  let(:organization) { create(:organization) }
   let(:current_page_instance) { Kaminari::Helpers::Paginator::PageProxy.new({ total_pages: 3 }, current_page, nil) }
   let(:current_page) { 1 }
   let(:pages) { [1, 2, 3] }
@@ -15,7 +16,9 @@ RSpec.describe Pagination::Pagination, type: :component do
       )
     end.each
   end
-  let(:params) { { current_page: current_page_instance, remote: false, pages: pages_enumerator, path: contributors_path } }
+  let(:params) do
+    { current_page: current_page_instance, remote: false, pages: pages_enumerator, path: organization_contributors_path(organization) }
+  end
 
   it { is_expected.to have_css('.Pagination') }
 
@@ -23,7 +26,7 @@ RSpec.describe Pagination::Pagination, type: :component do
     before do
       params[:query] = { state: 'inactive' }
     end
-    it { is_expected.to have_css("a[href='/contributors/page/#{pages.second}?state=inactive']") }
-    it { is_expected.to have_css("a[href='/contributors/page/#{pages.third}?state=inactive']") }
+    it { is_expected.to have_css("a[href='/#{organization.id}/contributors/page/#{pages.second}?state=inactive']") }
+    it { is_expected.to have_css("a[href='/#{organization.id}/contributors/page/#{pages.third}?state=inactive']") }
   end
 end

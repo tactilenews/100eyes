@@ -6,7 +6,7 @@
 
     <p><%= t('.text', name: contributor.name) %></p>
 
-    <%= c 'form', model: contributor do %>
+    <%= c 'form', model: [organization, contributor] do %>
       <%= c 'flex' do %>
 
         <%= c 'field', object: contributor, hide_label: true, attr: :threema_id do |field| %>

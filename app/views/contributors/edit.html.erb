@@ -1,7 +1,7 @@
 <%= c 'main' do %>
   <%= c 'box', style: :large do %>
     <%= c 'wrapper', style: :xnarrow do %>
-      <%= c 'contributor_core_data_form', contributor: @contributor %>
+      <%= c 'contributor_core_data_form', organization: @organization, contributor: @contributor %>
     <% end %>
   <% end %>
 <% end %>
