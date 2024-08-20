@@ -3,21 +3,22 @@
 require 'rails_helper'
 require 'telegram/bot/rspec/integration/rails'
 
-RSpec.describe '/contributors', type: :request do
+RSpec.describe '/{organization_id}/contributors', type: :request do
+  let(:organization) { create(:organization) }
   let!(:contributor) { create(:contributor) }
-  let(:the_request) { create(:request) }
+  let(:the_request) { create(:request, organization: organization) }
   let(:user) { create(:user) }
 
   describe 'GET /index' do
     it 'should be successful' do
-      get contributors_url(as: user)
+      get organization_contributors_url(organization, as: user)
       expect(response).to be_successful
     end
   end
 
   describe 'GET /show' do
     it 'should be successful' do
-      get contributor_url(contributor, as: user)
+      get organization_contributor_url(organization, contributor, as: user)
       expect(response).to be_successful
     end
   end
@@ -26,7 +27,7 @@ RSpec.describe '/contributors', type: :request do
     let!(:teachers) { create_list(:contributor, 2, tag_list: 'teacher') }
 
     it 'returns count of contributors with a specific tag' do
-      get count_contributors_path(tag_list: ['teacher'], as: user)
+      get count_organization_contributors_path(organization, tag_list: ['teacher'], as: user)
       expect(response.body).to eq({ count: 2 }.to_json)
     end
   end
@@ -36,7 +37,7 @@ RSpec.describe '/contributors', type: :request do
       received_message = create(:message, text: 'the received message', recipient: contributor,
                                           request: the_request)
       sent_message = create(:message, text: 'the sent message', request: the_request, sender: contributor)
-      get conversations_contributor_path(contributor, as: user)
+      get conversations_organization_contributor_path(organization, contributor, as: user)
       expect(response).to be_successful
       parsed = Capybara::Node::Simple.new(response.body)
       expect(parsed).to have_text(received_message.text)
@@ -59,7 +60,7 @@ RSpec.describe '/contributors', type: :request do
       }
     end
 
-    subject { -> { patch contributor_url(contributor, as: user), params: { contributor: new_attrs } } }
+    subject { -> { patch organization_contributor_url(organization, contributor, as: user), params: { contributor: new_attrs } } }
 
     it 'updates the requested contributor' do
       subject.call
@@ -87,7 +88,7 @@ RSpec.describe '/contributors', type: :request do
       let(:contributor) { create(:contributor, tag_list: %w[dev ops]) }
 
       it 'is supported' do
-        patch contributor_url(contributor, as: user), params: { contributor: updated_attrs }
+        patch organization_contributor_url(organization, id: contributor.id, as: user), params: { contributor: updated_attrs }
         contributor.reload
         expect(contributor.tag_list).to eq(['ops'])
         expect(Contributor.all_tags.count).to eq(1)
@@ -96,7 +97,7 @@ RSpec.describe '/contributors', type: :request do
 
     it 'redirects to the contributor' do
       subject.call
-      expect(response).to redirect_to(contributor_url(contributor))
+      expect(response).to redirect_to(organization_contributor_url(organization, contributor))
     end
 
     it 'shows success message' do
@@ -188,7 +189,8 @@ RSpec.describe '/contributors', type: :request do
   describe 'POST /message', telegram_bot: :rails do
     subject do
       lambda do
-        post message_contributor_url(contributor, as: user), params: { message: { text: 'Forgot to ask: How are you?' } }
+        post message_organization_contributor_url(organization, contributor, as: user),
+             params: { message: { text: 'Forgot to ask: How are you?' } }
       end
     end
 

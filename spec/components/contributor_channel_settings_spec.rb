@@ -5,9 +5,10 @@ require 'rails_helper'
 RSpec.describe ContributorChannelSettings::ContributorChannelSettings, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
+  let(:organization) { create(:organization) }
   let(:contributor) { create(:contributor, email: nil, **attrs) }
   let(:attrs) { {} }
-  let(:params) { { contributor: contributor } }
+  let(:params) { { contributor: contributor, organization: organization } }
 
   it { should_not have_css('h2') }
 
