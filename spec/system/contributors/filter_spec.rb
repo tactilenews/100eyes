@@ -47,7 +47,7 @@ RSpec.describe 'Filter contributors' do
     expect(page).to have_link(nil, href: organization_contributor_path(organization, active_contributor))
     expect(page).not_to have_link(nil, href: organization_contributor_path(organization, another_contributor))
 
-    click_on 'leeren'
+    click_on 'zurücksetzen'
 
     expect(page).not_to have_css('.ContributorsIndex-filterSection')
     expect(page).not_to have_content('Das sind die Mitglieder deiner Community gefiltert nach dem Tag (entwickler)')
