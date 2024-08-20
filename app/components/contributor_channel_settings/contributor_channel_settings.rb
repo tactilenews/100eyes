@@ -2,14 +2,15 @@
 
 module ContributorChannelSettings
   class ContributorChannelSettings < ApplicationComponent
-    def initialize(contributor:, **)
+    def initialize(organization:, contributor:, **)
       super
 
+      @organization = organization
       @contributor = contributor
     end
 
     private
 
-    attr_reader :contributor
+    attr_reader :organization, :contributor
   end
 end

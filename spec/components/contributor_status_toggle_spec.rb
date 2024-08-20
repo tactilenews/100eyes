@@ -6,11 +6,11 @@ RSpec.describe ContributorStatusToggle::ContributorStatusToggle, type: :componen
   subject { render_inline(described_class.new(**params)) }
 
   let(:organization) { create(:organization) }
-  let(:contributor) { create(:contributor) }
+  let(:contributor) { create(:contributor, organization: organization) }
   let(:deactivated_by) { nil }
   let(:params) { { organization: organization, contributor: contributor, deactivated_by: deactivated_by } }
 
-  it { should have_css("form[action='/contributors/#{contributor.id}']") }
+  it { should have_css("form[action='/#{contributor.organization_id}/contributors/#{contributor.id}']") }
 
   context 'given an active contributor' do
     it { should have_css('input[type="hidden"][value="off"]', visible: false) }

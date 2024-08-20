@@ -31,6 +31,17 @@ Rails.application.routes.draw do
 
     get '/settings', to: 'settings#index'
     patch '/settings', to: 'settings#update'
+
+    resources :contributors, only: %i[index show edit update], concerns: :paginatable do
+      member do
+        get 'conversations'
+        post 'message'
+      end
+
+      collection do
+        get 'count'
+      end
+    end
   end
 
   get '/health', to: 'health#index'
@@ -80,17 +91,6 @@ Rails.application.routes.draw do
       get 'notifications', format: /json/
       get 'messages-by-contributor'
       get 'stats'
-    end
-  end
-
-  resources :contributors, only: %i[index show edit update], concerns: :paginatable do
-    member do
-      get 'conversations'
-      post 'message'
-    end
-
-    collection do
-      get 'count'
     end
   end
 
