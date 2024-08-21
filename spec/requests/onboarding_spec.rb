@@ -3,12 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe 'Onboarding', type: :request do
-  before { create(:organization) }
+  let(:organization) { create(:organization) }
 
   describe 'GET /onboarding/index' do
     let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
     let(:params) { { jwt: jwt } }
-    let(:action) { -> { get onboarding_path(**params) } }
+    let(:action) { -> { get organization_onboarding_path(organization, **params) } }
 
     describe 'HTTP status' do
       subject { action.call && response }
@@ -23,7 +23,7 @@ RSpec.describe 'Onboarding', type: :request do
           let!(:contributor) do
             create(:contributor, telegram_onboarding_token: 'SOMETHING', telegram_id: nil, json_web_token: json_web_token)
           end
-          it { is_expected.to redirect_to onboarding_telegram_link_path(telegram_onboarding_token: 'SOMETHING') }
+          it { is_expected.to redirect_to organization_onboarding_telegram_link_path(organization, telegram_onboarding_token: 'SOMETHING') }
         end
       end
 
@@ -34,9 +34,8 @@ RSpec.describe 'Onboarding', type: :request do
     end
   end
 
-  describe 'GET /onboarding/success' do
-    let(:action) { -> { get onboarding_success_path(**params) } }
-    let(:params) { {} }
+  describe 'GET /{organization_id}/onboarding/success' do
+    let(:action) { -> { get organization_onboarding_success_path(organization) } }
     describe 'HTTP status' do
       subject { action.call && response }
       it { is_expected.to have_http_status(:ok) }

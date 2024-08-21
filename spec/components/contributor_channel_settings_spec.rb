@@ -8,7 +8,7 @@ RSpec.describe ContributorChannelSettings::ContributorChannelSettings, type: :co
   let(:organization) { create(:organization) }
   let(:contributor) { create(:contributor, email: nil, **attrs) }
   let(:attrs) { {} }
-  let(:params) { { contributor: contributor, organization: organization } }
+  let(:params) { { organization: organization, contributor: contributor } }
 
   it { should_not have_css('h2') }
 
