@@ -101,7 +101,7 @@ RSpec.describe 'Messages', type: :request do
         subject.call
 
         anchor = "contributor-#{message.contributor.id}"
-        url = request_url(request, anchor: anchor)
+        url = organization_request_url(request.organization_id, request, anchor: anchor)
 
         expect(flash[:success]).not_to be_empty
         expect(response).to redirect_to url
