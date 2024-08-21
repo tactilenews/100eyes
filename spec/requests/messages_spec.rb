@@ -3,21 +3,28 @@
 require 'rails_helper'
 
 RSpec.describe '/messages', type: :request do
-  let(:contributor) { create(:contributor) }
-  let(:request) { create(:request) }
-  let(:user) { create(:user) }
-  let(:message) { create(:message) }
+  let(:organization) { create(:organization) }
+  let(:contributor) { create(:contributor, organization: organization) }
+  let(:request) { create(:request, organization: organization) }
+  let(:user) { create(:user, organization: organization) }
+  let(:message) { create(:message, request: request) }
 
   describe 'GET /new' do
     it 'should be successful' do
-      get new_message_url(as: user, params: { request_id: request, contributor_id: contributor })
+      get new_organization_message_url(organization_id: request.organization_id, as: user,
+                                       params: { request_id: request.id, contributor_id: contributor.id })
       expect(response).to be_successful
     end
   end
 
   describe 'POST /messages' do
     let(:msg_attrs) { { text: 'Triangles are my favorite shape.' } }
-    subject { -> { post messages_url(as: user), params: { message: msg_attrs, request_id: request.id, contributor_id: contributor.id } } }
+    subject do
+      lambda {
+        post organization_messages_url(organization, as: user),
+             params: { message: msg_attrs, request_id: request.id, contributor_id: contributor.id }
+      }
+    end
 
     it { should change { Message.count }.from(0).to(1) }
 
@@ -40,7 +47,7 @@ RSpec.describe '/messages', type: :request do
     let(:previous_text) { 'Previous text' }
     let(:message) { create(:message, creator_id: user.id, text: previous_text) }
     let(:new_attrs) { { text: 'Grab your coat and get your hat' } }
-    subject { -> { patch message_url(message, as: user), params: { message: new_attrs } } }
+    subject { -> { patch organization_message_url(message.organization, message, as: user), params: { message: new_attrs } } }
 
     it { should change { message.reload && message.text }.from(previous_text).to('Grab your coat and get your hat') }
 

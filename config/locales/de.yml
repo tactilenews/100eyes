@@ -382,7 +382,7 @@ de:
       filter_section:
         heading: Nach Tags filtern
         submit_button: filtern
-        clear_button: leeren
+        clear_button: zurücksetzen
       contributors_filter:
         active: Aktiv
         inactive: Inaktiv

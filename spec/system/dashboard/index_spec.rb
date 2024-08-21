@@ -14,7 +14,7 @@ RSpec.describe 'Dashboard' do
   let(:contributor) { create(:contributor) }
 
   before do
-    request = create(:request, user: user)
+    request = create(:request, user: user, organization: organization)
     create_list(:message, 2, request: request, sender: contributor)
   end
 
@@ -25,7 +25,7 @@ RSpec.describe 'Dashboard' do
     visit organization_dashboard_path(organization, as: user)
 
     expect(page).to have_text('Guten Morgen, Dennis!')
-    expect(page).to have_link('Neue Frage stellen', href: new_request_path)
+    expect(page).to have_link('Neue Frage stellen', href: new_organization_request_path(organization))
 
     # ActivityNotifications section
     expect(page).to have_css('section.ActivityNotifications')

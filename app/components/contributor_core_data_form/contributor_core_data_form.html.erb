@@ -7,7 +7,7 @@
     <p><%= t('.text', name: contributor.name, first_name: contributor.first_name).html_safe %></p>
   <% end %>
 
-  <%= c 'form', model: contributor do %>
+  <%= c 'form', model: [organization, contributor] do %>
     <%= c 'stack' do %>
       <%= c 'flex' do %>
         <%= c 'field', object: contributor, attr: :first_name do |field| %>
@@ -39,7 +39,7 @@
 
       <%= c 'flex', styles: [:space_between, :reverse] do %>
         <%= c 'submit_button', label: t('save') %>
-        <%= c 'button', style: :secondary, link: contributor_path(contributor), label: t('cancel') %>
+        <%= c 'button', style: :secondary, link: organization_contributor_path(organization, contributor), label: t('cancel') %>
       <% end %>
     <% end %>
   <% end %>

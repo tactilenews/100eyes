@@ -3,7 +3,7 @@
     <%= c 'heading' do %>
       <%= t "dashboard.heading#{time_based_heading}", first_name: current_user.first_name %>
     <% end %>
-    <%= c 'new_request_link' %>
+    <%= c 'new_request_link', organization: @organization %>
   <% end %>
 
 

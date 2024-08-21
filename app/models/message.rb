@@ -30,6 +30,8 @@ class Message < ApplicationRecord
 
   delegate :name, to: :creator, allow_nil: true, prefix: true
 
+  delegate :organization_id, to: :request
+
   has_many_attached :raw_data
   validates :raw_data, presence: true, if: -> { sent_from_contributor? }
   validates :unknown_content, inclusion: { in: [true, false] }
@@ -55,7 +57,7 @@ class Message < ApplicationRecord
   end
 
   def chat_message_link
-    Rails.application.routes.url_helpers.conversations_contributor_path(id: contributor, anchor: "message-#{id}")
+    Rails.application.routes.url_helpers.conversations_organization_contributor_path(organization, id: contributor, anchor: "message-#{id}")
   end
 
   def sent_from_contributor?
