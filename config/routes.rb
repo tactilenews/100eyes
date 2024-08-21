@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  root to: redirect('/dashboard')
+  root to: redirect('/organizations')
 
   concern :paginatable do
     get '(page/:page)', action: :index, on: :collection, as: ''
   end
+  post '/set-organization', to: 'organizations#set_organization'
 
-  get '/dashboard', to: 'dashboard#index'
+  resources :organizations, only: :index
+
   scope ':organization_id', as: 'organization', constraints: { organization_id: /\d+/ } do
     # TODO: Move each unscoped controller here if it has to be scoped by its organization
 
@@ -19,6 +21,7 @@ Rails.application.routes.draw do
     resources :invites, only: :create
 
     get '/search', to: 'search#index'
+    get '/dashboard', to: 'dashboard#index'
 
     resources :requests, only: %i[index show new create edit update destroy], concerns: :paginatable do
       member do
@@ -39,17 +42,6 @@ Rails.application.routes.draw do
 
     get '/settings', to: 'settings#index'
     patch '/settings', to: 'settings#update'
-
-    resources :contributors, only: %i[index show edit update], concerns: :paginatable do
-      member do
-        get 'conversations'
-        post 'message'
-      end
-
-      collection do
-        get 'count'
-      end
-    end
 
     namespace :onboarding, module: nil do
       get '/', to: 'onboarding#index'
@@ -73,6 +65,23 @@ Rails.application.routes.draw do
 
         get '/whats-app/', to: 'whats_app#show'
         post '/whats-app/', to: 'whats_app#create'
+      end
+    end
+
+    namespace :charts do
+      get 'day-and-time-replies'
+      get 'day-and-time-requests'
+      get 'day-requests-replies'
+    end
+
+    resources :contributors, only: %i[index show edit update], concerns: :paginatable do
+      member do
+        get 'conversations'
+        post 'message'
+      end
+
+      collection do
+        get 'count'
       end
     end
   end
@@ -123,12 +132,6 @@ Rails.application.routes.draw do
 
   resource :otp_setup, controller: :otp_setup, only: %i[show create]
   resource :otp_auth, controller: :otp_auth, only: %i[show create]
-
-  namespace :charts do
-    get 'day-and-time-replies'
-    get 'day-and-time-requests'
-    get 'day-requests-replies'
-  end
 
   get '/profile', to: 'profile#index'
   post '/profile/user', to: 'profile#create_user'
