@@ -14,7 +14,7 @@ RSpec.describe 'OTP Setup' do
     let(:otp_enabled) { false }
 
     it 'editor tries to access any page' do
-      visit dashboard_path(as: user)
+      visit organization_dashboard_path(organization, as: user)
 
       expect(page).to have_current_path(otp_setup_path)
       expect(page).to have_text('Schütze dein Konto')
@@ -31,11 +31,11 @@ RSpec.describe 'OTP Setup' do
       expect { click_button 'Bestätigen' }.not_to(change { user.reload.otp_secret_key })
 
       # Editor is redirected back to the dashboard
-      expect(page).to have_current_path(dashboard_path)
+      expect(page).to have_current_path(organization_dashboard_path(organization))
     end
 
     it 'editor cancels setup' do
-      visit dashboard_path(as: user)
+      visit organization_dashboard_path(organization, as: user)
 
       expect(page).to have_current_path(otp_setup_path)
       expect(page).to have_text('Schütze dein Konto')
@@ -50,16 +50,16 @@ RSpec.describe 'OTP Setup' do
     let(:otp_enabled) { true }
 
     it 'editor tries to access any page' do
-      visit dashboard_path(as: user)
+      visit organization_dashboard_path(organization, as: user)
 
       # Editor is not redirected
-      expect(page).to have_current_path(dashboard_path, ignore_query: true)
+      expect(page).to have_current_path(organization_dashboard_path(organization), ignore_query: true)
     end
 
     it 'editor tries to access setup page' do
       visit otp_setup_path(as: user)
 
-      expect(page).to have_current_path(dashboard_path)
+      expect(page).to have_current_path(organization_dashboard_path(organization))
     end
   end
 end
