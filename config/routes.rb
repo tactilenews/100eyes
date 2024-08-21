@@ -20,6 +20,14 @@ Rails.application.routes.draw do
 
     get '/search', to: 'search#index'
 
+    resources :requests, only: %i[index show new create edit update destroy], concerns: :paginatable do
+      member do
+        get 'notifications', format: /json/
+        get 'messages-by-contributor'
+        get 'stats'
+      end
+    end
+
     resources :messages, only: %i[new create edit update] do
       member do
         scope module: :messages, as: :message do
@@ -84,14 +92,6 @@ Rails.application.routes.draw do
 
   Telegram.bots.each do |(_name, bot)|
     telegram_webhook Telegram::WebhookController, bot, as: nil
-  end
-
-  resources :requests, only: %i[index show new create edit update destroy], concerns: :paginatable do
-    member do
-      get 'notifications', format: /json/
-      get 'messages-by-contributor'
-      get 'stats'
-    end
   end
 
   namespace :admin do
