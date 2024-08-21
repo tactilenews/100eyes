@@ -27,6 +27,15 @@ Rails.application.routes.draw do
         get 'stats'
       end
     end
+    
+    resources :messages, only: %i[new create edit update] do
+      member do
+        scope module: :messages, as: :message do
+          resource :highlight, only: :update, format: /json/
+          resource :request, only: %i[show update]
+        end
+      end
+    end
 
     get '/settings', to: 'settings#index'
     patch '/settings', to: 'settings#update'
@@ -83,15 +92,6 @@ Rails.application.routes.draw do
 
   Telegram.bots.each do |(_name, bot)|
     telegram_webhook Telegram::WebhookController, bot, as: nil
-  end
-
-  resources :messages, only: %i[new create edit update] do
-    member do
-      scope module: :messages, as: :message do
-        resource :highlight, only: :update, format: /json/
-        resource :request, only: %i[show update]
-      end
-    end
   end
 
   namespace :admin do

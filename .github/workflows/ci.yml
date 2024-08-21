@@ -1,8 +1,6 @@
 name: CI
 
-on:
-  pull_request:
-    branches: [ main, 'releases/**']
+on: pull_request
 
 jobs:
   test:
