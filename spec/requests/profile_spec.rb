@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe '/contributors' do
+RSpec.describe '/profile' do
   let!(:user) { create(:user, organizations: [organization]) }
   let(:contact_person) { create(:user) }
   let(:organization) { create(:organization, contact_person: contact_person, business_plan_name: 'Editorial pro') }
