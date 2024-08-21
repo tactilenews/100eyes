@@ -73,7 +73,7 @@ Rails.application.routes.draw do
       get 'day-and-time-requests'
       get 'day-requests-replies'
     end
-    
+
     resources :contributors, only: %i[index show edit update], concerns: :paginatable do
       member do
         get 'conversations'
