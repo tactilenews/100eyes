@@ -20,8 +20,36 @@ Rails.application.routes.draw do
 
     get '/search', to: 'search#index'
 
+    resources :requests, only: %i[index show new create edit update destroy], concerns: :paginatable do
+      member do
+        get 'notifications', format: /json/
+        get 'messages-by-contributor'
+        get 'stats'
+      end
+    end
+
+    resources :messages, only: %i[new create edit update] do
+      member do
+        scope module: :messages, as: :message do
+          resource :highlight, only: :update, format: /json/
+          resource :request, only: %i[show update]
+        end
+      end
+    end
+
     get '/settings', to: 'settings#index'
     patch '/settings', to: 'settings#update'
+
+    resources :contributors, only: %i[index show edit update], concerns: :paginatable do
+      member do
+        get 'conversations'
+        post 'message'
+      end
+
+      collection do
+        get 'count'
+      end
+    end
 
     namespace :onboarding, module: nil do
       get '/', to: 'onboarding#index'
@@ -64,34 +92,6 @@ Rails.application.routes.draw do
 
   Telegram.bots.each do |(_name, bot)|
     telegram_webhook Telegram::WebhookController, bot, as: nil
-  end
-
-  resources :requests, only: %i[index show new create edit update destroy], concerns: :paginatable do
-    member do
-      get 'notifications', format: /json/
-      get 'messages-by-contributor'
-      get 'stats'
-    end
-  end
-
-  resources :contributors, only: %i[index show edit update], concerns: :paginatable do
-    member do
-      get 'conversations'
-      post 'message'
-    end
-
-    collection do
-      get 'count'
-    end
-  end
-
-  resources :messages, only: %i[new create edit update] do
-    member do
-      scope module: :messages, as: :message do
-        resource :highlight, only: :update, format: /json/
-        resource :request, only: %i[show update]
-      end
-    end
   end
 
   namespace :admin do

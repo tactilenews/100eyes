@@ -6,7 +6,9 @@ RSpec.describe ChatForm::ChatForm, type: :component do
   include DateTimeHelper
   subject { render_inline(described_class.new(**params)) }
 
-  let(:params) { { contributor: build(:contributor, id: 42) } }
+  let(:organization) { create(:organization) }
+  let(:contributor) { create(:contributor, organization: organization) }
+  let(:params) { { contributor: contributor, organization: organization } }
   it { should have_css('.ChatForm') }
 
   context 'without reply_to set' do

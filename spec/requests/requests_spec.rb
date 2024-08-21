@@ -4,11 +4,11 @@ require 'rails_helper'
 require 'telegram/bot/rspec/integration/rails'
 
 RSpec.describe 'Requests', telegram_bot: :rails do
-  before { create(:organization) }
+  let(:organization) { create(:organization) }
 
-  describe 'POST /requests' do
+  describe 'POST /{organization_id}/requests' do
     before(:each) { allow(Request).to receive(:broadcast!).and_call_original } # is stubbed for every other test
-    subject { -> { post requests_path(as: user), params: params } }
+    subject { -> { post organization_requests_path(organization, as: user), params: params } }
     let(:params) { { request: { title: 'Example Question', text: 'How do you do?', hints: ['confidential'] } } }
     let(:user) { create(:user) }
 
@@ -17,7 +17,7 @@ RSpec.describe 'Requests', telegram_bot: :rails do
     it 'redirects to requests#show' do
       response = subject.call
       request = Request.last
-      expect(response).to redirect_to request
+      expect(response).to redirect_to organization_request_path(organization, request)
     end
 
     it 'shows success notification' do
@@ -43,7 +43,7 @@ RSpec.describe 'Requests', telegram_bot: :rails do
         it 'redirects to requests#show' do
           response = subject.call
           request = Request.last
-          expect(response).to redirect_to request
+          expect(response).to redirect_to organization_request_path(organization, request)
         end
 
         it 'shows success notification' do
@@ -61,7 +61,7 @@ RSpec.describe 'Requests', telegram_bot: :rails do
         it 'redirects to requests#show' do
           response = subject.call
           request = Request.last
-          expect(response).to redirect_to request
+          expect(response).to redirect_to organization_request_path(organization, request)
         end
 
         it 'shows success notification' do
@@ -76,7 +76,7 @@ RSpec.describe 'Requests', telegram_bot: :rails do
         it 'redirects to requests#show' do
           response = subject.call
           request = Request.last
-          expect(response).to redirect_to request
+          expect(response).to redirect_to organization_request_path(organization, request)
         end
 
         it 'shows success notification' do
@@ -94,7 +94,7 @@ RSpec.describe 'Requests', telegram_bot: :rails do
 
       it 'redirects to requests#show' do
         response = subject.call
-        expect(response).to redirect_to requests_path(filter: :planned)
+        expect(response).to redirect_to organization_requests_path(organization, filter: :planned)
       end
 
       it 'shows success notification' do
@@ -105,13 +105,18 @@ RSpec.describe 'Requests', telegram_bot: :rails do
     end
   end
 
-  describe 'DELETE /requests/:id' do
-    subject { -> { delete "/requests/#{request.id}?as=#{user.id}" } }
+  describe 'DELETE /{organization_id}/requests/:id' do
+    subject do
+      lambda {
+        path = "/#{request.organization_id}/requests/#{request.id}?as=#{user.id}"
+        delete path
+      }
+    end
 
     let(:user) { create(:user) }
 
     context 'broadcasted request' do
-      let!(:request) { create(:request) }
+      let!(:request) { create(:request, organization: organization) }
 
       it 'does not delete the request' do
         expect { subject.call }.not_to change(Request, :count)
@@ -120,7 +125,7 @@ RSpec.describe 'Requests', telegram_bot: :rails do
       it 'redirects to requests path' do
         subject.call
 
-        expect(response).to redirect_to requests_path
+        expect(response).to redirect_to organization_requests_path(organization)
       end
 
       it 'shows error message' do
@@ -131,7 +136,7 @@ RSpec.describe 'Requests', telegram_bot: :rails do
     end
 
     context 'planned request' do
-      let!(:request) { create(:request, broadcasted_at: nil, schedule_send_for: 1.day.from_now) }
+      let!(:request) { create(:request, organization: organization, broadcasted_at: nil, schedule_send_for: 1.day.from_now) }
 
       it 'deletes the request' do
         expect { subject.call }.to change(Request, :count).from(1).to(0)
@@ -140,7 +145,7 @@ RSpec.describe 'Requests', telegram_bot: :rails do
       it 'redirects to requests path with planned filter' do
         subject.call
 
-        expect(response).to redirect_to requests_path(filter: :planned)
+        expect(response).to redirect_to organization_requests_path(organization, filter: :planned)
       end
 
       it 'shows a notice that it was successful' do
@@ -151,13 +156,13 @@ RSpec.describe 'Requests', telegram_bot: :rails do
     end
   end
 
-  describe 'GET /notifications' do
+  describe 'GET /{organization_id}/notifications' do
     let(:request) { create(:request) }
     let!(:older_message) { create(:message, request_id: request.id, created_at: 2.minutes.ago) }
     let(:params) { { last_updated_at: 1.minute.ago } }
     let(:user) { create(:user) }
 
-    subject { -> { get notifications_request_path(request, as: user), params: params } }
+    subject { -> { get notifications_organization_request_path(request.organization, request, as: user), params: params } }
 
     context 'No messages in last 1 minute' do
       it 'responds with message count 0' do

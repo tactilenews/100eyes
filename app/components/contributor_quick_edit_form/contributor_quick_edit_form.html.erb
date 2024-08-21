@@ -1,5 +1,5 @@
 <turbo-frame id="contributor-quick-edit-form">
-  <%= c 'form', model: contributor do %>
+  <%= c 'form', model: [organization, contributor] do %>
     <%= c 'stack' do %>
       <%= c 'field', object: contributor, attr: :tag_list do |field| %>
         <%= c 'tags_input', field.input_defaults.merge(available_tags: available_tags) %>

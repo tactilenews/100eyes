@@ -25,6 +25,8 @@ class OnboardingController < ApplicationController
   end
 
   def create
+    # FIXME: there is a inherent inconsistency possible here the overall @organization is taken from
+    # the onboarding paths (if scoped) whereas the context of the contributor is taken from the token itself.
     @contributor = Contributor.new(contributor_params.merge(json_web_token_attributes: { invalidated_jwt: jwt_param },
                                                             organization: @organization))
     @contributor.tag_list = tag_list_from_jwt
