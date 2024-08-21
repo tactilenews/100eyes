@@ -27,7 +27,7 @@ Rails.application.routes.draw do
         get 'stats'
       end
     end
-    
+
     resources :messages, only: %i[new create edit update] do
       member do
         scope module: :messages, as: :message do
