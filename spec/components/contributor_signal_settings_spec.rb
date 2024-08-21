@@ -5,8 +5,11 @@ require 'rails_helper'
 RSpec.describe ContributorSignalSettings::ContributorSignalSettings, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
-  let(:params) { { contributor: contributor } }
-  let(:complete_onboarding_link) { onboarding_signal_link_path(signal_onboarding_token: contributor.signal_onboarding_token) }
+  let(:params) { { contributor: contributor, organization: organization } }
+  let(:complete_onboarding_link) do
+    organization_onboarding_signal_link_path(organization, signal_onboarding_token: contributor.signal_onboarding_token)
+  end
+  let(:organization) { create(:organization) }
 
   let(:contributor) do
     create(:contributor,
@@ -14,7 +17,8 @@ RSpec.describe ContributorSignalSettings::ContributorSignalSettings, type: :comp
            last_name: 'Mustermann',
            signal_phone_number: '+4915112345678',
            signal_onboarding_completed_at: onboarding_completed_at,
-           created_at: '2021-01-01')
+           created_at: '2021-01-01',
+           organization: organization)
   end
 
   let(:onboarding_completed_at) { Time.zone.now }

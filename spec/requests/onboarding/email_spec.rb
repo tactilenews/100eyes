@@ -6,13 +6,13 @@ RSpec.describe 'Onboarding::Email', type: :request do
   let(:email) { 'zora@example.org' }
   let(:data_processing_consent) { true }
   let(:additional_consent) { true }
-  let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding', organization_id: organization.id }) }
+  let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
   let(:params) { { jwt: jwt } }
   let(:organization) { create(:organization, onboarding_allowed: onboarding_allowed) }
   let(:onboarding_allowed) { { email: false } }
 
-  describe 'GET /onboarding/email' do
-    subject { -> { get onboarding_email_path(jwt: jwt) } }
+  describe 'GET /{organization_id}/onboarding/email' do
+    subject { -> { get organization_onboarding_email_path(organization, jwt: jwt) } }
 
     before do
       allow(ENV).to receive(:fetch).with('POSTMARK_API_TOKEN', nil).and_return('valid_api_token')
@@ -37,7 +37,7 @@ RSpec.describe 'Onboarding::Email', type: :request do
     end
   end
 
-  describe 'POST /onboarding/email' do
+  describe 'POST /{organization_id}/onboarding/email' do
     let(:attrs) do
       {
         first_name: 'Zora',
@@ -50,7 +50,7 @@ RSpec.describe 'Onboarding::Email', type: :request do
 
     let(:params) { { jwt: jwt, contributor: attrs, context: :contributor_signup } }
 
-    subject { -> { post onboarding_email_path, params: params } }
+    subject { -> { post organization_onboarding_email_path(organization), params: params } }
 
     before do
       allow(ENV).to receive(:fetch).with('POSTMARK_API_TOKEN', nil).and_return('valid_api_token')
@@ -97,7 +97,7 @@ RSpec.describe 'Onboarding::Email', type: :request do
 
       it 'redirects to success page' do
         subject.call
-        expect(response).to redirect_to onboarding_success_path
+        expect(response).to redirect_to organization_onboarding_success_path(organization, jwt: nil)
       end
 
       it 'invalidates the jwt' do
@@ -171,7 +171,7 @@ RSpec.describe 'Onboarding::Email', type: :request do
 
         it 'redirects to success page' do
           subject.call
-          expect(response).to redirect_to onboarding_success_path
+          expect(response).to redirect_to organization_onboarding_success_path(organization, jwt: nil)
         end
 
         it 'invalidates the jwt' do

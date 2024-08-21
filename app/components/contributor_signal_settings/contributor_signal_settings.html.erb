@@ -12,7 +12,7 @@
 
         <%= c 'copy_button',
           style: :secondary,
-          copy: onboarding_signal_link_url(signal_onboarding_token: contributor.signal_onboarding_token),
+          copy: organization_onboarding_signal_link_url(organization, signal_onboarding_token: contributor.signal_onboarding_token),
           label: t('.incomplete.action')
         %>
       <% end %>
