@@ -35,6 +35,6 @@ class ApplicationController < ActionController::Base
   private
 
   def set_organization
-    @organization = Organization.find(params[:organization_id])
+    @organization = Organization.find(params[:organization_id]) if params[:organization_id].present?
   end
 end
