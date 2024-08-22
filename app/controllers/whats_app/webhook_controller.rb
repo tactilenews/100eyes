@@ -105,11 +105,11 @@ module WhatsApp
       end
 
       adapter.on(WhatsAppAdapter::TwilioInbound::UNSUBSCRIBE_CONTRIBUTOR) do |contributor, organization|
-        UnsubscribeContributorJob.perform_later(organization.id, contributor.id, WhatsAppAdapter::Delegator.new(organization))
+        UnsubscribeContributorJob.perform_later(organization.id, contributor.id, WhatsAppAdapter::TwilioOutbound)
       end
 
       adapter.on(WhatsAppAdapter::TwilioInbound::RESUBSCRIBE_CONTRIBUTOR) do |contributor, organization|
-        ResubscribeContributorJob.perform_later(organization.id, contributor.id, WhatsAppAdapter::Delegator.new(organization))
+        ResubscribeContributorJob.perform_later(organization.id, contributor.id, WhatsAppAdapter::TwilioOutbound)
       end
     end
 
