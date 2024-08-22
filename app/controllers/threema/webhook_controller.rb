@@ -57,7 +57,7 @@ class Threema::WebhookController < ApplicationController
 
   def handle_delivery_receipt(delivery_receipt)
     return if delivery_receipt.message_ids.blank?
-
+    # TODO: scope by organization?
     messages = Message.where(external_id: delivery_receipt.message_ids)
     messages.each do |message|
       delivery_receipt.message_ids.each do |message_id|

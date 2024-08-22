@@ -9,7 +9,9 @@ class RequestsController < ApplicationController
 
   def index
     @filter = filter_param
+    # TODO: scope by organization
     @sent_requests_count = Request.broadcasted.count
+    # TODO: scope by organization
     @planned_requests_count = Request.planned.count
     @requests = filtered_requests.page(params[:page])
   end
@@ -23,6 +25,7 @@ class RequestsController < ApplicationController
       if @request.planned?
         redirect_to organization_requests_path(@organization, filter: :planned), flash: {
           success: I18n.t('request.schedule_request_success',
+                          # TODO: scope by organization
                           count: Contributor.active.with_tags(@request.tag_list).count,
                           scheduled_datetime: I18n.l(@request.schedule_send_for, format: :long))
         }
@@ -47,6 +50,7 @@ class RequestsController < ApplicationController
       if @request.planned?
         redirect_to organization_requests_path(@request.organization_id, filter: :planned), flash: {
           success: I18n.t('request.schedule_request_success',
+                          # TODO: scopy by organization
                           count: Contributor.active.with_tags(@request.tag_list).count,
                           scheduled_datetime: I18n.l(@request.schedule_send_for, format: :long))
         }
@@ -108,6 +112,7 @@ class RequestsController < ApplicationController
   private
 
   def set_contributor
+    # TODO: scope by organization
     @contributor = Contributor.find(params[:contributor_id])
   end
 
@@ -160,6 +165,7 @@ class RequestsController < ApplicationController
   end
 
   def filtered_requests
+    # TODO: scope by organization
     if @filter == :planned
       Request.planned.reorder(schedule_send_for: :desc).includes(:tags)
     else
