@@ -168,7 +168,10 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
       context 'request to unsubscribe' do
         before { params[:messages].first[:text][:body] = 'Abbestellen' }
 
-        it { is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(organization.id, contributor.id, WhatsAppAdapter::ThreeSixtyDialogOutbound) }
+        it {
+          is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(organization.id, contributor.id,
+                                                                           WhatsAppAdapter::ThreeSixtyDialogOutbound)
+        }
       end
 
       context 'request to re-subscribe' do
@@ -177,7 +180,10 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
           params[:messages].first[:text][:body] = 'Bestellen'
         end
 
-        it { is_expected.to have_enqueued_job(ResubscribeContributorJob).with(organization.id, contributor.id, WhatsAppAdapter::ThreeSixtyDialogOutbound) }
+        it {
+          is_expected.to have_enqueued_job(ResubscribeContributorJob).with(organization.id, contributor.id,
+                                                                           WhatsAppAdapter::ThreeSixtyDialogOutbound)
+        }
       end
 
       context 'files' do

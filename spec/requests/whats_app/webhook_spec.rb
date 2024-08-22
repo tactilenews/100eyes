@@ -220,7 +220,8 @@ RSpec.describe WhatsApp::WebhookController do
           before { params['Body'] = 'Abbestellen' }
 
           it {
-            is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(organization.id, contributor.id, WhatsAppAdapter::TwilioOutbound)
+            is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(organization.id, contributor.id,
+                                                                             WhatsAppAdapter::TwilioOutbound)
           }
         end
 
@@ -231,7 +232,8 @@ RSpec.describe WhatsApp::WebhookController do
           end
 
           it {
-            is_expected.to have_enqueued_job(ResubscribeContributorJob).with(organization.id, contributor.id, WhatsAppAdapter::TwilioOutbound)
+            is_expected.to have_enqueued_job(ResubscribeContributorJob).with(organization.id, contributor.id,
+                                                                             WhatsAppAdapter::TwilioOutbound)
           }
         end
       end
