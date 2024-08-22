@@ -8,9 +8,10 @@ RSpec.describe 'Sessions', type: :request do
   let(:otp_enabled) { false }
 
   describe 'GET /sign_in' do
-    before(:each) { get sign_in_path(as: user) }
+    before { get sign_in_path(as: user) }
     subject { response }
 
+    # This redirect comes from Clearance.configuration.redirect_url and is hard-coded in clearance initializer.
     context 'if user is already signed-in' do
       it { should redirect_to(organizations_path) }
     end
@@ -32,7 +33,7 @@ RSpec.describe 'Sessions', type: :request do
       context 'with correct email and password' do
         let(:password_param) { '12345678' }
 
-        it { should redirect_to(organizations_path) }
+        it { should redirect_to(organization_dashboard_path(organization)) }
         it { should have_current_user(user) }
       end
     end

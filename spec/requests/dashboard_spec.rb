@@ -12,14 +12,14 @@ RSpec.describe '/dashboard' do
         before { user.update(organizations: [create(:organization)]) }
 
         it 'should return not found' do
-          get dashboard_url(as: user)
+          get organization_dashboard_url(organization, as: user)
           expect(response).to have_http_status(:not_found)
         end
       end
 
       describe 'Part of organization' do
         it 'should be successful' do
-          get dashboard_url(as: user)
+          get organization_dashboard_url(organization, as: user)
           expect(response).to be_successful
         end
       end

@@ -22,7 +22,7 @@ FactoryBot.define do
 
     after(:create) do |org, evaluator|
       if evaluator.users_count.positive?
-        org.users << create_list(:user, evaluator.users_count, organization: org)
+        org.users << create_list(:user, evaluator.users_count, organizations: [org])
         org.save!
       end
     end

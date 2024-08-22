@@ -4,8 +4,7 @@ module WhatsApp
   class ThreeSixtyDialogWebhookController < ApplicationController
     include WhatsAppHandleCallbacks
 
-    skip_before_action :require_login, :verify_authenticity_token
-    before_action :organization
+    skip_before_action :require_login, :verify_authenticity_token, :user_permitted?
 
     # rubocop:disable Metrics/AbcSize
     def message
@@ -56,10 +55,6 @@ module WhatsApp
     end
 
     private
-
-    def organization
-      @organization ||= Organization.find(params['organization_id'])
-    end
 
     def message_params
       params.permit({ three_sixty_dialog_webhook:

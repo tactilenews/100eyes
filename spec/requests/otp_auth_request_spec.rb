@@ -6,14 +6,14 @@ RSpec.describe 'OTP Auth', type: :request do
   include ActiveSupport::Testing::TimeHelpers
 
   let(:organization) { create(:organization) }
-  let!(:user) { create(:user, email: 'zora@example.org', password: '12345678', otp_enabled: true) }
+  let!(:user) { create(:user, email: 'zora@example.org', password: '12345678', otp_enabled: true, organizations: [organization]) }
 
   describe 'GET /otp_auth' do
     before(:each) { get otp_auth_path(as: user) }
     subject { response }
 
     context 'if user is already signed in' do
-      it { should redirect_to(organizations_path) }
+      it { should redirect_to(organization_dashboard_path(organization)) }
     end
   end
 
@@ -42,7 +42,7 @@ RSpec.describe 'OTP Auth', type: :request do
       context 'and correct OTP' do
         let(:otp_param) { user.otp_code }
 
-        it { should redirect_to(organizations_path) }
+        it { should redirect_to(organization_dashboard_path(organization)) }
         it { should have_current_user(user) }
       end
     end
