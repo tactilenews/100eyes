@@ -12,7 +12,7 @@ RSpec.describe UnsubscribeContributorJob do
       let(:contributor) do
         create(:contributor, whats_app_phone_number: '+491234567', unsubscribed_at: 1.day.ago, organization: organization)
       end
-      let(:adapter) { WhatsAppAdapter::Outbound }
+      let(:adapter) { WhatsAppAdapter::Delegator.new(organization) }
 
       it { is_expected.not_to(change { contributor.reload.unsubscribed_at }) }
     end
@@ -52,7 +52,7 @@ RSpec.describe UnsubscribeContributorJob do
     end
 
     context 'WhatsApp contributor' do
-      let(:adapter) { WhatsAppAdapter::Outbound }
+      let(:adapter) { WhatsAppAdapter::Delegator.new(organization) }
 
       context 'Twilio' do
         it_behaves_like 'a Contributor unsubscribes', WhatsAppAdapter::Outbound::Text do

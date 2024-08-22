@@ -2,9 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.describe WhatsAppAdapter::Outbound do
-  let(:adapter) { described_class.new }
+RSpec.describe WhatsAppAdapter::Delegator do
   let(:organization) { create(:organization) }
+  let(:adapter) { described_class.new(organization) }
   let(:request) { create(:request, organization: organization) }
   let!(:message) do
     create(:message,
@@ -16,7 +16,7 @@ RSpec.describe WhatsAppAdapter::Outbound do
   let(:contributor) { create(:contributor, email: nil, organization: organization) }
 
   describe '::send!' do
-    subject { -> { described_class.send!(message) } }
+    subject { -> { adapter.send!(message) } }
 
     context 'with 360dialog configured' do
       before do
@@ -59,7 +59,7 @@ RSpec.describe WhatsAppAdapter::Outbound do
   end
 
   describe '::send_welcome_message!' do
-    subject { -> { described_class.send_welcome_message!(contributor, organization) } }
+    subject { -> { adapter.send_welcome_message!(contributor, organization) } }
 
     context 'with 360dialog configured' do
       before do
@@ -102,7 +102,7 @@ RSpec.describe WhatsAppAdapter::Outbound do
   end
 
   describe '::send_more_info_message!' do
-    subject { -> { described_class.send_more_info_message!(contributor, organization) } }
+    subject { -> { adapter.send_more_info_message!(contributor, organization) } }
 
     context 'with 360dialog configured' do
       before do
@@ -145,7 +145,7 @@ RSpec.describe WhatsAppAdapter::Outbound do
   end
 
   describe '::send_unsubsribed_successfully_message!' do
-    subject { -> { described_class.send_unsubsribed_successfully_message!(contributor, organization) } }
+    subject { -> { adapter.send_unsubsribed_successfully_message!(contributor, organization) } }
 
     context 'with 360dialog configured' do
       before do

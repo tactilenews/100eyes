@@ -79,7 +79,7 @@ class Contributor < ApplicationRecord
 
   def send_welcome_message!(organization)
     [PostmarkAdapter::Outbound, SignalAdapter::Outbound, TelegramAdapter::Outbound, ThreemaAdapter::Outbound,
-     WhatsAppAdapter::Outbound].each do |adapter|
+     WhatsAppAdapter::Delegator.new(organization)].each do |adapter|
       adapter.send_welcome_message!(self, organization)
     end
   end

@@ -34,11 +34,11 @@ module WhatsApp
 
       # TODO: Update to API that passes in organization_id
       adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
-        UnsubscribeContributorJob.perform_later(@organization.id, contributor.id, WhatsAppAdapter::Outbound)
+        UnsubscribeContributorJob.perform_later(@organization.id, contributor.id, WhatsAppAdapter::Delegator.new(organization))
       end
 
       adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::RESUBSCRIBE_CONTRIBUTOR) do |contributor|
-        ResubscribeContributorJob.perform_later(@organization.id, contributor.id, WhatsAppAdapter::Outbound)
+        ResubscribeContributorJob.perform_later(@organization.id, contributor.id, WhatsAppAdapter::Delegator.new(organization))
       end
 
       adapter.consume(@organization, message_params.to_h) { |message| message.contributor.reply(adapter) }

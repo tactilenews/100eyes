@@ -129,7 +129,7 @@ RSpec.describe ResubscribeContributorJob do
 
     # rubocop:disable Style/FormatStringToken
     context 'unsubscribed WhatsApp contributor' do
-      let(:adapter) { WhatsAppAdapter::Outbound }
+      let(:adapter) { WhatsAppAdapter::Delegator.new(organization) }
       let(:whats_app_welcome_template) { I18n.t('adapter.whats_app.welcome_message').gsub('%{project_name}', '100eyes') }
 
       context 'Twilio' do
