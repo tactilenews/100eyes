@@ -39,7 +39,7 @@ module WhatsAppAdapter
       case response.code.to_i
       when 201
         file_id = JSON.parse(response.body)['media'].first['id']
-        WhatsAppAdapter::ThreeSixtyDialogFile.perform_later(message_id: message_id, file_id: file_id)
+        WhatsAppAdapter::Outbound::ThreeSixtyDialogFile.perform_later(message_id: message_id, file_id: file_id)
       when 400..599
         exception = WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: response.code, message: response.body)
         ErrorNotifier.report(exception)
