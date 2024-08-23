@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Request, type: :model do
   let(:organization) { create(:organization) }
   let(:contributor) { create(:contributor, organization: organization) }
-  let(:user) { create(:user) }
+  let(:user) { create(:user, organization: organization) }
 
   let(:request) do
     Request.new(
@@ -296,6 +296,19 @@ RSpec.describe Request, type: :model do
       it { should change { Message.pluck(:sender_id) }.from([]).to([request.user.id, request.user.id]) }
       it { should change { Message.pluck(:broadcasted) }.from([]).to([true, true]) }
       it { should change { Message::File.count }.from(0).to(2) }
+
+      describe 'given a planned request' do
+        before do
+          request.schedule_send_for = 1.hour.from_now
+          organization.users << user
+          organization.save!
+        end
+
+        let!(:admin) { create_list(:user, 2, admin: true) }
+        let!(:users_of_other_organization) { create_list(:user, 2, organization: create(:organization)) }
+
+        it_behaves_like 'an ActivityNotification', 'RequestScheduled', 3
+      end
     end
 
     describe 'creates message only for contributors tagged with tag_list' do
