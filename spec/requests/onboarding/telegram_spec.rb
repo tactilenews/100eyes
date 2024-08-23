@@ -4,8 +4,9 @@ require 'rails_helper'
 
 RSpec.describe 'Onboarding::Telegram', type: :request do
   let!(:organization) do
-    create(:organization, telegram_bot_api_key: telegram_bot_api_key, onboarding_allowed: onboarding_allowed)
+    create(:organization, telegram_bot_api_key: telegram_bot_api_key, onboarding_allowed: onboarding_allowed, users_count: 1)
   end
+  let!(:admin) { create_list(:user, 2, admin: true) }
   let(:telegram_bot_api_key) { nil }
   let(:onboarding_allowed) { { telegram: true } }
 
@@ -135,7 +136,7 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
       end
 
       context 'creates an ActivityNotification' do
-        it_behaves_like 'an ActivityNotification', 'OnboardingCompleted'
+        it_behaves_like 'an ActivityNotification', 'OnboardingCompleted', 3
       end
 
       context 'without data processing consent' do

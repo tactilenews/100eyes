@@ -298,14 +298,10 @@ RSpec.describe Request, type: :model do
       it { should change { Message::File.count }.from(0).to(2) }
 
       describe 'given a planned request' do
-        before do
-          request.schedule_send_for = 1.hour.from_now
-          organization.users << user
-          organization.save!
-        end
+        before { request.schedule_send_for = 1.hour.from_now }
 
         let!(:admin) { create_list(:user, 2, admin: true) }
-        let!(:users_of_other_organization) { create_list(:user, 2, organization: create(:organization)) }
+        let!(:other_organization) { create(:organization, users_count: 2) }
 
         it_behaves_like 'an ActivityNotification', 'RequestScheduled', 3
       end
