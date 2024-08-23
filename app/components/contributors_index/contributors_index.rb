@@ -2,6 +2,7 @@
 
 module ContributorsIndex
   class ContributorsIndex < ApplicationComponent
+
     def initialize(organization:, contributors:, state:, active_count:, inactive_count:, unsubscribed_count:, filter_count:, available_tags:, tag_list: nil)
       super
 
