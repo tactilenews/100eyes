@@ -56,9 +56,10 @@ RSpec.describe '/{organization_id}/contributors', type: :request do
   end
 
   describe 'GET /count' do
-    let!(:teachers) { create_list(:contributor, 2, tag_list: 'teacher') }
+    let!(:teachers) { create_list(:contributor, 2, tag_list: 'teacher', organization: organization) }
+    let!(:other_teachers) { create_list(:contributor, 2, tag_list: 'teacher') }
 
-    it 'returns count of contributors with a specific tag' do
+    it 'returns count of contributors with a specific tag within the organization' do
       get count_organization_contributors_path(organization, tag_list: ['teacher'], as: user)
       expect(response.body).to eq({ count: 2 }.to_json)
     end
