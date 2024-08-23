@@ -21,18 +21,7 @@ class ContributorsController < ApplicationController
   end
 
   def index
-    @state = state_params
-    @tag_list = tag_list_params
-
-    @active_count = @organization.contributors.active.count
-    @inactive_count = @organization.contributors.inactive.count
-    @unsubscribed_count = @organization.contributors.unsubscribed.count
-    @available_tags = @organization.contributors_tags_with_count.to_json
-
-    @contributors = filtered_contributors
-    @contributors = @contributors.with_tags(tag_list_params)
-    @filter_count = @contributors.size
-    @contributors = @contributors.with_attached_avatar.includes(:tags).page(contributors_params[:page])
+    @data_object = Contributors::IndexData.new(@organization, contributors_params)
   end
 
   def show; end
@@ -107,33 +96,6 @@ class ContributorsController < ApplicationController
 
   def count_params
     params.permit(tag_list: [])
-  end
-
-  def state_params
-    value = contributors_params[:state]&.to_sym
-
-    return :active unless %i[active inactive unsubscribed].include?(value)
-
-    value
-  end
-
-  def filtered_contributors
-
-    case @state
-    when :inactive
-      @organization.contributors.inactive
-    when :unsubscribed
-      @organization.contributors.unsubscribed
-    else
-      @organization.contributors.active
-    end
-  end
-
-  def tag_list_params
-    value = contributors_params[:tag_list]
-    return [] if value.blank? || value.all?(&:blank?)
-
-    value.reject(&:empty?).first.split(',')
   end
 
   def handle_failed_update
