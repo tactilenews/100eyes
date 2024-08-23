@@ -73,9 +73,10 @@ class ContributorsController < ApplicationController
   end
 
   def contributors_sidebar
-    @contributors_sidebar ||= Contributor
+    @contributors_sidebar ||= @organization
+                              .contributors
                               .active
-                              .or(Contributor.where(id: @contributor.id))
+                              .or(@organization.contributors.where(id: @contributor.id))
                               .with_attached_avatar
   end
 

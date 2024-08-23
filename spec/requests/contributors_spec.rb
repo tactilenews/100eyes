@@ -32,16 +32,26 @@ RSpec.describe '/{organization_id}/contributors', type: :request do
   end
 
   describe 'GET /show' do
+    subject { -> { get organization_contributor_url(organization, contributor, as: user) } }
+
     it 'should be successful' do
-      get organization_contributor_url(organization, contributor, as: user)
+      subject.call
       expect(response).to be_successful
     end
 
-    context 'for contributors of other organizations' do
+    context 'with contributors of other organizations' do
+      let!(:other_organizations_contributor) { create(:contributor, first_name: "WhatAName") }
+
       it 'renders not found' do
         get organization_contributor_url(organization, create(:contributor), as: user)
         expect(response).to be_not_found
       end
+
+      it 'doesn\'t have the other contributor in the sidebar' do
+        subject.call
+        expect(page).not_to have_content other_organizations_contributor.first_name
+      end
+
     end
   end
 
