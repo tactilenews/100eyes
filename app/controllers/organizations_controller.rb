@@ -11,8 +11,4 @@ class OrganizationsController < ApplicationController
     @organizations = Organization.all
   end
 
-  def set_organization
-    organization = Organization.find(params[:organization_id])
-    redirect_to organization_dashboard_path(organization)
-  end
 end
