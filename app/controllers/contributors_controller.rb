@@ -69,7 +69,7 @@ class ContributorsController < ApplicationController
   private
 
   def set_contributor
-    @contributor = Contributor.find(params[:id])
+    @contributor = @organization.contributors.find(params[:id])
   end
 
   def contributors_sidebar
