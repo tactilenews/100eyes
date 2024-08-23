@@ -10,5 +10,4 @@ class OrganizationsController < ApplicationController
 
     @organizations = Organization.all
   end
-
 end
