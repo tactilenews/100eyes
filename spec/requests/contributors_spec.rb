@@ -10,7 +10,7 @@ RSpec.describe '/{organization_id}/contributors', type: :request do
   let(:user) { create(:user, organizations: [organization]) }
 
   describe 'GET /index' do
-    let!(:other_organizations_contributor) { create(:contributor, first_name: "WhatAName") }
+    let!(:other_organizations_contributor) { create(:contributor, first_name: 'WhatAName') }
     let!(:other_inactive_contributor) { create(:contributor, :inactive) }
     let!(:other_unsubscribed_contributor) { create(:contributor, :unsubscribed) }
 
@@ -23,9 +23,9 @@ RSpec.describe '/{organization_id}/contributors', type: :request do
     it 'contains only the contributors from the organization' do
       expect(page).to have_content contributor.first_name
 
-      expect(page).to have_content("Aktiv 1")
-      expect(page).to have_content("Inaktiv 0")
-      expect(page).to have_content("Abbestellt 0")
+      expect(page).to have_content('Aktiv 1')
+      expect(page).to have_content('Inaktiv 0')
+      expect(page).to have_content('Abbestellt 0')
 
       expect(page).not_to have_content other_organizations_contributor.first_name
     end
@@ -40,7 +40,7 @@ RSpec.describe '/{organization_id}/contributors', type: :request do
     end
 
     context 'with contributors of other organizations' do
-      let!(:other_organizations_contributor) { create(:contributor, first_name: "WhatAName") }
+      let!(:other_organizations_contributor) { create(:contributor, first_name: 'WhatAName') }
 
       it 'renders not found' do
         get organization_contributor_url(organization, create(:contributor), as: user)
@@ -51,7 +51,6 @@ RSpec.describe '/{organization_id}/contributors', type: :request do
         subject.call
         expect(page).not_to have_content other_organizations_contributor.first_name
       end
-
     end
   end
 
@@ -245,7 +244,8 @@ RSpec.describe '/{organization_id}/contributors', type: :request do
 
     context 'for contributors of other organizations' do
       it 'renders not found' do
-        post message_organization_contributor_url(organization, create(:contributor), as: user), params: { message: { text: 'Forgot to ask: How are you?' } }
+        post message_organization_contributor_url(organization, create(:contributor), as: user),
+             params: { message: { text: 'Forgot to ask: How are you?' } }
         expect(response).to be_not_found
       end
     end
