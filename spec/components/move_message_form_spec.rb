@@ -9,7 +9,7 @@ RSpec.describe MoveMessageForm::MoveMessageForm, type: :component do
   let!(:older_request) { create(:request, broadcasted_at: 1.hour.ago, organization: organization) }
   let!(:request_for_info) { create(:request, broadcasted_at: 0.hours.ago, organization: organization) }
   let!(:planned_request) { create(:request, broadcasted_at: 1.hour.from_now, organization: organization) }
-  let!(:other_organizations_request) {create(:request, broadcasted_at: 1.hour.ago)}
+  let!(:other_organizations_request) { create(:request, broadcasted_at: 1.hour.ago) }
 
   let(:message) { create(:message, request: request_for_info) }
 
