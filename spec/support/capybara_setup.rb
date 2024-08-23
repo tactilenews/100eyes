@@ -29,3 +29,13 @@ end)
 Capybara.server_host = '0.0.0.0'
 # Use a hostname that could be resolved in the internal Docker network
 Capybara.app_host = "http://#{Socket.gethostname}:#{Capybara.server_port}"
+
+module CapybaraPage
+  def page
+    Capybara.string(response.body)
+  end
+end
+
+RSpec.configure do |config|
+  config.include CapybaraPage, type: :request
+end
