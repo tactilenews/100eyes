@@ -10,9 +10,14 @@ RSpec.describe '/{organization_id}/contributors', type: :request do
   let(:user) { create(:user, organizations: [organization]) }
 
   describe 'GET /index' do
+    before { get organization_contributors_url(organization, as: user) }
+
     it 'should be successful' do
-      get organization_contributors_url(organization, as: user)
       expect(response).to be_successful
+    end
+
+    it 'contains only the contributors from the organization' do
+      expect(page).to have_content contributor.first_name
     end
   end
 
