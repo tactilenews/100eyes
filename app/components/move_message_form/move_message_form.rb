@@ -17,7 +17,7 @@ module MoveMessageForm
     end
 
     def recent_requests
-      Request
+      message.organization.requests
         .where('broadcasted_at <= ?', request.broadcasted_at)
         .order(broadcasted_at: :desc)
         .limit(5)
