@@ -16,11 +16,11 @@ RSpec.describe 'Editing requests', js: true do
 
   it 'conditionally allows editing' do
     # Sent request
-    visit edit_request_path(sent_request, as: user)
+    visit edit_organization_request_path(organization, sent_request, as: user)
     expect(page).to have_content('Sie können eine bereits verschickte Frage nicht mehr bearbeiten.')
-    expect(page).to have_current_path(requests_path)
+    expect(page).to have_current_path(organization_requests_path(organization))
 
-    visit edit_request_path(request_scheduled_in_future, as: user)
+    visit edit_organization_request_path(organization, request_scheduled_in_future, as: user)
 
     expect(page).to have_field('Titel', with: request_scheduled_in_future.title)
     expect(page).to have_field('Was möchtest du wissen?', with: request_scheduled_in_future.text)
@@ -37,7 +37,7 @@ RSpec.describe 'Editing requests', js: true do
 
     formatted = I18n.l(scheduled_datetime, format: :long)
     success_message = "Ihre Frage wurde erfolgreich geplant, um am #{formatted} an ein Community-Mitglied gesendet zu werden."
-    expect(page).to have_current_path(requests_path(filter: :planned))
+    expect(page).to have_current_path(organization_requests_path(organization, filter: :planned))
     expect(page).to have_content('Did you get my scheduled request?')
     expect(page).to have_content(success_message)
   end

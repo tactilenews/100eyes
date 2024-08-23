@@ -8,7 +8,7 @@
     <p><%= t('.text') %></p>
   <% end %>
 
-  <%= form_with(model: contributor, local: true, url: onboarding_whats_app_path) do %>
+  <%= form_with(model: contributor, local: true, url: organization_onboarding_whats_app_path(organization)) do %>
     <%= c 'stack' do %>
       <%= c 'field', object: contributor, attr: :first_name do |field| %>
         <%= c 'input', field.input_defaults.merge(required: true) %>

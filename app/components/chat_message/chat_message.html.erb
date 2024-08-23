@@ -6,7 +6,8 @@
   data-chat-message-truncated-class="ChatMessage--truncated"
   data-chat-message-expanded-class="ChatMessage--expanded"
   data-chat-message-highlighted-class="ChatMessage--highlighted"
-  data-chat-message-copy-url-value="<%= request_url(message.request, anchor: id) %>"
+  data-chat-message-copy-url-value="<%= organization_request_url(message.organization_id, message.request_id, anchor: id) %>"
+  data-chat-message-highlight-url-value="<%= organization_message_highlight_path(message.organization_id, message) %>"
   id="<%= id %>"
 >
     <header class="ChatMessage-header">
@@ -85,7 +86,7 @@
         <% end %>
 
         <% if message.sent_from_contributor? %>
-          <%= c 'button', link: conversations_contributor_path(id: message.contributor, reply_to: message.id, anchor: "chat-form" ), style: :inline do %>
+          <%= c 'button', link: conversations_organization_contributor_path(organization_id: message.organization_id, id: message.contributor, reply_to: message.id, anchor: "chat-form" ), style: :inline do %>
             <%= c 'icon', icon: 'reply-arrow', styles: [:inline] %>
             <%= I18n.t('components.chat_messages_group.reply') %>
           <% end %>
@@ -98,7 +99,7 @@
         <%= I18n.t('components.chat_message.created_by', name: creator_name) %>
         ·
         <span class="ChatMessage-edit">
-          <%= link_to I18n.t('components.chat_message.edit'), edit_message_path(message) %>
+          <%= link_to I18n.t('components.chat_message.edit'), edit_organization_message_path(message, organization_id: message.organization_id) %>
         </span>
       </div>
     <% end %>
