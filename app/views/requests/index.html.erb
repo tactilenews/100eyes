@@ -7,18 +7,18 @@
       <p><%= t('request.subheading') %></p>
     </div>
 
-    <%= c 'new_request_link' %>
+    <%= c 'new_request_link', organization: @organization %>
 
     <% header.tab_bar do %>
       <%= c('tab_bar', items: [
         {
-          url: requests_path,
+          url: organization_requests_path(@organization),
           label: "Gestellt",
           active: @filter == :sent,
           count: @sent_requests_count
         },
         {
-          url: requests_path(filter: :planned),
+          url: organization_requests_path(@organization, filter: :planned),
           label: "Geplant",
           active: @filter == :planned,
           count: @planned_requests_count
@@ -28,10 +28,10 @@
   <% end %>
 
   <%= c 'section', styles: [:wide] do %>
-    <%= paginate @requests, params: { path: requests_path, query: { filter: @filter } } %>
+    <%= paginate @requests, params: { path: organization_requests_path(@organization), query: { filter: @filter } } %>
     <% @requests.each do |request| %>
       <%= c 'request_row', request: request %>
     <% end %>
-    <%= paginate @requests, params: { path: requests_path, query: { filter: @filter } } %>
+    <%= paginate @requests, params: { path: organization_requests_path(@organization), query: { filter: @filter } } %>
   <% end %>
 <% end %>

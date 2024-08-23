@@ -8,7 +8,7 @@
     <p><%= I18n.t('components.onboarding_email_form.text') %></p>
   <% end %>
 
-  <%= form_with(model: contributor, local: true, url: onboarding_email_path) do %>
+  <%= form_with(model: contributor, local: true, url: organization_onboarding_email_path(organization)) do %>
     <%= c 'stack' do %>
       <%= c 'field', object: contributor, attr: :first_name do |field| %>
         <%= c 'input', field.input_defaults.merge(required: true) %>

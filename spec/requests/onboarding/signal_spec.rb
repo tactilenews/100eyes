@@ -13,8 +13,8 @@ RSpec.describe 'Onboarding::Signal', type: :request do
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding', organization_id: organization.id }) }
   let(:params) { { jwt: jwt } }
 
-  describe 'GET /onboarding/signal' do
-    subject { -> { get onboarding_signal_path(jwt: jwt) } }
+  describe 'GET /{organization_id}/onboarding/signal' do
+    subject { -> { get organization_onboarding_signal_path(organization, jwt: jwt) } }
 
     describe 'when no signal server phone number is configured' do
       it 'returns a 404 not found' do
@@ -46,7 +46,7 @@ RSpec.describe 'Onboarding::Signal', type: :request do
     end
   end
 
-  describe 'POST /onboarding/signal' do
+  describe 'POST /{organization_id}/onboarding/signal' do
     let(:attrs) do
       {
         first_name: 'Zora',
@@ -60,7 +60,7 @@ RSpec.describe 'Onboarding::Signal', type: :request do
     let(:params) { { jwt: jwt, contributor: attrs, context: :contributor_signup } }
     let(:signal_onboarding_token) { SecureRandom.alphanumeric(8).upcase }
 
-    subject { -> { post onboarding_signal_path, params: params } }
+    subject { -> { post organization_onboarding_signal_path(organization), params: params } }
 
     describe 'when no signal server phone number is configured' do
       it 'returns a 404 not found' do
@@ -102,7 +102,9 @@ RSpec.describe 'Onboarding::Signal', type: :request do
 
       it 'redirects to success page' do
         subject.call
-        expect(response).to redirect_to onboarding_signal_link_path(jwt: nil, signal_onboarding_token: signal_onboarding_token)
+        expect(response).to redirect_to organization_onboarding_signal_link_path(organization,
+                                                                                 jwt: nil,
+                                                                                 signal_onboarding_token: signal_onboarding_token)
       end
 
       it 'invalidates the jwt' do

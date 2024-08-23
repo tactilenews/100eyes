@@ -1,5 +1,5 @@
 <%= c 'card', **attrs.merge(id: "request-#{request.id}") do %>
-  <%= link_to request.planned? ? edit_request_path(request) : request_path(id: request.id) do %>
+  <%= link_to request.planned? ? edit_organization_request_path(request.organization_id, request) : organization_request_path(request.organization_id, id: request.id) do %>
     <%= c 'box' do %>
       <%= c 'stack', space: :small do %>
 
@@ -34,7 +34,7 @@
               %>
             </span>
 
-            <%= c 'inline_metrics', metrics: request_metrics, path: stats_request_path(request) %>
+            <%= c 'inline_metrics', metrics: request_metrics, path: stats_organization_request_path(request.organization_id, request) %>
           </div>
         <% end %>
       <% end %>

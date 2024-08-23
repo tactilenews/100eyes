@@ -15,6 +15,7 @@ class Message < ApplicationRecord
   has_many :photos, dependent: :destroy
   has_many :files, dependent: :destroy, class_name: 'Message::File'
   has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
+  has_one :organization, through: :request
 
   counter_culture :request,
                   column_name: proc { |model| model.reply? ? 'replies_count' : nil },
@@ -28,7 +29,8 @@ class Message < ApplicationRecord
   scope :outbound, -> { where(sender_type: [User.name, nil]) }
 
   delegate :name, to: :creator, allow_nil: true, prefix: true
-  delegate :organization, to: :request
+
+  delegate :organization_id, to: :request
 
   has_many_attached :raw_data
   validates :raw_data, presence: true, if: -> { sent_from_contributor? }
@@ -55,7 +57,7 @@ class Message < ApplicationRecord
   end
 
   def chat_message_link
-    Rails.application.routes.url_helpers.conversations_contributor_path(id: contributor, anchor: "message-#{id}")
+    Rails.application.routes.url_helpers.conversations_organization_contributor_path(organization, id: contributor, anchor: "message-#{id}")
   end
 
   def sent_from_contributor?

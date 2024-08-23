@@ -14,7 +14,7 @@
       <%= c 'markdown', raw: @organization.onboarding_page %>
     </div>
 
-    <%= c 'onboarding_channel_buttons', channels: @channels %>
+    <%= c 'onboarding_channel_buttons', organization: @organization, channels: @channels %>
 
   <% end %>
 <% end %>

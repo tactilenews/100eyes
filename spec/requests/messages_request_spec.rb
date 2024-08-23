@@ -9,7 +9,8 @@ RSpec.describe 'Messages', type: :request do
 
     subject do
       lambda do
-        patch(message_highlight_url(message, format: :json, as: user), params: params)
+        patch(organization_message_highlight_url(message, organization_id: message.organization_id, format: :json, as: user),
+              params: params)
       end
     end
 
@@ -46,7 +47,7 @@ RSpec.describe 'Messages', type: :request do
     let(:user) { create(:user) }
     let(:contributor) { create(:contributor, first_name: 'Zora', last_name: 'Zimmermann') }
 
-    before(:each) { get(message_request_url(message, as: user)) }
+    before(:each) { get(organization_message_request_url(message.organization, message, as: user)) }
 
     context 'given an inbound message' do
       let(:message) { create(:message, sender: contributor, recipient: nil) }
@@ -71,7 +72,7 @@ RSpec.describe 'Messages', type: :request do
     let(:user) { create(:user) }
     let(:request) { create(:request) }
 
-    subject { -> { patch(message_request_url(message, as: user), params: params) } }
+    subject { -> { patch(organization_message_request_url(message.organization, message, as: user), params: params) } }
 
     let(:message) { create(:message, request: request) }
     let(:other_request) { create(:request) }
@@ -100,7 +101,7 @@ RSpec.describe 'Messages', type: :request do
         subject.call
 
         anchor = "contributor-#{message.contributor.id}"
-        url = request_url(request, anchor: anchor)
+        url = organization_request_url(request.organization_id, request, anchor: anchor)
 
         expect(flash[:success]).not_to be_empty
         expect(response).to redirect_to url

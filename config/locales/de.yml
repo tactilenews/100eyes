@@ -403,7 +403,8 @@ de:
       heading: "Bist du sicher, dass du „%{request_title}” dauerhaft löschen möchtest?"
       cancel: abbrechen
       confirm: löschen
-
+    set_organization_form:
+      heading: Bitte wähle eine Organisation aus, um fortzufahren
   mailer:
     unsubscribe:
       text: "Sofern Sie keine E-Mails mehr von uns erhalten möchten, können Sie sie unter diesem Link abbestellen: {{{ pm:unsubscribe }}}"
@@ -945,3 +946,7 @@ de:
   shared:
     community: Community
     editorial: Redaktion
+
+  organizations:
+    index:
+      heading: "Hallo, %{first_name}!"

@@ -2,15 +2,16 @@
 
 module RequestsFeed
   class RequestsFeed < ApplicationComponent
-    def initialize(contributor:, **)
+    def initialize(organization:, contributor:, **)
       super
 
+      @organization = organization
       @contributor = contributor
     end
 
     private
 
-    attr_reader :contributor
+    attr_reader :organization, :contributor
 
     def replies
       @replies ||= contributor.recent_replies

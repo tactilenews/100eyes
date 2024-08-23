@@ -15,7 +15,7 @@ module ContributorRow
     attr_reader :organization, :contributor
 
     def url
-      contributor_path(contributor)
+      organization_contributor_path(organization, contributor)
     end
 
     def channels

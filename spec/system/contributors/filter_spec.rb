@@ -10,23 +10,23 @@ RSpec.describe 'Filter contributors' do
   let!(:another_contributor) { create(:contributor, organization: organization) }
 
   it 'Editor lists contributors' do
-    visit contributors_path(as: user)
+    visit organization_contributors_path(organization, as: user)
 
-    expect(page).to have_link('Aktiv 2', href: contributors_path(state: :active))
-    expect(page).to have_link('Inaktiv 1', href: contributors_path(state: :inactive))
+    expect(page).to have_link('Aktiv 2', href: organization_contributors_path(organization, state: :active))
+    expect(page).to have_link('Inaktiv 1', href: organization_contributors_path(organization, state: :inactive))
 
-    expect(page).to have_link(nil, href: contributor_path(active_contributor))
-    expect(page).not_to have_link(nil, href: contributor_path(inactive_contributor))
+    expect(page).to have_link(nil, href: organization_contributor_path(organization, active_contributor))
+    expect(page).not_to have_link(nil, href: organization_contributor_path(organization, inactive_contributor))
 
     click_on 'Inaktiv'
 
-    expect(page).to have_link(nil, href: contributor_path(inactive_contributor))
-    expect(page).not_to have_link(nil, href: contributor_path(active_contributor))
+    expect(page).to have_link(nil, href: organization_contributor_path(organization, inactive_contributor))
+    expect(page).not_to have_link(nil, href: organization_contributor_path(organization, active_contributor))
 
     click_on 'Aktiv'
 
-    expect(page).not_to have_link(nil, href: contributor_path(inactive_contributor))
-    expect(page).to have_link(nil, href: contributor_path(active_contributor))
+    expect(page).not_to have_link(nil, href: organization_contributor_path(organization, inactive_contributor))
+    expect(page).to have_link(nil, href: organization_contributor_path(organization, active_contributor))
 
     expect(page).not_to have_css('.ContributorsIndex-filterSection')
     click_on 'filtern'
@@ -43,17 +43,17 @@ RSpec.describe 'Filter contributors' do
 
     expect(page).to have_css('.ContributorsIndex-filterSection')
     expect(page).to have_content('Das sind die Mitglieder deiner Community gefiltert nach dem Tag (entwickler)')
-    expect(page).to have_link('Aktiv 1', href: contributors_path(state: :active, tag_list: ['entwickler']))
-    expect(page).to have_link(nil, href: contributor_path(active_contributor))
-    expect(page).not_to have_link(nil, href: contributor_path(another_contributor))
+    expect(page).to have_link('Aktiv 1', href: organization_contributors_path(organization, state: :active, tag_list: ['entwickler']))
+    expect(page).to have_link(nil, href: organization_contributor_path(organization, active_contributor))
+    expect(page).not_to have_link(nil, href: organization_contributor_path(organization, another_contributor))
 
     click_on 'zurücksetzen'
 
     expect(page).not_to have_css('.ContributorsIndex-filterSection')
     expect(page).not_to have_content('Das sind die Mitglieder deiner Community gefiltert nach dem Tag (entwickler)')
-    expect(page).to have_link('Aktiv 2', href: contributors_path(state: :active))
-    expect(page).to have_link(nil, href: contributor_path(active_contributor))
-    expect(page).to have_link(nil, href: contributor_path(another_contributor))
+    expect(page).to have_link('Aktiv 2', href: organization_contributors_path(organization, state: :active))
+    expect(page).to have_link(nil, href: organization_contributor_path(organization, active_contributor))
+    expect(page).to have_link(nil, href: organization_contributor_path(organization, another_contributor))
 
     click_on 'filtern'
 
@@ -71,8 +71,8 @@ RSpec.describe 'Filter contributors' do
 
     expect(page).to have_css('.ContributorsIndex-filterSection')
     expect(page).to have_content('Das sind die Mitglieder deiner Community gefiltert nach dem Tag (entwickler)')
-    expect(page).to have_link('Inaktiv 1', href: contributors_path(state: :inactive, tag_list: ['entwickler']))
-    expect(page).to have_link(nil, href: contributor_path(inactive_contributor))
+    expect(page).to have_link('Inaktiv 1', href: organization_contributors_path(organization, state: :inactive, tag_list: ['entwickler']))
+    expect(page).to have_link(nil, href: organization_contributor_path(organization, inactive_contributor))
 
     within('.TabBar') do
       click_on 'filtern'
@@ -82,16 +82,16 @@ RSpec.describe 'Filter contributors' do
   end
 
   it 'Editor views profile of an active contributor' do
-    visit contributor_path(active_contributor, as: user)
+    visit organization_contributor_path(organization, active_contributor, as: user)
 
-    expect(page).to have_link(nil, href: contributor_path(active_contributor))
-    expect(page).not_to have_link(nil, href: contributor_path(inactive_contributor))
+    expect(page).to have_link(nil, href: organization_contributor_path(organization, active_contributor))
+    expect(page).not_to have_link(nil, href: organization_contributor_path(organization, inactive_contributor))
   end
 
   it 'Editor views profile of an inactive contributor' do
-    visit contributor_path(inactive_contributor, as: user)
+    visit organization_contributor_path(organization, inactive_contributor, as: user)
 
-    expect(page).to have_link(nil, href: contributor_path(active_contributor))
-    expect(page).to have_link(nil, href: contributor_path(inactive_contributor))
+    expect(page).to have_link(nil, href: organization_contributor_path(organization, active_contributor))
+    expect(page).to have_link(nil, href: organization_contributor_path(organization, inactive_contributor))
   end
 end

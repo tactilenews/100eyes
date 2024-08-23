@@ -1,0 +1,8 @@
+<%= c 'section', styles: [:wide, :largeBottomMargin], class: 'OrganizationsList', **attrs do %>
+  <%= c 'heading', tag: :h2 do %>
+    <%= t('.heading') %>
+  <% end %>
+  <%= c 'form', url: set_organization_path, auto_submit: true, allow_blank: true do %>
+    <%= select_tag "organization_id", options_from_collection_for_select(@organizations, "id", "name"), include_blank: true %>
+  <% end %>
+<% end %>

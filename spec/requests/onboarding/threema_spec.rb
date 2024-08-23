@@ -21,8 +21,8 @@ RSpec.describe 'Onboarding::Threema', type: :request do
     allow(threema_lookup_double).to receive(:key).and_return('PUBLIC_KEY_HEX_ENCODED')
   end
 
-  describe 'GET /onboarding/threema' do
-    subject { -> { get onboarding_threema_path, params: params } }
+  describe 'GET /{organization}/onboarding/threema' do
+    subject { -> { get organization_onboarding_threema_path(organization), params: params } }
 
     describe 'when no Threema api identity is configured' do
       it 'returns a 404 not found' do
@@ -54,7 +54,7 @@ RSpec.describe 'Onboarding::Threema', type: :request do
     end
   end
 
-  describe 'POST /onboarding/threema' do
+  describe 'POST /{organization_id}/onboarding/threema' do
     let(:attrs) do
       {
         first_name: 'Zora',
@@ -67,7 +67,7 @@ RSpec.describe 'Onboarding::Threema', type: :request do
 
     let(:params) { { jwt: jwt, contributor: attrs, context: :contributor_signup } }
 
-    subject { -> { post onboarding_threema_path, params: params } }
+    subject { -> { post organization_onboarding_threema_path(organization), params: params } }
 
     describe 'when no Threema api identity is configured' do
       it 'returns a 404 not found' do
@@ -111,7 +111,7 @@ RSpec.describe 'Onboarding::Threema', type: :request do
 
       it 'redirects to success page' do
         subject.call
-        expect(response).to redirect_to onboarding_success_path
+        expect(response).to redirect_to organization_onboarding_success_path(organization, jwt: nil)
       end
 
       it 'invalidates the jwt' do
@@ -153,7 +153,7 @@ RSpec.describe 'Onboarding::Threema', type: :request do
 
         it 'redirects to success page' do
           subject.call
-          expect(response).to redirect_to onboarding_success_path
+          expect(response).to redirect_to organization_onboarding_success_path(organization, jwt: nil)
         end
 
         it 'invalidates the jwt' do

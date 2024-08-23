@@ -13,6 +13,7 @@ class Organization < ApplicationRecord
   has_many :contributors, dependent: :destroy
   has_many :requests, dependent: :destroy
   has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
+  has_many :messages, through: :requests
 
   has_one_attached :onboarding_logo
   has_one_attached :onboarding_hero

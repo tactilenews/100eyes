@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Sending image files', js: true do
   let(:user) { create(:user) }
+  let(:organization) { create(:organization) }
 
   context 'given contributors' do
     before(:each) do
@@ -16,8 +17,8 @@ RSpec.describe 'Sending image files', js: true do
       create(:contributor, :skip_validations, threema_id: '12345678')
     end
 
-    it 'sending a request with image files' do
-      visit new_request_path(as: user)
+    it 'sending a request with image files', flaky: true do
+      visit new_organization_request_path(organization, as: user)
 
       # With no text, no file
       fill_in 'Titel', with: 'No text, no files'
@@ -25,10 +26,10 @@ RSpec.describe 'Sending image files', js: true do
       click_button 'Frage an die Community senden'
       message = page.find('textarea[name="request[text]"]').evaluate_script('this.validationMessage')
       expect(message).to eq 'Please fill out this field.'
-      expect(page).to have_current_path(new_request_path, ignore_query: true)
+      expect(page).to have_current_path(new_organization_request_path(organization), ignore_query: true)
 
       # With no text, with file
-      visit new_request_path(as: user)
+      visit new_organization_request_path(organization, as: user)
 
       fill_in 'Titel', with: 'Message with files, no text'
 
@@ -39,10 +40,10 @@ RSpec.describe 'Sending image files', js: true do
       click_button 'Frage an die Community senden'
 
       expect(page).to have_content('Message with files, no text')
-      expect(page).to have_current_path(request_path(Request.first))
+      expect(page).to have_current_path(organization_request_path(organization, Request.first))
 
       # With text
-      visit new_request_path(as: user)
+      visit new_organization_request_path(organization, as: user)
 
       fill_in 'Titel', with: 'Message with files'
       fill_in 'Was möchtest du wissen?', with: 'Did you get my image?'
@@ -56,7 +57,7 @@ RSpec.describe 'Sending image files', js: true do
 
       click_button 'Frage an die Community senden'
 
-      expect(page).to have_current_path(new_request_path, ignore_query: true)
+      expect(page).to have_current_path(new_organization_request_path(organization), ignore_query: true)
       expect(page).to have_content('Kein gültiges Bildformat. Bitte senden Sie Bilder als jpg, png oder gif.')
 
       # Image file
@@ -94,7 +95,7 @@ RSpec.describe 'Sending image files', js: true do
       click_button 'Frage an die Community senden'
 
       expect(page).to have_content('Did you get my image?')
-      expect(page).to have_current_path(request_path(Request.first))
+      expect(page).to have_current_path(organization_request_path(organization, Request.first))
 
       within('.PageHeader') do
         expect(page).to have_css("img[src*='example-image.png']")

@@ -8,7 +8,7 @@
   %>
 
   <div>
-    <%= link_to_unless_current c('heading') { contributor.name }, contributor_path(contributor), class: "ContributorHeader-contributor" %>
+    <%= link_to_unless_current c('heading') { contributor.name }, organization_contributor_path(organization, contributor), class: "ContributorHeader-contributor" %>
     <p class="text-small text-light">
       <%= t('.created_at', date: l(contributor.created_at.to_date)) %>
 
@@ -18,10 +18,10 @@
     </p>
 
     <div class="text-small text-light">
-      <a class="Link" href="<%= edit_contributor_path(contributor) %>"><%= t('.edit') %></a>
+      <a class="Link" href="<%= edit_organization_contributor_path(organization, contributor) %>"><%= t('.edit') %></a>
       ·
       <%= c('form',
-        model: contributor,
+        model: [organization, contributor],
         auto_submit: true,
         multipart: true,
         style: :inline,

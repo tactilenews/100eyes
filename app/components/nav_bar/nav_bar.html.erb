@@ -4,7 +4,7 @@
   data-nav-bar-responsive-class="NavBar-list--responsive"
 >
   <nav class="NavBar-nav">
-    <%= link_to dashboard_path, class: 'NavBar-logo' do %>
+    <%= link_to organization_dashboard_path(organization), class: 'NavBar-logo' do %>
       <%= svg '100eyes-logo' %>
     <% end %>
 
@@ -19,19 +19,19 @@
         <%= c 'icon', icon: 'i-remove' %>
       </button>
       <li class="NavBar-item">
-        <%= link_to dashboard_path do %>
+        <%= link_to organization_dashboard_path(organization) do %>
           <%= t('.dashboard') %>
           <%= svg 'dashboard' %>
         <% end %>
       </li>
       <li class="NavBar-item">
-        <%= link_to contributors_path do %>
+        <%= link_to organization_contributors_path(organization) do %>
           <%= t('.community', count: :many) %>
           <%= svg 'community' %>
         <% end %>
       </li>
       <li class="NavBar-item">
-        <%= link_to requests_path do %>
+        <%= link_to organization_requests_path(organization) do %>
           <%= t('.investigation', count: :many) %>
           <%= svg 'flyer' %>
         <% end %>
@@ -53,7 +53,7 @@
         <% end %>
       </li>
       <li class="NavBar-item NavBar-settings" >
-        <%= link_to settings_path do %>
+        <%= link_to organization_settings_path(organization) do %>
           <%= svg 'settings-wheel' %>
         <% end %>
       </li>

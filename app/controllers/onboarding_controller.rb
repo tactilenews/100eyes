@@ -25,8 +25,10 @@ class OnboardingController < ApplicationController
   end
 
   def create
+    # FIXME: there is a inherent inconsistency possible here the overall @organization is taken from
+    # the onboarding paths (if scoped) whereas the context of the contributor is taken from the token itself.
     @contributor = Contributor.new(contributor_params.merge(json_web_token_attributes: { invalidated_jwt: jwt_param },
-                                                            organization: organization))
+                                                            organization: @organization))
     @contributor.tag_list = tag_list_from_jwt
 
     if @contributor.save
@@ -76,7 +78,7 @@ class OnboardingController < ApplicationController
   end
 
   def redirect_to_success
-    redirect_to onboarding_success_path(jwt: nil)
+    redirect_to organization_onboarding_success_path(@organization, jwt: nil)
   end
 
   def render_unauthorized
@@ -93,7 +95,7 @@ class OnboardingController < ApplicationController
     return unless resume_telegram_onboarding?
 
     token = jwt.contributor.telegram_onboarding_token
-    redirect_to onboarding_telegram_link_path(telegram_onboarding_token: token)
+    redirect_to organization_onboarding_telegram_link_path(@organization, telegram_onboarding_token: token)
   end
 
   def resume_telegram_onboarding?
@@ -105,7 +107,7 @@ class OnboardingController < ApplicationController
     return unless resume_signal_onboarding?
 
     token = jwt.contributor.signal_onboarding_token
-    redirect_to onboarding_signal_link_path(signal_onboarding_token: token)
+    redirect_to organization_onboarding_signal_link_path(@organization, signal_onboarding_token: token)
   end
 
   def resume_signal_onboarding?
@@ -129,12 +131,6 @@ class OnboardingController < ApplicationController
 
   def jwt_param
     params.require(:jwt)
-  end
-
-  def organization
-    decoded_token = JsonWebToken.decode(jwt_param)
-    organization_id = decoded_token.first['data']['organization_id'].to_i
-    Organization.find(organization_id)
   end
 
   def onboarding_allowed?

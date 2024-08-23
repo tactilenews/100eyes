@@ -1,6 +1,6 @@
 <%= form_with(
   model: message,
-  url: message_request_path(message),
+  url: organization_message_request_path(message, organization_id: message.organization_id),
   local: true,
 ) do %>
   <%= c 'stack', space: :large do %>

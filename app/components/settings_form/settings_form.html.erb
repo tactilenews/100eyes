@@ -1,4 +1,4 @@
-<%= c 'form', model: organization, url: settings_path, multipart: true, **attrs do %>
+<%= c 'form', model: organization, url: organization_settings_path(organization), multipart: true, **attrs do %>
   <%= c 'section' do %>
     <%= c('heading', tag: :h2) { t('organization.form.groups.project_settings') } %>
     <%= c('settings_field', organization: organization, type: :input, attr: :project_name) %>

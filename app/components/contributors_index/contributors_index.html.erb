@@ -18,19 +18,19 @@
     <% header.tab_bar do %>
       <%= c('tab_bar', items: [
         {
-          url: contributors_path(state: :active, tag_list: tag_list.present? ? @tag_list : nil),
+          url: organization_contributors_path(organization, state: :active, tag_list: tag_list.present? ? @tag_list : nil),
           label: t('.contributors_filter.active'),
           active: state == :active,
           count: active_contributors_count,
         },
         {
-          url: contributors_path(state: :inactive, tag_list: tag_list.present? ? @tag_list : nil),
+          url: organization_contributors_path(organization, state: :inactive, tag_list: tag_list.present? ? @tag_list : nil),
           label: t('.contributors_filter.inactive'),
           active: state == :inactive,
           count: inactive_contributors_count,
         },
         {
-          url: contributors_path(state: :unsubscribed, tag_list: tag_list.present? ? @tag_list : nil),
+          url: organization_contributors_path(organization, state: :unsubscribed, tag_list: tag_list.present? ? @tag_list : nil),
           label: t('.contributors_filter.unsubscribed'),
           active: state == :unsubscribed,
           count: unsubscribed_contributors_count,
@@ -51,7 +51,7 @@
     hidden: true
   ) do %>
     <%= c('form',
-      url: contributors_path,
+      url: organization_contributors_path(organization),
       method: 'get',
       multiple: true
     ) do %>
@@ -88,8 +88,8 @@
         </strong>
       </p>
     <% end %>
-    <%= paginate contributors, params: { path: contributors_path, query: { state: state, tag_list: tag_list.present? ? @tag_list : nil } } %>
-      <%= c 'contributors_list', organization: @organization, contributors: contributors, filter_active: tag_list.present? %>
-    <%= paginate contributors, params: { path: contributors_path, query: { state: state, tag_list: tag_list.present? ? @tag_list : nil } } %>
+    <%= paginate contributors, params: { path: organization_contributors_path(organization), query: { state: state, tag_list: tag_list.present? ? @tag_list : nil } } %>
+      <%= c 'contributors_list', organization: organization, contributors: contributors, filter_active: tag_list.present? %>
+    <%= paginate contributors, params: { path: organization_contributors_path(organization), query: { state: state, tag_list: tag_list.present? ? @tag_list : nil } } %>
   <% end %>
 <% end %>

@@ -1,4 +1,4 @@
-<%= form_with(scope: :contributor, url: message_contributor_path(contributor), class: 'ChatForm', id: 'chat-form', local: true) do %>
+<%= form_with(scope: :contributor, url: message_organization_contributor_path(organization, contributor), class: 'ChatForm', id: 'chat-form', local: true) do %>
   <% if reply_to.present? %>
     <h3><%= "Zur Frage: #{reply_to.request.title}" %></h3>
     <%= hidden_field_tag 'message[reply_to_id]', reply_to&.id %>

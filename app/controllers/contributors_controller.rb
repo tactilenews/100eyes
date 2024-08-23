@@ -44,7 +44,7 @@ class ContributorsController < ApplicationController
     toggle_active_state if toggle_active_state_params[:active]
 
     if @contributor.update(contributor_params)
-      redirect_to contributor_url, flash: { success: I18n.t('contributor.saved', name: @contributor.name) }
+      redirect_to organization_contributor_url(@organization), flash: { success: I18n.t('contributor.saved', name: @contributor.name) }
     else
       handle_failed_update
 
@@ -54,7 +54,7 @@ class ContributorsController < ApplicationController
 
   def destroy
     @contributor.destroy
-    redirect_to contributors_url, notice: I18n.t('contributor.destroyed', name: @contributor.name)
+    redirect_to organization_contributors_url(@organization), notice: I18n.t('contributor.destroyed', name: @contributor.name)
   end
 
   def count

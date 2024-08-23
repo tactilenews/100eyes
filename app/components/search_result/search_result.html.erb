@@ -4,7 +4,7 @@
   <% when 'Message' %>
     <%= c 'excerpt', organization: @organization, sender: result.sender, title: result.sender_name, text: result.text, link: result.chat_message_link, date: result.created_at %>
   <% when 'Request' %>
-    <%= c 'excerpt', organization: @organization, sender: result.user, title: result.title, text: result.text, link: request_path(result), date: result.created_at %>
+    <%= c 'excerpt', organization: @organization, sender: result.user, title: result.title, text: result.text, link: organization_request_path(result.organization, result), date: result.created_at %>
   <% else %>
     <% raise ArgumentError.new "Unknown search result type #{type}. This should never happen." %>
   <% end %>

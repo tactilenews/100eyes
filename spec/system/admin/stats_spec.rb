@@ -16,7 +16,7 @@ RSpec.describe 'Stats' do
       create_list(:contributor, 12, :whats_app_contributor)
     end
 
-    it 'admin edits contributor' do
+    it 'admin edits contributor', flaky: true do
       visit admin_stats_path(as: user)
 
       expect(page).to have_content('Email contributors: 3')

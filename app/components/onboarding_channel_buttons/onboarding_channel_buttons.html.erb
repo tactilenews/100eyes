@@ -1,7 +1,7 @@
 <div <%= attrs %>>
   <% channels.each do |channel| %>
     <%= c 'button',
-      link: send("onboarding_#{channel}_path"),
+      link: send("organization_onboarding_#{channel}_path", organization),
       styles: [:primary] do
     %>
       <%= svg "channel_#{channel}" %>

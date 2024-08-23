@@ -10,7 +10,7 @@ RSpec.describe 'Sign in' do
   let!(:user) { create(:user, email: email, password: password, otp_enabled: otp_enabled, organization: organization) }
 
   it 'editor tries to visit protected page' do
-    visit dashboard_path
+    visit organization_dashboard_path(organization)
     expect(page).to have_current_path(sign_in_path)
   end
 
@@ -72,7 +72,7 @@ RSpec.describe 'Sign in' do
       click_button 'Bestätigen'
 
       # User is redirected to dashboard
-      expect(page).to have_current_path(dashboard_path)
+      expect(page).to have_current_path(organization_dashboard_path(organization))
     end
 
     it 'editor cancels sign in' do
@@ -95,7 +95,7 @@ RSpec.describe 'Sign in' do
     it 'signed-in editor visits OTP page' do
       visit otp_auth_path(as: user)
 
-      expect(page).to have_current_path(dashboard_path)
+      expect(page).to have_current_path(organization_dashboard_path(organization))
     end
 
     context 'editor has been deactivated' do

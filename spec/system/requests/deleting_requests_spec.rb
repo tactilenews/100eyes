@@ -17,43 +17,43 @@ RSpec.describe 'Deleting requests' do
   it 'conditonally allows deleting' do
     # Broadcasted request
 
-    visit requests_path(as: user)
+    visit organization_requests_path(organization, as: user)
     within("#request-#{broadcasted_request.id}") do
-      expect(page).to have_link(href: request_path(broadcasted_request))
-      expect(page).not_to have_link(href: edit_request_path(broadcasted_request))
+      expect(page).to have_link(href: organization_request_path(organization, broadcasted_request))
+      expect(page).not_to have_link(href: edit_organization_request_path(organization, broadcasted_request))
 
-      find_link(href: request_path(broadcasted_request)).click
+      find_link(href: organization_request_path(organization, broadcasted_request)).click
     end
 
-    expect(page).to have_current_path(request_path(broadcasted_request))
-    visit edit_request_path(broadcasted_request, as: user)
+    expect(page).to have_current_path(organization_request_path(organization, broadcasted_request))
+    visit edit_organization_request_path(organization, broadcasted_request, as: user)
     expect(page).to have_content('Sie können eine bereits verschickte Frage nicht mehr bearbeiten.')
-    expect(page).to have_current_path(requests_path)
+    expect(page).to have_current_path(organization_requests_path(organization))
 
     # Planned request
 
-    visit requests_path(as: user, filter: :planned)
+    visit organization_requests_path(organization, as: user, filter: :planned)
     within("#request-#{planned_request.id}") do
-      find_link(href: edit_request_path(planned_request)).click
+      find_link(href: edit_organization_request_path(organization, planned_request)).click
     end
 
-    expect(page).to have_current_path(edit_request_path(planned_request))
+    expect(page).to have_current_path(edit_organization_request_path(organization, planned_request))
 
     click_on I18n.t('components.request_form.planned_request.destroy.button_text')
     expect(page).to have_content(I18n.t('components.destroy_planned_request_modal.heading', request_title: planned_request.title))
     click_on 'löschen'
 
-    expect(page).to have_current_path(requests_path(filter: :planned))
+    expect(page).to have_current_path(organization_requests_path(organization, filter: :planned))
     expect(page).to have_content(I18n.t('request.destroy.successful', request_title: planned_request.title))
 
     # Planned request, that was then sent out
 
-    visit requests_path(as: user, filter: :planned)
+    visit organization_requests_path(organization, as: user, filter: :planned)
     within("#request-#{another_planned_request.id}") do
-      find_link(href: edit_request_path(another_planned_request)).click
+      find_link(href: edit_organization_request_path(organization, another_planned_request)).click
     end
 
-    expect(page).to have_current_path(edit_request_path(another_planned_request))
+    expect(page).to have_current_path(edit_organization_request_path(organization, another_planned_request))
     Timecop.travel(10.minutes.from_now)
     another_planned_request.update(broadcasted_at: 5.minutes.ago)
     click_on I18n.t('components.request_form.planned_request.destroy.button_text')
@@ -61,7 +61,7 @@ RSpec.describe 'Deleting requests' do
                                         request_title: another_planned_request.title))
     click_on 'löschen'
 
-    expect(page).to have_current_path(requests_path)
+    expect(page).to have_current_path(organization_requests_path(organization))
     expect(page).to have_content(I18n.t('request.destroy.broadcasted_request_unallowed', request_title: another_planned_request.title))
   end
 end

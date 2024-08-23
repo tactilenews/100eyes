@@ -3,17 +3,16 @@
 require 'rails_helper'
 
 RSpec.describe 'Sessions', type: :request do
-  let!(:user) { create(:user, email: 'zora@example.org', password: '12345678', otp_enabled: otp_enabled) }
+  let(:organization) { create(:organization) }
+  let!(:user) { create(:user, email: 'zora@example.org', password: '12345678', otp_enabled: otp_enabled, organization: organization) }
   let(:otp_enabled) { false }
-
-  before { create(:organization) }
 
   describe 'GET /sign_in' do
     before(:each) { get sign_in_path(as: user) }
     subject { response }
 
     context 'if user is already signed-in' do
-      it { should redirect_to(dashboard_path) }
+      it { should redirect_to(organizations_path) }
     end
   end
 
@@ -33,7 +32,7 @@ RSpec.describe 'Sessions', type: :request do
       context 'with correct email and password' do
         let(:password_param) { '12345678' }
 
-        it { should redirect_to(dashboard_path) }
+        it { should redirect_to(organizations_path) }
         it { should have_current_user(user) }
       end
     end

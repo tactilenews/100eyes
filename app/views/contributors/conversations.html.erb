@@ -10,7 +10,7 @@
   <%= c 'section', style: :xlargeSpaceBetween do %>
     <%= c 'contributor_metrics', contributor_for_info: @contributor, style: :cards %>
     <h2><%= t('.heading', name: @contributor.name ) %></h2>
-      <%= c 'chat_form', contributor: @contributor, reply_to: @reply_to %>
+      <%= c 'chat_form', organization: @organization, contributor: @contributor, reply_to: @reply_to %>
       <%= c 'chat_messages', messages: @messages, styles: [:compact] %>
   <% end %>
 <% end %>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="<%= I18n.locale %>">
   <head>
-    <title><%= @organization.project_name %></title>
+    <title><%= @organization&.project_name || t('application_name') %></title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 

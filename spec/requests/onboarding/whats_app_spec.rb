@@ -21,8 +21,8 @@ RSpec.describe 'Onboarding::Whatsapp' do
   let(:params) { { jwt: jwt } }
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding', organization_id: organization.id }) }
 
-  describe 'GET /onboarding/whatsapp' do
-    subject { -> { get onboarding_whats_app_path, params: params } }
+  describe 'GET /{organization_id}/onboarding/whatsapp' do
+    subject { -> { get organization_onboarding_whats_app_path(organization), params: params } }
 
     describe 'when WhatsApp was not configured' do
       it 'returns a 404 not found' do
@@ -80,8 +80,8 @@ RSpec.describe 'Onboarding::Whatsapp' do
     end
   end
 
-  describe 'POST /onboarding/whatsapp' do
-    subject { -> { post onboarding_whats_app_path, params: params } }
+  describe 'POST /{organization_id}/onboarding/whatsapp' do
+    subject { -> { post organization_onboarding_whats_app_path(organization), params: params } }
 
     let(:params) { { jwt: jwt, contributor: attrs, context: :contributor_signup } }
     let(:attrs) do
@@ -148,7 +148,7 @@ RSpec.describe 'Onboarding::Whatsapp' do
 
         it 'redirects to success page' do
           subject.call
-          expect(response).to redirect_to onboarding_success_path
+          expect(response).to redirect_to organization_onboarding_success_path(organization, jwt: nil)
         end
 
         it 'invalidates the jwt' do
@@ -232,7 +232,7 @@ RSpec.describe 'Onboarding::Whatsapp' do
 
         it 'redirects to success page' do
           subject.call
-          expect(response).to redirect_to onboarding_success_path
+          expect(response).to redirect_to organization_onboarding_success_path(organization, jwt: nil)
         end
 
         it 'invalidates the jwt' do
