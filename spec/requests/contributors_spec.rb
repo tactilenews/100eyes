@@ -10,6 +10,10 @@ RSpec.describe '/{organization_id}/contributors', type: :request do
   let(:user) { create(:user, organizations: [organization]) }
 
   describe 'GET /index' do
+    let!(:other_organizations_contributor) { create(:contributor) }
+    let!(:other_inactive_contributor) { create(:contributor, :inactive) }
+    let!(:other_unsubscribed_contributor) { create(:contributor, :unsubscribed) }
+
     before { get organization_contributors_url(organization, as: user) }
 
     it 'should be successful' do
@@ -18,6 +22,12 @@ RSpec.describe '/{organization_id}/contributors', type: :request do
 
     it 'contains only the contributors from the organization' do
       expect(page).to have_content contributor.first_name
+
+      expect(page).to have_content("Aktiv 1")
+      expect(page).to have_content("Inaktiv 0")
+      expect(page).to have_content("Abbestellt 0")
+
+      expect(page).not_to have_content other_organizations_contributor.first_name
     end
   end
 

@@ -24,9 +24,9 @@ class ContributorsController < ApplicationController
     @state = state_params
     @tag_list = tag_list_params
 
-    @active_count = Contributor.active.count
-    @inactive_count = Contributor.inactive.count
-    @unsubscribed_count = Contributor.unsubscribed.count
+    @active_count = @organization.contributors.active.count
+    @inactive_count = @organization.contributors.inactive.count
+    @unsubscribed_count = @organization.contributors.unsubscribed.count
     @available_tags = @organization.contributors_tags_with_count.to_json
 
     @contributors = filtered_contributors
@@ -117,13 +117,14 @@ class ContributorsController < ApplicationController
   end
 
   def filtered_contributors
+
     case @state
     when :inactive
-      Contributor.inactive
+      @organization.contributors.inactive
     when :unsubscribed
-      Contributor.unsubscribed
+      @organization.contributors.unsubscribed
     else
-      Contributor.active
+      @organization.contributors.active
     end
   end
 
