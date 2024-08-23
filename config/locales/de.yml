@@ -88,7 +88,7 @@ de:
         - "Wenn Sie unser Signal-Konto gefunden haben, geben Sie diesen Code ein: <strong>%{token}</strong>"
     onboarding_signal_form:
       heading: Mit Signal teilnehmen
-      text: Geben Sie bitte unten die Handynummer ein, mit der Sie bei Signal registriert sind.
+      text: Geben Sie uns zunächst Ihr Einverständnis. Wir werden dann einen Code generieren, den Sie an uns senden können, um Ihre Registrierung abzuschließen.
       submit: Anmeldung abschließen
     onboarding_whats_app_form:
       heading: Mit WhatsApp teilnehmen
