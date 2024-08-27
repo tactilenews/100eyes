@@ -129,10 +129,11 @@ RSpec.describe ResubscribeContributorJob do
 
     # rubocop:disable Style/FormatStringToken
     context 'unsubscribed WhatsApp contributor' do
-      let(:adapter) { WhatsAppAdapter::Delegator.new(organization) }
       let(:whats_app_welcome_template) { I18n.t('adapter.whats_app.welcome_message').gsub('%{project_name}', '100eyes') }
 
       context 'Twilio' do
+        let(:adapter) { WhatsAppAdapter::TwilioOutbound }
+
         it_behaves_like 'a Contributor resubscribes', WhatsAppAdapter::TwilioOutbound::Text do
           let(:contributor) do
             create(:contributor, whats_app_phone_number: '+491234567', unsubscribed_at: 5.days.ago,
@@ -168,6 +169,8 @@ RSpec.describe ResubscribeContributorJob do
       end
 
       context '360dialog' do
+        let(:adapter) { WhatsAppAdapter::ThreeSixtyDialogOutbound }
+
         before { organization.update!(three_sixty_dialog_client_api_key: 'valid_api_key') }
 
         it_behaves_like 'a Contributor resubscribes', WhatsAppAdapter::ThreeSixtyDialogOutbound::Text do

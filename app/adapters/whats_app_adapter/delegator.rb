@@ -15,11 +15,5 @@ module WhatsAppAdapter
     delegate :send!, to: :business_solution_provider
 
     delegate :send_welcome_message!, to: :business_solution_provider
-
-    delegate :send_more_info_message!, to: :business_solution_provider
-
-    delegate :send_unsubsribed_successfully_message!, to: :business_solution_provider
-
-    delegate :send_resubscribe_error_message!, to: :business_solution_provider
   end
 end
