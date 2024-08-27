@@ -21,7 +21,10 @@ Rails.application.routes.draw do
     resources :invites, only: :create
 
     get '/search', to: 'search#index'
-    get '/dashboard', to: 'dashboard#index'
+
+    scope module: 'organizations' do
+      get '/dashboard', to: 'dashboard#index'
+    end
 
     resources :requests, only: %i[index show new create edit update destroy], concerns: :paginatable do
       member do
