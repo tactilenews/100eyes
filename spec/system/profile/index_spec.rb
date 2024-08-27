@@ -41,7 +41,7 @@ RSpec.describe 'Profile' do
       find('a[aria-label="Zur Profilseite"]').click
     end
 
-    expect(page).to have_current_path(profile_path)
+    expect(page).to have_current_path(organization_profile_path(organization))
 
     # header
     expect(page).to have_content("Dein 100eyes Plan: #{current_plan.name}")
@@ -70,7 +70,7 @@ RSpec.describe 'Profile' do
 
     user_to_be_deactivated.update(deactivated_at: Time.current)
 
-    visit profile_path(as: user)
+    visit organization_profile_path(organization, as: user)
     expect(page).to have_content("3 von #{current_plan.number_of_users} Seats genutzt")
     expect(page).not_to have_content(user_to_be_deactivated.name)
 
@@ -160,7 +160,7 @@ RSpec.describe 'Profile' do
     expect(page).to have_content("Mindeslaufzeit: bis #{I18n.l(1.year.from_now, format: '%m/%Y')}")
 
     Timecop.travel(6.months.from_now + 1.minute)
-    visit profile_path(as: user)
+    visit organization_profile_path(organization, as: user)
     expect(page).to have_content("Preis: #{number_to_currency(editorial_enterprise.price_per_month)}/Monat")
 
     # WhatsApp not set up
@@ -180,8 +180,7 @@ RSpec.describe 'Profile' do
       three_sixty_dialog_client_api_key: nil
     )
 
-    visit profile_path(as: user)
-
+    visit organization_profile_path(organization, as: user)
     expect(page).not_to have_selector(:element, 'section', 'data-testid': 'whats-app-setup')
 
     # 360dialog configured
@@ -192,8 +191,7 @@ RSpec.describe 'Profile' do
       three_sixty_dialog_client_api_key: SecureRandom.alphanumeric(26)
     )
 
-    visit profile_path(as: user)
-
+    visit organization_profile_path(organization, as: user)
     expect(page).not_to have_selector(:element, 'section', 'data-testid': 'whats-app-setup')
   end
 end

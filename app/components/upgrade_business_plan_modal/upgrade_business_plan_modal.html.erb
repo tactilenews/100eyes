@@ -9,7 +9,7 @@
   <% end %>
   <%= form_with(
     model: organization,
-    url: profile_upgrade_business_plan_path,
+    url: organization_profile_upgrade_business_plan_path(organization),
     local: true,
     method: 'PUT',
     html: { autocomplete: 'off' }

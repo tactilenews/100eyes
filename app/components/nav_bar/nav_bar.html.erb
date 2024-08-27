@@ -45,7 +45,7 @@
         </li>
       <% end %>
       <li class="NavBar-item NavBar-profileLink">
-        <%= link_to profile_path, aria: { label: t('.profile_path') } do %>
+        <%= link_to organization_profile_path(organization), aria: { label: t('.profile_path') } do %>
           <span>
             <%= t '.profile_link' %>
           </span>

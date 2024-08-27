@@ -14,7 +14,7 @@ RSpec.describe '/contributors' do
 
   describe 'GET /index' do
     it 'should be successful' do
-      get profile_url(as: user)
+      get organization_profile_url(organization, as: user)
       expect(response).to be_successful
     end
   end
@@ -23,7 +23,7 @@ RSpec.describe '/contributors' do
     let(:params) { { user: { first_name: 'Daniel', last_name: 'Theis', email: 'daniel-theis@example.org' } } }
 
     context 'unauthenticated' do
-      subject { -> { post profile_user_path, params: params } }
+      subject { -> { post organization_profile_user_path(organization), params: params } }
 
       it 'does not change user count' do
         expect { subject.call }.not_to(change { User.count })
@@ -31,7 +31,7 @@ RSpec.describe '/contributors' do
     end
 
     context 'authenticated' do
-      subject { -> { post profile_user_path(as: user), params: params } }
+      subject { -> { post organization_profile_user_path(organization, as: user), params: params } }
 
       it 'creates a user' do
         expect { subject.call }.to(change { User.count }.from(2).to(3))
@@ -39,7 +39,7 @@ RSpec.describe '/contributors' do
 
       it 'redirects to profile page' do
         subject.call
-        expect(response).to redirect_to profile_path
+        expect(response).to redirect_to organization_profile_path(organization)
       end
 
       it 'shows success notification' do
@@ -58,7 +58,7 @@ RSpec.describe '/contributors' do
 
         it 'redirects to profile page' do
           subject.call
-          expect(response).to redirect_to profile_path
+          expect(response).to redirect_to organization_profile_path(organization)
         end
 
         it 'shows success notification' do
@@ -86,7 +86,7 @@ RSpec.describe '/contributors' do
     let(:params) { { profile: { business_plan_id: business_plan.id } } }
 
     context 'unauthenticated' do
-      subject { -> { put profile_upgrade_business_plan_path, params: params } }
+      subject { -> { put organization_profile_upgrade_business_plan_path(organization), params: params } }
 
       it 'does not change user count' do
         expect { subject.call }.not_to(change { organization.reload.business_plan })
@@ -94,7 +94,7 @@ RSpec.describe '/contributors' do
     end
 
     context 'authenticated' do
-      subject { -> { put profile_upgrade_business_plan_path(as: user), params: params } }
+      subject { -> { put organization_profile_upgrade_business_plan_path(organization, as: user), params: params } }
 
       it 'updates the organization business_plan' do
         current_business_plan = organization.business_plan
@@ -103,7 +103,7 @@ RSpec.describe '/contributors' do
 
       it 'redirects to profile page' do
         subject.call
-        expect(response).to redirect_to profile_path
+        expect(response).to redirect_to organization_profile_path(organization)
       end
 
       it 'shows success notification' do
