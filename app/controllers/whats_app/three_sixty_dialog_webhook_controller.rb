@@ -97,5 +97,11 @@ module WhatsApp
 
       WhatsAppAdapter::ThreeSixtyDialogOutbound.send!(contributor.received_messages.first)
     end
+
+    def handle_request_for_more_info(contributor, organization)
+      contributor.update!(whats_app_message_template_responded_at: Time.current)
+
+      WhatsAppAdapter::ThreeSixtyDialogOutbound.send_more_info_message!(contributor, organization)
+    end
   end
 end

@@ -186,6 +186,12 @@ module WhatsApp
       message.received_at = Time.current if message.received_at.blank?
       message.update(read_at: Time.current)
     end
+
+    def handle_request_for_more_info(contributor, organization)
+      contributor.update!(whats_app_message_template_responded_at: Time.current)
+
+      WhatsAppAdapter::TwilioOutbound.send_more_info_message!(contributor, organization)
+    end
   end
 end
 # rubocop:enable Metrics/ClassLength
