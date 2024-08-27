@@ -1,5 +1,5 @@
 <%= c 'modal', **attrs do %>
-    <%= form_with(url: profile_user_path) do %>
+    <%= form_with(url: organization_profile_user_path(organization)) do %>
       <%= c 'button',
         styles: [:secondary, :circular],
         type: 'button',

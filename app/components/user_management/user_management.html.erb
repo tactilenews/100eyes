@@ -20,5 +20,5 @@
       <%= t('.add_users_button') %>
     <% end%>
   <% end %>
-  <%= c 'create_user_modal', data: { controller: 'modal', user_management_target: 'modal' } %>
+  <%= c 'create_user_modal', organization: organization, data: { controller: 'modal', user_management_target: 'modal' } %>
 <% end %>

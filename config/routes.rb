@@ -84,6 +84,10 @@ Rails.application.routes.draw do
         get 'count'
       end
     end
+
+    get '/profile', to: 'profile#index'
+    post '/profile/user', to: 'profile#create_user'
+    put '/profile/upgrade_business_plan', to: 'profile#upgrade_business_plan'
   end
 
   get '/health', to: 'health#index'
@@ -132,8 +136,4 @@ Rails.application.routes.draw do
 
   resource :otp_setup, controller: :otp_setup, only: %i[show create]
   resource :otp_auth, controller: :otp_auth, only: %i[show create]
-
-  get '/profile', to: 'profile#index'
-  post '/profile/user', to: 'profile#create_user'
-  put '/profile/upgrade_business_plan', to: 'profile#upgrade_business_plan'
 end
