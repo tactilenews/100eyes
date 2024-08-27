@@ -5,9 +5,9 @@ class DashboardController < ApplicationController
     user_permitted?(@organization)
 
     @activity_notifications = activity_notifications
-    @active_contributors_count = Contributor.active.count
-    @requests_count = Request.count
-    @replies_count = Message.replies.count
+    @active_contributors_count = @organization.contributors.active.count
+    @requests_count = @organization.requests.count
+    @replies_count = @organization.messages.replies.count
     @engagment_metric = engagment_metric
   end
 

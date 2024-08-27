@@ -14,4 +14,41 @@ RSpec.describe '/{organization_id}/dashboard', type: :request do
   it_behaves_like "unauthenticated" do
      before { get organization_dashboard_path(organization) }
   end
+
+  context "with a user of the organization" do
+    subject { -> { get organization_dashboard_path(organization, as: user)} }
+
+    it "renders the dashboard for the organizations user" do
+      subject.call
+      expect(response).to be_successful
+    end
+
+    it "counts the active contributors for the organization" do
+      contributor = create_list(:contributor, 3, organization: organization)
+      other_contributor = create(:contributor)
+      subject.call
+      expect(page).to have_content "3 aktive Mitglieder"
+    end
+
+    it "counts the requests for the organization" do
+      contributor = create_list(:request, 3, organization: organization)
+      other_contributor = create(:request)
+      subject.call
+      expect(page).to have_content "3 Fragen gestellt"
+    end
+
+    it "counts the replies for the organization" do
+      request = create(:request, organization: organization)
+      replies = create_list(:message, 3, request: request)
+      other_message = create(:message)
+      subject.call
+      expect(page).to have_content "3 empfangene Nachrichten"
+    end
+
+    it "doesn't include activity notifications for other organizations" do
+    end
+
+    it "includes activity notifications for the organization" do
+    end
+  end
 end
