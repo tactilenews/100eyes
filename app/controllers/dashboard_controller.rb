@@ -2,6 +2,8 @@
 
 class DashboardController < ApplicationController
   def index
+    user_permitted?(@organization)
+
     @activity_notifications = activity_notifications
     @active_contributors_count = Contributor.active.count
     @requests_count = Request.count
@@ -41,4 +43,10 @@ class DashboardController < ApplicationController
 
     activity
   end
+
+  # TODO: remove as in ApplicationController as of https://github.com/tactilenews/100eyes/pull/1971/files/8e2b1fb04fdbc0434e0ca866453f5a52533f8cb2
+  def user_permitted?(organization)
+    raise ActionController::RoutingError, 'Not Found' unless current_user.admin? || current_user.organization_id == organization.id
+  end
+
 end
