@@ -8,7 +8,7 @@ class DashboardController < ApplicationController
     @active_contributors_count = @organization.contributors.active.count
     @requests_count = @organization.requests.count
     @replies_count = @organization.messages.replies.count
-    @engagment_metric = engagment_metric
+    @engagement_metric = engagement_metric
   end
 
   private
@@ -32,7 +32,7 @@ class DashboardController < ApplicationController
     end
   end
 
-  def engagment_metric
+  def engagement_metric
     current_weeks_activity = @organization.messages.replies.where('messages.created_at >= ?', 7.days.ago).count
     active_contributors_count = @organization.contributors.active.count
     return 0 unless active_contributors_count.positive?
