@@ -133,7 +133,7 @@ RSpec.describe ResubscribeContributorJob do
       let(:whats_app_welcome_template) { I18n.t('adapter.whats_app.welcome_message').gsub('%{project_name}', '100eyes') }
 
       context 'Twilio' do
-        it_behaves_like 'a Contributor resubscribes', WhatsAppAdapter::Outbound::Text do
+        it_behaves_like 'a Contributor resubscribes', WhatsAppAdapter::TwilioOutbound::Text do
           let(:contributor) do
             create(:contributor, whats_app_phone_number: '+491234567', unsubscribed_at: 5.days.ago,
                                  organization: organization)
@@ -141,7 +141,7 @@ RSpec.describe ResubscribeContributorJob do
         end
 
         describe 'which has been marked inactive by a user' do
-          it_behaves_like 'a resubscribe failure', WhatsAppAdapter::Outbound::Text do
+          it_behaves_like 'a resubscribe failure', WhatsAppAdapter::TwilioOutbound::Text do
             let(:contributor) do
               create(:contributor,
                      whats_app_phone_number: '+491234567',
@@ -154,7 +154,7 @@ RSpec.describe ResubscribeContributorJob do
         end
 
         describe 'which has been marked inactive by an admin' do
-          it_behaves_like 'a resubscribe failure', WhatsAppAdapter::Outbound::Text do
+          it_behaves_like 'a resubscribe failure', WhatsAppAdapter::TwilioOutbound::Text do
             let(:contributor) do
               create(:contributor,
                      whats_app_phone_number: '+491234567',
@@ -170,7 +170,7 @@ RSpec.describe ResubscribeContributorJob do
       context '360dialog' do
         before { organization.update!(three_sixty_dialog_client_api_key: 'valid_api_key') }
 
-        it_behaves_like 'a Contributor resubscribes', WhatsAppAdapter::Outbound::ThreeSixtyDialogText do
+        it_behaves_like 'a Contributor resubscribes', WhatsAppAdapter::ThreeSixtyDialogOutbound::Text do
           let(:contributor) do
             create(:contributor, whats_app_phone_number: '+491234567', unsubscribed_at: 5.days.ago,
                                  organization: organization)
@@ -178,7 +178,7 @@ RSpec.describe ResubscribeContributorJob do
         end
 
         describe 'which has been marked inactive by a user' do
-          it_behaves_like 'a resubscribe failure', WhatsAppAdapter::Outbound::ThreeSixtyDialogText do
+          it_behaves_like 'a resubscribe failure', WhatsAppAdapter::ThreeSixtyDialogOutbound::Text do
             let(:contributor) do
               create(:contributor,
                      whats_app_phone_number: '+491234567',
@@ -191,7 +191,7 @@ RSpec.describe ResubscribeContributorJob do
         end
 
         describe 'which has been marked inactive by an admin' do
-          it_behaves_like 'a resubscribe failure', WhatsAppAdapter::Outbound::ThreeSixtyDialogText do
+          it_behaves_like 'a resubscribe failure', WhatsAppAdapter::ThreeSixtyDialogOutbound::Text do
             let(:contributor) do
               create(:contributor,
                      whats_app_phone_number: '+491234567',

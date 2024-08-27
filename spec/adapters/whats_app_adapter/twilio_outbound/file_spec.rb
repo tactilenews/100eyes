@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe WhatsAppAdapter::Outbound::File do
+RSpec.describe WhatsAppAdapter::TwilioOutbound::File do
   let(:adapter) { described_class.new }
   let(:whats_app_phone_number) { '+491511234567' }
   let(:valid_account_sid) { 'VALID_ACCOUNT_SID' }

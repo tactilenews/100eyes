@@ -129,7 +129,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
           it 'enqueues a job to send the latest received message' do
             expect do
               subject.call
-            end.to have_enqueued_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText).on_queue('default').with(text_payload)
+            end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).on_queue('default').with(text_payload)
           end
 
           it 'marks that contributor has responded to template message' do
@@ -153,14 +153,14 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
         it 'enqueues a job to send more info message' do
           expect do
             subject.call
-          end.to have_enqueued_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText).on_queue('default').with(text_payload)
+          end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).on_queue('default').with(text_payload)
         end
 
         context 'does not enqueue a job' do
           let(:text) { latest_message }
 
           it 'to send the latest received message' do
-            expect { subject.call }.not_to have_enqueued_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText).with(text_payload)
+            expect { subject.call }.not_to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(text_payload)
           end
         end
       end
@@ -415,7 +415,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
             end
 
             it 'sends a message to contributor to let them know the message type is not supported' do
-              expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText).with(text_payload)
+              expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(text_payload)
             end
           end
 
@@ -432,7 +432,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
             end
 
             it 'sends a message to contributor to let them know the message type is not supported' do
-              expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText).with(text_payload)
+              expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(text_payload)
             end
           end
 
@@ -467,7 +467,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
             end
 
             it 'sends a message to contributor to let them know the message type is not supported' do
-              expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText).with(text_payload)
+              expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(text_payload)
             end
           end
         end

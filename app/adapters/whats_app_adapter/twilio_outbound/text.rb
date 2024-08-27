@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module WhatsAppAdapter
-  class Outbound
+  class TwilioOutbound
     class Text < ApplicationJob
       queue_as :default
 
