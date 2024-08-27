@@ -68,10 +68,12 @@ class Request < ApplicationRecord
       .transform_values { |messages| messages.sort_by(&:created_at) }
   end
 
+  # rubocop:disable Metrics/AbcSize
   def self.broadcast!(request)
     if request.planned?
       BroadcastRequestJob.delay(run_at: request.schedule_send_for).perform_later(request.id)
-      RequestScheduled.with(request_id: request.id, organization_id: request.organization.id).deliver_later(User.all)
+      RequestScheduled.with(request_id: request.id,
+                            organization_id: request.organization.id).deliver_later(request.organization.users + User.admin.all)
     else
       Contributor.active.with_tags(request.tag_list).each do |contributor|
         message = Message.new(
@@ -87,6 +89,7 @@ class Request < ApplicationRecord
       request.update(broadcasted_at: Time.current)
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   def self.attach_files(files)
     files.map do |file|

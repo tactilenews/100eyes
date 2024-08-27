@@ -10,8 +10,10 @@ RSpec.describe 'Onboarding::Whatsapp' do
            twilio_api_key_secret: twilio_api_key_secret,
            twilio_account_sid: twilio_account_sid,
            three_sixty_dialog_client_api_key: three_sixty_dialog_client_api_key,
-           onboarding_allowed: onboarding_allowed)
+           onboarding_allowed: onboarding_allowed,
+           users_count: 1)
   end
+  let!(:admin) { create_list(:user, 2, admin: true) }
   let(:whats_app_server_phone_number) { nil }
   let(:twilio_api_key_sid) { nil }
   let(:twilio_api_key_secret) { nil }
@@ -159,7 +161,7 @@ RSpec.describe 'Onboarding::Whatsapp' do
         end
 
         context 'creates an ActivityNotification' do
-          it_behaves_like 'an ActivityNotification', 'OnboardingCompleted'
+          it_behaves_like 'an ActivityNotification', 'OnboardingCompleted', 3
         end
       end
     end
@@ -243,7 +245,7 @@ RSpec.describe 'Onboarding::Whatsapp' do
         end
 
         context 'creates an ActivityNotification' do
-          it_behaves_like 'an ActivityNotification', 'OnboardingCompleted'
+          it_behaves_like 'an ActivityNotification', 'OnboardingCompleted', 3
         end
       end
     end

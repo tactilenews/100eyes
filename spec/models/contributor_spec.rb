@@ -5,9 +5,10 @@ require 'rails_helper'
 RSpec.describe Contributor, type: :model do
   let(:the_request) do
     create(:request, title: 'Hitchhiker’s Guide', text: 'What is the answer to life, the universe, and everything?',
-                     organization: organization, user: create(:user, organization: organization))
+                     organization: organization, user: user)
   end
   let(:organization) { create(:organization) }
+  let(:user) { create(:user) }
   let(:contributor) { create(:contributor, email: 'contributor@example.org', organization: organization) }
 
   it 'is sorted in alphabetical order' do
@@ -397,7 +398,7 @@ RSpec.describe Contributor, type: :model do
   describe '#reply' do
     subject { -> { contributor.reply(message_inbound_adapter) } }
 
-    let!(:organization) { create(:organization, email_from_address: '100eyes@example.org') }
+    let!(:organization) { create(:organization, email_from_address: '100eyes@example.org', users_count: 2) }
 
     describe 'given a PostmarkAdapter::Inbound' do
       let(:mail) do
@@ -417,13 +418,17 @@ RSpec.describe Contributor, type: :model do
       describe 'given a recent request' do
         let!(:contributor) { create(:contributor, email: 'contributor@example.org', organization: organization) }
 
-        before(:each) { the_request }
+        before do
+          the_request
+        end
 
         it { should change { Message.count }.from(0).to(1) }
         it { should_not(change { Photo.count }) }
 
         context 'ActivityNotifications' do
-          it_behaves_like 'an ActivityNotification', 'MessageReceived'
+          let!(:admin) { create(:user, admin: true) }
+
+          it_behaves_like 'an ActivityNotification', 'MessageReceived', 3
         end
       end
     end
@@ -449,8 +454,6 @@ RSpec.describe Contributor, type: :model do
         end
       end
 
-      let(:organization) { create(:organization) }
-
       let!(:contributor) { create(:contributor, :with_an_avatar, telegram_id: 4711, organization: organization) }
 
       it { expect { subject.call }.not_to raise_error }
@@ -463,7 +466,9 @@ RSpec.describe Contributor, type: :model do
         it { expect { subject.call }.not_to(change { Photo.count }) }
 
         context 'ActivityNotifications' do
-          it_behaves_like 'an ActivityNotification', 'MessageReceived'
+          let!(:admin) { create(:user, admin: true) }
+
+          it_behaves_like 'an ActivityNotification', 'MessageReceived', 3
         end
       end
     end
@@ -492,7 +497,7 @@ RSpec.describe Contributor, type: :model do
         end
       end
       let(:threema_id) { 'V5EA564T' }
-      let(:organization) { create(:organization, threemarb_api_identity: '*100EYES') }
+      let(:organization) { create(:organization, threemarb_api_identity: '*100EYES', users_count: 2) }
       let!(:contributor) { create(:contributor, :skip_validations, threema_id: threema_id, organization: organization) }
 
       before do
@@ -514,7 +519,9 @@ RSpec.describe Contributor, type: :model do
         it { should_not(change { Photo.count }) }
 
         context 'ActivityNotifications' do
-          it_behaves_like 'an ActivityNotification', 'MessageReceived'
+          let!(:admin) { create(:user, admin: true) }
+
+          it_behaves_like 'an ActivityNotification', 'MessageReceived', 3
         end
       end
     end
@@ -546,7 +553,7 @@ RSpec.describe Contributor, type: :model do
         end
       end
 
-      let(:organization) { create(:organization, signal_server_phone_number: '+4912345678') }
+      let(:organization) { create(:organization, signal_server_phone_number: '+4912345678', users_count: 2) }
       let(:phone_number) { '+4912345789' }
       let!(:contributor) do
         create(:contributor, signal_phone_number: phone_number, organization: organization)
@@ -562,7 +569,9 @@ RSpec.describe Contributor, type: :model do
         it { should_not(change { Photo.count }) }
 
         context 'ActivityNotifications' do
-          it_behaves_like 'an ActivityNotification', 'MessageReceived'
+          let!(:admin) { create(:user, admin: true) }
+
+          it_behaves_like 'an ActivityNotification', 'MessageReceived', 3
         end
       end
 
@@ -945,10 +954,11 @@ RSpec.describe Contributor, type: :model do
     before do
       users = create_list(:user, 5, organization: organization)
       organization.update(users: users)
+      create(:user, admin: true)
     end
 
     it 'behaves like an ActivityNotification' do
-      expect { subject }.to change(ActivityNotification.where(type: 'OnboardingCompleted'), :count).by(User.count)
+      expect { subject }.to change(ActivityNotification.where(type: 'OnboardingCompleted'), :count).by(6)
     end
 
     it 'for each user' do

@@ -68,7 +68,6 @@ class Message < ApplicationRecord
 
   # rubocop:disable Metrics/AbcSize
   def notify_recipient
-    # binding.pry
     if reply?
       MessageReceived.with(
         contributor_id: sender_id,

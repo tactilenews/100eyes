@@ -22,7 +22,7 @@ RSpec.shared_examples 'a Contributor resubscribes' do |adapter|
       end
     end)
   }
-  it_behaves_like 'an ActivityNotification', 'ContributorSubscribed'
+  it_behaves_like 'an ActivityNotification', 'ContributorSubscribed', 3
   it 'enqueues a job to inform admin' do
     expect { subject.call }.to have_enqueued_job.on_queue('default').with(
       'PostmarkAdapter::Outbound',

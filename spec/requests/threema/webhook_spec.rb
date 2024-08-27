@@ -19,7 +19,8 @@ RSpec.describe Threema::WebhookController do
   let(:threema) { instance_double(Threema) }
   let(:client_mock) { instance_double(Threema::Client) }
   let(:threema_lookup_double) { instance_double(Threema::Lookup) }
-  let!(:organization) { create(:organization, threemarb_api_identity: '*100EYES') }
+  let!(:organization) { create(:organization, threemarb_api_identity: '*100EYES', users_count: 1) }
+  let!(:admin) { create_list(:user, 2, admin: true) }
 
   before do
     allow(Threema).to receive(:new).and_return(threema)
@@ -47,7 +48,7 @@ RSpec.describe Threema::WebhookController do
 
     context 'With known contributor' do
       let!(:contributor) { create(:contributor, :skip_validations, threema_id: 'V5EA564T', organization: organization) }
-      let!(:request) { create(:request, organization: organization, user: create(:user, organization: organization)) }
+      let!(:request) { create(:request, organization: organization, user: create(:user)) }
 
       before do
         allow(threema_mock).to receive(:instance_of?).with(Threema::Receive::Text).and_return(true)
@@ -59,7 +60,7 @@ RSpec.describe Threema::WebhookController do
         expect { subject }.to change(Message, :count).from(0).to(1)
       end
 
-      it_behaves_like 'an ActivityNotification', 'MessageReceived'
+      it_behaves_like 'an ActivityNotification', 'MessageReceived', 3
 
       describe 'DeliveryReceipt' do
         let(:threema_mock) do
@@ -128,7 +129,7 @@ RSpec.describe Threema::WebhookController do
           expect { subject }.to change(Message, :count).from(0).to(1)
         end
 
-        it_behaves_like 'an ActivityNotification', 'MessageReceived'
+        it_behaves_like 'an ActivityNotification', 'MessageReceived', 3
       end
 
       describe 'Unsupported content' do

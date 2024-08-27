@@ -20,8 +20,11 @@ FactoryBot.define do
       business_plan_name { 'Editorial Basic' }
     end
 
-    users do
-      Array.new(users_count) { association(:user, organization: instance) }
+    after(:create) do |org, evaluator|
+      if evaluator.users_count.positive?
+        org.users << create_list(:user, evaluator.users_count, organization: org)
+        org.save!
+      end
     end
 
     contributors do
