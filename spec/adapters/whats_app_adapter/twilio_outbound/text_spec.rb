@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe WhatsAppAdapter::Outbound::Text do
+RSpec.describe WhatsAppAdapter::TwilioOutbound::Text do
   let(:adapter) { described_class.new }
   let(:valid_account_sid) { 'VALID_ACCOUNT_SID' }
   let(:valid_api_key_sid) { 'VALID_API_KEY_SID' }

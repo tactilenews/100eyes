@@ -34,11 +34,11 @@ module WhatsApp
 
       # TODO: Update to API that passes in organization_id
       adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
-        UnsubscribeContributorJob.perform_later(@organization.id, contributor.id, WhatsAppAdapter::Outbound)
+        UnsubscribeContributorJob.perform_later(@organization.id, contributor.id, WhatsAppAdapter::ThreeSixtyDialogOutbound)
       end
 
       adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::RESUBSCRIBE_CONTRIBUTOR) do |contributor|
-        ResubscribeContributorJob.perform_later(@organization.id, contributor.id, WhatsAppAdapter::Outbound)
+        ResubscribeContributorJob.perform_later(@organization.id, contributor.id, WhatsAppAdapter::ThreeSixtyDialogOutbound)
       end
 
       adapter.consume(@organization, message_params.to_h) { |message| message.contributor.reply(adapter) }
@@ -96,6 +96,12 @@ module WhatsApp
       contributor.update!(whats_app_message_template_responded_at: Time.current, whats_app_message_template_sent_at: nil)
 
       WhatsAppAdapter::ThreeSixtyDialogOutbound.send!(contributor.received_messages.first)
+    end
+
+    def handle_request_for_more_info(contributor, organization)
+      contributor.update!(whats_app_message_template_responded_at: Time.current)
+
+      WhatsAppAdapter::ThreeSixtyDialogOutbound.send_more_info_message!(contributor, organization)
     end
   end
 end

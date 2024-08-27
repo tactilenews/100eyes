@@ -91,7 +91,7 @@ class Message < ApplicationRecord
     return if manually_created? || reply?
 
     [PostmarkAdapter::Outbound, SignalAdapter::Outbound, TelegramAdapter::Outbound, ThreemaAdapter::Outbound,
-     WhatsAppAdapter::Outbound].each do |adapter|
+     WhatsAppAdapter::Delegator.new(organization)].each do |adapter|
       adapter.send!(self)
     end
   end

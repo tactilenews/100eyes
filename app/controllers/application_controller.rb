@@ -35,10 +35,8 @@ class ApplicationController < ActionController::Base
   private
 
   def set_organization
-    @organization = if params[:organization_id].present?
-                      Organization.find(params[:organization_id])
-                    else
-                      Organization.singleton
-                    end
+    @organization = Organization.find(params[:organization_id]) if params[:organization_id].present?
+  rescue ActiveRecord::RecordNotFound
+    raise ActionController::RoutingError, 'Not Found'
   end
 end

@@ -85,7 +85,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
     before { message } # we don't count the extra ::send here
 
     context '`whats_app_phone_number` blank' do
-      it { should_not enqueue_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText) }
+      it { should_not enqueue_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text) }
     end
 
     context 'given a WhatsApp contributor' do
@@ -93,7 +93,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
 
       describe 'contributor has not sent a message within 24 hours' do
         it 'enqueues the Text job with WhatsApp template' do
-          expect { subject.call }.to(have_enqueued_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText).on_queue('default').with do |params|
+          expect { subject.call }.to(have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).on_queue('default').with do |params|
                                        expect(params[:payload]).to include(new_request_payload)
                                      end)
         end
@@ -103,7 +103,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
         before { contributor.update(whats_app_message_template_responded_at: Time.current) }
 
         it 'enqueues the Text job with the request text' do
-          expect { subject.call }.to(have_enqueued_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText).on_queue('default').with do |params|
+          expect { subject.call }.to(have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).on_queue('default').with do |params|
             expect(params[:payload]).to eq(text_payload)
           end)
         end
@@ -113,7 +113,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
         before { create(:message, sender: contributor) }
 
         it 'enqueues the Text job with the request text' do
-          expect { subject.call }.to(have_enqueued_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText).on_queue('default').with do |params|
+          expect { subject.call }.to(have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).on_queue('default').with do |params|
             expect(params[:payload]).to eq(text_payload)
           end)
         end
@@ -126,7 +126,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
           it 'enqueues the Text job with WhatsApp template' do
             expect do
               subject.call
-            end.to(have_enqueued_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText).on_queue('default').with do |params|
+            end.to(have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).on_queue('default').with do |params|
                      expect(params[:payload]).to include(new_request_payload)
                    end)
           end
@@ -136,7 +136,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
           before { create(:message, sender: contributor) }
 
           it 'enqueues a File job with file, contributor, text' do
-            expect { subject.call }.to(have_enqueued_job(WhatsAppAdapter::UploadFile).on_queue('default').with do |params|
+            expect { subject.call }.to(have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::UploadFile).on_queue('default').with do |params|
               expect(params[:message_id]).to eq(message.id)
             end)
           end
@@ -148,14 +148,14 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
   describe '#send_welcome_message!' do
     subject { -> { described_class.send_welcome_message!(contributor, organization) } }
 
-    it { is_expected.not_to enqueue_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText) }
+    it { is_expected.not_to enqueue_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text) }
 
     context 'contributor has a phone number' do
       let(:contributor) { create(:contributor, :whats_app_contributor, organization: organization) }
 
       context 'and no replies sent(new contributor)' do
         it {
-          is_expected.to enqueue_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText).with({ organization_id: organization.id,
+          is_expected.to enqueue_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with({ organization_id: organization.id,
                                                                                              payload: welcome_message_payload })
         }
       end
@@ -171,7 +171,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
         end
 
         it {
-          is_expected.to enqueue_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText).with({ organization_id: organization.id,
+          is_expected.to enqueue_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with({ organization_id: organization.id,
                                                                                              payload: text_payload })
         }
       end
@@ -181,7 +181,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
   describe '#send_unsupported_content_message!' do
     subject { -> { described_class.send_unsupported_content_message!(contributor, organization) } }
 
-    it { is_expected.not_to enqueue_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText) }
+    it { is_expected.not_to enqueue_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text) }
 
     context 'contributor has a phone number' do
       let(:contributor) { create(:contributor, :whats_app_contributor, organization: organization) }
@@ -195,7 +195,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
       end
 
       it {
-        is_expected.to enqueue_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText).with({ organization_id: organization.id,
+        is_expected.to enqueue_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with({ organization_id: organization.id,
                                                                                            payload: text_payload })
       }
     end
@@ -204,7 +204,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
   describe '#send_more_info_message!' do
     subject { -> { described_class.send_more_info_message!(contributor, organization) } }
 
-    it { is_expected.not_to enqueue_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText) }
+    it { is_expected.not_to enqueue_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text) }
 
     context 'contributor has a phone number' do
       let(:contributor) do
@@ -221,7 +221,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
       end
 
       it {
-        is_expected.to enqueue_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText).with({ organization_id: organization.id,
+        is_expected.to enqueue_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with({ organization_id: organization.id,
                                                                                            payload: text_payload })
       }
     end
@@ -230,7 +230,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
   describe '#send_unsubsribed_successfully_message!' do
     subject { -> { described_class.send_unsubsribed_successfully_message!(contributor, organization) } }
 
-    it { is_expected.not_to enqueue_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText) }
+    it { is_expected.not_to enqueue_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text) }
 
     context 'contributor has a phone number' do
       let(:contributor) { create(:contributor, :whats_app_contributor, organization: organization) }
@@ -241,7 +241,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
       end
 
       it {
-        is_expected.to enqueue_job(WhatsAppAdapter::Outbound::ThreeSixtyDialogText).with({ organization_id: organization.id,
+        is_expected.to enqueue_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with({ organization_id: organization.id,
                                                                                            payload: text_payload })
       }
     end
