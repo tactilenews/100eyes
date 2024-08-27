@@ -7,8 +7,9 @@ RSpec.describe 'Onboarding::Signal', type: :request do
   let(:data_processing_consent) { true }
   let(:additional_consent) { true }
   let!(:organization) do
-    create(:organization, signal_server_phone_number: signal_server_phone_number, onboarding_allowed: onboarding_allowed)
+    create(:organization, signal_server_phone_number: signal_server_phone_number, onboarding_allowed: onboarding_allowed, users_count: 1)
   end
+  let!(:admin) { create_list(:user, 2, admin: true) }
   let(:onboarding_allowed) { { signal: true } }
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding', organization_id: organization.id }) }
   let(:params) { { jwt: jwt } }
@@ -115,7 +116,7 @@ RSpec.describe 'Onboarding::Signal', type: :request do
       end
 
       context 'creates an ActivityNotification' do
-        it_behaves_like 'an ActivityNotification', 'OnboardingCompleted'
+        it_behaves_like 'an ActivityNotification', 'OnboardingCompleted', 3
       end
 
       context 'without data processing consent' do

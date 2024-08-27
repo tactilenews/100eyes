@@ -8,7 +8,8 @@ RSpec.describe 'Onboarding::Email', type: :request do
   let(:additional_consent) { true }
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
   let(:params) { { jwt: jwt } }
-  let(:organization) { create(:organization, onboarding_allowed: onboarding_allowed) }
+  let(:organization) { create(:organization, onboarding_allowed: onboarding_allowed, users_count: 1) }
+  let!(:admin) { create_list(:user, 2, admin: true) }
   let(:onboarding_allowed) { { email: false } }
 
   describe 'GET /{organization_id}/onboarding/email' do
@@ -108,7 +109,7 @@ RSpec.describe 'Onboarding::Email', type: :request do
       end
 
       context 'creates an ActivityNotification' do
-        it_behaves_like 'an ActivityNotification', 'OnboardingCompleted'
+        it_behaves_like 'an ActivityNotification', 'OnboardingCompleted', 3
       end
 
       context 'given invalid email address' do

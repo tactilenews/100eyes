@@ -21,7 +21,7 @@ RSpec.shared_examples 'a Contributor unsubscribes' do |adapter|
       end
     end)
   }
-  it_behaves_like 'an ActivityNotification', 'ContributorMarkedInactive'
+  it_behaves_like 'an ActivityNotification', 'ContributorMarkedInactive', 3
   it 'enqueues a job to inform admin' do
     expect { subject.call }.to have_enqueued_job.on_queue('default').with(
       'PostmarkAdapter::Outbound',

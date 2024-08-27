@@ -35,10 +35,12 @@ RSpec.describe MarkInactiveContributorInactiveJob do
           before do
             contributor.update(organization_id: organization.id)
             non_admin_user.update(organization_id: organization.id)
+            organization.users << non_admin_user
+            organization.save!
           end
 
           it { is_expected.to change { contributor.reload.deactivated_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone)) }
-          it_behaves_like 'an ActivityNotification', 'ContributorMarkedInactive'
+          it_behaves_like 'an ActivityNotification', 'ContributorMarkedInactive', 3
           it 'enqueues a job to inform admin' do
             expect { subject.call }.to have_enqueued_job.on_queue('default').with(
               'PostmarkAdapter::Outbound',

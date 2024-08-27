@@ -8,8 +8,9 @@ RSpec.describe 'Onboarding::Threema', type: :request do
   let(:additional_consent) { true }
   let(:threemarb_api_identity) { nil }
   let!(:organization) do
-    create(:organization, threemarb_api_identity: threemarb_api_identity, onboarding_allowed: onboarding_allowed)
+    create(:organization, threemarb_api_identity: threemarb_api_identity, onboarding_allowed: onboarding_allowed, users_count: 1)
   end
+  let!(:admin) { create_list(:user, 2, admin: true) }
   let(:onboarding_allowed) { { threema: true } }
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding', organization_id: organization.id }) }
   let(:params) { { jwt: jwt } }
@@ -122,7 +123,7 @@ RSpec.describe 'Onboarding::Threema', type: :request do
       end
 
       context 'creates an ActivityNotification' do
-        it_behaves_like 'an ActivityNotification', 'OnboardingCompleted'
+        it_behaves_like 'an ActivityNotification', 'OnboardingCompleted', 3
       end
 
       context 'given an invalid Threema ID' do

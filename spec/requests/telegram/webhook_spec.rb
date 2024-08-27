@@ -13,9 +13,11 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
       telegram_contributor_not_found_message: 'Who are you?',
       telegram_unknown_content_message: 'Cannot handle this, I\'m sorry :(',
       onboarding_success_heading: 'Welcome new contributor!',
-      onboarding_success_text: ''
+      onboarding_success_text: '',
+      users_count: 1
     )
   end
+  let!(:admin) { create_list(:user, 2, admin: true) }
   let(:bot) { organization.telegram_bot }
   let(:controller_path) do
     "/telegram/#{Telegram::Bot::RoutesHelper.token_hash(organization.telegram_bot_api_key)}"
@@ -138,10 +140,10 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
         it { expect { subject.call }.not_to(change { Message.count }) }
 
         context 'given a recent request' do
-          before { create(:request, organization: organization, user: create(:user, organization: organization)) }
+          before { create(:request, organization: organization, user: create(:user)) }
           it { expect { subject.call }.to(change { Message.count }.from(0).to(1)) }
           it { expect { subject.call }.not_to respond_with_message }
-          it_behaves_like 'an ActivityNotification', 'MessageReceived'
+          it_behaves_like 'an ActivityNotification', 'MessageReceived', 3
         end
 
         context ' message has a document' do
