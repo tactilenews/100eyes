@@ -105,11 +105,11 @@ module WhatsApp
       end
 
       adapter.on(WhatsAppAdapter::TwilioInbound::UNSUBSCRIBE_CONTRIBUTOR) do |contributor, organization|
-        UnsubscribeContributorJob.perform_later(organization.id, contributor.id, WhatsAppAdapter::Outbound)
+        UnsubscribeContributorJob.perform_later(organization.id, contributor.id, WhatsAppAdapter::TwilioOutbound)
       end
 
       adapter.on(WhatsAppAdapter::TwilioInbound::RESUBSCRIBE_CONTRIBUTOR) do |contributor, organization|
-        ResubscribeContributorJob.perform_later(organization.id, contributor.id, WhatsAppAdapter::Outbound)
+        ResubscribeContributorJob.perform_later(organization.id, contributor.id, WhatsAppAdapter::TwilioOutbound)
       end
     end
 
@@ -185,6 +185,12 @@ module WhatsApp
 
       message.received_at = Time.current if message.received_at.blank?
       message.update(read_at: Time.current)
+    end
+
+    def handle_request_for_more_info(contributor, organization)
+      contributor.update!(whats_app_message_template_responded_at: Time.current)
+
+      WhatsAppAdapter::TwilioOutbound.send_more_info_message!(contributor, organization)
     end
   end
 end

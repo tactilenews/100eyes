@@ -24,11 +24,6 @@ class Organization < ApplicationRecord
 
   validates :telegram_bot_username, uniqueness: true
 
-  # As currently constructed, we only have one organization per instance.
-  def self.singleton
-    first
-  end
-
   def channels_onboarding_allowed
     {
       email: email_onboarding_allowed?,

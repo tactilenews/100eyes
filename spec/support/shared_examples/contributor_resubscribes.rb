@@ -13,7 +13,7 @@ RSpec.shared_examples 'a Contributor resubscribes' do |adapter|
   it {
     is_expected.to(have_enqueued_job(adapter).on_queue('default').with do |params|
       expect(params[:organization_id]).to eq(organization.id)
-      if adapter.eql?(WhatsAppAdapter::Outbound::ThreeSixtyDialogText)
+      if adapter.eql?(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text)
         expect(params[:payload][:to]).to eq(contributor.whats_app_phone_number.split('+').last)
         expect(params[:payload][:template][:name]).to eq('welcome_message')
       else

@@ -117,7 +117,9 @@ RSpec.describe WhatsApp::WebhookController do
 
         context 'request to receive latest message' do
           it 'enqueues a job to send the latest received message' do
-            expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::Outbound::Text).on_queue('default').with(latest_message_job_args)
+            expect do
+              subject.call
+            end.to have_enqueued_job(WhatsAppAdapter::TwilioOutbound::Text).on_queue('default').with(latest_message_job_args)
           end
 
           describe 'replying to message with quick reply button' do
@@ -157,7 +159,7 @@ RSpec.describe WhatsApp::WebhookController do
               it 'enqueues a job to send the requested message' do
                 expect do
                   subject.call
-                end.to have_enqueued_job(WhatsAppAdapter::Outbound::Text).on_queue('default').with(requested_message_job_args)
+                end.to have_enqueued_job(WhatsAppAdapter::TwilioOutbound::Text).on_queue('default').with(requested_message_job_args)
               end
             end
 
@@ -178,7 +180,7 @@ RSpec.describe WhatsApp::WebhookController do
               it 'enqueues a job to send the requested message' do
                 expect do
                   subject.call
-                end.to have_enqueued_job(WhatsAppAdapter::Outbound::Text).on_queue('default').with(requested_message_job_args)
+                end.to have_enqueued_job(WhatsAppAdapter::TwilioOutbound::Text).on_queue('default').with(requested_message_job_args)
               end
             end
 
@@ -188,7 +190,7 @@ RSpec.describe WhatsApp::WebhookController do
               it 'enqueues a job to send the latest received message' do
                 expect do
                   subject.call
-                end.to have_enqueued_job(WhatsAppAdapter::Outbound::Text).on_queue('default').with(latest_message_job_args)
+                end.to have_enqueued_job(WhatsAppAdapter::TwilioOutbound::Text).on_queue('default').with(latest_message_job_args)
               end
             end
           end
@@ -208,11 +210,11 @@ RSpec.describe WhatsApp::WebhookController do
           end
 
           it 'enqueues a job to send more info message' do
-            expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::Outbound::Text).on_queue('default').with(more_info_job_args)
+            expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::TwilioOutbound::Text).on_queue('default').with(more_info_job_args)
           end
 
           it 'does not enqueue a job to send the latest received message' do
-            expect { subject.call }.not_to have_enqueued_job(WhatsAppAdapter::Outbound::Text).with(latest_message_job_args)
+            expect { subject.call }.not_to have_enqueued_job(WhatsAppAdapter::TwilioOutbound::Text).with(latest_message_job_args)
           end
         end
 
@@ -220,7 +222,8 @@ RSpec.describe WhatsApp::WebhookController do
           before { params['Body'] = 'Abbestellen' }
 
           it {
-            is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(organization.id, contributor.id, WhatsAppAdapter::Outbound)
+            is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(organization.id, contributor.id,
+                                                                             WhatsAppAdapter::TwilioOutbound)
           }
         end
 
@@ -231,7 +234,8 @@ RSpec.describe WhatsApp::WebhookController do
           end
 
           it {
-            is_expected.to have_enqueued_job(ResubscribeContributorJob).with(organization.id, contributor.id, WhatsAppAdapter::Outbound)
+            is_expected.to have_enqueued_job(ResubscribeContributorJob).with(organization.id, contributor.id,
+                                                                             WhatsAppAdapter::TwilioOutbound)
           }
         end
       end
@@ -361,7 +365,7 @@ RSpec.describe WhatsApp::WebhookController do
             end
 
             it 'given message cannot be found by Twilio message sid body' do
-              expect { subject.call }.not_to have_enqueued_job(WhatsAppAdapter::Outbound::Text)
+              expect { subject.call }.not_to have_enqueued_job(WhatsAppAdapter::TwilioOutbound::Text)
               expect { subject.call }.not_to raise_error
             end
 
@@ -370,7 +374,7 @@ RSpec.describe WhatsApp::WebhookController do
               let(:body_text) { "Hey #{contributor.first_name}, because it was sent outside the allowed window" }
 
               it 'enqueues the Text job with WhatsApp template' do
-                expect { subject.call }.to(have_enqueued_job(WhatsAppAdapter::Outbound::Text).on_queue('default').with do |params|
+                expect { subject.call }.to(have_enqueued_job(WhatsAppAdapter::TwilioOutbound::Text).on_queue('default').with do |params|
                   expect(params[:contributor_id]).to eq(contributor.id)
                   expect(params[:text]).to include(contributor.first_name)
                   expect(params[:text]).to include(message.request.title)
@@ -380,7 +384,7 @@ RSpec.describe WhatsApp::WebhookController do
               context 'given an undelivered status' do
                 before { params['MessageStatus'] = 'undelivered' }
                 it 'is expected not to schedule a job as it would send out twice, one for undelivered and one for failed' do
-                  expect { subject.call }.not_to have_enqueued_job(WhatsAppAdapter::Outbound::Text)
+                  expect { subject.call }.not_to have_enqueued_job(WhatsAppAdapter::TwilioOutbound::Text)
                 end
               end
             end

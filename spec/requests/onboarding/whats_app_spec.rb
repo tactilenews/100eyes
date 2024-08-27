@@ -141,7 +141,7 @@ RSpec.describe 'Onboarding::Whatsapp' do
 
           subject.call
 
-          expect(WhatsAppAdapter::Outbound::Text).to have_been_enqueued.with(
+          expect(WhatsAppAdapter::TwilioOutbound::Text).to have_been_enqueued.with(
             organization_id: organization.id,
             contributor_id: Contributor.first.id,
             text: welcome_message
@@ -226,7 +226,7 @@ RSpec.describe 'Onboarding::Whatsapp' do
         it 'enqueues a job with welcome message' do
           subject.call
 
-          expect(WhatsAppAdapter::Outbound::ThreeSixtyDialogText).to have_been_enqueued.with(
+          expect(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).to have_been_enqueued.with(
             organization_id: organization.id,
             payload: welcome_message_payload
           )
