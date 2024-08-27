@@ -45,6 +45,17 @@ RSpec.describe '/{organization_id}/dashboard', type: :request do
       expect(page).to have_content "3 empfangene Nachrichten"
     end
 
+    it "calculates the engagement metric for the organization only" do
+      request = create(:request, organization: organization)
+      contributors = create_list(:contributor, 2, organization: organization)
+      contributor = create(:contributor)
+      replies = create(:message, :inbound, sender: contributors[0], organization: organization)
+      other_replies = create(:message, :inbound, sender: contributors[1])
+      subject.call
+      expect(page).to have_content "50% Interaktionsquote"
+    end
+
+
     it "doesn't include activity notifications for other organizations" do
     end
 
