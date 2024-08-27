@@ -48,5 +48,4 @@ class DashboardController < ApplicationController
   def user_permitted?(organization)
     raise ActionController::RoutingError, 'Not Found' unless current_user.admin? || current_user.organization_id == organization.id
   end
-
 end
