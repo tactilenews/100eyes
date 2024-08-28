@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_07_26_065204) do
+ActiveRecord::Schema.define(version: 2024_08_12_102032) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -336,6 +336,15 @@ ActiveRecord::Schema.define(version: 2024_07_26_065204) do
     t.index ["remember_token"], name: "index_users_on_remember_token"
   end
 
+  create_table "users_organizations", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "organization_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["organization_id"], name: "index_users_organizations_on_organization_id"
+    t.index ["user_id"], name: "index_users_organizations_on_user_id"
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "activity_notifications", "contributors"
@@ -356,4 +365,6 @@ ActiveRecord::Schema.define(version: 2024_07_26_065204) do
   add_foreign_key "requests", "users"
   add_foreign_key "taggings", "tags"
   add_foreign_key "users", "organizations"
+  add_foreign_key "users_organizations", "organizations"
+  add_foreign_key "users_organizations", "users"
 end

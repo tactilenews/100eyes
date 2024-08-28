@@ -10,7 +10,7 @@ RSpec.describe 'Requests', telegram_bot: :rails do
     before(:each) { allow(Request).to receive(:broadcast!).and_call_original } # is stubbed for every other test
     subject { -> { post organization_requests_path(organization, as: user), params: params } }
     let(:params) { { request: { title: 'Example Question', text: 'How do you do?', hints: ['confidential'] } } }
-    let(:user) { create(:user) }
+    let(:user) { create(:user, organizations: [organization]) }
 
     it { should change { Request.count }.from(0).to(1) }
 
@@ -113,7 +113,7 @@ RSpec.describe 'Requests', telegram_bot: :rails do
       }
     end
 
-    let(:user) { create(:user) }
+    let(:user) { create(:user, organizations: [organization]) }
 
     context 'broadcasted request' do
       let!(:request) { create(:request, organization: organization) }
@@ -157,10 +157,10 @@ RSpec.describe 'Requests', telegram_bot: :rails do
   end
 
   describe 'GET /{organization_id}/notifications' do
-    let(:request) { create(:request) }
+    let(:request) { create(:request, organization: organization) }
     let!(:older_message) { create(:message, request_id: request.id, created_at: 2.minutes.ago) }
     let(:params) { { last_updated_at: 1.minute.ago } }
-    let(:user) { create(:user) }
+    let(:user) { create(:user, organizations: [organization]) }
 
     subject { -> { get notifications_organization_request_path(request.organization, request, as: user), params: params } }
 

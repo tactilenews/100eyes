@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Profile pictures' do
   let(:organization) { create(:organization) }
-  let(:user) { create(:user, organization: organization) }
+  let(:user) { create(:user, organizations: [organization]) }
   let(:contributor) { create(:contributor, organization: organization) }
 
   it 'Editor uploads new picture' do

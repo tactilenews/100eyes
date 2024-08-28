@@ -5,9 +5,9 @@ require 'telegram/bot/rspec/integration/rails'
 
 RSpec.describe '/{organization_id}/contributors', type: :request do
   let(:organization) { create(:organization) }
-  let!(:contributor) { create(:contributor) }
+  let!(:contributor) { create(:contributor, organization: organization) }
   let(:the_request) { create(:request, organization: organization) }
-  let(:user) { create(:user) }
+  let(:user) { create(:user, organizations: [organization]) }
 
   describe 'GET /index' do
     it 'should be successful' do
@@ -85,7 +85,7 @@ RSpec.describe '/{organization_id}/contributors', type: :request do
       let(:updated_attrs) do
         { tag_list: 'ops' }
       end
-      let(:contributor) { create(:contributor, tag_list: %w[dev ops]) }
+      let(:contributor) { create(:contributor, tag_list: %w[dev ops], organization: organization) }
 
       it 'is supported' do
         patch organization_contributor_url(organization, id: contributor.id, as: user), params: { contributor: updated_attrs }
@@ -106,7 +106,9 @@ RSpec.describe '/{organization_id}/contributors', type: :request do
     end
 
     context 'given a manually created contributor' do
-      let(:contributor) { create(:contributor, :skip_validations, data_processing_consent: false, first_name: 'John') }
+      let(:contributor) do
+        create(:contributor, :skip_validations, data_processing_consent: false, first_name: 'John', organization: organization)
+      end
 
       it 'updates contributor' do
         expect { subject.call }.to(change { contributor.reload.first_name }.from('John').to('Zora'))
@@ -133,7 +135,7 @@ RSpec.describe '/{organization_id}/contributors', type: :request do
     context 'given a Threema contributor' do
       let(:threema) { instance_double(Threema) }
       let(:threema_lookup_double) { instance_double(Threema::Lookup) }
-      let(:contributor) { create(:contributor, :skip_validations, threema_id: 'VALID123') }
+      let(:contributor) { create(:contributor, :skip_validations, threema_id: 'VALID123', organization: organization) }
       let(:new_attrs) { { threema_id: 'INVALID!' } }
 
       before do
@@ -195,9 +197,6 @@ RSpec.describe '/{organization_id}/contributors', type: :request do
     end
 
     describe 'given a contributor' do
-      let(:params) { {} }
-      let(:contributor) { create(:contributor, **params) }
-
       describe 'response' do
         before(:each) { subject.call }
         it { expect(response).to have_http_status(:bad_request) }

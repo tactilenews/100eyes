@@ -3,7 +3,7 @@
 require 'openssl'
 
 class Threema::WebhookController < ApplicationController
-  skip_before_action :require_login, :verify_authenticity_token
+  skip_before_action :require_login, :verify_authenticity_token, :user_permitted?, :set_organization
 
   attr_reader :adapter
 

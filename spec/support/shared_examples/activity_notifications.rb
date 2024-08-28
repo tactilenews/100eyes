@@ -6,10 +6,10 @@ RSpec.shared_examples 'an ActivityNotification' do |event_type, count|
       expect { run_action(subject) }.to change(ActivityNotification.where(type: event_type), :count).by(count)
     end
 
-    it 'for each user' do
+    it 'for each user and admin' do
       run_action(subject)
       recipient_ids = ActivityNotification.where(type: event_type).pluck(:recipient_id).uniq.sort
-      user_ids = organization.users.pluck(:id)
+      user_ids = organization.users.pluck(:id).uniq
       admin_ids = User.admin.pluck(:id)
       all_org_user_plus_admin = (user_ids + admin_ids).sort
       expect(recipient_ids).to eq(all_org_user_plus_admin)

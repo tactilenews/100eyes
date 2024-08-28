@@ -132,7 +132,7 @@ RSpec.describe Message, type: :model do
 
       before do
         Contributor.skip_callback(:commit, :after, :notify_recipient, raise: false)
-        organization.update!(users: create_list(:user, 5, organization: organization))
+        organization.update!(users: create_list(:user, 5, organizations: [organization]))
       end
 
       after do

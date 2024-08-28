@@ -3,9 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe 'Messages', type: :request do
+  let(:organization) { create(:organization) }
+  let(:request) { create(:request, organization: organization) }
+
   describe 'PATCH /messages/:id/highlight' do
     let(:params) { {} }
-    let(:user) { create(:user) }
+    let(:user) { create(:user, organizations: [organization]) }
 
     subject do
       lambda do
@@ -15,7 +18,7 @@ RSpec.describe 'Messages', type: :request do
     end
 
     describe 'given an non-highlighted message' do
-      let(:message) { create(:message, highlighted: false) }
+      let(:message) { create(:message, highlighted: false, request: request) }
 
       describe 'given highlighted=true' do
         let(:params) { { highlighted: true } }
@@ -29,7 +32,7 @@ RSpec.describe 'Messages', type: :request do
     end
 
     describe 'given a highlighted message' do
-      let(:message) { create(:message, highlighted: true) }
+      let(:message) { create(:message, highlighted: true, request: request) }
 
       describe 'given highlighted=true' do
         let(:params) { { highlighted: true } }
@@ -44,13 +47,13 @@ RSpec.describe 'Messages', type: :request do
   end
 
   describe 'GET /request' do
-    let(:user) { create(:user) }
-    let(:contributor) { create(:contributor, first_name: 'Zora', last_name: 'Zimmermann') }
+    let(:user) { create(:user, organizations: [message.organization]) }
+    let(:contributor) { create(:contributor, first_name: 'Zora', last_name: 'Zimmermann', organization: organization) }
 
     before(:each) { get(organization_message_request_url(message.organization, message, as: user)) }
 
     context 'given an inbound message' do
-      let(:message) { create(:message, sender: contributor, recipient: nil) }
+      let(:message) { create(:message, sender: contributor, recipient: nil, request: request) }
 
       it 'renders successfully' do
         expect(response).to be_successful
@@ -69,8 +72,7 @@ RSpec.describe 'Messages', type: :request do
   end
 
   describe 'POST /request' do
-    let(:user) { create(:user) }
-    let(:request) { create(:request) }
+    let(:user) { create(:user, organizations: [organization]) }
 
     subject { -> { patch(organization_message_request_url(message.organization, message, as: user), params: params) } }
 

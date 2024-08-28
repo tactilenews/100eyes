@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Sending image files', js: true do
-  let(:user) { create(:user) }
+  let(:user) { create(:user, organizations: [organization]) }
   let(:organization) { create(:organization) }
 
   context 'given contributors' do

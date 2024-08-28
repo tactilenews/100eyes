@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class OtpSetupController < ApplicationController
-  skip_before_action :require_otp_setup
+  skip_before_action :require_otp_setup, :user_permitted?, :set_organization
   before_action :redirect_if_set_up
 
   layout 'minimal'
@@ -14,7 +14,7 @@ class OtpSetupController < ApplicationController
       current_user.save!
       session[:otp_verified_for_user] = current_user.id
 
-      redirect_back_or organizations_path
+      redirect_back_or redirect_path
     else
       flash.now[:error] = I18n.t('sessions.errors.otp_incorrect')
       render :show, status: :unauthorized
@@ -24,7 +24,7 @@ class OtpSetupController < ApplicationController
   private
 
   def redirect_if_set_up
-    redirect_to organizations_path if current_user.otp_enabled?
+    redirect_to redirect_path if current_user.otp_enabled?
   end
 
   def otp_params

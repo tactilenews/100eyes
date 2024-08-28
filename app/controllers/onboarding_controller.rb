@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class OnboardingController < ApplicationController
-  skip_before_action :require_login
+  skip_before_action :require_login, :user_permitted?
   before_action :ensure_onboarding_allowed
   before_action :verify_jwt, except: :success
   before_action :resume_telegram_onboarding, only: %i[index show]

@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe User do
   let(:organization) { create(:organization, business_plan_name: 'Editorial pro') }
-  let!(:users) { create_list(:user, 3, organization: organization) }
+  let!(:users) { create_list(:user, 3, organizations: [organization]) }
 
   describe 'validations' do
     describe '#email' do
@@ -17,7 +17,7 @@ RSpec.describe User do
   end
 
   describe '#notify_admin' do
-    subject { create(:user, organization: organization) }
+    subject { create(:user, organizations: [organization]) }
 
     context 'non-admin' do
       it 'does not schedule a job' do

@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Request personalization' do
-  let(:user) { create(:user) }
+  let(:user) { create(:user, organizations: [organization]) }
   let(:organization) { create(:organization) }
 
   context 'given two contributors'

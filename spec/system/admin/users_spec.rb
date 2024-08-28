@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Users' do
-  context 'as user with admin permissions' do
+  context 'as user with admin permissions', js: true do
     let(:user) { create(:user, first_name: 'Max', last_name: 'Mustermann', admin: true, password: '12345678') }
     let!(:organization) { create(:organization) }
 
@@ -15,8 +15,10 @@ RSpec.describe 'Users' do
       fill_in 'First name', with: 'Zora'
       fill_in 'Last name', with: 'Zimmermann'
       fill_in 'Email', with: 'zimmermann@example.org'
+      input = find('input[name="user[organization_ids][]"]', visible: false)
+      input.set(organization.id)
       click_on 'Sign up'
-      expect(User.find_by(email: 'zimmermann@example.org').reload.organization).to eq(organization)
+      expect(User.find_by(email: 'zimmermann@example.org').reload.organizations).to eq([organization])
 
       expect(page).to have_text('User was successfully created.')
     end
@@ -32,7 +34,7 @@ RSpec.describe 'Users' do
       check 'Admin'
 
       click_on 'Sign up'
-      expect(User.find_by(email: 'new_admin@example.org').reload.organization).to eq(nil)
+      expect(User.find_by(email: 'new_admin@example.org').reload.organizations).to eq([])
 
       expect(page).to have_text('User was successfully created.')
     end

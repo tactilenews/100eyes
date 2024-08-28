@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Settings' do
   let(:organization) { create(:organization) }
-  let(:user) { create(:user, organization: organization) }
+  let(:user) { create(:user, organizations: [organization]) }
 
   it 'Exposes certain fields only to admin' do
     visit organization_settings_path(organization, as: user)

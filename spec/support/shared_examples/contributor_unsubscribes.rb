@@ -3,7 +3,7 @@
 RSpec.shared_examples 'a Contributor unsubscribes' do |adapter|
   let!(:request) { create(:request, organization: organization, user: non_admin_user) }
   let!(:admin) { create_list(:user, 2, admin: true) }
-  let!(:non_admin_user) { create(:user, organization: organization) }
+  let!(:non_admin_user) { create(:user, organizations: [organization]) }
   let(:unsubscribe_successful_message) do
     [I18n.t('adapter.shared.unsubscribe.successful')].join("\n\n")
   end

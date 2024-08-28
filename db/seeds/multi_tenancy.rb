@@ -15,7 +15,7 @@ organizations = 3.times.collect do
   )
 end
 users = 10.times.collect do
-  FactoryBot.create(:user, organization: organizations.sample)
+  FactoryBot.create(:user, organizations: [organizations.sample])
 end
 
 # images = 10.times.map { URI(Faker::Avatar.image(size: '50x50', format: 'png', set: 'set5')) }

@@ -8,7 +8,7 @@ RSpec.describe 'OTP Setup' do
   let(:password) { Faker::Internet.password(min_length: 8, max_length: 128) }
   let(:new_password) { Faker::Internet.password(min_length: 8, max_length: 128) }
   let(:otp_enabled) { true }
-  let(:user) { create(:user, email: email, password: password, otp_enabled: otp_enabled, organization: organization) }
+  let(:user) { create(:user, email: email, password: password, otp_enabled: otp_enabled, organizations: [organization]) }
 
   describe 'without 2FA set up' do
     let(:otp_enabled) { false }

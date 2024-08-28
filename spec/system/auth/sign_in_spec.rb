@@ -7,7 +7,7 @@ RSpec.describe 'Sign in' do
   let(:email) { 'zora@example.org' }
   let(:password) { '12345678' }
   let(:otp_enabled) { true }
-  let!(:user) { create(:user, email: email, password: password, otp_enabled: otp_enabled, organization: organization) }
+  let!(:user) { create(:user, email: email, password: password, otp_enabled: otp_enabled, organizations: [organization]) }
 
   it 'editor tries to visit protected page' do
     visit organization_dashboard_path(organization)

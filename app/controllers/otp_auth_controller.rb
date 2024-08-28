@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 class OtpAuthController < ApplicationController
-  skip_before_action :require_login
-  skip_before_action :require_otp_setup
+  skip_before_action :require_login, :require_otp_setup, :user_permitted?, :set_organization
   before_action :redirect_if_signed_in, :redirect_unless_user_set, :reset_when_inactive
 
   layout 'minimal'
@@ -36,6 +35,6 @@ class OtpAuthController < ApplicationController
   end
 
   def redirect_if_signed_in
-    redirect_to organizations_path if signed_in?
+    redirect_to redirect_path if signed_in?
   end
 end

@@ -7,7 +7,7 @@ class ProfileController < ApplicationController
 
   def create_user
     password = SecureRandom.alphanumeric(20)
-    user = User.new(user_params.merge(password: password, organization: @organization))
+    user = User.new(user_params.merge(password: password, organizations: [@organization]))
     if user.save
       redirect_to organization_profile_path(@organization), flash: { success: I18n.t('profile.user.created_successfully') }
     else
