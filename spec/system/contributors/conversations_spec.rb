@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe 'Conversation interactions', js: false do
   let(:organization) { create(:organization) }
   let(:user) { create(:user, organizations: [organization]) }
-  let(:contributor) { create(:contributor, email: 'contributor@example.org') }
+  let(:contributor) { create(:contributor, email: 'contributor@example.org', organization: organization) }
   let(:request) { create(:request, organization: organization) }
   let(:first_received_message) do
     create(:message, text: 'Message with the contributor as recipient 1', recipient: contributor, request: request)
