@@ -3,7 +3,7 @@
 class ErrorsController < ApplicationController
   layout 'minimal'
 
-  skip_before_action :require_login
+  skip_before_action :require_login, :user_permitted?, :set_organization
 
   def not_found
     render status: :not_found
