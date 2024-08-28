@@ -17,10 +17,10 @@ module MoveMessageForm
     end
 
     def recent_requests
-      Request
-        .where('broadcasted_at <= ?', request.broadcasted_at)
-        .order(broadcasted_at: :desc)
-        .limit(5)
+      message.organization.requests
+             .where('broadcasted_at <= ?', request.broadcasted_at)
+             .order(broadcasted_at: :desc)
+             .limit(5)
     end
 
     def choices
