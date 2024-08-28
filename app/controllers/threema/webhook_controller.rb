@@ -38,8 +38,8 @@ class Threema::WebhookController < ApplicationController
       ErrorNotifier.report(exception)
     end
 
-    adapter.on(ThreemaAdapter::HANDLE_DELIVERY_RECEIPT) do |delivery_receipt|
-      handle_delivery_receipt(delivery_receipt)
+    adapter.on(ThreemaAdapter::HANDLE_DELIVERY_RECEIPT) do |delivery_receipt, organization|
+      handle_delivery_receipt(delivery_receipt, organization)
     end
 
     adapter.on(ThreemaAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor, organization|
@@ -55,10 +55,10 @@ class Threema::WebhookController < ApplicationController
     end
   end
 
-  def handle_delivery_receipt(delivery_receipt)
+  def handle_delivery_receipt(delivery_receipt, organization)
     return if delivery_receipt.message_ids.blank?
 
-    messages = Message.where(external_id: delivery_receipt.message_ids)
+    messages = organization.messages.where(external_id: delivery_receipt.message_ids)
     messages.each do |message|
       delivery_receipt.message_ids.each do |message_id|
         next unless message.external_id.eql?(message_id)
