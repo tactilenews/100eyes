@@ -111,7 +111,7 @@ RSpec.describe Threema::WebhookController do
           end
 
           it 'doesn\'t update the other message' do
-            expect { subject }.not_to change({ other_message.reload.read_at })
+            expect { subject }.not_to(change { other_message.reload.read_at })
           end
         end
       end
