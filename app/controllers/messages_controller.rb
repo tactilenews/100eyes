@@ -38,12 +38,13 @@ class MessagesController < ApplicationController
   end
 
   def set_request
-    request_id = params[:id] ? Message.find(params[:id]).request_id : params[:request_id]
-    @request = Request.find(request_id)
+    request_id = @message ? @organization.messages.find(params[:id]).request_id : params[:request_id]
+    @request = @organization.requests.find(request_id)
   end
 
   def set_contributor
-    contributor_id = params[:id] ? Message.find(params[:id]).sender_id : params[:contributor_id]
+    contributor_id = params[:id] ? @organization.messages.find(params[:id]).sender_id : params[:contributor_id]
+    # TODO: scope by organization
     @contributor = Contributor.find(contributor_id)
   end
 
