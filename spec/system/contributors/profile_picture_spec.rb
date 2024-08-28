@@ -23,9 +23,9 @@ RSpec.describe 'Profile pictures' do
   end
 
   context 'invalid avatar type' do
-    let!(:active_contributors) { create_list(:contributor, 2) }
-    let!(:inactive_contributor) { create(:contributor, deactivated_at: Time.current) }
-    let!(:unsubscribed_contributor) { create(:contributor, unsubscribed_at: Time.current) }
+    let!(:active_contributors) { create_list(:contributor, 2, organization: organization) }
+    let!(:inactive_contributor) { create(:contributor, organization: organization, deactivated_at: Time.current) }
+    let!(:unsubscribed_contributor) { create(:contributor, organization: organization, unsubscribed_at: Time.current) }
 
     it 'renders show with error message' do
       visit organization_contributor_path(organization, contributor, as: user)

@@ -74,7 +74,7 @@ Rails.application.routes.draw do
       get 'day-requests-replies'
     end
 
-    resources :contributors, only: %i[index show edit update], concerns: :paginatable do
+    resources :contributors, module: 'organizations', only: %i[index show edit update], concerns: :paginatable do
       member do
         get 'conversations'
         post 'message'

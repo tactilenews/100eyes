@@ -10,23 +10,55 @@ RSpec.describe '/{organization_id}/contributors', type: :request do
   let(:user) { create(:user, organizations: [organization]) }
 
   describe 'GET /index' do
+    let!(:other_organizations_contributor) { create(:contributor, first_name: 'WhatAName') }
+    let!(:other_inactive_contributor) { create(:contributor, :inactive) }
+    let!(:other_unsubscribed_contributor) { create(:contributor, :unsubscribed) }
+
+    before { get organization_contributors_url(organization, as: user) }
+
     it 'should be successful' do
-      get organization_contributors_url(organization, as: user)
       expect(response).to be_successful
+    end
+
+    it 'contains only the contributors from the organization' do
+      expect(page).to have_content contributor.first_name
+
+      expect(page).to have_content('Aktiv 1')
+      expect(page).to have_content('Inaktiv 0')
+      expect(page).to have_content('Abbestellt 0')
+
+      expect(page).not_to have_content other_organizations_contributor.first_name
     end
   end
 
   describe 'GET /show' do
+    subject { -> { get organization_contributor_url(organization, contributor, as: user) } }
+
     it 'should be successful' do
-      get organization_contributor_url(organization, contributor, as: user)
+      subject.call
       expect(response).to be_successful
+    end
+
+    context 'with contributors of other organizations' do
+      let!(:other_organizations_contributor) { create(:contributor, first_name: 'WhatAName') }
+
+      it 'renders not found' do
+        get organization_contributor_url(organization, create(:contributor), as: user)
+        expect(response).to be_not_found
+      end
+
+      it 'doesn\'t have the other contributor in the sidebar' do
+        subject.call
+        expect(page).not_to have_content other_organizations_contributor.first_name
+      end
     end
   end
 
   describe 'GET /count' do
-    let!(:teachers) { create_list(:contributor, 2, tag_list: 'teacher') }
+    let!(:teachers) { create_list(:contributor, 2, tag_list: 'teacher', organization: organization) }
+    let!(:other_teachers) { create_list(:contributor, 2, tag_list: 'teacher') }
 
-    it 'returns count of contributors with a specific tag' do
+    it 'returns count of contributors with a specific tag within the organization' do
       get count_organization_contributors_path(organization, tag_list: ['teacher'], as: user)
       expect(response.body).to eq({ count: 2 }.to_json)
     end
@@ -42,6 +74,13 @@ RSpec.describe '/{organization_id}/contributors', type: :request do
       parsed = Capybara::Node::Simple.new(response.body)
       expect(parsed).to have_text(received_message.text)
       expect(parsed).to have_text(sent_message.text)
+    end
+
+    context 'for contributors of other organizations' do
+      it 'renders not found' do
+        get conversations_organization_contributor_path(organization, create(:contributor), as: user)
+        expect(response).to be_not_found
+      end
     end
   end
 
@@ -61,6 +100,13 @@ RSpec.describe '/{organization_id}/contributors', type: :request do
     end
 
     subject { -> { patch organization_contributor_url(organization, contributor, as: user), params: { contributor: new_attrs } } }
+
+    context 'for contributors of other organizations' do
+      it 'renders not found' do
+        patch organization_contributor_url(organization, create(:contributor), as: user), params: { contributor: new_attrs }
+        expect(response).to be_not_found
+      end
+    end
 
     it 'updates the requested contributor' do
       subject.call
@@ -85,13 +131,13 @@ RSpec.describe '/{organization_id}/contributors', type: :request do
       let(:updated_attrs) do
         { tag_list: 'ops' }
       end
-      let(:contributor) { create(:contributor, tag_list: %w[dev ops], organization: organization) }
+      let(:contributor) { create(:contributor, organization: organization, tag_list: %w[dev ops]) }
 
       it 'is supported' do
         patch organization_contributor_url(organization, id: contributor.id, as: user), params: { contributor: updated_attrs }
         contributor.reload
         expect(contributor.tag_list).to eq(['ops'])
-        expect(Contributor.all_tags.count).to eq(1)
+        expect(organization.contributors.all_tags.count).to eq(1)
       end
     end
 
@@ -196,7 +242,18 @@ RSpec.describe '/{organization_id}/contributors', type: :request do
       end
     end
 
-    describe 'given a contributor' do
+    context 'for contributors of other organizations' do
+      it 'renders not found' do
+        post message_organization_contributor_url(organization, create(:contributor), as: user),
+             params: { message: { text: 'Forgot to ask: How are you?' } }
+        expect(response).to be_not_found
+      end
+    end
+
+    describe 'given a contributor of the organization' do
+      let(:params) { {} }
+      let(:contributor) { create(:contributor, organization: organization, **params) }
+
       describe 'response' do
         before(:each) { subject.call }
         it { expect(response).to have_http_status(:bad_request) }
