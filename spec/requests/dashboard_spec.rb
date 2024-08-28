@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe '/{organization_id}/dashboard', type: :request do
   let(:organization) { create(:organization) }
-  let(:user) { create(:user, organization: organization) }
+  let(:user) { create(:user, organizations: [organization]) }
 
   it_behaves_like 'protected' do
     before { get organization_dashboard_path(organization, as: create(:user)) }
