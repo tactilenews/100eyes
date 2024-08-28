@@ -112,7 +112,7 @@ class RequestsController < ApplicationController
   end
 
   def set_request
-    @request = Request.find(params[:id])
+    @request = @organization.requests.find(params[:id])
   end
 
   def available_tags

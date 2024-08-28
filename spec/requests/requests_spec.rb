@@ -81,6 +81,41 @@ RSpec.describe 'Requests', telegram_bot: :rails do
     end
   end
 
+  describe 'GET /{organization_id}/requests' do
+    let(:request) { create(:request, organization: organization) }
+
+    it_behaves_like 'unauthenticated' do
+      before { get organization_request_path(organization, request) }
+    end
+
+    context 'user not part of organization' do
+      it_behaves_like 'protected' do
+        before { get organization_request_path(organization, request, as: create(:user)) }
+      end
+    end
+
+    context 'authenticated and authorized' do
+      subject { -> { get organization_request_path(organization, request, as: user) } }
+
+      let(:user) { create(:user, organizations: [organization]) }
+
+      context 'request not part of organization' do
+        let(:request) { create(:request, organization: create(:organization)) }
+
+        it_behaves_like 'protected' do
+          before { get organization_request_path(organization, request, as: user) }
+        end
+      end
+
+      context 'request is part of organization' do
+        it 'should be successful' do
+          subject.call
+          expect(response).to be_successful
+        end
+      end
+    end
+  end
+
   describe 'POST /{organization_id}/requests' do
     before(:each) { allow(Request).to receive(:broadcast!).and_call_original } # is stubbed for every other test
     subject { -> { post organization_requests_path(organization, as: user), params: params } }
