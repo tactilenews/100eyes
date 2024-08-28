@@ -76,7 +76,7 @@ RSpec.describe 'Messages', type: :request do
     end
 
     context 'with a permitted user' do
-      let(:user) { create(:user, organization: organization) }
+      let(:user) { create(:user, organizations: [organization]) }
       context 'with a message of that organization' do
         before(:each) { get(organization_message_request_url(message.organization, message, as: user)) }
 
