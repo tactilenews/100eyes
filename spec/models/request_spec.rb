@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Request, type: :model do
   let(:organization) { create(:organization) }
   let(:contributor) { create(:contributor, organization: organization) }
-  let(:user) { create(:user, organization: organization) }
+  let(:user) { create(:user, organizations: [organization]) }
 
   let(:request) do
     Request.new(

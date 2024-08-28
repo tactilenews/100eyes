@@ -6,7 +6,7 @@ module WhatsApp
   class WebhookController < ApplicationController
     include WhatsAppHandleCallbacks
 
-    skip_before_action :require_login, :verify_authenticity_token
+    skip_before_action :require_login, :verify_authenticity_token, :user_permitted?
     before_action :set_organization, only: :status
     before_action :set_contributor, only: :status
 

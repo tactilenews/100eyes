@@ -6,7 +6,7 @@ RSpec.describe '/messages', type: :request do
   let(:organization) { create(:organization) }
   let(:contributor) { create(:contributor, organization: organization) }
   let(:request) { create(:request, organization: organization) }
-  let(:user) { create(:user, organization: organization) }
+  let(:user) { create(:user, organizations: [organization]) }
   let(:message) { create(:message, request: request) }
 
   describe 'GET /new' do
@@ -45,7 +45,7 @@ RSpec.describe '/messages', type: :request do
 
   describe 'PATCH /message/:id' do
     let(:previous_text) { 'Previous text' }
-    let(:message) { create(:message, creator_id: user.id, text: previous_text) }
+    let(:message) { create(:message, creator_id: user.id, text: previous_text, request: request) }
     let(:new_attrs) { { text: 'Grab your coat and get your hat' } }
     subject { -> { patch organization_message_url(message.organization, message, as: user), params: { message: new_attrs } } }
 
@@ -62,7 +62,7 @@ RSpec.describe '/messages', type: :request do
     end
 
     context 'not manually created message' do
-      let(:message) { create(:message, creator_id: nil) }
+      let(:message) { create(:message, creator_id: nil, request: request) }
 
       it 'does not update the requested message' do
         subject.call

@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Charts' do
   let(:organization) { create(:organization) }
-  let(:user) { create(:user, organization: organization) }
+  let!(:user) { create(:user, organizations: [organization]) }
   let(:last_friday_midnight) { Time.zone.today.beginning_of_day.prev_occurring(:friday) }
   let(:request) { create(:request, broadcasted_at: last_friday_midnight, organization: organization) }
   let(:message) { create(:message, created_at: last_friday_midnight, request: request) }

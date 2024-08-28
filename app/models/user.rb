@@ -9,7 +9,8 @@ class User < ApplicationRecord
            dependent: :destroy
   has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
   has_many :messages, as: :sender, dependent: :destroy
-  belongs_to :organization, optional: true
+  has_many :users_organizations, dependent: :destroy
+  has_many :organizations, through: :users_organizations
 
   has_one_time_password
   validates :password, length: { in: 8..128 }, unless: :skip_password_validation?
@@ -48,10 +49,14 @@ class User < ApplicationRecord
   private
 
   def notify_admin
-    return unless organization && User.admin(false).count > organization.business_plan.number_of_users
+    return unless organizations.any? { |organization| organization.users.admin(false).count > organization.business_plan.number_of_users }
 
     User.admin.find_each do |admin|
-      PostmarkAdapter::Outbound.send_user_count_exceeds_plan_limit_message!(admin, organization)
+      organizations.each do |organization|
+        next unless organization.users.admin(false).count > organization.business_plan.number_of_users
+
+        PostmarkAdapter::Outbound.send_user_count_exceeds_plan_limit_message!(admin, organization)
+      end
     end
   end
 

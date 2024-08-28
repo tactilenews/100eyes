@@ -7,7 +7,7 @@ RSpec.describe 'Searches', type: :request do
 
   describe 'GET /index' do
     it 'returns http success' do
-      get organization_search_path(organization, as: create(:user))
+      get organization_search_path(organization, as: create(:user, organizations: [organization]))
       expect(response).to have_http_status(:success)
     end
   end

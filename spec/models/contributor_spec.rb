@@ -8,7 +8,7 @@ RSpec.describe Contributor, type: :model do
                      organization: organization, user: user)
   end
   let(:organization) { create(:organization) }
-  let(:user) { create(:user) }
+  let!(:user) { create(:user, organizations: [organization]) }
   let(:contributor) { create(:contributor, email: 'contributor@example.org', organization: organization) }
 
   it 'is sorted in alphabetical order' do
@@ -428,7 +428,7 @@ RSpec.describe Contributor, type: :model do
         context 'ActivityNotifications' do
           let!(:admin) { create(:user, admin: true) }
 
-          it_behaves_like 'an ActivityNotification', 'MessageReceived', 3
+          it_behaves_like 'an ActivityNotification', 'MessageReceived', 4
         end
       end
     end
@@ -468,7 +468,7 @@ RSpec.describe Contributor, type: :model do
         context 'ActivityNotifications' do
           let!(:admin) { create(:user, admin: true) }
 
-          it_behaves_like 'an ActivityNotification', 'MessageReceived', 3
+          it_behaves_like 'an ActivityNotification', 'MessageReceived', 4
         end
       end
     end
@@ -521,7 +521,7 @@ RSpec.describe Contributor, type: :model do
         context 'ActivityNotifications' do
           let!(:admin) { create(:user, admin: true) }
 
-          it_behaves_like 'an ActivityNotification', 'MessageReceived', 3
+          it_behaves_like 'an ActivityNotification', 'MessageReceived', 4
         end
       end
     end
@@ -571,7 +571,7 @@ RSpec.describe Contributor, type: :model do
         context 'ActivityNotifications' do
           let!(:admin) { create(:user, admin: true) }
 
-          it_behaves_like 'an ActivityNotification', 'MessageReceived', 3
+          it_behaves_like 'an ActivityNotification', 'MessageReceived', 4
         end
       end
 
@@ -951,21 +951,8 @@ RSpec.describe Contributor, type: :model do
   describe '#after_create_commit' do
     subject { create(:contributor, organization: organization) }
 
-    before do
-      users = create_list(:user, 5, organization: organization)
-      organization.update(users: users)
-      create(:user, admin: true)
-    end
+    before { create(:user, admin: true) }
 
-    it 'behaves like an ActivityNotification' do
-      expect { subject }.to change(ActivityNotification.where(type: 'OnboardingCompleted'), :count).by(6)
-    end
-
-    it 'for each user' do
-      subject
-      recipient_ids = ActivityNotification.where(type: 'OnboardingCompleted').pluck(:recipient_id).uniq.sort
-      user_ids = User.pluck(:id).sort
-      expect(recipient_ids).to eq(user_ids)
-    end
+    it_behaves_like 'an ActivityNotification', 'OnboardingCompleted', 2
   end
 end

@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Filter contributors' do
-  let(:user) { create(:user) }
+  let(:user) { create(:user, organizations: [organization]) }
   let(:organization) { create(:organization) }
   let!(:active_contributor) { create(:contributor, tag_list: ['entwickler'], organization: organization) }
   let!(:inactive_contributor) { create(:contributor, :inactive, tag_list: ['entwickler'], organization: organization) }
