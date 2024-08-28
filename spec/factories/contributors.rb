@@ -13,6 +13,10 @@ FactoryBot.define do
       deactivated_at { Time.current }
     end
 
+    trait :unsubscribed do
+      unsubscribed_at { Time.current }
+    end
+
     trait :with_an_avatar do
       after(:build) do |contributor|
         contributor.avatar.attach(
