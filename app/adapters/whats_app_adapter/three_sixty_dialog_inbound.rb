@@ -69,7 +69,6 @@ module WhatsAppAdapter
       trigger(UNSUBSCRIBE_CONTRIBUTOR, sender) if unsubscribe_text?(text)
       trigger(RESUBSCRIBE_CONTRIBUTOR, sender) if resubscribe_text?(text)
       trigger(REQUEST_TO_RECEIVE_MESSAGE, sender) if request_to_receive_message?(sender, text)
-
       message = Message.new(text: text, sender: sender)
       message.raw_data.attach(
         io: StringIO.new(JSON.generate(whats_app_message)),

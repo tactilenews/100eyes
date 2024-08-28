@@ -24,6 +24,7 @@ class ContributorsController < ApplicationController
     @state = state_params
     @tag_list = tag_list_params
 
+    #TODO: scope by organization?
     @active_count = Contributor.active.count
     @inactive_count = Contributor.inactive.count
     @unsubscribed_count = Contributor.unsubscribed.count
@@ -58,6 +59,7 @@ class ContributorsController < ApplicationController
   end
 
   def count
+    # TODO: scope by organization?
     render json: { count: Contributor.with_tags(params[:tag_list]).count }
   end
 
@@ -69,10 +71,12 @@ class ContributorsController < ApplicationController
   private
 
   def set_contributor
+    # TODO: scope by organization?
     @contributor = Contributor.find(params[:id])
   end
 
   def contributors_sidebar
+    # TODO: scope by organization
     @contributors_sidebar ||= Contributor
                               .active
                               .or(Contributor.where(id: @contributor.id))
@@ -117,6 +121,7 @@ class ContributorsController < ApplicationController
   end
 
   def filtered_contributors
+    # TODO: scope by organization
     case @state
     when :inactive
       Contributor.inactive

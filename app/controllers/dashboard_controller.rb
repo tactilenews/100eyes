@@ -3,8 +3,11 @@
 class DashboardController < ApplicationController
   def index
     @activity_notifications = activity_notifications
+    # TODO: scope by organization
     @active_contributors_count = Contributor.active.count
+    # TODO: scope by organization
     @requests_count = Request.count
+    # TODO: scope by organization
     @replies_count = Message.replies.count
     @engagment_metric = engagment_metric
   end
@@ -31,7 +34,9 @@ class DashboardController < ApplicationController
   end
 
   def engagment_metric
+    # TODO: scope by organization
     current_weeks_activity = Message.replies.where('created_at >= ?', 7.days.ago).count
+    # TODO: scope by organization
     active_contributors_count = Contributor.active.count
     return 0 unless active_contributors_count.positive?
 

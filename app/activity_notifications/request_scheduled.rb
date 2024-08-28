@@ -28,6 +28,7 @@ class RequestScheduled < Noticed::Base
       request_title: request.title,
       date: I18n.l(request.schedule_send_for, format: '%A, %-d.%-m.%Y'),
       time: I18n.l(request.schedule_send_for, format: '%H:%M'),
+      # probably scope by request.organization?
       contributors_count: Contributor.active.with_tags(request.tag_list).count).html_safe
   end
   # rubocop:enable Rails/OutputSafety

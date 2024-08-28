@@ -13,6 +13,7 @@ class BroadcastRequestJob < ApplicationJob
       return
     end
 
+    # TODO scope by request.organization
     Contributor.active.with_tags(request.tag_list).each do |contributor|
       message = Message.new(
         sender: request.user,
@@ -21,6 +22,7 @@ class BroadcastRequestJob < ApplicationJob
         request: request,
         broadcasted: true
       )
+      # TODO: scope by organization?
       message.files = Request.attach_files(request.files) if request.files.attached?
       message.save!
     end

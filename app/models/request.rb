@@ -71,10 +71,12 @@ class Request < ApplicationRecord
   # rubocop:disable Metrics/AbcSize
   def self.broadcast!(request)
     if request.planned?
+      # TODO: might need the organization id as well to scope properly
       BroadcastRequestJob.delay(run_at: request.schedule_send_for).perform_later(request.id)
       RequestScheduled.with(request_id: request.id,
                             organization_id: request.organization.id).deliver_later(request.organization.users + User.admin.all)
     else
+      # TODO: scope by request.organization
       Contributor.active.with_tags(request.tag_list).each do |contributor|
         message = Message.new(
           sender: request.user,

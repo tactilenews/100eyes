@@ -12,6 +12,7 @@ module Messages
     private
 
     def set_message
+      # TODO: scope by organization
       @message = Message.find(params[:id])
     end
 

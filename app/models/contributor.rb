@@ -88,6 +88,7 @@ class Contributor < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
+  # TODO: Where is that used might have to be scoped by organization
   def conversations
     Message
       .where(recipient: self)
@@ -108,6 +109,7 @@ class Contributor < ApplicationRecord
   def active_request
     # active_request is always the request of the contributors last received message or the last broadcasted request
     # (first has to be used as the default order of messages and request is set to created_at desc)
+    # only works as intended as far as the contributor belongs only to one organization
     received_messages.first&.request || Request.broadcasted.first
   end
 
