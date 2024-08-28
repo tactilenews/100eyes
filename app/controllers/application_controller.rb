@@ -35,8 +35,14 @@ class ApplicationController < ActionController::Base
   private
 
   def set_organization
-    @organization = Organization.find(params[:organization_id]) if params[:organization_id].present?
+    organization = Organization.find(params[:organization_id]) if params[:organization_id].present?
+    user_permitted?(organization)
+    @organization = organization
   rescue ActiveRecord::RecordNotFound
     raise ActionController::RoutingError, 'Not Found'
+  end
+
+  def user_permitted?(organization)
+    raise ActionController::RoutingError, 'Not Found' unless current_user.admin? || organization.in?(current_user.organizations)
   end
 end
