@@ -59,20 +59,36 @@ RSpec.describe ':organization_id/messages', type: :request do
     end
 
     context 'with a message of the organization' do
-      let(:message) { create(:message, creator_id: user.id, text: previous_text, request: request) }
+      let(:message) { create(:message, creator_id: user.id, text: previous_text, request: request, sender: contributor) }
 
       subject { -> { patch organization_message_url(message.organization, message, as: user), params: { message: new_attrs } } }
 
-      it { should change { message.reload && message.text }.from(previous_text).to('Grab your coat and get your hat') }
+      it {
+        puts response.inspect
+        should change {
+                 message.reload && message.text
+               }.from(previous_text).to('Grab your coat and get your hat')
+      }
 
       it 'shows success notification' do
         subject.call
+
         expect(flash[:success]).not_to be_empty
       end
 
       it 'redirects to the conversation link the message belongs to' do
         subject.call
         expect(response).to redirect_to(message.chat_message_link)
+      end
+
+      context 'with a message of a contributor not belonging to this organization' do
+        # as there is no explicit setup of the sender the factory will create a contributor for another organization
+        let(:message) { create(:message, creator_id: user.id, text: previous_text, request: request) }
+
+        it 'renders a not found' do
+          subject.call
+          expect(response).to be_not_found
+        end
       end
 
       context 'not manually created message' do

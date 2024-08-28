@@ -44,8 +44,7 @@ class MessagesController < ApplicationController
 
   def set_contributor
     contributor_id = params[:id] ? @organization.messages.find(params[:id]).sender_id : params[:contributor_id]
-    # TODO: scope by organization
-    @contributor = Contributor.find(contributor_id)
+    @contributor = @organization.contributors.find(contributor_id)
   end
 
   def only_allow_manually_created_messages
