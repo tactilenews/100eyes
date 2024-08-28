@@ -6,6 +6,81 @@ require 'telegram/bot/rspec/integration/rails'
 RSpec.describe 'Requests', telegram_bot: :rails do
   let(:organization) { create(:organization) }
 
+  describe 'GET /{organization_id}/requests' do
+    it_behaves_like 'unauthenticated' do
+      before { get organization_requests_path(organization) }
+    end
+
+    it_behaves_like 'protected' do
+      before { get organization_requests_path(organization, as: create(:user)) }
+    end
+
+    context 'authenticated and authorized' do
+      subject { -> { get organization_requests_path(organization, as: user), params: params } }
+
+      let(:user) { create(:user, organizations: [organization]) }
+      let(:params) { {} }
+
+      before do
+        create(:request, title: 'I belong to the organization', organization: organization)
+        create(:request, title: 'I do too!', organization: organization)
+        create(:request, title: 'Planned for the future', schedule_send_for: 1.day.from_now, broadcasted_at: nil,
+                         organization: organization)
+        create(:request, title: 'Also planned, but from another organization', schedule_send_for: 1.hour.from_now, broadcasted_at: nil)
+        create(:request, title: 'From another organization', organization: create(:organization))
+        subject.call
+      end
+
+      it 'should be successful' do
+        subject.call
+        expect(response).to be_successful
+      end
+
+      context 'no params' do
+        it 'displays only sent messages' do
+          expect(page).to have_content('I belong to the organization')
+          expect(page).to have_content('I do too!')
+          expect(page).not_to have_content('Planned for the future')
+        end
+
+        it 'display only requests from the organization' do
+          expect(page).to have_content('Gestellt 2')
+          expect(page).to have_content('Geplant 1')
+          expect(page).to have_content('I belong to the organization')
+          expect(page).to have_content('I do too!')
+          expect(page).not_to have_content('From another organization')
+        end
+      end
+
+      context 'sent filter param' do
+        let(:params) { { filter: :sent } }
+
+        it 'displays only sent messages' do
+          expect(page).to have_content('I belong to the organization')
+          expect(page).to have_content('I do too!')
+          expect(page).not_to have_content('Planned for the future')
+        end
+      end
+
+      context 'planned filter param' do
+        let(:params) { { filter: :planned } }
+
+        it 'displays only sent messages' do
+          expect(page).not_to have_content('I belong to the organization')
+          expect(page).not_to have_content('I do too!')
+          expect(page).to have_content('Planned for the future')
+        end
+
+        it 'display only requests from the organization' do
+          expect(page).to have_content('Gestellt 2')
+          expect(page).to have_content('Geplant 1')
+          expect(page).to have_content('Planned for the future')
+          expect(page).not_to have_content('Also planned, but from another organization')
+        end
+      end
+    end
+  end
+
   describe 'POST /{organization_id}/requests' do
     before(:each) { allow(Request).to receive(:broadcast!).and_call_original } # is stubbed for every other test
     subject { -> { post organization_requests_path(organization, as: user), params: params } }
