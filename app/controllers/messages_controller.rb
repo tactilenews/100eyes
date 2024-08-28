@@ -34,7 +34,7 @@ class MessagesController < ApplicationController
   private
 
   def set_message
-    @message = Message.find(params[:id])
+    @message = @organization.messages.find(params[:id])
   end
 
   def set_request

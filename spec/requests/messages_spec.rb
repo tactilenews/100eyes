@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe '/messages', type: :request do
+RSpec.describe ':organization_id/messages', type: :request do
   let(:organization) { create(:organization) }
   let(:contributor) { create(:contributor, organization: organization) }
   let(:request) { create(:request, organization: organization) }
@@ -45,33 +45,48 @@ RSpec.describe '/messages', type: :request do
 
   describe 'PATCH /message/:id' do
     let(:previous_text) { 'Previous text' }
-    let(:message) { create(:message, creator_id: user.id, text: previous_text, request: request) }
     let(:new_attrs) { { text: 'Grab your coat and get your hat' } }
-    subject { -> { patch organization_message_url(message.organization, message, as: user), params: { message: new_attrs } } }
 
-    it { should change { message.reload && message.text }.from(previous_text).to('Grab your coat and get your hat') }
+    context 'with message not from the organization prevents updating ' do
+      let(:message) { create(:message, creator_id: user.id, text: previous_text) }
 
-    it 'shows success notification' do
-      subject.call
-      expect(flash[:success]).not_to be_empty
-    end
+      subject { -> { patch organization_message_url(organization, message, as: user), params: { message: new_attrs } } }
 
-    it 'redirects to the conversation link the message belongs to' do
-      subject.call
-      expect(response).to redirect_to(message.chat_message_link)
-    end
-
-    context 'not manually created message' do
-      let(:message) { create(:message, creator_id: nil, request: request) }
-
-      it 'does not update the requested message' do
+      it 'renders a notfound' do
         subject.call
-        expect(response).not_to be_successful
+        expect(response).to be_not_found
+      end
+    end
+
+    context 'with a message of the organization' do
+      let(:message) { create(:message, creator_id: user.id, text: previous_text, request: request) }
+
+      subject { -> { patch organization_message_url(message.organization, message, as: user), params: { message: new_attrs } } }
+
+      it { should change { message.reload && message.text }.from(previous_text).to('Grab your coat and get your hat') }
+
+      it 'shows success notification' do
+        subject.call
+        expect(flash[:success]).not_to be_empty
       end
 
-      it 'shows error notification' do
+      it 'redirects to the conversation link the message belongs to' do
         subject.call
-        expect(flash[:error]).not_to be_empty
+        expect(response).to redirect_to(message.chat_message_link)
+      end
+
+      context 'not manually created message' do
+        let(:message) { create(:message, creator_id: nil, request: request) }
+
+        it 'does not update the requested message' do
+          subject.call
+          expect(response).not_to be_successful
+        end
+
+        it 'shows error notification' do
+          subject.call
+          expect(flash[:error]).not_to be_empty
+        end
       end
     end
   end
