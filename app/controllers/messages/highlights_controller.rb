@@ -12,7 +12,7 @@ module Messages
     private
 
     def set_message
-      @message = Message.find(params[:id])
+      @message = @organization.messages.find(params[:id])
     end
 
     def highlight_params
