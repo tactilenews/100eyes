@@ -2,13 +2,13 @@
 
 module CommunityMetrics
   class CommunityMetrics < ApplicationComponent
-    def initialize(active_contributors_count:, requests_count:, replies_count:, engagment_metric:, **)
+    def initialize(active_contributors_count:, requests_count:, replies_count:, engagement_metric:, **)
       super
 
       @active_contributors_count = active_contributors_count
       @requests_count = requests_count
       @replies_count = replies_count
-      @engagment_metric = engagment_metric
+      @engagement_metric = engagement_metric
     end
 
     def call
@@ -17,7 +17,7 @@ module CommunityMetrics
 
     private
 
-    attr_reader :active_contributors_count, :requests_count, :replies_count, :engagment_metric
+    attr_reader :active_contributors_count, :requests_count, :replies_count, :engagement_metric
 
     def metrics
       [
@@ -37,7 +37,7 @@ module CommunityMetrics
           custom_icon: 'letter_turq'
         },
         {
-          value: number_to_percentage(engagment_metric, precision: 0, locale: :en),
+          value: number_to_percentage(engagement_metric, precision: 0, locale: :en),
           label: t('.engagement_metric'),
           custom_icon: 'percent_turq'
         }

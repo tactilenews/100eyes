@@ -12,7 +12,7 @@ RSpec.describe 'Dashboard' do
     create(:user, first_name: 'Dennis', last_name: 'Schroeder', email: email, password: password, otp_enabled: otp_enabled,
                   organizations: [organization])
   end
-  let(:contributor) { create(:contributor) }
+  let(:contributor) { create(:contributor, organization: organization) }
 
   before do
     request = create(:request, user: user, organization: organization)
