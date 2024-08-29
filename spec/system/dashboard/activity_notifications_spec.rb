@@ -49,12 +49,12 @@ RSpec.describe 'Activity Notifications' do
       contributor_two = create(:contributor, first_name: 'Timmy', last_name: 'Timmerson', organization: organization)
 
       visit organization_dashboard_path(organization, as: user)
-      expect(page).to have_css('svg.Avatar-initials')
       expect(page).to have_text(
         "#{contributor_two.name} hat sich via #{contributor_two.channels.first.to_s.capitalize} angemeldet."
       )
       expect(page).to have_text('vor weniger als eine Minute')
       expect(page).to have_link('Zum Profil', href: organization_contributor_path(organization, contributor_two))
+      expect(page).to have_css('svg.Avatar-initials')
 
       # MessageReceived
       reply = create(:message, :inbound, text: "I'm a reply to #{request.title}", request: request, sender: contributor_without_avatar)
@@ -62,13 +62,13 @@ RSpec.describe 'Activity Notifications' do
       Timecop.travel(1.day.from_now)
       visit organization_dashboard_path(organization, as: user)
 
-      expect(page).to have_css('svg.Avatar-initials')
       expect(page).to have_text(
         "#{contributor_without_avatar.name} hat auf die Frage „#{request.title}” geantwortet."
       )
       expect(page).to have_text('vor einem Tag')
       expect(page).to have_link('Zur Antwort',
                                 href: organization_request_path(request.organization_id, request, anchor: "message-#{reply.id}"))
+      expect(page).to have_css('svg.Avatar-initials')
 
       # ChatMessageSent
       click_link('Zur Antwort', href: organization_request_path(request.organization_id, request, anchor: "message-#{reply.id}"))
