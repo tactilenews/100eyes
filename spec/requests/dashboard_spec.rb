@@ -38,7 +38,8 @@ RSpec.describe '/{organization_id}/dashboard', type: :request do
 
     it 'counts the replies for the organization' do
       create_list(:message, 3, organization: organization)
-      create(:message) # other message
+      create(:message, :inbound) # other message
+      create(:message, :outbound) # shouldn't be counted
       subject.call
       expect(page).to have_content '3 empfangene Nachrichten'
     end
