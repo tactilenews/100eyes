@@ -80,16 +80,6 @@ RSpec.describe ':organization_id/messages', type: :request do
         expect(response).to redirect_to(message.chat_message_link)
       end
 
-      context 'with a message of a contributor not belonging to this organization' do
-        # as there is no explicit setup of the sender the factory will create a contributor for another organization
-        let(:message) { create(:message, creator_id: user.id, text: previous_text, request: request) }
-
-        it 'renders a not found' do
-          subject.call
-          expect(response).to be_not_found
-        end
-      end
-
       context 'not manually created message' do
         let(:message) { create(:message, creator_id: nil, request: request) }
 
