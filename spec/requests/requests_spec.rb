@@ -122,6 +122,16 @@ RSpec.describe 'Requests', telegram_bot: :rails do
     let(:params) { { request: { title: 'Example Question', text: 'How do you do?', hints: ['confidential'] } } }
     let(:user) { create(:user, organizations: [organization]) }
 
+    it_behaves_like 'unauthenticated' do
+      before { post organization_requests_path(organization), params: params }
+    end
+
+    context 'user not part of organization' do
+      it_behaves_like 'protected' do
+        before { post organization_requests_path(organization, as: create(:user)), params: params }
+      end
+    end
+
     it { should change { Request.count }.from(0).to(1) }
 
     it 'redirects to requests#show' do
@@ -144,54 +154,56 @@ RSpec.describe 'Requests', telegram_bot: :rails do
       it { should_not raise_error }
     end
 
-    context 'with image file(s)' do
-      let(:params) do
-        { request: { title: 'Message with files', text: 'Did you get this image?', files: [fixture_file_upload('profile_picture.jpg')] } }
+    describe 'with contributors' do
+      before do
+        create_list(:contributor, 2, organization: organization)
+        create(:contributor, organization: create(:organization))
+        subject.call
       end
 
-      describe 'an image file' do
-        it 'redirects to requests#show' do
-          response = subject.call
-          request = Request.last
-          expect(response).to redirect_to organization_request_path(organization, request)
-        end
-
-        it 'shows success notification' do
-          subject.call
-          expect(flash[:success]).not_to be_empty
-        end
-      end
-
-      describe 'multiple image files' do
+      context 'with image file(s)' do
         let(:params) do
-          { request: { title: 'Message with files', text: 'Did you get this image?',
-                       files: [fixture_file_upload('profile_picture.jpg'), fixture_file_upload('example-image.png')] } }
+          { request: { title: 'Message with files', text: 'Did you get this image?', files: [fixture_file_upload('profile_picture.jpg')] } }
         end
 
-        it 'redirects to requests#show' do
-          response = subject.call
-          request = Request.last
-          expect(response).to redirect_to organization_request_path(organization, request)
+        describe 'an image file' do
+          it 'redirects to requests#show' do
+            request = Request.last
+            expect(response).to redirect_to organization_request_path(organization, request)
+          end
+
+          it 'shows success notification' do
+            expect(page).to have_content('Deine Frage wurde erfolgreich an 2 Mitglieder in der Community gesendet')
+          end
         end
 
-        it 'shows success notification' do
-          subject.call
-          expect(flash[:success]).not_to be_empty
+        describe 'multiple image files' do
+          let(:params) do
+            { request: { title: 'Message with files', text: 'Did you get this image?',
+                         files: [fixture_file_upload('profile_picture.jpg'), fixture_file_upload('example-image.png')] } }
+          end
+
+          it 'redirects to requests#show' do
+            request = Request.last
+            expect(response).to redirect_to organization_request_path(organization, request)
+          end
+
+          it 'shows success notification' do
+            expect(page).to have_content('Deine Frage wurde erfolgreich an 2 Mitglieder in der Community gesendet')
+          end
         end
-      end
 
-      describe 'with no text' do
-        before { params[:request][:text] = '' }
+        describe 'with no text' do
+          before { params[:request][:text] = '' }
 
-        it 'redirects to requests#show' do
-          response = subject.call
-          request = Request.last
-          expect(response).to redirect_to organization_request_path(organization, request)
-        end
+          it 'redirects to requests#show' do
+            request = Request.last
+            expect(response).to redirect_to organization_request_path(organization, request)
+          end
 
-        it 'shows success notification' do
-          subject.call
-          expect(flash[:success]).not_to be_empty
+          it 'shows success notification' do
+            expect(page).to have_content('Deine Frage wurde erfolgreich an 2 Mitglieder in der Community gesendet')
+          end
         end
       end
     end
