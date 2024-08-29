@@ -58,7 +58,7 @@ jobs:
         with:
           python-version: '3.9'
           cache: 'pip' # caching pip dependencies
-      - run: pip install -r ansible/requirements.yml
+      - run: pip install -r requirements.txt
       - name: Run playbook
         uses: dawidd6/action-ansible-playbook@009b88e9b8894bd8838475d799b7dca5024e91d5
         with:
