@@ -24,7 +24,7 @@ RSpec.describe 'Onboarding' do
     jwt = JsonWebToken.encode({ invite_code: SecureRandom.base64(16), action: 'onboarding', organization_id: organization.id })
     visit organization_onboarding_path(organization, jwt: jwt)
 
-    expect(page).to have_content("The page you were looking for doesn't exist")
+    expect(page).to have_content('Die Seite, die du suchst, existiert nicht')
 
     organization.update!(signal_server_phone_number: '+491512345678',
                          onboarding_allowed: { threema: true, telegram: true, email: true, signal: true, whats_app: true })

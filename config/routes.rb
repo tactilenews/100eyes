@@ -136,4 +136,7 @@ Rails.application.routes.draw do
 
   resource :otp_setup, controller: :otp_setup, only: %i[show create]
   resource :otp_auth, controller: :otp_auth, only: %i[show create]
+
+  match '/500', to: 'errors#internal_server_error', via: :all
+  match '/404', to: 'errors#not_found', via: :all
 end

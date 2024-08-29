@@ -1,0 +1,11 @@
+<%= c 'main', **attrs do %>
+  <%= c 'page_header', styles: [:flexboxColumn, :xlargePaddingTop, :largeMarginBottom, :wide] do %>
+    <%= c 'heading' do %>
+      <%= header %>
+    <% end %>
+    <p class="ErrorsPage-description"><%= text %></p>
+  <% end %>
+  <%= c 'section' do %>
+    <%= image_tag('/components/error_otter.png', class: 'ErrorsPage-errorOtter', alt: t('.alt_text')) %>
+  <% end %>
+<% end %>
