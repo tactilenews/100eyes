@@ -53,13 +53,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-       - name: Install passlib required for `password_hash` ansible filter
-         uses: actions/checkout@v4
-         uses: actions/setup-python@v5
-         with:
-           python-version: '3.9'
-           cache: 'pip' # caching pip dependencies
-       - run: pip install -r ansible/requirements.txt
+      - name: Install passlib required for `password_hash` ansible filter
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+          cache: 'pip' # caching pip dependencies
+      - run: pip install -r ansible/requirements.txt
 
       - name: Run playbook
         uses: dawidd6/action-ansible-playbook@009b88e9b8894bd8838475d799b7dca5024e91d5
