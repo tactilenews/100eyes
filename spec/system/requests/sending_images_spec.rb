@@ -11,10 +11,10 @@ RSpec.describe 'Sending image files', js: true do
       # `broadcast!` is stubbed in tests
       allow(Request).to receive(:broadcast!).and_call_original
 
-      create(:contributor, email: 'adam@example.org')
-      create(:contributor, signal_phone_number: '+4912345678')
-      create(:contributor, telegram_id: 125_689)
-      create(:contributor, :skip_validations, threema_id: '12345678')
+      create(:contributor, email: 'adam@example.org', organization: organization)
+      create(:contributor, signal_phone_number: '+4912345678', organization: organization)
+      create(:contributor, telegram_id: 125_689, organization: organization)
+      create(:contributor, :skip_validations, threema_id: '12345678', organization: organization)
     end
 
     it 'sending a request with image files', flaky: true do

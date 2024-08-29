@@ -75,7 +75,7 @@ class Request < ApplicationRecord
       RequestScheduled.with(request_id: request.id,
                             organization_id: request.organization.id).deliver_later(request.organization.users + User.admin.all)
     else
-      Contributor.active.with_tags(request.tag_list).each do |contributor|
+      request.organization.contributors.active.with_tags(request.tag_list).each do |contributor|
         message = Message.new(
           sender: request.user,
           recipient: contributor,
