@@ -146,6 +146,7 @@ RSpec.describe 'Profile' do
       find('label[aria-label="Editorial Enterprise"]').click
       click_button 'Upgrade Plan'
     end
+
     editorial_enterprise = business_plans[2]
     price_per_month_with_discount = number_to_currency(
       editorial_enterprise.price_per_month - (editorial_enterprise.price_per_month * organization.upgrade_discount / 100.to_f)
@@ -159,7 +160,8 @@ RSpec.describe 'Profile' do
     # valid_until set to 1 year from now
     expect(page).to have_content("Mindeslaufzeit: bis #{I18n.l(1.year.from_now, format: '%m/%Y')}")
 
-    Timecop.travel(6.months.from_now + 1.minute)
+    Timecop.travel(6.months.from_now + 3.hours.from_now)
+
     visit organization_profile_path(organization, as: user)
     expect(page).to have_content("Preis: #{number_to_currency(editorial_enterprise.price_per_month)}/Monat")
 

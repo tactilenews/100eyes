@@ -43,7 +43,7 @@ FactoryBot.define do
     trait :signal_contributor do
       after(:build) do |contributor|
         contributor.email = nil
-        contributor.signal_phone_number = Faker::PhoneNumber.cell_phone
+        contributor.signal_phone_number = Faker::PhoneNumber.unique.cell_phone_in_e164
       end
     end
 
@@ -58,7 +58,7 @@ FactoryBot.define do
       after(:build) do |contributor|
         contributor.email = nil
         # FIXME: Faker seems to create invalid phone numbers sometimes
-        contributor.whats_app_phone_number = Faker::PhoneNumber.cell_phone
+        contributor.whats_app_phone_number = Faker::PhoneNumber.unique.cell_phone_in_e164
       end
     end
 

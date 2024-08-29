@@ -37,7 +37,9 @@ Capybara.register_driver(:better_cuprite) do |app|
       window_size: [1200, 800],
       browser_options: remote_chrome ? { 'no-sandbox' => nil } : {},
       inspector: true,
-      headless: !ENV['HEADLESS'].in?(%w[n 0 no false])
+      headless: !ENV['HEADLESS'].in?(%w[n 0 no false]),
+      process_timeout: 20,
+      timeout: 20
     }.merge(remote_options)
   )
 end
