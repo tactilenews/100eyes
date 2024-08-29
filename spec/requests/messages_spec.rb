@@ -47,7 +47,7 @@ RSpec.describe ':organization_id/messages', type: :request do
 
       before do
         post organization_messages_url(organization, as: user),
-            params: { message: msg_attrs, request_id: other_request.id, contributor_id: contributor.id }
+             params: { message: msg_attrs, request_id: other_request.id, contributor_id: contributor.id }
       end
 
       it 'renders a not found' do
@@ -60,7 +60,7 @@ RSpec.describe ':organization_id/messages', type: :request do
 
       before do
         post organization_messages_url(organization, as: user),
-            params: { message: msg_attrs, request_id: request.id, contributor_id: other_contributor.id }
+             params: { message: msg_attrs, request_id: request.id, contributor_id: other_contributor.id }
       end
 
       it 'renders a not found' do

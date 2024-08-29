@@ -28,7 +28,7 @@ RSpec.describe 'Messages', type: :request do
       it 'renders not found for other users' do
         patch(organization_message_highlight_url(message, organization_id: message.organization_id, format: :json, as: create(:user)),
               params: params)
-        
+
         expect(response).to be_not_found
       end
     end
