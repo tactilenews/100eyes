@@ -287,15 +287,18 @@ RSpec.describe Request, type: :model do
 
     describe 'given some existing contributors in the moment of creation' do
       before(:each) do
-        create(:contributor, id: 1, email: 'somebody@example.org')
-        create(:contributor, id: 2, email: nil, telegram_id: 22)
+        create(:contributor, id: 1, email: 'somebody@example.org', organization: request.organization)
+        create(:contributor, id: 2, email: nil, telegram_id: 22, organization: request.organization)
+        create(:contributor, id: 3)
       end
 
-      it { should change { Message.count }.from(0).to(2) }
-      it { should change { Message.pluck(:recipient_id).sort }.from([]).to([1, 2]) }
-      it { should change { Message.pluck(:sender_id) }.from([]).to([request.user.id, request.user.id]) }
-      it { should change { Message.pluck(:broadcasted) }.from([]).to([true, true]) }
-      it { should change { Message::File.count }.from(0).to(2) }
+      describe 'only sends to contributors of the organization' do
+        it { should change { Message.count }.from(0).to(2) }
+        it { should change { Message.pluck(:recipient_id).sort }.from([]).to([1, 2]) }
+        it { should change { Message.pluck(:sender_id) }.from([]).to([request.user.id, request.user.id]) }
+        it { should change { Message.pluck(:broadcasted) }.from([]).to([true, true]) }
+        it { should change { Message::File.count }.from(0).to(2) }
+      end
 
       describe 'given a planned request' do
         before { request.schedule_send_for = 1.hour.from_now }
@@ -330,9 +333,9 @@ RSpec.describe Request, type: :model do
 
     describe 'given contributors who are deactivated' do
       before(:each) do
-        create(:contributor, :inactive, id: 3, email: 'deactivated@example.org')
-        create(:contributor, id: 4, email: 'activated@example.org')
-        create(:contributor, :inactive, id: 5, telegram_id: 24)
+        create(:contributor, :inactive, id: 3, email: 'deactivated@example.org', organization: organization)
+        create(:contributor, id: 4, email: 'activated@example.org', organization: organization)
+        create(:contributor, :inactive, id: 5, telegram_id: 24, organization: organization)
       end
 
       it { should change { Message.count }.from(0).to(1) }
@@ -345,7 +348,7 @@ RSpec.describe Request, type: :model do
   describe '::after_update_commit' do
     before do
       allow(Request).to receive(:broadcast!).and_call_original
-      create(:contributor)
+      create(:contributor, organization: request.organization)
     end
     subject { request.update!(params) }
 
