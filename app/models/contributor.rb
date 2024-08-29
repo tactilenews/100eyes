@@ -35,11 +35,6 @@ class Contributor < ApplicationRecord
   phony_normalize :signal_phone_number, default_country_code: 'DE'
   phony_normalize :whats_app_phone_number, default_country_code: 'DE'
 
-  # (so): We have a lot of flaky specs due to failing validations
-  # on the phone numbers. Let's try to tell PhonyRails to use the correct
-  # country code to validate the numbers and see if that fixes it.
-  PhonyRails.default_country_code = 'DE'
-
   validates :signal_phone_number, phony_plausible: true
   validates :whats_app_phone_number, phony_plausible: true
   validates :data_processing_consent, acceptance: true, unless: proc { |c| c.editor_guarantees_data_consent }
