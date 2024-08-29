@@ -91,7 +91,7 @@ RSpec.describe ':organization_id/messages', type: :request do
 
       it {
         should change {
-                 message.reload && message.text
+                 message.reload.text
                }.from(previous_text).to('Grab your coat and get your hat')
       }
 
