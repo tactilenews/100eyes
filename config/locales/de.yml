@@ -405,6 +405,9 @@ de:
       confirm: löschen
     set_organization_form:
       heading: Bitte wähle eine Organisation aus, um fortzufahren
+    errors_page:
+      alt_text: Otter arbeitet an der Lösung des Problems
+
   mailer:
     unsubscribe:
       text: "Sofern Sie keine E-Mails mehr von uns erhalten möchten, können Sie sie unter diesem Link abbestellen: {{{ pm:unsubscribe }}}"
@@ -827,6 +830,12 @@ de:
       header:
         one: 'Konnte %{model} nicht speichern: ein Fehler.'
         other: 'Konnte %{model} nicht speichern: %{count} Fehler.'
+    not_found:
+      header: Die Seite, die du suchst, existiert nicht
+      text: Vielleicht hast du sich bei der Adresse vertippt oder die Seite ist umgezogen.
+    internal_server_error:
+      header: 100eyes hat einen Fehler
+      text: Unser Otter Till-E arbeitet gern an einer Lösung, wenn du ihm schreibst support@100eyes.
   helpers:
     select:
       prompt: Bitte wählen

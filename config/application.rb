@@ -49,6 +49,10 @@ module App
     # SVG files. Additionally, our Content Security Policy disallows inline JavaScript.
     config.active_storage.content_types_to_serve_as_binary -= ['image/svg+xml']
 
+    # Custom error page
+    config.exceptions_app = routes
+    config.action_dispatch.show_exceptions = true
+
     # Serve JSON files inline, i.e. without forcing a download. This allows
     # us to preview raw message data, which is often stored as JSON, directly
     # in the browser.

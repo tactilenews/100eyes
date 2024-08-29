@@ -1,0 +1,11 @@
+.ErrorsPage .Heading {
+  font-size: calc(3 * var(--font-size));
+}
+
+.ErrorsPage-description {
+  font-size: calc(1.25 * var(--font-size));
+}
+
+.ErrorsPage-errorOtter {
+  width: 100%;
+}
