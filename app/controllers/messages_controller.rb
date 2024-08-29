@@ -38,13 +38,11 @@ class MessagesController < ApplicationController
   end
 
   def set_request
-    request_id = @message ? @organization.messages.find(params[:id]).request_id : params[:request_id]
-    @request = @organization.requests.find(request_id)
+    @request = @message&.request || @organization.requests.find(params[:request_id])
   end
 
   def set_contributor
-    contributor_id = params[:id] ? @organization.messages.find(params[:id]).sender_id : params[:contributor_id]
-    @contributor = @organization.contributors.find(contributor_id)
+    @contributor = @message&.contributor || @organization.contributors.find(params[:contributor_id])
   end
 
   def only_allow_manually_created_messages

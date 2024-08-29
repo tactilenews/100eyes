@@ -41,6 +41,32 @@ RSpec.describe ':organization_id/messages', type: :request do
     it 'saves current user as creator' do
       should change { Message.pluck(:creator_id) }.from([]).to([user.id])
     end
+
+    context 'with a request not belonging to this organization' do
+      let(:other_request) { create(:request) }
+
+      before do
+        post organization_messages_url(organization, as: user),
+            params: { message: msg_attrs, request_id: other_request.id, contributor_id: contributor.id }
+      end
+
+      it 'renders a not found' do
+        expect(response).to be_not_found
+      end
+    end
+
+    context 'with a contributor not belonging to this organization' do
+      let(:other_contributor) { create(:contributor) }
+
+      before do
+        post organization_messages_url(organization, as: user),
+            params: { message: msg_attrs, request_id: request.id, contributor_id: other_contributor.id }
+      end
+
+      it 'renders a not found' do
+        expect(response).to be_not_found
+      end
+    end
   end
 
   describe 'PATCH /message/:id' do
