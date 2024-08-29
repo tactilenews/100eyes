@@ -64,7 +64,6 @@ RSpec.describe ':organization_id/messages', type: :request do
       subject { -> { patch organization_message_url(message.organization, message, as: user), params: { message: new_attrs } } }
 
       it {
-        puts response.inspect
         should change {
                  message.reload && message.text
                }.from(previous_text).to('Grab your coat and get your hat')
