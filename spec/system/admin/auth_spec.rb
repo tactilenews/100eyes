@@ -5,38 +5,24 @@ require 'rails_helper'
 RSpec.describe 'Auth' do
   let(:organization) { create(:organization) }
 
-  describe 'as signed-out user' do
-    it 'user tries to access' do
-      visit admin_users_path
-      expect(page).to have_http_status(:not_found)
-    end
-  end
+  it 'only allows access to admin' do
+    visit admin_users_path
+    expect(page).to have_http_status(:not_found)
 
-  describe 'as user without admin permissions' do
-    let(:user) { create(:user, admin: false) }
+    non_admin_user = create(:user, admin: false)
+    visit organization_dashboard_path(organization, as: non_admin_user)
+    expect(page).not_to have_link('Admin')
 
-    it 'user visits the main app' do
-      visit organization_dashboard_path(organization, as: user)
-      expect(page).not_to have_link('Admin')
-    end
+    visit admin_users_path(as: non_admin_user)
+    expect(page).to have_http_status(:not_found)
 
-    it 'user tries to access admin dashboard' do
-      visit admin_users_path(as: user)
-      expect(page).to have_http_status(:not_found)
-    end
-  end
+    admin = create(:user, admin: true)
 
-  describe 'as user with admin permissions' do
-    let(:user) { create(:user, admin: true) }
+    visit organization_dashboard_path(organization, as: admin)
+    click_link 'Admin'
 
-    it 'user visits the admin dashboard from the main app' do
-      visit organization_dashboard_path(organization, as: user)
+    expect(page).to have_http_status(:ok)
 
-      click_link 'Admin'
-
-      expect(page).to have_http_status(:ok)
-
-      expect(page).to have_link('New user')
-    end
+    expect(page).to have_link('New user')
   end
 end
