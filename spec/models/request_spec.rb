@@ -300,7 +300,6 @@ RSpec.describe Request, type: :model do
         it { should change { Message::File.count }.from(0).to(2) }
       end
 
-
       describe 'given a planned request' do
         before { request.schedule_send_for = 1.hour.from_now }
 
@@ -344,7 +343,6 @@ RSpec.describe Request, type: :model do
       it { should change { Message.pluck(:sender_id) }.from([]).to([request.user.id]) }
       it { should change { Message.pluck(:broadcasted) }.from([]).to([true]) }
     end
-
   end
 
   describe '::after_update_commit' do
