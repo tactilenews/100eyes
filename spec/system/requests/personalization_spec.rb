@@ -11,8 +11,8 @@ RSpec.describe 'Request personalization' do
     # `broadcast!` is stubbed in tests
     allow(Request).to receive(:broadcast!).and_call_original
 
-    create(:contributor, first_name: 'Adam', last_name: 'Apfel', email: 'adam@example.org')
-    create(:contributor, first_name: 'Zora', last_name: 'Zimmermann', email: 'zora@example.org')
+    create(:contributor, first_name: 'Adam', last_name: 'Apfel', email: 'adam@example.org', organization: organization)
+    create(:contributor, first_name: 'Zora', last_name: 'Zimmermann', email: 'zora@example.org', organization: organization)
   end
 
   it 'sending a request with placeholders' do
