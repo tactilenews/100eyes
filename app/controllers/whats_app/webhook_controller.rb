@@ -134,7 +134,7 @@ module WhatsApp
       message_text = fetch_message_from_twilio(twilio_message_sid, organization)
 
       request_title = message_text.scan(/„[^"]*“/).first&.gsub('„', '')&.gsub('“', '')
-      request = Request.find_by(title: request_title)
+      request = organization.requests.find_by(title: request_title)
 
       request&.messages&.where(recipient_id: contributor.id)&.first
     end
@@ -149,7 +149,7 @@ module WhatsApp
 
     def handle_freeform_message_not_allowed_error(contributor, twilio_message_sid)
       message_text = fetch_message_from_twilio(twilio_message_sid, @organization)
-      message = Message.find_by(text: message_text)
+      message = @organization.messages.find_by(text: message_text)
       return unless message
 
       WhatsAppAdapter::TwilioOutbound.send_message_template!(contributor, message)
@@ -174,7 +174,7 @@ module WhatsApp
     def handle_successful_delivery
       return unless @contributor
 
-      message = Message.where(external_id: status_params['MessageSid']).first
+      message = @organization.messages.where(external_id: status_params['MessageSid']).first
       return unless message
 
       delivered_status = SUCCESSFUL_DELIVERY.first

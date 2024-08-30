@@ -69,7 +69,7 @@ RSpec.describe Threema::WebhookController do
             Threema::Receive::DeliveryReceipt, content: 'x\00x\\0', message_ids: message_ids, status: status, timestamp: timestamp
           )
         end
-        let(:messages) { [create(:message, external_id: SecureRandom.alphanumeric(16))] }
+        let(:messages) { [create(:message, external_id: SecureRandom.alphanumeric(16), organization: organization)] }
         let(:message_ids) { messages.pluck(:external_id) }
         let(:status) { :received }
         let(:timestamp) { Time.current.to_i }
@@ -99,14 +99,19 @@ RSpec.describe Threema::WebhookController do
         end
 
         context 'given multiple message_ids' do
-          let(:messages) { create_list(:message, 3, external_id: SecureRandom.alphanumeric(16)) }
-          let(:message_ids) { messages.pluck(:external_id) }
+          let(:messages) { create_list(:message, 3, external_id: SecureRandom.alphanumeric(16), organization: organization) }
+          let(:other_message) { create(:message, external_id: SecureRandom.alphanumeric(16)) }
+          let(:message_ids) { messages.pluck(:external_id) << other_message.id }
           let(:status) { :read }
 
-          it 'updates all messages' do
+          it 'updates all messages belonging to the organization' do
             expect { subject }.to change { messages.first.reload.read_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone)).and \
               change { messages.second.reload.read_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone)).and \
                 change { messages.third.reload.read_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+          end
+
+          it 'doesn\'t update the other message' do
+            expect { subject }.not_to(change { other_message.reload.read_at })
           end
         end
       end
