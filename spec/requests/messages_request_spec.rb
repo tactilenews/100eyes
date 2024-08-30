@@ -6,7 +6,7 @@ RSpec.describe 'Messages', type: :request do
   let(:organization) { create(:organization) }
   let(:request) { create(:request, organization: organization) }
 
-  describe 'PATCH /messages/:id/highlight' do
+  describe 'PATCH /:organization_id/messages/:id/highlight' do
     let(:params) { {} }
     let(:user) { create(:user, organizations: [organization]) }
 
@@ -14,6 +14,22 @@ RSpec.describe 'Messages', type: :request do
       lambda do
         patch(organization_message_highlight_url(message, organization_id: message.organization_id, format: :json, as: user),
               params: params)
+      end
+    end
+
+    describe 'authentication and authorization' do
+      let(:message) { create(:message, organization: organization) }
+
+      it 'renders unauthorized if not logged in' do
+        patch(organization_message_highlight_url(message, organization_id: message.organization_id, format: :json), params: params)
+        expect(response).to be_unauthorized
+      end
+
+      it 'renders not found for other users' do
+        patch(organization_message_highlight_url(message, organization_id: message.organization_id, format: :json, as: create(:user)),
+              params: params)
+
+        expect(response).to be_not_found
       end
     end
 
@@ -46,33 +62,57 @@ RSpec.describe 'Messages', type: :request do
     end
   end
 
-  describe 'GET /request' do
+  describe 'GET /:organization_id/message/:message_id/request' do
     let(:user) { create(:user, organizations: [message.organization]) }
     let(:contributor) { create(:contributor, first_name: 'Zora', last_name: 'Zimmermann', organization: organization) }
+    let(:message) { create(:message, sender: contributor, recipient: nil, organization: organization) }
 
-    before(:each) { get(organization_message_request_url(message.organization, message, as: user)) }
-
-    context 'given an inbound message' do
-      let(:message) { create(:message, sender: contributor, recipient: nil, request: request) }
-
-      it 'renders successfully' do
-        expect(response).to be_successful
-        expect(response.body).to include('Zora Zimmermann')
-      end
+    it_behaves_like 'unauthenticated' do
+      before { get(organization_message_request_url(message.organization, message)) }
     end
 
-    context 'given an outbound message' do
-      let(:message) { create(:message, sender: nil, recipient: contributor, broadcasted: true) }
+    it_behaves_like 'protected' do
+      before { get(organization_message_request_url(message.organization, message, as: create(:user))) }
+    end
 
-      it 'renders successfully' do
-        expect(response).to be_successful
-        expect(response.body).to include('Zora Zimmermann')
+    context 'with a permitted user' do
+      let(:user) { create(:user, organizations: [organization]) }
+      context 'with a message of that organization' do
+        before(:each) { get(organization_message_request_url(message.organization, message, as: user)) }
+
+        context 'given an inbound message' do
+          let(:message) { create(:message, sender: contributor, recipient: nil, organization: organization) }
+
+          it 'renders successfully' do
+            expect(response).to be_successful
+            expect(response.body).to include('Zora Zimmermann')
+          end
+        end
+
+        context 'given an outbound message' do
+          let(:message) { create(:message, sender: user, recipient: contributor, broadcasted: true, organization: organization) }
+
+          it 'renders successfully' do
+            expect(response).to be_successful
+            expect(response.body).to include('Zora Zimmermann')
+          end
+        end
+      end
+
+      context 'with a message of another organization' do
+        let(:message) { create(:message, sender: nil, recipient: contributor, broadcasted: true) }
+        it 'renders not found' do
+          get(organization_message_request_url(organization.id, message, as: user))
+          expect(response).to be_not_found
+        end
       end
     end
   end
 
-  describe 'POST /request' do
+  describe 'POST /:organization_id/messages/:id/request' do
+    let(:organization) { create(:organization) }
     let(:user) { create(:user, organizations: [organization]) }
+    let(:request) { create(:request, organization: organization) }
 
     subject { -> { patch(organization_message_request_url(message.organization, message, as: user), params: params) } }
 
