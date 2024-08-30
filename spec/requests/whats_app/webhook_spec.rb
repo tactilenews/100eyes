@@ -338,7 +338,8 @@ RSpec.describe WhatsApp::WebhookController do
 
           context 'due to a freeform message not allowed error' do
             let!(:request) do
-              create(:request, title: 'I failed to send', text: 'Hey {{FIRST_NAME}}, because it was sent outside the allowed window')
+              create(:request, title: 'I failed to send', text: 'Hey {{FIRST_NAME}}, because it was sent outside the allowed window',
+                               organization: organization)
             end
             let(:valid_account_sid) { 'VALID_ACCOUNT_SID' }
             let(:valid_api_key_sid) { 'VALID_API_KEY_SID' }
@@ -426,7 +427,7 @@ RSpec.describe WhatsApp::WebhookController do
             end
 
             context 'given a message with the twilio message sid as external_id' do
-              let!(:message) { create(:message, external_id: twilio_message_sid) }
+              let!(:message) { create(:message, external_id: twilio_message_sid, organization: organization) }
 
               it 'is expected to mark the message as received' do
                 expect { subject.call }.to change { message.reload.received_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
@@ -438,7 +439,7 @@ RSpec.describe WhatsApp::WebhookController do
             before { params['MessageStatus'] = 'read' }
 
             context 'given a message with the twilio message sid as external_id' do
-              let!(:message) { create(:message, external_id: twilio_message_sid, received_at: 1.hour.ago) }
+              let!(:message) { create(:message, external_id: twilio_message_sid, received_at: 1.hour.ago, organization: organization) }
 
               it 'is expected to mark the message as read' do
                 expect { subject.call }.to change { message.reload.read_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))

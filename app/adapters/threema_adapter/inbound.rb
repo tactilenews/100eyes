@@ -36,7 +36,7 @@ module ThreemaAdapter
       return unless @sender
 
       if delivery_receipt?(decrypted_message)
-        trigger(HANDLE_DELIVERY_RECEIPT, decrypted_message)
+        trigger(HANDLE_DELIVERY_RECEIPT, decrypted_message, @organization)
         return
       end
 
