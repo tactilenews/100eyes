@@ -25,8 +25,6 @@ class OnboardingController < ApplicationController
   end
 
   def create
-    # FIXME: there is a inherent inconsistency possible here the overall @organization is taken from
-    # the onboarding paths (if scoped) whereas the context of the contributor is taken from the token itself.
     @contributor = Contributor.new(contributor_params.merge(json_web_token_attributes: { invalidated_jwt: jwt_param },
                                                             organization: @organization))
     @contributor.tag_list = tag_list_from_jwt
@@ -67,7 +65,7 @@ class OnboardingController < ApplicationController
     # for the presence of the `taken` error. This
     # is necessary as custom validators may perform
     # additional normalization.
-    contributor = Contributor.new(attr_name => attr_value)
+    contributor = Contributor.new(attr_name => attr_value, :organization => @organization)
     contributor.valid?
 
     contributor.errors.details[attr_name].pluck(:error).include?(:taken)

@@ -167,8 +167,10 @@ RSpec.describe 'Onboarding::Email', type: :request do
         end
       end
 
-      describe 'given an existing email address' do
-        let!(:contributor) { create(:contributor, **attrs.merge(json_web_token: create(:json_web_token, invalidated_jwt: :jwt))) }
+      describe 'given an existing email address for an organization' do
+        let!(:contributor) do
+          create(:contributor, organization: organization, **attrs.merge(json_web_token: create(:json_web_token, invalidated_jwt: :jwt)))
+        end
 
         it 'redirects to success page' do
           subject.call
