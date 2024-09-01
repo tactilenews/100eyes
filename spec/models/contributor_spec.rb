@@ -144,7 +144,7 @@ RSpec.describe Contributor, type: :model do
 
   describe '#telegram_id' do
     it_behaves_like 'unique within an organization' do
-      let(:attrs) { attrs = { telegram_id: 1 } }
+      let(:attrs) { { telegram_id: 1 } }
     end
   end
 
