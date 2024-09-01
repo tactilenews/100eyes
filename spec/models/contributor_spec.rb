@@ -3,6 +3,22 @@
 require 'rails_helper'
 
 RSpec.describe Contributor, type: :model do
+  shared_examples 'unique within an organization' do
+    before { create(:contributor, organization: organization, **attrs) }
+
+    it 'raises errors when not unique' do
+      expect { create(:contributor, organization: organization, **attrs) }.to raise_error(ActiveRecord::RecordInvalid)
+      expect do
+        build(:contributor, organization: organization, **attrs).save!(validate: false)
+      end.to raise_error(ActiveRecord::RecordNotUnique)
+    end
+
+    it 'accepts duplicates for other organizations' do
+      expect { create(:contributor, **attrs) }.not_to raise_error
+      expect { build(:contributor, **attrs).save!(validate: false) }.not_to raise_error
+    end
+  end
+
   let(:the_request) do
     create(:request, title: 'Hitchhiker’s Guide', text: 'What is the answer to life, the universe, and everything?',
                      organization: organization, user: user)
@@ -47,10 +63,8 @@ RSpec.describe Contributor, type: :model do
   end
 
   describe '#email' do
-    it 'must be unique' do
-      create(:contributor, email: 'contributor@example.org')
-      expect { create(:contributor, email: 'contributor@example.org') }.to raise_error(ActiveRecord::RecordInvalid)
-      expect { create(:contributor, email: 'CONTRIBUTOR@example.org') }.to raise_error(ActiveRecord::RecordInvalid)
+    it_behaves_like 'unique within an organization' do
+      let(:attrs) { { email: 'contributor@example.org' } }
     end
 
     describe 'two contributor accounts without email' do
@@ -107,11 +121,8 @@ RSpec.describe Contributor, type: :model do
       expect(build(:contributor, signal_phone_number: nil)).to be_valid
     end
 
-    it 'must be unique' do
-      create(:contributor, signal_phone_number: '+491511234567')
-      contributor = build(:contributor, signal_phone_number: '+491511234567')
-      expect(contributor).not_to be_valid
-      expect { contributor.save!(validate: false) }.to raise_error(ActiveRecord::RecordNotUnique)
+    it_behaves_like 'unique within an organization' do
+      let(:attrs) { { signal_phone_number: '+491511234567' } }
     end
 
     it 'must be a valid phone number' do
@@ -119,12 +130,21 @@ RSpec.describe Contributor, type: :model do
     end
   end
 
+  describe '#telegram_chat_id' do
+    it_behaves_like 'unique within an organization' do
+      let(:attrs) { { telegram_chat_id: 111 } }
+    end
+  end
+
+  describe '#whats_app_phone_number' do
+    it_behaves_like 'unique within an organization' do
+      let(:attrs) { { whats_app_phone_number: '+491511234567' } }
+    end
+  end
+
   describe '#telegram_id' do
-    it 'must be unique' do
-      create(:contributor, telegram_id: 1)
-      contributor = build(:contributor, telegram_id: 1)
-      expect(contributor).not_to be_valid
-      expect { contributor.save!(validate: false) }.to raise_error(ActiveRecord::RecordNotUnique)
+    it_behaves_like 'unique within an organization' do
+      let(:attrs) { { telegram_id: 1 } }
     end
   end
 
@@ -211,21 +231,18 @@ RSpec.describe Contributor, type: :model do
         end
       end
 
-      context 'given a vaild Threema ID' do
+      context 'given a valid Threema ID' do
         before do
           allow(threema_lookup_double).to receive(:key).and_return('PUBLIC_KEY_HEX_ENCODED')
         end
 
-        it 'must be unique' do
-          create(:contributor, threema_id: 'ABCD1234')
-          contributor = build(:contributor, threema_id: 'ABCD1234')
-          expect(contributor).not_to be_valid
-          expect { contributor.save!(validate: false) }.to raise_error(ActiveRecord::RecordNotUnique)
+        it_behaves_like 'unique within an organization' do
+          let(:attrs) { { threema_id: 'abcd1234' } }
         end
 
         it 'must be unique, ignoring case' do
-          create(:contributor, threema_id: 'abcd1234')
-          contributor = build(:contributor, threema_id: 'ABCD1234')
+          create(:contributor, threema_id: 'abcd1234', organization: organization)
+          contributor = build(:contributor, threema_id: 'ABCD1234', organization: organization)
           expect(contributor).not_to be_valid
         end
       end

@@ -149,8 +149,8 @@ RSpec.describe 'Onboarding::Threema', type: :request do
         end
       end
 
-      describe 'given an existing threema ID' do
-        let!(:contributor) { create(:contributor, **attrs, organization: organization) }
+      describe 'given an existing threema ID for an organization' do
+        let!(:contributor) { create(:contributor, organization: organization, **attrs) }
 
         it 'redirects to success page' do
           subject.call
