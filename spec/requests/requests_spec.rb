@@ -3,7 +3,7 @@
 require 'rails_helper'
 require 'telegram/bot/rspec/integration/rails'
 
-RSpec.describe 'Requests', telegram_bot: :rails do
+RSpec.describe 'Requests', type: :request do
   let(:organization) { create(:organization) }
 
   describe 'GET /{organization_id}/requests' do
@@ -117,10 +117,14 @@ RSpec.describe 'Requests', telegram_bot: :rails do
   end
 
   describe 'POST /{organization_id}/requests' do
-    before(:each) { allow(Request).to receive(:broadcast!).and_call_original } # is stubbed for every other test
     subject { -> { post organization_requests_path(organization, as: user), params: params } }
+    
     let(:params) { { request: { title: 'Example Question', text: 'How do you do?', hints: ['confidential'] } } }
     let(:user) { create(:user, organizations: [organization]) }
+    
+    before do
+      allow(Request).to receive(:broadcast!).and_call_original # is stubbed for every other test
+    end
 
     it_behaves_like 'unauthenticated' do
       before { post organization_requests_path(organization), params: params }
@@ -135,14 +139,14 @@ RSpec.describe 'Requests', telegram_bot: :rails do
     it { should change { Request.count }.from(0).to(1) }
 
     it 'redirects to requests#show' do
-      response = subject.call
-      request = Request.last
+      subject.call
+      request = organization.requests.first
       expect(response).to redirect_to organization_request_path(organization, request)
     end
 
     it 'shows success notification' do
       subject.call
-      expect(flash[:success]).not_to be_empty
+      expect(flash[:success]).to eq('Deine Frage wurde erfolgreich an 0 Mitglieder in der Community gesendet')
     end
 
     describe 'without hints param' do
@@ -168,12 +172,13 @@ RSpec.describe 'Requests', telegram_bot: :rails do
 
         describe 'an image file' do
           it 'redirects to requests#show' do
-            request = Request.last
+            request = organization.requests.first
+
             expect(response).to redirect_to organization_request_path(organization, request)
           end
 
           it 'shows success notification' do
-            expect(page).to have_content('Deine Frage wurde erfolgreich an 2 Mitglieder in der Community gesendet')
+            expect(flash[:success]).to eq('Deine Frage wurde erfolgreich an 2 Mitglieder in der Community gesendet')
           end
         end
 
@@ -184,12 +189,12 @@ RSpec.describe 'Requests', telegram_bot: :rails do
           end
 
           it 'redirects to requests#show' do
-            request = Request.last
+            request = Request.first
             expect(response).to redirect_to organization_request_path(organization, request)
           end
 
           it 'shows success notification' do
-            expect(page).to have_content('Deine Frage wurde erfolgreich an 2 Mitglieder in der Community gesendet')
+            expect(flash[:success]).to eq('Deine Frage wurde erfolgreich an 2 Mitglieder in der Community gesendet')
           end
         end
 
@@ -197,12 +202,12 @@ RSpec.describe 'Requests', telegram_bot: :rails do
           before { params[:request][:text] = '' }
 
           it 'redirects to requests#show' do
-            request = Request.last
+            request = Request.first
             expect(response).to redirect_to organization_request_path(organization, request)
           end
 
           it 'shows success notification' do
-            expect(page).to have_content('Deine Frage wurde erfolgreich an 2 Mitglieder in der Community gesendet')
+            expect(flash[:success]).to eq('Deine Frage wurde erfolgreich an 2 Mitglieder in der Community gesendet')
           end
         end
       end
