@@ -44,16 +44,11 @@ class RequestsController < ApplicationController
   def update
     @request.files.purge_later if @request.files.attached? && request_params[:files].blank?
     if @request.update(request_params)
-      if @request.planned?
-        redirect_to organization_requests_path(@request.organization_id, filter: :planned), flash: {
-          success: I18n.t('request.schedule_request_success',
-                          count: Contributor.active.with_tags(@request.tag_list).count,
-                          scheduled_datetime: I18n.l(@request.schedule_send_for, format: :long))
-        }
-      else
-        redirect_to organization_request_path(@request.organization_id, @request),
-                    flash: { success: I18n.t('request.success', count: @request.stats[:counts][:recipients]) }
-      end
+      redirect_to organization_requests_path(@request.organization_id, filter: :planned), flash: {
+        success: I18n.t('request.schedule_request_success',
+                        count: @request.organization.contributors.active.with_tags(@request.tag_list).count,
+                        scheduled_datetime: I18n.l(@request.schedule_send_for, format: :long))
+      }
     else
       render :edit, status: :unprocessable_entity
     end

@@ -118,10 +118,10 @@ RSpec.describe 'Requests', type: :request do
 
   describe 'POST /{organization_id}/requests' do
     subject { -> { post organization_requests_path(organization, as: user), params: params } }
-    
+
     let(:params) { { request: { title: 'Example Question', text: 'How do you do?', hints: ['confidential'] } } }
     let(:user) { create(:user, organizations: [organization]) }
-    
+
     before do
       allow(Request).to receive(:broadcast!).and_call_original # is stubbed for every other test
     end
@@ -228,6 +228,78 @@ RSpec.describe 'Requests', type: :request do
         subject.call
         request = Request.first
         expect(flash[:success]).to include(I18n.l(request.schedule_send_for, format: :long))
+      end
+    end
+  end
+
+  describe 'PATCH  /:organization_id/requests/:id' do
+    subject { -> { patch organization_request_path(organization, request, as: user), params: params } }
+
+    let(:request) { create(:request, title: 'Temp title', organization: organization) }
+    let(:params) { { request: { title: 'Changed me' } } }
+
+    context 'unauthenticated' do
+      let(:user) { nil }
+
+      it 'redirects to the sign in path' do
+        subject.call
+        expect(response).to redirect_to(sign_in_path)
+      end
+    end
+
+    context 'unauthorized' do
+      let(:user) { create(:user, organizations: [create(:organization)]) }
+
+      it 'renders not found ' do
+        subject.call
+        expect(response).to be_not_found
+      end
+    end
+
+    context 'authenticated and authorized' do
+      let(:user) { create(:user, organizations: [organization]) }
+
+      context 'request not part of organization' do
+        let(:request) { create(:request, organization: create(:organization)) }
+
+        it 'renders not found ' do
+          subject.call
+          expect(response).to be_not_found
+        end
+      end
+
+      context 'request is not planned' do
+        it 'does not update the request' do
+          expect { subject.call }.not_to(change { request.reload })
+        end
+
+        it 'redirects to requests index page with error message' do
+          subject.call
+          expect(response).to redirect_to(organization_requests_path(request.organization))
+          expect(flash[:error]).to eq('Sie können eine bereits verschickte Frage nicht mehr bearbeiten.')
+        end
+      end
+
+      context 'request is planned' do
+        before do
+          request.update!(schedule_send_for: 1.day.from_now)
+          create_list(:contributor, 2, organization: organization)
+          create(:contributor, deactivated_at: 1.day.ago, organization: organization)
+          create(:contributor, organization: create(:organization))
+        end
+
+        it 'updates the request' do
+          expect { subject.call }.to (change { request.reload.title }).from('Temp title').to('Changed me')
+        end
+
+        it 'redirects to requests index page with planned filter and success message' do
+          subject.call
+          expect(response).to redirect_to(organization_requests_path(request.organization_id, filter: :planned))
+          expect(flash[:success]).to eq(
+            "Ihre Frage wurde erfolgreich geplant, um am #{I18n.l(request.schedule_send_for,
+                                                                  format: :long)} an 2 Community-Mitglieder gesendet zu werden."
+          )
+        end
       end
     end
   end
