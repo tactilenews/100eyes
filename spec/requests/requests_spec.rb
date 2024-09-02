@@ -385,25 +385,55 @@ RSpec.describe 'Requests', type: :request do
     let(:request) { create(:request, organization: organization) }
     let!(:older_message) { create(:message, request_id: request.id, created_at: 2.minutes.ago) }
     let(:params) { { last_updated_at: 1.minute.ago } }
-    let(:user) { create(:user, organizations: [organization]) }
 
     subject { -> { get notifications_organization_request_path(request.organization, request, as: user), params: params } }
 
-    context 'No messages in last 1 minute' do
-      it 'responds with message count 0' do
-        expected = { message_count: 0 }.to_json
+    context 'unauthenticated' do
+      let(:user) { nil }
+
+      it 'redirects to the sign in path' do
         subject.call
-        expect(response.body).to eq(expected)
+        expect(response).to redirect_to(sign_in_path)
       end
     end
 
-    context 'New messages in last 1 minute' do
-      let!(:new_message) { create(:message, request_id: request.id, created_at: 30.seconds.ago) }
+    context 'unauthorized' do
+      let(:user) { create(:user, organizations: [create(:organization)]) }
 
-      it 'responds with message count' do
-        expected = { message_count: 1 }.to_json
+      it 'renders not found ' do
         subject.call
-        expect(response.body).to eq(expected)
+        expect(response).to be_not_found
+      end
+    end
+
+    context 'authenticated and authorized' do
+      let(:user) { create(:user, organizations: [organization]) }
+
+      context 'request not part of organization' do
+        let(:request) { create(:request, organization: create(:organization)) }
+
+        it 'renders not found ' do
+          subject.call
+          expect(response).to be_not_found
+        end
+      end
+
+      context 'No messages in last 1 minute' do
+        it 'responds with message count 0' do
+          expected = { message_count: 0 }.to_json
+          subject.call
+          expect(response.body).to eq(expected)
+        end
+      end
+
+      context 'New messages in last 1 minute' do
+        let!(:new_message) { create(:message, request_id: request.id, created_at: 30.seconds.ago) }
+
+        it 'responds with message count' do
+          expected = { message_count: 1 }.to_json
+          subject.call
+          expect(response.body).to eq(expected)
+        end
       end
     end
   end
