@@ -472,4 +472,72 @@ RSpec.describe 'Requests', type: :request do
       end
     end
   end
+
+  describe 'GET /:organization_id/requests/:id/messages-by-contributor' do
+    subject { -> { get messages_by_contributor_organization_request_path(organization, request, as: user) } }
+
+    let(:request) { create(:request, organization: organization) }
+
+    context 'unauthenticated' do
+      let(:user) { nil }
+
+      it 'redirects to the sign in path' do
+        subject.call
+        expect(response).to redirect_to(sign_in_path)
+      end
+    end
+
+    context 'unauthorized' do
+      let(:user) { create(:user, organizations: [create(:organization)]) }
+
+      it 'renders not found ' do
+        subject.call
+        expect(response).to be_not_found
+      end
+    end
+
+    context 'authenticated and authorized' do
+      let(:user) { create(:user, organizations: [organization]) }
+
+      context 'request not part of organization' do
+        let(:request) { create(:request, organization: create(:organization)) }
+
+        it 'renders not found ' do
+          subject.call
+          expect(response).to be_not_found
+        end
+      end
+
+      context 'request part of organization' do
+        let(:message_from_other_request) do
+          create(:message, text: 'Not part of request', request: create(:request, organization: organization))
+        end
+        let(:message_from_other_organization) { create(:message, text: 'Not part of organization', organization: create(:organization)) }
+        let(:first_message) do
+          create(:message, text: 'First message', sender: create(:contributor, first_name: 'Super', last_name: 'FastReplier'))
+        end
+        let(:second_message) do
+          create(:message, text: 'Second message', sender: create(:contributor, first_name: 'Second', last_name: 'AintBad'))
+        end
+
+        before do
+          request.update!(messages: [first_message, second_message])
+          message_from_other_request
+          message_from_other_organization
+        end
+
+        it 'renders MessageGroups::MessageGroups component' do
+          subject.call
+          expect(page).to have_content('Super FastReplier')
+          expect(page).to have_content('First message')
+
+          expect(page).to have_content('Second AintBad')
+          expect(page).to have_content('Second message')
+
+          expect(page).not_to have_content('Not part of request')
+          expect(page).not_to have_content('Not part of organization')
+        end
+      end
+    end
+  end
 end
