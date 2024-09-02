@@ -540,4 +540,69 @@ RSpec.describe 'Requests', type: :request do
       end
     end
   end
+
+  describe 'GET /:organization_id/requests/:id/stats' do
+    subject { -> { get stats_organization_request_path(organization, request, as: user) } }
+
+    let(:request) { create(:request, organization: organization) }
+
+    context 'unauthenticated' do
+      let(:user) { nil }
+
+      it 'redirects to the sign in path' do
+        subject.call
+        expect(response).to redirect_to(sign_in_path)
+      end
+    end
+
+    context 'unauthorized' do
+      let(:user) { create(:user, organizations: [create(:organization)]) }
+
+      it 'renders not found ' do
+        subject.call
+        expect(response).to be_not_found
+      end
+    end
+
+    context 'authenticated and authorized' do
+      let(:user) { create(:user, organizations: [organization]) }
+
+      context 'request not part of organization' do
+        let(:request) { create(:request, organization: create(:organization)) }
+
+        it 'renders not found ' do
+          subject.call
+          expect(response).to be_not_found
+        end
+      end
+
+      context 'request part of organization' do
+        describe 'given a number of requests, replies and photos' do
+          before(:each) do
+            create_list(:message, 2)
+            delivered_messages = create_list(:message, 7, :outbound, request: request, broadcasted: true)
+            create(:message, :with_file, :outbound, request: request, broadcasted: false,
+                                                    attachment: fixture_file_upload('example-image.png'))
+            # _ is some unresponsive recipient
+            responsive_recipient, _, *other_recipients = delivered_messages.map(&:recipient)
+            create_list(:message, 3, request: request, sender: responsive_recipient)
+            other_recipients.each do |recipient|
+              create(:message, :with_a_photo, sender: recipient, request: request)
+              create(:message, :with_file, sender: recipient, request: request, attachment: fixture_file_upload('example-image.png'))
+              create(:message, :with_file, sender: recipient, request: request,
+                                           attachment: fixture_file_upload('invalid_profile_picture.pdf'))
+            end
+            request.reload
+          end
+
+          it 'displays the stats' do
+            subject.call
+            expect(page).to have_content('6/8')
+            expect(page).to have_content('18')
+            expect(page).to have_content('10')
+          end
+        end
+      end
+    end
+  end
 end
