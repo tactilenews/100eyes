@@ -73,7 +73,12 @@
   community.docker.docker_prune:
     images: yes
 
-- name: Create and migrate database
+- name: Run schema migrations
   command:
-    cmd: docker compose -f docker-compose.yml -f docker-compose.prod.yml exec app bin/rails db:migrate:with_data
+    cmd: docker compose -f docker-compose.yml -f docker-compose.prod.yml exec app bin/rails db:migrate
+    chdir: /home/ansible
+
+- name: Run data migrations
+  command:
+    cmd: docker compose -f docker-compose.yml -f docker-compose.prod.yml exec app bin/rails data:migrate
     chdir: /home/ansible
