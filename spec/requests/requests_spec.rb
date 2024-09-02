@@ -305,52 +305,78 @@ RSpec.describe 'Requests', type: :request do
   end
 
   describe 'DELETE /{organization_id}/requests/:id' do
-    subject do
-      lambda {
-        path = "/#{request.organization_id}/requests/#{request.id}?as=#{user.id}"
-        delete path
-      }
-    end
+    subject { -> { delete organization_request_path(organization, request, as: user) } }
 
-    let(:user) { create(:user, organizations: [organization]) }
+    let(:request) { create(:request, organization: organization) }
 
-    context 'broadcasted request' do
-      let!(:request) { create(:request, organization: organization) }
+    context 'unauthenticated' do
+      let(:user) { nil }
 
-      it 'does not delete the request' do
-        expect { subject.call }.not_to change(Request, :count)
-      end
-
-      it 'redirects to requests path' do
+      it 'redirects to the sign in path' do
         subject.call
-
-        expect(response).to redirect_to organization_requests_path(organization)
-      end
-
-      it 'shows error message' do
-        subject.call
-
-        expect(flash[:error]).to eq(I18n.t('request.destroy.broadcasted_request_unallowed', request_title: request.title))
+        expect(response).to redirect_to(sign_in_path)
       end
     end
 
-    context 'planned request' do
-      let!(:request) { create(:request, organization: organization, broadcasted_at: nil, schedule_send_for: 1.day.from_now) }
+    context 'unauthorized' do
+      let(:user) { create(:user, organizations: [create(:organization)]) }
 
-      it 'deletes the request' do
-        expect { subject.call }.to change(Request, :count).from(1).to(0)
+      it 'renders not found ' do
+        subject.call
+        expect(response).to be_not_found
+      end
+    end
+
+    context 'authenticated and authorized' do
+      let(:user) { create(:user, organizations: [organization]) }
+
+      context 'request not part of organization' do
+        let(:request) { create(:request, organization: create(:organization)) }
+
+        it 'renders not found ' do
+          subject.call
+          expect(response).to be_not_found
+        end
       end
 
-      it 'redirects to requests path with planned filter' do
-        subject.call
+      context 'broadcasted request' do
+        let!(:request) { create(:request, organization: organization) }
 
-        expect(response).to redirect_to organization_requests_path(organization, filter: :planned)
+        it 'does not delete the request' do
+          expect { subject.call }.not_to change(Request, :count)
+        end
+
+        it 'redirects to requests path' do
+          subject.call
+
+          expect(response).to redirect_to organization_requests_path(organization)
+        end
+
+        it 'shows error message' do
+          subject.call
+
+          expect(flash[:error]).to eq(I18n.t('request.destroy.broadcasted_request_unallowed', request_title: request.title))
+        end
       end
 
-      it 'shows a notice that it was successful' do
-        subject.call
+      context 'planned request' do
+        let!(:request) { create(:request, organization: organization, broadcasted_at: nil, schedule_send_for: 1.day.from_now) }
 
-        expect(flash[:notice]).to eq(I18n.t('request.destroy.successful', request_title: request.title))
+        it 'deletes the request' do
+          expect { subject.call }.to change(Request, :count).from(1).to(0)
+        end
+
+        it 'redirects to requests path with planned filter' do
+          subject.call
+
+          expect(response).to redirect_to organization_requests_path(organization, filter: :planned)
+        end
+
+        it 'shows a notice that it was successful' do
+          subject.call
+
+          expect(flash[:notice]).to eq(I18n.t('request.destroy.successful', request_title: request.title))
+        end
       end
     end
   end
