@@ -7,19 +7,30 @@ RSpec.describe 'Requests', type: :request do
   let(:organization) { create(:organization) }
 
   describe 'GET /{organization_id}/requests' do
-    it_behaves_like 'unauthenticated' do
-      before { get organization_requests_path(organization) }
+    subject { -> { get organization_requests_path(organization, as: user), params: params } }
+
+    let(:params) { {} }
+
+    context 'unauthenticated' do
+      let(:user) { nil }
+
+      it 'redirects to the sign in path' do
+        subject.call
+        expect(response).to redirect_to(sign_in_path)
+      end
     end
 
-    it_behaves_like 'protected' do
-      before { get organization_requests_path(organization, as: create(:user)) }
+    context 'unauthorized' do
+      let(:user) { create(:user, organizations: [create(:organization)]) }
+
+      it 'renders not found ' do
+        subject.call
+        expect(response).to be_not_found
+      end
     end
 
     context 'authenticated and authorized' do
-      subject { -> { get organization_requests_path(organization, as: user), params: params } }
-
       let(:user) { create(:user, organizations: [organization]) }
-      let(:params) { {} }
 
       before do
         create(:request, title: 'I belong to the organization', organization: organization)
@@ -82,28 +93,37 @@ RSpec.describe 'Requests', type: :request do
   end
 
   describe 'GET /{organization_id}/requests' do
+    subject { -> { get organization_request_path(organization, request, as: user) } }
+
     let(:request) { create(:request, organization: organization) }
 
-    it_behaves_like 'unauthenticated' do
-      before { get organization_request_path(organization, request) }
+    context 'unauthenticated' do
+      let(:user) { nil }
+
+      it 'redirects to the sign in path' do
+        subject.call
+        expect(response).to redirect_to(sign_in_path)
+      end
     end
 
-    context 'user not part of organization' do
-      it_behaves_like 'protected' do
-        before { get organization_request_path(organization, request, as: create(:user)) }
+    context 'unauthorized' do
+      let(:user) { create(:user, organizations: [create(:organization)]) }
+
+      it 'renders not found ' do
+        subject.call
+        expect(response).to be_not_found
       end
     end
 
     context 'authenticated and authorized' do
-      subject { -> { get organization_request_path(organization, request, as: user) } }
-
       let(:user) { create(:user, organizations: [organization]) }
 
       context 'request not part of organization' do
         let(:request) { create(:request, organization: create(:organization)) }
 
-        it_behaves_like 'protected' do
-          before { get organization_request_path(organization, request, as: user) }
+        it 'renders not found ' do
+          subject.call
+          expect(response).to be_not_found
         end
       end
 
@@ -126,88 +146,99 @@ RSpec.describe 'Requests', type: :request do
       allow(Request).to receive(:broadcast!).and_call_original # is stubbed for every other test
     end
 
-    it_behaves_like 'unauthenticated' do
-      before { post organization_requests_path(organization), params: params }
-    end
+    context 'unauthenticated' do
+      let(:user) { nil }
 
-    context 'user not part of organization' do
-      it_behaves_like 'protected' do
-        before { post organization_requests_path(organization, as: create(:user)), params: params }
-      end
-    end
-
-    it { should change { Request.count }.from(0).to(1) }
-
-    it 'redirects to requests#show' do
-      subject.call
-      request = organization.requests.first
-      expect(response).to redirect_to organization_request_path(organization, request)
-    end
-
-    it 'shows success notification' do
-      subject.call
-      expect(flash[:success]).to eq('Deine Frage wurde erfolgreich an 0 Mitglieder in der Community gesendet')
-    end
-
-    describe 'without hints param' do
-      let(:params) { { request: {  title: 'Example Question', text: 'How do you do?' } } }
-      it { should_not raise_error }
-    end
-
-    describe 'without contributors' do
-      it { should_not raise_error }
-    end
-
-    describe 'with contributors' do
-      before do
-        create_list(:contributor, 2, organization: organization)
-        create(:contributor, organization: create(:organization))
+      it 'redirects to the sign in path' do
         subject.call
+        expect(response).to redirect_to(sign_in_path)
+      end
+    end
+
+    context 'unauthorized' do
+      let(:user) { create(:user, organizations: [create(:organization)]) }
+
+      it 'renders not found ' do
+        subject.call
+        expect(response).to be_not_found
+      end
+    end
+
+    context 'authenticated and authorized' do
+      it { should change { Request.count }.from(0).to(1) }
+
+      it 'redirects to requests#show' do
+        subject.call
+        request = organization.requests.first
+        expect(response).to redirect_to organization_request_path(organization, request)
       end
 
-      context 'with image file(s)' do
-        let(:params) do
-          { request: { title: 'Message with files', text: 'Did you get this image?', files: [fixture_file_upload('profile_picture.jpg')] } }
+      it 'shows success notification' do
+        subject.call
+        expect(flash[:success]).to eq('Deine Frage wurde erfolgreich an 0 Mitglieder in der Community gesendet')
+      end
+
+      describe 'without hints param' do
+        let(:params) { { request: {  title: 'Example Question', text: 'How do you do?' } } }
+        it { should_not raise_error }
+      end
+
+      describe 'without contributors' do
+        it { should_not raise_error }
+      end
+
+      describe 'with contributors' do
+        before do
+          create_list(:contributor, 2, organization: organization)
+          create(:contributor, organization: create(:organization))
+          subject.call
         end
 
-        describe 'an image file' do
-          it 'redirects to requests#show' do
-            request = organization.requests.first
-
-            expect(response).to redirect_to organization_request_path(organization, request)
-          end
-
-          it 'shows success notification' do
-            expect(flash[:success]).to eq('Deine Frage wurde erfolgreich an 2 Mitglieder in der Community gesendet')
-          end
-        end
-
-        describe 'multiple image files' do
+        context 'with image file(s)' do
           let(:params) do
             { request: { title: 'Message with files', text: 'Did you get this image?',
-                         files: [fixture_file_upload('profile_picture.jpg'), fixture_file_upload('example-image.png')] } }
+                         files: [fixture_file_upload('profile_picture.jpg')] } }
           end
 
-          it 'redirects to requests#show' do
-            request = Request.first
-            expect(response).to redirect_to organization_request_path(organization, request)
+          describe 'an image file' do
+            it 'redirects to requests#show' do
+              request = organization.requests.first
+
+              expect(response).to redirect_to organization_request_path(organization, request)
+            end
+
+            it 'shows success notification' do
+              expect(flash[:success]).to eq('Deine Frage wurde erfolgreich an 2 Mitglieder in der Community gesendet')
+            end
           end
 
-          it 'shows success notification' do
-            expect(flash[:success]).to eq('Deine Frage wurde erfolgreich an 2 Mitglieder in der Community gesendet')
+          describe 'multiple image files' do
+            let(:params) do
+              { request: { title: 'Message with files', text: 'Did you get this image?',
+                           files: [fixture_file_upload('profile_picture.jpg'), fixture_file_upload('example-image.png')] } }
+            end
+
+            it 'redirects to requests#show' do
+              request = Request.first
+              expect(response).to redirect_to organization_request_path(organization, request)
+            end
+
+            it 'shows success notification' do
+              expect(flash[:success]).to eq('Deine Frage wurde erfolgreich an 2 Mitglieder in der Community gesendet')
+            end
           end
-        end
 
-        describe 'with no text' do
-          before { params[:request][:text] = '' }
+          describe 'with no text' do
+            before { params[:request][:text] = '' }
 
-          it 'redirects to requests#show' do
-            request = Request.first
-            expect(response).to redirect_to organization_request_path(organization, request)
-          end
+            it 'redirects to requests#show' do
+              request = Request.first
+              expect(response).to redirect_to organization_request_path(organization, request)
+            end
 
-          it 'shows success notification' do
-            expect(flash[:success]).to eq('Deine Frage wurde erfolgreich an 2 Mitglieder in der Community gesendet')
+            it 'shows success notification' do
+              expect(flash[:success]).to eq('Deine Frage wurde erfolgreich an 2 Mitglieder in der Community gesendet')
+            end
           end
         end
       end
@@ -268,37 +299,39 @@ RSpec.describe 'Requests', type: :request do
         end
       end
 
-      context 'request is not planned' do
-        it 'does not update the request' do
-          expect { subject.call }.not_to(change { request.reload })
+      context 'request part of organization' do
+        context 'request is not planned' do
+          it 'does not update the request' do
+            expect { subject.call }.not_to(change { request.reload })
+          end
+
+          it 'redirects to requests index page with error message' do
+            subject.call
+            expect(response).to redirect_to(organization_requests_path(request.organization))
+            expect(flash[:error]).to eq('Sie können eine bereits verschickte Frage nicht mehr bearbeiten.')
+          end
         end
 
-        it 'redirects to requests index page with error message' do
-          subject.call
-          expect(response).to redirect_to(organization_requests_path(request.organization))
-          expect(flash[:error]).to eq('Sie können eine bereits verschickte Frage nicht mehr bearbeiten.')
-        end
-      end
+        context 'request is planned' do
+          before do
+            request.update!(schedule_send_for: 1.day.from_now)
+            create_list(:contributor, 2, organization: organization)
+            create(:contributor, deactivated_at: 1.day.ago, organization: organization)
+            create(:contributor, organization: create(:organization))
+          end
 
-      context 'request is planned' do
-        before do
-          request.update!(schedule_send_for: 1.day.from_now)
-          create_list(:contributor, 2, organization: organization)
-          create(:contributor, deactivated_at: 1.day.ago, organization: organization)
-          create(:contributor, organization: create(:organization))
-        end
+          it 'updates the request' do
+            expect { subject.call }.to (change { request.reload.title }).from('Temp title').to('Changed me')
+          end
 
-        it 'updates the request' do
-          expect { subject.call }.to (change { request.reload.title }).from('Temp title').to('Changed me')
-        end
-
-        it 'redirects to requests index page with planned filter and success message' do
-          subject.call
-          expect(response).to redirect_to(organization_requests_path(request.organization_id, filter: :planned))
-          expect(flash[:success]).to eq(
-            "Ihre Frage wurde erfolgreich geplant, um am #{I18n.l(request.schedule_send_for,
-                                                                  format: :long)} an 2 Community-Mitglieder gesendet zu werden."
-          )
+          it 'redirects to requests index page with planned filter and success message' do
+            subject.call
+            expect(response).to redirect_to(organization_requests_path(request.organization_id, filter: :planned))
+            expect(flash[:success]).to eq(
+              "Ihre Frage wurde erfolgreich geplant, um am #{I18n.l(request.schedule_send_for,
+                                                                    format: :long)} an 2 Community-Mitglieder gesendet zu werden."
+            )
+          end
         end
       end
     end
@@ -339,43 +372,45 @@ RSpec.describe 'Requests', type: :request do
         end
       end
 
-      context 'broadcasted request' do
-        let!(:request) { create(:request, organization: organization) }
+      context 'request part of organization' do
+        context 'broadcasted request' do
+          let!(:request) { create(:request, organization: organization) }
 
-        it 'does not delete the request' do
-          expect { subject.call }.not_to change(Request, :count)
+          it 'does not delete the request' do
+            expect { subject.call }.not_to change(Request, :count)
+          end
+
+          it 'redirects to requests path' do
+            subject.call
+
+            expect(response).to redirect_to organization_requests_path(organization)
+          end
+
+          it 'shows error message' do
+            subject.call
+
+            expect(flash[:error]).to eq(I18n.t('request.destroy.broadcasted_request_unallowed', request_title: request.title))
+          end
         end
 
-        it 'redirects to requests path' do
-          subject.call
+        context 'planned request' do
+          let!(:request) { create(:request, organization: organization, broadcasted_at: nil, schedule_send_for: 1.day.from_now) }
 
-          expect(response).to redirect_to organization_requests_path(organization)
-        end
+          it 'deletes the request' do
+            expect { subject.call }.to change(Request, :count).from(1).to(0)
+          end
 
-        it 'shows error message' do
-          subject.call
+          it 'redirects to requests path with planned filter' do
+            subject.call
 
-          expect(flash[:error]).to eq(I18n.t('request.destroy.broadcasted_request_unallowed', request_title: request.title))
-        end
-      end
+            expect(response).to redirect_to organization_requests_path(organization, filter: :planned)
+          end
 
-      context 'planned request' do
-        let!(:request) { create(:request, organization: organization, broadcasted_at: nil, schedule_send_for: 1.day.from_now) }
+          it 'shows a notice that it was successful' do
+            subject.call
 
-        it 'deletes the request' do
-          expect { subject.call }.to change(Request, :count).from(1).to(0)
-        end
-
-        it 'redirects to requests path with planned filter' do
-          subject.call
-
-          expect(response).to redirect_to organization_requests_path(organization, filter: :planned)
-        end
-
-        it 'shows a notice that it was successful' do
-          subject.call
-
-          expect(flash[:notice]).to eq(I18n.t('request.destroy.successful', request_title: request.title))
+            expect(flash[:notice]).to eq(I18n.t('request.destroy.successful', request_title: request.title))
+          end
         end
       end
     end
