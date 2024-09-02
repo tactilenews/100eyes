@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class HealthController < ApplicationController
-  skip_before_action :require_login
+  skip_before_action :require_login, :user_permitted?, :set_organization
 
   def index
     ActiveRecord::Base.connection.execute('select 1')
