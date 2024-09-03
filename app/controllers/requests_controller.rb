@@ -104,10 +104,6 @@ class RequestsController < ApplicationController
 
   private
 
-  def set_contributor
-    @contributor = Contributor.find(params[:contributor_id])
-  end
-
   def set_request
     @request = @organization.requests.find(params[:id])
   end
