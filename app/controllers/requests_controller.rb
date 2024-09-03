@@ -44,10 +44,9 @@ class RequestsController < ApplicationController
   def update
     @request.files.purge_later if @request.files.attached? && request_params[:files].blank?
     if @request.update(request_params)
-      redirect_to organization_requests_path(@request.organization_id, filter: :planned), flash: {
-        success: I18n.t('request.schedule_request_success',
-                        count: @request.organization.contributors.active.with_tags(@request.tag_list).count,
-                        scheduled_datetime: I18n.l(@request.schedule_send_for, format: :long))
+      success_message, filter = update_request_redirect_specifics
+      redirect_to organization_requests_path(@request.organization_id, filter: filter), flash: {
+        success: success_message
       }
     else
       render :edit, status: :unprocessable_entity
@@ -159,6 +158,18 @@ class RequestsController < ApplicationController
       @organization.requests.planned.reorder(schedule_send_for: :desc).includes(:tags)
     else
       @organization.requests.broadcasted.includes(:tags)
+    end
+  end
+
+  def update_request_redirect_specifics
+    if @request.planned?
+      [I18n.t('request.schedule_request_success',
+              count: @request.organization.contributors.active.with_tags(@request.tag_list).count,
+              scheduled_datetime: I18n.l(@request.schedule_send_for, format: :long)),
+       :planned]
+    else
+      [I18n.t('request.success', count: @request.organization.contributors.active.with_tags(@request.tag_list).count),
+       nil]
     end
   end
 end

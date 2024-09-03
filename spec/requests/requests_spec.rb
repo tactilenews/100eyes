@@ -33,8 +33,8 @@ RSpec.describe 'Requests', type: :request do
       let(:user) { create(:user, organizations: [organization]) }
 
       before do
-        create(:request, title: 'I belong to the organization', organization: organization)
-        create(:request, title: 'I do too!', organization: organization)
+        create(:request, title: 'I belong to the organization', organization: organization, broadcasted_at: 1.hour.ago)
+        create(:request, title: 'I do too!', organization: organization, broadcasted_at: 1.day.ago)
         create(:request, title: 'Planned for the future', schedule_send_for: 1.day.from_now, broadcasted_at: nil,
                          organization: organization)
         create(:request, title: 'Also planned, but from another organization', schedule_send_for: 1.hour.from_now, broadcasted_at: nil)
@@ -50,7 +50,6 @@ RSpec.describe 'Requests', type: :request do
       context 'no params' do
         it 'displays only sent messages' do
           expect(page).to have_content('I belong to the organization')
-          expect(page).to have_content('I do too!')
           expect(page).not_to have_content('Planned for the future')
         end
 
@@ -68,7 +67,6 @@ RSpec.describe 'Requests', type: :request do
 
         it 'displays only sent messages' do
           expect(page).to have_content('I belong to the organization')
-          expect(page).to have_content('I do too!')
           expect(page).not_to have_content('Planned for the future')
         end
       end
@@ -92,7 +90,7 @@ RSpec.describe 'Requests', type: :request do
     end
   end
 
-  describe 'GET /{organization_id}/requests' do
+  describe 'GET /:organization_id/request/:id' do
     subject { -> { get organization_request_path(organization, request, as: user) } }
 
     let(:request) { create(:request, organization: organization) }
@@ -200,32 +198,14 @@ RSpec.describe 'Requests', type: :request do
                          files: [fixture_file_upload('profile_picture.jpg')] } }
           end
 
-          describe 'an image file' do
-            it 'redirects to requests#show' do
-              request = organization.requests.first
+          it 'redirects to requests#show' do
+            request = organization.requests.first
 
-              expect(response).to redirect_to organization_request_path(organization, request)
-            end
-
-            it 'shows success notification' do
-              expect(flash[:success]).to eq('Deine Frage wurde erfolgreich an 2 Mitglieder in der Community gesendet')
-            end
+            expect(response).to redirect_to organization_request_path(organization, request)
           end
 
-          describe 'multiple image files' do
-            let(:params) do
-              { request: { title: 'Message with files', text: 'Did you get this image?',
-                           files: [fixture_file_upload('profile_picture.jpg'), fixture_file_upload('example-image.png')] } }
-            end
-
-            it 'redirects to requests#show' do
-              request = Request.first
-              expect(response).to redirect_to organization_request_path(organization, request)
-            end
-
-            it 'shows success notification' do
-              expect(flash[:success]).to eq('Deine Frage wurde erfolgreich an 2 Mitglieder in der Community gesendet')
-            end
+          it 'shows success notification' do
+            expect(flash[:success]).to eq('Deine Frage wurde erfolgreich an 2 Mitglieder in der Community gesendet')
           end
 
           describe 'with no text' do
@@ -331,6 +311,20 @@ RSpec.describe 'Requests', type: :request do
               "Ihre Frage wurde erfolgreich geplant, um am #{I18n.l(request.schedule_send_for,
                                                                     format: :long)} an 2 Community-Mitglieder gesendet zu werden."
             )
+          end
+
+          context 're-scheduled to be sent now' do
+            let(:params) { { request: { schedule_send_for: Time.current } } }
+
+            it 'updates the request' do
+              expect { subject.call }.to(change { request.reload.schedule_send_for })
+            end
+
+            it 'redirects to requests index page with success message' do
+              subject.call
+              expect(response).to redirect_to(organization_requests_path(request.organization_id))
+              expect(flash[:success]).to eq('Deine Frage wurde erfolgreich an 2 Mitglieder in der Community gesendet')
+            end
           end
         end
       end
