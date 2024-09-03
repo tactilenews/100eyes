@@ -69,8 +69,11 @@ class Request < ApplicationRecord
   end
 
   def self.broadcast!(request)
-    BroadcastRequestJob.delay(run_at: request.schedule_send_for).perform_later(request.id)
-    RequestScheduled.with(request_id: request.id).deliver_later(request.organization.users + User.admin.all) if request.planned?
+    BroadcastRequestJob.perform_later(request.id)
+    return unless request.planned?
+
+    RequestScheduled.with(request_id: request.id,
+                          organization_id: request.organization.id).deliver_later(request.organization.users + User.admin.all)
   end
 
   def self.attach_files(files)

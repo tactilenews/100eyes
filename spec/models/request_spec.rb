@@ -285,63 +285,19 @@ RSpec.describe Request, type: :model do
       allow(Request).to receive(:broadcast!).and_call_original # is stubbed for every other test
     end
 
-    describe 'given some existing contributors in the moment of creation' do
-      before(:each) do
-        create(:contributor, id: 1, email: 'somebody@example.org', organization: request.organization)
-        create(:contributor, id: 2, email: nil, telegram_id: 22, organization: request.organization)
-        create(:contributor, id: 3)
-      end
+    describe 'given a planned request' do
+      before { request.schedule_send_for = 1.hour.from_now }
 
-      describe 'only sends to contributors of the organization' do
-        it { should change { Message.count }.from(0).to(2) }
-        it { should change { Message.pluck(:recipient_id).sort }.from([]).to([1, 2]) }
-        it { should change { Message.pluck(:sender_id) }.from([]).to([request.user.id, request.user.id]) }
-        it { should change { Message.pluck(:broadcasted) }.from([]).to([true, true]) }
-        it { should change { Message::File.count }.from(0).to(2) }
-      end
+      let!(:admin) { create_list(:user, 2, admin: true) }
+      let!(:other_organization) { create(:organization, users_count: 2) }
 
-      describe 'given a planned request' do
-        before { request.schedule_send_for = 1.hour.from_now }
-
-        let!(:admin) { create_list(:user, 2, admin: true) }
-        let!(:other_organization) { create(:organization, users_count: 2) }
-
-        it_behaves_like 'an ActivityNotification', 'RequestScheduled', 3
-      end
+      it_behaves_like 'an ActivityNotification', 'RequestScheduled', 3
     end
 
-    describe 'creates message only for contributors tagged with tag_list' do
-      let(:request) do
-        Request.new(
-          title: 'Hitchhiker’s Guide',
-          text: 'What is the answer to life, the universe, and everything?',
-          tag_list: 'programmer',
-          user: user,
-          organization: organization
-        )
+    it 'schedules a job to broadcast the request' do
+      expect { subject.call }.to have_enqueued_job(BroadcastRequestJob).with do |params|
+        expect(params[:request_id]).to eq(request.id)
       end
-      before(:each) do
-        create(:contributor, id: 1, email: 'somebody@example.org', tag_list: ['programmer'], organization: organization)
-        create(:contributor, id: 2, email: nil, telegram_id: 22, organization: organization)
-      end
-
-      it { should change { Message.count }.from(0).to(1) }
-      it { should change { Message.pluck(:recipient_id) }.from([]).to([1]) }
-      it { should change { Message.pluck(:sender_id) }.from([]).to([request.user.id]) }
-      it { should change { Message.pluck(:broadcasted) }.from([]).to([true]) }
-    end
-
-    describe 'given contributors who are deactivated' do
-      before(:each) do
-        create(:contributor, :inactive, id: 3, email: 'deactivated@example.org', organization: organization)
-        create(:contributor, id: 4, email: 'activated@example.org', organization: organization)
-        create(:contributor, :inactive, id: 5, telegram_id: 24, organization: organization)
-      end
-
-      it { should change { Message.count }.from(0).to(1) }
-      it { should change { Message.pluck(:recipient_id) }.from([]).to([4]) }
-      it { should change { Message.pluck(:sender_id) }.from([]).to([request.user.id]) }
-      it { should change { Message.pluck(:broadcasted) }.from([]).to([true]) }
     end
   end
 
@@ -401,8 +357,10 @@ RSpec.describe Request, type: :model do
             expect { subject }.not_to(change { ActivityNotification.where(type: RequestScheduled.name).count })
           end
 
-          it 'broadcasts the messages' do
-            expect { subject }.to(change(Message, :count).from(0).to(1))
+          it 'schedules a job to broadcast the request' do
+            expect { subject }.to have_enqueued_job(BroadcastRequestJob).with do |params|
+              expect(params[:request_id]).to eq(request.id)
+            end
           end
         end
 
@@ -414,8 +372,10 @@ RSpec.describe Request, type: :model do
             expect { subject }.not_to(change { ActivityNotification.where(type: RequestScheduled.name).count })
           end
 
-          it 'broadcasts the messages' do
-            expect { subject }.to(change(Message, :count).from(0).to(1))
+          it 'schedules a job to broadcast the request' do
+            expect { subject }.to have_enqueued_job(BroadcastRequestJob).with do |params|
+              expect(params[:request_id]).to eq(request.id)
+            end
           end
         end
       end

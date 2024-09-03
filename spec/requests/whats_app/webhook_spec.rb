@@ -99,7 +99,7 @@ RSpec.describe WhatsApp::WebhookController do
 
       context 'no message template sent' do
         it 'creates a messsage' do
-          expect { subject.call }.to change(Message, :count).from(2).to(3)
+          expect { subject.call }.to change(Message, :count).from(1).to(2)
         end
       end
 
@@ -143,12 +143,12 @@ RSpec.describe WhatsApp::WebhookController do
             end
 
             describe 'previous request' do
-              let(:message) { previous_request.messages.where(recipient_id: contributor.id).first }
+              let(:previous_message) { create(:message, request: previous_request, recipient_id: contributor.id) }
               let(:requested_message_job_args) do
                 {
                   organization_id: organization.id,
                   contributor_id: contributor.id,
-                  text: message.text,
+                  text: previous_message.text,
                   message: message
                 }
               end
@@ -164,7 +164,7 @@ RSpec.describe WhatsApp::WebhookController do
             end
 
             describe 'newer request' do
-              let(:message) { newer_request.messages.where(recipient_id: contributor.id).first }
+              let(:newer_message) { create(:message, request: newer_request, recipient_id: contributor.id) }
               let(:requested_message_job_args) do
                 {
                   organization_id: organization.id,
