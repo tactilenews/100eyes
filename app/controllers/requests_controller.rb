@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# TODO: Refactor to remove the need to disable rubocop
+# rubocop:disable Metrics/ClassLength
 class RequestsController < ApplicationController
   before_action :set_request, only: %i[show edit update notifications destroy messages_by_contributor stats]
   before_action :notifications_params, only: :notifications
@@ -172,3 +174,4 @@ class RequestsController < ApplicationController
     end
   end
 end
+# rubocop:enable Metrics/ClassLength
