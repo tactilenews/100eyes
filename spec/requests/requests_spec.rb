@@ -6,7 +6,7 @@ require 'telegram/bot/rspec/integration/rails'
 RSpec.describe 'Requests', type: :request do
   let(:organization) { create(:organization) }
 
-  describe 'GET /{organization_id}/requests' do
+  describe 'GET /:organization_id/requests' do
     subject { -> { get organization_requests_path(organization, as: user), params: params } }
 
     let(:params) { {} }
@@ -134,7 +134,7 @@ RSpec.describe 'Requests', type: :request do
     end
   end
 
-  describe 'POST /{organization_id}/requests' do
+  describe 'POST /:organization_id/requests' do
     subject { -> { post organization_requests_path(organization, as: user), params: params } }
 
     let(:params) { { request: { title: 'Example Question', text: 'How do you do?', hints: ['confidential'] } } }
@@ -331,7 +331,7 @@ RSpec.describe 'Requests', type: :request do
     end
   end
 
-  describe 'DELETE /{organization_id}/requests/:id' do
+  describe 'DELETE /:organization_id/requests/:id' do
     subject { -> { delete organization_request_path(organization, request, as: user) } }
 
     let(:request) { create(:request, organization: organization) }
@@ -410,7 +410,7 @@ RSpec.describe 'Requests', type: :request do
     end
   end
 
-  describe 'GET /{organization_id}/notifications' do
+  describe 'GET /:organization_id/notifications' do
     let(:request) { create(:request, organization: organization) }
     let!(:older_message) { create(:message, request_id: request.id, created_at: 2.minutes.ago) }
     let(:params) { { last_updated_at: 1.minute.ago } }
@@ -571,29 +571,53 @@ RSpec.describe 'Requests', type: :request do
       end
 
       context 'request part of organization' do
+        let(:request) { create(:request, organization: organization) }
+
         describe 'given a number of requests, replies and photos' do
           before(:each) do
-            create_list(:message, 2)
-            delivered_messages = create_list(:message, 7, :outbound, request: request, broadcasted: true)
-            create(:message, :with_file, :outbound, request: request, broadcasted: false,
-                                                    attachment: fixture_file_upload('example-image.png'))
-            # _ is some unresponsive recipient
-            responsive_recipient, _, *other_recipients = delivered_messages.map(&:recipient)
-            create_list(:message, 3, request: request, sender: responsive_recipient)
-            other_recipients.each do |recipient|
-              create(:message, :with_a_photo, sender: recipient, request: request)
-              create(:message, :with_file, sender: recipient, request: request, attachment: fixture_file_upload('example-image.png'))
-              create(:message, :with_file, sender: recipient, request: request,
-                                           attachment: fixture_file_upload('invalid_profile_picture.pdf'))
-            end
-            request.reload
+            contributors = create_list(:contributor, 2, organization: organization)
+            # not counted since they are from another organization's request
+            create_list(:message, 2, request: create(:request, organization: create(:organization)))
+            delivered_messages_from_organization = contributors.collect do |contributor|
+              [create(:message, :outbound, request: request, recipient: contributor, broadcasted: true),
+               create(:message, :with_file, :outbound, request: request, broadcasted: false,
+                                                       recipient: contributor,
+                                                       attachment: fixture_file_upload('example-image.png'))] # outbound files not counted
+            end.flatten
+            responsive_recipient = delivered_messages_from_organization.first.recipient
+            create_list(:message, 2, request: request, sender: responsive_recipient)
+            create(:message, :with_a_photo, sender: responsive_recipient, request: request) # counted
+            create(:message, :with_file, sender: responsive_recipient, request: request,
+                                         attachment: fixture_file_upload('example-image.png')) # counted
+            # Not counted for photos because it's a pdf, counted as a reply because a message record is created
+            create(:message, :with_file, sender: responsive_recipient, request: request,
+                                         attachment: fixture_file_upload('invalid_profile_picture.pdf'))
           end
 
           it 'displays the stats' do
             subject.call
-            expect(page).to have_content('6/8')
-            expect(page).to have_content('18')
-            expect(page).to have_content('10')
+            expect(page).to have_css('.InlineMetrics') do |inline_metrics|
+              # unique contributors replied / recipients of request
+              expect(inline_metrics).to have_css("div[data-testid='unique-contributors-replied-ratio']") do |contributors_replied_ratio|
+                expect(contributors_replied_ratio).to have_css("use[href='/icons.svg#icon-single-03-glyph-24']")
+                expect(contributors_replied_ratio).to have_css('span[class="Metric-value"]', text: '1/2')
+                expect(contributors_replied_ratio).to have_css('span[class="Metric-label"]', text: 'hat geantwortet')
+              end
+
+              # total number of replied messages
+              expect(inline_metrics).to have_css("div[data-testid='total-replies-count']") do |total_replies|
+                expect(total_replies).to have_css("use[href='/icons.svg#icon-a-chat-glyph-24']")
+                expect(total_replies).to have_css('span[class="Metric-value"]', text: '5')
+                expect(total_replies).to have_css('span[class="Metric-label"]', text: 'empfangene Nachricht')
+              end
+
+              # total number of photos
+              expect(inline_metrics).to have_css("div[data-testid='photos-count']") do |photos|
+                expect(photos).to have_css("use[href='/icons.svg#icon-camera-glyph-24']")
+                expect(photos).to have_css('span[class="Metric-value"]', text: '2')
+                expect(photos).to have_css('span[class="Metric-label"]', text: 'empfangene Bilder')
+              end
+            end
           end
         end
       end

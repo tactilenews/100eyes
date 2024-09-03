@@ -83,17 +83,20 @@ class RequestsController < ApplicationController
         value: stats[:counts][:contributors],
         total: stats[:counts][:recipients],
         label: I18n.t('components.request_metrics.contributors', count: stats[:counts][:contributors]),
-        icon: 'single-03'
+        icon: 'single-03',
+        data: { testid: 'unique-contributors-replied-ratio' }
       },
       {
         value: stats[:counts][:replies],
         label: I18n.t('components.request_metrics.replies', count: stats[:counts][:replies]),
-        icon: 'a-chat'
+        icon: 'a-chat',
+        data: { testid: 'total-replies-count' }
       },
       {
         value: stats[:counts][:photos],
         label: I18n.t('components.request_metrics.photos', count: stats[:counts][:photos]),
-        icon: 'camera'
+        icon: 'camera',
+        data: { testid: 'photos-count' }
       }
     ]
     render(InlineMetrics::InlineMetrics.new(metrics: metrics), content_type: 'text/html')
