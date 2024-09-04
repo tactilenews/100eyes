@@ -39,12 +39,12 @@ class Contributor < ApplicationRecord
   validates :whats_app_phone_number, phony_plausible: true
   validates :data_processing_consent, acceptance: true, unless: proc { |c| c.editor_guarantees_data_consent }
 
-  validates :email, uniqueness: { case_sensitive: false, scope: :organization }, allow_nil: true, 'valid_email_2/email': true
-  validates :threema_id, uniqueness: { case_sensitive: false, scope: :organization }, allow_blank: true
-  validates :telegram_chat_id, uniqueness: { scope: :organization }, allow_nil: true
-  validates :telegram_id, uniqueness: { scope: :organization }, allow_nil: true
-  validates :signal_phone_number, uniqueness: { scope: :organization }, allow_nil: true
-  validates :whats_app_phone_number, uniqueness: { scope: :organization }, allow_nil: true
+  validates :email, uniqueness: { case_sensitive: false, scope: :organization_id }, allow_nil: true, 'valid_email_2/email': true
+  validates :threema_id, uniqueness: { case_sensitive: false, scope: :organization_id }, allow_blank: true
+  validates :telegram_chat_id, uniqueness: { scope: :organization_id }, allow_nil: true
+  validates :telegram_id, uniqueness: { scope: :organization_id }, allow_nil: true
+  validates :signal_phone_number, uniqueness: { scope: :organization_id }, allow_nil: true
+  validates :whats_app_phone_number, uniqueness: { scope: :organization_id }, allow_nil: true
 
   validates :avatar, blob: { content_type: ['image/png', 'image/jpg', 'image/jpeg'], size_range: 0..(5.megabytes) }
 
