@@ -293,13 +293,16 @@ de:
       expand: In Originalgröße anzeigen
       editorial_logo: "%{project_name} Logo"
     about:
-      heading: Über 100eyes
+      subheading: powered by 100eyes
       version: "Version %{version} (%{date})"
-      email_from_address: E-Mail-Adresse
+      email_from_address: E-Mail Adresse
       telegram_bot_username: Telegram-Handle
       threemarb_api_identity: Threema-ID
-      signal_server_phone_number: Signal-Handynummer
-      signal_not_set_up: Signal ist für diese Instanz nicht aktiviert.
+      signal_server_phone_number: Signal Handynummer
+      whats_app_phone_number: Whats-App Handynummer
+      not_set_up: "N/A"
+      active: Aktiv
+      inactive: Inaktiv
     gdpr_modal:
       heading: Datenschutz
       text: Für die technische Unterstützung der Webseitenfunktionen benötigen wir Tools, deren Nutzung auf Grundlage unseres Interesses an einer sicheren und effizienten Bereitstellung, Analyse sowie Optimierung unseres Onlineangebotes erfolgt. Nähere Informationen, auch zur Datenverarbeitung außerhalb der EU, finden Sie in <a class="Link" href="%{link}" target="_blank" rel="noreferrer noopener">unserer Datenschutzerklärung</a>.
