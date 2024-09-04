@@ -1,0 +1,22 @@
+<%= c 'main', style: :lightestGrayBackground, **attrs do %>
+  <%= c 'page_header', styles: [:flexboxColumn, :wide, :xlargePaddingTop] do %>
+    <%= c 'heading' do %>
+      <%= t('.main_heading', first_name: current_user.first_name) %>
+    <% end %>
+    <%= c 'heading', tag: :h2 do %>
+      <%= t('.heading') %>
+    <% end %>
+  <% end %>
+
+  <%= c 'section', styles: [:wide, :noSpaceBetween] do %>
+    <ul class="OrganizationsIndex-organizationsList">
+      <% organizations.each do |organization| %>
+        <li>
+          <%= c 'button', link: organization_dashboard_path(organization), styles: [:plain, :underline] do %>
+            <%= organization.name %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+<% end %>
