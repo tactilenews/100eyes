@@ -14,16 +14,6 @@ module Admin
       end
     end
 
-    def update
-      user = User.find(update_params[:id])
-
-      if user.update(update_params[:user])
-        redirect_to admin_user_path(user), flash: { success: 'User was successfully updated.' }
-      else
-        render :edit, status: :unprocessable_entity
-      end
-    end
-
     private
 
     def resource_params
@@ -33,10 +23,6 @@ module Admin
 
       new_password = SecureRandom.alphanumeric(12)
       params.merge(password: new_password)
-    end
-
-    def update_params
-      params.permit(:id, user: %i[first_name last_name email admin otp_enabled active])
     end
   end
 end
