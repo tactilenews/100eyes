@@ -5,6 +5,6 @@ class OrganizationsController < ApplicationController
   layout 'minimal'
 
   def index
-    @organizations = Organization.all
+    @organizations = current_user.admin? ? Organization.all : current_user.organizations
   end
 end
