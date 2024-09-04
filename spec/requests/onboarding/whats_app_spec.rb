@@ -170,7 +170,7 @@ RSpec.describe 'Onboarding::Whatsapp' do
           it 'creates the contributor' do
             expect { subject.call }.to change(Contributor, :count).by(1)
 
-            contributor = Contributor.first
+            contributor = Contributor.unscoped.last
             expect(contributor).to have_attributes(
               first_name: 'Zora',
               last_name: 'Zimmermann',
