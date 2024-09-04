@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Editing requests', js: true do
+RSpec.describe 'Editing requests' do
   let(:organization) { create(:organization) }
   let(:user) { create(:user, organizations: [organization]) }
   let(:sent_request) { create(:request, organization: organization) }
@@ -11,7 +11,7 @@ RSpec.describe 'Editing requests', js: true do
   before(:each) do
     # `broadcast!` is stubbed in tests
     allow(Request).to receive(:broadcast!).and_call_original
-    create(:contributor)
+    create(:contributor, organization: organization)
   end
 
   it 'conditionally allows editing' do

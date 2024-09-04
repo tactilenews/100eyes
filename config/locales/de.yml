@@ -403,7 +403,8 @@ de:
       heading: "Bist du sicher, dass du „%{request_title}” dauerhaft löschen möchtest?"
       cancel: abbrechen
       confirm: löschen
-    set_organization_form:
+    organizations_index:
+      main_heading: "Hallo, %{first_name}!"
       heading: Bitte wähle eine Organisation aus, um fortzufahren
     errors_page:
       alt_text: Otter arbeitet an der Lösung des Problems
@@ -955,7 +956,3 @@ de:
   shared:
     community: Community
     editorial: Redaktion
-
-  organizations:
-    index:
-      heading: "Hallo, %{first_name}!"

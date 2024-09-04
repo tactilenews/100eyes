@@ -1,4 +1,4 @@
-<div class="<%= class_attr %>">
+<div <%= attrs %>>
   <% if total.present? && styles.include?(:large) %>
     <div
       class="Metric-progress"
@@ -7,11 +7,11 @@
   <% end %>
 
   <span class="Metric-icon">
-  <% if custom_icon %>
-    <%= svg custom_icon %>
-  <% else %>
-    <%= c 'icon', icon: icon, style: :inline %>
-  <% end %>
+    <% if custom_icon %>
+      <%= svg custom_icon %>
+    <% else %>
+      <%= c 'icon', icon: icon, style: :inline %>
+    <% end %>
   </span>
 
   <span class="Metric-value">

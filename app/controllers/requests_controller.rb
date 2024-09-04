@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# TODO: Refactor to remove the need to disable rubocop
+# rubocop:disable Metrics/ClassLength
 class RequestsController < ApplicationController
   before_action :set_request, only: %i[show edit update notifications destroy messages_by_contributor stats]
   before_action :notifications_params, only: :notifications
@@ -9,8 +11,8 @@ class RequestsController < ApplicationController
 
   def index
     @filter = filter_param
-    @sent_requests_count = Request.broadcasted.count
-    @planned_requests_count = Request.planned.count
+    @sent_requests_count = @organization.requests.broadcasted.count
+    @planned_requests_count = @organization.requests.planned.count
     @requests = filtered_requests.page(params[:page])
   end
 
@@ -36,7 +38,7 @@ class RequestsController < ApplicationController
   end
 
   def new
-    @request = Request.new(organization: @organization)
+    @request = @organization.requests.new
   end
 
   def edit; end
@@ -44,16 +46,10 @@ class RequestsController < ApplicationController
   def update
     @request.files.purge_later if @request.files.attached? && request_params[:files].blank?
     if @request.update(request_params)
-      if @request.planned?
-        redirect_to organization_requests_path(@request.organization_id, filter: :planned), flash: {
-          success: I18n.t('request.schedule_request_success',
-                          count: Contributor.active.with_tags(@request.tag_list).count,
-                          scheduled_datetime: I18n.l(@request.schedule_send_for, format: :long))
-        }
-      else
-        redirect_to organization_request_path(@request.organization_id, @request),
-                    flash: { success: I18n.t('request.success', count: @request.stats[:counts][:recipients]) }
-      end
+      success_message, filter = update_request_redirect_specifics
+      redirect_to organization_requests_path(@request.organization_id, filter: filter), flash: {
+        success: success_message
+      }
     else
       render :edit, status: :unprocessable_entity
     end
@@ -89,17 +85,20 @@ class RequestsController < ApplicationController
         value: stats[:counts][:contributors],
         total: stats[:counts][:recipients],
         label: I18n.t('components.request_metrics.contributors', count: stats[:counts][:contributors]),
-        icon: 'single-03'
+        icon: 'single-03',
+        data: { testid: 'unique-contributors-replied-ratio' }
       },
       {
         value: stats[:counts][:replies],
         label: I18n.t('components.request_metrics.replies', count: stats[:counts][:replies]),
-        icon: 'a-chat'
+        icon: 'a-chat',
+        data: { testid: 'total-replies-count' }
       },
       {
         value: stats[:counts][:photos],
         label: I18n.t('components.request_metrics.photos', count: stats[:counts][:photos]),
-        icon: 'camera'
+        icon: 'camera',
+        data: { testid: 'photos-count' }
       }
     ]
     render(InlineMetrics::InlineMetrics.new(metrics: metrics), content_type: 'text/html')
@@ -107,12 +106,8 @@ class RequestsController < ApplicationController
 
   private
 
-  def set_contributor
-    @contributor = Contributor.find(params[:contributor_id])
-  end
-
   def set_request
-    @request = Request.find(params[:id])
+    @request = @organization.requests.find(params[:id])
   end
 
   def available_tags
@@ -161,9 +156,22 @@ class RequestsController < ApplicationController
 
   def filtered_requests
     if @filter == :planned
-      Request.planned.reorder(schedule_send_for: :desc).includes(:tags)
+      @organization.requests.planned.reorder(schedule_send_for: :desc).includes(:tags)
     else
-      Request.broadcasted.includes(:tags)
+      @organization.requests.broadcasted.includes(:tags)
+    end
+  end
+
+  def update_request_redirect_specifics
+    if @request.planned?
+      [I18n.t('request.schedule_request_success',
+              count: @request.organization.contributors.active.with_tags(@request.tag_list).count,
+              scheduled_datetime: I18n.l(@request.schedule_send_for, format: :long)),
+       :planned]
+    else
+      [I18n.t('request.success', count: @request.organization.contributors.active.with_tags(@request.tag_list).count),
+       nil]
     end
   end
 end
+# rubocop:enable Metrics/ClassLength

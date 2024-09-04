@@ -1,10 +1,1 @@
-<%= c 'main', style: :lightestGrayBackground do %>
-  <%= c 'page_header', styles: [:wide, :inheritBackgroundColor, :xlargePaddingTop, :spaceBetween] do %>
-    <%= c 'heading' do %>
-      <%= t ".heading", first_name: current_user.first_name %>
-    <% end %>
-  <% end %>
-
-
-  <%= c 'set_organization_form', organizations: @organizations %>
-<% end %>
+<%= c 'organizations_index', current_user: current_user, organizations: @organizations %>
