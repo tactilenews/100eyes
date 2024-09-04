@@ -166,7 +166,7 @@ RSpec.describe 'Onboarding::Whatsapp' do
 
         context 'onboarding contributor has same whats_app_phone_number as other in different organization' do
           before { create(:contributor, whats_app_phone_number: '+491512454567', organization: create(:organization)) }
-          
+
           it 'creates the contributor' do
             expect { subject.call }.to change(Contributor, :count).by(1)
 
