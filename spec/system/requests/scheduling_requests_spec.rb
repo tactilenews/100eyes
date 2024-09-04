@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Scheduling requests', js: true do
+RSpec.describe 'Scheduling requests' do
   let(:user) { create(:user, organizations: [organization]) }
   let(:organization) { create(:organization) }
 
@@ -10,7 +10,7 @@ RSpec.describe 'Scheduling requests', js: true do
     before(:each) do
       # `broadcast!` is stubbed in tests
       allow(Request).to receive(:broadcast!).and_call_original
-      create(:contributor)
+      create(:contributor, organization: organization)
     end
 
     it 'schedules a future job' do
