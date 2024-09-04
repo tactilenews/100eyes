@@ -25,6 +25,8 @@ class Organization < ApplicationRecord
 
   validates :telegram_bot_username, uniqueness: true
 
+  # TODO: what about https://github.com/tactilenews/100eyes/pull/1898/files#diff-0ee28d6592941883dd2f0006587a46e2d9e66ef444ab746cbf3db6a778c6fc60R24
+
   def channels_onboarding_allowed
     {
       email: email_onboarding_allowed?,

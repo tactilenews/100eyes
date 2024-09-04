@@ -108,6 +108,7 @@ class Setting < RailsSettings::Base
   field :threema_unknown_content_message, default: File.read(File.join('config', 'locales', 'threema', 'unknown_content.txt'))
   field :threemarb_api_identity, readonly: true, default: ENV.fetch('THREEMARB_API_IDENTITY', nil)
 
+  # TODO: what about https://github.com/tactilenews/100eyes/pull/1898/files#diff-f1d12f9023a819c8e3bbeb276c8de59f412ed96db88a29f473d3cd06aa262f65R111
   field :signal_server_phone_number, readonly: true, default: ENV.fetch('SIGNAL_SERVER_PHONE_NUMBER', nil)
   field :signal_monitoring_url, readonly: true, default: ENV.fetch('SIGNAL_MONITORING_URL', nil)
   field :signal_cli_rest_api_endpoint, readonly: true, default: ENV['SIGNAL_CLI_REST_API_ENDPOINT'] || 'http://localhost:8080'
