@@ -6,13 +6,13 @@ module WhatsAppAdapter
   class CreateApiKey < ApplicationJob
     def perform(organization_id:, channel_id:)
       @organization = Organization.find_by(id: organization_id)
-      return unless organization && organization.three_sixty_dialog_partner_id.present?
+      return unless organization && ENV.fetch('THREE_SIXTY_DIALOG_PARTNER_ID', nil).present?
 
       @base_uri = ENV.fetch('THREE_SIXTY_DIALOG_PARTNER_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')
 
       token = organization.three_sixty_dialog_partner_token
       fetch_token unless token.present? && organization.updated_at > 24.hours.ago
-      partner_id = organization.three_sixty_dialog_partner_id
+      partner_id = ENV.fetch('THREE_SIXTY_DIALOG_PARTNER_ID', nil)
 
       url = URI.parse(
         "#{base_uri}/partners/#{partner_id}/channels/#{channel_id}/api_keys"
@@ -40,8 +40,8 @@ module WhatsAppAdapter
       }
       request = Net::HTTP::Post.new(url.to_s, headers)
       request.body = {
-        username: organization.three_sixty_dialog_partner_username,
-        password: organization.three_sixty_dialog_partner_password
+        username: ENV.fetch('THREE_SIXTY_DIALOG_PARTNER_USERNAME', nil),
+        password: ENV.fetch('THREE_SIXTY_DIALOG_PARTNER_PASSWORD', nil)
       }.to_json
       response = Net::HTTP.start(url.host, url.port, use_ssl: true) do |http|
         http.request(request)

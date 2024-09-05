@@ -4,7 +4,7 @@ class Organization < ApplicationRecord
   attr_encrypted_options.merge!(key: Base64.decode64(ENV.fetch('ATTR_ENCRYPTED_KEY', nil)))
   attr_encrypted :threemarb_api_secret, :threemarb_private
   attr_encrypted :twilio_api_key_secret
-  attr_encrypted :three_sixty_dialog_partner_password, :three_sixty_dialog_partner_token, :three_sixty_dialog_client_api_key
+  attr_encrypted :three_sixty_dialog_partner_token, :three_sixty_dialog_client_api_key
   attr_encrypted :telegram_bot_api_key
 
   belongs_to :business_plan

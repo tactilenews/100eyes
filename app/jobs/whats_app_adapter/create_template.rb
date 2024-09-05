@@ -71,8 +71,8 @@ module WhatsAppAdapter
       headers = { 'Content-Type': 'application/json' }
       request = Net::HTTP::Post.new(url.to_s, headers)
       request.body = {
-        username: organization.three_sixty_dialog_partner_username,
-        password: organization.three_sixty_dialog_partner_password
+        username: ENV.fetch('THREE_SIXTY_DIALOG_PARTNER_USERNAME', nil),
+        password: ENV.fetch('THREE_SIXTY_DIALOG_PARTNER_PASSWORD', nil)
       }.to_json
       response = Net::HTTP.start(url.host, url.port, use_ssl: true) do |http|
         http.request(request)
