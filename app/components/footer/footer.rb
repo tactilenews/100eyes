@@ -3,9 +3,9 @@
 module Footer
   class Footer < ApplicationComponent
     def initialize(organization:)
-      @organization = organization
-
       super
+
+      @organization = organization
     end
 
     attr_reader :organization
