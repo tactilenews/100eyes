@@ -41,7 +41,6 @@ class Contributor < ApplicationRecord
 
   validates :email, uniqueness: { case_sensitive: false, scope: :organization }, allow_nil: true, 'valid_email_2/email': true
   validates :threema_id, uniqueness: { case_sensitive: false, scope: :organization }, allow_blank: true
-  validates :telegram_chat_id, uniqueness: { scope: :organization }, allow_nil: true
   validates :telegram_id, uniqueness: { scope: :organization }, allow_nil: true
   validates :signal_phone_number, uniqueness: { scope: :organization }, allow_nil: true
   validates :whats_app_phone_number, uniqueness: { scope: :organization }, allow_nil: true

@@ -130,12 +130,6 @@ RSpec.describe Contributor, type: :model do
     end
   end
 
-  describe '#telegram_chat_id' do
-    it_behaves_like 'unique within an organization' do
-      let(:attrs) { { telegram_chat_id: 111 } }
-    end
-  end
-
   describe '#whats_app_phone_number' do
     it_behaves_like 'unique within an organization' do
       let(:attrs) { { whats_app_phone_number: '+491511234567' } }
