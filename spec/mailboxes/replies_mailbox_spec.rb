@@ -28,7 +28,7 @@ RSpec.describe RepliesMailbox, type: :mailbox do
   }
 
   describe 'given a contributor' do
-    let(:contributor) { create(:contributor, email: 'zora@example.org') }
+    let(:contributor) { create(:contributor, email: 'zora@example.org', organization: organization) }
     before(:each) { contributor }
 
     it { should_not(change { Message.count }) }
@@ -36,7 +36,7 @@ RSpec.describe RepliesMailbox, type: :mailbox do
     describe 'given an active request' do
       let(:request) { create(:request, title: 'Wie geht es euren Haustieren in Corona-Zeiten?', organization: organization) }
       before(:each) { create(:message, request: request, sender: nil, recipient: contributor, broadcasted: true) }
-      let!(:admin) { create(:user, admin: true) }
+      let!(:admin) { create(:user, admin: true, organizations: [organization]) }
 
       it { should(change { Message.count }.from(1).to(2)) }
 
