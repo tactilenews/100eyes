@@ -60,7 +60,7 @@ class Organization < ApplicationRecord
   end
 
   def email_onboarding_allowed?
-    ENV.fetch('POSTMARK_API_TOKEN', nil).present? && onboarding_allowed?(:email)
+    ENV.fetch('POSTMARK_API_TOKEN', nil).present? && email_from_address.present? && onboarding_allowed?(:email)
   end
 
   def signal_onboarding_allowed?

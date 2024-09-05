@@ -1,25 +1,34 @@
-<%= c 'stack', **attrs do %>
-  <div>
-    <%= c('heading', tag: :h1) { t('.heading') } %>
+<main <%= attrs %>>
+  <article class="About-card">
+    <header class="About-cardHeader">
+      <%= c('heading', tag: :h1) { organization.name } %>
+      <%= c('heading', tag: :h2) { t('.subheading') } %>
 
-    <% if ENV.fetch('GIT_COMMIT_SHA', nil).present? && ENV.fetch('GIT_COMMIT_SHA', nil).present? %>
-      <p class="text-small text-light">
-        <%= t('.version', version: version, date: date) %>
-      </p>
-    <% end %>
-  </div>
 
-  <dl>
-    <dt><%= t('.email_from_address') %></dt>
-    <dd><%= organization.email_from_address %></dd>
+      <% if ENV.fetch('GIT_COMMIT_SHA', nil).present? && ENV.fetch('GIT_COMMIT_SHA', nil).present? %>
+        <p class="text-small text-light">
+          <%= t('.version', version: version, date: date) %>
+        </p>
+      <% end %>
+    </header>
 
-    <dt><%= t('.telegram_bot_username') %></dt>
-    <dd><%= organization.telegram_bot_username %></dd>
+    <section>
+      <dl>
+        <dt><%= t('.email_from_address') %></dt>
+        <dd><%= channel_status(:email) %></dd>
 
-    <dt><%= t('.threemarb_api_identity') %></dt>
-    <dd><%= organization.threemarb_api_identity %></dd>
+        <dt><%= t('.telegram_bot_username') %></dt>
+        <dd><%= channel_status(:telegram) %></dd>
 
-    <dt><%= t('.signal_server_phone_number') %></dt>
-    <dd><%= organization.signal_server_phone_number&.phony_formatted || t('.signal_not_set_up') %></dd>
-  </dl>
-<% end %>
+        <dt><%= t('.threemarb_api_identity') %></dt>
+        <dd><%= channel_status(:threema) %></dd>
+
+        <dt><%= t('.signal_server_phone_number') %></dt>
+        <dd><%= channel_status(:signal) %></dd>
+
+        <dt><%= t('.whats_app_phone_number') %></dt>
+        <dd><%= channel_status(:whats_app) %></dd>
+      </dl>
+    </section>
+  </article>
+</main>

@@ -28,7 +28,7 @@ RSpec.describe RepliesMailbox, type: :mailbox do
   }
 
   describe 'given a contributor' do
-    let(:contributor) { create(:contributor, email: 'zora@example.org') }
+    let(:contributor) { create(:contributor, email: 'zora@example.org', organization: organization) }
     before(:each) { contributor }
 
     it { should_not(change { Message.count }) }
