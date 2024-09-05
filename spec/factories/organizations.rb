@@ -13,6 +13,7 @@ FactoryBot.define do
     signal_server_phone_number { Faker::PhoneNumber.unique.cell_phone_in_e164 }
     whats_app_server_phone_number { Faker::PhoneNumber.unique.cell_phone_in_e164 }
     telegram_bot_username { Faker::Internet.unique.username }
+    email_from_address { Faker::Internet.email }
 
     transient do
       users_count { 0 }
