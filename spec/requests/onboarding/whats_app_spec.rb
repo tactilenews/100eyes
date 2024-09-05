@@ -22,6 +22,8 @@ RSpec.describe 'Onboarding::Whatsapp' do
   let(:onboarding_allowed) { { whats_app: true } }
   let(:params) { { jwt: jwt } }
   let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding', organization_id: organization.id }) }
+  # onboarding should work also when a contributor in another organization has the same number
+  let!(:existing_contributor) { create(:contributor, whats_app_phone_number: '+491512454567') }
 
   describe 'GET /{organization_id}/onboarding/whatsapp' do
     subject { -> { get organization_onboarding_whats_app_path(organization), params: params } }
@@ -90,7 +92,7 @@ RSpec.describe 'Onboarding::Whatsapp' do
       {
         first_name: 'Zora',
         last_name: 'Zimmermann',
-        whats_app_phone_number: '01512454567',
+        whats_app_phone_number: '+491512454567',
         data_processing_consent: true
       }
     end
@@ -123,7 +125,7 @@ RSpec.describe 'Onboarding::Whatsapp' do
         it 'creates the contributor' do
           expect { subject.call }.to change(Contributor, :count).by(1)
 
-          contributor = Contributor.first
+          contributor = Contributor.unscoped.last
           expect(contributor).to have_attributes(
             first_name: 'Zora',
             last_name: 'Zimmermann',
@@ -143,7 +145,7 @@ RSpec.describe 'Onboarding::Whatsapp' do
 
           expect(WhatsAppAdapter::TwilioOutbound::Text).to have_been_enqueued.with(
             organization_id: organization.id,
-            contributor_id: Contributor.first.id,
+            contributor_id: Contributor.unscoped.last.id,
             text: welcome_message
           )
         end
@@ -162,26 +164,6 @@ RSpec.describe 'Onboarding::Whatsapp' do
 
         context 'creates an ActivityNotification' do
           it_behaves_like 'an ActivityNotification', 'OnboardingCompleted', 3
-        end
-
-        context 'onboarding contributor has same whats_app_phone_number as other in different organization' do
-          before { create(:contributor, whats_app_phone_number: '+491512454567', organization: create(:organization)) }
-
-          it 'creates the contributor' do
-            expect { subject.call }.to change(Contributor, :count).by(1)
-
-            contributor = Contributor.unscoped.last
-            expect(contributor).to have_attributes(
-              first_name: 'Zora',
-              last_name: 'Zimmermann',
-              whats_app_phone_number: '+491512454567',
-              data_processing_consent: true,
-              organization: organization
-            )
-            expect(contributor.json_web_token).to have_attributes(
-              invalidated_jwt: jwt
-            )
-          end
         end
       end
     end
@@ -203,7 +185,7 @@ RSpec.describe 'Onboarding::Whatsapp' do
         let(:welcome_message_payload) do
           {
             recipient_type: 'individual',
-            to: Contributor.first.whats_app_phone_number.split('+').last,
+            to: Contributor.unscoped.last.whats_app_phone_number.split('+').last,
             type: 'template',
             template: {
               namespace: organization.three_sixty_dialog_whats_app_template_namespace,
@@ -230,7 +212,7 @@ RSpec.describe 'Onboarding::Whatsapp' do
         it 'creates the contributor' do
           expect { subject.call }.to change(Contributor, :count).by(1)
 
-          contributor = Contributor.first
+          contributor = Contributor.unscoped.last
           expect(contributor).to have_attributes(
             first_name: 'Zora',
             last_name: 'Zimmermann',
