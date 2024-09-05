@@ -11,6 +11,8 @@ RSpec.describe 'Onboarding::Email', type: :request do
   let(:organization) { create(:organization, onboarding_allowed: onboarding_allowed, users_count: 1) }
   let!(:admin) { create_list(:user, 2, admin: true) }
   let(:onboarding_allowed) { { email: false } }
+  # onboarding should work also with another contributor with same email in another organization
+  let!(:other_contributor) { create(:contributor, email: 'zora@example.org') }
 
   describe 'GET /{organization_id}/onboarding/email' do
     subject { -> { get organization_onboarding_email_path(organization, jwt: jwt) } }
@@ -71,7 +73,7 @@ RSpec.describe 'Onboarding::Email', type: :request do
       it 'creates contributor' do
         expect { subject.call }.to change(Contributor, :count).by(1)
 
-        contributor = Contributor.first
+        contributor = Contributor.unscoped.last
         expect(contributor).to have_attributes(
           first_name: 'Zora',
           last_name: 'Zimmermann',
@@ -156,7 +158,7 @@ RSpec.describe 'Onboarding::Email', type: :request do
         it 'creates contributor without additional consent' do
           expect { subject.call }.to change(Contributor, :count).by(1)
 
-          contributor = Contributor.first
+          contributor = Contributor.unscoped.last
           expect(contributor).to have_attributes(
             first_name: 'Zora',
             last_name: 'Zimmermann',
