@@ -1,0 +1,35 @@
+.About {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  width: 100%;
+  min-height: 100vh;
+  padding: var(--spacing-unit);
+  background-color: var(--color-gray-light);
+  background-attachment: fixed;
+  background-image: linear-gradient(
+    to bottom,
+    var(--color-blue-dark) 45%,
+    transparent 45%
+  );
+}
+
+.About-card {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 2px 20px rgba(0, 0, 0, 0.1);
+  border-radius: var(--border-radius);
+  transition: 0.15s all ease-in-out;
+  background-color: #fff;
+  width: 100%;
+  max-width: var(--grid-max-width-xs);
+  margin-left: auto;
+  margin-right: auto;
+  padding: var(--spacing-unit-l);
+}
+
+.About-cardHeader {
+  margin-bottom: var(--spacing-unit);
+}
