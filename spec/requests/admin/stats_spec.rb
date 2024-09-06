@@ -18,7 +18,7 @@ RSpec.describe 'Stats' do
       subject.call
     end
 
-    it 'admin edits contributor', flaky: true do
+    it 'can view stats of how many contributors for each messenger' do
       expect(page).to have_content('Email contributors: 1')
       expect(page).to have_content('Threema contributors: 1')
       expect(page).to have_content('Telegram contributors: 2')
