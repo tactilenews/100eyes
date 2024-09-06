@@ -16,10 +16,13 @@ RSpec.describe 'Onboarding::Threema', type: :request do
   let(:params) { { jwt: jwt } }
   let(:threema) { instance_double(Threema) }
   let(:threema_lookup_double) { instance_double(Threema::Lookup) }
+
   before do
     allow(Threema).to receive(:new).and_return(threema)
     allow(Threema::Lookup).to receive(:new).with({ threema: threema }).and_return(threema_lookup_double)
     allow(threema_lookup_double).to receive(:key).and_return('PUBLIC_KEY_HEX_ENCODED')
+    # onboarding works with an existing contributor with the same threema id in another organization
+    create(:contributor, threema_id: 'ABCD1234')
   end
 
   describe 'GET /{organization}/onboarding/threema' do
@@ -95,7 +98,7 @@ RSpec.describe 'Onboarding::Threema', type: :request do
       it 'creates contributor' do
         expect { subject.call }.to change(Contributor, :count).by(1)
 
-        contributor = Contributor.first
+        contributor = Contributor.unscoped.last
         expect(contributor).to have_attributes(
           first_name: 'Zora',
           last_name: 'Zimmermann',
@@ -149,8 +152,8 @@ RSpec.describe 'Onboarding::Threema', type: :request do
         end
       end
 
-      describe 'given an existing threema ID' do
-        let!(:contributor) { create(:contributor, **attrs, organization: organization) }
+      describe 'given an existing threema ID for an organization' do
+        let!(:contributor) { create(:contributor, organization: organization, **attrs) }
 
         it 'redirects to success page' do
           subject.call
@@ -196,7 +199,7 @@ RSpec.describe 'Onboarding::Threema', type: :request do
         it 'creates contributor without additional consent' do
           expect { subject.call }.to change(Contributor, :count).by(1)
 
-          contributor = Contributor.first
+          contributor = Contributor.unscoped.last
           expect(contributor).to have_attributes(
             first_name: 'Zora',
             last_name: 'Zimmermann',

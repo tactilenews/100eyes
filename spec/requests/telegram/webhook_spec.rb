@@ -116,13 +116,23 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
 
         context 'and sends telegram_onboarding_token' do
           let(:message) { " \n  GHIJKL  \t " }
+
+          # onboarding should work also with another contributor with same telegram_id in another organization
+          before { create(:contributor, telegram_id: 12_345, organization: create(:organization)) }
+
           it { expect { subject.call }.to respond_with_message "<b>Welcome new contributor!</b>\n" }
           it { expect { subject.call }.to(change { contributor.reload.telegram_id }.from(nil).to(12_345)) }
 
           describe 'treats message case-insensitive' do
             let(:message) { " \n  GhIjKl  \t " }
-            it { expect { subject.call }.to respond_with_message "<b>Welcome new contributor!</b>\n" }
-            it { expect { subject.call }.to(change { contributor.reload.telegram_id }.from(nil).to(12_345)) }
+
+            it 'sends the welcome message' do
+              expect { subject.call }.to respond_with_message "<b>Welcome new contributor!</b>\n"
+            end
+
+            it "updates the contributor's telegram_id" do
+              expect { subject.call }.to(change { contributor.reload.telegram_id }.from(nil).to(12_345))
+            end
           end
 
           context 'even if other contributors are not connected yet' do

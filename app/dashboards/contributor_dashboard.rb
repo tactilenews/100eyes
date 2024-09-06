@@ -68,7 +68,7 @@ class ContributorDashboard < Administrate::BaseDashboard
 
   COLLECTION_FILTERS = {
     email: ->(resources) { resources.where.not(email: nil) },
-    telegram: ->(resources) { resources.where.not(telegram_chat_id: nil) },
+    telegram: ->(resources) { resources.where.not(telegram_id: nil) },
     threema: ->(resources) { resources.where.not(threema_id: nil) },
     signal: ->(resources) { resources.where.not(signal_phone_number: nil) }
   }.freeze
