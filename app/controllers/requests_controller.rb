@@ -22,15 +22,16 @@ class RequestsController < ApplicationController
     resize_image_files if request_params[:files].present?
     @request = @organization.requests.new(request_params.merge(user: current_user))
     if @request.save
+      recipient_count = @request.organization.contributors.active.with_tags(@request.tag_list).count
       if @request.planned?
         redirect_to organization_requests_path(@organization, filter: :planned), flash: {
           success: I18n.t('request.schedule_request_success',
-                          count: Contributor.active.with_tags(@request.tag_list).count,
+                          count: recipient_count,
                           scheduled_datetime: I18n.l(@request.schedule_send_for, format: :long))
         }
       else
         redirect_to organization_request_path(@organization.id, @request),
-                    flash: { success: I18n.t('request.success', count: @request.stats[:counts][:recipients]) }
+                    flash: { success: I18n.t('request.success', count: recipient_count) }
       end
     else
       render :new, status: :unprocessable_entity
