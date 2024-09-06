@@ -8,7 +8,7 @@ class BroadcastRequestJob < ApplicationJob
     return unless request
     return if request.broadcasted_at.present?
 
-    if request.planned? # rescheduled for future after this job was created
+    if request.planned? # reschedule for future
       BroadcastRequestJob.delay(run_at: request.schedule_send_for).perform_later(request.id)
       return
     end
@@ -22,6 +22,7 @@ class BroadcastRequestJob < ApplicationJob
         broadcasted: true
       )
       message.files = Request.attach_files(request.files) if request.files.attached?
+
       message.save!
     end
     request.update(broadcasted_at: Time.current)
