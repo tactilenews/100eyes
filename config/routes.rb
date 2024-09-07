@@ -17,14 +17,6 @@ Rails.application.routes.draw do
       post '/three-sixty-dialog-webhook', to: 'three_sixty_dialog_webhook#message'
     end
 
-    resources :invites, only: :create
-
-    get '/search', to: 'search#index'
-
-    scope module: 'organizations' do
-      get '/dashboard', to: 'dashboard#index'
-    end
-
     resources :requests, only: %i[index show new create edit update destroy], concerns: :paginatable do
       member do
         get 'notifications', format: /json/
@@ -33,23 +25,30 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :messages, only: %i[new create edit update] do
-      member do
-        scope module: :messages, as: :message do
-          resource :highlight, only: :update, format: /json/
-          resource :request, only: %i[show update]
-        end
+    scope module: 'organizations' do
+      get '/about', to: 'about#index'
+
+      get '/dashboard', to: 'dashboard#index'
+
+      get '/profile', to: 'profile#index'
+      post '/profile/user', to: 'profile#create_user'
+      put '/profile/upgrade_business_plan', to: 'profile#upgrade_business_plan'
+
+      get '/search', to: 'search#index'
+
+      get '/settings', to: 'settings#index'
+      patch '/settings', to: 'settings#update'
+
+      namespace :charts do
+        get 'day-and-time-replies'
+        get 'day-and-time-requests'
+        get 'day-requests-replies'
       end
-    end
 
-    get '/settings', to: 'settings#index'
-    patch '/settings', to: 'settings#update'
+      namespace :onboarding do
+        get '/', to: 'base#index'
+        get '/success', to: 'base#success'
 
-    namespace :onboarding, module: nil do
-      get '/', to: 'onboarding#index'
-      get '/success', to: 'onboarding#success'
-
-      scope module: :onboarding do
         get '/email', to: 'email#show'
         post '/email', to: 'email#create'
 
@@ -68,30 +67,29 @@ Rails.application.routes.draw do
         get '/whats-app/', to: 'whats_app#show'
         post '/whats-app/', to: 'whats_app#create'
       end
-    end
 
-    namespace :charts do
-      get 'day-and-time-replies'
-      get 'day-and-time-requests'
-      get 'day-requests-replies'
-    end
+      resources :contributors, only: %i[index show edit update], concerns: :paginatable do
+        member do
+          get 'conversations'
+          post 'message'
+        end
 
-    resources :contributors, module: 'organizations', only: %i[index show edit update], concerns: :paginatable do
-      member do
-        get 'conversations'
-        post 'message'
+        collection do
+          get 'count'
+        end
       end
 
-      collection do
-        get 'count'
+      resources :invites, only: :create
+
+      resources :messages, only: %i[new create edit update] do
+        member do
+          scope module: :messages, as: :message do
+            resource :highlight, only: :update, format: /json/
+            resource :request, only: %i[show update]
+          end
+        end
       end
     end
-
-    get '/profile', to: 'profile#index'
-    post '/profile/user', to: 'profile#create_user'
-    put '/profile/upgrade_business_plan', to: 'profile#upgrade_business_plan'
-
-    get '/about', to: 'about#index'
   end
 
   get '/health', to: 'health#index'

@@ -27,7 +27,7 @@ RSpec.describe 'Errors' do
 
     let(:message) { create(:message, creator_id: user.id, organization: organization) }
     before do
-      allow_any_instance_of(MessagesController).to receive(:update).and_raise(StandardError)
+      allow_any_instance_of(Organizations::MessagesController).to receive(:update).and_raise(StandardError)
     end
 
     it 'should return status code' do
