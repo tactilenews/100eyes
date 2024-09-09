@@ -28,7 +28,8 @@ class OrganizationDashboard < Administrate::BaseDashboard
     onboarding_additional_consent_heading: Field::String,
     onboarding_additional_consent_text: Field::String,
     channel_image: Field::ActiveStorage,
-    whats_app_profile_about: Field::Text
+    whats_app_profile_about: Field::Text,
+    email_from_address: Field::Email
   }.freeze
 
   COLLECTION_ATTRIBUTES = %i[
@@ -47,6 +48,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
     created_at
     updated_at
     upgraded_business_plan_at
+    email_from_address
   ].freeze
 
   FORM_ATTRIBUTES_NEW = %i[
@@ -63,6 +65,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
     onboarding_additional_consent_text
     onboarding_allowed
     channel_image
+    email_from_address
   ].freeze
 
   FORM_ATTRIBUTES_EDIT = %i[
