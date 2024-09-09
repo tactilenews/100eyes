@@ -53,7 +53,7 @@ RSpec.describe 'Organization management' do
                                                        email_from_address: 'redaktion@100ey.es' } })
         end
 
-        it 'allows configuring email_from_address' do
+        it 'allows configuration of Email specific attrs' do
           subject.call
           follow_redirect!
           expect(page).to have_content('I have an email')
@@ -67,7 +67,7 @@ RSpec.describe 'Organization management' do
                                                        telegram_bot_username: 'unique_username_bot' } })
         end
 
-        it 'allows configuring Telegram' do
+        it 'allows configuration of Telegram specific attrs' do
           subject.call
           follow_redirect!
           expect(page).to have_content('unique_username_bot')
@@ -84,7 +84,7 @@ RSpec.describe 'Organization management' do
                                                        threemarb_private: 'valid_private_key' } })
         end
 
-        it 'allows configuring Threema' do
+        it 'allows configuration of Threema specific attrs' do
           subject.call
           follow_redirect!
           expect(page).to have_content('*APIIDENT')
@@ -109,7 +109,7 @@ RSpec.describe 'Organization management' do
           required_params.deep_merge({ organization: whats_app_params })
         end
 
-        it 'allows configuring Twilio WhatsApp' do
+        it 'allows configuration of Twilio specific attrs' do
           subject.call
           follow_redirect!
 
