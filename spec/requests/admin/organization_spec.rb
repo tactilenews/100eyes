@@ -76,6 +76,25 @@ RSpec.describe 'Organization management' do
           expect(organization.telegram_bot_api_key).to eq('valid_api_key')
         end
       end
+
+      context 'Threema' do
+        let(:params) do
+          required_params.deep_merge({ organization: { threemarb_api_identity: '*APIIDENT',
+                                                       threemarb_api_secret: 'valid_secret',
+                                                       threemarb_private: 'valid_private_key' } })
+        end
+
+        it 'allows configuring Threema' do
+          subject.call
+          follow_redirect!
+          expect(page).to have_content('*APIIDENT')
+          expect(page).not_to have_content('valid_secret')
+          expect(page).not_to have_content('valid_private_key')
+
+          organization = Organization.find_by(threemarb_api_identity: '*APIIDENT')
+          expect(organization).to have_attributes(threemarb_api_secret: 'valid_secret', threemarb_private: 'valid_private_key')
+        end
+      end
     end
   end
 end
