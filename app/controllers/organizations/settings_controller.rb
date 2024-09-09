@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Organizations
   class SettingsController < ApplicationController
     def index; end

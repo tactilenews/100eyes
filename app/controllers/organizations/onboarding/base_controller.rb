@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Organizations
   module Onboarding
     class BaseController < ApplicationController
