@@ -32,6 +32,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
     whats_app_profile_about: Field::Text,
     signal_complete_onboarding_link: Field::Url,
     whats_app_quick_reply_button_text: Field::JSONB
+    email_from_address: Field::Email,
   }.freeze
 
   COLLECTION_ATTRIBUTES = %i[
@@ -51,6 +52,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
     updated_at
     upgraded_business_plan_at
     whats_app_more_info_message
+    email_from_address
   ].freeze
 
   FORM_ATTRIBUTES_NEW = %i[
@@ -67,6 +69,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
     onboarding_additional_consent_text
     onboarding_allowed
     channel_image
+    email_from_address
   ].freeze
 
   FORM_ATTRIBUTES_EDIT = %i[

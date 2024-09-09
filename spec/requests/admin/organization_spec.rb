@@ -6,7 +6,10 @@ RSpec.describe 'Organization management' do
   context 'POST /admin/organizations' do
     subject { -> { post admin_organizations_path(as: user), params: params } }
 
-    let(:params) { { organization: { business_plan_id: create(:business_plan).id } } }
+    let(:business_plan) { create(:business_plan) }
+    let(:required_params) { { organization: { name: 'Find by my name', business_plan_id: business_plan.id } } }
+    let(:params) { required_params }
+
     context 'unauthenticated' do
       let(:user) { nil }
 
@@ -32,9 +35,30 @@ RSpec.describe 'Organization management' do
         expect { subject.call }.to change(Organization, :count).from(0).to(1)
       end
 
+      it 'assigns the business plan to the organization' do
+        subject.call
+        organization = Organization.find_by(name: 'Find by my name')
+        expect(organization.business_plan).to eq(business_plan)
+      end
+
       it "redirect to organization's show page" do
         subject.call
-        expect(response).to redirect_to(admin_organization_path(Organization.last))
+        organization = Organization.find_by(name: 'Find by my name')
+        expect(response).to redirect_to(admin_organization_path(organization))
+      end
+
+      context 'Email' do
+        let(:params) do
+          required_params.deep_merge({ organization: { name: 'I have an email',
+                                                       email_from_address: 'redaktion@100ey.es' } })
+        end
+
+        it 'allows configuring email_from_address' do
+          subject.call
+          follow_redirect!
+          expect(page).to have_content('I have an email')
+          expect(page).to have_content('redaktion@100ey.es')
+        end
       end
     end
   end
