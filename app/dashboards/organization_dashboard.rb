@@ -31,7 +31,10 @@ class OrganizationDashboard < Administrate::BaseDashboard
     whats_app_profile_about: Field::Text,
     email_from_address: Field::Email,
     telegram_bot_username: Field::Text,
-    telegram_bot_api_key: Field::Text
+    telegram_bot_api_key: Field::Text,
+    threemarb_api_identity: Field::Text,
+    threemarb_api_secret: Field::Password,
+    threemarb_private: Field::Password
   }.freeze
 
   COLLECTION_ATTRIBUTES = %i[
@@ -52,6 +55,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
     upgraded_business_plan_at
     email_from_address
     telegram_bot_username
+    threemarb_api_identity
   ].freeze
 
   FORM_ATTRIBUTES_NEW = %i[
@@ -71,6 +75,9 @@ class OrganizationDashboard < Administrate::BaseDashboard
     email_from_address
     telegram_bot_username
     telegram_bot_api_key
+    threemarb_api_identity
+    threemarb_api_secret
+    threemarb_private
   ].freeze
 
   FORM_ATTRIBUTES_EDIT = %i[
