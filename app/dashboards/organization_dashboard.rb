@@ -50,6 +50,22 @@ class OrganizationDashboard < Administrate::BaseDashboard
     upgraded_business_plan_at
   ].freeze
 
+  FORM_ATTRIBUTES_NEW = %i[
+    name
+    contact_person
+    business_plan
+    upgrade_discount
+    whats_app_profile_about
+    onboarding_data_protection_link
+    onboarding_data_processing_consent_additional_info
+    onboarding_imprint_link
+    onboarding_ask_for_additional_consent
+    onboarding_additional_consent_heading
+    onboarding_additional_consent_text
+    onboarding_allowed
+    channel_image
+  ].freeze
+
   FORM_ATTRIBUTES_EDIT = %i[
     name
     contact_person
