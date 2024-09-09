@@ -63,7 +63,7 @@ RSpec.describe 'Onboarding::Telegram', type: :request do
   end
 
   describe 'POST /{organization_id}/onboarding/telegram' do
-    let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding', organization_id: organization.id }) }
+    let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
     let(:params) { { jwt: jwt } }
     let(:data_processing_consent) { true }
     let(:additional_consent) { true }

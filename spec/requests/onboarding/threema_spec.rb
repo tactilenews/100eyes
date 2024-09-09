@@ -12,7 +12,7 @@ RSpec.describe 'Onboarding::Threema', type: :request do
   end
   let!(:admin) { create_list(:user, 2, admin: true) }
   let(:onboarding_allowed) { { threema: true } }
-  let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding', organization_id: organization.id }) }
+  let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
   let(:params) { { jwt: jwt } }
   let(:threema) { instance_double(Threema) }
   let(:threema_lookup_double) { instance_double(Threema::Lookup) }

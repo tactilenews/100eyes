@@ -21,7 +21,7 @@ RSpec.describe 'Onboarding::Whatsapp' do
   let(:three_sixty_dialog_client_api_key) { nil }
   let(:onboarding_allowed) { { whats_app: true } }
   let(:params) { { jwt: jwt } }
-  let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding', organization_id: organization.id }) }
+  let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
   # onboarding should work also when a contributor in another organization has the same number
   let!(:existing_contributor) { create(:contributor, whats_app_phone_number: '+491512454567') }
 

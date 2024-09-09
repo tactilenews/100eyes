@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'GDPR modal' do
   let(:organization) { create(:organization) }
-  let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding', organization_id: organization.id }) }
+  let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
 
   it 'visiting onboarding page' do
     visit organization_onboarding_path(organization, jwt: jwt)
