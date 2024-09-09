@@ -95,6 +95,33 @@ RSpec.describe 'Organization management' do
           expect(organization).to have_attributes(threemarb_api_secret: 'valid_secret', threemarb_private: 'valid_private_key')
         end
       end
+
+      context 'WhatsApp Twilio' do
+        let(:whats_app_params) do
+          {
+            whats_app_server_phone_number: '+4912345678',
+            twilio_account_sid: 'valid_account_sid',
+            twilio_api_key_sid: 'valid_api_key_sid',
+            twilio_api_key_secret: 'valid_secret'
+          }
+        end
+        let(:params) do
+          required_params.deep_merge({ organization: whats_app_params })
+        end
+
+        it 'allows configuring Twilio WhatsApp' do
+          subject.call
+          follow_redirect!
+
+          expect(page).to have_content('+4912345678')
+          expect(page).to have_content('valid_account_sid')
+          expect(page).to have_content('valid_api_key_sid')
+          expect(page).not_to have_content('valid_secret')
+
+          organization = Organization.find_by(whats_app_server_phone_number: '+4912345678')
+          expect(organization).to have_attributes(whats_app_params)
+        end
+      end
     end
   end
 end
