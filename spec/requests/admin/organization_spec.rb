@@ -60,6 +60,22 @@ RSpec.describe 'Organization management' do
           expect(page).to have_content('redaktion@100ey.es')
         end
       end
+
+      context 'Telegram' do
+        let(:params) do
+          required_params.deep_merge({ organization: { telegram_bot_api_key: 'valid_api_key',
+                                                       telegram_bot_username: 'unique_username_bot' } })
+        end
+
+        it 'allows configuring Telegram' do
+          subject.call
+          follow_redirect!
+          expect(page).to have_content('unique_username_bot')
+          expect(page).not_to have_content('valid_api_key')
+          organization = Organization.find_by(telegram_bot_username: 'unique_username_bot')
+          expect(organization.telegram_bot_api_key).to eq('valid_api_key')
+        end
+      end
     end
   end
 end
