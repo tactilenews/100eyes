@@ -30,7 +30,9 @@ class OrganizationDashboard < Administrate::BaseDashboard
     channel_image: Field::ActiveStorage,
     whats_app_profile_about: Field::Text,
     email_from_address: Field::Email,
-    signal_complete_onboarding_link: Field::Url
+    telegram_bot_username: Field::Text,
+    telegram_bot_api_key: Field::Text
+    signal_complete_onboarding_link: Field::Url,
   }.freeze
 
   COLLECTION_ATTRIBUTES = %i[
@@ -50,6 +52,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
     updated_at
     upgraded_business_plan_at
     email_from_address
+    telegram_bot_username
   ].freeze
 
   FORM_ATTRIBUTES_NEW = %i[
@@ -67,6 +70,8 @@ class OrganizationDashboard < Administrate::BaseDashboard
     onboarding_allowed
     channel_image
     email_from_address
+    telegram_bot_username
+    telegram_bot_api_key
   ].freeze
 
   FORM_ATTRIBUTES_EDIT = %i[
