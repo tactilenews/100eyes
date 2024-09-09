@@ -28,7 +28,11 @@ class OrganizationDashboard < Administrate::BaseDashboard
     telegram_bot_api_key: Field::Password,
     threemarb_api_identity: Field::String,
     threemarb_api_secret: Field::Password,
-    threemarb_private: Field::Password
+    threemarb_private: Field::Password,
+    whats_app_server_phone_number: Field::String,
+    twilio_account_sid: Field::String,
+    twilio_api_key_sid: Field::String,
+    twilio_api_key_secret: Field::Password
   }.freeze
 
   COLLECTION_ATTRIBUTES = %i[
@@ -50,6 +54,9 @@ class OrganizationDashboard < Administrate::BaseDashboard
     email_from_address
     telegram_bot_username
     threemarb_api_identity
+    whats_app_server_phone_number
+    twilio_account_sid
+    twilio_api_key_sid
   ].freeze
 
   FORM_ATTRIBUTES_NEW = %i[
@@ -72,6 +79,10 @@ class OrganizationDashboard < Administrate::BaseDashboard
     threemarb_api_identity
     threemarb_api_secret
     threemarb_private
+    whats_app_server_phone_number
+    twilio_account_sid
+    twilio_api_key_sid
+    twilio_api_key_secret
   ].freeze
 
   FORM_ATTRIBUTES_EDIT = %i[
