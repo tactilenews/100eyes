@@ -54,6 +54,9 @@ class OrganizationDashboard < Administrate::BaseDashboard
     email_from_address
     telegram_bot_username
     threemarb_api_identity
+    whats_app_server_phone_number
+    twilio_account_sid
+    twilio_api_key_sid
   ].freeze
 
   FORM_ATTRIBUTES_NEW = %i[
@@ -76,6 +79,10 @@ class OrganizationDashboard < Administrate::BaseDashboard
     threemarb_api_identity
     threemarb_api_secret
     threemarb_private
+    whats_app_server_phone_number
+    twilio_account_sid
+    twilio_api_key_sid
+    twilio_api_key_secret
   ].freeze
 
   FORM_ATTRIBUTES_EDIT = %i[
