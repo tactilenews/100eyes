@@ -15,13 +15,13 @@ RSpec.describe 'Onboarding' do
            onboarding_allowed: { threema: true, telegram: true, email: false, signal: true, whats_app: true })
   end
   let(:invalidated_jwt) do
-    JsonWebToken.encode({ invite_code: SecureRandom.base64(16), action: 'onboarding', organization_id: organization.id })
+    JsonWebToken.encode({ invite_code: SecureRandom.base64(16), action: 'onboarding' })
   end
   let!(:invalidate_jwt) { create(:json_web_token, invalidated_jwt: invalidated_jwt) }
 
   it 'Supports onboarding new contributors' do
     # Valid JWT, no configured channels
-    jwt = JsonWebToken.encode({ invite_code: SecureRandom.base64(16), action: 'onboarding', organization_id: organization.id })
+    jwt = JsonWebToken.encode({ invite_code: SecureRandom.base64(16), action: 'onboarding' })
     visit organization_onboarding_path(organization, jwt: jwt)
 
     expect(page).to have_content('Die Seite, die du suchst, existiert nicht')
@@ -41,7 +41,7 @@ RSpec.describe 'Onboarding' do
     expect(page).to have_content("Don't panic!")
 
     # Valid JWT
-    jwt = JsonWebToken.encode({ invite_code: SecureRandom.base64(16), action: 'onboarding', organization_id: organization.id })
+    jwt = JsonWebToken.encode({ invite_code: SecureRandom.base64(16), action: 'onboarding' })
     visit organization_onboarding_path(organization, jwt: jwt)
 
     expect(page).to have_content('Cool Project')

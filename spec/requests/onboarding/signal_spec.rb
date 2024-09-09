@@ -11,7 +11,7 @@ RSpec.describe 'Onboarding::Signal', type: :request do
   end
   let!(:admin) { create_list(:user, 2, admin: true) }
   let(:onboarding_allowed) { { signal: true } }
-  let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding', organization_id: organization.id }) }
+  let(:jwt) { JsonWebToken.encode({ invite_code: 'ONBOARDING_TOKEN', action: 'onboarding' }) }
   let(:params) { { jwt: jwt } }
 
   describe 'GET /{organization_id}/onboarding/signal' do
