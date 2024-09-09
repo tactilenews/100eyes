@@ -29,10 +29,13 @@ class OrganizationDashboard < Administrate::BaseDashboard
     onboarding_additional_consent_text: Field::String,
     channel_image: Field::ActiveStorage,
     whats_app_profile_about: Field::Text,
+    signal_complete_onboarding_link: Field::Url,
     email_from_address: Field::Email,
     telegram_bot_username: Field::Text,
-    telegram_bot_api_key: Field::Text
-    signal_complete_onboarding_link: Field::Url,
+    telegram_bot_api_key: Field::Text,
+    threemarb_api_identity: Field::Text,
+    threemarb_api_secret: Field::Password,
+    threemarb_private: Field::Password,
   }.freeze
 
   COLLECTION_ATTRIBUTES = %i[
@@ -53,6 +56,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
     upgraded_business_plan_at
     email_from_address
     telegram_bot_username
+    threemarb_api_identity
   ].freeze
 
   FORM_ATTRIBUTES_NEW = %i[
@@ -72,6 +76,9 @@ class OrganizationDashboard < Administrate::BaseDashboard
     email_from_address
     telegram_bot_username
     telegram_bot_api_key
+    threemarb_api_identity
+    threemarb_api_secret
+    threemarb_private
   ].freeze
 
   FORM_ATTRIBUTES_EDIT = %i[
