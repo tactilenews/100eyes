@@ -10,7 +10,6 @@ RSpec.describe 'Deleting requests' do
   let!(:another_planned_request) { create(:request, schedule_send_for: 5.minutes.from_now, organization: organization, user: user) }
 
   before do
-    allow(Request).to receive(:broadcast!).and_call_original
     create(:contributor, organization: organization)
   end
 

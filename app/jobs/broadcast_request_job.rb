@@ -7,11 +7,7 @@ class BroadcastRequestJob < ApplicationJob
     request = Request.where(id: request_id).first
     return unless request
     return if request.broadcasted_at.present?
-
-    if request.planned? # reschedule for future
-      BroadcastRequestJob.delay(run_at: request.schedule_send_for).perform_later(request.id)
-      return
-    end
+    return if request.planned? # rescheduled for future
 
     request.organization.contributors.active.with_tags(request.tag_list).each do |contributor|
       message = Message.new(

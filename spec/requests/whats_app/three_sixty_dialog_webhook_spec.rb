@@ -28,7 +28,6 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
   describe '#messages' do
     before do
       allow(Sentry).to receive(:capture_exception)
-      allow(Request).to receive(:broadcast!).and_call_original
     end
 
     it 'should be successful' do

@@ -43,7 +43,6 @@ RSpec.describe WhatsApp::WebhookController do
     before do
       allow(Sentry).to receive(:capture_exception)
       allow(Twilio::Security::RequestValidator).to receive(:new).and_return(mock_twilio_security_request_validator)
-      allow(Request).to receive(:broadcast!).and_call_original
     end
 
     describe 'fails Rack::TwilioWebhookAuthentication' do

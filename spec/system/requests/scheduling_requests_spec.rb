@@ -8,8 +8,6 @@ RSpec.describe 'Scheduling requests' do
 
   context 'given contributors' do
     before(:each) do
-      # `broadcast!` is stubbed in tests
-      allow(Request).to receive(:broadcast!).and_call_original
       create(:contributor, organization: organization)
     end
 

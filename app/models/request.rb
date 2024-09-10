@@ -27,9 +27,7 @@ class Request < ApplicationRecord
   acts_as_taggable_on :tags
   acts_as_taggable_tenant :organization_id
 
-  after_create :broadcast_request
-
-  after_update_commit :broadcast_updated_request
+  after_create :notify_recipient
 
   delegate :replies, to: :messages
   delegate :outbound, to: :messages
@@ -68,14 +66,6 @@ class Request < ApplicationRecord
       .transform_values { |messages| messages.sort_by(&:created_at) }
   end
 
-  def self.broadcast!(request)
-    BroadcastRequestJob.perform_later(request.id)
-    return unless request.planned?
-
-    RequestScheduled.with(request_id: request.id,
-                          organization_id: request.organization.id).deliver_later(request.organization.users + User.admin.all)
-  end
-
   def self.attach_files(files)
     files.map do |file|
       message_file = Message::File.new
@@ -86,13 +76,10 @@ class Request < ApplicationRecord
 
   private
 
-  def broadcast_request
-    Request.broadcast!(self)
-  end
+  def notify_recipient
+    return unless planned?
 
-  def broadcast_updated_request
-    return unless saved_change_to_schedule_send_for?
-
-    Request.broadcast!(self)
+    RequestScheduled.with(request_id: id,
+                          organization_id: organization.id).deliver_later(organization.users + User.admin.all)
   end
 end

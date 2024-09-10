@@ -36,15 +36,6 @@ RSpec.describe BroadcastRequestJob do
     context 'given a request has been rescheduled for the future' do
       before { request.update(schedule_send_for: 1.day.from_now) }
 
-      it 'enqueues a job to broadcast the request, and broadcast it when called again' do
-        expect { subject.call }.to change(DelayedJob, :count).from(0).to(1)
-        expect(Delayed::Job.last.run_at).to be_within(1.second).of(request.schedule_send_for)
-
-        Timecop.travel(1.day.from_now + 2.minutes)
-
-        expect { subject.call }.to change { request.reload.broadcasted_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
-      end
-
       it 'does not create a Message instance' do
         expect { subject.call }.not_to change(Message, :count)
       end
