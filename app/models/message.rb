@@ -36,7 +36,14 @@ class Message < ApplicationRecord
   validates :raw_data, presence: true, if: -> { sent_from_contributor? }
   validates :unknown_content, inclusion: { in: [true, false] }
 
-  after_create_commit :send_if_outbound, :notify_recipient
+  after_create_commit :notify_recipient
+
+  def send!
+    [PostmarkAdapter::Outbound, SignalAdapter::Outbound, TelegramAdapter::Outbound, ThreemaAdapter::Outbound,
+     WhatsAppAdapter::Delegator.new(organization)].each do |adapter|
+      adapter.send!(self)
+    end
+  end
 
   def reply?
     sent_from_contributor?
@@ -86,13 +93,4 @@ class Message < ApplicationRecord
     end
   end
   # rubocop:enable Metrics/AbcSize
-
-  def send_if_outbound
-    return if manually_created? || reply?
-
-    [PostmarkAdapter::Outbound, SignalAdapter::Outbound, TelegramAdapter::Outbound, ThreemaAdapter::Outbound,
-     WhatsAppAdapter::Delegator.new(organization)].each do |adapter|
-      adapter.send!(self)
-    end
-  end
 end

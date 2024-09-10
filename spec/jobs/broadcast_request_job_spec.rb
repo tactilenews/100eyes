@@ -53,6 +53,24 @@ RSpec.describe BroadcastRequestJob do
           create(:contributor, id: 3)
         end
 
+        it "schedules jobs to send out message with contributor's channel" do
+          subject.call
+
+          expect(ActionMailer::MailDeliveryJob).to have_been_enqueued.with(
+            'PostmarkAdapter::Outbound',
+            'message_email',
+            'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
+            {
+              params: { message: request.messages.where(recipient_id: 1).first, organization: request.organization },
+              args: []
+            }
+          )
+          expect(TelegramAdapter::Outbound::Text).to have_been_enqueued.with({ organization_id: request.organization.id,
+                                                                               contributor_id: 2,
+                                                                               text: request.text,
+                                                                               message: request.messages.where(recipient_id: 2).first })
+        end
+
         it 'only sends to contributors of the organization' do
           expect { subject.call }.to change(Message, :count).from(0).to(2)
                                                             .and (change { Message.pluck(:recipient_id).sort }).from([]).to([1, 2])

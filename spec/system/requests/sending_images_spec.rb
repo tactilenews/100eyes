@@ -7,8 +7,7 @@ RSpec.describe 'Sending image files', js: true do
   let(:organization) { create(:organization) }
 
   context 'given contributors' do
-    before(:each) do
-      Message.any_instance.stub(:send_if_outbound)
+    before do
       create(:contributor, email: 'adam@example.org', organization: organization)
       create(:contributor, signal_phone_number: '+4912345678', organization: organization)
       create(:contributor, telegram_id: 125_689, organization: organization)
@@ -16,7 +15,7 @@ RSpec.describe 'Sending image files', js: true do
     end
 
     it 'sending a request with image files', flaky: true do
-      perform_enqueued_jobs do
+      perform_enqueued_jobs(only: BroadcastRequestJob) do
         visit new_organization_request_path(organization, as: user)
 
         # With no text, no file
@@ -37,7 +36,6 @@ RSpec.describe 'Sending image files', js: true do
         find_field('request_files', visible: :all).attach_file(image_file)
 
         click_button 'Frage an die Community senden'
-        BroadcastRequestJob.perform_later(Request.first.id)
 
         expect(page).to have_content('Message with files, no text')
         expect(page).to have_current_path(organization_request_path(organization, Request.first))
@@ -93,7 +91,6 @@ RSpec.describe 'Sending image files', js: true do
         find_field('request_files', visible: :all).attach_file(image_file)
 
         click_button 'Frage an die Community senden'
-        BroadcastRequestJob.perform_later(Request.first.id)
 
         expect(page).to have_content('Did you get my image?')
         expect(page).to have_current_path(organization_request_path(organization, Request.first))

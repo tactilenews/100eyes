@@ -20,6 +20,7 @@ class BroadcastRequestJob < ApplicationJob
       message.files = Request.attach_files(request.files) if request.files.attached?
 
       message.save!
+      message.send!
     end
     request.update(broadcasted_at: Time.current)
   end
