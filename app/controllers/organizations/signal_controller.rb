@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-module Settings
+module Organizations
   class SignalController < ApplicationController
     def edit; end
 
     def update
       if @organization.update(update_params)
-        redirect_to settings_register_path
+        redirect_to organization_signal_register_path(@organization)
       else
         render :edit, status: :unprocessable_entity
       end
@@ -26,7 +26,7 @@ module Settings
       end
       case response
       when Net::HTTPSuccess
-        redirect_to settings_verify_path
+        redirect_to organization_signal_verify_path
       else
         handle_error_response(response)
       end
@@ -46,7 +46,7 @@ module Settings
       end
       case response
       when Net::HTTPSuccess
-        Signal::SetTrustModeJob.perform_later(signal_server_phone_number: signal_server_phone_number)
+        SignalAdapter::SetTrustModeJob.perform_later(signal_server_phone_number: signal_server_phone_number)
       else
         handle_error_response(response)
       end
