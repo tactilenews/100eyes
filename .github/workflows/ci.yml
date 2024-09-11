@@ -26,9 +26,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Update file watchers because of rails settings cached
-        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-
       - name: Read .tool-versions
         uses: marocchino/tool-versions-action@v1
         id: versions

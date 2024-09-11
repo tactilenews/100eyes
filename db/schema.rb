@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_09_05_105530) do
+ActiveRecord::Schema.define(version: 2024_09_11_210001) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -125,9 +125,6 @@ ActiveRecord::Schema.define(version: 2024_09_05_105530) do
     t.index ["organization_id", "threema_id"], name: "idx_org_threema_id", unique: true
     t.index ["organization_id", "whats_app_phone_number"], name: "idx_org_whats_app_phone_number", unique: true
     t.index ["organization_id"], name: "index_contributors_on_organization_id"
-  end
-
-  create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
@@ -276,14 +273,6 @@ ActiveRecord::Schema.define(version: 2024_09_05_105530) do
     t.bigint "organization_id"
     t.index ["organization_id"], name: "index_requests_on_organization_id"
     t.index ["user_id"], name: "index_requests_on_user_id"
-  end
-
-  create_table "settings", force: :cascade do |t|
-    t.string "var", null: false
-    t.text "value"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["var"], name: "index_settings_on_var", unique: true
   end
 
   create_table "taggings", id: :serial, force: :cascade do |t|
