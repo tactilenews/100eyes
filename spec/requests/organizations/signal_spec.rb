@@ -93,10 +93,12 @@ RSpec.describe 'Signal' do
     subject { -> { post organization_signal_register_path(organization, as: user), params: params } }
 
     let(:params) { { organization: { signal: { captcha: 'signalcaptcha://signal-hcaptcha.valid-captcha' } } } }
-    let(:uri) { URI.parse('http://signal:8080/v1/register/+4912345678') }
+    let(:uri) { URI.parse('http://localhost:8080/v1/register/+4912345678') }
 
     before do
       organization.update!(signal_server_phone_number: '+4912345678')
+
+      allow(ENV).to receive(:fetch).with('SIGNAL_CLI_REST_API_ENDPOINT', 'http://localhost:8080').and_return('http://localhost:8080')
       stub_request(:post, uri).to_return(status: 201)
     end
 
@@ -155,10 +157,12 @@ RSpec.describe 'Signal' do
     subject { -> { post organization_signal_verify_path(organization, as: user), params: params } }
 
     let(:params) { { organization: { signal: { token: '123456' } } } }
-    let(:uri) { URI.parse('http://signal:8080/v1/register/+4912345678/verify/123456') }
+    let(:uri) { URI.parse('http://localhost:8080/v1/register/+4912345678/verify/123456') }
 
     before do
       organization.update!(signal_server_phone_number: '+4912345678')
+
+      allow(ENV).to receive(:fetch).with('SIGNAL_CLI_REST_API_ENDPOINT', 'http://localhost:8080').and_return('http://localhost:8080')
       stub_request(:post, uri).to_return(status: 201)
     end
 
