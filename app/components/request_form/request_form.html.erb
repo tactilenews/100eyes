@@ -4,6 +4,7 @@
   data-request-form-members-count-message-value="<%= t('components.request_form.members_count_message').to_json %>"
   data-request-form-preview-fallback-value="<%= t('components.request_form.preview_fallback') %>"
   data-request-form-request-files-url-value="<%= @request.files.map { |file| url_for(file) } %>"
+  data-request-form-update-members-count-url-value="<%= count_organization_contributors_path(@request.organization) %>"
 >
 
   <div class="RequestForm-column" data-action="input->request-form#updatePreview">
