@@ -20,6 +20,7 @@ export default class extends Controller {
     membersCountMessage: String,
     previewFallback: String,
     requestFilesUrl: Array,
+    updateMembersCountUrl: String,
   };
 
   connect() {
@@ -75,7 +76,7 @@ export default class extends Controller {
     const tags = event.detail.tags;
 
     Rails.ajax({
-      url: '/contributors/count',
+      url: this.updateMembersCountUrlValue,
       type: 'GET',
       data: new URLSearchParams({ tag_list: tags }).toString(),
       success: ({ count }) => {
