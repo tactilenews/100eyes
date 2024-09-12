@@ -58,7 +58,6 @@ gem 'jwt'
 gem 'kramdown', '~> 2.4'
 gem 'pg_search'
 gem 'phony_rails'
-gem 'rails-settings-cached', '~> 2.8'
 gem 'valid_email2', '~> 4.0'
 gem 'view_component', '~> 2.83.0'
 

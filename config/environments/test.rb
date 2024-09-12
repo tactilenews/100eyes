@@ -8,8 +8,6 @@
 Telegram.reset_bots
 Telegram::Bot::ClientStub.stub_all!
 
-require_relative '../../app/models/setting'
-
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
