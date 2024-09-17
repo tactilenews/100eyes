@@ -13,7 +13,8 @@ module WhatsAppAdapter
       headers = { 'D360-API-KEY' => organization.three_sixty_dialog_client_api_key, 'Content-Type' => 'application/json' }
       request = Net::HTTP::Post.new(url.to_s, headers)
 
-      request.body = { url: "https://#{ENV.fetch('APPLICATION_HOSTNAME', 'localhost:3000')}/whats_app/three-sixty-dialog-webhook" }.to_json
+      request.body = { url: "https://#{ENV.fetch('APPLICATION_HOSTNAME',
+                                                 'localhost:3000')}/#{organization_id}/whats_app/three-sixty-dialog-webhook" }.to_json
       response = Net::HTTP.start(url.host, url.port, use_ssl: true) do |http|
         http.request(request)
       end
