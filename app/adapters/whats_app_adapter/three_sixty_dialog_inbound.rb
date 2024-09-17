@@ -22,7 +22,6 @@ module WhatsAppAdapter
 
     def consume(organization, whats_app_message)
       @organization = organization
-      whats_app_message = whats_app_message.with_indifferent_access
 
       @sender = initialize_sender(whats_app_message)
       return unless @sender

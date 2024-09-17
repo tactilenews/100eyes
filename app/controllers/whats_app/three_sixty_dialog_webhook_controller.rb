@@ -5,13 +5,14 @@ module WhatsApp
     include WhatsAppHandleCallbacks
 
     skip_before_action :require_login, :verify_authenticity_token, :user_permitted?
+    before_action :extract_components, only: :message
 
     # rubocop:disable Metrics/AbcSize
     def message
       head :ok
-      return if params['statuses'].present? # TODO: Do we want to handle statuses?
+      return if @components[:statuses].present? # TODO: Handle statuses?
 
-      handle_error(params['messages'].first['errors'].first) if params['messages'].first['errors'].present?
+      handle_error(@components[:errors].first) if @components[:errors].present?
 
       adapter = WhatsAppAdapter::ThreeSixtyDialogInbound.new
 
@@ -40,7 +41,7 @@ module WhatsApp
         ResubscribeContributorJob.perform_later(@organization.id, contributor.id, WhatsAppAdapter::ThreeSixtyDialogOutbound)
       end
 
-      adapter.consume(@organization, message_params.to_h) { |message| message.contributor.reply(adapter) }
+      adapter.consume(@organization, @components) { |message| message.contributor.reply(adapter) }
     end
     # rubocop:enable Metrics/AbcSize
 
@@ -56,26 +57,24 @@ module WhatsApp
 
     private
 
+    def extract_components
+      @components = message_params.to_h.with_indifferent_access[:entry].first[:changes].first[:value]
+    end
+
     def message_params
-      params.permit({ three_sixty_dialog_webhook:
-                        [contacts: [:wa_id, { profile: [:name] }],
-                         messages: [:from, :id, :type, :timestamp, { text: [:body] }, { context: %i[from id] },
-                                    { button: [:text] }, { image: %i[id mime_type sha256 caption] },
-                                    { voice: %i[id mime_type sha256] }, { video: %i[id mime_type sha256 caption] },
-                                    { audio: %i[id mime_type sha256] }, { errors: %i[code details title] },
-                                    { document: %i[filename id mime_type sha256] }, { location: %i[latitude longitude] },
-                                    { contacts: [{ org: {} }, { addresses: [] }, { emails: [] }, { ims: [] },
-                                                 { phones: %i[phone type wa_id] }, { urls: [] },
-                                                 { name: %i[first_name formatted_name last_name] }] }]] },
-                    contacts: [:wa_id, { profile: [:name] }],
-                    messages: [:from, :id, :type, :timestamp, { text: [:body] }, { context: %i[from id] },
-                               { button: [:text] }, { image: %i[id mime_type sha256 caption] },
-                               { voice: %i[id mime_type sha256] }, { video: %i[id mime_type sha256 caption] },
-                               { audio: %i[id mime_type sha256] }, { errors: %i[code details title] },
-                               { document: %i[filename id mime_type sha256] }, { location: %i[latitude longitude] },
-                               { contacts: [{ org: {} }, { addresses: [] }, { emails: [] }, { ims: [] },
-                                            { phones: %i[phone type wa_id] }, { urls: [] },
-                                            { name: %i[first_name formatted_name last_name] }] }])
+      params.permit(:organization_id, :object,
+                    entry: [:id, { changes: [:field, { value: [:messaging_product,
+                                                               { metadata: %i[display_phone_number
+                                                                              phone_number_id] },
+                                                               { contacts: [:wa_id, { profile: [:name] }],
+                                                                 messages: [:from, :id, :type, :timestamp, { text: [:body] },
+                                                                            { button: %i[payload text] },
+                                                                            { context: %i[from id] }],
+                                                                 statuses: [:id, :status, :timestamp, :expiration_timestamp, :recipient_id,
+                                                                            { conversation: [:id, { origin: [:type] }] },
+                                                                            { pricing: %i[billable pricing_model category] }],
+                                                                 errors: [:code, :title, :message, :href,
+                                                                          { error_data: [:details] }] }] }] }])
     end
 
     def create_api_key_params
@@ -83,8 +82,8 @@ module WhatsApp
     end
 
     def handle_error(error)
-      exception = WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: error['code'], message: error['title'])
-      ErrorNotifier.report(exception, context: { details: error['details'] })
+      exception = WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: error[:code], message: error[:title])
+      ErrorNotifier.report(exception, context: { details: error[:error_data][:details] })
     end
 
     def handle_request_to_receive_message(contributor)
