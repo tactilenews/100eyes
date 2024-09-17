@@ -30,6 +30,7 @@ module WhatsAppAdapter
 
       def payload
         {
+          messaging_product: 'whatsapp',
           recipient_type: 'individual',
           to: recipient.whats_app_phone_number.split('+').last,
           type: 'image',
