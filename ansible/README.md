@@ -3,7 +3,7 @@
 Our setup uses a number of community-maintained Ansibles roles. Install them using the `ansible-galaxy` command:
 
 ```
-$ ansible-galaxy install -r ansible/requirements.yml
+$ ansible-galaxy install -r ansible/requirements.yml --force
 ```
 
 Generate configuration files:
