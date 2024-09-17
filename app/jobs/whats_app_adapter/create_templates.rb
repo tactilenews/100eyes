@@ -2,33 +2,46 @@
 
 require 'net/http'
 
-# rubocop:disable Metrics/ClassLength
 module WhatsAppAdapter
-  class CreateTemplate < ApplicationJob
-    def perform(organization_id:, template_name:, template_text:)
+  class CreateTemplates < ApplicationJob
+    def perform(organization_id:, token:)
       @organization = Organization.find_by(id: organization_id)
       return unless organization
 
       @base_uri = ENV.fetch('THREE_SIXTY_DIALOG_PARTNER_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')
       @partner_id = ENV.fetch('THREE_SIXTY_DIALOG_PARTNER_ID', nil)
-      @template_name = template_name
-      @template_text = template_text
-
-      @token = organization.three_sixty_dialog_partner_token
-      @token = fetch_token unless token.present? && organization.updated_at > 24.hours.ago
-
+      @token = token
       @waba_account_id = organization.three_sixty_dialog_client_waba_account_id
-      waba_accont_namespace = organization.three_sixty_dialog_whats_app_template_namespace
-      @waba_account_id = fetch_client_info if waba_account_id.blank? || waba_accont_namespace.blank?
+      @waba_account_id = fetch_client_info if waba_account_id.blank? || organization.three_sixty_dialog_whats_app_template_namespace.blank?
 
-      conditionally_create_template
+      templates_to_create_array = whats_app_templates.keys.difference(existing_templates)
+      templates_to_create = whats_app_templates.select { |key, _value| key.in?(templates_to_create_array) }
+      templates_to_create.each do |key, value|
+        @template_name = key
+        @template_text = value
+
+        create_template
+      end
     end
 
     attr_reader :organization, :base_uri, :partner_id, :template_name, :template_text, :token, :waba_account_id
 
     private
 
-    def conditionally_create_template
+    # rubocop:disable Style/FormatStringToken
+    def whats_app_templates
+      default_welcome_message = ["*#{File.read(File.join('config', 'locales', 'onboarding', 'success_heading.txt'))}*",
+                                 File.read(File.join('config', 'locales', 'onboarding',
+                                                     'success_text.txt'))].join("\n\n").gsub('100eyes', '{{1}}')
+      default_welcome_message_hash = { default_welcome_message: default_welcome_message }
+      requests_hash = I18n.t('.')[:adapter][:whats_app][:request_template].transform_values do |value|
+        value.gsub('%{first_name}', '{{1}}').gsub('%{request_title}', '{{2}}')
+      end
+      default_welcome_message_hash.merge(requests_hash)
+    end
+    # rubocop:enable Style/FormatStringToken
+
+    def existing_templates
       url = URI.parse(
         "#{base_uri}/partners/#{partner_id}/waba_accounts/#{waba_account_id}/waba_templates"
       )
@@ -38,10 +51,7 @@ module WhatsAppAdapter
         http.request(request)
       end
       waba_templates = JSON.parse(response.body)['waba_templates']
-      template_names_array = waba_templates.pluck('name')
-      return if template_name.in?(template_names_array)
-
-      create_template
+      waba_templates.pluck('name').map(&:to_sym)
     end
 
     def create_template
@@ -61,33 +71,15 @@ module WhatsAppAdapter
 
     def set_headers
       {
+        Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: "Bearer #{organization.three_sixty_dialog_partner_token}"
+        Authorization: "Bearer #{token}"
       }
-    end
-
-    def fetch_token
-      url = URI.parse("#{base_uri}/token")
-      headers = { 'Content-Type': 'application/json' }
-      request = Net::HTTP::Post.new(url.to_s, headers)
-      request.body = {
-        username: organization.three_sixty_dialog_partner_username,
-        password: organization.three_sixty_dialog_partner_password
-      }.to_json
-      response = Net::HTTP.start(url.host, url.port, use_ssl: true) do |http|
-        http.request(request)
-      end
-      token = JSON.parse(response.body)['access_token']
-      organization.update!(three_sixty_dialog_partner_token: token)
     end
 
     def fetch_client_info
       url = URI.parse("#{base_uri}/partners/#{partner_id}/channels")
-      headers = {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: "Bearer #{organization.three_sixty_dialog_partner_token}"
-      }
+      headers = set_headers
       request = Net::HTTP::Get.new(url.to_s, headers)
       response = Net::HTTP.start(url.host, url.port, use_ssl: true) do |http|
         http.request(request)
@@ -170,4 +162,3 @@ module WhatsAppAdapter
     end
   end
 end
-# rubocop:enable Metrics/ClassLength
