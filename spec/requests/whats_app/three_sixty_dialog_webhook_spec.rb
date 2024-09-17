@@ -9,25 +9,25 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
   end
   let(:whats_app_phone_number) { '+491511234567' }
   let(:params) do
-    { contacts: [{ profile: { name: 'Matthew Rider' },
-                   wa_id: '491511234567' }],
-      messages: [{ from: '491511234567',
-                   id: 'some_valid_id',
-                   text: { body: 'Hey' },
-                   timestamp: '1692118778',
-                   type: 'text' }],
-      three_sixty_dialog_webhook: { contacts: [{ profile: { name: 'Matthew Rider' },
-                                                 wa_id: '491511234567' }],
-                                    messages: [{ from: '491511234567',
-                                                 id: 'some_valid_id',
-                                                 text: { body: 'Hey' },
-                                                 timestamp: '1692118778',
-                                                 type: 'text' }] } }
+    { entry: [{ id: 'some_external_id',
+                changes: [{ value: {
+                  messaging_product: 'whatsapp',
+                  metadata: { display_phone_number: '4915133311445', phone_number_id: 'some_valid_id' },
+                  contacts: [{ profile: { name: 'Matthew Rider' },
+                               wa_id: '491511234567' }],
+                  messages: [{ from: '491511234567',
+                               id: 'some_valid_id',
+                               text: { body: 'Hey' },
+                               timestamp: '1692118778',
+                               type: 'text' }]
+                } }] }] }
   end
+  let(:components) { params[:entry].first[:changes].first[:value] }
   let(:text_payload) do
     {
       organization_id: organization.id,
       payload: {
+        messaging_product: 'whatsapp',
         recipient_type: 'individual',
         to: contributor.whats_app_phone_number.split('+').last,
         type: 'text',
@@ -54,11 +54,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
                        message: { recipient_id: '491511234567' },
                        status: 'read',
                        timestamp: '1691405467',
-                       type: 'message' }],
-          three_sixty_dialog_webhook: { statuses: [{ id: 'some_valid_id',
-                                                     message: { recipient_id: '491511234567' },
-                                                     status: 'read', timestamp: '1691405467',
-                                                     type: 'message' }] }
+                       type: 'message' }]
         }
       end
 
@@ -72,17 +68,12 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
     describe 'errors' do
       let(:exception) { WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: '501', message: 'Unsupported message type') }
       before do
-        params[:messages] = [
-          { errors: [{
-            code: 501,
-            details: 'Message type is not currently supported',
-            title: 'Unsupported message type'
-          }],
-            from: '491511234567',
-            id: 'some_valid_id',
-            timestamp: '1691066820',
-            type: 'unknown' }
-        ]
+        components[:errors] = [{
+          code: 501,
+          title: 'Unsupported message type',
+          error_data: { details: 'Message type is not currently supported' }
+        }]
+
         allow(ErrorNotifier).to receive(:report)
       end
 
@@ -141,7 +132,10 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
       end
 
       context 'request for more info' do
-        before { params[:messages].first[:text][:body] = 'Mehr Infos' }
+        before do
+          components[:messages].first.delete(:text)
+          components[:messages].first[:button] = { text: 'Mehr Infos' }
+        end
         let(:text) { [organization.whats_app_profile_about, "_#{I18n.t('adapter.shared.unsubscribe.instructions')}_"].join("\n\n") }
 
         it 'marks that contributor has responded to template message' do
@@ -166,7 +160,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
       end
 
       context 'request to unsubscribe' do
-        before { params[:messages].first[:text][:body] = 'Abbestellen' }
+        before { components[:messages].first[:text][:body] = 'Abbestellen' }
 
         it {
           is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(organization.id, contributor.id,
@@ -177,7 +171,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
       context 'request to re-subscribe' do
         before do
           contributor.update(unsubscribed_at: Time.current)
-          params[:messages].first[:text][:body] = 'Bestellen'
+          components[:messages].first[:text][:body] = 'Bestellen'
         end
 
         it {
@@ -187,7 +181,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
       end
 
       context 'files' do
-        let(:message) { params[:messages].first }
+        let(:message) { components[:messages].first }
         let(:fetch_file_url) { 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693/media/some_valid_id' }
 
         before { message.delete(:text) }

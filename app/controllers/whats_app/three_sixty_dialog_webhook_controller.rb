@@ -63,18 +63,26 @@ module WhatsApp
 
     def message_params
       params.permit(:organization_id, :object,
-                    entry: [:id, { changes: [:field, { value: [:messaging_product,
-                                                               { metadata: %i[display_phone_number
-                                                                              phone_number_id] },
-                                                               { contacts: [:wa_id, { profile: [:name] }],
-                                                                 messages: [:from, :id, :type, :timestamp, { text: [:body] },
-                                                                            { button: %i[payload text] },
-                                                                            { context: %i[from id] }],
-                                                                 statuses: [:id, :status, :timestamp, :expiration_timestamp, :recipient_id,
-                                                                            { conversation: [:id, { origin: [:type] }] },
-                                                                            { pricing: %i[billable pricing_model category] }],
-                                                                 errors: [:code, :title, :message, :href,
-                                                                          { error_data: [:details] }] }] }] }])
+                    entry: [:id, {
+                      changes: [:field, {
+                        value: [:messaging_product,
+                                { metadata: %i[display_phone_number phone_number_id] },
+                                { contacts: [:wa_id, { profile: [:name] }],
+                                  messages: [:from, :id, :type, :timestamp,
+                                             { text: [:body] }, { button: %i[payload text] },
+                                             { image: %i[id mime_type sha256 caption] }, { voice: %i[id mime_type sha256] },
+                                             { video: %i[id mime_type sha256 caption] }, { audio: %i[id mime_type sha256] },
+                                             { document: %i[filename id mime_type sha256] }, { location: %i[latitude longitude] },
+                                             { contacts: [{ org: {} }, { addresses: [] }, { emails: [] }, { ims: [] },
+                                                          { phones: %i[phone type wa_id] }, { urls: [] },
+                                                          { name: %i[first_name formatted_name last_name] }] },
+                                             { context: %i[from id] }],
+                                  statuses: [:id, :status, :timestamp, :expiration_timestamp, :recipient_id,
+                                             { conversation: [:id, { origin: [:type] }] },
+                                             { pricing: %i[billable pricing_model category] }],
+                                  errors: [:code, :title, :message, :href, { error_data: [:details] }] }]
+                      }]
+                    }])
     end
 
     def create_api_key_params
