@@ -6,9 +6,9 @@ const POLLING_INTERVAL = 1000 * 30;
 export default class extends Controller {
   static targets = ['text'];
   static values = {
-    id: String,
     lastUpdatedAt: String,
     messageTemplate: String,
+    fetchMessagesUrl: String,
   };
 
   connect() {
@@ -25,7 +25,7 @@ export default class extends Controller {
 
   fetchMessages() {
     Rails.ajax({
-      url: `/requests/${this.idValue}/notifications`,
+      url: this.fetchMessagesUrlValue,
       type: 'GET',
       data: new URLSearchParams({
         last_updated_at: this.lastUpdatedAtValue,
