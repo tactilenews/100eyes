@@ -47,6 +47,16 @@ class Request < ApplicationRecord
     }
   end
 
+  def trigger_broadcast
+    if planned?
+      BroadcastRequestJob.delay(run_at: schedule_send_for).perform_later(id)
+      return schedule_send_for
+    else
+      BroadcastRequestJob.perform_later(id)
+      return nil
+    end
+  end
+
   def planned?
     schedule_send_for.present? && schedule_send_for > Time.current
   end

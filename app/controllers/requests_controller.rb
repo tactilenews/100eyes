@@ -21,7 +21,7 @@ class RequestsController < ApplicationController
     resize_image_files if request_params[:files].present?
     @request = @organization.requests.new(request_params.merge(user: current_user))
     if @request.save
-      schedule_broadcast_request_and_redirect(@request)
+      trigger_broadcast_and_redirect(@request)
     else
       render :new, status: :unprocessable_entity
     end
@@ -36,7 +36,7 @@ class RequestsController < ApplicationController
   def update
     @request.files.purge_later if @request.files.attached? && request_params[:files].blank?
     if @request.update(request_params)
-      schedule_broadcast_request_and_redirect(@request)
+      trigger_broadcast_and_redirect(@request)
     else
       render :edit, status: :unprocessable_entity
     end
@@ -149,17 +149,16 @@ class RequestsController < ApplicationController
     end
   end
 
-  def schedule_broadcast_request_and_redirect(request)
+  def trigger_broadcast_and_redirect(request)
     recipient_count = @request.organization.contributors.active.with_tags(request.tag_list).count
-    if request.planned?
-      BroadcastRequestJob.delay(run_at: request.schedule_send_for).perform_later(request.id)
+    run_at = request.trigger_broadcast
+    if run_at
       redirect_to organization_requests_path(@organization, filter: :planned), flash: {
         success: I18n.t('request.schedule_request_success',
                         count: recipient_count,
-                        scheduled_datetime: I18n.l(request.schedule_send_for, format: :long))
+                        scheduled_datetime: I18n.l(run_at, format: :long))
       }
     else
-      BroadcastRequestJob.perform_later(request.id)
       redirect_to organization_request_path(@organization.id, request),
                   flash: { success: I18n.t('request.success', count: recipient_count) }
     end
