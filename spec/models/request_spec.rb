@@ -274,6 +274,25 @@ RSpec.describe Request, type: :model do
     end
   end
 
+  describe '#trigger_broadcast' do
+    context 'with a request not scheduled for' do
+      let!(:request) { create(:request, schedule_send_for: nil) }
+
+      it 'schedules a job to broadcast the request and returns nil' do
+        expect(request.trigger_broadcast).to have_been_enqueued.with(request.id)
+      end
+    end
+
+    context 'with a scheduled for request' do
+      let!(:request) { create(:request, schedule_send_for: 1.day.from_now) }
+
+      it 'delays the job for the future and returns the run time' do
+        expect { request.trigger_broadcast }.to change(DelayedJob, :count).from(0).to(1)
+        expect(Delayed::Job.last.run_at).to be_within(1.second).of(request.schedule_send_for)
+      end
+    end
+  end
+
   describe '::after_create' do
     subject { -> { request.save! } }
 
