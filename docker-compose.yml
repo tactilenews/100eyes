@@ -7,7 +7,7 @@ x-defaults: &x-defaults
     SIGNAL_CLI_REST_API_ENDPOINT: "http://signal:8080"
     SIGNAL_CLI_REST_API_ATTACHMENT_PATH: "signal-cli-config/attachments/"
     THREE_SIXTY_DIALOG_PARTNER_REST_API_ENDPOINT: "https://hub.360dialog.io/api/v2"
-    THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT: "https://waba.360dialog.io/v1"
+    THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT: "https://waba-v2.360dialog.io"
 
 services:
   app:
