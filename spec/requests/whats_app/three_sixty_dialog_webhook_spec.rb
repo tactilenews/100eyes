@@ -182,15 +182,17 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
 
       context 'files' do
         let(:message) { components[:messages].first }
-        let(:fetch_file_url) { 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693/media/some_valid_id' }
+        let(:fetch_file_url) { 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693/some_valid_id' }
+        let(:fetch_streamable_file) { 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693/somepath' }
 
         before { message.delete(:text) }
 
         context 'supported content' do
           before do
-            allow(ENV).to receive(:fetch).with('THREE_SIXTY_DIALOG_PARTNER_REST_API_ENDPOINT',
+            allow(ENV).to receive(:fetch).with('THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT',
                                                'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693').and_return('https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')
-            stub_request(:get, fetch_file_url).to_return(status: 200, body: 'downloaded_file')
+            stub_request(:get, fetch_file_url).to_return(status: 200, body: { url: 'someurl.com/somepath' }.to_json)
+            stub_request(:get, fetch_streamable_file).to_return(status: 200, body: 'some_streamable_file')
           end
 
           context 'image' do

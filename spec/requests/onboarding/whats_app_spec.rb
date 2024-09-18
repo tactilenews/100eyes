@@ -184,11 +184,11 @@ RSpec.describe 'Onboarding::Whatsapp' do
       context 'and onboarding has not been disallowed' do
         let(:welcome_message_payload) do
           {
+            messaging_product: 'whatsapp',
             recipient_type: 'individual',
             to: Contributor.unscoped.last.whats_app_phone_number.split('+').last,
             type: 'template',
             template: {
-              namespace: organization.three_sixty_dialog_whats_app_template_namespace,
               language: {
                 policy: 'deterministic',
                 code: 'de'

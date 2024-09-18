@@ -124,7 +124,7 @@ module WhatsAppAdapter
       return unless message
 
       unsupported_content = message.keys.any? do |key|
-        UNSUPPORTED_CONTENT_TYPES.include?(key)
+        UNSUPPORTED_CONTENT_TYPES.include?(key.to_s)
       end || UNSUPPORTED_CONTENT_TYPES.any? do |type|
         message[:document]&.dig(:mime_type) && message[:document][:mime_type].include?(type)
       end
