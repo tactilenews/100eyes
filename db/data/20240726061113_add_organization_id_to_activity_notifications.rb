@@ -3,7 +3,7 @@
 class AddOrganizationIdToActivityNotifications < ActiveRecord::Migration[6.1]
   def up
     ActiveRecord::Base.transaction do
-      organization = Organization.singleton
+      organization = Organization.first
       return unless organization
 
       ActivityNotification.find_each do |notification|
@@ -16,7 +16,7 @@ class AddOrganizationIdToActivityNotifications < ActiveRecord::Migration[6.1]
 
   def down
     ActiveRecord::Base.transaction do
-      organization = Organization.singleton
+      organization = Organization.first
       return unless organization
 
       ActivityNotification.find_each do |notification|

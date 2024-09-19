@@ -3,7 +3,7 @@
 class AddOrganizationIdToRequests < ActiveRecord::Migration[6.1]
   def up
     ActiveRecord::Base.transaction do
-      organization = Organization.singleton
+      organization = Organization.first
       return unless organization
 
       Request.find_each do |request|
@@ -16,7 +16,7 @@ class AddOrganizationIdToRequests < ActiveRecord::Migration[6.1]
 
   def down
     ActiveRecord::Base.transaction do
-      organization = Organization.singleton
+      organization = Organization.first
       return unless organization
 
       Request.find_each do |request|

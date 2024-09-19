@@ -3,7 +3,7 @@
 class AddOrganizationIdToTaggings < ActiveRecord::Migration[6.1]
   def up
     ActiveRecord::Base.transaction do
-      organization = Organization.singleton
+      organization = Organization.first
       return unless organization
 
       ActsAsTaggableOn::Tagging.find_each do |tag|
@@ -16,7 +16,7 @@ class AddOrganizationIdToTaggings < ActiveRecord::Migration[6.1]
 
   def down
     ActiveRecord::Base.transaction do
-      organization = Organization.singleton
+      organization = Organization.first
       return unless organization
 
       ActsAsTaggableOn::Tagging.find_each do |tag|

@@ -3,7 +3,9 @@
 class ScopeSettingsToOrganizations < ActiveRecord::Migration[6.1]
   def up
     ActiveRecord::Base.transaction do
-      organization = Organization.singleton
+      return unless ActiveRecord::Base.connection.table_exists? 'settings'
+
+      organization = Organization.first
       return unless organization
 
       attrs = Setting.keys
