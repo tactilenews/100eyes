@@ -12,7 +12,7 @@ module WhatsAppAdapter
         @recipient = message.recipient
         @file_id = file_id
 
-        url = URI.parse("#{ENV.fetch('THREE_SIXTY_DIALOG_PARTNER_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')}/messages")
+        url = URI.parse("#{ENV.fetch('THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')}/messages")
         headers = { 'D360-API-KEY' => organization.three_sixty_dialog_client_api_key, 'Content-Type' => 'application/json' }
         request = Net::HTTP::Post.new(url.to_s, headers)
         request.body = payload.to_json
@@ -30,6 +30,7 @@ module WhatsAppAdapter
 
       def payload
         {
+          messaging_product: 'whatsapp',
           recipient_type: 'individual',
           to: recipient.whats_app_phone_number.split('+').last,
           type: 'image',

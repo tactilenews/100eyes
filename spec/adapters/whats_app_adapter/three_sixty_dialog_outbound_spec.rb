@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
   let(:adapter) { described_class.new }
   let(:organization) do
-    create(:organization, three_sixty_dialog_whats_app_template_namespace: '12abcdefghijk_34lmnop', project_name: 'Great project')
+    create(:organization, project_name: 'Great project')
   end
   let!(:message) do
     create(:message, :outbound, text: '360dialog is great!', broadcasted: true, recipient: contributor,
@@ -14,11 +14,11 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
   let(:contributor) { create(:contributor, organization: organization) }
   let(:new_request_payload) do
     {
+      messaging_product: 'whatsapp',
       recipient_type: 'individual',
       to: contributor.whats_app_phone_number.split('+').last,
       type: 'template',
       template: {
-        namespace: organization.three_sixty_dialog_whats_app_template_namespace,
         language: {
           policy: 'deterministic',
           code: 'de'
@@ -44,6 +44,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
   end
   let(:text_payload) do
     {
+      messaging_product: 'whatsapp',
       recipient_type: 'individual',
       to: contributor.whats_app_phone_number.split('+').last,
       type: 'text',
@@ -55,11 +56,11 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
 
   let(:welcome_message_payload) do
     {
+      messaging_product: 'whatsapp',
       recipient_type: 'individual',
       to: contributor.whats_app_phone_number.split('+').last,
       type: 'template',
       template: {
-        namespace: organization.three_sixty_dialog_whats_app_template_namespace,
         language: {
           policy: 'deterministic',
           code: 'de'

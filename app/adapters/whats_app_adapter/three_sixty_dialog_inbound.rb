@@ -22,7 +22,6 @@ module WhatsAppAdapter
 
     def consume(organization, whats_app_message)
       @organization = organization
-      whats_app_message = whats_app_message.with_indifferent_access
 
       @sender = initialize_sender(whats_app_message)
       return unless @sender
@@ -97,9 +96,10 @@ module WhatsAppAdapter
       content_type = message_file[:mime_type]
       file_id = message_file[:id]
       filename = message_file[:filename] || file_id
+      file_fetcher = WhatsAppAdapter::ThreeSixtyDialog::FileFetcherService.new(organization_id: organization.id, file_id: file_id)
 
       file.attachment.attach(
-        io: StringIO.new(fetch_file(file_id)),
+        io: StringIO.new(file_fetcher.call),
         filename: filename,
         content_type: content_type,
         identify: false
@@ -123,7 +123,7 @@ module WhatsAppAdapter
       return unless message
 
       unsupported_content = message.keys.any? do |key|
-        UNSUPPORTED_CONTENT_TYPES.include?(key)
+        UNSUPPORTED_CONTENT_TYPES.include?(key.to_s)
       end || UNSUPPORTED_CONTENT_TYPES.any? do |type|
         message[:document]&.dig(:mime_type) && message[:document][:mime_type].include?(type)
       end
@@ -174,16 +174,6 @@ module WhatsAppAdapter
       has_non_text_content = message.files.any? || message.unknown_content
       text = message.text
       has_non_text_content || (text.present? && !quick_reply_response?(text) && !unsubscribe_text?(text) && !resubscribe_text?(text))
-    end
-
-    def fetch_file(file_id)
-      url = URI.parse("#{ENV.fetch('THREE_SIXTY_DIALOG_PARTNER_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')}/media/#{file_id}")
-      headers = { 'D360-API-KEY' => organization.three_sixty_dialog_client_api_key, 'Content-Type' => 'application/json' }
-      request = Net::HTTP::Get.new(url.to_s, headers)
-      response = Net::HTTP.start(url.host, url.port, use_ssl: true) do |http|
-        http.request(request)
-      end
-      response.body
     end
   end
 end

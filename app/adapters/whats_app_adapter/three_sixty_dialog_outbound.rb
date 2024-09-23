@@ -129,11 +129,11 @@ module WhatsAppAdapter
       # rubocop:disable Metrics/MethodLength
       def new_request_payload(recipient, request)
         {
+          messaging_product: 'whatsapp',
           recipient_type: 'individual',
           to: recipient.whats_app_phone_number.split('+').last,
           type: 'template',
           template: {
-            namespace: request.organization.three_sixty_dialog_whats_app_template_namespace,
             language: {
               policy: 'deterministic',
               code: 'de'
@@ -161,6 +161,7 @@ module WhatsAppAdapter
 
       def text_payload(recipient, text)
         {
+          messaging_product: 'whatsapp',
           recipient_type: 'individual',
           to: recipient.whats_app_phone_number.split('+').last,
           type: 'text',
@@ -172,11 +173,11 @@ module WhatsAppAdapter
 
       def welcome_message_payload(recipient, organization)
         {
+          messaging_product: 'whatsapp',
           recipient_type: 'individual',
           to: recipient.whats_app_phone_number.split('+').last,
           type: 'template',
           template: {
-            namespace: organization.three_sixty_dialog_whats_app_template_namespace,
             language: {
               policy: 'deterministic',
               code: 'de'

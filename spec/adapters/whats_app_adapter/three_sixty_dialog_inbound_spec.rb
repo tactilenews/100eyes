@@ -13,14 +13,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
                    id: 'some_valid_id',
                    text: { body: 'Hey' },
                    timestamp: '1692118778',
-                   type: 'text' }],
-      three_sixty_dialog_webhook: { contacts: [{ profile: { name: 'Matthew Rider' },
-                                                 wa_id: '491511234567' }],
-                                    messages: [{ from: '491511234567',
-                                                 id: 'some_valid_id',
-                                                 text: { body: 'Hey' },
-                                                 timestamp: '1692118778',
-                                                 type: 'text' }] } }
+                   type: 'text' }] }
   end
   let(:whats_app_message_with_attachment) do
     { contacts: [{ profile: { name: 'Matthew Rider' },
@@ -34,27 +27,16 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
                      sha256: 'sha256_hash'
                    },
                    timestamp: '1692118778',
-                   type: 'image' }],
-      three_sixty_dialog_webhook: { contacts: [{ profile: { name: 'Matthew Rider' },
-                                                 wa_id: '491511234567' }],
-                                    messages: [{ from: '491511234567',
-                                                 id: 'some_valid_id',
-                                                 image: {
-                                                   caption: 'Look how cute',
-                                                   id: 'some_valid_id',
-                                                   mime_type: 'image/jpeg',
-                                                   sha256: 'sha256_hash'
-                                                 },
-                                                 timestamp: '1692118778',
-                                                 type: 'image' }] } }
+                   type: 'image' }] }
   end
 
   let(:organization) { create(:organization) }
   let!(:contributor) { create(:contributor, whats_app_phone_number: phone_number, organization: organization) }
-  let(:fetch_file_url) { 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693/media/some_valid_id' }
+  let(:fetch_file_url) { 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693/some_valid_id' }
+  let(:fetch_streamable_file) { 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693/somepath' }
 
   before do
-    allow(ENV).to receive(:fetch).with('THREE_SIXTY_DIALOG_PARTNER_REST_API_ENDPOINT',
+    allow(ENV).to receive(:fetch).with('THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT',
                                        'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693').and_return('https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')
   end
 
@@ -78,7 +60,10 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
       context 'given a message with text and an attachment' do
         let(:whats_app_message) { whats_app_message_with_attachment }
 
-        before { stub_request(:get, fetch_file_url).to_return(status: 200, body: 'downloaded_file') }
+        before do
+          stub_request(:get, fetch_file_url).to_return(status: 200, body: { url: 'https://someurl.com/somepath' }.to_json)
+          stub_request(:get, fetch_streamable_file).to_return(status: 200, body: 'some_streamable_file')
+        end
 
         it 'is expected to store message text and attached file' do
           expect(message.text).to eq('Look how cute')
@@ -98,7 +83,8 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
         let(:whats_app_message) { whats_app_message_with_attachment }
         before do
           whats_app_message[:messages].first[:image][:caption] = nil
-          stub_request(:get, fetch_file_url).to_return(status: 200, body: 'downloaded_file')
+          stub_request(:get, fetch_file_url).to_return(status: 200, body: { url: 'https://someurl.com/somepath' }.to_json)
+          stub_request(:get, fetch_streamable_file).to_return(status: 200, body: 'some_streamable_file')
         end
 
         it { is_expected.to be(nil) }
@@ -120,7 +106,8 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
       let(:whats_app_message) { whats_app_message_with_attachment }
 
       before do
-        stub_request(:get, fetch_file_url).to_return(status: 200, body: 'downloaded_file')
+        stub_request(:get, fetch_file_url).to_return(status: 200, body: { url: 'https://someurl.com/somepath' }.to_json)
+        stub_request(:get, fetch_streamable_file).to_return(status: 200, body: 'some_streamable_file')
       end
 
       describe 'handling different content types' do
@@ -273,7 +260,8 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
 
           before do
             message.delete(:text)
-            stub_request(:get, fetch_file_url).to_return(status: 200, body: 'downloaded_file')
+            stub_request(:get, fetch_file_url).to_return(status: 200, body: { url: 'https://someurl.com/somepath' }.to_json)
+            stub_request(:get, fetch_streamable_file).to_return(status: 200, body: 'some_streamable_file')
           end
 
           context 'image' do
@@ -404,7 +392,6 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
 
         before do
           message.delete(:text)
-          stub_request(:get, fetch_file_url).to_return(status: 200, body: 'downloaded_file')
         end
 
         context 'document|pdf|' do
