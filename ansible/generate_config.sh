@@ -64,18 +64,11 @@ rails:
     password: # (REQUIRED) copied from Digital Ocean database config
     host: # optional (e.g. for managed databases)
     port: # optional (e.g. for managed databases)
-  inbound_email_password: "${inbound_email_password}"
   email_from_address: "redaktion@${domain}"
   sentry:
     dsn: # (REQUIRED) Sentry DSN to enable error tracking
-  whats_app:
-    server_phone_number: ""
   twilio:
-    account_sid: ""
     auth_token: ""
-    api_key:
-      sid: ""
-      secret: ""
   three_sixty_dialog:
     partner:
       id: ""
