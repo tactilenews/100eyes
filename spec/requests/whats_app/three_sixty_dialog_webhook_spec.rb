@@ -40,7 +40,8 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
     it 'schedules a job to process the webhook' do
       expect do
         subject.call
-      end.to have_enqueued_job(WhatsAppAdapter::ProcessWebhookJob).with(organization_id: organization.id, components: components)
+      end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob).with(organization_id: organization.id,
+                                                                                          components: components)
     end
 
     describe 'statuses' do

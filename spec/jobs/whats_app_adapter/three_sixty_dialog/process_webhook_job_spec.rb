@@ -3,7 +3,7 @@
 require 'rails_helper'
 require 'webmock/rspec'
 
-RSpec.describe WhatsAppAdapter::ProcessWebhookJob do
+RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
   describe '#perform_later(organization_id:, components:)' do
     subject { -> { described_class.new.perform(organization_id: organization.id, components: components) } }
 
