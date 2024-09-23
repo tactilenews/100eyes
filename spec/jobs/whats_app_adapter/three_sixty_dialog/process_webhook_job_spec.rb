@@ -140,8 +140,13 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
 
       context 'files' do
         let(:message) { components[:messages].first }
-        let(:fetch_file_url) { 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693/some_valid_id' }
-        let(:fetch_streamable_file) { 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693/somepath' }
+        let(:file_id) { 'some_valid_id' }
+        let(:path) { '/whatsapp_business/attachments/' }
+        let(:query) { "?mid=#{file_id}&ext=1727097743&hash=ATu6wfuxkGsA6z-jlTHimX3hb8TTrWgHeDsaLZ-Qs7ab6g" }
+        let(:fetch_file_url) { "https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693/#{file_id}" }
+        let(:fetch_streamable_file) do
+          "https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693#{path}#{query}"
+        end
 
         before { message.delete(:text) }
 
@@ -149,7 +154,8 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
           before do
             allow(ENV).to receive(:fetch).with('THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT',
                                                'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693').and_return('https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')
-            stub_request(:get, fetch_file_url).to_return(status: 200, body: { url: 'https://someurl.com/somepath' }.to_json)
+            stub_request(:get, fetch_file_url).to_return(status: 200,
+                                                         body: { url: "https://someurl.com#{path}#{query}" }.to_json)
             stub_request(:get, fetch_streamable_file).to_return(status: 200, body: 'some_streamable_file')
           end
 

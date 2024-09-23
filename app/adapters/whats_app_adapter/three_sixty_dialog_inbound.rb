@@ -96,10 +96,10 @@ module WhatsAppAdapter
       content_type = message_file[:mime_type]
       file_id = message_file[:id]
       filename = message_file[:filename] || file_id
-      file_fetcher = WhatsAppAdapter::ThreeSixtyDialog::FileFetcher.new(organization_id: organization.id, file_id: file_id)
+      file_fetcher = WhatsAppAdapter::ThreeSixtyDialog::FileFetcherService.new(organization_id: organization.id, file_id: file_id)
 
       file.attachment.attach(
-        io: StringIO.new(file_fetcher.fetch_streamable_file),
+        io: StringIO.new(file_fetcher.call),
         filename: filename,
         content_type: content_type,
         identify: false
