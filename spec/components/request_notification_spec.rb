@@ -6,7 +6,7 @@ RSpec.describe RequestNotification::RequestNotification, type: :component do
   subject { render_inline(described_class.new(**params)) }
 
   let(:params) { { request_for_info: request_for_info } }
-  let(:request_for_info) { build(:request) }
+  let(:request_for_info) { create(:request) }
 
   it { should have_css('.RequestNotification', visible: :hidden) }
 end

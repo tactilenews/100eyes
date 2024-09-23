@@ -1,9 +1,9 @@
 <div 
   class="RequestNotification" 
   data-controller="request-notification" 
-  data-request-notification-id-value="<%= request_for_info.id %>" 
   data-request-notification-last-updated-at-value="<%= last_updated_at %>"
   data-request-notification-message-template-value="<%= t('components.request_notification.message_template').to_json %>"
+  data-request-notification-fetch-messages-url-value="<%= notifications_organization_request_path(request_for_info.organization, request_for_info) %>"
   hidden
 >
   <%= c 'notification', show_close: false do %>
