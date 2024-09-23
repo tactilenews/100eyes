@@ -184,8 +184,8 @@ module WhatsAppAdapter
       response = Net::HTTP.start(url.host, url.port, use_ssl: true) do |http|
         http.request(request)
       end
-      media_url = JSON.parse(response.body)['url'].split('.com/').last
-      url = URI.parse("#{base_uri}/#{media_url}")
+      media_url = URI.parse(JSON.parse(response.body)['url'])
+      url = URI::HTTPS.build(host: base_uri, path: media_url.request_uri)
       request = Net::HTTP::Get.new(url.to_s, headers)
       response = Net::HTTP.start(url.host, url.port, use_ssl: true) do |http|
         http.request(request)
