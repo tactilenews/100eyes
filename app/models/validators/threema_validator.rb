@@ -12,6 +12,6 @@ class ThreemaValidator < ActiveModel::Validator
   def threema_id_valid(record)
     record.threema_id.match?(/\A[A-Za-z0-9]+\z/) &&
       record.threema_id.length.eql?(8) &&
-      Threema::Lookup.new(threema: Threema.new).key(record.threema_id.upcase).present?
+      Threema::Lookup.new(threema: record.organization.threema_instance).key(record.threema_id.upcase).present?
   end
 end
