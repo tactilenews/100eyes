@@ -50,13 +50,6 @@ rails:
   environment: production
   hundred_eyes_project_name: 100eyes
   attr_encrypted_key: # (REQUIRED) To save encrypted attrs to db
-  threema:
-    api_identity: 
-    api_secret: 
-    private_key: # your threema private key *without* `private:` prefix
-  telegram_bot:
-    api_key: 
-    username: # your telegram bot name, e.g. 'HundredEyesBot'
   postmark:
     api_token: # (REQUIRED) API token for your new Postmark server
     transactional_stream: "outbound"
