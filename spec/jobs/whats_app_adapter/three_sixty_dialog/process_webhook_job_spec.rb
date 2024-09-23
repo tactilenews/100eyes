@@ -149,7 +149,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
           before do
             allow(ENV).to receive(:fetch).with('THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT',
                                                'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693').and_return('https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')
-            stub_request(:get, fetch_file_url).to_return(status: 200, body: { url: 'someurl.com/somepath' }.to_json)
+            stub_request(:get, fetch_file_url).to_return(status: 200, body: { url: 'https://someurl.com/somepath' }.to_json)
             stub_request(:get, fetch_streamable_file).to_return(status: 200, body: 'some_streamable_file')
           end
 

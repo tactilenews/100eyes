@@ -61,7 +61,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
         let(:whats_app_message) { whats_app_message_with_attachment }
 
         before do
-          stub_request(:get, fetch_file_url).to_return(status: 200, body: { url: 'someurl.com/somepath' }.to_json)
+          stub_request(:get, fetch_file_url).to_return(status: 200, body: { url: 'https://someurl.com/somepath' }.to_json)
           stub_request(:get, fetch_streamable_file).to_return(status: 200, body: 'some_streamable_file')
         end
 
@@ -83,7 +83,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
         let(:whats_app_message) { whats_app_message_with_attachment }
         before do
           whats_app_message[:messages].first[:image][:caption] = nil
-          stub_request(:get, fetch_file_url).to_return(status: 200, body: { url: 'someurl.com/somepath' }.to_json)
+          stub_request(:get, fetch_file_url).to_return(status: 200, body: { url: 'https://someurl.com/somepath' }.to_json)
           stub_request(:get, fetch_streamable_file).to_return(status: 200, body: 'some_streamable_file')
         end
 
@@ -106,7 +106,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
       let(:whats_app_message) { whats_app_message_with_attachment }
 
       before do
-        stub_request(:get, fetch_file_url).to_return(status: 200, body: { url: 'someurl.com/somepath' }.to_json)
+        stub_request(:get, fetch_file_url).to_return(status: 200, body: { url: 'https://someurl.com/somepath' }.to_json)
         stub_request(:get, fetch_streamable_file).to_return(status: 200, body: 'some_streamable_file')
       end
 
@@ -260,7 +260,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
 
           before do
             message.delete(:text)
-            stub_request(:get, fetch_file_url).to_return(status: 200, body: { url: 'someurl.com/somepath' }.to_json)
+            stub_request(:get, fetch_file_url).to_return(status: 200, body: { url: 'https://someurl.com/somepath' }.to_json)
             stub_request(:get, fetch_streamable_file).to_return(status: 200, body: 'some_streamable_file')
           end
 
