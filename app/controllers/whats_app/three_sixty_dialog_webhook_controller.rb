@@ -13,7 +13,7 @@ module WhatsApp
 
       handle_error(@components[:errors].first) and return if @components[:errors].present?
 
-      WhatsAppAdapter::ProcessWebhook.perform_later(organization_id: @organization.id, components: @components)
+      WhatsAppAdapter::ProcessWebhookJob.perform_later(organization_id: @organization.id, components: @components)
     end
 
     def create_api_key
@@ -63,18 +63,6 @@ module WhatsApp
     def handle_error(error)
       exception = WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: error[:code], message: error[:title])
       ErrorNotifier.report(exception, context: { details: error[:error_data][:details] })
-    end
-
-    def handle_request_to_receive_message(contributor)
-      contributor.update!(whats_app_message_template_responded_at: Time.current, whats_app_message_template_sent_at: nil)
-
-      WhatsAppAdapter::ThreeSixtyDialogOutbound.send!(contributor.received_messages.first)
-    end
-
-    def handle_request_for_more_info(contributor, organization)
-      contributor.update!(whats_app_message_template_responded_at: Time.current)
-
-      WhatsAppAdapter::ThreeSixtyDialogOutbound.send_more_info_message!(contributor, organization)
     end
   end
 end

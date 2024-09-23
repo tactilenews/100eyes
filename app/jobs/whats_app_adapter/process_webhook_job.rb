@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module WhatsAppAdapter
-  class ProcessWebhook < ApplicationJob
+  class ProcessWebhookJob < ApplicationJob
     def perform(organization_id:, components:)
       organization = Organization.find_by(id: organization_id)
       return unless organization
@@ -33,6 +33,25 @@ module WhatsAppAdapter
       end
 
       adapter.consume(organization, components) { |message| message.contributor.reply(adapter) }
+    end
+
+    private
+
+    def handle_unknown_contributor(whats_app_phone_number)
+      exception = WhatsAppAdapter::UnknownContributorError.new(whats_app_phone_number: whats_app_phone_number)
+      ErrorNotifier.report(exception)
+    end
+
+    def handle_request_to_receive_message(contributor)
+      contributor.update!(whats_app_message_template_responded_at: Time.current, whats_app_message_template_sent_at: nil)
+
+      WhatsAppAdapter::ThreeSixtyDialogOutbound.send!(contributor.received_messages.first)
+    end
+
+    def handle_request_for_more_info(contributor, organization)
+      contributor.update!(whats_app_message_template_responded_at: Time.current)
+
+      WhatsAppAdapter::ThreeSixtyDialogOutbound.send_more_info_message!(contributor, organization)
     end
   end
 end
