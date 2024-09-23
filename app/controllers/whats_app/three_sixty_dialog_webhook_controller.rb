@@ -2,8 +2,6 @@
 
 module WhatsApp
   class ThreeSixtyDialogWebhookController < ApplicationController
-    include WhatsAppHandleCallbacks
-
     skip_before_action :require_login, :verify_authenticity_token, :user_permitted?
     before_action :extract_components, only: :message
 
@@ -13,7 +11,7 @@ module WhatsApp
 
       handle_error(@components[:errors].first) and return if @components[:errors].present?
 
-      WhatsAppAdapter::ProcessWebhookJob.perform_later(organization_id: @organization.id, components: @components)
+      WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob.perform_later(organization_id: @organization.id, components: @components)
     end
 
     def create_api_key
