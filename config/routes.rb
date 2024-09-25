@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  root to: redirect('/organizations')
+  root to: 'sessions#new'
 
   concern :paginatable do
     get '(page/:page)', action: :index, on: :collection, as: ''
@@ -11,6 +11,8 @@ Rails.application.routes.draw do
 
   scope ':organization_id', as: 'organization', constraints: { organization_id: /\d+/ } do
     # TODO: Move each unscoped controller here if it has to be scoped by its organization
+
+    root to: 'organizations/dashboard#index'
 
     namespace :whats_app do
       get '/onboarding-successful', to: 'three_sixty_dialog_webhook#create_api_key'
