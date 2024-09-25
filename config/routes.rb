@@ -12,8 +12,6 @@ Rails.application.routes.draw do
   scope ':organization_id', as: 'organization', constraints: { organization_id: /\d+/ } do
     # TODO: Move each unscoped controller here if it has to be scoped by its organization
 
-    root to: 'organizations/dashboard#index'
-
     namespace :whats_app do
       get '/onboarding-successful', to: 'three_sixty_dialog_webhook#create_api_key'
       post '/three-sixty-dialog-webhook', to: 'three_sixty_dialog_webhook#message'
