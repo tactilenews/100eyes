@@ -15,4 +15,10 @@ class SessionsController < Clearance::SessionsController
       sign_in(user)
     end
   end
+
+  private
+
+  def url_after_create
+    redirect_path
+  end
 end
