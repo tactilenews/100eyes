@@ -8,12 +8,36 @@ RSpec.describe 'Sessions', type: :request do
   let(:otp_enabled) { false }
 
   describe 'GET /sign_in' do
-    before { get sign_in_path(as: user) }
-    subject { response }
+    subject { -> { get sign_in_path(as: user) } }
 
-    # This redirect comes from Clearance.configuration.redirect_url and is hard-coded in clearance initializer.
     context 'if user is already signed-in' do
-      it { should redirect_to(organizations_path) }
+      context 'and belongs to one organization' do
+        it "redirects to the organization's dashboard" do
+          subject.call
+          expect(response).to redirect_to(organization_dashboard_path(organization))
+        end
+      end
+
+      context 'and belongs to multiple organizations' do
+        before do
+          user.organizations << create(:organization)
+          user.save!
+        end
+
+        it 'redirects to the organizations path to choose the organization' do
+          subject.call
+          expect(response).to redirect_to(organizations_path)
+        end
+      end
+
+      context 'user is an admin' do
+        let(:user) { create(:user, admin: true) }
+
+        it 'redirects to the organizations path to choose the organization' do
+          subject.call
+          expect(response).to redirect_to(organizations_path)
+        end
+      end
     end
   end
 
