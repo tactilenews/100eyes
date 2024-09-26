@@ -97,5 +97,3 @@ gem 'kaminari', '~> 1.2'
 
 # Encrypt attrs
 gem 'attr_encrypted'
-
-gem 'data_migrate', '~> 9.2.0'
