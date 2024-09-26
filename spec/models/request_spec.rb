@@ -274,6 +274,33 @@ RSpec.describe Request, type: :model do
     end
   end
 
+  describe '#trigger_broadcast' do
+    context 'with a request not scheduled for' do
+      let!(:request) { create(:request, schedule_send_for: nil) }
+
+      it 'schedules a job to broadcast the request and returns nil' do
+        expect(request.trigger_broadcast).to have_been_enqueued.with(request.id)
+      end
+    end
+
+    context 'with a request scheduled to be sent out immediately' do
+      let!(:request) { create(:request, schedule_send_for: Time.current) }
+
+      it 'schedules a job to broadcast the request and returns nil' do
+        expect(request.trigger_broadcast).to have_been_enqueued.with(request.id)
+      end
+    end
+
+    context 'with a scheduled for request' do
+      let!(:request) { create(:request, schedule_send_for: 1.day.from_now) }
+
+      it 'delays the job for the future and returns the run time' do
+        expect { request.trigger_broadcast }.to change(DelayedJob, :count).from(0).to(1)
+        expect(Delayed::Job.last.run_at).to be_within(1.second).of(request.schedule_send_for)
+      end
+    end
+  end
+
   describe '::after_create' do
     subject { -> { request.save! } }
 
@@ -282,143 +309,15 @@ RSpec.describe Request, type: :model do
         io: Rails.root.join('example-image.png').open,
         filename: 'example-image.png'
       )
-      allow(Request).to receive(:broadcast!).and_call_original # is stubbed for every other test
     end
 
-    describe 'given some existing contributors in the moment of creation' do
-      before(:each) do
-        create(:contributor, id: 1, email: 'somebody@example.org', organization: request.organization)
-        create(:contributor, id: 2, email: nil, telegram_id: 22, organization: request.organization)
-        create(:contributor, id: 3)
-      end
+    describe 'given a planned request' do
+      before { request.schedule_send_for = 1.hour.from_now }
 
-      describe 'only sends to contributors of the organization' do
-        it { should change { Message.count }.from(0).to(2) }
-        it { should change { Message.pluck(:recipient_id).sort }.from([]).to([1, 2]) }
-        it { should change { Message.pluck(:sender_id) }.from([]).to([request.user.id, request.user.id]) }
-        it { should change { Message.pluck(:broadcasted) }.from([]).to([true, true]) }
-        it { should change { Message::File.count }.from(0).to(2) }
-      end
+      let!(:admin) { create_list(:user, 2, admin: true) }
+      let!(:other_organization) { create(:organization, users_count: 2) }
 
-      describe 'given a planned request' do
-        before { request.schedule_send_for = 1.hour.from_now }
-
-        let!(:admin) { create_list(:user, 2, admin: true) }
-        let!(:other_organization) { create(:organization, users_count: 2) }
-
-        it_behaves_like 'an ActivityNotification', 'RequestScheduled', 3
-      end
-    end
-
-    describe 'creates message only for contributors tagged with tag_list' do
-      let(:request) do
-        Request.new(
-          title: 'Hitchhiker’s Guide',
-          text: 'What is the answer to life, the universe, and everything?',
-          tag_list: 'programmer',
-          user: user,
-          organization: organization
-        )
-      end
-      before(:each) do
-        create(:contributor, id: 1, email: 'somebody@example.org', tag_list: ['programmer'], organization: organization)
-        create(:contributor, id: 2, email: nil, telegram_id: 22, organization: organization)
-      end
-
-      it { should change { Message.count }.from(0).to(1) }
-      it { should change { Message.pluck(:recipient_id) }.from([]).to([1]) }
-      it { should change { Message.pluck(:sender_id) }.from([]).to([request.user.id]) }
-      it { should change { Message.pluck(:broadcasted) }.from([]).to([true]) }
-    end
-
-    describe 'given contributors who are deactivated' do
-      before(:each) do
-        create(:contributor, :inactive, id: 3, email: 'deactivated@example.org', organization: organization)
-        create(:contributor, id: 4, email: 'activated@example.org', organization: organization)
-        create(:contributor, :inactive, id: 5, telegram_id: 24, organization: organization)
-      end
-
-      it { should change { Message.count }.from(0).to(1) }
-      it { should change { Message.pluck(:recipient_id) }.from([]).to([4]) }
-      it { should change { Message.pluck(:sender_id) }.from([]).to([request.user.id]) }
-      it { should change { Message.pluck(:broadcasted) }.from([]).to([true]) }
-    end
-  end
-
-  describe '::after_update_commit' do
-    before do
-      allow(Request).to receive(:broadcast!).and_call_original
-      create(:contributor, organization: request.organization)
-    end
-    subject { request.update!(params) }
-
-    describe '#broadcast_updated_request' do
-      context 'not planned request' do
-        before { request.save! }
-
-        let(:params) { { text: 'I have new text' } }
-
-        it 'does not broadcast request' do
-          expect(Request).not_to receive(:broadcast!)
-
-          subject
-        end
-
-        it 'does not create a notification' do
-          expect { subject }.not_to(change { ActivityNotification.where(type: RequestScheduled.name).count })
-        end
-      end
-
-      context 'planned request' do
-        let(:params) { { schedule_send_for: 1.day.from_now } }
-
-        it 'calls broadcast! to schedule request' do
-          expect(Request).to receive(:broadcast!).with(request)
-
-          subject
-        end
-
-        it 'creates a notification' do
-          expect { subject }.to(change { ActivityNotification.where(type: RequestScheduled.name).count }.from(0).to(1))
-        end
-
-        context 'no change to scheduled time' do
-          before { request.save! }
-          let(:params) { { text: 'Fixed typo' } }
-
-          it 'does not broadcast request' do
-            expect(Request).not_to receive(:broadcast!)
-
-            subject
-          end
-        end
-
-        context 'schedule_send_for set to nil' do
-          before { request.update(schedule_send_for: 1.day.from_now) }
-          let(:params) { { schedule_send_for: nil } }
-
-          it 'does not create a notification' do
-            expect { subject }.not_to(change { ActivityNotification.where(type: RequestScheduled.name).count })
-          end
-
-          it 'broadcasts the messages' do
-            expect { subject }.to(change(Message, :count).from(0).to(1))
-          end
-        end
-
-        context 'schedule_send_for set to time in past' do
-          before { request.update(schedule_send_for: 1.day.from_now) }
-          let(:params) { { schedule_send_for: 1.day.ago } }
-
-          it 'does not create a notification' do
-            expect { subject }.not_to(change { ActivityNotification.where(type: RequestScheduled.name).count })
-          end
-
-          it 'broadcasts the messages' do
-            expect { subject }.to(change(Message, :count).from(0).to(1))
-          end
-        end
-      end
+      it_behaves_like 'an ActivityNotification', 'RequestScheduled', 3
     end
   end
 end

@@ -27,9 +27,7 @@ class Request < ApplicationRecord
   acts_as_taggable_on :tags
   acts_as_taggable_tenant :organization_id
 
-  after_create :broadcast_request
-
-  after_update_commit :broadcast_updated_request
+  after_create :notify_recipient
 
   delegate :replies, to: :messages
   delegate :outbound, to: :messages
@@ -47,6 +45,16 @@ class Request < ApplicationRecord
         replies: replies_count
       }
     }
+  end
+
+  def trigger_broadcast
+    if planned?
+      BroadcastRequestJob.delay(run_at: schedule_send_for).perform_later(id)
+      schedule_send_for
+    else
+      BroadcastRequestJob.perform_later(id)
+      nil
+    end
   end
 
   def planned?
@@ -68,29 +76,6 @@ class Request < ApplicationRecord
       .transform_values { |messages| messages.sort_by(&:created_at) }
   end
 
-  # rubocop:disable Metrics/AbcSize
-  def self.broadcast!(request)
-    if request.planned?
-      BroadcastRequestJob.delay(run_at: request.schedule_send_for).perform_later(request.id)
-      RequestScheduled.with(request_id: request.id,
-                            organization_id: request.organization.id).deliver_later(request.organization.users + User.admin.all)
-    else
-      request.organization.contributors.active.with_tags(request.tag_list).each do |contributor|
-        message = Message.new(
-          sender: request.user,
-          recipient: contributor,
-          text: request.personalized_text(contributor),
-          request: request,
-          broadcasted: true
-        )
-        message.files = attach_files(request.files) if request.files.attached?
-        message.save!
-      end
-      request.update(broadcasted_at: Time.current)
-    end
-  end
-  # rubocop:enable Metrics/AbcSize
-
   def self.attach_files(files)
     files.map do |file|
       message_file = Message::File.new
@@ -101,13 +86,10 @@ class Request < ApplicationRecord
 
   private
 
-  def broadcast_request
-    Request.broadcast!(self)
-  end
+  def notify_recipient
+    return unless planned?
 
-  def broadcast_updated_request
-    return unless saved_change_to_schedule_send_for?
-
-    Request.broadcast!(self)
+    RequestScheduled.with(request_id: id,
+                          organization_id: organization.id).deliver_later(organization.users + User.admin.all)
   end
 end

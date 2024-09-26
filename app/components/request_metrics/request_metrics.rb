@@ -21,7 +21,7 @@ module RequestMetrics
       [
         {
           value: stats[:counts][:contributors],
-          total: stats[:counts][:recipients],
+          total: request_for_info.organization.contributors.active.with_tags(request_for_info.tag_list).count,
           label: I18n.t('components.request_metrics.contributors', count: stats[:counts][:contributors]),
           icon: 'single-03'
         },

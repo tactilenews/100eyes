@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 # TODO: Refactor to remove the need to disable rubocop
-# rubocop:disable Metrics/ClassLength
 class RequestsController < ApplicationController
   before_action :set_request, only: %i[show edit update notifications destroy messages_by_contributor stats]
   before_action :notifications_params, only: :notifications
@@ -22,17 +21,7 @@ class RequestsController < ApplicationController
     resize_image_files if request_params[:files].present?
     @request = @organization.requests.new(request_params.merge(user: current_user))
     if @request.save
-      recipient_count = @request.organization.contributors.active.with_tags(@request.tag_list).count
-      if @request.planned?
-        redirect_to organization_requests_path(@organization, filter: :planned), flash: {
-          success: I18n.t('request.schedule_request_success',
-                          count: recipient_count,
-                          scheduled_datetime: I18n.l(@request.schedule_send_for, format: :long))
-        }
-      else
-        redirect_to organization_request_path(@organization.id, @request),
-                    flash: { success: I18n.t('request.success', count: recipient_count) }
-      end
+      trigger_broadcast_and_redirect(@request)
     else
       render :new, status: :unprocessable_entity
     end
@@ -47,10 +36,7 @@ class RequestsController < ApplicationController
   def update
     @request.files.purge_later if @request.files.attached? && request_params[:files].blank?
     if @request.update(request_params)
-      success_message, filter = update_request_redirect_specifics
-      redirect_to organization_requests_path(@request.organization_id, filter: filter), flash: {
-        success: success_message
-      }
+      trigger_broadcast_and_redirect(@request)
     else
       render :edit, status: :unprocessable_entity
     end
@@ -163,16 +149,18 @@ class RequestsController < ApplicationController
     end
   end
 
-  def update_request_redirect_specifics
-    if @request.planned?
-      [I18n.t('request.schedule_request_success',
-              count: @request.organization.contributors.active.with_tags(@request.tag_list).count,
-              scheduled_datetime: I18n.l(@request.schedule_send_for, format: :long)),
-       :planned]
+  def trigger_broadcast_and_redirect(request)
+    recipient_count = @request.organization.contributors.active.with_tags(request.tag_list).count
+    run_at = request.trigger_broadcast
+    if run_at
+      redirect_to organization_requests_path(@organization, filter: :planned), flash: {
+        success: I18n.t('request.schedule_request_success',
+                        count: recipient_count,
+                        scheduled_datetime: I18n.l(run_at, format: :long))
+      }
     else
-      [I18n.t('request.success', count: @request.organization.contributors.active.with_tags(@request.tag_list).count),
-       nil]
+      redirect_to organization_request_path(@organization.id, request),
+                  flash: { success: I18n.t('request.success', count: recipient_count) }
     end
   end
 end
-# rubocop:enable Metrics/ClassLength
