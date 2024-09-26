@@ -90,10 +90,24 @@ RSpec.describe Message, type: :model do
     end
   end
 
+  describe '#send!' do
+    subject { message.send! }
+
+    let(:message) { create(:message, :outbound, recipient: create(:contributor, :whats_app_contributor)) }
+
+    it 'enqueues a job to send the message' do
+      expect { subject }.to(have_enqueued_job(WhatsAppAdapter::TwilioOutbound::Text).on_queue('default').with do |params|
+        expect(params[:organization_id]).to eq(message.organization_id)
+        expect(params[:contributor_id]).to eq(message.contributor.id)
+        expect(params[:text]).to include(message.contributor.first_name)
+        expect(params[:text]).to include(message.request.title)
+      end)
+    end
+  end
+
   describe '#after_commit(on: :commit)' do
     let!(:user) { create(:user) }
-    let!(:request) { create(:request, user: user, organization: organization) }
-    let(:message) { create(:message, sender: user, recipient: recipient, broadcasted: broadcasted, request: request) }
+    let!(:request) { create(:request, user: user, organization: organization, broadcasted_at: nil) }
     let(:organization) do
       create(:organization, name: '100eyes', telegram_bot_api_key: 'TELEGRAM_BOT_API_KEY', telegram_bot_username: 'USERNAME')
     end
@@ -112,9 +126,8 @@ RSpec.describe Message, type: :model do
 
       describe '#blocked' do
         subject do
-          perform_enqueued_jobs { message }
-          message.reload
-          message.blocked
+          perform_enqueued_jobs { BroadcastRequestJob.perform_later(request.id) }
+          request.messages.where(recipient_id: recipient.id).first.reload.blocked
         end
 
         it { should be(false) }
@@ -128,6 +141,7 @@ RSpec.describe Message, type: :model do
     describe '#notify_recipient' do
       subject { message }
 
+      let(:message) { create(:message, sender: user, recipient: recipient, broadcasted: broadcasted, request: request) }
       let!(:admin) { create(:user, admin: true) }
 
       before do

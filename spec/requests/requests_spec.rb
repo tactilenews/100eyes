@@ -140,10 +140,6 @@ RSpec.describe 'Requests', type: :request do
     let(:params) { { request: { title: 'Example Question', text: 'How do you do?', hints: ['confidential'] } } }
     let(:user) { create(:user, organizations: [organization]) }
 
-    before do
-      allow(Request).to receive(:broadcast!).and_call_original # is stubbed for every other test
-    end
-
     context 'unauthenticated' do
       let(:user) { nil }
 
@@ -208,11 +204,15 @@ RSpec.describe 'Requests', type: :request do
             expect(flash[:success]).to eq('Deine Frage wurde erfolgreich an 2 Mitglieder in der Community gesendet')
           end
 
+          it 'schedules a job to broadcast the request' do
+            expect(BroadcastRequestJob).to have_been_enqueued.with(organization.requests.first.id)
+          end
+
           describe 'with no text' do
             before { params[:request][:text] = '' }
 
             it 'redirects to requests#show' do
-              request = Request.first
+              request = organization.requests.first
               expect(response).to redirect_to organization_request_path(organization, request)
             end
 
@@ -222,28 +222,33 @@ RSpec.describe 'Requests', type: :request do
           end
         end
       end
-    end
 
-    context 'scheduled for future datetime' do
-      let(:scheduled_datetime) { Time.current.tomorrow.beginning_of_hour }
-      let(:params) do
-        { request: { title: 'Scheduled request', text: 'Did you get this scheduled request?', schedule_send_for: scheduled_datetime } }
-      end
+      context 'scheduled for future datetime' do
+        let(:scheduled_datetime) { Time.current.tomorrow.beginning_of_hour }
+        let(:params) do
+          { request: { title: 'Scheduled request', text: 'Did you get this scheduled request?', schedule_send_for: scheduled_datetime } }
+        end
 
-      it 'redirects to requests#show' do
-        response = subject.call
-        expect(response).to redirect_to organization_requests_path(organization, filter: :planned)
-      end
+        it 'redirects to requests#show' do
+          response = subject.call
+          expect(response).to redirect_to organization_requests_path(organization, filter: :planned)
+        end
 
-      it 'shows success notification' do
-        subject.call
-        request = Request.first
-        expect(flash[:success]).to include(I18n.l(request.schedule_send_for, format: :long))
+        it 'shows success notification' do
+          subject.call
+          request = Request.first
+          expect(flash[:success]).to include(I18n.l(request.schedule_send_for, format: :long))
+        end
+
+        it 'delays the job for the future' do
+          expect { subject.call }.to change(DelayedJob, :count).from(0).to(1)
+          expect(Delayed::Job.last.run_at).to be_within(1.second).of(organization.requests.first.schedule_send_for)
+        end
       end
     end
   end
 
-  describe 'PATCH  /:organization_id/requests/:id' do
+  describe 'PATCH /:organization_id/requests/:id' do
     subject { -> { patch organization_request_path(organization, request, as: user), params: params } }
 
     let(:request) { create(:request, title: 'Temp title', organization: organization) }
@@ -313,6 +318,11 @@ RSpec.describe 'Requests', type: :request do
             )
           end
 
+          it 'delays the job for the future' do
+            expect { subject.call }.to change(DelayedJob, :count).from(0).to(1)
+            expect(Delayed::Job.last.run_at).to be_within(1.second).of(request.schedule_send_for)
+          end
+
           context 're-scheduled to be sent now' do
             let(:params) { { request: { schedule_send_for: Time.current } } }
 
@@ -320,9 +330,15 @@ RSpec.describe 'Requests', type: :request do
               expect { subject.call }.to(change { request.reload.schedule_send_for })
             end
 
-            it 'redirects to requests index page with success message' do
+            it 'schedules a job to broadcast the request' do
               subject.call
-              expect(response).to redirect_to(organization_requests_path(request.organization_id))
+
+              expect(BroadcastRequestJob).to have_been_enqueued.with(request.id)
+            end
+
+            it "redirects to request's show page with success message" do
+              subject.call
+              expect(response).to redirect_to(organization_request_path(request.organization_id, request))
               expect(flash[:success]).to eq('Deine Frage wurde erfolgreich an 2 Mitglieder in der Community gesendet')
             end
           end
