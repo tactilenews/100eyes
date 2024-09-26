@@ -283,6 +283,14 @@ RSpec.describe Request, type: :model do
       end
     end
 
+    context 'with a request scheduled to be sent out immediately' do
+      let!(:request) { create(:request, schedule_send_for: Time.current) }
+
+      it 'schedules a job to broadcast the request and returns nil' do
+        expect(request.trigger_broadcast).to have_been_enqueued.with(request.id)
+      end
+    end
+
     context 'with a scheduled for request' do
       let!(:request) { create(:request, schedule_send_for: 1.day.from_now) }
 
