@@ -64,6 +64,7 @@ rails:
     password: # (REQUIRED) copied from Digital Ocean database config
     host: # optional (e.g. for managed databases)
     port: # optional (e.g. for managed databases)
+  inbound_email_password: "${inbound_email_password}"
   email_from_address: "redaktion@${domain}"
   sentry:
     dsn: # (REQUIRED) Sentry DSN to enable error tracking
