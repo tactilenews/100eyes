@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  root to: redirect('/organizations')
+  root to: 'sessions#new'
 
   concern :paginatable do
     get '(page/:page)', action: :index, on: :collection, as: ''

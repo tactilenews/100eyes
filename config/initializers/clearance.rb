@@ -8,7 +8,7 @@ Clearance.configure do |config|
   config.mailer_sender = ENV['EMAIL_FROM_ADDRESS']
   config.rotate_csrf_on_sign_in = true
   config.same_site = :lax
-  config.redirect_url = '/organizations'
+  config.redirect_url = '/sign_in'
   config.routes = false
   config.sign_in_on_password_reset = false
 
