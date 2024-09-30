@@ -41,7 +41,7 @@ module WhatsAppAdapter
 
       def welcome_message_template_payload
         {
-          name: "welcome_messsage_#{organization.project_name.parameterize.underscore}",
+          name: "welcome_message_#{organization.project_name.parameterize.underscore}",
           category: 'MARKETING',
           components: [
             {

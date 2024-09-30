@@ -193,7 +193,7 @@ RSpec.describe 'Onboarding::Whatsapp' do
                 policy: 'deterministic',
                 code: 'de'
               },
-              name: 'welcome_message',
+              name: "welcome_message_#{organization.project_name.parameterize.underscore}",
               components: [
                 {
                   type: 'body',

@@ -182,7 +182,7 @@ module WhatsAppAdapter
               policy: 'deterministic',
               code: 'de'
             },
-            name: "welcome_messsage_#{organization.project_name.parameterize.underscore}",
+            name: "welcome_message_#{organization.project_name.parameterize.underscore}",
             components: [
               {
                 type: 'body',
