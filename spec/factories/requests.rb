@@ -18,5 +18,9 @@ FactoryBot.define do
         create(:message, request: request, sender: adam, created_at: 1.hour.ago)
       end
     end
+
+    trait :with_file do
+      files { [Rack::Test::UploadedFile.new(Rails.root.join('example-image.png'), 'image/png')] }
+    end
   end
 end

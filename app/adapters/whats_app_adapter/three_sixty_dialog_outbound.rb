@@ -121,7 +121,7 @@ module WhatsAppAdapter
                                                                         ))
         else
           files.each do |_file|
-            WhatsAppAdapter::ThreeSixtyDialog::UploadFile.perform_later(message_id: message.id)
+            WhatsAppAdapter::ThreeSixtyDialog::UploadFileJob.perform_later(message_id: message.id)
           end
         end
       end

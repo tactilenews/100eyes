@@ -8,7 +8,9 @@ VCR.configure do |c|
   c.filter_sensitive_data('TELEGRAM_BOT_API_KEY') { 'TELEGRAM_BOT_API_KEY' }
   c.filter_sensitive_data('TELEGRAM_BOT_USERNAME') { 'TELEGRAM_BOT_USERNAME' }
   c.filter_sensitive_data('SIGNAL_SERVER_PHONE_NUMBER') { '+4912345678' }
-
+  c.filter_sensitive_data('D360-API-KEY') do |interaction|
+    interaction.request.headers['D360-Api-Key'].try(:first)
+  end
   c.configure_rspec_metadata!
 
   # Capybara.server_host default
