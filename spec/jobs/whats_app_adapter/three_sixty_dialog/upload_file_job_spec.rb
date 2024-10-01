@@ -12,7 +12,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::UploadFileJob do
 
     before do
       allow(ENV).to receive(:fetch).with(
-        ENV.fetch('THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')
+        'THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693'
       ).and_return('https://waba-v2.360dialog.io')
     end
 
