@@ -137,9 +137,11 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
           before { create(:message, sender: contributor) }
 
           it 'enqueues a File job with file, contributor, text' do
-            expect { subject.call }.to(have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::UploadFile).on_queue('default').with do |params|
-              expect(params[:message_id]).to eq(message.id)
-            end)
+            expect do
+              subject.call
+            end.to(have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::UploadFileJob).on_queue('default').with do |params|
+                     expect(params[:message_id]).to eq(message.id)
+                   end)
           end
         end
       end
