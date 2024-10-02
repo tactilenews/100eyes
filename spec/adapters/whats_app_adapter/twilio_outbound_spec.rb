@@ -10,14 +10,14 @@ RSpec.describe WhatsAppAdapter::TwilioOutbound do
     create(:organization, onboarding_success_heading: onboarding_success_heading, onboarding_success_text: onboarding_success_text)
   end
   let(:contributor) { create(:contributor, email: nil) }
+  let(:onboarding_success_heading) { 'Thanks for onboarding' }
+  let(:onboarding_success_text) { 'We will start sending messages soon.' }
 
   describe '::send_welcome_message!' do
     let(:expected_job_args) do
       { organization_id: organization.id, contributor_id: contributor.id,
         text: ["*#{onboarding_success_heading}*", onboarding_success_text].join("\n\n") }
     end
-    let(:onboarding_success_heading) { 'Thanks for onboarding' }
-    let(:onboarding_success_text) { 'We will start sending messages soon.' }
     subject { -> { described_class.send_welcome_message!(contributor, organization) } }
     before do
       message # we don't count the extra ::send here
@@ -57,10 +57,11 @@ RSpec.describe WhatsAppAdapter::TwilioOutbound do
 
       describe 'contributor has not sent a message within 24 hours' do
         it 'enqueues the Text job with WhatsApp template' do
-          expect { subject.call }.to(have_enqueued_job(WhatsAppAdapter::TwilioOutbound::Text).on_queue('default').with do |params|
+          expect { subject.call }.to(have_enqueued_job(WhatsAppAdapter::TwilioOutbound::Template).on_queue('default').with do |params|
+                                       expect(params[:organization_id]).to eq(message.organization.id)
                                        expect(params[:contributor_id]).to eq(contributor.id)
-                                       expect(params[:text]).to include(contributor.first_name)
-                                       expect(params[:text]).to include(message.request.title)
+                                       expect(params[:content_sid]).to be_kind_of(String)
+                                       expect(params[:message]).to eq(message)
                                      end)
         end
       end
@@ -94,10 +95,11 @@ RSpec.describe WhatsAppAdapter::TwilioOutbound do
 
         context 'contributor has not sent a message within 24 hours' do
           it 'enqueues the Text job with WhatsApp template' do
-            expect { subject.call }.to(have_enqueued_job(WhatsAppAdapter::TwilioOutbound::Text).on_queue('default').with do |params|
+            expect { subject.call }.to(have_enqueued_job(WhatsAppAdapter::TwilioOutbound::Template).on_queue('default').with do |params|
+              expect(params[:organization_id]).to eq(message.organization.id)
               expect(params[:contributor_id]).to eq(contributor.id)
-              expect(params[:text]).to include(contributor.first_name)
-              expect(params[:text]).to include(message.request.title)
+              expect(params[:content_sid]).to be_kind_of(String)
+              expect(params[:message]).to eq(message)
             end)
           end
         end
