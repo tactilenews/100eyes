@@ -50,13 +50,6 @@ rails:
   environment: production
   hundred_eyes_project_name: 100eyes
   attr_encrypted_key: # (REQUIRED) To save encrypted attrs to db
-  threema:
-    api_identity: 
-    api_secret: 
-    private_key: # your threema private key *without* `private:` prefix
-  telegram_bot:
-    api_key: 
-    username: # your telegram bot name, e.g. 'HundredEyesBot'
   postmark:
     api_token: # (REQUIRED) API token for your new Postmark server
     transactional_stream: "outbound"
@@ -75,14 +68,8 @@ rails:
   email_from_address: "redaktion@${domain}"
   sentry:
     dsn: # (REQUIRED) Sentry DSN to enable error tracking
-  whats_app:
-    server_phone_number: ""
   twilio:
-    account_sid: ""
     auth_token: ""
-    api_key:
-      sid: ""
-      secret: ""
   three_sixty_dialog:
     partner:
       id: ""
