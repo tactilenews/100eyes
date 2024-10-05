@@ -477,5 +477,39 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
         end
       end
     end
+
+    describe 'REQUEST_TO_RECEIVE_MESSAGE' do
+      let(:request_to_receive_message_callback) { spy('request_to_receive_message_callback') }
+
+      before do
+        adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::REQUEST_TO_RECEIVE_MESSAGE) do |contributor, message|
+          request_to_receive_message_callback.call(contributor, message)
+        end
+      end
+
+      subject do
+        adapter.consume(organization, whats_app_message)
+        request_to_receive_message_callback
+      end
+
+      before do
+        create(:message, external_id: 'some_external_id')
+        whats_app_message[:messages].first[:context] = { id: 'some_external_id' }
+      end
+
+      describe 'with no WhatsApp template sent' do
+        it 'does not trigger the callback' do
+          expect(subject).not_to have_received(:call)
+        end
+      end
+
+      describe 'with a WhatsApp template sent' do
+        before { contributor.update!(whats_app_message_template_sent_at: 1.hour.ago) }
+
+        it 'triggerd the callback' do
+          expect(subject).to have_received(:call)
+        end
+      end
+    end
   end
 end

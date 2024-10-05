@@ -58,11 +58,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
           }
         }
       end
-      let(:latest_message) { contributor.received_messages.first.text }
-
-      before do
-        create(:message, :outbound, request: request, recipient: contributor)
-      end
+      let!(:latest_message) { create(:message, :outbound, request: request, recipient: contributor) }
 
       context 'no message template sent' do
         it 'creates a messsage' do
@@ -72,19 +68,43 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
 
       context 'responding to template' do
         before { contributor.update(whats_app_message_template_sent_at: Time.current) }
-        let(:text) { latest_message }
+        let(:text) { latest_message.text }
 
         context 'request to receive latest message' do
-          it 'enqueues a job to send the latest received message' do
-            expect do
-              subject.call
-            end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).on_queue('default').with(text_payload)
-          end
-
           it 'marks that contributor has responded to template message' do
             expect { subject.call }.to change {
                                          contributor.reload.whats_app_message_template_responded_at
                                        }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+          end
+
+          describe 'with no external id' do
+            it 'enqueues a job to send the latest received message' do
+              expect do
+                subject.call
+              end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).on_queue('default').with(
+                text_payload.merge({ message_id: latest_message.id })
+              )
+            end
+          end
+
+          describe 'with an external id' do
+            let(:previous_message) do
+              create(:message, :outbound, request: request, recipient: contributor, created_at: 2.days.ago, external_id: 'some_external_id')
+            end
+            let(:text) { previous_message.text }
+
+            before do
+              previous_message
+              components[:messages].first[:context] = { id: 'some_external_id' }
+            end
+
+            it 'sends out the message with that external id' do
+              expect do
+                subject.call
+              end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).on_queue('default').with(
+                text_payload.merge({ message_id: previous_message.id })
+              )
+            end
           end
         end
       end

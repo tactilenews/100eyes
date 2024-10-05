@@ -67,7 +67,7 @@ module WhatsAppAdapter
       trigger(REQUEST_FOR_MORE_INFO, sender) if request_for_more_info?(text)
       trigger(UNSUBSCRIBE_CONTRIBUTOR, sender) if unsubscribe_text?(text)
       trigger(RESUBSCRIBE_CONTRIBUTOR, sender) if resubscribe_text?(text)
-      trigger(REQUEST_TO_RECEIVE_MESSAGE, sender) if request_to_receive_message?(sender, text)
+      trigger(REQUEST_TO_RECEIVE_MESSAGE, sender, message) if request_to_receive_message?(sender, text)
 
       message = Message.new(text: text, sender: sender)
       message.raw_data.attach(
