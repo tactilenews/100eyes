@@ -7,7 +7,7 @@ module WhatsAppAdapter
     class CreateWelcomeMessageTemplateJob < ApplicationJob
       def perform(organization_id:)
         @organization = Organization.find_by(id: organization_id)
-        @token = WhatsAppAdapter::ThreeSixtyDialog::TokenFetcherService.new.call
+        @token = WhatsAppAdapter::ThreeSixtyDialog::TokenFetcherService.call
 
         @base_uri = ENV.fetch('THREE_SIXTY_DIALOG_PARTNER_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')
         @partner_id = ENV.fetch('THREE_SIXTY_DIALOG_PARTNER_ID', nil)
@@ -17,9 +17,7 @@ module WhatsAppAdapter
           token: token
         ).call
         if "welcome_message_#{organization.project_name.parameterize.underscore}".in?(existing_templates)
-          User.admin.find_each do |admin|
-            PostmarkAdapter::Outbound.welcome_message_updated!(admin, organization)
-          end
+          notify_admin_to_update_existing_template
         else
           create_welcome_message_template
         end
@@ -28,6 +26,10 @@ module WhatsAppAdapter
       attr_reader :organization, :token, :base_uri, :partner_id, :waba_account_id
 
       private
+
+      def notify_admin_to_update_existing_template
+        User.admin.find_each { |admin| PostmarkAdapter::Outbound.welcome_message_updated!(admin, organization) }
+      end
 
       def create_welcome_message_template
         url = URI.parse(

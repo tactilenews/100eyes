@@ -3,9 +3,7 @@
 module WhatsAppAdapter
   module ThreeSixtyDialog
     class TokenFetcherService
-      def initialize; end
-
-      def call
+      def self.call
         base_uri = URI.parse(
           ENV.fetch('THREE_SIXTY_DIALOG_PARTNER_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')
         )

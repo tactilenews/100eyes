@@ -15,15 +15,7 @@ RSpec.describe Organization do
       let(:params) { { name: 'SomethingElse', upgrade_discount: 100 } }
 
       it 'for other updates' do
-        expect { subject }.not_to have_enqueued_job.on_queue('default').with(
-          'PostmarkAdapter::Outbound',
-          'business_plan_upgraded_email',
-          'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
-          {
-            params: { admin: an_instance_of(User), organization: organization, price_per_month_with_discount: anything },
-            args: []
-          }
-        )
+        expect { subject }.not_to have_enqueued_job
       end
     end
 
@@ -32,15 +24,7 @@ RSpec.describe Organization do
         let(:params) { { business_plan: create(:business_plan, :editorial_pro), upgraded_business_plan_at: nil } }
 
         it 'does not schedule a job' do
-          expect { subject }.not_to have_enqueued_job.on_queue('default').with(
-            'PostmarkAdapter::Outbound',
-            'business_plan_upgraded_email',
-            'deliver_now', # How ActionMailer works in test environment, even though in production we call deliver_later
-            {
-              params: { admin: an_instance_of(User), organization: organization, price_per_month_with_discount: anything },
-              args: []
-            }
-          )
+          expect { subject }.not_to have_enqueued_job
         end
       end
 
@@ -75,7 +59,7 @@ RSpec.describe Organization do
       let(:params) { { name: 'SomethingElse' } }
 
       it 'for other updates' do
-        expect { subject }.not_to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::CreateWelcomeMessageTemplateJob)
+        expect { subject }.not_to have_enqueued_job
       end
     end
 

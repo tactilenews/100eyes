@@ -10,7 +10,7 @@ module WhatsAppAdapter
 
       @base_uri = ENV.fetch('THREE_SIXTY_DIALOG_PARTNER_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')
 
-      @token = WhatsAppAdapter::ThreeSixtyDialog::TokenFetcherService.new.call
+      @token = WhatsAppAdapter::ThreeSixtyDialog::TokenFetcherService.call
       partner_id = ENV.fetch('THREE_SIXTY_DIALOG_PARTNER_ID', nil)
 
       url = URI.parse(
