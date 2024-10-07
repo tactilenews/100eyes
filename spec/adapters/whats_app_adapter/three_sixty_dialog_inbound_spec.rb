@@ -506,7 +506,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
       describe 'with a WhatsApp template sent' do
         before { contributor.update!(whats_app_message_template_sent_at: 1.hour.ago) }
 
-        it 'triggerd the callback' do
+        it 'triggered the callback' do
           expect(subject).to have_received(:call)
         end
       end
