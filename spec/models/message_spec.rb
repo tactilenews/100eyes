@@ -96,11 +96,9 @@ RSpec.describe Message, type: :model do
     let(:message) { create(:message, :outbound, recipient: create(:contributor, :whats_app_contributor)) }
 
     it 'enqueues a job to send the message' do
-      expect { subject }.to(have_enqueued_job(WhatsAppAdapter::TwilioOutbound::Text).on_queue('default').with do |params|
-        expect(params[:organization_id]).to eq(message.organization_id)
-        expect(params[:contributor_id]).to eq(message.contributor.id)
-        expect(params[:text]).to include(message.contributor.first_name)
-        expect(params[:text]).to include(message.request.title)
+      expect { subject }.to(have_enqueued_job(WhatsAppAdapter::TwilioOutbound::Template).on_queue('default').with do |params|
+        expect(params[:content_sid]).to be_kind_of(String)
+        expect(params[:message_id]).to eq(message.id)
       end)
     end
   end
