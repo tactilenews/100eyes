@@ -58,10 +58,8 @@ RSpec.describe WhatsAppAdapter::TwilioOutbound do
       describe 'contributor has not sent a message within 24 hours' do
         it 'enqueues the Text job with WhatsApp template' do
           expect { subject.call }.to(have_enqueued_job(WhatsAppAdapter::TwilioOutbound::Template).on_queue('default').with do |params|
-                                       expect(params[:organization_id]).to eq(message.organization.id)
-                                       expect(params[:contributor_id]).to eq(contributor.id)
                                        expect(params[:content_sid]).to be_kind_of(String)
-                                       expect(params[:message]).to eq(message)
+                                       expect(params[:message_id]).to eq(message.id)
                                      end)
         end
       end
@@ -96,10 +94,8 @@ RSpec.describe WhatsAppAdapter::TwilioOutbound do
         context 'contributor has not sent a message within 24 hours' do
           it 'enqueues the Text job with WhatsApp template' do
             expect { subject.call }.to(have_enqueued_job(WhatsAppAdapter::TwilioOutbound::Template).on_queue('default').with do |params|
-              expect(params[:organization_id]).to eq(message.organization.id)
-              expect(params[:contributor_id]).to eq(contributor.id)
               expect(params[:content_sid]).to be_kind_of(String)
-              expect(params[:message]).to eq(message)
+              expect(params[:message_id]).to eq(message.id)
             end)
           end
         end

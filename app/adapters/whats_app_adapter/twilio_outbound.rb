@@ -55,8 +55,7 @@ module WhatsAppAdapter
       def send_message_template!(recipient, message)
         recipient.update(whats_app_message_template_sent_at: Time.current)
         content_sid = message.organization.twilio_content_sids["new_request_#{time_of_day}#{rand(1..3)}"]
-        WhatsAppAdapter::TwilioOutbound::Template.perform_later(organization_id: message.organization.id, contributor_id: recipient.id,
-                                                                content_sid: content_sid, message: message)
+        WhatsAppAdapter::TwilioOutbound::Template.perform_later(content_sid: content_sid, message_id: message.id)
       end
 
       private

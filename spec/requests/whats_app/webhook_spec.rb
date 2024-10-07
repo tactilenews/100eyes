@@ -375,9 +375,8 @@ RSpec.describe WhatsApp::WebhookController do
 
               it 'enqueues the Text job with WhatsApp template' do
                 expect { subject.call }.to(have_enqueued_job(WhatsAppAdapter::TwilioOutbound::Template).on_queue('default').with do |params|
-                  expect(params[:contributor_id]).to eq(contributor.id)
                   expect(params[:content_sid]).to be_kind_of(String)
-                  expect(params[:message]).to eq(message)
+                  expect(params[:message_id]).to eq(message.id)
                 end)
               end
 

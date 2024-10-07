@@ -5,9 +5,10 @@ module WhatsAppAdapter
     class Template < ApplicationJob
       queue_as :default
 
-      def perform(organization_id:, contributor_id:, content_sid:, message:)
-        organization = Organization.find(organization_id)
-        contributor = organization.contributors.find(contributor_id)
+      def perform(content_sid:, message_id:)
+        message = Message.find(message_id)
+        organization = message.organization
+        contributor = message.recipient
 
         response = organization.twilio_instance.messages.create(
           content_sid: content_sid,
