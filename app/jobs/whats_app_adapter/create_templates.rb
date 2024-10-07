@@ -13,7 +13,10 @@ module WhatsAppAdapter
       @token = token
       @waba_account_id = organization.three_sixty_dialog_client_waba_account_id
       @waba_account_id = fetch_client_info if waba_account_id.blank? || organization.three_sixty_dialog_whats_app_template_namespace.blank?
-
+      existing_templates = WhatsAppAdapter::ThreeSixtyDialog::TemplateFetcherService.new(
+        waba_account_id: waba_account_id,
+        token: token
+      )
       templates_to_create_array = whats_app_templates.keys.difference(existing_templates)
       templates_to_create = whats_app_templates.select { |key, _value| key.in?(templates_to_create_array) }
       templates_to_create.each do |key, value|
@@ -40,19 +43,6 @@ module WhatsAppAdapter
       default_welcome_message_hash.merge(requests_hash)
     end
     # rubocop:enable Style/FormatStringToken
-
-    def existing_templates
-      url = URI.parse(
-        "#{base_uri}/partners/#{partner_id}/waba_accounts/#{waba_account_id}/waba_templates"
-      )
-      headers = set_headers
-      request = Net::HTTP::Get.new(url.to_s, headers)
-      response = Net::HTTP.start(url.host, url.port, use_ssl: true) do |http|
-        http.request(request)
-      end
-      waba_templates = JSON.parse(response.body)['waba_templates']
-      waba_templates.pluck('name').map(&:to_sym)
-    end
 
     def create_template
       url = URI.parse(
