@@ -956,6 +956,9 @@ de:
     contributor_subscribed:
       text_html: "<strong>%{contributor_name}</strong> hat beantragt, erneut Nachrichten per %{contributor_channel} zu bestellen."
       link_text: Zum Profil
+    whats_app_template_created:
+      text_html: Deine WhatsApp-Vorlage wurde erfolgreich erstellt
+      link_text: Zu Einstellungen
   shared:
     community: Community
     editorial: Redaktion

@@ -21,7 +21,7 @@ class Organization < ApplicationRecord
   has_one_attached :channel_image
 
   before_update :notify_admin
-  after_commit :notify_admin_of_welcome_message_change
+  after_update_commit :notify_admin_of_welcome_message_change
 
   validates :telegram_bot_username, uniqueness: true
 
@@ -123,8 +123,6 @@ class Organization < ApplicationRecord
   def notify_admin_of_welcome_message_change
     return unless saved_change_to_onboarding_success_heading? || saved_change_to_onboarding_success_text?
 
-    User.admin.find_each do |admin|
-      PostmarkAdapter::Outbound.welcome_message_updated!(admin, self)
-    end
+    WhatsAppAdapter::ThreeSixtyDialog::CreateWelcomeMessageTemplateJob.perform_later(organization_id: id)
   end
 end

@@ -13,7 +13,7 @@
     <%= c('settings_field', organization: organization, type: :textarea, attr: :onboarding_page) %>
   <% end %>
 
-  <%= c 'section', data: { testid: 'onboarding-success-section' } do %>
+  <%= c 'section', id: 'onboarding-success-section', data: { testid: 'onboarding-success-section' } do %>
     <%= c('heading', tag: :h2) { t('organization.form.groups.onboarding_success') } %>
     <%= c('settings_field', organization: organization, type: :input, attr: :onboarding_success_heading) %>
     <%= c('settings_field', organization: organization, type: :textarea, attr: :onboarding_success_text) %>
