@@ -15,7 +15,7 @@ RSpec.shared_examples 'a Contributor resubscribes' do |adapter|
       expect(params[:organization_id]).to eq(organization.id)
       if adapter.eql?(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text)
         expect(params[:payload][:to]).to eq(contributor.whats_app_phone_number.split('+').last)
-        expect(params[:payload][:template][:name]).to eq("welcome_message_#{organization.project_name.parameterize.underscore}")
+        expect(params[:payload][:template][:name]).to eq('welcome_message_test_project')
       else
         expect(params[:contributor_id]).to eq(contributor.id)
         expect(params[:text]).to match(welcome_message)
