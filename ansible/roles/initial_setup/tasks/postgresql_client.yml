@@ -1,0 +1,20 @@
+---
+- name: Add pgdg repo to sources.list.d
+  lineinfile:
+    path: /etc/apt/sources.list.d/pgdg.list
+    line: "deb http://apt.postgresql.org/pub/repos/apt {{ ansible_distribution_release }}-pgdg main"
+    create: true
+
+- name: Download PostgreSQL key and add it to system keyring
+  apt_key:
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+    state: present
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Install postgresql-client-14 for backups
+  apt:
+    name: postgresql-client-14
+    state: present
