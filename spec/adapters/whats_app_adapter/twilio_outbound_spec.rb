@@ -16,7 +16,7 @@ RSpec.describe WhatsAppAdapter::TwilioOutbound do
   describe '::send_welcome_message!' do
     let(:expected_job_args) do
       { organization_id: organization.id, contributor_id: contributor.id,
-        text: ["*#{onboarding_success_heading}*", onboarding_success_text].join("\n\n") }
+        text: "*Thanks for onboarding*\n\nWe will start sending messages soon." }
     end
     subject { -> { described_class.send_welcome_message!(contributor, organization) } }
     before do
