@@ -6,7 +6,7 @@ module WhatsAppAdapter
       queue_as :default
 
       def perform(message_id:, file_id:)
-        message = Message.find(message_id)
+        @message = Message.find(message_id)
         organization = Organization.find(message.organization.id)
 
         @recipient = message.recipient
@@ -26,7 +26,7 @@ module WhatsAppAdapter
 
       private
 
-      attr_reader :recipient, :file_id
+      attr_reader :recipient, :file_id, :message
 
       def payload
         {
@@ -41,10 +41,11 @@ module WhatsAppAdapter
       end
 
       def handle_response(response)
-        case response.code.to_i
-        when 200
-          Rails.logger.debug 'Great!'
-        when 400..599
+        case response
+        when Net::HTTPSuccess
+          external_id = JSON.parse(response.body)['messages'].first['id']
+          message.update!(external_id: external_id)
+        when Net::HTTPClientError, Net::HTTPServerError
           exception = WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: response.code, message: response.body)
           ErrorNotifier.report(exception)
         end

@@ -118,7 +118,8 @@ module WhatsAppAdapter
           WhatsAppAdapter::ThreeSixtyDialogOutbound::Text.perform_later(organization_id: message.organization.id,
                                                                         payload: text_payload(
                                                                           recipient, message.text
-                                                                        ))
+                                                                        ),
+                                                                        message_id: message.id)
         else
           files.each do |_file|
             WhatsAppAdapter::ThreeSixtyDialog::UploadFileJob.perform_later(message_id: message.id)

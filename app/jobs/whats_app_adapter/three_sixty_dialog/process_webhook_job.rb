@@ -17,8 +17,8 @@ module WhatsAppAdapter
           handle_request_for_more_info(contributor, organization)
         end
 
-        adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::REQUEST_TO_RECEIVE_MESSAGE) do |contributor|
-          handle_request_to_receive_message(contributor)
+        adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::REQUEST_TO_RECEIVE_MESSAGE) do |contributor, whats_app_message|
+          handle_request_to_receive_message(contributor, whats_app_message)
         end
 
         adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::UNSUPPORTED_CONTENT) do |contributor|
@@ -43,10 +43,11 @@ module WhatsAppAdapter
         ErrorNotifier.report(exception)
       end
 
-      def handle_request_to_receive_message(contributor)
+      def handle_request_to_receive_message(contributor, whats_app_message)
         contributor.update!(whats_app_message_template_responded_at: Time.current, whats_app_message_template_sent_at: nil)
-
-        WhatsAppAdapter::ThreeSixtyDialogOutbound.send!(contributor.received_messages.first)
+        external_id = whats_app_message.dig(:context, :id)
+        message = Message.find_by(external_id: external_id) if external_id
+        WhatsAppAdapter::ThreeSixtyDialogOutbound.send!(message || contributor.received_messages.first)
       end
 
       def handle_request_for_more_info(contributor, organization)

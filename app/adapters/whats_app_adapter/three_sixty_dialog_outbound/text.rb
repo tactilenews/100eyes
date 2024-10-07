@@ -5,8 +5,9 @@ module WhatsAppAdapter
     class Text < ApplicationJob
       queue_as :default
 
-      def perform(organization_id:, payload:)
+      def perform(organization_id:, payload:, message_id: nil)
         organization = Organization.find(organization_id)
+        @message = Message.find(message_id) if message_id
 
         url = URI.parse("#{ENV.fetch('THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')}/messages")
         headers = { 'D360-API-KEY' => organization.three_sixty_dialog_client_api_key, 'Content-Type' => 'application/json' }
@@ -21,13 +22,16 @@ module WhatsAppAdapter
         ErrorNotifier.report(e)
       end
 
+      attr_reader :message
+
       private
 
       def handle_response(response)
-        case response.code.to_i
-        when 201
-          Rails.logger.debug 'Great!'
-        when 400..599
+        case response
+        when Net::HTTPSuccess
+          external_id = JSON.parse(response.body)['messages'].first['id']
+          message&.update!(external_id: external_id)
+        when Net::HTTPClientError, Net::HTTPServerError
           exception = WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: response.code, message: response.body)
           ErrorNotifier.report(exception)
         end
