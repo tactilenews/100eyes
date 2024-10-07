@@ -16,7 +16,7 @@ module WhatsAppAdapter
       existing_templates = WhatsAppAdapter::ThreeSixtyDialog::TemplateFetcherService.new(
         waba_account_id: waba_account_id,
         token: token
-      )
+      ).call
       templates_to_create_array = whats_app_templates.keys.difference(existing_templates)
       templates_to_create = whats_app_templates.select { |key, _value| key.in?(templates_to_create_array) }
       templates_to_create.each do |key, value|
@@ -140,10 +140,10 @@ module WhatsAppAdapter
     end
 
     def handle_response(response)
-      case response.code.to_i
-      when 201
+      case response
+      when Net::HTTPSuccess
         Rails.logger.debug 'Great!'
-      when 400..599
+      when Net::HTTPClientError, Net::HTTPServerError
         return if response.body.match?(/you have provided is already in use. Please choose a different name for your template./)
 
         exception = WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: response.code, message: response.body)

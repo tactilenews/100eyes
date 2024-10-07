@@ -6,9 +6,10 @@ module WhatsAppAdapter
       def initialize; end
 
       def call
-        url = URI.parse(
-          "#{ENV.fetch('THREE_SIXTY_DIALOG_PARTNER_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')}/token"
+        base_uri = URI.parse(
+          ENV.fetch('THREE_SIXTY_DIALOG_PARTNER_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')
         )
+        url = URI::HTTPS.build(host: base_uri.hostname, path: "#{base_uri.path}/token")
         headers = { 'Content-Type': 'application/json' }
         request = Net::HTTP::Post.new(url.to_s, headers)
         request.body = {

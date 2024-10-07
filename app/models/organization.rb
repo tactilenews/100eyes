@@ -21,7 +21,7 @@ class Organization < ApplicationRecord
   has_one_attached :channel_image
 
   before_update :notify_admin
-  after_commit :notify_admin_of_welcome_message_change
+  after_update_commit :notify_admin_of_welcome_message_change
 
   validates :telegram_bot_username, uniqueness: true
 

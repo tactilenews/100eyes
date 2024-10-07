@@ -1,0 +1,179 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://hub.360dialog.io/api/v2/token
+    body:
+      encoding: UTF-8
+      string: '{"username":"THREE_SIXTY_DIALOG_PARTNER_USERNAME","password":"THREE_SIXTY_DIALOG_PARTNER_PASSWORD"}'
+    headers:
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 07 Oct 2024 09:01:21 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1235'
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Origin:
+      - http://172.16.30.117:3001
+      Vary:
+      - Origin
+      Strict-Transport-Security:
+      - max-age=15724800; includeSubDomains
+    body:
+      encoding: UTF-8
+      string: '{"access_token":"<TOKEN>","expires_in":86400,"refresh_token":"byYbJEwZks37AzgFG540OeW-fItMgGAoXFfw-ba_994VV","token_type":"Bearer"}
+
+        '
+  recorded_at: Mon, 07 Oct 2024 09:01:21 GMT
+- request:
+    method: get
+    uri: https://hub.360dialog.io/api/v2/partners/THREE_SIXTY_DIALOG_PARTNER_ID/waba_accounts/THREE_SIXTY_DIALOG_CLIENT_WABA_ACCOUNT_ID/waba_templates
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer <TOKEN>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 07 Oct 2024 09:01:21 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '13145'
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Origin:
+      - http://172.16.30.117:3001
+      Vary:
+      - Origin
+      Strict-Transport-Security:
+      - max-age=15724800; includeSubDomains
+    body:
+      encoding: UTF-8
+      string: '{"count":15,"filters":{},"limit":1000,"offset":0,"sort":["id"],"total":15,"waba_templates":[{"category":"MARKETING","components":[{"example":{"body_text":[["Jakob","Familie
+        und Freizeit"]]},"text":"Guten Morgen {{1}}, heute haben wir zum Thema \u201e{{2}}\u201c
+        eine Frage vorbereitet. Wenn du antworten m\u00f6chtest, klicke auf ''Antworten''.","type":"BODY"},{"buttons":[{"text":"Antworten","type":"QUICK_REPLY"},{"text":"Mehr
+        Infos","type":"QUICK_REPLY"}],"type":"BUTTONS"}],"created_at":"2023-08-11T08:34:37Z","created_by":{"user_id":"HmpUn8U","user_name":"apiuser"},"external_id":"1949428312134154","id":"6D5ijv87QgDZQtj0ad4mWT","language":"de","modified_at":"2024-09-12T22:26:51Z","modified_by":{"user_id":"system","user_name":"system"},"name":"new_request_morning_3","namespace":"7380bb95_042f_4bea_a6b2_58f1d0a4be55","partner_id":"THREE_SIXTY_DIALOG_PARTNER_ID","quality_score":{"reasons":null,"score":"UNKNOWN"},"rejected_reason":"NONE","status":"approved","updated_external":true,"waba_account_id":"THREE_SIXTY_DIALOG_CLIENT_WABA_ACCOUNT_ID"},{"category":"MARKETING","components":[{"example":{"body_text":[["Jakob","Familie
+        und Freizeit"]]},"text":"Guten Morgen {{1}}, wir haben eine neue Frage zum
+        Thema \u201e{{2}}\u201c. Wenn du antworten m\u00f6chtest, klicke auf ''Antworten''.","type":"BODY"},{"buttons":[{"text":"Antworten","type":"QUICK_REPLY"},{"text":"Mehr
+        Infos","type":"QUICK_REPLY"}],"type":"BUTTONS"}],"created_at":"2023-08-11T08:34:26Z","created_by":{"user_id":"HmpUn8U","user_name":"apiuser"},"external_id":"820558729663892","id":"BAdzWd15UEtvmCG6CIe7WT","language":"de","modified_at":"2024-09-12T22:26:51Z","modified_by":{"user_id":"system","user_name":"system"},"name":"new_request_morning_1","namespace":"7380bb95_042f_4bea_a6b2_58f1d0a4be55","partner_id":"THREE_SIXTY_DIALOG_PARTNER_ID","quality_score":{"reasons":null,"score":"UNKNOWN"},"rejected_reason":"NONE","status":"approved","updated_external":true,"waba_account_id":"THREE_SIXTY_DIALOG_CLIENT_WABA_ACCOUNT_ID"},{"category":"MARKETING","components":[{"example":{"body_text":[["Jakob","Familie
+        und Freizeit"]]},"text":"Hallo {{1}}, heute Abend m\u00f6chte ich gern mehr
+        zum Thema \u201e{{2}}\u201c erfahren. Wenn du antworten m\u00f6chtest, klicke
+        auf ''Antworten''.","type":"BODY"},{"buttons":[{"text":"Antworten","type":"QUICK_REPLY"},{"text":"Mehr
+        Infos","type":"QUICK_REPLY"}],"type":"BUTTONS"}],"created_at":"2023-08-11T08:35:21Z","created_by":{"user_id":"HmpUn8U","user_name":"apiuser"},"external_id":"1040137623582369","id":"CSpZ6F5sRYrr8BuwgW2PWT","language":"de","modified_at":"2024-09-12T22:26:51Z","modified_by":{"user_id":"system","user_name":"system"},"name":"new_request_evening_3","namespace":"7380bb95_042f_4bea_a6b2_58f1d0a4be55","partner_id":"THREE_SIXTY_DIALOG_PARTNER_ID","quality_score":{"reasons":null,"score":"UNKNOWN"},"rejected_reason":"NONE","status":"approved","updated_external":true,"waba_account_id":"THREE_SIXTY_DIALOG_CLIENT_WABA_ACCOUNT_ID"},{"category":"MARKETING","components":[{"example":{"body_text":[["Jakob","Familie
+        und Freizeit"]]},"text":"Guten Tag {{1}}, wir haben eine neue Frage zum Thema
+        \u201e{{2}}\u201c f\u00fcr dich. Wenn du antworten m\u00f6chtest, klicke auf
+        ''Antworten''.","type":"BODY"},{"buttons":[{"text":"Antworten","type":"QUICK_REPLY"},{"text":"Mehr
+        Infos","type":"QUICK_REPLY"}],"type":"BUTTONS"}],"created_at":"2023-08-11T08:34:41Z","created_by":{"user_id":"HmpUn8U","user_name":"apiuser"},"external_id":"252644734301298","id":"CvYv8VyCfrSfpbFHvUQdWT","language":"de","modified_at":"2024-09-12T22:26:51Z","modified_by":{"user_id":"system","user_name":"system"},"name":"new_request_day_1","namespace":"7380bb95_042f_4bea_a6b2_58f1d0a4be55","partner_id":"THREE_SIXTY_DIALOG_PARTNER_ID","quality_score":{"reasons":null,"score":"UNKNOWN"},"rejected_reason":"NONE","status":"approved","updated_external":true,"waba_account_id":"THREE_SIXTY_DIALOG_CLIENT_WABA_ACCOUNT_ID"},{"category":"MARKETING","components":[{"example":{"body_text":[["Jakob","Familie
+        und Freizeit"]]},"text":"Guten Tag {{1}}, ich habe eine neue Frage zu \u201e{{2}}\u201c.
+        Wenn du antworten m\u00f6chtest, klicke auf ''Antworten''.","type":"BODY"},{"buttons":[{"text":"Antworten","type":"QUICK_REPLY"},{"text":"Mehr
+        Infos","type":"QUICK_REPLY"}],"type":"BUTTONS"}],"created_at":"2023-08-11T08:34:49Z","created_by":{"user_id":"HmpUn8U","user_name":"apiuser"},"external_id":"2860193370790221","id":"De9xBrv7mmoYLNBoeNgXWT","language":"de","modified_at":"2024-09-12T22:26:51Z","modified_by":{"user_id":"system","user_name":"system"},"name":"new_request_day_3","namespace":"7380bb95_042f_4bea_a6b2_58f1d0a4be55","partner_id":"THREE_SIXTY_DIALOG_PARTNER_ID","quality_score":{"reasons":null,"score":"UNKNOWN"},"rejected_reason":"NONE","status":"approved","updated_external":true,"waba_account_id":"THREE_SIXTY_DIALOG_CLIENT_WABA_ACCOUNT_ID"},{"category":"MARKETING","components":[{"example":{"body_text":[["Jakob","Familie
+        und Freizeit"]]},"text":"Guten Morgen {{1}}, zum Thema \u201e{{2}}\u201c haben
+        wir eine neue Frage. Wenn du antworten m\u00f6chtest, klicke auf ''Antworten''.","type":"BODY"},{"buttons":[{"text":"Antworten","type":"QUICK_REPLY"},{"text":"Mehr
+        Infos","type":"QUICK_REPLY"}],"type":"BUTTONS"}],"created_at":"2023-08-11T08:34:32Z","created_by":{"user_id":"HmpUn8U","user_name":"apiuser"},"external_id":"1016275052721084","id":"gwNeBf6mHzkwdryX1cErWT","language":"de","modified_at":"2024-09-12T22:26:51Z","modified_by":{"user_id":"system","user_name":"system"},"name":"new_request_morning_2","namespace":"7380bb95_042f_4bea_a6b2_58f1d0a4be55","partner_id":"THREE_SIXTY_DIALOG_PARTNER_ID","quality_score":{"reasons":null,"score":"UNKNOWN"},"rejected_reason":"NONE","status":"approved","updated_external":true,"waba_account_id":"THREE_SIXTY_DIALOG_CLIENT_WABA_ACCOUNT_ID"},{"category":"MARKETING","components":[{"example":{"body_text":[["Jakob","Familie
+        und Freizeit"]]},"text":"Hallo {{1}}, ich wei\u00df, es ist schon sp\u00e4t.
+        Aber ich m\u00f6chte gern mehr zum Thema \u201e{{2}}\u201c erfahren. Wenn
+        du antworten m\u00f6chtest, klicke auf ''Antworten''.","type":"BODY"},{"buttons":[{"text":"Antworten","type":"QUICK_REPLY"},{"text":"Mehr
+        Infos","type":"QUICK_REPLY"}],"type":"BUTTONS"}],"created_at":"2023-08-11T08:35:30Z","created_by":{"user_id":"HmpUn8U","user_name":"apiuser"},"external_id":"619159036994241","id":"K5SWWUbrsfa1HyPE38OfWT","language":"de","modified_at":"2024-09-12T22:26:51Z","modified_by":{"user_id":"system","user_name":"system"},"name":"new_request_night_2","namespace":"7380bb95_042f_4bea_a6b2_58f1d0a4be55","partner_id":"THREE_SIXTY_DIALOG_PARTNER_ID","quality_score":{"reasons":null,"score":"UNKNOWN"},"rejected_reason":"NONE","status":"approved","updated_external":true,"waba_account_id":"THREE_SIXTY_DIALOG_CLIENT_WABA_ACCOUNT_ID"},{"category":"MARKETING","components":[{"example":{"body_text":[["100eyes"]]},"text":"*Welcome
+        to {{1}}*\n\nUnsere Dialog-Recherche startet bald. Wir melden uns dann bei
+        Ihnen.\n\nUm unseren Kanal abzubestellen, schreibe \u201eabbestellen\u201c.\n","type":"BODY"}],"created_at":"2024-10-07T08:50:05Z","created_by":{"user_id":"0fIXafU","user_name":"Matt"},"external_id":"1214097339917640","id":"MEuXRnVMAD7ScqqN0VDrWT","language":"de","modified_at":"2024-10-07T08:50:31Z","modified_by":{"user_id":"system","user_name":"system"},"name":"welcome_message_test_project","namespace":"7380bb95_042f_4bea_a6b2_58f1d0a4be55","partner_id":"THREE_SIXTY_DIALOG_PARTNER_ID","quality_score":null,"rejected_reason":"NONE","status":"approved","updated_external":true,"waba_account_id":"THREE_SIXTY_DIALOG_CLIENT_WABA_ACCOUNT_ID"},{"category":"MARKETING","components":[{"example":{"body_text":[["Jakob","Familie
+        und Freizeit"]]},"text":"Hallo {{1}}, ich m\u00f6chte gerne mehr zum Thema
+        \u201e{{2}}\u201c erfahren. Wenn du antworten m\u00f6chtest, klicke auf ''Antworten''.","type":"BODY"},{"buttons":[{"text":"Antworten","type":"QUICK_REPLY"},{"text":"Mehr
+        Infos","type":"QUICK_REPLY"}],"type":"BUTTONS"}],"created_at":"2023-08-11T08:34:45Z","created_by":{"user_id":"HmpUn8U","user_name":"apiuser"},"external_id":"1015388879635601","id":"paNXjwq4WnYKPJERmM90WT","language":"de","modified_at":"2024-09-12T22:26:51Z","modified_by":{"user_id":"system","user_name":"system"},"name":"new_request_day_2","namespace":"7380bb95_042f_4bea_a6b2_58f1d0a4be55","partner_id":"THREE_SIXTY_DIALOG_PARTNER_ID","quality_score":{"reasons":null,"score":"UNKNOWN"},"rejected_reason":"NONE","status":"approved","updated_external":true,"waba_account_id":"THREE_SIXTY_DIALOG_CLIENT_WABA_ACCOUNT_ID"},{"category":"MARKETING","components":[{"example":{"body_text":[["Jakob","Familie
+        und Freizeit"]]},"text":"Hallo {{1}}, heute Nacht ist mir etwas zum Thema
+        \u201e{{2}}\u201c eingefallen. Wenn du antworten m\u00f6chtest, klicke auf
+        ''Antworten''.","type":"BODY"},{"buttons":[{"text":"Antworten","type":"QUICK_REPLY"},{"text":"Mehr
+        Infos","type":"QUICK_REPLY"}],"type":"BUTTONS"}],"created_at":"2023-08-11T08:35:25Z","created_by":{"user_id":"HmpUn8U","user_name":"apiuser"},"external_id":"1332407930985100","id":"pav66DM2EOgaVmGGA2NGWT","language":"de","modified_at":"2024-09-12T22:26:51Z","modified_by":{"user_id":"system","user_name":"system"},"name":"new_request_night_1","namespace":"7380bb95_042f_4bea_a6b2_58f1d0a4be55","partner_id":"THREE_SIXTY_DIALOG_PARTNER_ID","quality_score":{"reasons":null,"score":"UNKNOWN"},"rejected_reason":"NONE","status":"approved","updated_external":true,"waba_account_id":"THREE_SIXTY_DIALOG_CLIENT_WABA_ACCOUNT_ID"},{"category":"MARKETING","components":[{"example":{"body_text":[["Jakob","Familie
+        und Freizeit"]]},"text":"Guten Abend {{1}}, wir haben eine neue Frage zum
+        Thema \u201e{{2}}\u201c. Wenn du antworten m\u00f6chtest, klicke auf ''Antworten''.","type":"BODY"},{"buttons":[{"text":"Antworten","type":"QUICK_REPLY"},{"text":"Mehr
+        Infos","type":"QUICK_REPLY"}],"type":"BUTTONS"}],"created_at":"2023-08-11T08:34:53Z","created_by":{"user_id":"HmpUn8U","user_name":"apiuser"},"external_id":"1325500401656814","id":"pDFrXyiyftNYj21ZHpaTWT","language":"de","modified_at":"2024-09-12T22:26:51Z","modified_by":{"user_id":"system","user_name":"system"},"name":"new_request_evening_1","namespace":"7380bb95_042f_4bea_a6b2_58f1d0a4be55","partner_id":"THREE_SIXTY_DIALOG_PARTNER_ID","quality_score":{"reasons":null,"score":"UNKNOWN"},"rejected_reason":"NONE","status":"approved","updated_external":true,"waba_account_id":"THREE_SIXTY_DIALOG_CLIENT_WABA_ACCOUNT_ID"},{"category":"MARKETING","components":[{"example":{"body_text":[["100eyes"]]},"text":"*Vielen
+        Dank f\u00fcr Ihre Anmeldung bei {{1}}.\n*\n\nUnsere Dialog-Recherche startet
+        bald. Wir melden uns dann bei Ihnen.\n\nUm unseren Kanal Abzubestellen, schreibe
+        \u201eabbestellen\u201c.\n","type":"BODY"}],"created_at":"2024-09-16T10:05:24Z","created_by":{"user_id":"0fIXafU","user_name":"Matt"},"external_id":"8196831700408015","id":"QQJzvTfNOec7qpbp91TgWT","language":"de","modified_at":"2024-09-16T10:05:52Z","modified_by":{"user_id":"system","user_name":"system"},"name":"default_welcome_message","namespace":"7380bb95_042f_4bea_a6b2_58f1d0a4be55","partner_id":"THREE_SIXTY_DIALOG_PARTNER_ID","quality_score":null,"rejected_reason":"NONE","status":"approved","updated_external":true,"waba_account_id":"THREE_SIXTY_DIALOG_CLIENT_WABA_ACCOUNT_ID"},{"category":"MARKETING","components":[{"example":{"body_text":[["100eyes"]]},"text":"Vielen
+        Dank f\u00fcr deine Anmeldung bei {{1}}. Unsere Dialog-Recherche startet bald.
+        Wir melden uns dann bei dir.","type":"BODY"}],"created_at":"2023-08-11T08:34:22Z","created_by":{"user_id":"HmpUn8U","user_name":"apiuser"},"external_id":"6443353965699593","id":"V7XC4olb3r7aaq416f2eWT","language":"de","modified_at":"2024-09-12T22:26:51Z","modified_by":{"user_id":"system","user_name":"system"},"name":"welcome_message","namespace":"7380bb95_042f_4bea_a6b2_58f1d0a4be55","partner_id":"THREE_SIXTY_DIALOG_PARTNER_ID","quality_score":{"reasons":null,"score":"UNKNOWN"},"rejected_reason":"NONE","status":"approved","updated_external":true,"waba_account_id":"THREE_SIXTY_DIALOG_CLIENT_WABA_ACCOUNT_ID"},{"category":"MARKETING","components":[{"example":{"body_text":[["Jakob","Familie
+        und Freizeit"]]},"text":"Guten Abend {{1}}, zum Thema \u201e{{2}}\u201c haben
+        wir eine neue Frage. Wenn du antworten m\u00f6chtest, klicke auf ''Antworten''.","type":"BODY"},{"buttons":[{"text":"Antworten","type":"QUICK_REPLY"},{"text":"Mehr
+        Infos","type":"QUICK_REPLY"}],"type":"BUTTONS"}],"created_at":"2023-08-11T08:34:57Z","created_by":{"user_id":"HmpUn8U","user_name":"apiuser"},"external_id":"1261099061091845","id":"wikijRUJB3gXyDsFkxlOWT","language":"de","modified_at":"2024-09-12T22:26:51Z","modified_by":{"user_id":"system","user_name":"system"},"name":"new_request_evening_2","namespace":"7380bb95_042f_4bea_a6b2_58f1d0a4be55","partner_id":"THREE_SIXTY_DIALOG_PARTNER_ID","quality_score":{"reasons":null,"score":"UNKNOWN"},"rejected_reason":"NONE","status":"approved","updated_external":true,"waba_account_id":"THREE_SIXTY_DIALOG_CLIENT_WABA_ACCOUNT_ID"},{"category":"MARKETING","components":[{"example":{"body_text":[["Jakob","Familie
+        und Freizeit"]]},"text":"Hallo {{1}}, zum Thema \u201e{{2}}\u201c m\u00f6chte
+        ich heute noch gern mehr erfahren. Wenn du antworten m\u00f6chtest, klicke
+        auf ''Antworten''.","type":"BODY"},{"buttons":[{"text":"Antworten","type":"QUICK_REPLY"},{"text":"Mehr
+        Infos","type":"QUICK_REPLY"}],"type":"BUTTONS"}],"created_at":"2023-08-11T08:35:34Z","created_by":{"user_id":"HmpUn8U","user_name":"apiuser"},"external_id":"999005154631078","id":"YjibnEv90XZ2OjWsmuJVWT","language":"de","modified_at":"2024-09-12T22:26:51Z","modified_by":{"user_id":"system","user_name":"system"},"name":"new_request_night_3","namespace":"7380bb95_042f_4bea_a6b2_58f1d0a4be55","partner_id":"THREE_SIXTY_DIALOG_PARTNER_ID","quality_score":{"reasons":null,"score":"UNKNOWN"},"rejected_reason":"NONE","status":"approved","updated_external":true,"waba_account_id":"THREE_SIXTY_DIALOG_CLIENT_WABA_ACCOUNT_ID"}]}
+
+        '
+  recorded_at: Mon, 07 Oct 2024 09:01:21 GMT
+- request:
+    method: post
+    uri: https://hub.360dialog.io/api/v2/partners/THREE_SIXTY_DIALOG_PARTNER_ID/waba_accounts/THREE_SIXTY_DIALOG_CLIENT_WABA_ACCOUNT_ID/waba_templates
+    body:
+      encoding: UTF-8
+      string: '{"name":"welcome_message_test_project_name","category":"MARKETING","components":[{"type":"BODY","text":"*Welcome
+        to {{1}}*\n\nUnsere Dialog-Recherche startet bald. Wir melden uns dann bei
+        Ihnen.\n\nUm unseren Kanal abzubestellen, schreibe „abbestellen“.\n","example":{"body_text":[["100eyes"]]}}],"language":"de","allow_category_change":true}'
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer <TOKEN>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 201
+      message: CREATED
+    headers:
+      Date:
+      - Mon, 07 Oct 2024 09:01:27 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '762'
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Origin:
+      - http://172.16.30.117:3001
+      Vary:
+      - Origin
+      Strict-Transport-Security:
+      - max-age=15724800; includeSubDomains
+    body:
+      encoding: UTF-8
+      string: '{"category":"MARKETING","components":[{"example":{"body_text":[["100eyes"]]},"text":"*Welcome
+        to {{1}}*\n\nUnsere Dialog-Recherche startet bald. Wir melden uns dann bei
+        Ihnen.\n\nUm unseren Kanal abzubestellen, schreibe \u201eabbestellen\u201c.\n","type":"BODY"}],"created_at":"2024-10-07T09:01:21Z","created_by":{"user_id":"0fIXafU","user_name":"Matt"},"external_id":"1275839723420499","id":"xyJ01IL2o2OZRvICUBDGWT","language":"de","modified_at":"2024-10-07T09:01:27Z","modified_by":{"user_id":"0fIXafU","user_name":"Matt"},"name":"welcome_message_test_project_name","namespace":"7380bb95_042f_4bea_a6b2_58f1d0a4be55","partner_id":"THREE_SIXTY_DIALOG_PARTNER_ID","quality_score":null,"rejected_reason":null,"status":"submitted","updated_external":true,"waba_account_id":"THREE_SIXTY_DIALOG_CLIENT_WABA_ACCOUNT_ID"}
+
+        '
+  recorded_at: Mon, 07 Oct 2024 09:01:27 GMT
+recorded_with: VCR 6.1.0

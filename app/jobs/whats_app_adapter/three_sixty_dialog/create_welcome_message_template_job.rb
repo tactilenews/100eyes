@@ -15,7 +15,7 @@ module WhatsAppAdapter
         existing_templates = WhatsAppAdapter::ThreeSixtyDialog::TemplateFetcherService.new(
           waba_account_id: waba_account_id,
           token: token
-        )
+        ).call
         if "welcome_message_#{organization.project_name.parameterize.underscore}".in?(existing_templates)
           User.admin.find_each do |admin|
             PostmarkAdapter::Outbound.welcome_message_updated!(admin, organization)
@@ -55,7 +55,9 @@ module WhatsAppAdapter
           components: [
             {
               type: 'BODY',
-              text: ["*#{organization.onboarding_success_heading}*", organization.onboarding_success_text].join("\n\n"),
+              text: ["*#{organization.onboarding_success_heading}*", organization.onboarding_success_text].join("\n\n").gsub(
+                organization.project_name.to_s, '{{1}}'
+              ),
               example: {
                 body_text: [
                   ['100eyes']
@@ -66,6 +68,16 @@ module WhatsAppAdapter
           language: 'de',
           allow_category_change: true
         }
+      end
+
+      def handle_response(response)
+        case response
+        when Net::HTTPSuccess
+          WhatsAppTemplateCreated.with(organization_id: organization.id).deliver_later(organization.users + User.admin.all)
+        when Net::HTTPClientError, Net::HTTPServerError
+          exception = WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: response.code, message: response.body)
+          ErrorNotifier.report(exception)
+        end
       end
     end
   end
