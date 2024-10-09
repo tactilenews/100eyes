@@ -252,7 +252,7 @@ RSpec.describe '/{organization_id}/contributors', type: :request do
 
     describe 'given a contributor of the organization' do
       let(:params) { {} }
-      let(:contributor) { create(:contributor, organization: organization, **params) }
+      let(:contributor) { create(:contributor, :telegram_contributor, organization: organization, **params) }
 
       describe 'response' do
         before(:each) { subject.call }
@@ -267,9 +267,19 @@ RSpec.describe '/{organization_id}/contributors', type: :request do
         describe 'response' do
           before(:each) { subject.call }
           let(:newest_message) { Message.reorder(created_at: :desc).first }
+
           it do
             expect(response)
               .to redirect_to(newest_message.chat_message_link)
+          end
+
+          it 'schedules a job to send out the message' do
+            expect(TelegramAdapter::Outbound::Text).to have_been_enqueued.with(
+              organization_id: newest_message.organization.id,
+              contributor_id: newest_message.recipient.id,
+              text: newest_message.text,
+              message: newest_message
+            )
           end
         end
       end
