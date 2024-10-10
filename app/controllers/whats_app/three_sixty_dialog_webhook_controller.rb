@@ -14,16 +14,6 @@ module WhatsApp
       WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob.perform_later(organization_id: @organization.id, components: @components)
     end
 
-    def create_api_key
-      channel_ids = create_api_key_params[:channels].split('[').last.split(']').last.split(',')
-      client_id = create_api_key_params[:client]
-      @organization.update!(three_sixty_dialog_client_id: client_id)
-      channel_ids.each do |channel_id|
-        WhatsAppAdapter::CreateApiKey.perform_later(organization_id: @organization.id, channel_id: channel_id)
-      end
-      render 'onboarding/success'
-    end
-
     private
 
     def extract_components
@@ -53,10 +43,6 @@ module WhatsApp
                                   errors: [:code, :title, :message, :href, { error_data: [:details] }] }]
                       }]
                     }])
-    end
-
-    def create_api_key_params
-      params.permit(:client, :channels, :revoked)
     end
 
     def handle_error(error)

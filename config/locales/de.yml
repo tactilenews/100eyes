@@ -963,3 +963,7 @@ de:
   shared:
     community: Community
     editorial: Redaktion
+  organization:
+    whats_app:
+      success_heading: WhatsApp wurde erfolgreich konfiguriert
+      success_text: Du kannst nun mit der Einbindung von WhatsApp-Mitgliedern beginnen.
