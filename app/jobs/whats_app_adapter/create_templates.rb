@@ -79,6 +79,7 @@ module WhatsAppAdapter
       waba_account = client_hash['waba_account']
       organization.update!(three_sixty_dialog_whats_app_template_namespace: waba_account['namespace'],
                            three_sixty_dialog_client_waba_account_id: waba_account['id'])
+      waba_account
     end
 
     # rubocop:disable Metrics/MethodLength
