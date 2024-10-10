@@ -28,7 +28,8 @@ class OrganizationDashboard < Administrate::BaseDashboard
     onboarding_additional_consent_heading: Field::String,
     onboarding_additional_consent_text: Field::String,
     channel_image: Field::ActiveStorage,
-    whats_app_profile_about: Field::Text
+    whats_app_profile_about: Field::Text,
+    signal_complete_onboarding_link: Field::Url
   }.freeze
 
   COLLECTION_ATTRIBUTES = %i[
@@ -63,6 +64,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
     onboarding_additional_consent_text
     onboarding_allowed
     channel_image
+    signal_complete_onboarding_link
   ].freeze
 
   COLLECTION_FILTERS = {}.freeze

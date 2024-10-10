@@ -13,9 +13,8 @@ module OnboardingSignalLink
 
     attr_reader :organization, :signal_onboarding_token
 
-    def fallback_steps
-      data = { signal_server_phone_number: organization.signal_server_phone_number, token: signal_onboarding_token }
-      I18n.t('components.onboarding_signal_link.steps', **data)
+    def signal_link
+      organization.signal_complete_onboarding_link
     end
   end
 end

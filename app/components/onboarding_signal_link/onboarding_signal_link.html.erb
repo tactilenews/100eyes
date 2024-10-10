@@ -1,14 +1,34 @@
 <%= c 'stack', **attrs do %>
   <%= c 'stack', class: 'text-serif text-center', space: :xsmall do %>
     <%= c 'heading', tag: :h1 do %>
-      <%= t 'components.onboarding_signal_link.heading' %>
+      <%= t('.heading') %>
     <% end %>
 
-    <p><%= t 'components.onboarding_signal_link.text' %></p>
+    <p><%= t('.text') %></p>
   <% end %>
 
-  <%= c 'steps_list',
-    class: 'text-serif',
-    steps: fallback_steps.map(&:html_safe)
-  %>
+  <%= c 'stack', space: :small, class: 'text-center' do %>
+    <%= c 'button',
+      styles: [:primary, :block],
+      label: t('.link'),
+      link: signal_link,
+      target: '_blank'
+    %>
+
+    <%= c 'copy_button',
+      styles: [:secondary, :block],
+      label: t('.copy'),
+      copy: signal_link
+    %>
+
+    <%= c 'stack', space: :xsmall, class: 'text-small text-light' do %>
+      <p>
+        <%= t('.help', project_name: organization.project_name) %>
+      </p>
+
+    <% end %>
+    <p>
+      <%= t('.message', token: signal_onboarding_token).html_safe %>
+    </p>
+  <% end %>
 <% end %>
