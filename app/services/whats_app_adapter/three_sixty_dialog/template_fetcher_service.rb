@@ -3,24 +3,17 @@
 module WhatsAppAdapter
   module ThreeSixtyDialog
     class TemplateFetcherService
-      def initialize(waba_account_id:, token:)
-        @base_uri = ENV.fetch('THREE_SIXTY_DIALOG_PARTNER_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')
-        @partner_id = ENV.fetch('THREE_SIXTY_DIALOG_PARTNER_ID', nil)
-        @waba_account_id = waba_account_id
-        @token = token
+      def initialize(organization_id:)
+        @organization = Organization.find(organization_id)
+        @base_uri = ENV.fetch('THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')
       end
 
-      attr_reader :base_uri, :partner_id, :waba_account_id, :token
+      attr_reader :base_uri, :organization
 
       def call
-        url = URI.parse(
-          "#{base_uri}/partners/#{partner_id}/waba_accounts/#{waba_account_id}/waba_templates"
-        )
-        headers = {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: "Bearer #{token}"
-        }
+        url = URI.parse("#{base_uri}/v1/configs/templates")
+        headers = { 'D360-API-KEY' => organization.three_sixty_dialog_client_api_key, 'Content-Type' => 'application/json' }
+
         request = Net::HTTP::Get.new(url.to_s, headers)
         response = Net::HTTP.start(url.host, url.port, use_ssl: true) do |http|
           http.request(request)

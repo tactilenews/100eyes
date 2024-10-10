@@ -13,10 +13,8 @@ module WhatsAppAdapter
       @token = token
       @waba_account_id = organization.three_sixty_dialog_client_waba_account_id
       @waba_account_id = fetch_client_info if waba_account_id.blank? || organization.three_sixty_dialog_whats_app_template_namespace.blank?
-      existing_templates = WhatsAppAdapter::ThreeSixtyDialog::TemplateFetcherService.new(
-        waba_account_id: waba_account_id,
-        token: token
-      ).call
+      existing_templates = WhatsAppAdapter::ThreeSixtyDialog::TemplateFetcherService.new(organization_id: organization.id).call
+
       templates_to_create_array = whats_app_templates.keys.difference(existing_templates)
       templates_to_create = whats_app_templates.select { |key, _value| key.in?(templates_to_create_array) }
       templates_to_create.each do |key, value|
