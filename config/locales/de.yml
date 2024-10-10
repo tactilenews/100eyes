@@ -82,10 +82,11 @@ de:
       byline: eine Dialog-Recherche von <a class="Link" href="https://tactile.news" target="_blank">tactile.news</a>
     onboarding_signal_link:
       heading: Fast geschafft.
-      text: Verbinden Sie Ihr Signal-Konto in der Signal-App, um die Anmeldung abzuschließen.
-      steps:
-        - "Finden Sie uns auf Signal. Suchen Sie dazu nach <strong>%{signal_server_phone_number}</strong>."
-        - "Wenn Sie unser Signal-Konto gefunden haben, geben Sie diesen Code ein: <strong>%{token}</strong>"
+      text: Verbinde dein Signal-Konto in der Signal-App, um die Anmeldung abzuschließen.
+      link: Zur Signal-App
+      copy: Link kopieren
+      help: Über den Button gelangst du direkt zum Signal-Profil von „%{project_name}”. Alternativ kannst du einen Link kopieren und auf deinem Smartphone öffnen.
+      message: "Wenn du unser Signal-Konto gefunden hast, gebe diesen Code ein: <strong>%{token}</strong>"
     onboarding_signal_form:
       heading: Mit Signal teilnehmen
       text: Geben Sie uns zunächst Ihr Einverständnis. Wir werden dann einen Code generieren, den Sie an uns senden können, um Ihre Registrierung abzuschließen.
