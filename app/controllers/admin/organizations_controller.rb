@@ -25,7 +25,7 @@ module Admin
                                      onboarding_data_protection_link onboarding_data_processing_consent_additional_info
                                      onboarding_imprint_link onboarding_ask_for_additional_consent
                                      onboarding_additional_consent_heading onboarding_additional_consent_text
-                                     channel_image about])
+                                     channel_image about signal_complete_onboarding_link])
     end
   end
 end
