@@ -8,7 +8,7 @@ module WhatsAppAdapter
     REQUEST_TO_RECEIVE_MESSAGE = :request_to_receive_message
     UNSUBSCRIBE_CONTRIBUTOR = :unsubscribe_contributor
     RESUBSCRIBE_CONTRIBUTOR = :resubscribe_contributor
-    UNSUPPORTED_CONTENT_TYPES = %w[location contacts application].freeze
+    UNSUPPORTED_CONTENT_TYPES = %w[location contacts application sticker].freeze
 
     attr_reader :sender, :text, :message, :organization
 

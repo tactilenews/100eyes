@@ -450,6 +450,26 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
               expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(text_payload)
             end
           end
+
+          context 'stickers' do
+            let(:sticker) do
+              {
+                mime_type: 'image/webp',
+                sha256: 'sha256_hash',
+                id: 'some_valid_id',
+                animated: false
+              }
+            end
+
+            before do
+              message[:type] = 'sticker'
+              message[:sticker] = sticker
+            end
+
+            it 'sends a message to contributor to let them know the message type is not supported' do
+              expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(text_payload)
+            end
+          end
         end
       end
     end

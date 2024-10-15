@@ -45,6 +45,7 @@ module WhatsApp
                                              { contacts: [{ org: {} }, { addresses: [] }, { emails: [] }, { ims: [] },
                                                           { phones: %i[phone type wa_id] }, { urls: [] },
                                                           { name: %i[first_name formatted_name last_name] }] },
+                                             { sticker: %i[id mime_type sha256 animated] },
                                              { context: %i[from id] }],
                                   statuses: [:id, :status, :timestamp, :expiration_timestamp, :recipient_id,
                                              { conversation: [:id, { origin: [:type] }] },

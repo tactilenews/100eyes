@@ -475,6 +475,26 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
 
           it { should have_received(:call).with(contributor) }
         end
+
+        context 'sticker' do
+          let(:sticker) do
+            {
+              mime_type: 'image/webp',
+              sha256: 'sha256_hash',
+              id: 'some_valid_id',
+              animated: false
+            }
+          end
+
+          before do
+            message[:type] = 'sticker'
+            message[:sticker] = sticker
+          end
+
+          it 'triggers the unsupported content callback' do
+            expect(subject).to have_received(:call).with(contributor)
+          end
+        end
       end
     end
 
