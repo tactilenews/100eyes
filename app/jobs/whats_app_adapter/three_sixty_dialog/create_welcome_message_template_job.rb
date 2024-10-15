@@ -7,15 +7,10 @@ module WhatsAppAdapter
     class CreateWelcomeMessageTemplateJob < ApplicationJob
       def perform(organization_id:)
         @organization = Organization.find_by(id: organization_id)
-        @token = WhatsAppAdapter::ThreeSixtyDialog::TokenFetcherService.call
 
-        @base_uri = ENV.fetch('THREE_SIXTY_DIALOG_PARTNER_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')
-        @partner_id = ENV.fetch('THREE_SIXTY_DIALOG_PARTNER_ID', nil)
-        @waba_account_id = organization.three_sixty_dialog_client_waba_account_id
-        existing_templates = WhatsAppAdapter::ThreeSixtyDialog::TemplateFetcherService.new(
-          waba_account_id: waba_account_id,
-          token: token
-        ).call
+        @base_uri = ENV.fetch('THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')
+        existing_templates = WhatsAppAdapter::ThreeSixtyDialog::TemplateFetcherService.new(organization_id: organization.id).call
+
         if "welcome_message_#{organization.project_name.parameterize.underscore}".in?(existing_templates)
           notify_admin_to_update_existing_template
         else
@@ -23,7 +18,7 @@ module WhatsAppAdapter
         end
       end
 
-      attr_reader :organization, :token, :base_uri, :partner_id, :waba_account_id
+      attr_reader :organization, :base_uri
 
       private
 
@@ -32,14 +27,8 @@ module WhatsAppAdapter
       end
 
       def create_welcome_message_template
-        url = URI.parse(
-          "#{base_uri}/partners/#{partner_id}/waba_accounts/#{waba_account_id}/waba_templates"
-        )
-        headers = {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: "Bearer #{token}"
-        }
+        url = URI.parse("#{base_uri}/v1/configs/templates")
+        headers = { 'D360-API-KEY' => organization.three_sixty_dialog_client_api_key, 'Content-Type' => 'application/json' }
 
         request = Net::HTTP::Post.new(url.to_s, headers)
         payload = welcome_message_template_payload
