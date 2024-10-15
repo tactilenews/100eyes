@@ -23,7 +23,7 @@ class Organization < ApplicationRecord
   before_update :notify_admin
   after_update_commit :notify_admin_of_welcome_message_change
 
-  validates :telegram_bot_username, uniqueness: true
+  validates :telegram_bot_username, uniqueness: true, allow_nil: true
 
   def channels_onboarding_allowed
     {
