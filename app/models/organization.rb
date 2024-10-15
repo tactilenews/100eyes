@@ -21,6 +21,7 @@ class Organization < ApplicationRecord
   has_one_attached :channel_image
 
   before_update :notify_admin
+  after_create_commit :set_telegram_webhook
   after_update_commit :notify_admin_of_welcome_message_change
 
   validates :telegram_bot_username, uniqueness: true, allow_nil: true
@@ -115,6 +116,12 @@ class Organization < ApplicationRecord
   end
 
   private
+
+  def set_telegram_webhook
+    return unless saved_change_to_telegram_bot_username?
+
+    TelegramAdapter::SetWebhookUrlJob.perform_later(organization_id: id)
+  end
 
   def notify_admin
     return unless business_plan_id_changed? && upgraded_business_plan_at.present?
