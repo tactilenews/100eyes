@@ -856,6 +856,13 @@ de:
         username: Telegram Username
         threema_id: Threema Id
         telegram_id: Telegram Id
+      organization:
+        name: Name
+        contact_person: Kontaktperson
+        email_from_address: E-Mail Adresse
+        telegram_bot_username: Telegram-Bot-Benutzername
+        threemarb_api_identity: Threema Id
+        signal_server_phone_number: Signal-Rufnummer
   number:
     currency:
       format:

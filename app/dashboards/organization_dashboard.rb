@@ -32,7 +32,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
     threemarb_api_identity: Field::String,
     threemarb_api_secret: Field::String,
     threemarb_private: Field::String,
-    signal_server_phone_number: Field::String
+    signal_server_phone_number: SetupSignalLinkField
   }.freeze
 
   COLLECTION_ATTRIBUTES = %i[
