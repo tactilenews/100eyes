@@ -5,20 +5,14 @@ module Organizations
     def captcha_form; end
 
     def register
-      uri = URI.parse("#{ENV.fetch('SIGNAL_CLI_REST_API_ENDPOINT', 'http://localhost:8080')}/v1/register/#{signal_server_phone_number}")
-      request = Net::HTTP::Post.new(uri, {
-                                      Accept: 'application/json',
-                                      'Content-Type': 'application/json'
-                                    })
-      request.body = register_data.to_json
-      response = Net::HTTP.start(uri.host, uri.port) do |http|
-        http.request(request)
-      end
+      response = SignalAdapter::RegisterPhoneNumberService.new(organization_id: @organization.id, register_data: register_data).call
+      Rails.logger.debug JSON.parse(response.body)
       case response
       when Net::HTTPSuccess
         redirect_to organization_signal_verify_path
       else
         handle_error_response(response)
+        render :captcha_form, status: :unprocessable_entity
       end
     end
 
@@ -26,19 +20,14 @@ module Organizations
 
     def verify
       token = params[:organization][:signal][:token]
-      uri = URI.parse("#{ENV.fetch('SIGNAL_CLI_REST_API_ENDPOINT', 'http://localhost:8080')}/v1/register/#{signal_server_phone_number}/verify/#{token}")
-      request = Net::HTTP::Post.new(uri, {
-                                      Accept: 'application/json',
-                                      'Content-Type': 'application/json'
-                                    })
-      response = Net::HTTP.start(uri.host, uri.port) do |http|
-        http.request(request)
-      end
+      response = SignalAdapter::VerifyPhoneNumberService.new(organization_id: @organization.id, token: token).call
+      Rails.logger.debug JSON.parse(response.body)
       case response
       when Net::HTTPSuccess
-        SignalAdapter::SetTrustModeJob.perform_later(signal_server_phone_number: signal_server_phone_number)
+        SignalAdapter::SetTrustModeJob.perform_later(signal_server_phone_number: organization.signal_server_phone_number)
       else
         handle_error_response(response)
+        render :verify_form, status: :unprocessable_entity
       end
     end
 
@@ -55,7 +44,7 @@ module Organizations
     def register_data
       {
         captcha: params[:organization][:signal][:captcha],
-        use_voice: false
+        use_voice: ActiveModel::Type::Boolean.new.cast(params[:organization][:signal][:use_voice])
       }
     end
 
@@ -69,6 +58,7 @@ module Organizations
         body: error_message
       }
       ErrorNotifier.report(exception, context: context)
+      flash.now[:error] = error_message
     end
   end
 end

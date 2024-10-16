@@ -1,0 +1,7 @@
+.SignalCaptchaForm-useVoiceSection {
+  margin-top: var(--spacing-unit-s);
+}
+
+.SignalCaptchaForm .SubmitButton {
+  margin-top: var(--spacing-unit);
+}

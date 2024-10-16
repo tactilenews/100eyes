@@ -1,0 +1,30 @@
+<%= c 'main', **attrs do %>
+  <%= c 'page_header', styles: [:wide, :inheritBackgroundColor, :xlargePaddingTop] do %>
+    <%= c 'heading', tag: :h2 do %>
+      <%= t('.main_heading') %>
+    <% end %>
+  <% end %>
+    
+  <%= c 'section', styles: [:wide] do %>
+    <p><%= t('.instructions.where_to_generate_html', link: 'https://signalcaptchas.org/registration/generate.html') %></p>
+    <p><%= t('.instructions.after_solving_captcha') %></p>
+  <% end %>
+  
+  <%= c 'section', styles: [:wide] do %>
+    <%= c 'form', model: organization, url: organization_signal_register_path(organization), method: :post do %>
+      <%= c 'base_field', id: 'organization[signal][captcha]', label: 'Captcha' do |field| %>
+        <% c 'textarea', id: 'organization[signal][captcha]', value: nil %>
+      <% end %>
+
+      <section class="SignalCaptchaForm-useVoiceSection">
+        <label class="BaseField-labelText">
+          <%= c 'checkbox', id: 'organization[signal][use_voice]' %>
+          <%= t('.instructions.use_voice.label') %>
+        </label>
+        <p class="BaseField-helpText"><%= t('.instructions.use_voice.help') %></p>
+      </section>
+
+      <%= c 'submit_button', label: t('save') %>
+    <% end %>
+  <% end %>
+<% end %>

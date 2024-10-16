@@ -1,16 +1,1 @@
-
-<%= c 'main' do %>
-  <%= c 'page_header', styles: [:wide, :inheritBackgroundColor, :xlargePaddingTop, :spaceBetween] do %>
-    <%= c 'heading' do %>
-      <%= "Verify Signal Number" %>
-    <% end %>
-  <% end %>
-  <%= c 'section', styles: [:wide, :largeBottomMargin] do %>
-    <%= c 'form', model: @organization, url: organization_signal_verify_path(@organization), method: :post do %>
-      <%= c 'base_field', id: 'organization[signal][token]', label: 'Captcha' do |field| %>
-        <% c 'input', id: 'organization[signal][token]' %>
-      <% end %>
-      <%= c 'submit_button', label: t('save') %>
-    <% end %>
-  <% end %>
-<% end %>
+<%= c 'signal_verify_phone_number_form', organization: @organization %>
