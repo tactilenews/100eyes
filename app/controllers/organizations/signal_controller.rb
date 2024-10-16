@@ -2,16 +2,6 @@
 
 module Organizations
   class SignalController < ApplicationController
-    def edit; end
-
-    def update
-      if @organization.update(update_params)
-        redirect_to organization_signal_register_path(@organization)
-      else
-        render :edit, status: :unprocessable_entity
-      end
-    end
-
     def captcha_form; end
 
     def register
