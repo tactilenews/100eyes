@@ -121,7 +121,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     constraints Clearance::Constraints::SignedIn.new(&:admin?) do
-      root to: 'users#index'
+      root to: 'organizations#index'
 
       resources :users
       resources :contributors, only: %i[index show edit update destroy] do
