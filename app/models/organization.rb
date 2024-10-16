@@ -24,7 +24,10 @@ class Organization < ApplicationRecord
   after_create_commit :set_telegram_webhook
   after_update_commit :notify_admin_of_welcome_message_change
 
+  phony_normalize :signal_server_phone_number, default_country_code: 'DE'
+
   validates :telegram_bot_username, uniqueness: true, allow_nil: true
+  validates :signal_server_phone_number, phony_plausible: true
 
   def channels_onboarding_allowed
     {

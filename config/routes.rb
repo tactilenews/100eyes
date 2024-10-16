@@ -95,8 +95,6 @@ Rails.application.routes.draw do
 
     constraints Clearance::Constraints::SignedIn.new(&:admin?) do
       scope module: 'organizations' do
-        get '/signal/add', to: 'signal#edit'
-        patch '/signal/add', to: 'signal#update'
         get '/signal/register', to: 'signal#captcha_form'
         post '/signal/register', to: 'signal#register'
         get '/signal/verify', to: 'signal#verify_form'
