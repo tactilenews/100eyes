@@ -24,7 +24,8 @@ module Organizations
       Rails.logger.debug JSON.parse(response.body)
       case response
       when Net::HTTPSuccess
-        SignalAdapter::SetTrustModeJob.perform_later(signal_server_phone_number: organization.signal_server_phone_number)
+        SignalAdapter::SetTrustModeJob.perform_later(signal_server_phone_number: @organization.signal_server_phone_number)
+        SignalAdapter::SetUsernameJob.perform_later(organization_id: @organization.id)
       else
         handle_error_response(response)
         render :verify_form, status: :unprocessable_entity
