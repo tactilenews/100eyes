@@ -4,12 +4,12 @@
       <%= t('.main_heading') %>
     <% end %>
   <% end %>
-    
+
   <%= c 'section', styles: [:wide] do %>
     <p><%= t('.instructions.where_to_generate_html', link: 'https://signalcaptchas.org/registration/generate.html') %></p>
     <p><%= t('.instructions.after_solving_captcha') %></p>
   <% end %>
-  
+
   <%= c 'section', styles: [:wide] do %>
     <%= c 'form', model: organization, url: organization_signal_register_path(organization), method: :post do %>
       <%= c 'base_field', id: 'organization[signal][captcha]', label: 'Captcha' do |field| %>
