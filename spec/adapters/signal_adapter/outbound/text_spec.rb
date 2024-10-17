@@ -5,7 +5,11 @@ require 'webmock/rspec'
 
 RSpec.describe SignalAdapter::Outbound::Text do
   let(:adapter) { described_class.new }
-  let(:organization) { create(:organization, signal_server_phone_number: 'SIGNAL_SERVER_PHONE_NUMBER') }
+  let(:organization) do
+    build(:organization, signal_server_phone_number: 'SIGNAL_SERVER_PHONE_NUMBER').tap do |org|
+      org.save(validate: false)
+    end
+  end
   let(:contributor) { create(:contributor, signal_phone_number: '+4915112345678', email: nil, organization: organization) }
   let(:message) { create(:message, :with_file, text: 'Hello Signal') }
   let(:organization_id) { organization.id }

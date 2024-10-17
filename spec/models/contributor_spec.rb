@@ -913,10 +913,13 @@ RSpec.describe Contributor, type: :model do
   describe '.send_welcome_message!', telegram_bot: :rails do
     subject { -> { contributor.send_welcome_message!(organization) } }
 
-    let(:organization) do
+    let!(:organization) do
       create(:organization, onboarding_success_heading: 'Welcome new contributor!', onboarding_success_text: 'You onboarded successfully.')
     end
-    let(:contributor) { create(:contributor, telegram_id: nil, email: nil, threema_id: nil) }
+    let(:contributor) do
+      create(:contributor, telegram_id: nil, email: nil, threema_id: nil, signal_phone_number: nil, whats_app_phone_number: nil,
+                           organization: organization)
+    end
 
     it { should_not have_enqueued_job }
 
@@ -925,11 +928,13 @@ RSpec.describe Contributor, type: :model do
         { organization_id: organization.id, contributor_id: contributor.id,
           text: "<b>Welcome new contributor!</b>\nYou onboarded successfully." }
       end
-      let(:contributor) { create(:contributor, telegram_id: nil, telegram_onboarding_token: 'ABCDEF', email: nil) }
+      let(:contributor) do
+        create(:contributor, telegram_id: nil, telegram_onboarding_token: 'ABCDEF', email: nil, organization: organization)
+      end
       it { should_not have_enqueued_job }
 
       context 'and connected' do
-        let(:contributor) { create(:contributor, telegram_id: 4711, telegram_onboarding_token: 'ABCDEF', email: nil) }
+        let(:contributor) { create(:contributor, :telegram_contributor, organization: organization) }
         it { should enqueue_job(TelegramAdapter::Outbound::Text).with(expected_job_args) }
       end
     end
