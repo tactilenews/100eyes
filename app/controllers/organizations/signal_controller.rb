@@ -6,7 +6,6 @@ module Organizations
 
     def register
       response = SignalAdapter::RegisterPhoneNumberService.new(organization_id: @organization.id, register_data: register_data).call
-      Rails.logger.debug JSON.parse(response.body) if response.body.present?
       case response
       when Net::HTTPSuccess
         redirect_to organization_signal_verify_path
@@ -21,7 +20,6 @@ module Organizations
     def verify
       token = params[:organization][:signal][:token]
       response = SignalAdapter::VerifyPhoneNumberService.new(organization_id: @organization.id, token: token).call
-      Rails.logger.debug JSON.parse(response.body) if response.body.present?
       case response
       when Net::HTTPSuccess
         SignalAdapter::SetTrustModeJob.perform_later(signal_server_phone_number: @organization.signal_server_phone_number)
