@@ -14,12 +14,6 @@ class OrganizationDashboard < Administrate::BaseDashboard
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
     upgraded_business_plan_at: Field::DateTime,
-    threemarb_api_identity: Field::String,
-    threemarb_api_secret: Field::String,
-    threemarb_private: Field::String,
-    twilio_account_sid: Field::String,
-    twilio_api_key_sid: Field::String,
-    twilio_api_key_secret: Field::String,
     onboarding_allowed: Field::JSONB,
     onboarding_data_protection_link: Field::Url,
     onboarding_data_processing_consent_additional_info: Field::Text,
@@ -29,14 +23,23 @@ class OrganizationDashboard < Administrate::BaseDashboard
     onboarding_additional_consent_text: Field::String,
     channel_image: Field::ActiveStorage,
     whats_app_profile_about: Field::Text,
-    signal_complete_onboarding_link: Field::Url
+    signal_complete_onboarding_link: Field::Url,
+    email_from_address: Field::Email,
+    telegram_bot_username: Field::String,
+    telegram_bot_api_key: Field::String,
+    threemarb_api_identity: Field::String,
+    threemarb_api_secret: Field::String,
+    threemarb_private: Field::String,
+    signal_server_phone_number: SetupSignalLinkField
   }.freeze
 
   COLLECTION_ATTRIBUTES = %i[
     name
     contact_person
-    contributors
-    users
+    email_from_address
+    telegram_bot_username
+    threemarb_api_identity
+    signal_server_phone_number
   ].freeze
 
   SHOW_PAGE_ATTRIBUTES = %i[
@@ -48,6 +51,33 @@ class OrganizationDashboard < Administrate::BaseDashboard
     created_at
     updated_at
     upgraded_business_plan_at
+    email_from_address
+    telegram_bot_username
+    threemarb_api_identity
+    signal_server_phone_number
+  ].freeze
+
+  FORM_ATTRIBUTES_NEW = %i[
+    name
+    contact_person
+    business_plan
+    upgrade_discount
+    whats_app_profile_about
+    onboarding_data_protection_link
+    onboarding_data_processing_consent_additional_info
+    onboarding_imprint_link
+    onboarding_ask_for_additional_consent
+    onboarding_additional_consent_heading
+    onboarding_additional_consent_text
+    onboarding_allowed
+    channel_image
+    email_from_address
+    telegram_bot_username
+    telegram_bot_api_key
+    threemarb_api_identity
+    threemarb_api_secret
+    threemarb_private
+    signal_server_phone_number
   ].freeze
 
   FORM_ATTRIBUTES_EDIT = %i[
