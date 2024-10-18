@@ -88,7 +88,7 @@ class Organization < ApplicationRecord
   end
 
   def telegram_bot
-    Telegram.bots[id]
+    Telegram::Bot::Client.new(telegram_bot_api_key)
   end
 
   def twilio_instance
@@ -121,7 +121,7 @@ class Organization < ApplicationRecord
   private
 
   def set_telegram_webhook
-    return unless saved_change_to_telegram_bot_username?
+    return unless saved_change_to_telegram_bot_username? && saved_change_to_telegram_bot_api_key?
 
     TelegramAdapter::SetWebhookUrlJob.perform_later(organization_id: id)
   end

@@ -11,7 +11,7 @@ module SignalAdapter
                                       Accept: 'application/json',
                                       'Content-Type': 'application/json'
                                     })
-      request.body = { username: organization.project_name.gsub(/\s+/, '').camelize }.to_json
+      request.body = { username: organization.project_name.gsub(/[^\w\s]/, '').gsub(/\s+/, '').camelize }.to_json
       response = Net::HTTP.start(uri.host, uri.port) do |http|
         http.request(request)
       end
@@ -19,13 +19,14 @@ module SignalAdapter
       when Net::HTTPSuccess
         organization.update!(signal_complete_onboarding_link: JSON.parse(response.body)['username_link'])
       else
-        handle_error(JSON.parse(response.body)['error'])
+        handle_error(response)
       end
     end
 
     private
 
-    def handle_error(error_message)
+    def handle_error(response)
+      error_message = JSON.parse(response.body)['error']
       exception = SignalAdapter::BadRequestError.new(error_code: response.code, message: error_message)
       context = {
         code: response.code,
