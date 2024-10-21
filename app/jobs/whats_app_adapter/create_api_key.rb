@@ -16,6 +16,7 @@ module WhatsAppAdapter
       url = URI.parse(
         "#{base_uri}/partners/#{partner_id}/channels/#{channel_id}/api_keys"
       )
+
       headers = {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -39,7 +40,7 @@ module WhatsAppAdapter
         Rails.logger.debug api_key
         organization.update!(three_sixty_dialog_client_api_key: api_key)
         WhatsAppAdapter::SetWebhookUrl.perform_later(organization_id: organization.id)
-        WhatsAppAdapter::CreateTemplates.perform_later(organization_id: organization.id, token: token)
+        WhatsAppAdapter::ThreeSixtyDialog::CreateTemplatesJob.perform_later(organization_id: organization.id)
       when Net::HTTPClientError, Net::HTTPServerError
         exception = WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: response.code, message: response.body)
         ErrorNotifier.report(exception)

@@ -14,7 +14,8 @@ module WhatsAppAdapter
         if "welcome_message_#{organization.project_name.parameterize.underscore}".in?(existing_templates)
           notify_admin_to_update_existing_template
         else
-          create_welcome_message_template
+          WhatsAppAdapter::ThreeSixtyDialog::TemplateCreatorService.new(organization_id: organization.id,
+                                                                        payload: welcome_message_template_payload).call
         end
       end
 
@@ -26,19 +27,6 @@ module WhatsAppAdapter
         User.admin.find_each { |admin| PostmarkAdapter::Outbound.welcome_message_updated!(admin, organization) }
       end
 
-      def create_welcome_message_template
-        url = URI.parse("#{base_uri}/v1/configs/templates")
-        headers = { 'D360-API-KEY' => organization.three_sixty_dialog_client_api_key, 'Content-Type' => 'application/json' }
-
-        request = Net::HTTP::Post.new(url.to_s, headers)
-        payload = welcome_message_template_payload
-        request.body = payload.to_json
-        response = Net::HTTP.start(url.host, url.port, use_ssl: true) do |http|
-          http.request(request)
-        end
-        handle_response(response)
-      end
-
       def welcome_message_template_payload
         {
           name: "welcome_message_#{organization.project_name.parameterize.underscore}",
@@ -46,29 +34,12 @@ module WhatsAppAdapter
           components: [
             {
               type: 'BODY',
-              text: ["*#{organization.onboarding_success_heading}*", organization.onboarding_success_text].join("\n\n").gsub(
-                organization.project_name.to_s, '{{1}}'
-              ),
-              example: {
-                body_text: [
-                  ['100eyes']
-                ]
-              }
+              text: ["*#{organization.onboarding_success_heading}*", organization.onboarding_success_text].join("\n\n")
             }
           ],
           language: 'de',
           allow_category_change: true
         }
-      end
-
-      def handle_response(response)
-        case response
-        when Net::HTTPSuccess
-          WhatsAppTemplateCreated.with(organization_id: organization.id).deliver_later(organization.users + User.admin.all)
-        when Net::HTTPClientError, Net::HTTPServerError
-          exception = WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: response.code, message: response.body)
-          ErrorNotifier.report(exception)
-        end
       end
     end
   end
