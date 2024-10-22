@@ -7,7 +7,7 @@ module WhatsApp
       layout 'minimal'
 
       def create_api_key
-        channel_ids = create_api_key_params[:channels].split('[').last.split(']').last.split(',')
+        channel_ids = YAML.safe_load(create_api_key_params[:channels])
         client_id = create_api_key_params[:client]
         @organization.update!(three_sixty_dialog_client_id: client_id)
         channel_ids.each do |channel_id|

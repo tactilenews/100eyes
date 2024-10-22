@@ -25,7 +25,7 @@ RSpec.describe 'WhatsApp 360dialog Setup' do
       subject.call
       expect(response).to be_successful
       expect(page).to have_content('WhatsApp wurde erfolgreich konfiguriert')
-      expect(page).to have_content('Du kannst nun mit der Einbindung von WhatsApp-Mitgliedern beginnen.')
+      expect(page).to have_content('Du kannst jetzt Mitglieder über WhatsApp einladen.')
     end
   end
 end
