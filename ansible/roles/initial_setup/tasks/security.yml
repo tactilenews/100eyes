@@ -14,7 +14,6 @@
   command: "systemctl restart {{ item }}"
   with_items:
     - ssh
-    - sshd
 
 # UFW Setup
 - name: UFW - Allow SSH connections
