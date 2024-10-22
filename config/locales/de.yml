@@ -529,6 +529,9 @@ de:
       threema_unknown_content_message:
         label: Fehler-Nachricht bei unbekannten Inhalten
         help: Wenn ein Mitglied via Threema Nachrichten versendet, die von 100eyes noch nicht unterstützt werden, erhält es diese Nachricht.
+    whats_app_setup:
+      success_heading: WhatsApp wurde erfolgreich konfiguriert
+      success_text: Du kannst jetzt Mitglieder über WhatsApp einladen.
 
   settings:
     header: Einstellungen
