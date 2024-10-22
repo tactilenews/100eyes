@@ -127,6 +127,9 @@ ActiveRecord::Schema.define(version: 2024_11_20_182931) do
     t.index ["organization_id"], name: "index_contributors_on_organization_id"
   end
 
+  create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
+  end
+
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
     t.integer "attempts", default: 0, null: false
@@ -236,6 +239,7 @@ ActiveRecord::Schema.define(version: 2024_11_20_182931) do
     t.string "signal_complete_onboarding_link"
     t.jsonb "whats_app_quick_reply_button_text", default: {"more_info"=>"Mehr Infos", "answer_request"=>"Antworten"}
     t.string "whats_app_more_info_message", default: ""
+    t.string "messengers_about_text"
     t.index ["business_plan_id"], name: "index_organizations_on_business_plan_id"
     t.index ["contact_person_id"], name: "index_organizations_on_contact_person_id"
     t.index ["telegram_bot_username"], name: "index_organizations_on_telegram_bot_username", unique: true

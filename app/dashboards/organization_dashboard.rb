@@ -32,7 +32,8 @@ class OrganizationDashboard < Administrate::BaseDashboard
     threemarb_api_identity: Field::String,
     threemarb_api_secret: Field::String,
     threemarb_private: Field::String,
-    signal_server_phone_number: SetupSignalLinkField
+    signal_server_phone_number: SetupSignalLinkField,
+    messengers_about_text: Field::String
   }.freeze
 
   COLLECTION_ATTRIBUTES = %i[
@@ -58,6 +59,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
     telegram_bot_username
     threemarb_api_identity
     signal_server_phone_number
+    messengers_about_text
   ].freeze
 
   FORM_ATTRIBUTES_NEW = %i[
@@ -81,6 +83,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
     threemarb_api_secret
     threemarb_private
     signal_server_phone_number
+    messengers_about_text
   ].freeze
 
   FORM_ATTRIBUTES_EDIT = %i[
@@ -100,6 +103,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
     channel_image
     signal_complete_onboarding_link
     whats_app_quick_reply_button_text
+    messengers_about_text
   ].freeze
 
   COLLECTION_FILTERS = {}.freeze
