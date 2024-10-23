@@ -56,16 +56,6 @@ For development purposes, you can set up `100eyes` using Docker. To perform the 
     $ docker compose up
     ```
 
-#### Run the tests
-
-In Github Actions, we run the tests with the local environment because setting up the containers and running them there is more expensive in terms of time. You can run the tests in the containers, if you don't want to get set up locally with:
-
-```bash
-$ docker compose exec app bundle exec rspec
-```
-
-NOTE: You should expect the `spec/jobs/signal_adapter` to have failures since we recorded [VCR cassettes](https://github.com/vcr/vcr) from a local env not a containerized one.
-
 #### Messengers
 
 To test out webhooks for Postmark, Telegram or Threema you could use [ngrok](https://ngrok.com/) or a similar tool like [localtunnel](https://www.npmjs.com/package/localtunnel). We recommend `localtunnel` as it is free and open-source software.
@@ -91,11 +81,13 @@ See this [blog post](https://rossta.net/blog/how-to-specify-local-ruby-gems-in-y
 
 ### Testing
 
-To run tests in a Docker container, you can run:
+We have a dedicated `.env` file for test enviroment, which can be found at `.env.test.local`, which with our `dotenv` gem is loaded
+as a first priority in test environment. We mock values only when needed.
+
+In Github Actions, we run the tests with the local environment because setting up the containers and running them there is more expensive in terms of time. You can run the tests in the containers, if you don't want to get set up locally with:
 
 ```bash
-$ docker compose exec -it app bash
-$ RAILS_ENV=test rspec
+$ docker compose exec app bundle exec rspec
 ```
 
 ### Production
