@@ -7,7 +7,6 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::CreateTemplatesJob do
   describe '#perform_later(organization_id:)' do
     subject { -> { described_class.new.perform(organization_id: organization.id) } }
 
-    ### REMOVE CLIENT API KEY BEFORE COMMITTING
     let(:organization) { create(:organization, three_sixty_dialog_client_api_key: 'valid_client_api_key') }
     let!(:admin) { create_list(:user, 3, admin: true) }
     let!(:users_of_an_organization) { create_list(:user, 2, organizations: [organization]) }
