@@ -92,6 +92,15 @@ Rails.application.routes.draw do
     put '/profile/upgrade_business_plan', to: 'profile#upgrade_business_plan'
 
     get '/about', to: 'about#index'
+
+    constraints Clearance::Constraints::SignedIn.new(&:admin?) do
+      scope module: 'organizations' do
+        get '/signal/register', to: 'signal#captcha_form'
+        post '/signal/register', to: 'signal#register'
+        get '/signal/verify', to: 'signal#verify_form'
+        post '/signal/verify', to: 'signal#verify'
+      end
+    end
   end
 
   get '/health', to: 'health#index'
@@ -112,7 +121,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     constraints Clearance::Constraints::SignedIn.new(&:admin?) do
-      root to: 'users#index'
+      root to: 'organizations#index'
 
       resources :users
       resources :contributors, only: %i[index show edit update destroy] do
@@ -122,7 +131,7 @@ Rails.application.routes.draw do
       resources :messages, only: %i[index show destroy]
       resources :delayed_jobs, only: %i[index show destroy]
       resources :business_plans, only: %i[index show edit update]
-      resources :organizations, only: %i[index show edit update]
+      resources :organizations, only: %i[index show edit update new create]
       resources :stats, only: [:index]
     end
   end
