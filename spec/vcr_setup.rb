@@ -23,7 +23,6 @@ VCR.configure do |c|
   c.filter_sensitive_data('Bearer <TOKEN>') do |interaction|
     interaction.request.headers['Authorization'].try(:first)
   end
-  c.filter_sensitive_data('THREE_SIXTY_DIALOG_CLIENT_WABA_ACCOUNT_ID') { 'valid_waba_account_id' }
   c.configure_rspec_metadata!
 
   # Capybara.server_host default

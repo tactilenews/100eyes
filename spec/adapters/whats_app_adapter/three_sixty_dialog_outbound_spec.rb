@@ -65,18 +65,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
           policy: 'deterministic',
           code: 'de'
         },
-        name: "welcome_message_#{organization.project_name.parameterize.underscore}",
-        components: [
-          {
-            type: 'body',
-            parameters: [
-              {
-                type: 'text',
-                text: organization.project_name
-              }
-            ]
-          }
-        ]
+        name: "welcome_message_#{organization.project_name.parameterize.underscore}"
       }
     }
   end

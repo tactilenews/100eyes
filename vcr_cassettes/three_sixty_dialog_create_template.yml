@@ -23,11 +23,11 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Wed, 23 Oct 2024 07:33:29 GMT
+      - Tue, 22 Oct 2024 11:50:11 GMT
       Content-Type:
       - application/json
       Content-Length:
-      - '4080'
+      - '3213'
       Access-Control-Allow-Origin:
       - http://172.16.30.117:3001
       Strict-Transport-Security:
@@ -35,18 +35,14 @@ http_interactions:
       Vary:
       - Origin
       X-Envoy-Upstream-Service-Time:
-      - '78'
+      - '384'
       Server:
       - istio-envoy
     body:
       encoding: UTF-8
-      string: '{"count":5,"filters":{},"limit":1000,"offset":0,"sort":["id"],"total":5,"waba_templates":[{"category":"MARKETING","components":[{"example":{"body_text":[["100eyes"]]},"text":"*Welcome
+      string: '{"count":4,"filters":{},"limit":1000,"offset":0,"sort":["id"],"total":4,"waba_templates":[{"category":"MARKETING","components":[{"example":{"body_text":[["100eyes"]]},"text":"*Welcome
         to {{1}}*\n\nUnsere Dialog-Recherche startet bald. Wir melden uns dann bei
         Ihnen.\n\nUm unseren Kanal abzubestellen, schreibe \u201eabbestellen\u201c.\n","type":"BODY"}],"created_at":"2024-10-07T08:50:05Z","created_by":{"user_id":"0fIXafU","user_name":"Matt"},"external_id":"1214097339917640","id":"MEuXRnVMAD7ScqqN0VDrWT","language":"de","modified_at":"2024-10-07T08:50:31Z","modified_by":{"user_id":"system","user_name":"system"},"name":"welcome_message_test_project","namespace":"7380bb95_042f_4bea_a6b2_58f1d0a4be55","partner_id":"WdBs71PA","quality_score":null,"rejected_reason":"NONE","status":"approved","updated_external":true,"waba_account_id":"uX3BECWA"},{"category":"MARKETING","components":[{"example":{"body_text":[["Jakob","Familie
-        und Freizeit"]]},"text":"Guten Morgen {{1}}, zum Thema \u201e{{2}}\u201c haben
-        wir eine neue Frage. Wenn du antworten m\u00f6chtest, klicke auf ''Antworten''.","type":"BODY"},{"buttons":[{"text":"Antworten","type":"QUICK_REPLY"},{"text":"Mehr
-        Infos","type":"QUICK_REPLY"}],"type":"BUTTONS"}],"created_at":"2024-10-22T11:50:11Z","created_by":{"user_id":"system","user_name":"System
-        account"},"external_id":"1475284523158116","id":"mg83ovEcYk8BJ8PL9FY0WT","language":"de","modified_at":"2024-10-22T11:50:44Z","modified_by":{"user_id":"system","user_name":"system"},"name":"new_request_morning2","namespace":"7380bb95_042f_4bea_a6b2_58f1d0a4be55","partner_id":"WdBs71PA","quality_score":null,"rejected_reason":"NONE","status":"approved","updated_external":true,"waba_account_id":"uX3BECWA"},{"category":"MARKETING","components":[{"example":{"body_text":[["Jakob","Familie
         und Freizeit"]]},"text":"Guten Morgen {{1}}, wir haben eine neue Frage zum
         Thema \u201e{{2}}\u201c. Wenn du antworten m\u00f6chtest, klicke auf ''Antworten''.","type":"BODY"},{"buttons":[{"text":"Antworten","type":"QUICK_REPLY"},{"text":"Mehr
         Infos","type":"QUICK_REPLY"}],"type":"BUTTONS"}],"created_at":"2024-10-22T11:41:52Z","created_by":{"user_id":"system","user_name":"System
@@ -57,15 +53,17 @@ http_interactions:
         Ihnen.\n\nUm unseren Kanal abzubestellen, schreibe \u201eabbestellen\u201c.\n","type":"BODY"}],"created_at":"2024-10-07T09:01:21Z","created_by":{"user_id":"0fIXafU","user_name":"Matt"},"external_id":"1275839723420499","id":"xyJ01IL2o2OZRvICUBDGWT","language":"de","modified_at":"2024-10-07T09:01:33Z","modified_by":{"user_id":"system","user_name":"system"},"name":"welcome_message_test_project_name","namespace":"7380bb95_042f_4bea_a6b2_58f1d0a4be55","partner_id":"WdBs71PA","quality_score":null,"rejected_reason":"NONE","status":"approved","updated_external":true,"waba_account_id":"uX3BECWA"}]}
 
         '
-  recorded_at: Wed, 23 Oct 2024 07:33:28 GMT
+  recorded_at: Tue, 22 Oct 2024 11:50:11 GMT
 - request:
     method: post
     uri: https://waba-v2.360dialog.io/v1/configs/templates
     body:
       encoding: UTF-8
-      string: '{"name":"welcome_message_hundred_eyes","category":"MARKETING","components":[{"type":"BODY","text":"*Welcome
-        to Test Project Name*\n\nUnsere Dialog-Recherche startet bald. Wir melden
-        uns dann bei Ihnen.\n\nUm unseren Kanal abzubestellen, schreibe „abbestellen“.\n"}],"language":"de","allow_category_change":true}'
+      string: '{"name":"new_request_morning2","category":"MARKETING","components":[{"type":"BODY","text":"Guten
+        Morgen {{1}}, zum Thema „{{2}}“ haben wir eine neue Frage. Wenn du antworten
+        möchtest, klicke auf ''Antworten''.","example":{"body_text":[["Jakob","Familie
+        und Freizeit"]]}},{"type":"BUTTONS","buttons":[{"type":"QUICK_REPLY","text":"Antworten"},{"type":"QUICK_REPLY","text":"Mehr
+        Infos"}]}],"language":"de","allow_category_change":true}'
     headers:
       D360-Api-Key:
       - D360-API-KEY
@@ -83,11 +81,11 @@ http_interactions:
       message: Created
     headers:
       Date:
-      - Wed, 23 Oct 2024 07:33:33 GMT
+      - Tue, 22 Oct 2024 11:50:13 GMT
       Content-Type:
       - application/json
       Content-Length:
-      - '451'
+      - '576'
       Access-Control-Allow-Origin:
       - http://172.16.30.117:3001
       Strict-Transport-Security:
@@ -95,15 +93,16 @@ http_interactions:
       Vary:
       - Origin
       X-Envoy-Upstream-Service-Time:
-      - '3117'
+      - '2088'
       Server:
       - istio-envoy
     body:
       encoding: UTF-8
-      string: '{"category":"MARKETING","components":[{"text":"*Welcome to Test Project
-        Name*\n\nUnsere Dialog-Recherche startet bald. Wir melden uns dann bei Ihnen.\n\nUm
-        unseren Kanal abzubestellen, schreibe \u201eabbestellen\u201c.\n","type":"BODY"}],"external_id":"8322283881154137","id":"8RNeQaAYgYEnrWvUORy8WT","language":"de","name":"welcome_message_hundred_eyes","namespace":"7380bb95_042f_4bea_a6b2_58f1d0a4be55","rejected_reason":null,"status":"submitted"}
+      string: '{"category":"MARKETING","components":[{"example":{"body_text":[["Jakob","Familie
+        und Freizeit"]]},"text":"Guten Morgen {{1}}, zum Thema \u201e{{2}}\u201c haben
+        wir eine neue Frage. Wenn du antworten m\u00f6chtest, klicke auf ''Antworten''.","type":"BODY"},{"buttons":[{"text":"Antworten","type":"QUICK_REPLY"},{"text":"Mehr
+        Infos","type":"QUICK_REPLY"}],"type":"BUTTONS"}],"external_id":"1475284523158116","id":"mg83ovEcYk8BJ8PL9FY0WT","language":"de","name":"new_request_morning2","namespace":"7380bb95_042f_4bea_a6b2_58f1d0a4be55","rejected_reason":null,"status":"submitted"}
 
         '
-  recorded_at: Wed, 23 Oct 2024 07:33:32 GMT
+  recorded_at: Tue, 22 Oct 2024 11:50:13 GMT
 recorded_with: VCR 6.1.0

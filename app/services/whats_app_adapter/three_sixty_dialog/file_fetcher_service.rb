@@ -2,7 +2,7 @@
 
 module WhatsAppAdapter
   module ThreeSixtyDialog
-    class FileFetcherService
+    class FileFetcherService < ApplicationService
       class FetchError < StandardError; end
 
       attr_reader :organization, :base_uri, :headers, :file_id
@@ -33,7 +33,7 @@ module WhatsAppAdapter
 
       def fetch_streamable_file(media_url)
         url = URI::HTTPS.build(host: base_uri.hostname, path: base_uri.path + media_url.path, query: media_url.query)
-        request = Net::HTTP::Get.new(url.to_s, headers)
+        request = Net::HTTP::Get.new(url, headers)
         response = Net::HTTP.start(url.host, url.port, use_ssl: true) do |http|
           http.request(request)
         end

@@ -7,7 +7,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::FileFetcherService, type: :mod
   describe '#call' do
     subject { -> { described_class.new(organization_id: organization.id, file_id: file_id).call } }
 
-    let(:organization) { create(:organization) }
+    let!(:organization) { create(:organization) }
     let(:file_id) { 'some_valid_id' }
 
     let(:path) { '/whatsapp_business/attachments/' }
