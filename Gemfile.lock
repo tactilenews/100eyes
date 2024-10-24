@@ -399,9 +399,9 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
-    telegram-bot (0.15.6)
-      actionpack (>= 4.0, < 7.1)
-      activesupport (>= 4.0, < 7.1)
+    telegram-bot (0.16.4)
+      actionpack (>= 4.0, < 7.3)
+      activesupport (>= 4.0, < 7.3)
       httpclient (~> 2.7)
     thor (1.2.1)
     tilt (2.0.11)
@@ -499,4 +499,4 @@ RUBY VERSION
    ruby 3.0.0p0
 
 BUNDLED WITH
-   2.5.15
+   2.5.21
