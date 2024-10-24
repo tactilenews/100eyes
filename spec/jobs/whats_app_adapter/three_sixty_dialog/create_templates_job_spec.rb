@@ -28,7 +28,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::CreateTemplatesJob do
         expect(whats_app_template_created_notifications.count).to eq(5)
 
         recipient_ids = whats_app_template_created_notifications.pluck(:recipient_id).uniq.sort
-        user_ids = users_of_an_organization.pluck(:id).uniq
+        user_ids = users_of_an_organization.pluck(:id)
         admin_ids = admin.pluck(:id)
         all_org_user_plus_admin = (user_ids + admin_ids).sort
         expect(recipient_ids).to eq(all_org_user_plus_admin)

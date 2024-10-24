@@ -28,3 +28,7 @@ Metrics/PerceivedComplexity:
 Metrics/AbcSize:
   Exclude:
     - 'db/data/**'
+
+Lint/MissingSuper:
+  Exclude:
+    - 'app/services/**/*.rb'

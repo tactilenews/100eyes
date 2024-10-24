@@ -6,22 +6,17 @@ module WhatsAppAdapter
   module ThreeSixtyDialog
     class CreateTemplatesJob < ApplicationJob
       def perform(organization_id:)
-        @organization = Organization.find(organization_id)
+        organization = Organization.find(organization_id)
 
-        @base_uri = ENV.fetch('THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')
-        existing_templates = WhatsAppAdapter::ThreeSixtyDialog::TemplateFetcherService.new(organization_id: organization.id).call
+        existing_templates = WhatsAppAdapter::ThreeSixtyDialog::TemplateFetcherService.call(organization_id: organization.id)
 
         templates_to_create_array = whats_app_templates.keys.difference(existing_templates)
         templates_to_create = whats_app_templates.select { |key, _value| key.in?(templates_to_create_array) }
         templates_to_create.each do |key, value|
-          @template_name = key
-          @template_text = value
-          WhatsAppAdapter::ThreeSixtyDialog::TemplateCreatorService.new(organization_id: organization.id,
-                                                                        payload: new_request_template_payload).call
+          WhatsAppAdapter::ThreeSixtyDialog::TemplateCreatorService.call(organization_id: organization.id,
+                                                                         payload: new_request_template_payload(key, value))
         end
       end
-
-      attr_reader :organization, :base_uri, :partner_id, :template_name, :template_text, :token, :waba_account_id
 
       private
 
@@ -34,7 +29,7 @@ module WhatsAppAdapter
       # rubocop:enable Style/FormatStringToken
 
       # rubocop:disable Metrics/MethodLength
-      def new_request_template_payload
+      def new_request_template_payload(template_name, template_text)
         {
           name: template_name,
           category: 'MARKETING',
