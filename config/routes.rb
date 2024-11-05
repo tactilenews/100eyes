@@ -102,6 +102,7 @@ Rails.application.routes.draw do
 
   namespace :whats_app do
     post '/webhook', to: 'webhook#message'
+    post '/record-voice', to: 'webhook#record_voice'
     post '/errors', to: 'webhook#errors'
     post '/status', to: 'webhook#status'
   end

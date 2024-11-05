@@ -26,6 +26,12 @@ module WhatsApp
       adapter.consume(whats_app_message_params) { |message| message.contributor.reply(adapter) }
     end
 
+    def record_voice
+      response = Twilio::TwiML::VoiceResponse.new
+      response.record(play_beep: true, transcribe: true)
+      render xml: response.to_xml
+    end
+
     def errors
       head :ok
       return unless error_params['Level'] == 'ERROR'
