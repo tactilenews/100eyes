@@ -89,7 +89,7 @@ class Organization < ApplicationRecord
   end
 
   def telegram_bot
-    Telegram::Bot::Client.new(telegram_bot_api_key)
+    Telegram.bots[id]
   end
 
   def twilio_instance
