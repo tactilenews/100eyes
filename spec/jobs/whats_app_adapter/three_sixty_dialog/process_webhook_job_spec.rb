@@ -85,6 +85,47 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
                 text_payload.merge({ message_id: latest_message.id })
               )
             end
+
+            context 'message with file, no text' do
+              let(:message_file) do
+                [create(:file, message: latest_message,
+                               attachment: Rack::Test::UploadedFile.new(Rails.root.join('spec/fixtures/files/matt.jpeg'), 'image/jpeg'))]
+              end
+
+              before do
+                latest_message.update!(text: '', files: message_file)
+              end
+
+              it 'enqueues a job to upload the file' do
+                expect do
+                  subject.call
+                end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::UploadFileJob).on_queue('default').with(
+                  message_id: latest_message.id
+                )
+              end
+
+              context 'message with file and text' do
+                before do
+                  latest_message.update!(text: 'Some text')
+                end
+
+                it 'enqueues a job to upload the file' do
+                  expect do
+                    subject.call
+                  end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::UploadFileJob).on_queue('default').with(
+                    message_id: latest_message.id
+                  )
+                end
+
+                it 'enqueues a job to send out the text' do
+                  expect do
+                    subject.call
+                  end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).on_queue('default').with(
+                    text_payload.merge({ message_id: latest_message.id })
+                  )
+                end
+              end
+            end
           end
 
           describe 'with an external id' do

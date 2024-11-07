@@ -114,17 +114,15 @@ module WhatsAppAdapter
       def send_message(recipient, message)
         files = message.files
 
-        if files.blank?
-          WhatsAppAdapter::ThreeSixtyDialogOutbound::Text.perform_later(organization_id: message.organization.id,
-                                                                        payload: text_payload(
-                                                                          recipient, message.text
-                                                                        ),
-                                                                        message_id: message.id)
-        else
-          files.each do |_file|
-            WhatsAppAdapter::ThreeSixtyDialog::UploadFileJob.perform_later(message_id: message.id)
-          end
-        end
+        WhatsAppAdapter::ThreeSixtyDialog::UploadFileJob.perform_later(message_id: message.id) if files.present?
+
+        return if message.text.blank?
+
+        WhatsAppAdapter::ThreeSixtyDialogOutbound::Text.perform_later(organization_id: message.organization.id,
+                                                                      payload: text_payload(
+                                                                        recipient, message.text
+                                                                      ),
+                                                                      message_id: message.id)
       end
 
       # rubocop:disable Metrics/MethodLength
