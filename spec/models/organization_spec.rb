@@ -97,7 +97,10 @@ RSpec.describe Organization do
       end
 
       context 'given an inactive contributor with the same tag' do
-        before { create(:contributor, tag_list: %w[Homeowner], organization: organization, deactivated_at: 1.day.ago) }
+        before do
+          create(:contributor, tag_list: %w[Homeowner], deactivated_at: 1.day.ago, organization: organization)
+          create(:contributor, tag_list: 'teacher', unsubscribed_at: 1.day.ago, organization: organization)
+        end
 
         it "does not count inactive contributor's tags" do
           expect(subject).to eq([['Homeowner', 1]])
