@@ -89,38 +89,38 @@ de:
       message: "Wenn du unser Signal-Konto gefunden hast, gebe diesen Code ein: <strong>%{token}</strong>"
     onboarding_signal_form:
       heading: Mit Signal teilnehmen
-      text: Geben Sie uns zunächst Ihr Einverständnis. Wir werden dann einen Code generieren, den Sie an uns senden können, um Ihre Registrierung abzuschließen.
+      text: Gib uns zunächst dein Einverständnis. Wir werden dann einen Code generieren, den du an uns senden kannst, um deine Registrierung abzuschließen.
       submit: Anmeldung abschließen
     onboarding_whats_app_form:
       heading: Mit WhatsApp teilnehmen
-      text: Geben Sie bitte unten die Handynummer ein, mit der Sie bei WhatsApp registriert sind.
+      text: Gib bitte unten die Handynummer ein, mit der du bei WhatsApp registriert bist.
       submit: Anmeldung abschließen
     onboarding_email_form:
       heading: Per E-Mail teilnehmen
-      text: Geben Sie bitte unten Ihre Kontaktdaten ein, um Ihre Anmeldung abzuschließen.
+      text: Gib bitte unten deine Kontaktdaten ein, um deine Anmeldung abzuschließen.
       submit: Anmeldung abschließen
     onboarding_threema_form:
       heading: Mit Threema teilnehmen
-      text: Geben Sie bitte unten Ihren Namen sowie Ihre Threema ID ein. Die Threema ID finden Sie in der Threema-App im Bereich „Mein Profil”.
+      text: Gib bitte unten deinen Namen sowie deine Threema ID ein. Die Threema ID findest du in der Threema-App im Bereich „Mein Profil”.
       submit: Anmeldung abschließen
     onboarding_telegram_form:
       heading: Mit Telegram teilnehmen
-      text: Geben Sie bitte unten Ihren Namen ein, um die Anmeldung abzuschließen.
+      text: Gib bitte unten deinen Namen ein, um deine Anmeldung abzuschließen.
       submit: Anmeldung fortsetzen
     onboarding_telegram_link:
       heading: Fast geschafft.
-      text: Verbinden Sie Ihr Telegram-Konto in der Telegram-App, um die Anmeldung abzuschließen.
+      text: Verbinde dein Telegram-Konto in der Telegram-App, um die Anmeldung abzuschließen.
       link: Zur Telegram-App
       copy: Link kopieren
-      help: Über den Button gelangen Sie direkt zum Telegram-Profil von „%{project_name}”. Alternativ können Sie einen Link kopieren und auf Ihrem Smartphone öffnen.
-      didnt_work: Hat das nicht funktioniert? Oder werden Sie nach einem Code gefragt?
+      help: Über den Button gelangst du direkt zum Telegram-Profil von „%{project_name}”. Alternativ kannst du einen Link kopieren und auf deinem Smartphone öffnen.
+      didnt_work: Hat das nicht funktioniert? Oder wirst du nach einem Code gefragt?
     onboarding_telegram_fallback:
       heading: Fast geschafft.
-      text: Verbinden Sie Ihr Telegram-Konto in der Telegram-App, um die Anmeldung abzuschließen.
+      text: Verbinde dein Telegram-Konto in der Telegram-App, um die Anmeldung abzuschließen.
       steps:
-        - "Finden Sie uns auf Telegram. Suchen Sie dazu nach <strong>%{telegram_handle}</strong>."
-        - "Wenn Sie unser Telegram-Konto gefunden haben, klicken Sie auf <strong>Start</strong>."
-        - "Geben Sie diesen Code ein, sobald sie danach gefragt werden: <strong>%{token}</strong>"
+        - "Finde uns auf Telegram. Suche dazu nach <strong>%{telegram_handle}</strong>."
+        - "Wenn du unser Telegram-Konto gefunden hast, klicke auf <strong>Start</strong>."
+        - "Gib diesen Code ein, sobald du danach gefragt wirst: <strong>%{token}</strong>"
     onboarding_footer:
       imprint: Impressum
       data_protection: Datenschutz
