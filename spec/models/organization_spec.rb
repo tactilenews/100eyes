@@ -96,7 +96,7 @@ RSpec.describe Organization do
         it { should eq([['Homeowner', 1]]) }
       end
 
-      context 'given an inactive contributor with the same tag' do
+      context 'given non-active contributors with the same tag' do
         before do
           create(:contributor, tag_list: %w[Homeowner], deactivated_at: 1.day.ago, organization: organization)
           create(:contributor, tag_list: 'teacher', unsubscribed_at: 1.day.ago, organization: organization)
