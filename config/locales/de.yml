@@ -118,9 +118,9 @@ de:
       heading: Fast geschafft.
       text: Verbinde dein Telegram-Konto in der Telegram-App, um die Anmeldung abzuschließen.
       steps:
-        - "Finde bitte uns auf Telegram. Suche dazu nach <strong>%{telegram_handle}</strong>."
+        - "Finde uns auf Telegram. Suche dazu nach <strong>%{telegram_handle}</strong>."
         - "Wenn du unser Telegram-Konto gefunden hast, klicke auf <strong>Start</strong>."
-        - "Gib diesen Code ein, sobald du danach gefragst werden: <strong>%{token}</strong>"
+        - "Gib diesen Code ein, sobald du danach gefragt wirst: <strong>%{token}</strong>"
     onboarding_footer:
       imprint: Impressum
       data_protection: Datenschutz
