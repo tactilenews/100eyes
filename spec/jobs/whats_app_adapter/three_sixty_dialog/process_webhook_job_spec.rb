@@ -91,17 +91,21 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
                 [create(:file, message: latest_message,
                                attachment: Rack::Test::UploadedFile.new(Rails.root.join('spec/fixtures/files/matt.jpeg'), 'image/jpeg'))]
               end
+              let(:external_file_id) { '545466424653131' }
 
               before do
                 latest_message.update!(text: '', files: message_file)
+                allow(ENV).to receive(:fetch).with(
+                  'THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693'
+                ).and_return('https://waba-v2.360dialog.io')
               end
 
-              it 'enqueues a job to upload the file' do
-                expect do
-                  subject.call
-                end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::UploadFileJob).on_queue('default').with(
-                  message_id: latest_message.id
-                )
+              it 'enqueues a job to send the file' do
+                expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::UploadFileJob)
+                  .and have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::File).with({
+                                                                                                 message_id: latest_message.id,
+                                                                                                 file_id: external_file_id
+                                                                                               })
               end
 
               context 'message with file and text' do
