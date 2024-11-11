@@ -7,9 +7,8 @@ module WhatsApp
 
     def message
       head :ok
+      handle_error(@components[:statuses].first[:errors].first) and return if @components[:statuses]&.first[:errors].present?
       return if @components[:statuses].present? # TODO: Handle statuses
-
-      handle_error(@components[:errors].first) and return if @components[:errors].present?
 
       WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob.perform_later(organization_id: @organization.id, components: @components)
     end
@@ -39,8 +38,9 @@ module WhatsApp
                                              { context: %i[from id] }],
                                   statuses: [:id, :status, :timestamp, :expiration_timestamp, :recipient_id,
                                              { conversation: [:id, { origin: [:type] }] },
-                                             { pricing: %i[billable pricing_model category] }],
-                                  errors: [:code, :title, :message, :href, { error_data: [:details] }] }]
+                                             { pricing: %i[billable pricing_model category],
+                                               errors: [:code, :title, :message, :href, { error_data: [:details] }] }] }]
+
                       }]
                     }])
     end
