@@ -87,6 +87,10 @@ RSpec.describe Organization do
   describe '#contributors_tags_with_count' do
     subject { organization.contributors_tags_with_count.pluck(:name, :count) }
 
+    it 'makes five database queries' do
+      expect { subject }.to make_database_queries(count: 5)
+    end
+
     context 'given a contributor with a tag' do
       let!(:contributor) { create(:contributor, tag_list: %w[Homeowner], organization: organization) }
       it { should eq([['Homeowner', 1]]) }
