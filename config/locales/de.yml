@@ -462,7 +462,7 @@ de:
     shared:
       unsubscribe:
         text: abbestellen
-        instructions: Um unseren Kanal Abzubestellen, schreibe „abbestellen“.
+        instructions: Um unseren Kanal abzubestellen, schreibe „abbestellen“.
         successful: Du wurdest erfolgreich abgemeldet. Wir danken dir für deinen Beitrag zu diesem Projekt.
         by_request_of_contributor: "Das Mitglied, %{contributor_name}, hat darum gebeten, keine weiteren Nachrichten mit %{channel} mehr zu erhalten."
       resubscribe:
