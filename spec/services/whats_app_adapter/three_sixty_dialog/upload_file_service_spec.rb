@@ -2,9 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::UploadFileJob do
-  describe '#perform_later(message_id:)' do
-    subject { -> { described_class.new.perform(message_id: message.id) } }
+RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::UploadFileService do
+  describe '#call(request_id:)' do
+    subject { -> { described_class.call(request_id: message.request.id) } }
 
     let(:organization) { create(:organization, three_sixty_dialog_client_api_key: 'valid_api_key') }
     let(:message) { create(:message, request: create(:request, :with_file, organization: organization)) }
@@ -17,12 +17,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::UploadFileJob do
     end
 
     it 'schedules a job to send out the message with the file', vcr: { cassette_name: :three_sixty_dialog_upload_file_job } do
-      expect { subject.call }.to have_enqueued_job(
-        WhatsAppAdapter::ThreeSixtyDialogOutbound::File
-      ).with({
-               message_id: message.id,
-               file_id: external_file_id
-             })
+      expect { subject.call }.to (change { message.reload.request.external_file_ids }).from([]).to([external_file_id])
     end
   end
 end

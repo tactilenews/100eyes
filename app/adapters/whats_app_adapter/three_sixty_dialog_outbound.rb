@@ -112,10 +112,8 @@ module WhatsAppAdapter
       end
 
       def send_message(recipient, message)
-        files = message.files
-
-        if files.present?
-          WhatsAppAdapter::ThreeSixtyDialogOutbound::File.perform_later(message_id: message.id) if files.present?
+        if message.files.present?
+          WhatsAppAdapter::ThreeSixtyDialogOutbound::File.perform_later(message_id: message.id)
 
         else
 

@@ -7,8 +7,8 @@ module WhatsApp
 
     def message
       head :ok
-      handle_error(@components[:statuses].first[:errors].first) and return if @components[:statuses]&.first[:errors].present?
-      return if @components[:statuses].present? # TODO: Handle statuses
+      handle_statuses and return if @components[:statuses].present? # TODO: Handle statuses
+      handle_errors(@components[:errors]) and return if @components[:errors].present?
 
       WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob.perform_later(organization_id: @organization.id, components: @components)
     end
@@ -24,8 +24,8 @@ module WhatsApp
                     entry: [:id, {
                       changes: [:field, {
                         value: [:messaging_product,
-                                { metadata: %i[display_phone_number phone_number_id] },
-                                { contacts: [:wa_id, { profile: [:name] }],
+                                { metadata: %i[display_phone_number phone_number_id],
+                                  contacts: [:wa_id, { profile: [:name] }],
                                   messages: [:from, :id, :type, :timestamp,
                                              { text: [:body] }, { button: %i[payload text] },
                                              { image: %i[id mime_type sha256 caption] }, { voice: %i[id mime_type sha256] },
@@ -38,16 +38,26 @@ module WhatsApp
                                              { context: %i[from id] }],
                                   statuses: [:id, :status, :timestamp, :expiration_timestamp, :recipient_id,
                                              { conversation: [:id, { origin: [:type] }] },
-                                             { pricing: %i[billable pricing_model category],
-                                               errors: [:code, :title, :message, :href, { error_data: [:details] }] }] }]
+                                             { pricing: %i[billable pricing_model category] },
+                                             { errors: [:code, :title, :message, :href, { error_data: [:details] }] }],
+                                  errors: [:code, :title, :message, :href, { error_data: [:details] }] }]
 
                       }]
                     }])
     end
 
-    def handle_error(error)
-      exception = WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: error[:code], message: error[:title])
-      ErrorNotifier.report(exception, context: { details: error[:error_data][:details] })
+    def handle_statuses
+      statuses = @components[:statuses]
+      statuses.each do |status|
+        handle_errors(status[:errors]) if status[:errors]
+      end
+    end
+
+    def handle_errors(errors)
+      errors.each do |error|
+        exception = WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: error[:code], message: error[:title])
+        ErrorNotifier.report(exception, context: { details: error[:error_data][:details] })
+      end
     end
   end
 end

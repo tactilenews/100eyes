@@ -8,8 +8,6 @@ module WhatsAppAdapter
       # rubocop:disable Metrics/AbcSize
       def perform(message_id:)
         @message = Message.find(message_id)
-        organization = Organization.find(message.organization.id)
-
         @recipient = message.recipient
 
         unless caption_it?
@@ -19,7 +17,7 @@ module WhatsAppAdapter
 
         message.request.external_file_ids.each do |file_id|
           url = URI.parse("#{ENV.fetch('THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')}/messages")
-          headers = { 'D360-API-KEY' => organization.three_sixty_dialog_client_api_key, 'Content-Type' => 'application/json' }
+          headers = { 'D360-API-KEY' => message.organization.three_sixty_dialog_client_api_key, 'Content-Type' => 'application/json' }
           request = Net::HTTP::Post.new(url.to_s, headers)
           body = payload(file_id)
           body[:image][:caption] = message.text if caption_it?
