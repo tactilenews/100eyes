@@ -5,16 +5,19 @@ module WhatsAppAdapter
     class File < ApplicationJob
       queue_as :default
 
-      # rubocop:disable Metrics/AbcSize
       def perform(message_id:)
         @message = Message.find(message_id)
         @recipient = message.recipient
 
-        unless caption_it?
-          WhatsAppAdapter::ThreeSixtyDialogOutbound::Text.perform_later(organization_id: message.organization_id, payload: text_payload,
-                                                                        message_id: message.id)
-        end
+        send_files
+        send_text_separately unless caption_it?
+      end
 
+      private
+
+      attr_reader :recipient, :message
+
+      def send_files
         message.request.external_file_ids.each do |file_id|
           url = URI.parse("#{ENV.fetch('THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')}/messages")
           headers = { 'D360-API-KEY' => message.organization.three_sixty_dialog_client_api_key, 'Content-Type' => 'application/json' }
@@ -28,14 +31,15 @@ module WhatsAppAdapter
           end
           handle_response(response)
         end
-      rescue ActiveRecord::RecordNotFound => e
-        ErrorNotifier.report(e)
       end
-      # rubocop:enable Metrics/AbcSize
 
-      private
-
-      attr_reader :recipient, :message
+      def send_text_separately
+        WhatsAppAdapter::ThreeSixtyDialogOutbound::Text.perform_later(
+          organization_id: message.organization_id,
+          payload: text_payload,
+          message_id: message.id
+        )
+      end
 
       def payload(file_id)
         {
@@ -64,11 +68,14 @@ module WhatsAppAdapter
       def handle_response(response)
         case response
         when Net::HTTPSuccess
-          external_id = JSON.parse(response.body)['messages'].first['id']
-          message.update!(external_id: external_id)
+          if caption_it?
+            external_id = JSON.parse(response.body)['messages'].first['id']
+            message.update!(external_id: external_id)
+          end
         when Net::HTTPClientError, Net::HTTPServerError
           exception = WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: response.code, message: response.body)
-          ErrorNotifier.report(exception)
+          context = { message_id: message.id }
+          ErrorNotifier.report(exception, context: context)
         end
       end
 
