@@ -3,7 +3,7 @@
 require 'rails_helper'
 require 'webmock/rspec'
 
-RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::FileFetcherService, type: :model do
+RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::FileFetcherService do
   describe '#call' do
     subject { -> { described_class.new(organization_id: organization.id, file_id: file_id).call } }
 
