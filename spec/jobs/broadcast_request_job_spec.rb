@@ -7,16 +7,19 @@ RSpec.describe BroadcastRequestJob do
     subject { -> { described_class.new.perform(request.id) } }
 
     let!(:contributor) { create(:contributor) }
-    let(:request) { create(:request, broadcasted_at: nil) }
+    let(:request) do
+      create(:request, broadcasted_at: nil, organization: create(:organization, three_sixty_dialog_client_api_key: 'valid_client_api_key'))
+    end
 
     context 'given the request has been deleted' do
       before { request.destroy }
 
-      it 'does not raise an error' do
-        expect { subject.call }.not_to raise_error
+      it 'raises an error to indicate something should be looked into' do
+        expect { subject.call }.to raise_error(ActiveRecord::RecordNotFound)
       end
 
       it 'does not create a Message instance' do
+      rescue ActiveRecord::RecordNotFound
         expect { subject.call }.not_to change(Message, :count)
       end
     end
@@ -46,7 +49,7 @@ RSpec.describe BroadcastRequestJob do
     end
 
     context 'given a request that is to be sent out now' do
-      describe 'given contributors from multipile organizations' do
+      describe 'given contributors from multiple organizations' do
         before(:each) do
           create(:contributor, id: 1, email: 'somebody@example.org', organization: request.organization)
           create(:contributor, id: 2, email: nil, telegram_id: 22, organization: request.organization)
@@ -134,6 +137,26 @@ RSpec.describe BroadcastRequestJob do
         it 'only sends to active contributors' do
           expect { subject.call }.to change(Message, :count).from(0).to(1)
                                                             .and (change { Message.pluck(:recipient_id) }).from([]).to([8])
+        end
+      end
+
+      describe 'given a request with files attached', vcr: { cassette_name: :three_sixty_dialog_upload_file_service } do
+        before do
+          request.update!(files: [fixture_file_upload('profile_picture.jpg')])
+        end
+
+        context 'no WhatsApp contributors as recipients' do
+          it "does not update the request's external_file_ids since WhatsApp won't be used to send files" do
+            expect { subject.call }.not_to(change { request.reload.external_file_ids })
+          end
+        end
+
+        context 'with WhatsApp contributors as recipients' do
+          before { create(:contributor, :whats_app_contributor, organization: request.organization) }
+
+          it "updates the request's external_file_ids" do
+            expect { subject.call }.to (change { request.reload.external_file_ids }).from([]).to(['545466424653131'])
+          end
         end
       end
     end

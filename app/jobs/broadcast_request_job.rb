@@ -3,14 +3,25 @@
 class BroadcastRequestJob < ApplicationJob
   queue_as :broadcast_request
 
+  attr_reader :recipients, :request
+
   def perform(request_id)
-    request = Request.find(request_id)
+    @request = Request.find(request_id)
     return if request.broadcasted_at.present?
     return if request.planned? # rescheduled for future
 
-    recipients = request.organization.contributors.active.with_tags(request.tag_list)
-    WhatsAppAdapter::ThreeSixtyDialog::UploadFileService.call(request_id: request.id) if recipients.with_whats_app.count.positive?
+    @recipients = request.organization.contributors.active.with_tags(request.tag_list)
+    if recipients.with_whats_app.count.positive? && request.files.attached?
+      WhatsAppAdapter::ThreeSixtyDialog::UploadFileService.call(request_id: request.id)
+    end
 
+    create_and_send_messages
+    request.update(broadcasted_at: Time.current)
+  end
+
+  private
+
+  def create_and_send_messages
     recipients.each do |contributor|
       message = Message.new(
         sender: request.user,
@@ -25,6 +36,5 @@ class BroadcastRequestJob < ApplicationJob
       message.save!
       message.send!
     end
-    request.update(broadcasted_at: Time.current)
   end
 end
