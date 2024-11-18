@@ -23,6 +23,11 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound::File do
       }
     end
 
+    before do
+      allow(ENV).to receive(:fetch).with('THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT',
+                                         'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693').and_return('https://waba-v2.360dialog.io')
+    end
+
     it "updates the message's external_id", vcr: { cassette_name: 'three_sixty_dialog_send_file' } do
       expect { subject.call }.to (change do
                                     message.reload.external_id

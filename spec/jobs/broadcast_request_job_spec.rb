@@ -143,6 +143,8 @@ RSpec.describe BroadcastRequestJob do
       describe 'given a request with files attached', vcr: { cassette_name: :three_sixty_dialog_upload_file_service } do
         before do
           request.update!(files: [fixture_file_upload('profile_picture.jpg')])
+          allow(ENV).to receive(:fetch).with('THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT',
+                                             'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693').and_return('https://waba-v2.360dialog.io')
         end
 
         context 'no WhatsApp contributors as recipients' do
