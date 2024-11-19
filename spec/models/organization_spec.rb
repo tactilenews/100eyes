@@ -87,6 +87,10 @@ RSpec.describe Organization do
   describe '#contributors_tags_with_count' do
     subject { organization.contributors_tags_with_count.pluck(:name, :count) }
 
+    it 'makes one database query' do
+      expect { subject }.to make_database_queries(count: 1)
+    end
+
     context 'given a contributor with a tag' do
       let!(:contributor) { create(:contributor, tag_list: %w[Homeowner], organization: organization) }
       it { should eq([['Homeowner', 1]]) }
@@ -94,6 +98,17 @@ RSpec.describe Organization do
       context 'and a request with the same tag' do
         let!(:request) { create(:request, tag_list: %w[Homeowner], organization: organization) }
         it { should eq([['Homeowner', 1]]) }
+      end
+
+      context 'given non-active contributors with the same tag' do
+        before do
+          create(:contributor, tag_list: %w[Homeowner], deactivated_at: 1.day.ago, organization: organization)
+          create(:contributor, tag_list: 'teacher', unsubscribed_at: 1.day.ago, organization: organization)
+        end
+
+        it "does not count inactive contributor's tags" do
+          expect(subject).to eq([['Homeowner', 1]])
+        end
       end
     end
   end

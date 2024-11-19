@@ -95,7 +95,7 @@ class Organization < ApplicationRecord
     ActsAsTaggableOn::Tag
       .for_tenant(id)
       .joins(:taggings)
-      .where(taggings: { taggable_type: Contributor.name })
+      .where(taggings: { taggable_type: Contributor.name, taggable_id: Contributor.active })
       .select('tags.id, tags.name, count(taggings.id) as taggings_count')
       .group('tags.id')
       .all

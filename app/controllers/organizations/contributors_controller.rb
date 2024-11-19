@@ -49,7 +49,7 @@ module Organizations
     end
 
     def count
-      render json: { count: @organization.contributors.with_tags(params[:tag_list]).count }
+      render json: { count: @organization.contributors.active.with_tags(params[:tag_list]).count }
     end
 
     def conversations
