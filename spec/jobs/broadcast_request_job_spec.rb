@@ -7,18 +7,8 @@ RSpec.describe BroadcastRequestJob do
     subject { -> { described_class.new.perform(request.id) } }
 
     let!(:contributor) { create(:contributor) }
-    let(:request) { create(:request, broadcasted_at: nil) }
-
-    context 'given the request has been deleted' do
-      before { request.destroy }
-
-      it 'does not raise an error' do
-        expect { subject.call }.not_to raise_error
-      end
-
-      it 'does not create a Message instance' do
-        expect { subject.call }.not_to change(Message, :count)
-      end
+    let(:request) do
+      create(:request, broadcasted_at: nil, organization: create(:organization, three_sixty_dialog_client_api_key: 'valid_client_api_key'))
     end
 
     context 'given a request has been broadcast' do
@@ -46,7 +36,7 @@ RSpec.describe BroadcastRequestJob do
     end
 
     context 'given a request that is to be sent out now' do
-      describe 'given contributors from multipile organizations' do
+      describe 'given contributors from multiple organizations' do
         before(:each) do
           create(:contributor, id: 1, email: 'somebody@example.org', organization: request.organization)
           create(:contributor, id: 2, email: nil, telegram_id: 22, organization: request.organization)
@@ -134,6 +124,14 @@ RSpec.describe BroadcastRequestJob do
         it 'only sends to active contributors' do
           expect { subject.call }.to change(Message, :count).from(0).to(1)
                                                             .and (change { Message.pluck(:recipient_id) }).from([]).to([8])
+        end
+      end
+
+      describe 'given a WhatsApp contributor' do
+        before { create(:contributor, :whats_app_contributor, organization: request.organization) }
+
+        it 'schedules a job to send out the message' do
+          expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::BroadcastMessagesJob).with(request_id: request.id)
         end
       end
     end

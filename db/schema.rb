@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_11_13_120655) do
+ActiveRecord::Schema.define(version: 2024_11_19_084424) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -267,8 +267,10 @@ ActiveRecord::Schema.define(version: 2024_11_13_120655) do
     t.datetime "schedule_send_for"
     t.datetime "broadcasted_at"
     t.bigint "organization_id"
+    t.string "whats_app_external_file_ids", default: [], array: true
     t.index ["organization_id"], name: "index_requests_on_organization_id"
     t.index ["user_id"], name: "index_requests_on_user_id"
+    t.index ["whats_app_external_file_ids"], name: "index_requests_on_whats_app_external_file_ids", using: :gin
   end
 
   create_table "taggings", id: :serial, force: :cascade do |t|

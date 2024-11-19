@@ -78,12 +78,80 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
           end
 
           describe 'with no external id' do
+            let(:base_uri) { 'https://waba-v2.360dialog.io' }
+            let(:external_file_id) { '545466424653131' }
+
+            before do
+              latest_message.request.update!(whats_app_external_file_ids: [external_file_id])
+              allow(ENV).to receive(:fetch).with(
+                'THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693'
+              ).and_return(base_uri)
+              stub_request(:post, "#{base_uri}/messages").to_return(status: 200, body: { messages: [id: 'some_external_id'] }.to_json)
+            end
+
             it 'enqueues a job to send the latest received message' do
               expect do
                 subject.call
               end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).on_queue('default').with(
                 text_payload.merge({ message_id: latest_message.id })
               )
+            end
+
+            it 'updates the message with the external id' do
+              perform_enqueued_jobs(only: WhatsAppAdapter::ThreeSixtyDialogOutbound::Text) do
+                expect { subject.call }.to (change { latest_message.reload.external_id }).from(nil).to('some_external_id')
+              end
+            end
+
+            context 'message with file, no text' do
+              let(:message_file) do
+                [create(:file, message: latest_message,
+                               attachment: Rack::Test::UploadedFile.new(Rails.root.join('spec/fixtures/files/matt.jpeg'), 'image/jpeg'))]
+              end
+
+              before do
+                latest_message.update!(text: '', files: message_file)
+              end
+
+              it 'enqueues a job to send the file' do
+                expect { subject.call }.to have_enqueued_job(
+                  WhatsAppAdapter::ThreeSixtyDialogOutbound::File
+                ).with({ message_id: latest_message.id })
+              end
+
+              it 'updates the message with the external id' do
+                perform_enqueued_jobs(only: WhatsAppAdapter::ThreeSixtyDialogOutbound::File) do
+                  expect { subject.call }.to (change { latest_message.reload.external_id }).from(nil).to('some_external_id')
+                end
+              end
+
+              context 'message with file and text' do
+                before do
+                  latest_message.update!(text: 'Some text')
+                end
+
+                it 'enqueues a job to upload the file' do
+                  expect do
+                    subject.call
+                  end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::File).on_queue('default').with(
+                    message_id: latest_message.id
+                  )
+                end
+
+                context 'given the text is greater than 1024' do
+                  before { latest_message.update!(text: Faker::Lorem.characters(number: 1025)) }
+
+                  it 'enqueues a job to send out the text' do
+                    perform_enqueued_jobs(only: WhatsAppAdapter::ThreeSixtyDialogOutbound::File) do
+                      expect do
+                        subject.call
+                      end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).on_queue('default').with(
+                        text_payload.merge({ message_id: latest_message.id })
+                      )
+                    end
+                  end
+                end
+              end
             end
           end
 

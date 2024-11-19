@@ -3,13 +3,28 @@
 class BroadcastRequestJob < ApplicationJob
   queue_as :broadcast_request
 
+  attr_reader :request, :recipients
+
   def perform(request_id)
-    request = Request.where(id: request_id).first
-    return unless request
+    @request = Request.find(request_id)
     return if request.broadcasted_at.present?
     return if request.planned? # rescheduled for future
 
-    request.organization.contributors.active.with_tags(request.tag_list).each do |contributor|
+    all_recipients = request.organization.contributors.active.with_tags(request.tag_list)
+    whats_app_recipients = all_recipients.with_whats_app
+    @recipients = all_recipients - whats_app_recipients
+
+    create_and_send_messages
+
+    WhatsAppAdapter::BroadcastMessagesJob.perform_later(request_id: request.id)
+
+    request.update(broadcasted_at: Time.current)
+  end
+
+  private
+
+  def create_and_send_messages
+    recipients.each do |contributor|
       message = Message.new(
         sender: request.user,
         recipient: contributor,
@@ -17,11 +32,11 @@ class BroadcastRequestJob < ApplicationJob
         request: request,
         broadcasted: true
       )
-      message.files = Request.attach_files(request.files) if request.files.attached?
+
+      message.files = Message::File.attach_files(request.files) if request.files.attached?
 
       message.save!
       message.send!
     end
-    request.update(broadcasted_at: Time.current)
   end
 end

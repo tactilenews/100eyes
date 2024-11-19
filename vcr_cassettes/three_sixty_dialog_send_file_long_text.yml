@@ -1,0 +1,68 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://waba-v2.360dialog.io/messages
+    body:
+      encoding: UTF-8
+      string: '{"messaging_product":"whatsapp","recipient_type":"individual","to":"4915123456789","type":"image","image":{"id":"883247393974022"}}'
+    headers:
+      D360-Api-Key:
+      - D360-API-KEY
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 18 Nov 2024 10:12:40 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '180'
+      Access-Control-Allow-Origin:
+      - "*"
+      Alt-Svc:
+      - h3=":443"; ma=86400
+      Cache-Control:
+      - private, no-cache, no-store, must-revalidate
+      Expires:
+      - Sat, 01 Jan 2000 00:00:00 GMT
+      Facebook-Api-Version:
+      - v19.0
+      Pragma:
+      - no-cache
+      Strict-Transport-Security:
+      - max-age=15724800; includeSubDomains
+      Vary:
+      - Origin,Accept-Encoding
+      X-Business-Use-Case-Usage:
+      - '{"118406021245988":[{"type":"whatsapp","call_count":1,"total_cputime":1,"total_time":1,"estimated_time_to_regain_access":0}]}'
+      X-Fb-Connection-Quality:
+      - EXCELLENT; q=0.9, rtt=1, rtx=0, c=10, mss=1380, tbw=3387, tp=-1, tpl=-1, uplat=639,
+        ullat=0
+      X-Fb-Debug:
+      - "/Bvw+7zJIG+tHtLPTJdM1wS4S+mAQ39u3AFI71R4jEyZwupU4YzAKKnPoNpeo0HynXFvU1wg+ZljCNQEm0kZyA=="
+      X-Fb-Request-Id:
+      - A2ViDW1v_Cem7BZwEPouvOE
+      X-Fb-Rev:
+      - '1018276187'
+      X-Fb-Trace-Id:
+      - BdjsfPbttAN
+      X-Envoy-Upstream-Service-Time:
+      - '670'
+      Server:
+      - istio-envoy
+    body:
+      encoding: UTF-8
+      string: '{"messaging_product":"whatsapp","contacts":[{"input":"4915123456789","wa_id":"4915123456789"}],"messages":[{"id":"wamid.HBgNNDkxNTE0MzQxNjI2NRUCABEYEjIzQUFFNzI0QjZEMUYzQTQ0NAA="}]}'
+  recorded_at: Mon, 18 Nov 2024 10:12:40 GMT
+recorded_with: VCR 6.1.0

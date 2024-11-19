@@ -123,12 +123,14 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
         end
 
         context 'contributor has sent a reply within 24 hours' do
-          before { create(:message, sender: contributor) }
+          before do
+            create(:message, sender: contributor)
+          end
 
           it 'enqueues a File job with file, contributor, text' do
             expect do
               subject.call
-            end.to(have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::UploadFileJob).on_queue('default').with do |params|
+            end.to(have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::File).on_queue('default').with do |params|
                      expect(params[:message_id]).to eq(message.id)
                    end)
           end

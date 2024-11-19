@@ -27,4 +27,12 @@ class Message::File < ApplicationRecord
   def image_attachment?
     attachment.blob.content_type.match?(/image/)
   end
+
+  def self.attach_files(files)
+    files.map do |file|
+      message_file = Message::File.new
+      message_file.attachment.attach(file.blob)
+      message_file
+    end
+  end
 end

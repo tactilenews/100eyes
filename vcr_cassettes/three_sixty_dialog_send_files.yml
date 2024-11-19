@@ -1,0 +1,133 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://waba-v2.360dialog.io/messages
+    body:
+      encoding: UTF-8
+      string: '{"messaging_product":"whatsapp","recipient_type":"individual","to":"4915123456789","type":"image","image":{"id":"883247393974022"}}'
+    headers:
+      D360-Api-Key:
+      - D360-API-KEY
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 18 Nov 2024 10:02:23 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '180'
+      Access-Control-Allow-Origin:
+      - "*"
+      Alt-Svc:
+      - h3=":443"; ma=86400
+      Cache-Control:
+      - private, no-cache, no-store, must-revalidate
+      Expires:
+      - Sat, 01 Jan 2000 00:00:00 GMT
+      Facebook-Api-Version:
+      - v19.0
+      Pragma:
+      - no-cache
+      Strict-Transport-Security:
+      - max-age=15724800; includeSubDomains
+      Vary:
+      - Origin,Accept-Encoding
+      X-Business-Use-Case-Usage:
+      - '{"118406021245988":[{"type":"whatsapp","call_count":1,"total_cputime":1,"total_time":0,"estimated_time_to_regain_access":0}]}'
+      X-Fb-Connection-Quality:
+      - EXCELLENT; q=0.9, rtt=5, rtx=0, c=10, mss=1380, tbw=3364, tp=-1, tpl=-1, uplat=694,
+        ullat=0
+      X-Fb-Debug:
+      - nFZfNqGefRwrfQ8oOQv5n/gMdsVtSdqHSqS4o/f3bRd4r8ztO7HMr9tM9AHzaIHTJ3IIrm5ejNxBOeQnI37iog==
+      X-Fb-Request-Id:
+      - A5EGrLikK6mkUjZu6yN1kT2
+      X-Fb-Rev:
+      - '1018276187'
+      X-Fb-Trace-Id:
+      - ANEDLkY2PZn
+      X-Envoy-Upstream-Service-Time:
+      - '725'
+      Server:
+      - istio-envoy
+    body:
+      encoding: UTF-8
+      string: '{"messaging_product":"whatsapp","contacts":[{"input":"4915123456789","wa_id":"4915123456789"}],"messages":[{"id":"wamid.HBgNNDkxNTE0MzQxNjI2NRUCABEYEjg2RTAxQzkxNDAyRDJGNjdGQgA="}]}'
+  recorded_at: Mon, 18 Nov 2024 10:02:23 GMT
+- request:
+    method: post
+    uri: https://waba-v2.360dialog.io/messages
+    body:
+      encoding: UTF-8
+      string: '{"messaging_product":"whatsapp","recipient_type":"individual","to":"4915123456789","type":"image","image":{"id":"371901912601458"}}'
+    headers:
+      D360-Api-Key:
+      - D360-API-KEY
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 18 Nov 2024 10:02:24 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '180'
+      Access-Control-Allow-Origin:
+      - "*"
+      Alt-Svc:
+      - h3=":443"; ma=86400
+      Cache-Control:
+      - private, no-cache, no-store, must-revalidate
+      Expires:
+      - Sat, 01 Jan 2000 00:00:00 GMT
+      Facebook-Api-Version:
+      - v19.0
+      Pragma:
+      - no-cache
+      Strict-Transport-Security:
+      - max-age=15724800; includeSubDomains
+      Vary:
+      - Origin,Accept-Encoding
+      X-Business-Use-Case-Usage:
+      - '{"118406021245988":[{"type":"whatsapp","call_count":1,"total_cputime":1,"total_time":1,"estimated_time_to_regain_access":0}]}'
+      X-Fb-Connection-Quality:
+      - EXCELLENT; q=0.9, rtt=4, rtx=0, c=10, mss=1380, tbw=4200, tp=-1, tpl=-1, uplat=681,
+        ullat=0
+      X-Fb-Debug:
+      - DY5YiaftdXpsPY5zo56xzd004EBfzzk/W99hc5DIACZyREH5TBWOW2afd9CqD/9JoHNz/QpugnSaC+QP07elkg==
+      X-Fb-Request-Id:
+      - A4eRa5IMmuhGfR2WNNww9DK
+      X-Fb-Rev:
+      - '1018276187'
+      X-Fb-Trace-Id:
+      - CnlgEmlFXs1
+      X-Envoy-Upstream-Service-Time:
+      - '689'
+      Server:
+      - istio-envoy
+    body:
+      encoding: UTF-8
+      string: '{"messaging_product":"whatsapp","contacts":[{"input":"4915123456789","wa_id":"4915123456789"}],"messages":[{"id":"wamid.HBgNNDkxNTE0MzQxNjI2NRUCABEYEkM4NDZFRUFFNjlCRDEwMjY4NwA="}]}'
+  recorded_at: Mon, 18 Nov 2024 10:02:24 GMT
+recorded_with: VCR 6.1.0
