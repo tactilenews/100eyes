@@ -88,7 +88,7 @@ RSpec.describe Organization do
     subject { organization.contributors_tags_with_count.pluck(:name, :count) }
 
     it 'makes five database queries' do
-      expect { subject }.to make_database_queries(count: 5)
+      expect { subject }.to make_database_queries(count: 1)
     end
 
     context 'given a contributor with a tag' do
