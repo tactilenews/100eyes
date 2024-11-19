@@ -8,7 +8,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound::File do
   describe '#perform_later(message_id:)' do
     let(:organization) { create(:organization, three_sixty_dialog_client_api_key: 'valid_client_api_key') }
     let(:message) do
-      create(:message, request: create(:request, external_file_ids: ['883247393974022']), organization: organization,
+      create(:message, request: create(:request, whats_app_external_file_ids: ['883247393974022']), organization: organization,
                        recipient: create(:contributor, whats_app_phone_number: '+4915123456789', email: nil))
     end
     let(:text_payload) do
@@ -50,7 +50,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound::File do
 
     context 'with multiple files' do
       before do
-        message.request.external_file_ids << '371901912601458'
+        message.request.whats_app_external_file_ids << '371901912601458'
         message.request.save!
       end
 

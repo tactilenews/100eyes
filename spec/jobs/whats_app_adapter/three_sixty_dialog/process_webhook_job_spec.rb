@@ -82,7 +82,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
             let(:external_file_id) { '545466424653131' }
 
             before do
-              latest_message.request.update!(external_file_ids: [external_file_id])
+              latest_message.request.update!(whats_app_external_file_ids: [external_file_id])
               allow(ENV).to receive(:fetch).with(
                 'THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693'
               ).and_return(base_uri)

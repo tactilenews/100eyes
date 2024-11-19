@@ -38,7 +38,7 @@ module WhatsAppAdapter
         case response
         when Net::HTTPSuccess
           external_file_id = JSON.parse(response.body)['id']
-          broadcasted_request.external_file_ids << external_file_id
+          broadcasted_request.whats_app_external_file_ids << external_file_id
         when Net::HTTPClientError, Net::HTTPServerError
           exception = WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: response.code, message: response.body)
           ErrorNotifier.report(exception)

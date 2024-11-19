@@ -16,8 +16,8 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::UploadFileService do
       ).and_return('https://waba-v2.360dialog.io')
     end
 
-    it "updates the request's external_file_ids", vcr: { cassette_name: :three_sixty_dialog_upload_file_service } do
-      expect { subject.call }.to (change { message.reload.request.external_file_ids }).from([]).to([external_file_id])
+    it "updates the request's whats_app_external_file_ids", vcr: { cassette_name: :three_sixty_dialog_upload_file_service } do
+      expect { subject.call }.to (change { message.reload.request.whats_app_external_file_ids }).from([]).to([external_file_id])
     end
   end
 end

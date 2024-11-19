@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_11_13_120655) do
+ActiveRecord::Schema.define(version: 2024_11_19_084424) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -234,7 +234,6 @@ ActiveRecord::Schema.define(version: 2024_11_13_120655) do
     t.jsonb "onboarding_allowed", default: {"email"=>true, "signal"=>true, "threema"=>true, "telegram"=>true, "whats_app"=>true}
     t.jsonb "twilio_content_sids", default: {"new_request_day1"=>"", "new_request_day2"=>"", "new_request_day3"=>"", "new_request_night1"=>"", "new_request_night2"=>"", "new_request_night3"=>"", "new_request_evening1"=>"", "new_request_evening2"=>"", "new_request_evening3"=>"", "new_request_morning1"=>"", "new_request_morning2"=>"", "new_request_morning3"=>""}
     t.string "signal_complete_onboarding_link"
-    t.string "messengers_about_text"
     t.index ["business_plan_id"], name: "index_organizations_on_business_plan_id"
     t.index ["contact_person_id"], name: "index_organizations_on_contact_person_id"
     t.index ["telegram_bot_username"], name: "index_organizations_on_telegram_bot_username", unique: true
@@ -268,10 +267,10 @@ ActiveRecord::Schema.define(version: 2024_11_13_120655) do
     t.datetime "schedule_send_for"
     t.datetime "broadcasted_at"
     t.bigint "organization_id"
-    t.string "external_file_ids", default: [], array: true
-    t.index ["external_file_ids"], name: "index_requests_on_external_file_ids", using: :gin
+    t.string "whats_app_external_file_ids", default: [], array: true
     t.index ["organization_id"], name: "index_requests_on_organization_id"
     t.index ["user_id"], name: "index_requests_on_user_id"
+    t.index ["whats_app_external_file_ids"], name: "index_requests_on_whats_app_external_file_ids", using: :gin
   end
 
   create_table "taggings", id: :serial, force: :cascade do |t|

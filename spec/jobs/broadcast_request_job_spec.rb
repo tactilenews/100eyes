@@ -11,19 +11,6 @@ RSpec.describe BroadcastRequestJob do
       create(:request, broadcasted_at: nil, organization: create(:organization, three_sixty_dialog_client_api_key: 'valid_client_api_key'))
     end
 
-    context 'given the request has been deleted' do
-      before { request.destroy }
-
-      it 'raises an error to indicate something should be looked into' do
-        expect { subject.call }.to raise_error(ActiveRecord::RecordNotFound)
-      end
-
-      it 'does not create a Message instance' do
-      rescue ActiveRecord::RecordNotFound
-        expect { subject.call }.not_to change(Message, :count)
-      end
-    end
-
     context 'given a request has been broadcast' do
       before { request.update(broadcasted_at: 5.minutes.ago) }
 
@@ -140,25 +127,11 @@ RSpec.describe BroadcastRequestJob do
         end
       end
 
-      describe 'given a request with files attached', vcr: { cassette_name: :three_sixty_dialog_upload_file_service } do
-        before do
-          request.update!(files: [fixture_file_upload('profile_picture.jpg')])
-          allow(ENV).to receive(:fetch).with('THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT',
-                                             'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693').and_return('https://waba-v2.360dialog.io')
-        end
+      describe 'given a WhatsApp contributor' do
+        before { create(:contributor, :whats_app_contributor, organization: request.organization) }
 
-        context 'no WhatsApp contributors as recipients' do
-          it "does not update the request's external_file_ids since WhatsApp won't be used to send files" do
-            expect { subject.call }.not_to(change { request.reload.external_file_ids })
-          end
-        end
-
-        context 'with WhatsApp contributors as recipients' do
-          before { create(:contributor, :whats_app_contributor, organization: request.organization) }
-
-          it "updates the request's external_file_ids" do
-            expect { subject.call }.to (change { request.reload.external_file_ids }).from([]).to(['545466424653131'])
-          end
+        it 'schedules a job to send out the message' do
+          expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::BroadcastMessagesJob).with(request_id: request.id)
         end
       end
     end

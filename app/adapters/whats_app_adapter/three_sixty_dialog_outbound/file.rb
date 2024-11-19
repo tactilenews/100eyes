@@ -7,7 +7,7 @@ module WhatsAppAdapter
 
       retry_on Net::HTTPServerError, wait: ->(executions) { executions * 3 } do |job, exception|
         if job.executions == 5
-          exception = WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: exception.code, message: exception.body)
+          exception = WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: exception.code, message: exception.message)
           context = { message_id: job.arguments.first[:message_id] }
           ErrorNotifier.report(exception, context: context)
         end
@@ -26,10 +26,11 @@ module WhatsAppAdapter
       attr_reader :recipient, :message
 
       def send_files
-        message.request.external_file_ids.each do |file_id|
-          url = URI.parse("#{ENV.fetch('THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')}/messages")
-          headers = { 'D360-API-KEY' => message.organization.three_sixty_dialog_client_api_key, 'Content-Type' => 'application/json' }
-          request = Net::HTTP::Post.new(url.to_s, headers)
+        url = URI.parse("#{ENV.fetch('THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')}/messages")
+        headers = { 'D360-API-KEY' => message.organization.three_sixty_dialog_client_api_key, 'Content-Type' => 'application/json' }
+        request = Net::HTTP::Post.new(url, headers)
+
+        message.request.whats_app_external_file_ids.each do |file_id|
           body = payload(file_id)
           body[:image][:caption] = message.text if caption_it?
 
@@ -88,7 +89,7 @@ module WhatsAppAdapter
       end
 
       def caption_it?
-        message.request.external_file_ids.length.eql?(1) && message.text.length < 1024
+        message.request.whats_app_external_file_ids.length.eql?(1) && message.text.length < 1024
       end
     end
   end
