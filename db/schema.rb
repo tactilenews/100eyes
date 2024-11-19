@@ -127,9 +127,6 @@ ActiveRecord::Schema.define(version: 2024_11_13_120655) do
     t.index ["organization_id"], name: "index_contributors_on_organization_id"
   end
 
-  create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
-  end
-
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
     t.integer "attempts", default: 0, null: false
