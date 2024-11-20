@@ -8,7 +8,10 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
     subject { -> { described_class.new.perform(organization_id: organization.id, components: components) } }
 
     let(:organization) do
-      create(:organization, three_sixty_dialog_client_api_key: 'valid_api_key')
+      create(:organization,
+             three_sixty_dialog_client_api_key: 'valid_api_key',
+             whats_app_quick_reply_button_text: { answer_request: 'Mehr Infos', more_info: 'Über uns' },
+             whats_app_more_info_message: "Please do not unsubscribe. Unless you want to. Then send a 'unsubscribe'")
     end
     let(:components) do
       {
@@ -180,9 +183,9 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
       context 'request for more info' do
         before do
           components[:messages].first.delete(:text)
-          components[:messages].first[:button] = { text: 'Mehr Infos' }
+          components[:messages].first[:button] = { text: 'Über uns' }
         end
-        let(:text) { [organization.whats_app_profile_about, "_#{I18n.t('adapter.shared.unsubscribe.instructions')}_"].join("\n\n") }
+        let(:text) { organization.whats_app_more_info_message }
 
         it 'marks that contributor has responded to template message' do
           expect { subject.call }.to change {
