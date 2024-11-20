@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_11_20_150844) do
+ActiveRecord::Schema.define(version: 2024_11_20_182931) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -230,11 +230,12 @@ ActiveRecord::Schema.define(version: 2024_11_20_150844) do
     t.string "three_sixty_dialog_client_id"
     t.string "three_sixty_dialog_client_waba_account_id"
     t.string "email_from_address"
-    t.string "whats_app_more_info_message", default: ""
+    t.string "whats_app_profile_about", default: ""
     t.jsonb "onboarding_allowed", default: {"email"=>true, "signal"=>true, "threema"=>true, "telegram"=>true, "whats_app"=>true}
     t.jsonb "twilio_content_sids", default: {"new_request_day1"=>"", "new_request_day2"=>"", "new_request_day3"=>"", "new_request_night1"=>"", "new_request_night2"=>"", "new_request_night3"=>"", "new_request_evening1"=>"", "new_request_evening2"=>"", "new_request_evening3"=>"", "new_request_morning1"=>"", "new_request_morning2"=>"", "new_request_morning3"=>""}
     t.string "signal_complete_onboarding_link"
     t.jsonb "whats_app_quick_reply_button_text", default: {"more_info"=>"Mehr Infos", "answer_request"=>"Antworten"}
+    t.string "whats_app_more_info_message", default: ""
     t.index ["business_plan_id"], name: "index_organizations_on_business_plan_id"
     t.index ["contact_person_id"], name: "index_organizations_on_contact_person_id"
     t.index ["telegram_bot_username"], name: "index_organizations_on_telegram_bot_username", unique: true
