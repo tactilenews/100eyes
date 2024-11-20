@@ -33,7 +33,7 @@ module WhatsAppAdapter
       def send_more_info_message!(contributor, organization)
         return unless contributor_can_receive_messages?(contributor)
 
-        text = [organization.whats_app_profile_about, "_#{I18n.t('adapter.shared.unsubscribe.instructions')}_"].join("\n\n")
+        text = [organization.whats_app_more_info_message, "_#{I18n.t('adapter.shared.unsubscribe.instructions')}_"].join("\n\n")
         WhatsAppAdapter::TwilioOutbound::Text.perform_later(organization_id: organization.id, contributor_id: contributor.id, text: text)
       end
 

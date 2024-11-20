@@ -198,7 +198,7 @@ RSpec.describe WhatsApp::WebhookController do
         context 'request for more info' do
           before do
             params['Body'] = 'Mehr Infos'
-            organization.update(whats_app_profile_about: 'Here is more info')
+            organization.update(whats_app_more_info_message: 'Here is more info')
           end
           let(:more_info_job_args) do
             {

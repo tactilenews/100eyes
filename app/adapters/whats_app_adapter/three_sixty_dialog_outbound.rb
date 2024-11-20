@@ -41,10 +41,9 @@ module WhatsAppAdapter
       def send_more_info_message!(contributor, organization)
         return unless contributor_can_receive_messages?(contributor)
 
-        text = [organization.whats_app_profile_about, "_#{I18n.t('adapter.shared.unsubscribe.instructions')}_"].join("\n\n")
         WhatsAppAdapter::ThreeSixtyDialogOutbound::Text.perform_later(organization_id: organization.id,
                                                                       payload: text_payload(
-                                                                        contributor, text
+                                                                        contributor, organization.whats_app_more_info_message
                                                                       ))
       end
 

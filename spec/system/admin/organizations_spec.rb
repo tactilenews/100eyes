@@ -12,10 +12,12 @@ RSpec.describe 'Organizations' do
 
       click_on 'Edit'
       fill_in 'Name', with: 'Real name'
+      fill_in 'Whats app more info message', with: 'More info. Unsubscribe?'
       click_on 'Update Organization'
 
       expect(page).to have_text('Organization was successfully updated.')
       expect(page).to have_text('Show Real name')
+      expect(page).to have_content('More info. Unsubscribe?')
     end
   end
 end

@@ -140,7 +140,7 @@ module WhatsAppAdapter
     def request_for_more_info?(text)
       return false if text.blank?
 
-      text.strip.eql?(I18n.t('adapter.whats_app.quick_reply_button_text.more_info'))
+      text.strip.eql?(organization.whats_app_quick_reply_button_text['more_info'])
     end
 
     def request_to_receive_message?(contributor, text)
@@ -150,12 +150,7 @@ module WhatsAppAdapter
     end
 
     def quick_reply_response?(text)
-      quick_reply_keys = %w[answer more_info]
-      quick_reply_texts = []
-      quick_reply_keys.each do |key|
-        quick_reply_texts << I18n.t("adapter.whats_app.quick_reply_button_text.#{key}")
-      end
-      text.strip.in?(quick_reply_texts)
+      text.strip.in?(organization.whats_app_quick_reply_button_text.values)
     end
 
     def unsubscribe_text?(text)

@@ -5,7 +5,9 @@ require 'rails_helper'
 RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
   let(:adapter) { described_class.new }
   let(:organization) do
-    create(:organization, project_name: 'Great project')
+    create(:organization,
+           project_name: 'Great project',
+           whats_app_more_info_message: "We're cool, but if you want to unsubscribe, write 'unsubscribe'")
   end
   let!(:message) do
     create(:message, :outbound, text: '360dialog is great!', broadcasted: true, recipient: contributor,
@@ -210,8 +212,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
       end
 
       before do
-        text_payload[:text][:body] =
-          [organization.whats_app_profile_about, "_#{I18n.t('adapter.shared.unsubscribe.instructions')}_"].join("\n\n")
+        text_payload[:text][:body] = organization.whats_app_more_info_message
       end
 
       it {
