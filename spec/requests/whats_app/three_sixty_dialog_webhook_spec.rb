@@ -45,6 +45,32 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
     end
 
     describe 'statuses' do
+      context 'successful delivery' do
+        let(:successful_delivery) do
+          [{
+            'id' => 'valid_message_id',
+            'status' => 'delivered',
+            'timestamp' => '1732132030',
+            'recipient_id' => '49123456789',
+            'conversation' => {
+              'id' => 'valid_conversation_id', 'origin' => {
+                'type' => 'marketing'
+              }
+            },
+            'pricing' => {
+              'billable' => true, 'pricing_model' => 'CBP', 'category' => 'marketing'
+            }
+          }]
+        end
+
+        before { components[:statuses] = successful_delivery }
+
+        it 'is successful' do
+          subject.call
+          expect(response).to be_successful
+        end
+      end
+
       context 'unsuccessful delivery' do
         context 'failed delivery' do
           let(:user) { create(:user, organizations: [organization]) }
