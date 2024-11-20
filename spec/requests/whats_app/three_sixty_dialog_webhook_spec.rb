@@ -125,7 +125,8 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
       end
 
       it 'reports the error' do
-        expect(ErrorNotifier).to receive(:report).with(exception, context: { details: 'Message type is not currently supported' })
+        context = { details: 'Message type is not currently supported', title: 'Unsupported message type' }
+        expect(ErrorNotifier).to receive(:report).with(exception, context: context)
 
         subject.call
       end
