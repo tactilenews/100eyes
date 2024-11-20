@@ -52,7 +52,7 @@ module WhatsApp
     def handle_statuses
       statuses = @components[:statuses]
       statuses.each do |status|
-        invalid_recipient_error = status[:errors].select { |error| error[:code].to_i.eql?(INVALID_MESSAGE_RECIPIENT_ERROR_CODE) }
+        invalid_recipient_error = status[:errors]&.select { |error| error[:code].to_i.eql?(INVALID_MESSAGE_RECIPIENT_ERROR_CODE) }
         mark_inactive_contributor_inactive(status) if invalid_recipient_error.present?
         handle_errors(status[:errors]) if status[:status].in?(UNSUCCESSFUL_DELIVERY)
       end
