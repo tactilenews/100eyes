@@ -5,9 +5,12 @@ module WhatsApp
     skip_before_action :require_login, :verify_authenticity_token, :user_permitted?
     before_action :extract_components, only: :message
 
+    UNSUCCESSFUL_DELIVERY = %w[undelivered failed].freeze
+    INVALID_MESSAGE_RECIPIENT_ERROR_CODE = 131_026 # https://docs.360dialog.com/docs/useful/api-error-message-list#type-message-undeliverable
+
     def message
       head :ok
-      handle_statuses and return if @components[:statuses].present? # TODO: Handle statuses
+      handle_statuses and return if @components[:statuses].present?
       handle_errors(@components[:errors]) and return if @components[:errors].present?
 
       WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob.perform_later(organization_id: @organization.id, components: @components)
@@ -49,15 +52,22 @@ module WhatsApp
     def handle_statuses
       statuses = @components[:statuses]
       statuses.each do |status|
-        handle_errors(status[:errors]) if status[:errors]
+        invalid_recipient_error = status[:errors].select { |error| error[:code].to_i.eql?(INVALID_MESSAGE_RECIPIENT_ERROR_CODE) }
+        mark_inactive_contributor_inactive(status) if invalid_recipient_error.present?
+        handle_errors(status[:errors]) if status[:status].in?(UNSUCCESSFUL_DELIVERY)
       end
     end
 
     def handle_errors(errors)
       errors.each do |error|
-        exception = WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: error[:code], message: error[:title])
-        ErrorNotifier.report(exception, context: { details: error[:error_data][:details] })
+        exception = WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: error[:code], message: error[:message])
+        ErrorNotifier.report(exception, context: { details: error[:error_data][:details], title: error[:title] })
       end
+    end
+
+    def mark_inactive_contributor_inactive(status)
+      contributor = @organization.contributors.find_by(whats_app_phone_number: "+#{status[:recipient_id]}")
+      MarkInactiveContributorInactiveJob.perform_later(organization_id: @organization.id, contributor_id: contributor.id)
     end
   end
 end
