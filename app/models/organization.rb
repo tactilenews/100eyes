@@ -39,6 +39,10 @@ class Organization < ApplicationRecord
     self[:onboarding_allowed] = value.is_a?(String) ? JSON.parse(value) : value
   end
 
+  def whats_app_quick_reply_button_text=(value)
+    self[:whats_app_quick_reply_button_text] = value.is_a?(String) ? JSON.parse(value) : value
+  end
+
   def whats_app_configured?
     twilio_configured? || three_sixty_dialog_configured?
   end
