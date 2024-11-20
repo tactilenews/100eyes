@@ -212,7 +212,7 @@ de:
         text: "<strong>%{name}</strong> ist ein <strong>inaktives Mitglied</strong> deiner Community und erhält aktuell keine Recherchefragen über %{project_name}."
         possible_reason_whats_app: |
           Die Rufnummer wurde möglicherweise nicht bei WhatsApp registriert oder der Empfänger hat die neuen Nutzungsbedingungen und Datenschutzrichtlinien von WhatsApp nicht akzeptiert.
-          Es ist auch möglich, dass der Empfänger eine alte, nicht unterstützte Version des WhatsApp-Clients für sein Telefon verwendet. Bitte überprüfe dies mit<strong>%{first_name}</strong>.
+          Es ist auch möglich, dass der Empfänger eine alte, nicht unterstützte Version des WhatsApp-Clients für sein Telefon verwendet. Bitte überprüfe dies mit <strong>%{first_name}</strong>.
         possible_reason_signal: "Die Rufnummer wurde möglicherweise nicht bei Signal registriert. Bitte überprüfe dies mit <strong>%{first_name}</strong>."
         possible_reason_threema: "Diese Threema-ID wurde möglicherweise von Threema als ungültig gemeldet. Bitte <strong>%{first_name}</strong>, die Threema-ID zu überprüfen."
         possible_reason_email: "Diese E-Mail-Adresse wurde vom Server als inaktiv gemeldet. Das bedeutet, es können keine E-Mails an diese Adresse zugestellt werden."

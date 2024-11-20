@@ -4,28 +4,29 @@ require 'rails_helper'
 require 'webmock/rspec'
 
 RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
-  let(:organization) do
-    create(:organization, whats_app_server_phone_number: '+4915133311445', three_sixty_dialog_client_api_key: 'valid_api_key')
-  end
-  let(:params) do
-    { entry: [{ id: 'some_external_id',
-                changes: [{ value: {
-                  messaging_product: 'whatsapp',
-                  metadata: { display_phone_number: '4915133311445', phone_number_id: 'some_valid_id' },
-                  contacts: [{ profile: { name: 'Matthew Rider' },
-                               wa_id: '491511234567' }],
-                  messages: [{ from: '491511234567',
-                               id: 'some_valid_id',
-                               text: { body: 'Hey' },
-                               timestamp: '1692118778',
-                               type: 'text' }]
-                } }] }] }
-  end
-  let(:components) { params[:entry].first[:changes].first[:value] }
-
-  subject { -> { post organization_whats_app_three_sixty_dialog_webhook_path(organization), params: params } }
-
   describe '#messages' do
+    subject { -> { post organization_whats_app_three_sixty_dialog_webhook_path(organization), params: params } }
+
+    let(:organization) do
+      create(:organization, whats_app_server_phone_number: '+4915133311445', three_sixty_dialog_client_api_key: 'valid_api_key')
+    end
+    let(:params) do
+      { entry: [{ id: 'some_external_id',
+                  changes: [{ value: {
+                    messaging_product: 'whatsapp',
+                    metadata: { display_phone_number: '4915133311445', phone_number_id: 'some_valid_id' },
+                    contacts: [{ profile: { name: 'Matthew Rider' },
+                                 wa_id: '491511234567' }],
+                    messages: [{ from: '491511234567',
+                                 id: 'some_valid_id',
+                                 text: { body: 'Hey' },
+                                 timestamp: '1692118778',
+                                 type: 'text' }]
+                  } }] }] }
+    end
+    let(:components) { params[:entry].first[:changes].first[:value] }
+    let(:exception) { WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: error_code, message: error_message) }
+
     before do
       allow(Sentry).to receive(:capture_exception)
     end
@@ -44,29 +45,79 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
     end
 
     describe 'statuses' do
-      let(:params) do
-        {
-          statuses: [{ id: 'some_valid_id',
-                       message: { recipient_id: '491511234567' },
-                       status: 'read',
-                       timestamp: '1691405467',
-                       type: 'message' }]
-        }
-      end
+      context 'unsuccessful delivery' do
+        context 'failed delivery' do
+          let(:user) { create(:user, organizations: [organization]) }
+          context 'message undeliverable' do
+            let(:failed_status) do
+              [{
+                id: 'valid_external_message_id',
+                status: 'failed',
+                timestamp: '1731672268',
+                recipient_id: '49123456789',
+                errors: [{
+                  code: 131_026,
+                  title: 'Message undeliverable',
+                  message: 'Message undeliverable',
+                  error_data: {
+                    details: 'Message Undeliverable.'
+                  }
+                }]
+              }]
+            end
+            let(:error_code) { 131_026 }
+            let(:error_message) { 'Message undeliverable' }
+            let!(:contributor) do
+              create(:contributor, whats_app_phone_number: '+49123456789', organization: organization, email: nil, first_name: 'Johnny')
+            end
+            let(:message_explaining_reason_for_being_marked_inactive) do
+              <<~HELLO
+                Die Rufnummer wurde möglicherweise nicht bei WhatsApp registriert oder der Empfänger hat die neuen Nutzungsbedingungen und Datenschutzrichtlinien von WhatsApp nicht akzeptiert.
+              HELLO
+            end
+            let(:message_continued) do
+              <<~HELLO
+                Es ist auch möglich, dass der Empfänger eine alte, nicht unterstützte Version des WhatsApp-Clients für sein Telefon verwendet. Bitte überprüfe dies mit Johnny
+              HELLO
+            end
+            before { components[:statuses] = failed_status }
 
-      it 'ignores statuses' do
-        expect(WhatsAppAdapter::ThreeSixtyDialogInbound).not_to receive(:new)
+            it 'reports any errors' do
+              expect(Sentry).to receive(:capture_exception).with(exception)
 
-        subject.call
+              subject.call
+            end
+
+            it 'marks the contributor as inactive since we are unable to send them a message' do
+              subject.call
+              expect(MarkInactiveContributorInactiveJob).to have_been_enqueued.with do |params|
+                expect(params[:organization_id]).to eq(organization.id)
+                expect(params[:contributor_id]).to eq(contributor.id)
+              end
+            end
+
+            it 'displays a message to inform the contributor the potential reason' do
+              perform_enqueued_jobs(only: MarkInactiveContributorInactiveJob) do
+                subject.call
+                get organization_contributor_path(organization, contributor, as: user)
+                expect(page).to have_content(message_explaining_reason_for_being_marked_inactive.strip)
+                expect(page).to have_content(message_continued.strip)
+              end
+            end
+          end
+        end
       end
     end
 
     describe 'errors' do
-      let(:exception) { WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: '501', message: 'Unsupported message type') }
+      let(:error_code) { 501 }
+      let(:error_message) { 'Unsupported message type' }
+
       before do
         components[:errors] = [{
           code: 501,
           title: 'Unsupported message type',
+          message: 'Unsupported message type',
           error_data: { details: 'Message type is not currently supported' }
         }]
 
