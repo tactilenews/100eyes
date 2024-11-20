@@ -50,6 +50,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
     created_at
     updated_at
     upgraded_business_plan_at
+    whats_app_more_info_message
   ].freeze
 
   FORM_ATTRIBUTES_EDIT = %i[
