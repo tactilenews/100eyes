@@ -53,7 +53,7 @@ class AddSettingsToOrganizations < ActiveRecord::Migration[6.1]
       t.string :three_sixty_dialog_client_id
       t.string :three_sixty_dialog_client_waba_account_id
       t.string :email_from_address
-      t.string :whats_app_more_info_message, default: ''
+      t.string :whats_app_profile_about, default: ''
       t.jsonb :onboarding_allowed, default: { threema: true, telegram: true, email: true, signal: true, whats_app: true }
       t.index :telegram_bot_username, unique: true
     end
