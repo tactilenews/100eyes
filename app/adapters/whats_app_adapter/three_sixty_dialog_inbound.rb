@@ -146,7 +146,7 @@ module WhatsAppAdapter
     def request_to_receive_message?(contributor, text)
       return false if request_for_more_info?(text) || unsubscribe_text?(text) || resubscribe_text?(text)
 
-      contributor.whats_app_message_template_sent_at.present?
+      contributor.whats_app_message_template_sent_at.present? || text.strip.eql?(organization.whats_app_quick_reply_button_text['answer_request'])
     end
 
     def quick_reply_response?(text)
