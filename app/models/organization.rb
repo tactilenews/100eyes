@@ -27,7 +27,6 @@ class Organization < ApplicationRecord
   phony_normalize :signal_server_phone_number, default_country_code: 'DE'
 
   validates :telegram_bot_username, uniqueness: true, allow_nil: true
-  validates :signal_server_phone_number, phony_plausible: true
   validates :messengers_about_text, length: { maximum: 139 }, allow_blank: true
 
   def channels_onboarding_allowed
