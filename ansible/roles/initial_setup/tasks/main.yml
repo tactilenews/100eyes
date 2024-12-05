@@ -4,4 +4,5 @@
 - include_tasks: postgresql_client.yml
 - include_tasks: ansible_user.yml
 - include_tasks: upload_public_keys.yml
+- include_tasks: set_up_log_rotation.yml
 - include_tasks: security.yml
