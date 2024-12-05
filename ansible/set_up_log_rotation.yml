@@ -1,0 +1,6 @@
+- hosts: webservers
+  become: true
+  become_user: root
+  become_method: sudo
+  roles: 
+    - role: log_rotation
