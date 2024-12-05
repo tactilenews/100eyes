@@ -1,0 +1,10 @@
+---
+- name: Set up rotation of rails logs
+  ansible.builtin.blockinfile:
+    # Current host being iterated over in the play. See https://docs.ansible.com/ansible/latest/reference_appendices/special_variables.html#term-inventory_hostname
+    path: "/etc/logrotate.d/{{ inventory_hostname }}"
+    block: "{{ logrotate_conf }}"
+    create: true
+    owner: root
+    group: root
+    mode: 0644
