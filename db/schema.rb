@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_11_20_182931) do
+ActiveRecord::Schema.define(version: 2024_12_19_111927) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -127,9 +127,6 @@ ActiveRecord::Schema.define(version: 2024_11_20_182931) do
     t.index ["organization_id"], name: "index_contributors_on_organization_id"
   end
 
-  create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
-  end
-
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
     t.integer "attempts", default: 0, null: false
@@ -193,7 +190,7 @@ ActiveRecord::Schema.define(version: 2024_11_20_182931) do
     t.bigint "business_plan_id", null: false
     t.bigint "contact_person_id"
     t.datetime "upgraded_business_plan_at"
-    t.string "project_name", default: "100eyes"
+    t.string "project_name"
     t.string "onboarding_title", default: "Hallo und herzlich willkommen!"
     t.string "onboarding_byline", default: ""
     t.string "onboarding_data_processing_consent_additional_info", default: ""
