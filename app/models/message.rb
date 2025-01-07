@@ -27,6 +27,7 @@ class Message < ApplicationRecord
 
   scope :replies, -> { where(sender_type: Contributor.name) }
   scope :outbound, -> { where(sender_type: [User.name, nil]) }
+  scope :direct_messages, -> { outbound.where(broadcasted: false) }
 
   delegate :name, to: :creator, allow_nil: true, prefix: true
 

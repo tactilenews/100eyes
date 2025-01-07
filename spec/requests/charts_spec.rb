@@ -7,7 +7,7 @@ RSpec.describe 'Charts' do
   let!(:user) { create(:user, organizations: [organization]) }
   let(:last_friday_midnight) { Time.zone.today.beginning_of_day.prev_occurring(:friday) }
   let(:request) { create(:request, broadcasted_at: last_friday_midnight, organization: organization) }
-  let(:message) { create(:message, created_at: last_friday_midnight, request: request) }
+  let(:request_from_other_organization) { create(:request, organization: create(:organization)) }
   let(:data) do
     [
       { x: '00:00', y: 0 },
@@ -46,7 +46,9 @@ RSpec.describe 'Charts' do
 
   describe 'GET /{organization_id}/charts/day-and-time-replies' do
     before do
-      message
+      create(:message, created_at: last_friday_midnight, request: request)
+      create(:message, created_at: last_friday_midnight, request: request_from_other_organization)
+
       data_dup.first[:y] = 1
       friday[:data] = data_dup
     end
@@ -62,7 +64,7 @@ RSpec.describe 'Charts' do
   describe 'GET /{organization_id}/charts/day-and-time-requests' do
     subject { -> { get organization_charts_day_and_time_requests_path(organization, as: user) } }
 
-    context 'no request, no chat messages' do
+    context 'no request, no direct messages' do
       before { series.map { |hash| hash[:data] = [] } }
 
       it 'returns empty data array' do
@@ -71,9 +73,10 @@ RSpec.describe 'Charts' do
       end
     end
 
-    context 'request, no chat messages' do
+    context 'request, no direct messages' do
       before do
         request
+        request_from_other_organization
         data_dup.first[:y] = 1
         friday[:data] = data_dup
       end
@@ -84,10 +87,10 @@ RSpec.describe 'Charts' do
       end
     end
 
-    context 'request, with chat message' do
+    context 'request, with direct message' do
       before do
-        request
-        message.update(broadcasted: false, sender: user, text: 'ChatMessage')
+        create(:direct_message, created_at: last_friday_midnight, request: request)
+        create(:direct_message, created_at: last_friday_midnight, request: request_from_other_organization)
         data_dup.first[:y] = 2
         friday[:data] = data_dup
       end
@@ -140,8 +143,8 @@ RSpec.describe 'Charts' do
       let(:friday) { data_dup.find { |hash| hash[:x] == 'Freitag' } }
 
       before do
-        request
-        message
+        create(:message, created_at: last_friday_midnight, request: request)
+
         friday[:y] = 1
         editorial[:data] = data_dup
         community[:data] = data_dup
