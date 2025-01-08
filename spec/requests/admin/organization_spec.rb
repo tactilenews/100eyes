@@ -7,7 +7,16 @@ RSpec.describe 'Organization management' do
     subject { -> { post admin_organizations_path(as: user), params: params } }
 
     let(:business_plan) { create(:business_plan) }
-    let(:required_params) { { organization: { name: 'Find by my name', business_plan_id: business_plan.id } } }
+    let(:required_params) do
+      {
+        organization:
+        {
+          name: 'Find by my name',
+          business_plan_id: business_plan.id,
+          project_name: 'NewProject'
+        }
+      }
+    end
     let(:params) { required_params }
 
     context 'unauthenticated' do
@@ -102,14 +111,26 @@ RSpec.describe 'Organization management' do
           required_params.deep_merge({ organization: signal_params })
         end
 
-        it 'allows configuration of Twilio specific attrs' do
+        it 'displays an error if the signal username is not set' do
           subject.call
-          follow_redirect!
 
-          expect(page).to have_content('+4912345678')
+          expect(page).to have_content("Signal username can't be blank")
+        end
 
-          organization = Organization.find_by(signal_server_phone_number: '+4912345678')
-          expect(organization).to have_attributes(signal_params)
+        context 'with a valid signal username' do
+          let(:params) do
+            required_params.deep_merge({ organization: signal_params.merge(signal_username: 'valid_username') })
+          end
+
+          it 'allows configuring signal' do
+            subject.call
+            follow_redirect!
+
+            expect(page).to have_content('+4912345678')
+
+            organization = Organization.find_by(signal_server_phone_number: '+4912345678')
+            expect(organization).to have_attributes(signal_params)
+          end
         end
       end
     end

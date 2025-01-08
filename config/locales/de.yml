@@ -1,5 +1,12 @@
 de:
   application_name: One hundred eyes
+  administrate:
+    field_hints:
+      organization:
+        signal_username: |
+          Ein Signal-Benutzername ist erforderlich, wenn eine Signal-Telefonnummer hinzugefügt wird und das Onboarding nicht untersagt ist.
+          Er muss zwischen 3 und 32 Zeichen lang sein, darf nicht mit einer Zahl beginnen und darf nur alphanumerische Zeichen und _ enthalten.
+
   components:
     activity_notifications:
       card_heading: Letzte Aktivität

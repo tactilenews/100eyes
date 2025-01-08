@@ -9,6 +9,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
     contact_person: Field::BelongsTo,
     contributors: Field::HasMany,
     name: Field::String,
+    project_name: Field::String,
     upgrade_discount: Field::Number,
     users: Field::HasMany,
     created_at: Field::DateTime,
@@ -33,7 +34,8 @@ class OrganizationDashboard < Administrate::BaseDashboard
     threemarb_api_secret: Field::String,
     threemarb_private: Field::String,
     signal_server_phone_number: SetupSignalLinkField,
-    messengers_about_text: Field::String
+    messengers_about_text: Field::String,
+    signal_username: Field::String
   }.freeze
 
   COLLECTION_ATTRIBUTES = %i[
@@ -64,8 +66,10 @@ class OrganizationDashboard < Administrate::BaseDashboard
 
   FORM_ATTRIBUTES_NEW = %i[
     name
-    contact_person
+    project_name
+    signal_username
     business_plan
+    contact_person
     upgrade_discount
     whats_app_profile_about
     onboarding_data_protection_link

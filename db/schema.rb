@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_12_19_111927) do
+ActiveRecord::Schema.define(version: 2025_01_08_092828) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -237,6 +237,7 @@ ActiveRecord::Schema.define(version: 2024_12_19_111927) do
     t.jsonb "whats_app_quick_reply_button_text", default: {"more_info"=>"Mehr Infos", "answer_request"=>"Antworten"}
     t.string "whats_app_more_info_message", default: ""
     t.string "messengers_about_text"
+    t.string "signal_username"
     t.index ["business_plan_id"], name: "index_organizations_on_business_plan_id"
     t.index ["contact_person_id"], name: "index_organizations_on_contact_person_id"
     t.index ["telegram_bot_username"], name: "index_organizations_on_telegram_bot_username", unique: true

@@ -108,7 +108,13 @@ RSpec.describe 'Signal' do
         expect { subject.call }.to have_enqueued_job(SignalAdapter::SetTrustModeJob).with(signal_server_phone_number: '+4912345678')
       end
 
-      context 'given the verify is unsucessful' do
+      it 'schedules a job to set the username' do
+        perform_enqueued_jobs(only: SignalAdapter::SetUsernameJob) do
+          expect { subject.call }.to have_enqueued_job(SignalAdapter::SetUsernameJob).with(organization_id: organization.id)
+        end
+      end
+
+      context 'given the verify is unsuccessful' do
         let(:error_message) { 'Verify error: StatusCode: 400' }
 
         before do
