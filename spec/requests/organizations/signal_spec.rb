@@ -109,9 +109,11 @@ RSpec.describe 'Signal' do
       end
 
       it 'schedules a job to set the username' do
-        perform_enqueued_jobs(only: SignalAdapter::SetUsernameJob) do
-          expect { subject.call }.to have_enqueued_job(SignalAdapter::SetUsernameJob).with(organization_id: organization.id)
-        end
+        expect { subject.call }.to have_enqueued_job(SignalAdapter::SetUsernameJob).with(organization_id: organization.id)
+      end
+
+      it 'schedules a job to set the profile info' do
+        expect { subject.call }.to have_enqueued_job(SignalAdapter::SetProfileInfoJob).with(organization_id: organization.id)
       end
 
       context 'given the verify is unsuccessful' do
