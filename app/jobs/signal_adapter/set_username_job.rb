@@ -11,7 +11,8 @@ module SignalAdapter
                                       Accept: 'application/json',
                                       'Content-Type': 'application/json'
                                     })
-      request.body = { username: organization.project_name.gsub(/[^\w\s]/, '').gsub(/\s+/, '').camelize }.to_json
+
+      request.body = { username: organization.signal_username }.to_json
       response = Net::HTTP.start(uri.host, uri.port) do |http|
         http.request(request)
       end
