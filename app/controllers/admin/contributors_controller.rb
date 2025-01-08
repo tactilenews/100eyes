@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Admin
-  class ContributorsController < Admin::ApplicationController
+  class ContributorsController < Administrate::ApplicationController
     include AdministrateExportable::Exporter
 
     before_action :set_contributor, only: :update

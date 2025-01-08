@@ -12,10 +12,10 @@ RSpec.describe 'Contributors' do
 
       click_on 'Edit'
       fill_in 'First name', with: 'Zora Z.'
-      click_on 'Update Contributor'
+      click_on 'Contributor aktualisieren'
 
       expect(page).to have_text('Contributor was successfully updated.')
-      expect(page).to have_text('Show Zora Z. Zimmermann')
+      expect(page).to have_text('Zora Z. Zimmermann anzeigen')
     end
   end
 end

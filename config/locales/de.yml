@@ -6,7 +6,10 @@ de:
         signal_username: |
           Ein Signal-Benutzername ist erforderlich, wenn eine Signal-Telefonnummer hinzugefügt wird und das Onboarding nicht untersagt ist.
           Er muss zwischen 3 und 32 Zeichen lang sein, darf nicht mit einer Zahl beginnen und darf nur alphanumerische Zeichen und _ enthalten.
-
+    custom_field_type:
+      setup_signal_link_field:
+        show:
+          help_text: Klicke hier, um dich zu registrieren, falls du noch nicht registriert bist.
   components:
     activity_notifications:
       card_heading: Letzte Aktivität

@@ -23,6 +23,6 @@ RSpec.describe 'Auth' do
 
     expect(page).to have_http_status(:ok)
 
-    expect(page).to have_link('New organization')
+    expect(page).to have_link('organization erstellen')
   end
 end

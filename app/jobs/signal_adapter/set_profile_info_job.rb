@@ -20,7 +20,7 @@ module SignalAdapter
       end
       case response
       when Net::HTTPSuccess
-        Rails.logger.debug 'Great!'
+        Rails.logger.debug 'Successfully set profile info job!'
       else
         handle_error(response)
       end

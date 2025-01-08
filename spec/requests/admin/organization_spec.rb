@@ -114,7 +114,7 @@ RSpec.describe 'Organization management' do
         it 'displays an error if the signal username is not set' do
           subject.call
 
-          expect(page).to have_content("Signal username can't be blank")
+          expect(page).to have_content('Signal username muss ausgefüllt werden')
         end
 
         context 'with a valid signal username' do

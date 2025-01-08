@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module Admin
-  class RequestsController < Admin::ApplicationController; end
+  class RequestsController < Administrate::ApplicationController; end
 end

@@ -38,7 +38,6 @@ module App
 
     config.active_job.queue_adapter = :delayed_job
 
-    config.i18n.available_locales = %i[de en]
     config.i18n.default_locale = :de
     config.time_zone = 'Berlin'
     config.i18n.fallbacks = true
