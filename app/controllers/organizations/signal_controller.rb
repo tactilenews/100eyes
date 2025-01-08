@@ -25,11 +25,14 @@ module Organizations
         SignalAdapter::SetTrustModeJob.perform_later(signal_server_phone_number: @organization.signal_server_phone_number)
         SignalAdapter::SetUsernameJob.perform_later(organization_id: @organization.id)
         SignalAdapter::SetProfileInfoJob.perform_later(organization_id: @organization.id)
+        redirect_to organization_signal_setup_successful_path
       else
         handle_error_response(response)
         render :verify_form, status: :unprocessable_entity
       end
     end
+
+    def success; end
 
     private
 

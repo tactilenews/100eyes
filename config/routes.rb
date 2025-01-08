@@ -17,6 +17,8 @@ Rails.application.routes.draw do
       post '/three-sixty-dialog-webhook', to: 'three_sixty_dialog_webhook#message'
     end
 
+    get '/signal/setup-successful', to: 'organizations/signal#success'
+
     resources :invites, only: :create
 
     get '/search', to: 'search#index'
