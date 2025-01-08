@@ -62,7 +62,7 @@ RSpec.describe 'Organization management' do
                                                        email_from_address: 'redaktion@100ey.es' } })
         end
 
-        it 'allows configuration of Email specific attrs' do
+        it 'allows configuration of Email specific attributes' do
           subject.call
           follow_redirect!
           expect(page).to have_content('I have an email')
@@ -76,7 +76,7 @@ RSpec.describe 'Organization management' do
                                                        telegram_bot_username: 'unique_username_bot' } })
         end
 
-        it 'allows configuration of Telegram specific attrs' do
+        it 'allows configuration of Telegram specific attributes' do
           subject.call
           follow_redirect!
           expect(page).to have_content('unique_username_bot')
@@ -93,7 +93,7 @@ RSpec.describe 'Organization management' do
                                                        threemarb_private: 'valid_private_key' } })
         end
 
-        it 'allows configuration of Threema specific attrs' do
+        it 'allows configuration of Threema specific attributes' do
           subject.call
           follow_redirect!
           expect(page).to have_content('*APIIDENT')

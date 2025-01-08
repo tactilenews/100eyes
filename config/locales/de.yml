@@ -425,13 +425,13 @@ de:
     signal_captcha_form:
       main_heading: Erzeugen eines Captcha-Tokens
       instructions:
-        where_to_generate_html: Um das Token zu erhalten, gehst du zu <a class="Link" href=%{link} target="_blank">Signal-Captcha für die Registrierung generieren</a>.
+        where_to_generate_html: Um das Token zu erhalten,klicke auf <a class="Link" href=%{link} target="_blank">Signal-Captcha für die Registrierung</a>.
         after_solving_captcha: |
-          Nach dem Ausfüllen des Captcha zeigt die Website das Token nicht sofort an, sondern versucht, zu einer signalcaptcha://-Url umzuleiten, die das Token enthält. Nach einem kurzen Moment erscheint unter dem Captcha ein Link mit der Bezeichnung „Open Signal“.
-          Holen Sie sich das Token, indem Sie mit der rechten Maustaste darauf klicken und auf: copy url. Sie können es direkt in die Seite einfügen:
+          Nach dem Ausfüllen des Captchas zeigt die Website das Token nicht sofort an, sondern versucht, zu einer signalcaptcha://-Url umzuleiten, die das Token enthält. Nach einem kurzen Moment erscheint unter dem Captcha ein Link mit der Bezeichnung „Open Signal“.
+          Kopiere das Token via Rechtsklick und füge es hier in das Textfeld ein:
         use_voice:
           label: Telefonanruf anfordern
-          help: Sie müssen zuerst eine SMS anfordern, die unter alrets@dialog.click empfangen wird. Wenn Sie diese nach 60 Sekunden nicht erhalten haben, können Sie einen Sprachanruf anfordern.
+          help: Fordere eine SMS an, die unter alerts@dialog.click empfangen wird. Wenn du sie nach 60 Sekunden nicht erhalten hast, kannst du alternativ einen Sprachanruf anfordern.
     signal_verify_phone_number_form:
       main_heading: Rufnummer überprüfen
 

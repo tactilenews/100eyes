@@ -53,7 +53,7 @@ RSpec.describe 'Signal' do
         end
       end
 
-      context 'given the register is unsucessful' do
+      context 'given the registration is unsuccessful' do
         let(:error_message) { 'Invalid captcha' }
 
         before do
@@ -116,7 +116,7 @@ RSpec.describe 'Signal' do
         expect { subject.call }.to have_enqueued_job(SignalAdapter::SetProfileInfoJob).with(organization_id: organization.id)
       end
 
-      context 'given the verify is unsuccessful' do
+      context 'given the verification is unsuccessful' do
         let(:error_message) { 'Verify error: StatusCode: 400' }
 
         before do
