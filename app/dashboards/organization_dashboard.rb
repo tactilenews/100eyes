@@ -92,6 +92,8 @@ class OrganizationDashboard < Administrate::BaseDashboard
 
   FORM_ATTRIBUTES_EDIT = %i[
     name
+    project_name
+    signal_username
     contact_person
     business_plan
     upgrade_discount
