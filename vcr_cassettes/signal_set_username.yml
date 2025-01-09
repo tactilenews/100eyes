@@ -1,0 +1,35 @@
+---
+http_interactions:
+  - request:
+      method: post
+      uri: http://signal:8080/v1/accounts/SIGNAL_SERVER_PHONE_NUMBER/username
+      body:
+        encoding: UTF-8
+        string: '{"username":"conrad_beahan"}'
+      headers:
+        Accept:
+          - application/json
+        Content-Type:
+          - application/json
+        Accept-Encoding:
+          - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+        User-Agent:
+          - Ruby
+        Host:
+          - signal:8080
+    response:
+      status:
+        code: 201
+        message: Created
+      headers:
+        Content-Type:
+          - application/json; charset=utf-8
+        Date:
+          - Wed, 08 Jan 2025 11:18:22 GMT
+        Content-Length:
+          - '136'
+      body:
+        encoding: UTF-8
+        string: '{"username":"valid_username","username_link":"https://signal.me/some_valid_uuid"}'
+    recorded_at: Wed, 08 Jan 2025 11:18:22 GMT
+recorded_with: VCR 6.1.0

@@ -6,7 +6,8 @@ require 'webmock/rspec'
 RSpec.describe SignalAdapter::Outbound::File do
   let(:adapter) { described_class.new }
   let(:contributor) { create(:contributor, signal_phone_number: '+4915112345678', email: nil) }
-  let(:request) { create(:request, organization: create(:organization, signal_server_phone_number: 'SIGNAL_SERVER_PHONE_NUMBER')) }
+  let(:organization) { create(:organization, signal_server_phone_number: 'SIGNAL_SERVER_PHONE_NUMBER') }
+  let(:request) { create(:request, organization: organization) }
   let(:message) { create(:message, :with_file, recipient: contributor, text: 'Hello Signal', request: request) }
   let(:perform) { -> { adapter.perform(message: message) } }
 

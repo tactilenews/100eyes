@@ -1,5 +1,15 @@
 de:
   application_name: One hundred eyes
+  administrate:
+    field_hints:
+      organization:
+        signal_username: |
+          Ein Signal-Benutzername ist erforderlich, wenn eine Signal-Telefonnummer hinzugefügt wird und das Onboarding nicht untersagt ist.
+          Er muss zwischen 3 und 32 Zeichen lang sein, darf nicht mit einer Zahl beginnen und darf nur alphanumerische Zeichen und _ enthalten.
+    custom_field_type:
+      setup_signal_link_field:
+        show:
+          help_text: Klicke hier, um dich zu registrieren, falls du noch nicht registriert bist.
   components:
     activity_notifications:
       card_heading: Letzte Aktivität
@@ -20,14 +30,14 @@ de:
       blocked_by_contributor: wurde von diesem Mitglied blockiert
       created_by: Manuell hinzugefügt von %{name}
       anonymous_creator: anonymer User
-      sent_by_x_at: "%{name} am <time>%{date}</time> "
-      about: " zu "
+      sent_by_x_at: '%{name} am <time>%{date}</time> '
+      about: ' zu '
     chat_messages_group:
       conversations: Verlauf
       reply: antworten
       add_message: Notiz hinzufügen
     chat_form:
-      reply_to_reference: "Zur Nachricht: \"%{text}\""
+      reply_to_reference: 'Zur Nachricht: "%{text}"'
       placeholder: Gib hier deine Nachfrage ein. Referenziere falls nötig die entsprechende Nachricht...
       submit: Absenden
     message_form:
@@ -86,7 +96,7 @@ de:
       link: Zur Signal-App
       copy: Link kopieren
       help: Über den Button gelangst du direkt zum Signal-Profil von „%{project_name}”. Alternativ kannst du einen Link kopieren und auf deinem Smartphone öffnen.
-      message: "Wenn du unser Signal-Konto gefunden hast, gebe diesen Code ein: <strong>%{token}</strong>"
+      message: 'Wenn du unser Signal-Konto gefunden hast, gebe diesen Code ein: <strong>%{token}</strong>'
     onboarding_signal_form:
       heading: Mit Signal teilnehmen
       text: Gib uns zunächst dein Einverständnis. Wir werden dann einen Code generieren, den du an uns senden kannst, um deine Registrierung abzuschließen.
@@ -118,16 +128,16 @@ de:
       heading: Fast geschafft.
       text: Verbinde dein Telegram-Konto in der Telegram-App, um die Anmeldung abzuschließen.
       steps:
-        - "Finde uns auf Telegram. Suche dazu nach <strong>%{telegram_handle}</strong>."
-        - "Wenn du unser Telegram-Konto gefunden hast, klicke auf <strong>Start</strong>."
-        - "Gib diesen Code ein, sobald du danach gefragt wirst: <strong>%{token}</strong>"
+        - 'Finde uns auf Telegram. Suche dazu nach <strong>%{telegram_handle}</strong>.'
+        - 'Wenn du unser Telegram-Konto gefunden hast, klicke auf <strong>Start</strong>.'
+        - 'Gib diesen Code ein, sobald du danach gefragt wirst: <strong>%{token}</strong>'
     onboarding_footer:
       imprint: Impressum
       data_protection: Datenschutz
     two_factor_auth_setup:
       header: Anmeldung in zwei Schritten einrichten
-      step_1: "1. Fügen Sie 100eyes zu einer App wie Authy oder FreeOTP hinzu, indem Sie entweder den folgenden QR-Code scannen oder den geheimen Schlüssel manuell kopieren."
-      step_2: "2. Geben Sie den 6-stelligen Bestätigungscode ein."
+      step_1: '1. Fügen Sie 100eyes zu einer App wie Authy oder FreeOTP hinzu, indem Sie entweder den folgenden QR-Code scannen oder den geheimen Schlüssel manuell kopieren.'
+      step_2: '2. Geben Sie den 6-stelligen Bestätigungscode ein.'
       copy_secret_key:
         label: Schlüssel kopieren
         success: Geheimen Schlüssel kopiert
@@ -139,7 +149,7 @@ de:
       success: kopiert
     request_form:
       subheading: Finde heraus, was deine Community bewegt
-      preview_fallback: "Sobald du eine Frage eingegeben hast, siehst du hier eine Vorschau deiner Nachricht."
+      preview_fallback: 'Sobald du eine Frage eingegeben hast, siehst du hier eine Vorschau deiner Nachricht.'
       members_count_message:
         one: Es gibt <strong>ein Mitglied</strong> mit diesen Tags.
         other: Es gibt <strong>%{count} Mitglieder</strong> mit diesen Tags.
@@ -209,24 +219,24 @@ de:
           <strong>%{first_name}</strong> wird dann wieder alle Forschungsfragen erhalten.
         action: Mitglied reaktivieren
       automatically_marked_inactive:
-        text: "<strong>%{name}</strong> ist ein <strong>inaktives Mitglied</strong> deiner Community und erhält aktuell keine Recherchefragen über %{project_name}."
+        text: '<strong>%{name}</strong> ist ein <strong>inaktives Mitglied</strong> deiner Community und erhält aktuell keine Recherchefragen über %{project_name}.'
         possible_reason_whats_app: |
           Die Rufnummer wurde möglicherweise nicht bei WhatsApp registriert oder der Empfänger hat die neuen Nutzungsbedingungen und Datenschutzrichtlinien von WhatsApp nicht akzeptiert.
           Es ist auch möglich, dass der Empfänger eine alte, nicht unterstützte Version des WhatsApp-Clients für sein Telefon verwendet. Bitte überprüfe dies mit <strong>%{first_name}</strong>.
-        possible_reason_signal: "Die Rufnummer wurde möglicherweise nicht bei Signal registriert. Bitte überprüfe dies mit <strong>%{first_name}</strong>."
-        possible_reason_threema: "Diese Threema-ID wurde möglicherweise von Threema als ungültig gemeldet. Bitte <strong>%{first_name}</strong>, die Threema-ID zu überprüfen."
-        possible_reason_email: "Diese E-Mail-Adresse wurde vom Server als inaktiv gemeldet. Das bedeutet, es können keine E-Mails an diese Adresse zugestellt werden."
-        possible_reason_telegram: "<strong>%{first_name}</strong> hat sich aktiv vom Empfang von Nachrichten auf Telegram abgemeldet. Wenn du vermutest, dass dies eine versehentliche Abmeldung ist, kontaktiere %{first_name}."
+        possible_reason_signal: 'Die Rufnummer wurde möglicherweise nicht bei Signal registriert. Bitte überprüfe dies mit <strong>%{first_name}</strong>.'
+        possible_reason_threema: 'Diese Threema-ID wurde möglicherweise von Threema als ungültig gemeldet. Bitte <strong>%{first_name}</strong>, die Threema-ID zu überprüfen.'
+        possible_reason_email: 'Diese E-Mail-Adresse wurde vom Server als inaktiv gemeldet. Das bedeutet, es können keine E-Mails an diese Adresse zugestellt werden.'
+        possible_reason_telegram: '<strong>%{first_name}</strong> hat sich aktiv vom Empfang von Nachrichten auf Telegram abgemeldet. Wenn du vermutest, dass dies eine versehentliche Abmeldung ist, kontaktiere %{first_name}.'
       unsubscribed:
         text: |
           <strong>%{name}</strong> ist ein <strong>inaktives Mitglied</strong> deiner Community und erhält aktuell keine Recherchefragen über %{project_name}.
           <strong>%{first_name}</strong> hat darum gebeten, vom Erhalt von Nachrichten über WhatsApp abgemeldet zu werden.
           Wenn du vermutest, dass es sich um eine versehentliche Abmeldung handelt, kontaktiere <strong>%{first_name}</strong>.
     contributor_email_settings:
-      heading: "Ausgewählter Kanal: E-Mail"
-      text: "%{name} hat sich via E-Mail angemeldet."
+      heading: 'Ausgewählter Kanal: E-Mail'
+      text: '%{name} hat sich via E-Mail angemeldet.'
     contributor_telegram_settings:
-      heading: "Ausgewählter Kanal: Telegram"
+      heading: 'Ausgewählter Kanal: Telegram'
       complete:
         text: |
           %{name} hat sich unter dem Telegram-Nutzernamen „%{username}” angemeldet.
@@ -236,10 +246,10 @@ de:
           Sende %{first_name} einen Link mit Hinweisen zum Abschließen der Anmeldung.
         action: Link kopieren
     contributor_threema_settings:
-      heading: "Ausgewählter Kanal: Threema"
-      text: "%{name} hat sich unter der folgenden Threema-ID angemeldet."
+      heading: 'Ausgewählter Kanal: Threema'
+      text: '%{name} hat sich unter der folgenden Threema-ID angemeldet.'
     contributor_signal_settings:
-      heading: "Ausgewählter Kanal: Signal"
+      heading: 'Ausgewählter Kanal: Signal'
       complete:
         text:
           phone_number: |
@@ -252,7 +262,7 @@ de:
           Sende %{first_name} einen Link mit Hinweisen zum Abschließen der Anmeldung.
         action: Link kopieren
     contributor_whats_app_settings:
-      heading: "Ausgewählter Kanal: WhatsApp"
+      heading: 'Ausgewählter Kanal: WhatsApp'
       text: |
         %{name} hat sich mit der Handynummer %{phone_number} angemeldet.
     contributor_header:
@@ -264,7 +274,7 @@ de:
     requests_feed:
       heading: Letzte beantwortete Fragen
       show_all: Alle Antworten anzeigen (%{count})
-      no_replies: "%{name} hat bisher auf keine Recherche geantwortet."
+      no_replies: '%{name} hat bisher auf keine Recherche geantwortet.'
     contributor_core_data_form:
       heading: Stammdaten bearbeiten
       text: |
@@ -282,7 +292,7 @@ de:
         text: Um die Anmeldung in zwei Schritten zu nutzen, benötigst du eine App wie z.B. <a class="Link" href="https://freeotp.github.io/" target="_blank" rel="noreferrer noopener">FreeOTP</a> oder <a class="Link" href="https://support.google.com/accounts/answer/1066447?hl=de" rel="noreferrer noopener">Google Authenticator</a>. Wenn du schon eine andere App verwendest, kannst du sie auch für 100eyes verwenden.
       step_2:
         heading: Scanne den QR-Code
-        text: "Alternativ kannst du auch den folgenden Code kopieren oder händisch in deiner App eingeben:"
+        text: 'Alternativ kannst du auch den folgenden Code kopieren oder händisch in deiner App eingeben:'
         copy: Code kopieren
       step_3:
         heading: Bestätige die Einrichtung
@@ -292,16 +302,16 @@ de:
       macos_emoji_picker_hint: Füge Emojis mit <kbd>Control ⌃</kbd> + <kbd>Command ⌘</kbd> + <kbd>Leertaste</kbd> ein.
     avatar:
       expand: In Originalgröße anzeigen
-      editorial_logo: "%{project_name} Logo"
+      editorial_logo: '%{project_name} Logo'
     about:
       subheading: powered by 100eyes
-      version: "Version %{version} (%{date})"
+      version: 'Version %{version} (%{date})'
       email_from_address: E-Mail Adresse
       telegram_bot_username: Telegram-Handle
       threemarb_api_identity: Threema-ID
       signal_server_phone_number: Signal Handynummer
       whats_app_phone_number: Whats-App Handynummer
-      not_set_up: "N/A"
+      not_set_up: 'N/A'
       active: Aktiv
       inactive: Inaktiv
     gdpr_modal:
@@ -339,29 +349,29 @@ de:
       whats_app: WhatsApp
     user_management:
       main_heading: Dein 100eyes Team
-      number_of_users_of_business_plan_used: "%{users_count} von %{allocated_users} Seats genutzt"
-      add_users_button: "Teammitglied hinzufügen"
+      number_of_users_of_business_plan_used: '%{users_count} von %{allocated_users} Seats genutzt'
+      add_users_button: 'Teammitglied hinzufügen'
     profile_header:
       main_heading: 'Dein 100eyes Plan: %{business_plan_name}'
       sub_heading:
-        contact_person: "Auftraggeber:in %{contact_person_name}, %{contact_person_email}"
+        contact_person: 'Auftraggeber:in %{contact_person_name}, %{contact_person_email}'
         business_plan:
-          price_per_month: "Preis: %{price_per_month}/Monat"
-          valid_until: "Mindeslaufzeit: bis %{valid_until}"
+          price_per_month: 'Preis: %{price_per_month}/Monat'
+          valid_until: 'Mindeslaufzeit: bis %{valid_until}'
       additional_info:
-        channels: "Dialogkanäle: Signal, Threema, Telegram, E-Mail"
-        security: "Sicherheit: Community abgesichert über Zwei-Faktor-Authentifizierung, Cloudflare"
-      upgrade_business_plan_button_html: "<span>Plan jetzt upgraden und <strong>%{upgrade_discount}%</strong> sparen</span>"
+        channels: 'Dialogkanäle: Signal, Threema, Telegram, E-Mail'
+        security: 'Sicherheit: Community abgesichert über Zwei-Faktor-Authentifizierung, Cloudflare'
+      upgrade_business_plan_button_html: '<span>Plan jetzt upgraden und <strong>%{upgrade_discount}%</strong> sparen</span>'
     business_plan_choices:
       legend: Upgrade Plan
-      price_per_month: "%{price_per_month}/Monat"
+      price_per_month: '%{price_per_month}/Monat'
     upgrade_business_plan_modal:
       business_plan:
-        features_info: "%{number_of_communities} Community mit %{number_of_users} Redakteur:innen und %{number_of_contributors} Mitgliedern."
-        hours_of_included_support: "Inklusive %{hours} Stunden technischer Support"
+        features_info: '%{number_of_communities} Community mit %{number_of_users} Redakteur:innen und %{number_of_contributors} Mitgliedern.'
+        hours_of_included_support: 'Inklusive %{hours} Stunden technischer Support'
       close_modal: Modal schließen
       submit_button: Upgrade Plan
-      discount_explained_html: "*Wir gewähren dir <strong>%{discount}%</strong> Bonus auf den regulären Preis für die Vertragslaufzeit bis <strong>%{valid_through}</strong>, danach gelten die gültigen Preise laut Preistabelle."
+      discount_explained_html: '*Wir gewähren dir <strong>%{discount}%</strong> Bonus auf den regulären Preis für die Vertragslaufzeit bis <strong>%{valid_through}</strong>, danach gelten die gültigen Preise laut Preistabelle.'
     create_user_modal:
       first_name:
         label: Vorname
@@ -369,7 +379,7 @@ de:
         label: Nachname
       email:
         label: E-Mail-Adresse
-      submit_button: "Teammitglied hinzufügen"
+      submit_button: 'Teammitglied hinzufügen'
       close_modal: Modal schließen
     pagination:
       first: Erste
@@ -390,8 +400,8 @@ de:
         inactive: Inaktiv
         unsubscribed: Abbestellt
       filter_active_text:
-        one: "Das sind die Mitglieder deiner Community <strong>gefiltert nach dem Tag</strong>"
-        other: "Das sind die Mitglieder deiner Community <strong>gefiltert nach den Tags</strong>"
+        one: 'Das sind die Mitglieder deiner Community <strong>gefiltert nach dem Tag</strong>'
+        other: 'Das sind die Mitglieder deiner Community <strong>gefiltert nach den Tags</strong>'
     contributors_list:
       empty_state:
         no_contributors: Du hast noch keine Mitglieder. Über Einladungslinks können sich neue Mitglieder hier anmelden.
@@ -404,19 +414,31 @@ de:
       legend: Aktive Onboarding-Channel
       help_text: Achtung, hier deaktivierst du Kanäle. Mitglieder können sich nur noch auf aktiven Kanälen anmelden.
     destroy_planned_request_modal:
-      heading: "Bist du sicher, dass du „%{request_title}” dauerhaft löschen möchtest?"
+      heading: 'Bist du sicher, dass du „%{request_title}” dauerhaft löschen möchtest?'
       cancel: abbrechen
       confirm: löschen
     organizations_index:
-      main_heading: "Hallo, %{first_name}!"
+      main_heading: 'Hallo, %{first_name}!'
       heading: Bitte wähle eine Organisation aus, um fortzufahren
     errors_page:
       alt_text: Otter arbeitet an der Lösung des Problems
+    signal_captcha_form:
+      main_heading: Erzeugen eines Captcha-Tokens
+      instructions:
+        where_to_generate_html: Um das Token zu erhalten,klicke auf <a class="Link" href=%{link} target="_blank">Signal-Captcha für die Registrierung</a>.
+        after_solving_captcha: |
+          Nach dem Ausfüllen des Captchas zeigt die Website das Token nicht sofort an, sondern versucht, zu einer signalcaptcha://-Url umzuleiten, die das Token enthält. Nach einem kurzen Moment erscheint unter dem Captcha ein Link mit der Bezeichnung „Open Signal“.
+          Kopiere das Token via Rechtsklick und füge es hier in das Textfeld ein:
+        use_voice:
+          label: Telefonanruf anfordern
+          help: Fordere eine SMS an, die unter alerts@dialog.click empfangen wird. Wenn du sie nach 60 Sekunden nicht erhalten hast, kannst du alternativ einen Sprachanruf anfordern.
+    signal_verify_phone_number_form:
+      main_heading: Rufnummer überprüfen
 
   mailer:
     unsubscribe:
-      text: "Sofern Sie keine E-Mails mehr von uns erhalten möchten, können Sie sie unter diesem Link abbestellen: {{{ pm:unsubscribe }}}"
-      html: "Sofern Sie keine E-Mails mehr von uns erhalten möchten, können Sie sie unter <a href=\"{{{ pm:unsubscribe }}}\">diesem Link abbestellen</a>."
+      text: 'Sofern Sie keine E-Mails mehr von uns erhalten möchten, können Sie sie unter diesem Link abbestellen: {{{ pm:unsubscribe }}}'
+      html: 'Sofern Sie keine E-Mails mehr von uns erhalten möchten, können Sie sie unter <a href="{{{ pm:unsubscribe }}}">diesem Link abbestellen</a>.'
 
   adapter:
     postmark:
@@ -426,21 +448,21 @@ de:
       new_message_email:
         subject: Die Redaktion hat eine neue Frage
       business_plan_upgraded:
-        subject: "Der Plan von %{organization_name} wurde zu %{business_plan_name} mit einem %{discount}%-Rabatt aufgewertet."
-        text: "Der monatliche Preis mit Rabatt beträgt jetzt bis zum %{valid_through} %{price_per_month_with_discount}. Bitte aktualisieren Sie Ihre Aufzeichnungen und wenden Sie sich an %{organization_name}."
+        subject: 'Der Plan von %{organization_name} wurde zu %{business_plan_name} mit einem %{discount}%-Rabatt aufgewertet.'
+        text: 'Der monatliche Preis mit Rabatt beträgt jetzt bis zum %{valid_through} %{price_per_month_with_discount}. Bitte aktualisieren Sie Ihre Aufzeichnungen und wenden Sie sich an %{organization_name}.'
       user_count_exceeds_plan_limit:
-        subject: "%{organization_name} hat die Höchstzahl der %{business_plan_name} Nutzer seines %{users_limit} Plans überschritten "
-        text: "%{organization_name} hat die zahl der gebuchten Contributors überschritten. Technisch ist das kein problem. Sprich mit der Kund:in doch demnächst über eine Aufstockung des Plans."
+        subject: '%{organization_name} hat die Höchstzahl der %{business_plan_name} Nutzer seines %{users_limit} Plans überschritten '
+        text: '%{organization_name} hat die zahl der gebuchten Contributors überschritten. Technisch ist das kein problem. Sprich mit der Kund:in doch demnächst über eine Aufstockung des Plans.'
       contributor_marked_as_inactive_email:
-        subject: "%{contributor_name} wurde bei %{channel} als inaktiv markiert, weil er keine Nachrichten mehr von %{project_name} empfangen kann."
-        text: "Wenn Sie vermuten, dass es sich um eine versehentliche Abmeldung handelt, setzen Sie sich mit %{contributor_name} in Verbindung. Vielleicht möchte die Person die Nachrichten lieber über einen anderen Kanal empfangen? Dann verschicken Sie einen neuen Anmelde-Link."
+        subject: '%{contributor_name} wurde bei %{channel} als inaktiv markiert, weil er keine Nachrichten mehr von %{project_name} empfangen kann.'
+        text: 'Wenn Sie vermuten, dass es sich um eine versehentliche Abmeldung handelt, setzen Sie sich mit %{contributor_name} in Verbindung. Vielleicht möchte die Person die Nachrichten lieber über einen anderen Kanal empfangen? Dann verschicken Sie einen neuen Anmelde-Link.'
       contributor_unsubscribed_email:
-        subject: "%{contributor_name} hat darum gebeten, keine weiteren Nachrichten über %{channel} von %{project_name} zu erhalten."
+        subject: '%{contributor_name} hat darum gebeten, keine weiteren Nachrichten über %{channel} von %{project_name} zu erhalten.'
       contributor_resubscribed_email:
-        subject: "%{contributor_name} hat erneut den Empfang von Nachrichten über %{channel} von %{project_name} angefordert."
+        subject: '%{contributor_name} hat erneut den Empfang von Nachrichten über %{channel} von %{project_name} angefordert.'
       welcome_message_updated:
-        subject: "%{project_name} hat seine Willkommensnachricht aktualisiert"
-        text: "Wenn die Instanz WhatsApp verwendet, muss eine neue Vorlage erstellt werden, bevor versucht wird, die Willkommensnachricht zu senden."
+        subject: '%{project_name} hat seine Willkommensnachricht aktualisiert'
+        text: 'Wenn die Instanz WhatsApp verwendet, muss eine neue Vorlage erstellt werden, bevor versucht wird, die Willkommensnachricht zu senden.'
     whats_app:
       request_template:
         new_request_morning_1: "Guten Morgen %{first_name}, wir haben eine neue Frage zum Thema „%{request_title}“. Wenn du antworten möchtest, klicke auf 'Antworten'."
@@ -455,7 +477,7 @@ de:
         new_request_night_1: "Hallo %{first_name}, heute Nacht ist mir etwas zum Thema „%{request_title}“ eingefallen. Wenn du antworten möchtest, klicke auf 'Antworten'."
         new_request_night_2: "Hallo %{first_name}, ich weiß, es ist schon spät. Aber ich möchte gern mehr zum Thema „%{request_title}“ erfahren. Wenn du antworten möchtest, klicke auf 'Antworten'."
         new_request_night_3: "Hallo %{first_name}, zum Thema „%{request_title}“ möchte ich heute noch gern mehr erfahren. Wenn du antworten möchtest, klicke auf 'Antworten'."
-      unsupported_content_template: "Tut mir leid %{first_name}, leider kann unsere Software derzeit nur Textnachrichten, Sprachnachrichten, Bilder und Reaktionen auf Nachrichten verarbeiten, jedoch noch keine weiteren Inhalte wie z.B. Sticker oder Kontakte. In der Zwischenzeit senden Sie bitte Nachrichten mit solchen Inhalten an %{contact_person}. Herzlichen Dank!"
+      unsupported_content_template: 'Tut mir leid %{first_name}, leider kann unsere Software derzeit nur Textnachrichten, Sprachnachrichten, Bilder und Reaktionen auf Nachrichten verarbeiten, jedoch noch keine weiteren Inhalte wie z.B. Sticker oder Kontakte. In der Zwischenzeit senden Sie bitte Nachrichten mit solchen Inhalten an %{contact_person}. Herzlichen Dank!'
       quick_reply_button_text:
         answer: Antworten
         more_info: Mehr Infos
@@ -464,22 +486,22 @@ de:
         text: abbestellen
         instructions: Um unseren Kanal abzubestellen, schreibe „abbestellen“.
         successful: Du wurdest erfolgreich abgemeldet. Wir danken dir für deinen Beitrag zu diesem Projekt.
-        by_request_of_contributor: "Das Mitglied, %{contributor_name}, hat darum gebeten, keine weiteren Nachrichten mit %{channel} mehr zu erhalten."
+        by_request_of_contributor: 'Das Mitglied, %{contributor_name}, hat darum gebeten, keine weiteren Nachrichten mit %{channel} mehr zu erhalten.'
       resubscribe:
         text: bestellen
         instructions: Um unseren Kanal erneut zu bestellen, schreiben Sie "bestellen".
         failure: Eine Registrierung ist aktuell nicht möglich. Ihr Account wurde deaktiviert. Bitte wenden Sie sich an kontakt@tactile.news
-        by_request_of_contributor: "Das Mitglied %{contributor_name} hat darum gebeten, wieder Nachrichten über WhatsApp empfangen zu können."
+        by_request_of_contributor: 'Das Mitglied %{contributor_name} hat darum gebeten, wieder Nachrichten über WhatsApp empfangen zu können.'
 
   save: Speichern
   cancel: Abbrechen
   skip_to_content: Zum Hauptinhalt springen
 
   dashboard:
-    heading: "Hallo, %{first_name}!"
-    heading_morning: "Guten Morgen, %{first_name}!"
-    heading_afternoon: "Guten Tag, %{first_name}!"
-    heading_evening: "Guten Abend, %{first_name}!"
+    heading: 'Hallo, %{first_name}!'
+    heading_morning: 'Guten Morgen, %{first_name}!'
+    heading_afternoon: 'Guten Tag, %{first_name}!'
+    heading_evening: 'Guten Abend, %{first_name}!'
 
   organization:
     form:
@@ -532,6 +554,9 @@ de:
     whats_app_setup:
       success_heading: WhatsApp wurde erfolgreich konfiguriert
       success_text: Du kannst jetzt Mitglieder über WhatsApp einladen.
+    signal_setup:
+      success_heading: Signal wurde erfolgreich konfiguriert
+      success_text: Du kannst jetzt Mitglieder über Signal einladen.
 
   settings:
     header: Einstellungen
@@ -606,15 +631,15 @@ de:
     create: Neue Frage stellen
     send: Frage an die Community senden
     schedule_request_success:
-      one: "Ihre Frage wurde erfolgreich geplant, um am %{scheduled_datetime} an ein Community-Mitglied gesendet zu werden."
-      other: "Ihre Frage wurde erfolgreich geplant, um am %{scheduled_datetime} an %{count} Community-Mitglieder gesendet zu werden."
+      one: 'Ihre Frage wurde erfolgreich geplant, um am %{scheduled_datetime} an ein Community-Mitglied gesendet zu werden.'
+      other: 'Ihre Frage wurde erfolgreich geplant, um am %{scheduled_datetime} an %{count} Community-Mitglieder gesendet zu werden.'
     success:
       one: Deine Frage wurde erfolgreich an ein Mitglied in der Community gesendet
       other: Deine Frage wurde erfolgreich an %{count} Mitglieder in der Community gesendet
     editing_disallowed: Sie können eine bereits verschickte Frage nicht mehr bearbeiten.
     destroy:
-      successful: "Deine Frage „%{request_title}” wurde erfolgreich gelöscht"
-      broadcasted_request_unallowed: "Frage %{request_title} wurde bereits gesendet und kann nicht gelöscht werden"
+      successful: 'Deine Frage „%{request_title}” wurde erfolgreich gelöscht'
+      broadcasted_request_unallowed: 'Frage %{request_title} wurde bereits gesendet und kann nicht gelöscht werden'
     replies: Alle Antworten der Community
     created_at: Frage gestellt %{datetime}
     planned_for: Frage geplant für %{datetime}
@@ -673,16 +698,16 @@ de:
   profile:
     contributors_section:
       main_heading: Deine Community
-      number_of_contributors_of_business_plan_used: "%{contributors_count} von %{allocated_contributors} Community-Mitgliedern aktiv"
+      number_of_contributors_of_business_plan_used: '%{contributors_count} von %{allocated_contributors} Community-Mitgliedern aktiv'
       copy_invite: Einladungslink generieren
     user:
-      created_successfully: "Redakteur:in erfolgreich erstellt"
+      created_successfully: 'Redakteur:in erfolgreich erstellt'
     business_plan:
       updated_successfully: Plan erfolgreich aktualisiert
 
   sessions:
     errors:
-      otp_incorrect: "Der 6-stellige Anmeldecode ist nicht korrekt."
+      otp_incorrect: 'Der 6-stellige Anmeldecode ist nicht korrekt.'
       deactivated_user: Dein Konto ist derzeit nicht aktiv, bitte kontaktiere den Support unter support@tactile.news
 
   activerecord:
@@ -690,7 +715,8 @@ de:
       messages:
         record_invalid: 'Gültigkeitsprüfung ist fehlgeschlagen: %{errors}'
         restrict_dependent_destroy:
-          has_one: Datensatz kann nicht gelöscht werden, da ein abhängiger %{record}-Datensatz
+          has_one:
+            Datensatz kann nicht gelöscht werden, da ein abhängiger %{record}-Datensatz
             existiert.
           has_many: Datensatz kann nicht gelöscht werden, da abhängige %{record} existieren.
 
@@ -702,57 +728,57 @@ de:
       disallowed_image_content_type: Kein gültiges Bildformat. Bitte senden Sie Bilder als jpg, png oder gif.
   date:
     abbr_day_names:
-    - So
-    - Mo
-    - Di
-    - Mi
-    - Do
-    - Fr
-    - Sa
+      - So
+      - Mo
+      - Di
+      - Mi
+      - Do
+      - Fr
+      - Sa
     abbr_month_names:
-    -
-    - Jan
-    - Feb
-    - Mär
-    - Apr
-    - Mai
-    - Jun
-    - Jul
-    - Aug
-    - Sep
-    - Okt
-    - Nov
-    - Dez
+      -
+      - Jan
+      - Feb
+      - Mär
+      - Apr
+      - Mai
+      - Jun
+      - Jul
+      - Aug
+      - Sep
+      - Okt
+      - Nov
+      - Dez
     day_names:
-    - Sonntag
-    - Montag
-    - Dienstag
-    - Mittwoch
-    - Donnerstag
-    - Freitag
-    - Samstag
+      - Sonntag
+      - Montag
+      - Dienstag
+      - Mittwoch
+      - Donnerstag
+      - Freitag
+      - Samstag
     formats:
-      default: "%d.%m.%Y"
-      long: "%e. %B %Y"
-      short: "%e. %b"
+      default: '%d.%m.%Y'
+      long: '%e. %B %Y'
+      short: '%e. %b'
     month_names:
-    -
-    - Januar
-    - Februar
-    - März
-    - April
-    - Mai
-    - Juni
-    - Juli
-    - August
-    - September
-    - Oktober
-    - November
-    - Dezember
+      -
+      - Januar
+      - Februar
+      - März
+      - April
+      - Mai
+      - Juni
+      - Juli
+      - August
+      - September
+      - Oktober
+      - November
+      - Dezember
     order:
-    - :day
-    - :month
-    - :year
+      - :day
+      - :month
+      - :year
   datetime:
     distance_in_words:
       about_x_hours:
@@ -779,19 +805,19 @@ de:
         other: mehr als %{count} Jahre
       x_seconds:
         one: eine Sekunde
-        other: "%{count} Sekunden"
+        other: '%{count} Sekunden'
       x_minutes:
         one: eine Minute
-        other: "%{count} Minuten"
+        other: '%{count} Minuten'
       x_days:
         one: einem Tag
-        other: "%{count} Tage"
+        other: '%{count} Tage'
       x_months:
         one: ein Monat
-        other: "%{count} Monate"
+        other: '%{count} Monate'
       x_years:
         one: ein Jahr
-        other: "%{count} Jahre"
+        other: '%{count} Jahre'
 
     prompts:
       second: Sekunde
@@ -801,7 +827,7 @@ de:
       month: Monat
       year: Jahr
   errors:
-    format: "%{attribute} %{message}"
+    format: '%{attribute} %{message}'
     messages:
       accepted: muss akzeptiert werden
       blank: muss ausgefüllt werden
@@ -848,33 +874,42 @@ de:
     select:
       prompt: Bitte wählen
     submit:
-      create: "%{model} erstellen"
-      submit: "%{model} speichern"
-      update: "%{model} aktualisieren"
+      create: '%{model} erstellen'
+      submit: '%{model} speichern'
+      update: '%{model} aktualisieren'
     label:
       contributor:
         username: Telegram Username
         threema_id: Threema Id
         telegram_id: Telegram Id
+      organization:
+        name: Name
+        contact_person: Kontaktperson
+        email_from_address: E-Mail Adresse
+        telegram_bot_username: Telegram-Bot-Benutzername
+        threemarb_api_identity: Threema Id
+        threemarb_api_secret: Threema API secret
+        threemarb_private: Threema private key
+        signal_server_phone_number: Signal-Rufnummer
   number:
     currency:
       format:
-        delimiter: "."
-        format: "%n %u"
+        delimiter: '.'
+        format: '%n %u'
         precision: 2
-        separator: ","
+        separator: ','
         significant: false
         strip_insignificant_zeros: false
-        unit: "€"
+        unit: '€'
     format:
-      delimiter: "."
+      delimiter: '.'
       precision: 2
-      separator: ","
+      separator: ','
       significant: false
       strip_insignificant_zeros: false
     human:
       decimal_units:
-        format: "%n %u"
+        format: '%n %u'
         units:
           billion:
             one: Milliarde
@@ -896,7 +931,7 @@ de:
         significant: true
         strip_insignificant_zeros: true
       storage_units:
-        format: "%n %u"
+        format: '%n %u'
         units:
           byte:
             one: Byte
@@ -908,23 +943,23 @@ de:
     percentage:
       format:
         delimiter: ''
-        format: "%n %"
+        format: '%n %'
     precision:
       format:
         delimiter: ''
   support:
     array:
-      last_word_connector: " und "
-      two_words_connector: " und "
-      words_connector: ", "
+      last_word_connector: ' und '
+      two_words_connector: ' und '
+      words_connector: ', '
   time:
     am: vormittags
     formats:
-      default: "%A, %d. %B %Y, %H:%M Uhr"
-      long: "%A, %d. %B %Y, %H:%M Uhr"
-      short: "%a, %d. %b, %H:%M"
-      time_only: "%H:%M Uhr"
-      today: "heute, %H:%M"
+      default: '%A, %d. %B %Y, %H:%M Uhr'
+      long: '%A, %d. %B %Y, %H:%M Uhr'
+      short: '%a, %d. %b, %H:%M'
+      time_only: '%H:%M Uhr'
+      today: 'heute, %H:%M'
     pm: nachmittags
 
   contributors:
@@ -933,32 +968,32 @@ de:
 
   notifications:
     onboarding_completed:
-      text_html: "<strong>%{contributor_name}</strong> hat sich via %{contributor_channel} angemeldet."
-      link_text: "Zum Profil"
+      text_html: '<strong>%{contributor_name}</strong> hat sich via %{contributor_channel} angemeldet.'
+      link_text: 'Zum Profil'
     message_received:
       text_html:
-        one: "<strong>%{contributor_one}</strong> hat auf die Frage <strong>„%{request_title}”</strong> geantwortet."
-        two: "<strong>%{contributor_one}</strong> und <strong>%{contributor_two}</strong> haben auf die Frage <strong>„%{request_title}”</strong> geantwortet."
-        other: "<strong>%{contributor_one}</strong> und %{others_count} andere haben auf die Frage <strong>„%{request_title}”</strong> geantwortet."
-      link_text: "Zur Antwort"
+        one: '<strong>%{contributor_one}</strong> hat auf die Frage <strong>„%{request_title}”</strong> geantwortet.'
+        two: '<strong>%{contributor_one}</strong> und <strong>%{contributor_two}</strong> haben auf die Frage <strong>„%{request_title}”</strong> geantwortet.'
+        other: '<strong>%{contributor_one}</strong> und %{others_count} andere haben auf die Frage <strong>„%{request_title}”</strong> geantwortet.'
+      link_text: 'Zur Antwort'
     chat_message_sent:
       text_html:
-        one: "<strong>%{user_name}</strong> hat <strong>%{contributor_one}</strong> auf <strong>„%{request_title}”</strong> geantwortet."
-        two: "<strong>%{user_name}</strong> hat <strong>%{contributor_one}</strong> und <strong>%{contributor_two}</strong> auf die Frage <strong>„%{request_title}”</strong> geantwortet."
-        other: "<strong>%{user_name}</strong> hat <strong>%{contributor_one}</strong> und %{others_count} anderen auf die Frage <strong>„%{request_title}”</strong> geantwortet."
+        one: '<strong>%{user_name}</strong> hat <strong>%{contributor_one}</strong> auf <strong>„%{request_title}”</strong> geantwortet.'
+        two: '<strong>%{user_name}</strong> hat <strong>%{contributor_one}</strong> und <strong>%{contributor_two}</strong> auf die Frage <strong>„%{request_title}”</strong> geantwortet.'
+        other: '<strong>%{user_name}</strong> hat <strong>%{contributor_one}</strong> und %{others_count} anderen auf die Frage <strong>„%{request_title}”</strong> geantwortet.'
       my_text_html:
-        one: "<strong>Du</strong> hast <strong>%{contributor_one}</strong> auf <strong>„%{request_title}”</strong> geantwortet."
-        two: "<strong>Du</strong> hast <strong>%{contributor_one}</strong> und <strong>%{contributor_two}</strong> auf die Frage <strong>„%{request_title}”</strong> geantwortet."
-        other: "<strong>Du</strong> hast <strong>%{contributor_one}</strong> und %{others_count} anderen auf die Frage <strong>„%{request_title}”</strong> geantwortet."
-      link_text: "Zur Nachricht"
+        one: '<strong>Du</strong> hast <strong>%{contributor_one}</strong> auf <strong>„%{request_title}”</strong> geantwortet.'
+        two: '<strong>Du</strong> hast <strong>%{contributor_one}</strong> und <strong>%{contributor_two}</strong> auf die Frage <strong>„%{request_title}”</strong> geantwortet.'
+        other: '<strong>Du</strong> hast <strong>%{contributor_one}</strong> und %{others_count} anderen auf die Frage <strong>„%{request_title}”</strong> geantwortet.'
+      link_text: 'Zur Nachricht'
     request_scheduled:
-      text_html: "Die Frage <strong>%{request_title}</strong> wurde für den Versand am %{date} um %{time} geplant und wird an %{contributors_count} Community-Mitgliedern versendet."
+      text_html: 'Die Frage <strong>%{request_title}</strong> wurde für den Versand am %{date} um %{time} geplant und wird an %{contributors_count} Community-Mitgliedern versendet.'
       link_text: Zur Frage
     contributor_marked_inactive:
-      text_html: "<strong>%{contributor_name}</strong> wurde als inaktiv markiert, weil die Person über diesen Kanal keine Fragen mehr zu %{contributor_channel} erhalten können."
-      link_text: "Zum Profil"
+      text_html: '<strong>%{contributor_name}</strong> wurde als inaktiv markiert, weil die Person über diesen Kanal keine Fragen mehr zu %{contributor_channel} erhalten können.'
+      link_text: 'Zum Profil'
     contributor_subscribed:
-      text_html: "<strong>%{contributor_name}</strong> hat beantragt, erneut Nachrichten per %{contributor_channel} zu bestellen."
+      text_html: '<strong>%{contributor_name}</strong> hat beantragt, erneut Nachrichten per %{contributor_channel} zu bestellen.'
       link_text: Zum Profil
     whats_app_template_created:
       text_html: Deine WhatsApp-Vorlage wurde erfolgreich erstellt

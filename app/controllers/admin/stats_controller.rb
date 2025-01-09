@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Admin
-  class StatsController < Admin::ApplicationController
+  class StatsController < Administrate::ApplicationController
     def index
       @stats = {
         email_contributors_count: Contributor.with_email.count,

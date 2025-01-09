@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_11_20_182931) do
+ActiveRecord::Schema.define(version: 2025_01_08_092828) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -190,7 +190,7 @@ ActiveRecord::Schema.define(version: 2024_11_20_182931) do
     t.bigint "business_plan_id", null: false
     t.bigint "contact_person_id"
     t.datetime "upgraded_business_plan_at"
-    t.string "project_name", default: "100eyes"
+    t.string "project_name"
     t.string "onboarding_title", default: "Hallo und herzlich willkommen!"
     t.string "onboarding_byline", default: ""
     t.string "onboarding_data_processing_consent_additional_info", default: ""
@@ -236,6 +236,8 @@ ActiveRecord::Schema.define(version: 2024_11_20_182931) do
     t.string "signal_complete_onboarding_link"
     t.jsonb "whats_app_quick_reply_button_text", default: {"more_info"=>"Mehr Infos", "answer_request"=>"Antworten"}
     t.string "whats_app_more_info_message", default: ""
+    t.string "messengers_about_text"
+    t.string "signal_username"
     t.index ["business_plan_id"], name: "index_organizations_on_business_plan_id"
     t.index ["contact_person_id"], name: "index_organizations_on_contact_person_id"
     t.index ["telegram_bot_username"], name: "index_organizations_on_telegram_bot_username", unique: true

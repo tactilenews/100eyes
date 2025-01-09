@@ -21,9 +21,14 @@ class Organization < ApplicationRecord
   has_one_attached :channel_image
 
   before_update :notify_admin
+  after_create_commit :set_telegram_webhook
   after_update_commit :notify_admin_of_welcome_message_change
 
-  validates :telegram_bot_username, uniqueness: true
+  validates :name, presence: true
+  validates :project_name, presence: true
+  validates :telegram_bot_username, uniqueness: true, allow_nil: true
+  validates :messengers_about_text, length: { maximum: 139 }, allow_blank: true
+  validates :signal_username, presence: true, length: { in: 3..32 }, format: { with: /\A[a-z]\w+\z/ }, if: :signal_onboarding_allowed?
 
   def channels_onboarding_allowed
     {
@@ -115,6 +120,12 @@ class Organization < ApplicationRecord
   end
 
   private
+
+  def set_telegram_webhook
+    return unless saved_change_to_telegram_bot_username? && saved_change_to_telegram_bot_api_key?
+
+    TelegramAdapter::SetWebhookUrlJob.perform_later(organization_id: id)
+  end
 
   def notify_admin
     return unless business_plan_id_changed? && upgraded_business_plan_at.present?
