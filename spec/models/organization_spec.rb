@@ -111,6 +111,14 @@ RSpec.describe Organization do
           expect(organization.errors.messages).to eq(signal_username: ['ist nicht gültig'])
         end
       end
+
+      context 'username contains capital letter' do
+        before { organization.signal_username = 'HundredEyes' }
+
+        it 'is expected to be valid' do
+          expect(organization).to be_valid
+        end
+      end
     end
   end
 

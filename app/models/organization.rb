@@ -28,7 +28,7 @@ class Organization < ApplicationRecord
   validates :project_name, presence: true
   validates :telegram_bot_username, uniqueness: true, allow_nil: true
   validates :messengers_about_text, length: { maximum: 139 }, allow_blank: true
-  validates :signal_username, presence: true, length: { in: 3..32 }, format: { with: /\A[a-z]\w+\z/ }, if: :signal_onboarding_allowed?
+  validates :signal_username, presence: true, length: { in: 3..32 }, format: { with: /\A[a-z]\w+\z/i }, if: :signal_onboarding_allowed?
 
   def channels_onboarding_allowed
     {
