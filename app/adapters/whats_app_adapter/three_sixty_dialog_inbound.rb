@@ -30,7 +30,7 @@ module WhatsAppAdapter
       @text = initialize_text
 
       if ephemeral_data?
-        trigger_appropriate_callback
+        handle_ephemeral_data
         return
       end
 
@@ -63,7 +63,9 @@ module WhatsAppAdapter
       request_for_more_info? || unsubscribe_text? || resubscribe_text? || request_to_receive_message?
     end
 
-    def trigger_appropriate_callback
+    def handle_ephemeral_data
+      params_array = [sender]
+
       callback =
         if request_for_more_info?
           REQUEST_FOR_MORE_INFO
@@ -72,10 +74,9 @@ module WhatsAppAdapter
         elsif resubscribe_text?
           RESUBSCRIBE_CONTRIBUTOR
         elsif request_to_receive_message?
+          params_array.append(whats_app_message[:messages].first)
           REQUEST_TO_RECEIVE_MESSAGE
         end
-      params_array = [sender]
-      params_array.append(whats_app_message[:messages].first) if request_to_receive_message?
 
       trigger(callback, *params_array)
     end
