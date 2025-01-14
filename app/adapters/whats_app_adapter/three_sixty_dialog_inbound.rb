@@ -46,10 +46,22 @@ module WhatsAppAdapter
 
     private
 
-    def trigger(event, *args)
+    def trigger(event)
       return unless @callbacks.key?(event)
 
-      @callbacks[event].call(*args)
+      @callbacks[event].call
+    end
+
+    def initialize_sender
+      whats_app_phone_number = whats_app_message[:contacts].first[:wa_id].phony_normalized
+      sender = organization.contributors.find_by(whats_app_phone_number: whats_app_phone_number)
+
+      unless sender
+        trigger(UNKNOWN_CONTRIBUTOR)
+        return nil
+      end
+
+      sender
     end
 
     def initialize_text
@@ -64,8 +76,6 @@ module WhatsAppAdapter
     end
 
     def handle_ephemeral_data
-      params_array = [sender]
-
       callback =
         if request_for_more_info?
           REQUEST_FOR_MORE_INFO
@@ -74,23 +84,10 @@ module WhatsAppAdapter
         elsif resubscribe_text?
           RESUBSCRIBE_CONTRIBUTOR
         elsif request_to_receive_message?
-          params_array.append(whats_app_message[:messages].first)
           REQUEST_TO_RECEIVE_MESSAGE
         end
 
-      trigger(callback, *params_array)
-    end
-
-    def initialize_sender
-      whats_app_phone_number = whats_app_message[:contacts].first[:wa_id].phony_normalized
-      sender = organization.contributors.find_by(whats_app_phone_number: whats_app_phone_number)
-
-      unless sender
-        trigger(UNKNOWN_CONTRIBUTOR, whats_app_phone_number)
-        return nil
-      end
-
-      sender
+      trigger(callback)
     end
 
     def initialize_message
@@ -107,7 +104,7 @@ module WhatsAppAdapter
       return unless unsupported_content?
 
       message.unknown_content = true
-      trigger(UNSUPPORTED_CONTENT, sender)
+      trigger(UNSUPPORTED_CONTENT)
     end
 
     def initialize_file

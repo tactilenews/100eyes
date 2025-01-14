@@ -216,8 +216,8 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
       let(:unknown_contributor_callback) { spy('unknown_contributor_callback') }
 
       before do
-        adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::UNKNOWN_CONTRIBUTOR) do |whats_app_phone_number|
-          unknown_contributor_callback.call(whats_app_phone_number)
+        adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::UNKNOWN_CONTRIBUTOR) do
+          unknown_contributor_callback.call
         end
       end
 
@@ -232,7 +232,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
 
       describe 'if the sender is unknown' do
         before { whats_app_message[:contacts].first[:wa_id] = '4955443322' }
-        it { should have_received(:call).with('+4955443322') }
+        it { should have_received(:call) }
       end
     end
 
@@ -240,8 +240,8 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
       let(:unsupported_content_callback) { spy('unsupported_content_callback') }
 
       before do
-        adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::UNSUPPORTED_CONTENT) do |sender|
-          unsupported_content_callback.call(sender)
+        adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::UNSUPPORTED_CONTENT) do
+          unsupported_content_callback.call
         end
       end
 
@@ -408,7 +408,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
             message[:document] = document
           end
 
-          it { should have_received(:call).with(contributor) }
+          it { should have_received(:call) }
         end
 
         context 'document|docx|' do
@@ -425,7 +425,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
             message[:document] = document
           end
 
-          it { should have_received(:call).with(contributor) }
+          it { should have_received(:call) }
         end
 
         context 'location' do
@@ -440,7 +440,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
             message[:location] = location
           end
 
-          it { should have_received(:call).with(contributor) }
+          it { should have_received(:call) }
         end
 
         context 'contacts' do
@@ -473,7 +473,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
             message[:contacts] = contacts
           end
 
-          it { should have_received(:call).with(contributor) }
+          it { should have_received(:call) }
         end
 
         context 'sticker' do
@@ -492,7 +492,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
           end
 
           it 'triggers the unsupported content callback' do
-            expect(subject).to have_received(:call).with(contributor)
+            expect(subject).to have_received(:call)
           end
         end
       end
@@ -502,8 +502,8 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
       let(:request_to_receive_message_callback) { spy('request_to_receive_message_callback') }
 
       before do
-        adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::REQUEST_TO_RECEIVE_MESSAGE) do |contributor, message|
-          request_to_receive_message_callback.call(contributor, message)
+        adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::REQUEST_TO_RECEIVE_MESSAGE) do
+          request_to_receive_message_callback.call
         end
       end
 
