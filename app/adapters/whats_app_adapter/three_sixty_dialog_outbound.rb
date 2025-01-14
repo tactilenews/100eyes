@@ -107,7 +107,8 @@ module WhatsAppAdapter
         WhatsAppAdapter::ThreeSixtyDialogOutbound::Text.perform_later(organization_id: message.organization.id,
                                                                       payload: new_request_payload(
                                                                         recipient, message.request
-                                                                      ))
+                                                                      ),
+                                                                      message_id: message.id)
       end
 
       def send_message(recipient, message)
