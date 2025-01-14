@@ -2,23 +2,11 @@
 
 module WhatsAppAdapter
   class ThreeSixtyDialogInbound
-    UNKNOWN_CONTRIBUTOR = :unknown_contributor
-    UNSUPPORTED_CONTENT = :unsupported_content
-    REQUEST_FOR_MORE_INFO = :request_for_more_info
-    REQUEST_TO_RECEIVE_MESSAGE = :request_to_receive_message
-    UNSUBSCRIBE_CONTRIBUTOR = :unsubscribe_contributor
-    RESUBSCRIBE_CONTRIBUTOR = :resubscribe_contributor
     UNSUPPORTED_CONTENT_TYPES = %w[location contacts application sticker].freeze
 
     attr_reader :sender, :text, :message, :organization, :whats_app_message
 
-    def initialize
-      @callbacks = {}
-    end
-
-    def on(callback, &block)
-      @callbacks[callback] = block
-    end
+    def initialize; end
 
     def consume(organization, whats_app_message)
       @organization = organization
@@ -46,18 +34,13 @@ module WhatsAppAdapter
 
     private
 
-    def trigger(event)
-      return unless @callbacks.key?(event)
-
-      @callbacks[event].call
-    end
-
     def initialize_sender
       whats_app_phone_number = whats_app_message[:contacts].first[:wa_id].phony_normalized
       sender = organization.contributors.find_by(whats_app_phone_number: whats_app_phone_number)
 
       unless sender
-        trigger(UNKNOWN_CONTRIBUTOR)
+        exception = WhatsAppAdapter::UnknownContributorError.new(whats_app_phone_number: whats_app_phone_number)
+        ErrorNotifier.report(exception)
         return nil
       end
 
@@ -76,18 +59,22 @@ module WhatsAppAdapter
     end
 
     def handle_ephemeral_data
-      callback =
+      type =
         if request_for_more_info?
-          REQUEST_FOR_MORE_INFO
+          :request_for_more_info
         elsif unsubscribe_text?
-          UNSUBSCRIBE_CONTRIBUTOR
+          :unsubscribe
         elsif resubscribe_text?
-          RESUBSCRIBE_CONTRIBUTOR
+          :resubscribe
         elsif request_to_receive_message?
-          REQUEST_TO_RECEIVE_MESSAGE
+          external_message_id = whats_app_message[:messages].first.dig(:context, :id)
+          :request_to_receive_message
         end
-
-      trigger(callback)
+      WhatsAppAdapter::ThreeSixtyDialog::HandleEphemeralDataJob.perform_later(
+        type: type,
+        contributor_id: sender.id,
+        external_message_id: external_message_id
+      )
     end
 
     def initialize_message
@@ -104,7 +91,7 @@ module WhatsAppAdapter
       return unless unsupported_content?
 
       message.unknown_content = true
-      trigger(UNSUPPORTED_CONTENT)
+      WhatsAppAdapter::ThreeSixtyDialogOutbound.send_unsupported_content_message!(sender, organization)
     end
 
     def initialize_file
@@ -165,10 +152,6 @@ module WhatsAppAdapter
     def request_to_receive_message?
       answer_request_keyword = text.strip.eql?(organization.whats_app_quick_reply_button_text['answer_request'])
       sender.whats_app_message_template_sent_at.present? || answer_request_keyword
-    end
-
-    def quick_reply_response?
-      text.strip.in?(organization.whats_app_quick_reply_button_text.values)
     end
 
     def unsubscribe_text?

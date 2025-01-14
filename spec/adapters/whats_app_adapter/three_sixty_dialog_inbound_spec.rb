@@ -30,7 +30,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
                    type: 'image' }] }
   end
 
-  let(:organization) { create(:organization) }
+  let(:organization) { create(:organization, contact_person: create(:user)) }
   let!(:contributor) { create(:contributor, whats_app_phone_number: phone_number, organization: organization) }
   let(:fetch_file_url) { 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693/some_valid_id' }
   let(:fetch_streamable_file) { 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693/somepath' }
@@ -190,6 +190,40 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
           end
         end
 
+        context 'voice' do
+          let(:voice) do
+            {
+              id: 'some_valid_id',
+              mime_type: 'audio/ogg; codecs=opus',
+              sha256: 'sha256_hash'
+            }
+          end
+          before do
+            first_message = whats_app_message[:messages].first
+            first_message[:type] = 'voice'
+            first_message[:voice] = voice
+          end
+
+          it { is_expected.to be_attached }
+        end
+
+        context 'video' do
+          let(:video) do
+            {
+              id: 'some_valid_id',
+              mime_type: 'video/mp4',
+              sha256: 'sha256_hash'
+            }
+          end
+          before do
+            first_message = whats_app_message[:messages].first
+            first_message[:type] = 'video'
+            first_message[:voice] = video
+          end
+
+          it { is_expected.to be_attached }
+        end
+
         context 'given an unsupported document' do
           subject { message.files }
 
@@ -211,336 +245,240 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
     end
   end
 
-  describe '#on' do
-    describe 'UNKNOWN_CONTRIBUTOR' do
-      let(:unknown_contributor_callback) { spy('unknown_contributor_callback') }
+  describe 'given an unknown sender' do
+    subject do
+      adapter.consume(organization, whats_app_message)
+    end
 
+    before do
+      whats_app_message[:contacts].first[:wa_id] = '4955443322'
+      allow(Sentry).to receive(:capture_exception)
+    end
+
+    it 'it is expected to throw an error to advise us there might be a problem' do
+      subject
+
+      exception = WhatsAppAdapter::UnknownContributorError.new(whats_app_phone_number: '+4955443322')
+      expect(Sentry).to have_received(:capture_exception).with(exception)
+    end
+  end
+
+  describe 'given unsupported content' do
+    subject do
+      adapter.consume(organization, whats_app_message)
+    end
+
+    let(:message) { whats_app_message[:messages].first }
+    let(:unsupported_content_text) do
+      I18n.t('adapter.whats_app.unsupported_content_template', first_name: contributor.first_name,
+                                                               contact_person: contributor.organization.contact_person.name)
+    end
+
+    before do
+      message.delete(:text)
+    end
+
+    context 'document|pdf|' do
+      let(:document) do
+        {
+          filename: 'Comprovante.pdf',
+          id: 'some_valid_id',
+          mime_type: 'application/pdf',
+          sha256: 'sha256_hash'
+        }
+      end
       before do
-        adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::UNKNOWN_CONTRIBUTOR) do
-          unknown_contributor_callback.call
-        end
+        message[:type] = 'document'
+        message[:document] = document
       end
 
-      subject do
-        adapter.consume(organization, whats_app_message)
-        unknown_contributor_callback
-      end
-
-      describe 'if the sender is a contributor ' do
-        it { should_not have_received(:call) }
-      end
-
-      describe 'if the sender is unknown' do
-        before { whats_app_message[:contacts].first[:wa_id] = '4955443322' }
-        it { should have_received(:call) }
+      it 'it is expected to send a message to the contributor to inform them we do not accept the content' do
+        expect { subject }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(
+          organization_id: organization.id,
+          payload: hash_including(text: { body: unsupported_content_text })
+        )
       end
     end
 
-    describe 'UNSUPPORTED_CONTENT' do
-      let(:unsupported_content_callback) { spy('unsupported_content_callback') }
-
+    context 'document|docx|' do
+      let(:document) do
+        {
+          filename: 'price-list.docx',
+          id: 'some_valid_id',
+          mime_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          sha256: 'sha256_hash'
+        }
+      end
       before do
-        adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::UNSUPPORTED_CONTENT) do
-          unsupported_content_callback.call
-        end
+        message[:type] = 'document'
+        message[:document] = document
       end
 
-      subject do
-        adapter.consume(organization, whats_app_message)
-        unsupported_content_callback
-      end
-
-      describe 'supported content' do
-        context 'if the message is a plaintext message' do
-          it { should_not have_received(:call) }
-        end
-
-        context 'files' do
-          let(:message) { whats_app_message[:messages].first }
-
-          before do
-            message.delete(:text)
-            stub_request(:get, fetch_file_url).to_return(status: 200, body: { url: 'https://someurl.com/somepath' }.to_json)
-            stub_request(:get, fetch_streamable_file).to_return(status: 200, body: 'some_streamable_file')
-          end
-
-          context 'image' do
-            let(:image) do
-              {
-                id: 'some_valid_id',
-                mime_type: 'image/jpeg',
-                sha256: 'sha256_hash'
-              }
-            end
-
-            before do
-              message[:type] = 'image'
-              message[:image] = image
-            end
-
-            it { should_not have_received(:call) }
-          end
-
-          context 'voice' do
-            let(:voice) do
-              {
-                id: 'some_valid_id',
-                mime_type: 'audio/ogg; codecs=opus',
-                sha256: 'sha256_hash'
-              }
-            end
-            before do
-              message[:type] = 'voice'
-              message[:voice] = voice
-            end
-
-            it { should_not have_received(:call) }
-          end
-
-          context 'video' do
-            let(:video) do
-              {
-                id: 'some_valid_id',
-                mime_type: 'video/mp4',
-                sha256: 'sha256_hash'
-              }
-            end
-            before do
-              message[:type] = 'video'
-              message[:video] = video
-            end
-
-            it { should_not have_received(:call) }
-          end
-
-          context 'audio' do
-            let(:audio) do
-              {
-                id: 'some_valid_id',
-                mime_type: 'audio/ogg',
-                sha256: 'sha256_hash'
-              }
-            end
-            before do
-              message[:type] = 'audio'
-              message[:audio] = audio
-            end
-
-            it { should_not have_received(:call) }
-          end
-
-          context 'document' do
-            context 'image' do
-              let(:document) do
-                {
-                  filename: 'animated-cat-image-0056.gif',
-                  id: 'some_valid_id',
-                  mime_type: 'image/gif',
-                  sha256: 'sha256_hash'
-                }
-              end
-
-              before do
-                message[:type] = 'document'
-                message[:document] = document
-              end
-
-              it { should_not have_received(:call) }
-            end
-
-            context 'audio' do
-              let(:document) do
-                {
-                  filename: 'AUD-12345.opus',
-                  id: 'some_valid_id',
-                  mime_type: 'audio/ogg',
-                  sha256: 'sha256_hash'
-                }
-              end
-
-              before do
-                message[:type] = 'document'
-                message[:document] = document
-              end
-
-              it { should_not have_received(:call) }
-            end
-
-            context 'video' do
-              let(:document) do
-                {
-                  filename: 'VID_12345.mp4',
-                  id: 'some_valid_id',
-                  mime_type: 'video/mp4',
-                  sha256: 'sha256_hash'
-                }
-              end
-
-              before do
-                message[:type] = 'document'
-                message[:document] = document
-              end
-
-              it { should_not have_received(:call) }
-            end
-          end
-        end
-      end
-
-      describe 'unsupported content' do
-        let(:message) { whats_app_message[:messages].first }
-
-        before do
-          message.delete(:text)
-        end
-
-        context 'document|pdf|' do
-          let(:document) do
-            {
-              filename: 'Comprovante.pdf',
-              id: 'some_valid_id',
-              mime_type: 'application/pdf',
-              sha256: 'sha256_hash'
-            }
-          end
-          before do
-            message[:type] = 'document'
-            message[:document] = document
-          end
-
-          it { should have_received(:call) }
-        end
-
-        context 'document|docx|' do
-          let(:document) do
-            {
-              filename: 'price-list.docx',
-              id: 'some_valid_id',
-              mime_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-              sha256: 'sha256_hash'
-            }
-          end
-          before do
-            message[:type] = 'document'
-            message[:document] = document
-          end
-
-          it { should have_received(:call) }
-        end
-
-        context 'location' do
-          let(:location) do
-            {
-              latitude: '22.9871',
-              longitude: '43.2048'
-            }
-          end
-          before do
-            message[:type] = 'location'
-            message[:location] = location
-          end
-
-          it { should have_received(:call) }
-        end
-
-        context 'contacts' do
-          let(:contacts) do
-            {
-              contacts: [
-                { addresses: [],
-                  emails: [],
-                  ims: [],
-                  name: {
-                    first_name: '360dialog',
-                    formatted_name: '360dialog Sandbox',
-                    last_name: 'Sandbox'
-                  },
-                  org: {},
-                  phones: [
-                    { phone: '+49 30 609859535',
-                      type: 'Mobile',
-                      wa_id: '4930609859535' }
-                  ], urls: [] }
-              ],
-              from: '4915143416265',
-              id: 'some_valid_id',
-              timestamp: '1692123428',
-              type: 'contacts'
-            }
-          end
-          before do
-            message[:type] = 'contacts'
-            message[:contacts] = contacts
-          end
-
-          it { should have_received(:call) }
-        end
-
-        context 'sticker' do
-          let(:sticker) do
-            {
-              mime_type: 'image/webp',
-              sha256: 'sha256_hash',
-              id: 'some_valid_id',
-              animated: false
-            }
-          end
-
-          before do
-            message[:type] = 'sticker'
-            message[:sticker] = sticker
-          end
-
-          it 'triggers the unsupported content callback' do
-            expect(subject).to have_received(:call)
-          end
-        end
+      it 'it is expected to send a message to the contributor to inform them we do not accept the content' do
+        expect { subject }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(
+          organization_id: organization.id,
+          payload: hash_including(text: { body: unsupported_content_text })
+        )
       end
     end
 
-    describe 'REQUEST_TO_RECEIVE_MESSAGE' do
-      let(:request_to_receive_message_callback) { spy('request_to_receive_message_callback') }
+    context 'location' do
+      let(:location) do
+        {
+          latitude: '22.9871',
+          longitude: '43.2048'
+        }
+      end
+      before do
+        message[:type] = 'location'
+        message[:location] = location
+      end
+
+      it 'it is expected to send a message to the contributor to inform them we do not accept the content' do
+        expect { subject }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(
+          organization_id: organization.id,
+          payload: hash_including(text: { body: unsupported_content_text })
+        )
+      end
+    end
+
+    context 'contacts' do
+      let(:contacts) do
+        {
+          contacts: [
+            { addresses: [],
+              emails: [],
+              ims: [],
+              name: {
+                first_name: '360dialog',
+                formatted_name: '360dialog Sandbox',
+                last_name: 'Sandbox'
+              },
+              org: {},
+              phones: [
+                { phone: '+49 30 609859535',
+                  type: 'Mobile',
+                  wa_id: '4930609859535' }
+              ], urls: [] }
+          ],
+          from: '4915143416265',
+          id: 'some_valid_id',
+          timestamp: '1692123428',
+          type: 'contacts'
+        }
+      end
+      before do
+        message[:type] = 'contacts'
+        message[:contacts] = contacts
+      end
+
+      it 'it is expected to send a message to the contributor to inform them we do not accept the content' do
+        expect { subject }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(
+          organization_id: organization.id,
+          payload: hash_including(text: { body: unsupported_content_text })
+        )
+      end
+    end
+
+    context 'sticker' do
+      let(:sticker) do
+        {
+          mime_type: 'image/webp',
+          sha256: 'sha256_hash',
+          id: 'some_valid_id',
+          animated: false
+        }
+      end
 
       before do
-        adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::REQUEST_TO_RECEIVE_MESSAGE) do
-          request_to_receive_message_callback.call
-        end
+        message[:type] = 'sticker'
+        message[:sticker] = sticker
       end
 
-      subject do
-        adapter.consume(organization, whats_app_message)
-        request_to_receive_message_callback
+      it 'it is expected to send a message to the contributor to inform them we do not accept the content' do
+        expect { subject }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(
+          organization_id: organization.id,
+          payload: hash_including(text: { body: unsupported_content_text })
+        )
       end
+    end
+  end
 
+  describe 'given a request to receive the message' do
+    subject do
+      adapter.consume(organization, whats_app_message)
+    end
+
+    before do
+      create(:message, external_id: 'some_external_id')
+      whats_app_message[:messages].first[:context] = { id: 'some_external_id' }
+    end
+
+    describe 'with no WhatsApp template sent' do
+      it 'does not schedule a job' do
+        expect { subject }.not_to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::HandleEphemeralDataJob)
+      end
+    end
+
+    describe 'with a WhatsApp template sent' do
+      before { contributor.update!(whats_app_message_template_sent_at: 1.hour.ago) }
+
+      it 'is expected to schedule a job to handle the ephemeral data' do
+        expect { subject }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::HandleEphemeralDataJob).with(
+          type: :request_to_receive_message,
+          contributor_id: contributor.id,
+          external_message_id: 'some_external_id'
+        )
+      end
+    end
+
+    describe 'sending answer request keyword' do
       before do
-        create(:message, external_id: 'some_external_id')
-        whats_app_message[:messages].first[:context] = { id: 'some_external_id' }
+        answer_request_keyword = organization.whats_app_quick_reply_button_text['answer_request']
+        whats_app_message[:messages].first[:text][:body] = answer_request_keyword
       end
 
-      describe 'with no WhatsApp template sent' do
-        it 'does not trigger the callback' do
-          expect(subject).not_to have_received(:call)
-        end
+      it 'is expected to schedule a job  to handle the ephemeral data' do
+        expect { subject }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::HandleEphemeralDataJob).with(
+          type: :request_to_receive_message,
+          contributor_id: contributor.id,
+          external_message_id: 'some_external_id'
+        )
       end
+    end
+  end
 
-      describe 'with a WhatsApp template sent' do
-        before { contributor.update!(whats_app_message_template_sent_at: 1.hour.ago) }
+  describe 'given a request to unsubscribe' do
+    subject do
+      adapter.consume(organization, whats_app_message)
+    end
 
-        it 'triggered the callback' do
-          expect(subject).to have_received(:call)
-        end
-      end
+    before do
+      whats_app_message[:messages].first[:text] = { body: 'Abbestellen' }
+    end
 
-      describe 'sending answer request keyword' do
-        before do
-          answer_request_keyword = organization.whats_app_quick_reply_button_text['answer_request']
-          whats_app_message[:messages].first[:text][:body] = answer_request_keyword
-        end
+    it 'is expected to schedule a job  to handle the ephemeral data' do
+      expect { subject }.not_to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::HandleEphemeralDataJob).with(
+        type: :unsubscribe,
+        contributor_id: contributor.id
+      )
+    end
+  end
 
-        it 'triggered the callback' do
-          expect(subject).to have_received(:call)
-        end
-      end
+  describe 'given a request to resubscribe' do
+    subject do
+      adapter.consume(organization, whats_app_message)
+    end
+
+    before do
+      whats_app_message[:messages].first[:text] = { body: 'Bestellen' }
+    end
+
+    it 'is expected to schedule a job  to handle the ephemeral data' do
+      expect { subject }.not_to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::HandleEphemeralDataJob).with(
+        type: :resubscribe,
+        contributor_id: contributor.id
+      )
     end
   end
 end
