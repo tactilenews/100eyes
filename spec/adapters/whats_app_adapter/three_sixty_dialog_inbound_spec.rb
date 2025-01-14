@@ -530,6 +530,17 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
           expect(subject).to have_received(:call)
         end
       end
+
+      describe 'sending answer request keyword' do
+        before do
+          answer_request_keyword = organization.whats_app_quick_reply_button_text['answer_request']
+          whats_app_message[:messages].first[:text][:body] = answer_request_keyword
+        end
+
+        it 'triggered the callback' do
+          expect(subject).to have_received(:call)
+        end
+      end
     end
   end
 end
