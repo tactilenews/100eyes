@@ -32,11 +32,11 @@ class Organization < ApplicationRecord
 
   def channels_onboarding_allowed
     {
-      email: email_onboarding_allowed?,
+      whats_app: whats_app_onboarding_allowed?,
       signal: signal_onboarding_allowed?,
       telegram: telegram_onboarding_allowed?,
       threema: threema_onboarding_allowed?,
-      whats_app: whats_app_onboarding_allowed?
+      email: email_onboarding_allowed?
     }.select { |_k, v| v }.keys
   end
 
