@@ -80,7 +80,7 @@ module WhatsAppAdapter
     def initialize_message
       message = Message.new(text: text, sender: sender)
       message.raw_data.attach(
-        io: StringIO.new(JSON.generate(text)),
+        io: StringIO.new(JSON.generate(whats_app_message)),
         filename: 'whats_app_message.json',
         content_type: 'application/json'
       )
