@@ -10,6 +10,14 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound::Text do
   let(:text) { 'Some text' }
   let(:message_id) { nil }
 
+  before do
+    allow(ENV).to receive(:fetch).with(
+      'THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693'
+    ).and_return('https://waba-v2.360dialog.io')
+    allow(ENV).to receive(:fetch).with('ATTR_ENCRYPTED_KEY',
+                                       nil).and_return(Base64.encode64(OpenSSL::Cipher.new('aes-256-gcm').random_key))
+  end
+
   describe 'given no contributor' do
     it 'is expected to throw an ActiveRecord::RecordNotFound error' do
       expect { subject.call }.to raise_error(ActiveRecord::RecordNotFound)
