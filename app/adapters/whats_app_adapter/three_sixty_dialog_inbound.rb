@@ -49,7 +49,7 @@ module WhatsAppAdapter
 
     def initialize_text
       message = whats_app_message[:messages].first
-      message[:text]&.dig(:body) || message[:button]&.dig(:text) || supported_file(message)&.dig(:caption)
+      message[:text]&.dig(:body) || message[:button]&.dig(:text)
     end
 
     def ephemeral_data?
@@ -95,12 +95,13 @@ module WhatsAppAdapter
     end
 
     def initialize_file
-      message = whats_app_message[:messages].first
-      return [] unless file_type_supported?(message)
+      message_payload = whats_app_message[:messages].first
+      return [] unless file_type_supported?(message_payload)
 
       file = Message::File.new
 
-      message_file = supported_file(message)
+      message_file = supported_file(message_payload)
+      caption = message_file[:caption]
       content_type = message_file[:mime_type]
       file_id = message_file[:id]
       filename = message_file[:filename] || file_id
@@ -112,6 +113,8 @@ module WhatsAppAdapter
         content_type: content_type,
         identify: false
       )
+
+      message.text = caption if caption
 
       [file]
     end
