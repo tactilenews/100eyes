@@ -79,38 +79,22 @@ module WhatsAppAdapter
         end
       end
 
-      def new_request_payload
+      def request_payload
         template_name = "new_request_#{time_of_day}_#{rand(1..3)}"
-        template_payload(template_name).merge({
-                                                components: [
-                                                  {
-                                                    type: 'body',
-                                                    parameters: [
-                                                      {
-                                                        type: 'text',
-                                                        text: contributor.first_name
-                                                      },
-                                                      {
-                                                        type: 'text',
-                                                        text: message.request.title
-                                                      }
-                                                    ]
-                                                  }
-                                                ]
-                                              })
+        template_payload(template_name).deep_merge(template_components)
       end
 
       def template_payload(name)
-        base_payload.merge({
-                             type: 'template',
-                             template: {
-                               language: {
-                                 policy: 'deterministic',
-                                 code: 'de'
-                               },
-                               name: name
-                             }
-                           })
+        base_payload.merge(
+          type: 'template',
+          template: {
+            language: {
+              policy: 'deterministic',
+              code: 'de'
+            },
+            name: name
+          }
+        )
       end
 
       def base_payload
@@ -121,11 +105,37 @@ module WhatsAppAdapter
         }
       end
 
+      def template_components
+        {
+          template: {
+            components: [
+              {
+                type: 'body',
+                parameters: [
+                  {
+                    type: 'text',
+                    text: contributor.first_name
+                  },
+                  {
+                    type: 'text',
+                    text: message.request.title
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      end
+
       def handle_response(response)
         case response
         when Net::HTTPSuccess
           external_id = JSON.parse(response.body)['messages'].first['id']
-          message&.update!(external_id: external_id)
+          if type.eql?(:request_template)
+            Message::WhatsAppTemplate.create!(message_id: message.id, external_id: external_id)
+          else
+            message&.update!(external_id: external_id)
+          end
         when Net::HTTPClientError
           exception = WhatsAppAdapter::ThreeSixtyDialogError.new(error_code: response.code, message: response.body)
           context = { message_id: message&.id, recipient: payload[:to] }
