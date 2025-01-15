@@ -423,27 +423,29 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
       it 'does not schedule a job' do
         expect { subject }.not_to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::HandleEphemeralDataJob)
       end
+
+      describe 'but sending the answer request keyword' do
+        before do
+          organization.whats_app_quick_reply_button_text['answer_request'] = 'Antworten'
+          organization.save
+
+          whats_app_message[:messages].first[:text][:body] = 'Antworten'
+        end
+
+        it 'is expected to schedule a job  to handle the ephemeral data' do
+          expect { subject }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::HandleEphemeralDataJob).with(
+            type: :request_to_receive_message,
+            contributor_id: contributor.id,
+            external_message_id: 'some_external_id'
+          )
+        end
+      end
     end
 
     describe 'with a WhatsApp template sent' do
       before { contributor.update!(whats_app_message_template_sent_at: 1.hour.ago) }
 
       it 'is expected to schedule a job to handle the ephemeral data' do
-        expect { subject }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::HandleEphemeralDataJob).with(
-          type: :request_to_receive_message,
-          contributor_id: contributor.id,
-          external_message_id: 'some_external_id'
-        )
-      end
-    end
-
-    describe 'sending answer request keyword' do
-      before do
-        answer_request_keyword = organization.whats_app_quick_reply_button_text['answer_request']
-        whats_app_message[:messages].first[:text][:body] = answer_request_keyword
-      end
-
-      it 'is expected to schedule a job  to handle the ephemeral data' do
         expect { subject }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::HandleEphemeralDataJob).with(
           type: :request_to_receive_message,
           contributor_id: contributor.id,
