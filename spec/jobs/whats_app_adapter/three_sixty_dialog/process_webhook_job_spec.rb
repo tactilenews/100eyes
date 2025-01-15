@@ -178,7 +178,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
             let(:text) { previous_message.text }
 
             before do
-              previous_message
+              whats_app_template
               components[:messages].first[:context] = { id: 'some_external_id' }
             end
 
