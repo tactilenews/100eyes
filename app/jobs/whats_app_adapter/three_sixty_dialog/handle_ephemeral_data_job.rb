@@ -26,7 +26,7 @@ module WhatsAppAdapter
 
       def handle_request_for_more_info
         contributor.update!(whats_app_message_template_responded_at: Time.current)
-        WhatsAppAdapter::ThreeSixtyDialogOutbound.send_more_info_message!(contributor, organization)
+        WhatsAppAdapter::ThreeSixtyDialogOutbound.send_more_info_message!(contributor)
       end
 
       def handle_unsubscribe

@@ -99,7 +99,9 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
                 expect do
                   subject.call
                 end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).on_queue('default').with(
-                  text_payload.merge({ message_id: latest_message.id })
+                  contributor_id: contributor.id,
+                  type: :text,
+                  message_id: latest_message.id
                 )
               end
             end
@@ -157,7 +159,9 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
                       expect do
                         subject.call
                       end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).on_queue('default').with(
-                        text_payload.merge({ message_id: latest_message.id })
+                        contributor_id: contributor.id,
+                        type: :text,
+                        message_id: latest_message.id
                       )
                     end
                   end
@@ -168,8 +172,9 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
 
           describe 'with an external id' do
             let(:previous_message) do
-              create(:message, :outbound, request: request, recipient: contributor, created_at: 2.days.ago, external_id: 'some_external_id')
+              create(:message, :outbound, request: request, recipient: contributor, created_at: 2.days.ago)
             end
+            let(:whats_app_template) { create(:message_whats_app_template, message: previous_message, external_id: 'some_external_id') }
             let(:text) { previous_message.text }
 
             before do
@@ -182,7 +187,9 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
                 expect do
                   subject.call
                 end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).on_queue('default').with(
-                  text_payload.merge({ message_id: previous_message.id })
+                  contributor_id: contributor.id,
+                  type: :text,
+                  message_id: previous_message.id
                 )
               end
             end
@@ -209,15 +216,21 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
           perform_enqueued_jobs(only: WhatsAppAdapter::ThreeSixtyDialog::HandleEphemeralDataJob) do
             expect do
               subject.call
-            end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).on_queue('default').with(text_payload)
+            end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).on_queue('default').with(
+              contributor_id: contributor.id,
+              type: :text,
+              text: text
+            )
           end
         end
 
         context 'does not enqueue a job' do
-          let(:text) { latest_message }
-
           it 'to send the latest received message' do
-            expect { subject.call }.not_to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(text_payload)
+            expect { subject.call }.not_to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(
+              contributor_id: contributor.id,
+              type: :text,
+              message_id: latest_message.id
+            )
           end
         end
       end
@@ -464,7 +477,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
         context 'unsupported content' do
           before { organization.update!(contact_person: contact_person) }
           let(:contact_person) { create(:user) }
-          let(:text) do
+          let(:unsupported_content_text) do
             I18n.t('adapter.whats_app.unsupported_content_template', first_name: contributor.first_name,
                                                                      contact_person: contributor.organization.contact_person.name)
           end
@@ -484,7 +497,11 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
             end
 
             it 'sends a message to contributor to let them know the message type is not supported' do
-              expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(text_payload)
+              expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(
+                contributor_id: contributor.id,
+                type: :text,
+                text: unsupported_content_text
+              )
             end
           end
 
@@ -501,7 +518,11 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
             end
 
             it 'sends a message to contributor to let them know the message type is not supported' do
-              expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(text_payload)
+              expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(
+                contributor_id: contributor.id,
+                type: :text,
+                text: unsupported_content_text
+              )
             end
           end
 
@@ -536,7 +557,11 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
             end
 
             it 'sends a message to contributor to let them know the message type is not supported' do
-              expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(text_payload)
+              expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(
+                contributor_id: contributor.id,
+                type: :text,
+                text: unsupported_content_text
+              )
             end
           end
 
@@ -556,7 +581,11 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
             end
 
             it 'sends a message to contributor to let them know the message type is not supported' do
-              expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(text_payload)
+              expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(
+                contributor_id: contributor.id,
+                type: :text,
+                text: unsupported_content_text
+              )
             end
           end
         end

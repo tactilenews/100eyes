@@ -11,17 +11,6 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound::File do
       create(:message, request: create(:request, whats_app_external_file_ids: ['883247393974022']), organization: organization,
                        recipient: create(:contributor, whats_app_phone_number: '+4915123456789', email: nil))
     end
-    let(:text_payload) do
-      {
-        messaging_product: 'whatsapp',
-        recipient_type: 'individual',
-        to: message.recipient.whats_app_phone_number.split('+').last,
-        type: 'text',
-        text: {
-          body: message.text
-        }
-      }
-    end
 
     before do
       allow(ENV).to receive(:fetch).with('THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT',
@@ -41,8 +30,8 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound::File do
 
       it 'schedules a text message to be sent separately' do
         expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(
-          organization_id: organization.id,
-          payload: text_payload,
+          contributor_id: message.recipient.id,
+          type: :text,
           message_id: message.id
         )
       end
@@ -56,8 +45,8 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound::File do
 
       it 'schedules a text message to be sent separately', vcr: { cassette_name: 'three_sixty_dialog_send_files' } do
         expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(
-          organization_id: organization.id,
-          payload: text_payload,
+          contributor_id: message.recipient.id,
+          type: :text,
           message_id: message.id
         )
       end

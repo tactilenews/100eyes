@@ -294,8 +294,9 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
 
       it 'it is expected to send a message to the contributor to inform them we do not accept the content' do
         expect { subject }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(
-          organization_id: organization.id,
-          payload: hash_including(text: { body: unsupported_content_text })
+          contributor_id: contributor.id,
+          type: :text,
+          text: unsupported_content_text
         )
       end
     end
@@ -316,8 +317,9 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
 
       it 'it is expected to send a message to the contributor to inform them we do not accept the content' do
         expect { subject }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(
-          organization_id: organization.id,
-          payload: hash_including(text: { body: unsupported_content_text })
+          contributor_id: contributor.id,
+          type: :text,
+          text: unsupported_content_text
         )
       end
     end
@@ -336,8 +338,9 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
 
       it 'it is expected to send a message to the contributor to inform them we do not accept the content' do
         expect { subject }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(
-          organization_id: organization.id,
-          payload: hash_including(text: { body: unsupported_content_text })
+          contributor_id: contributor.id,
+          type: :text,
+          text: unsupported_content_text
         )
       end
     end
@@ -374,8 +377,9 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
 
       it 'it is expected to send a message to the contributor to inform them we do not accept the content' do
         expect { subject }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(
-          organization_id: organization.id,
-          payload: hash_including(text: { body: unsupported_content_text })
+          contributor_id: contributor.id,
+          type: :text,
+          text: unsupported_content_text
         )
       end
     end
@@ -397,8 +401,9 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
 
       it 'it is expected to send a message to the contributor to inform them we do not accept the content' do
         expect { subject }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(
-          organization_id: organization.id,
-          payload: hash_including(text: { body: unsupported_content_text })
+          contributor_id: contributor.id,
+          type: :text,
+          text: unsupported_content_text
         )
       end
     end
@@ -410,7 +415,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
     end
 
     before do
-      create(:message, external_id: 'some_external_id')
+      create(:message)
       whats_app_message[:messages].first[:context] = { id: 'some_external_id' }
     end
 

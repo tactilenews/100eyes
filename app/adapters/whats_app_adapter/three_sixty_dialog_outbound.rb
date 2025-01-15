@@ -14,11 +14,10 @@ module WhatsAppAdapter
         end
       end
 
-      def send_welcome_message!(contributor)
+      def send_welcome_message!(contributor, organization)
         return unless contributor_can_receive_messages?(contributor)
 
         if freeform_message_permitted?(contributor)
-          organization = contributor.organization
           welcome_message = ["*#{organization.onboarding_success_heading}*", organization.onboarding_success_text].join("\n\n")
           WhatsAppAdapter::ThreeSixtyDialogOutbound::Text.perform_later(contributor_id: contributor.id, type: :text,
                                                                         text: welcome_message)
@@ -39,10 +38,10 @@ module WhatsAppAdapter
         return unless contributor_can_receive_messages?(contributor)
 
         WhatsAppAdapter::ThreeSixtyDialogOutbound::Text.perform_later(contributor_id: contributor.id, type: :text,
-                                                                      text: organization.whats_app_more_info_message)
+                                                                      text: contributor.organization.whats_app_more_info_message)
       end
 
-      def send_unsubsribed_successfully_message!(contributor)
+      def send_unsubsribed_successfully_message!(contributor, _organization)
         return unless contributor_can_receive_messages?(contributor)
 
         text = [I18n.t('adapter.shared.unsubscribe.successful'),
@@ -51,11 +50,11 @@ module WhatsAppAdapter
         WhatsAppAdapter::ThreeSixtyDialogOutbound::Text.perform_later(contributor_id: contributor.id, type: :text, text: text)
       end
 
-      def send_resubscribe_error_message!(contributor)
+      def send_resubscribe_error_message!(contributor, _organization)
         return unless contributor_can_receive_messages?(contributor)
 
         text = I18n.t('adapter.shared.resubscribe.failure')
-        WhatsAppAdapter::ThreeSixtyDialogOutbound::Text.perform_later(contributor_id: organization.id, type: :text, text: text)
+        WhatsAppAdapter::ThreeSixtyDialogOutbound::Text.perform_later(contributor_id: contributor.id, type: :text, text: text)
       end
 
       private
@@ -73,7 +72,7 @@ module WhatsAppAdapter
       end
 
       def send_message_template(message)
-        contributor.update(whats_app_message_template_sent_at: Time.current)
+        message.recipient.update(whats_app_message_template_sent_at: Time.current)
         WhatsAppAdapter::ThreeSixtyDialogOutbound::Text.perform_later(contributor_id: message.recipient.id,
                                                                       type: :request_template,
                                                                       message_id: message.id)

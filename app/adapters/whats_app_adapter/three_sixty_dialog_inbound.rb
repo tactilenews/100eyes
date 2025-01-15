@@ -91,7 +91,7 @@ module WhatsAppAdapter
       return unless unsupported_content?
 
       message.unknown_content = true
-      WhatsAppAdapter::ThreeSixtyDialogOutbound.send_unsupported_content_message!(sender, organization)
+      WhatsAppAdapter::ThreeSixtyDialogOutbound.send_unsupported_content_message!(sender)
     end
 
     def initialize_file
