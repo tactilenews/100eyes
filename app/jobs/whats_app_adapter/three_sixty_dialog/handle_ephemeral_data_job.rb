@@ -41,7 +41,7 @@ module WhatsAppAdapter
         contributor.update!(whats_app_message_template_responded_at: Time.current, whats_app_message_template_sent_at: nil)
         if external_message_id
           whats_app_template = Message::WhatsAppTemplate.find_by(external_id: external_message_id)
-          message = whats_app_template.message
+          message = whats_app_template&.message
         end
         WhatsAppAdapter::ThreeSixtyDialogOutbound.send!(message || contributor.received_messages.first)
       end
