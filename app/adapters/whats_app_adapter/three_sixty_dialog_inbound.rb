@@ -4,17 +4,19 @@ module WhatsAppAdapter
   class ThreeSixtyDialogInbound
     UNSUPPORTED_CONTENT_TYPES = %w[location contacts application sticker].freeze
 
-    attr_reader :sender, :text, :message, :organization, :whats_app_message
+    attr_reader :sender, :text, :message, :organization, :whats_app_payload, :message_payload, :quote_reply_message_id
 
     def initialize; end
 
-    def consume(organization, whats_app_message)
+    def consume(organization, whats_app_payload)
       @organization = organization
-      @whats_app_message = whats_app_message
+      @whats_app_payload = whats_app_payload
 
       @sender = initialize_sender
       return unless @sender
 
+      @message_payload = whats_app_payload[:messages].first
+      @quote_reply_message_id = message_payload.dig(:context, :id)
       @text = initialize_text
 
       if ephemeral_data?
@@ -23,6 +25,7 @@ module WhatsAppAdapter
       end
 
       @message = initialize_message
+      @message.request = initialize_request
 
       @unsupported_content = initialize_unsupported_content
 
@@ -35,7 +38,7 @@ module WhatsAppAdapter
     private
 
     def initialize_sender
-      whats_app_phone_number = whats_app_message[:contacts].first[:wa_id].phony_normalized
+      whats_app_phone_number = whats_app_payload[:contacts].first[:wa_id].phony_normalized
       sender = organization.contributors.find_by(whats_app_phone_number: whats_app_phone_number)
 
       unless sender
@@ -48,8 +51,7 @@ module WhatsAppAdapter
     end
 
     def initialize_text
-      message = whats_app_message[:messages].first
-      message[:text]&.dig(:body) || message[:button]&.dig(:text)
+      message_payload[:text]&.dig(:body) || message_payload[:button]&.dig(:text)
     end
 
     def ephemeral_data?
@@ -67,24 +69,28 @@ module WhatsAppAdapter
         elsif resubscribe_text?
           :resubscribe
         elsif request_to_receive_message?
-          external_message_id = whats_app_message[:messages].first.dig(:context, :id)
           :request_to_receive_message
         end
       WhatsAppAdapter::ThreeSixtyDialog::HandleEphemeralDataJob.perform_later(
         type: type,
         contributor_id: sender.id,
-        external_message_id: external_message_id
+        external_message_id: quote_reply_message_id
       )
     end
 
     def initialize_message
       message = Message.new(text: text, sender: sender)
       message.raw_data.attach(
-        io: StringIO.new(JSON.generate(whats_app_message)),
-        filename: 'whats_app_message.json',
+        io: StringIO.new(JSON.generate(whats_app_payload)),
+        filename: 'whats_app_payload.json',
         content_type: 'application/json'
       )
       message
+    end
+
+    def initialize_request
+      reply_to_message = Message.find_by(external_id: quote_reply_message_id)
+      reply_to_message&.request
     end
 
     def initialize_unsupported_content
@@ -95,7 +101,6 @@ module WhatsAppAdapter
     end
 
     def initialize_file
-      message_payload = whats_app_message[:messages].first
       return [] unless file_type_supported?(message_payload)
 
       file = Message::File.new
@@ -130,15 +135,14 @@ module WhatsAppAdapter
     end
 
     def unsupported_content?
-      message = whats_app_message[:messages].first
-      return unless message
+      return unless message_payload
 
-      unsupported_content = message.keys.any? do |key|
+      unsupported_content = message_payload.keys.any? do |key|
         UNSUPPORTED_CONTENT_TYPES.include?(key.to_s)
       end || UNSUPPORTED_CONTENT_TYPES.any? do |type|
-        message[:document]&.dig(:mime_type) && message[:document][:mime_type].include?(type)
+        message_payload[:document]&.dig(:mime_type) && message_payload[:document][:mime_type].include?(type)
       end
-      errors = message[:errors]
+      errors = message_payload[:errors]
       return unsupported_content unless errors
 
       error_indicating_unsupported_content(errors)

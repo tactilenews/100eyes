@@ -586,10 +586,80 @@ RSpec.describe Contributor, type: :model do
         end
       end
 
-      describe 'givena a contributor with signal_uuid' do
+      describe 'given a contributor with signal_uuid' do
         let!(:contributor) { create(:contributor, signal_uuid: 'valid_uuid') }
 
         before { signal_message[:envelope][:sourceUuid] = 'valid_uuid' }
+      end
+    end
+
+    describe 'given a WhatsApp::ThreeSixtyDialogInbound' do
+      let(:whats_app_message) do
+        { contacts: [{ profile: { name: 'Matthew Rider' },
+                       wa_id: '491511234567' }],
+          messages: [{ from: '491511234567',
+                       id: 'some_valid_id',
+                       text: { body: 'Hey' },
+                       timestamp: '1692118778',
+                       type: 'text' }] }
+      end
+      subject do
+        lambda do
+          message_inbound_adapter = WhatsAppAdapter::ThreeSixtyDialogInbound.new
+          message_inbound_adapter.consume(organization, whats_app_message) do |message|
+            message.contributor.reply(message_inbound_adapter)
+          end
+        end
+      end
+
+      let(:organization) { create(:organization, whats_app_server_phone_number: '+4912345678', users_count: 2) }
+      let(:phone_number) { '+491511234567' }
+      let!(:contributor) do
+        create(:contributor, whats_app_phone_number: phone_number, organization: organization)
+      end
+
+      describe 'given no request' do
+        it 'is not expected to raise an error' do
+          expect { subject.call }.not_to raise_error
+        end
+
+        it 'is not expected to create a message' do
+          expect { subject.call }.not_to(change { Message.count })
+        end
+      end
+
+      describe 'given a recent request' do
+        before { the_request }
+
+        it 'creates a message record' do
+          expect { subject.call }.to (change { Message.count }).from(0).to(1)
+        end
+
+        context 'ActivityNotifications' do
+          let!(:admin) { create(:user, admin: true) }
+
+          it_behaves_like 'an ActivityNotification', 'MessageReceived', 4
+        end
+      end
+
+      describe 'given a contributor quote replies a previous request' do
+        let(:whats_app_template) do
+          create(:message, request: previous_request, external_id: 'some_valid_id')
+        end
+        let(:previous_request) { create(:request, organization: organization) }
+
+        before do
+          whats_app_template
+          the_request
+          whats_app_message[:messages].first[:context] = { id: 'some_valid_id' }
+        end
+
+        it 'assigns the previous request to the inbound message' do
+          subject.call
+
+          inbound_message = Message.find_by(sender: contributor, text: 'Hey')
+          expect(inbound_message.request).to eq(previous_request)
+        end
       end
     end
   end

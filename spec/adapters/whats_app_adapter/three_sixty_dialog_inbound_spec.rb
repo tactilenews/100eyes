@@ -102,6 +102,40 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
       it { is_expected.to eq(contributor) }
     end
 
+    describe '#request' do
+      subject { message.request }
+
+      context 'given no quote reply id present in message payload' do
+        it 'is expected to be nil' do
+          expect(subject).to be(nil)
+        end
+      end
+
+      describe 'give a quote reply' do
+        context 'with no message record' do
+          before { whats_app_message[:messages].first[:context] = { id: 'you_cant_find_me' } }
+
+          it 'is expected to be nil' do
+            expect(subject).to be(nil)
+          end
+        end
+
+        context 'with an associated message record' do
+          let(:outbound_message) do
+            create(:message, :outbound, recipient: contributor, external_id: 'external_id')
+          end
+          before do
+            outbound_message
+            whats_app_message[:messages].first[:context] = { id: 'external_id' }
+          end
+
+          it "is expected to be the message's request" do
+            expect(subject).to eq(message.request)
+          end
+        end
+      end
+    end
+
     describe '|message|files' do
       let(:whats_app_message) { whats_app_message_with_attachment }
 
