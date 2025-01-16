@@ -80,8 +80,12 @@ module WhatsAppAdapter
     end
 
     def initialize_request
-      reply_to_message = Message.find_by(external_id: quote_reply_message_id)
-      reply_to_message&.request || sender.active_request
+      if quote_reply_message_id.present?
+        reply_to_message = Message.find_by(external_id: quote_reply_message_id)
+        return reply_to_message.request if reply_to_message.present?
+      end
+
+      sender.active_request
     end
 
     def initialize_unsupported_content
