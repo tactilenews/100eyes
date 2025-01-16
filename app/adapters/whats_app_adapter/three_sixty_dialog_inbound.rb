@@ -81,7 +81,7 @@ module WhatsAppAdapter
 
     def initialize_request
       if quote_reply_message_id.present?
-        reply_to_message = Message.find_by(external_id: quote_reply_message_id)
+        reply_to_message = sender.received_messages.find_by(external_id: quote_reply_message_id)
         return reply_to_message.request if reply_to_message.present?
       end
 
