@@ -72,7 +72,6 @@ module WhatsAppAdapter
       end
 
       def send_message_template(message)
-        message.recipient.update(whats_app_message_template_sent_at: Time.current)
         WhatsAppAdapter::ThreeSixtyDialogOutbound::Text.perform_later(contributor_id: message.recipient.id,
                                                                       type: :request_template,
                                                                       message_id: message.id)

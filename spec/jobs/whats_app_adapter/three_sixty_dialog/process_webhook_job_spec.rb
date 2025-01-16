@@ -47,20 +47,6 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
       let(:whats_app_phone_number) { '+491511234567' }
       let(:contributor) { create(:contributor, whats_app_phone_number: whats_app_phone_number, organization: organization) }
       let(:request) { create(:request, organization: organization) }
-      let(:text_payload) do
-        {
-          organization_id: organization.id,
-          payload: {
-            messaging_product: 'whatsapp',
-            recipient_type: 'individual',
-            to: contributor.whats_app_phone_number.split('+').last,
-            type: 'text',
-            text: {
-              body: text
-            }
-          }
-        }
-      end
       let!(:latest_message) { create(:message, :outbound, request: request, recipient: contributor) }
 
       context 'no message template sent' do
@@ -70,10 +56,14 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
       end
 
       context 'responding to template' do
-        before { contributor.update(whats_app_message_template_sent_at: Time.current) }
+        let(:whats_app_template) { create(:message_whats_app_template, message: latest_message, external_id: 'some_external_template_id') }
         let(:text) { latest_message.text }
 
+        before { whats_app_template }
+
         context 'request to receive latest message' do
+          before { components[:messages].first[:context] = { id: 'some_external_template_id' } }
+
           it 'marks that contributor has responded to template message' do
             perform_enqueued_jobs(only: WhatsAppAdapter::ThreeSixtyDialog::HandleEphemeralDataJob) do
               expect { subject.call }.to change {

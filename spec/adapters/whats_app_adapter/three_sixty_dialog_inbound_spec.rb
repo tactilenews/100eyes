@@ -470,20 +470,20 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
           expect { subject }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::HandleEphemeralDataJob).with(
             type: :request_to_receive_message,
             contributor_id: contributor.id,
-            external_message_id: 'some_external_id'
+            message_id: nil
           )
         end
       end
     end
 
     describe 'with a WhatsApp template sent' do
-      before { contributor.update!(whats_app_message_template_sent_at: 1.hour.ago) }
+      let(:whats_app_template) { create(:message_whats_app_template, message: create(:message), external_id: 'some_external_id') }
 
       it 'is expected to schedule a job to handle the ephemeral data' do
         expect { subject }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::HandleEphemeralDataJob).with(
           type: :request_to_receive_message,
           contributor_id: contributor.id,
-          external_message_id: 'some_external_id'
+          message_id: whats_app_template.message.id
         )
       end
     end

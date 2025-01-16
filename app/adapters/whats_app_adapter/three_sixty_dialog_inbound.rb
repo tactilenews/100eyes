@@ -57,7 +57,7 @@ module WhatsAppAdapter
     def ephemeral_data?
       return if text.blank?
 
-      request_for_more_info? || unsubscribe_text? || resubscribe_text? || request_to_receive_message?
+      request_for_more_info? || unsubscribe_text? || resubscribe_text? || request_to_receive_message? || requested_message
     end
 
     def handle_ephemeral_data
@@ -68,13 +68,13 @@ module WhatsAppAdapter
           :unsubscribe
         elsif resubscribe_text?
           :resubscribe
-        elsif request_to_receive_message?
+        elsif request_to_receive_message? || requested_message
           :request_to_receive_message
         end
       WhatsAppAdapter::ThreeSixtyDialog::HandleEphemeralDataJob.perform_later(
         type: type,
         contributor_id: sender.id,
-        external_message_id: quote_reply_message_id
+        message_id: requested_message&.id
       )
     end
 
@@ -156,9 +156,13 @@ module WhatsAppAdapter
       text.strip.eql?(organization.whats_app_quick_reply_button_text['more_info'])
     end
 
+    # TODO: Remove this after we have some time actually saving Message::WhatsAppTemplate records
     def request_to_receive_message?
-      answer_request_keyword = text.strip.eql?(organization.whats_app_quick_reply_button_text['answer_request'])
-      sender.whats_app_message_template_sent_at.present? || answer_request_keyword
+      text.downcase.strip.eql?(organization.whats_app_quick_reply_button_text['answer_request'].downcase)
+    end
+
+    def requested_message
+      Message::WhatsAppTemplate.find_by(external_id: quote_reply_message_id)&.message
     end
 
     def unsubscribe_text?
