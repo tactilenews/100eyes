@@ -69,11 +69,9 @@ class Contributor < ApplicationRecord
   end
 
   def reply(message_decorator)
-    message = message_decorator.message
-    request = message.request || active_request
-    return unless request
-
+    request = active_request or return nil
     ActiveRecord::Base.transaction do
+      message = message_decorator.message
       message.request = request
       message.save!
     end

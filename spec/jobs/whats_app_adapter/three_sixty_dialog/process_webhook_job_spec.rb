@@ -65,11 +65,9 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
           before { components[:messages].first[:context] = { id: 'some_external_template_id' } }
 
           it 'marks that contributor has responded to template message' do
-            perform_enqueued_jobs(only: WhatsAppAdapter::ThreeSixtyDialog::HandleEphemeralDataJob) do
-              expect { subject.call }.to change {
-                contributor.reload.whats_app_message_template_responded_at
-              }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
-            end
+            expect { subject.call }.to change {
+              contributor.reload.whats_app_message_template_responded_at
+            }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
           end
 
           describe 'with no external id' do
@@ -85,15 +83,13 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
             end
 
             it 'enqueues a job to send the latest received message' do
-              perform_enqueued_jobs(only: WhatsAppAdapter::ThreeSixtyDialog::HandleEphemeralDataJob) do
-                expect do
-                  subject.call
-                end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).on_queue('default').with(
-                  contributor_id: contributor.id,
-                  type: :text,
-                  message_id: latest_message.id
-                )
-              end
+              expect do
+                subject.call
+              end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).on_queue('default').with(
+                contributor_id: contributor.id,
+                type: :text,
+                message_id: latest_message.id
+              )
             end
 
             it 'updates the message with the external id' do
@@ -113,11 +109,9 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
               end
 
               it 'enqueues a job to send the file' do
-                perform_enqueued_jobs(only: WhatsAppAdapter::ThreeSixtyDialog::HandleEphemeralDataJob) do
-                  expect { subject.call }.to have_enqueued_job(
-                    WhatsAppAdapter::ThreeSixtyDialogOutbound::File
-                  ).with({ message_id: latest_message.id })
-                end
+                expect { subject.call }.to have_enqueued_job(
+                  WhatsAppAdapter::ThreeSixtyDialogOutbound::File
+                ).with({ message_id: latest_message.id })
               end
 
               it 'updates the message with the external id' do
@@ -132,13 +126,11 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
                 end
 
                 it 'enqueues a job to upload the file' do
-                  perform_enqueued_jobs(only: WhatsAppAdapter::ThreeSixtyDialog::HandleEphemeralDataJob) do
-                    expect do
-                      subject.call
-                    end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::File).on_queue('default').with(
-                      message_id: latest_message.id
-                    )
-                  end
+                  expect do
+                    subject.call
+                  end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::File).on_queue('default').with(
+                    message_id: latest_message.id
+                  )
                 end
 
                 context 'given the text is greater than 1024' do
@@ -173,15 +165,13 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
             end
 
             it 'sends out the message with that external id' do
-              perform_enqueued_jobs(only: WhatsAppAdapter::ThreeSixtyDialog::HandleEphemeralDataJob) do
-                expect do
-                  subject.call
-                end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).on_queue('default').with(
-                  contributor_id: contributor.id,
-                  type: :text,
-                  message_id: previous_message.id
-                )
-              end
+              expect do
+                subject.call
+              end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).on_queue('default').with(
+                contributor_id: contributor.id,
+                type: :text,
+                message_id: previous_message.id
+              )
             end
           end
         end
@@ -195,23 +185,19 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
         let(:text) { organization.whats_app_more_info_message }
 
         it 'marks that contributor has responded to template message' do
-          perform_enqueued_jobs(only: WhatsAppAdapter::ThreeSixtyDialog::HandleEphemeralDataJob) do
-            expect { subject.call }.to change {
-                                         contributor.reload.whats_app_message_template_responded_at
-                                       }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
-          end
+          expect { subject.call }.to change {
+                                       contributor.reload.whats_app_message_template_responded_at
+                                     }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
         end
 
         it 'enqueues a job to send more info message' do
-          perform_enqueued_jobs(only: WhatsAppAdapter::ThreeSixtyDialog::HandleEphemeralDataJob) do
-            expect do
-              subject.call
-            end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).on_queue('default').with(
-              contributor_id: contributor.id,
-              type: :text,
-              text: text
-            )
-          end
+          expect do
+            subject.call
+          end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).on_queue('default').with(
+            contributor_id: contributor.id,
+            type: :text,
+            text: text
+          )
         end
 
         context 'does not enqueue a job' do
@@ -229,10 +215,8 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
         before { components[:messages].first[:text][:body] = 'Abbestellen' }
 
         it 'is expected to enqueue a job to unsubscribe' do
-          perform_enqueued_jobs(only: WhatsAppAdapter::ThreeSixtyDialog::HandleEphemeralDataJob) do
-            expect { subject.call }.to have_enqueued_job(UnsubscribeContributorJob).with(organization.id, contributor.id,
-                                                                                         WhatsAppAdapter::ThreeSixtyDialogOutbound)
-          end
+          expect { subject.call }.to have_enqueued_job(UnsubscribeContributorJob).with(organization.id, contributor.id,
+                                                                                       WhatsAppAdapter::ThreeSixtyDialogOutbound)
         end
       end
 
@@ -243,10 +227,8 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
         end
 
         it 'is expected to enqueue a job to unsubscribe' do
-          perform_enqueued_jobs(only: WhatsAppAdapter::ThreeSixtyDialog::HandleEphemeralDataJob) do
-            expect { subject.call }.to have_enqueued_job(ResubscribeContributorJob).with(organization.id, contributor.id,
-                                                                                         WhatsAppAdapter::ThreeSixtyDialogOutbound)
-          end
+          expect { subject.call }.to have_enqueued_job(ResubscribeContributorJob).with(organization.id, contributor.id,
+                                                                                       WhatsAppAdapter::ThreeSixtyDialogOutbound)
         end
       end
 

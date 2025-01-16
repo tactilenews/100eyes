@@ -61,18 +61,12 @@ module WhatsAppAdapter
       end
 
       def time_of_day
-        current_time = Time.current
-        morning = current_time.change(hour: 6)
-        day = current_time.change(hour: 11)
-        evening = current_time.change(hour: 17)
-        night = current_time.change(hour: 23)
-
-        case current_time
-        when morning..day
+        case Time.current.hour
+        when 6..11
           'morning'
-        when day..evening
+        when 11..17
           'day'
-        when evening..night
+        when 17..23
           'evening'
         else
           'night'

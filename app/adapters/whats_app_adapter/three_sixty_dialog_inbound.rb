@@ -19,20 +19,18 @@ module WhatsAppAdapter
       @quote_reply_message_id = message_payload.dig(:context, :id)
       @text = initialize_text
 
-      if ephemeral_data?
-        handle_ephemeral_data
-        return
-      end
+      return if ephemeral_data_handled?
 
       @message = initialize_message
-      @message.request = initialize_request
 
       @unsupported_content = initialize_unsupported_content
 
       files = initialize_file
       @message.files = files
+      @message.request = initialize_request
 
-      yield(@message) if block_given?
+      @message.save!
+      @message
     end
 
     private
@@ -54,28 +52,21 @@ module WhatsAppAdapter
       message_payload[:text]&.dig(:body) || message_payload[:button]&.dig(:text)
     end
 
-    def ephemeral_data?
-      return if text.blank?
+    def ephemeral_data_handled?
+      return false if text.blank?
 
-      request_for_more_info? || unsubscribe_text? || resubscribe_text? || request_to_receive_message? || requested_message
-    end
-
-    def handle_ephemeral_data
-      type =
-        if request_for_more_info?
-          :request_for_more_info
-        elsif unsubscribe_text?
-          :unsubscribe
-        elsif resubscribe_text?
-          :resubscribe
-        elsif request_to_receive_message? || requested_message
-          :request_to_receive_message
-        end
-      WhatsAppAdapter::ThreeSixtyDialog::HandleEphemeralDataJob.perform_later(
-        type: type,
-        contributor_id: sender.id,
-        message_id: requested_message&.id
-      )
+      if request_for_more_info?
+        handle_request_for_more_info
+      elsif unsubscribe_text?
+        handle_unsubscribe
+      elsif resubscribe_text?
+        handle_resubscribe
+      elsif request_to_receive_message? || requested_message
+        handle_request_to_receive_message
+      else
+        return false
+      end
+      true
     end
 
     def initialize_message
@@ -90,7 +81,7 @@ module WhatsAppAdapter
 
     def initialize_request
       reply_to_message = Message.find_by(external_id: quote_reply_message_id)
-      reply_to_message&.request
+      reply_to_message&.request || sender.active_request
     end
 
     def initialize_unsupported_content
@@ -171,6 +162,24 @@ module WhatsAppAdapter
 
     def resubscribe_text?
       text.downcase.strip.eql?(I18n.t('adapter.shared.resubscribe.text'))
+    end
+
+    def handle_request_for_more_info
+      sender.update!(whats_app_message_template_responded_at: Time.current)
+      WhatsAppAdapter::ThreeSixtyDialogOutbound.send_more_info_message!(sender)
+    end
+
+    def handle_unsubscribe
+      UnsubscribeContributorJob.perform_later(organization.id, sender.id, WhatsAppAdapter::ThreeSixtyDialogOutbound)
+    end
+
+    def handle_resubscribe
+      ResubscribeContributorJob.perform_later(organization.id, sender.id, WhatsAppAdapter::ThreeSixtyDialogOutbound)
+    end
+
+    def handle_request_to_receive_message
+      sender.update!(whats_app_message_template_responded_at: Time.current)
+      WhatsAppAdapter::ThreeSixtyDialogOutbound.send!(requested_message || sender.received_messages.first)
     end
   end
 end

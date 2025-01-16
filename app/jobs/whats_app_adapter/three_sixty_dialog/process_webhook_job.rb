@@ -11,7 +11,7 @@ module WhatsAppAdapter
         @whats_app_message = components
         adapter = WhatsAppAdapter::ThreeSixtyDialogInbound.new
 
-        adapter.consume(organization, components) { |message| message.contributor.reply(adapter) }
+        adapter.consume(organization, components)
       end
     end
   end
