@@ -27,7 +27,7 @@ module WhatsAppAdapter
 
       files = initialize_file
       @message.files = files
-      @message.request = initialize_request
+      @message.request = sender.active_request
 
       @message.save!
       @message
@@ -77,15 +77,6 @@ module WhatsAppAdapter
         content_type: 'application/json'
       )
       message
-    end
-
-    def initialize_request
-      if quote_reply_message_id.present?
-        reply_to_message = sender.received_messages.find_by(external_id: quote_reply_message_id)
-        return reply_to_message.request if reply_to_message.present?
-      end
-
-      sender.active_request
     end
 
     def initialize_unsupported_content

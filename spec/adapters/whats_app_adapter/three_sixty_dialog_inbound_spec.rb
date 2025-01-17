@@ -167,22 +167,6 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
           end
         end
       end
-
-      describe 'given a quote reply' do
-        context 'with an associated message record' do
-          let(:outbound_message) do
-            create(:message, :outbound, recipient: contributor, external_id: 'external_id')
-          end
-          before do
-            outbound_message
-            whats_app_message[:messages].first[:context] = { id: 'external_id' }
-          end
-
-          it "is expected to be the message's request" do
-            expect(reply.request).to eq(outbound_message.request)
-          end
-        end
-      end
     end
 
     describe '|message|files' do
