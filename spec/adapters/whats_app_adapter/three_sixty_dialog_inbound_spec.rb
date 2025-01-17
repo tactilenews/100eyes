@@ -10,7 +10,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
     { contacts: [{ profile: { name: 'Matthew Rider' },
                    wa_id: '491511234567' }],
       messages: [{ from: '491511234567',
-                   id: 'some_valid_id',
+                   id: 'wamid.valid_uuid',
                    text: { body: 'Hey' },
                    timestamp: '1692118778',
                    type: 'text' }] }
@@ -57,6 +57,10 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
 
       it 'is expected to create a Message' do
         expect { subject.call }.to change(Message, :count).from(0).to(1)
+      end
+
+      it 'saves the external id to the message record' do
+        expect(reply.external_id).to eq('wamid.valid_uuid')
       end
 
       context 'from an unknown contributor' do
