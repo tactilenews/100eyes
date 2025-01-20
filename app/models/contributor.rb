@@ -108,7 +108,7 @@ class Contributor < ApplicationRecord
   def active_request
     # active_request is always the request of the contributors last received message or the last broadcasted request
     # (first has to be used as the default order of messages and request is set to created_at desc)
-    received_messages.first&.request || Request.broadcasted.first
+    received_messages.first&.request || organization.requests.broadcasted.first
   end
 
   def telegram?
