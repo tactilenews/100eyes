@@ -34,7 +34,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
   let!(:contributor) { create(:contributor, whats_app_phone_number: phone_number, organization: organization) }
   let(:fetch_file_url) { 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693/some_valid_id' }
   let(:fetch_streamable_file) { 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693/somepath' }
-  let(:request) { create(:request) }
+  let(:request) { create(:request, organization: contributor.organization) }
 
   before do
     allow(ENV).to receive(:fetch).with('THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT',
@@ -150,7 +150,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
         end
 
         context 'given no received request, but a request in the db' do
-          let(:request) { create(:request, tag_list: ['not for you']) }
+          let(:request) { create(:request, tag_list: ['not for you'], organization: contributor.organization) }
 
           before do
             request
