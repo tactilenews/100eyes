@@ -596,7 +596,28 @@ RSpec.describe Contributor, type: :model do
 
   describe '#active_request' do
     subject { contributor.active_request }
-    it { should be(nil) }
+
+    describe 'given no request has gone out' do
+      it 'is expected to be nil' do
+        expect(subject).to be_nil
+      end
+    end
+
+    describe 'given a request has gone out before the contributor onboarded' do
+      let!(:previous_request) { create(:request, broadcasted_at: 1.day.ago, organization: contributor.organization) }
+
+      it 'is expected to be the most recent request' do
+        expect(subject).to eq(previous_request)
+      end
+
+      context 'the previous request is from a different organization' do
+        before { previous_request.update!(organization: create(:organization)) }
+
+        it 'is expected to be nil' do
+          expect(subject).to be_nil
+        end
+      end
+    end
 
     describe 'once a request was sent as a message to the contributor' do
       before(:each) { create(:message, request: the_request, recipient: contributor) }
