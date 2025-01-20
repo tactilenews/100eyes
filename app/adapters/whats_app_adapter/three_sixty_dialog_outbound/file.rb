@@ -44,8 +44,8 @@ module WhatsAppAdapter
 
       def send_text_separately
         WhatsAppAdapter::ThreeSixtyDialogOutbound::Text.perform_later(
-          organization_id: message.organization_id,
-          payload: text_payload,
+          contributor_id: message.recipient.id,
+          type: :text,
           message_id: message.id
         )
       end
@@ -58,18 +58,6 @@ module WhatsAppAdapter
           type: 'image',
           image: {
             id: file_id
-          }
-        }
-      end
-
-      def text_payload
-        {
-          messaging_product: 'whatsapp',
-          recipient_type: 'individual',
-          to: recipient.whats_app_phone_number.split('+').last,
-          type: 'text',
-          text: {
-            body: message.text
           }
         }
       end

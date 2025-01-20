@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_01_08_092828) do
+ActiveRecord::Schema.define(version: 2025_01_15_103450) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -155,6 +155,15 @@ ActiveRecord::Schema.define(version: 2025_01_08_092828) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["message_id"], name: "index_message_files_on_message_id"
+  end
+
+  create_table "message_whats_app_templates", force: :cascade do |t|
+    t.bigint "message_id", null: false
+    t.string "external_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["external_id"], name: "index_message_whats_app_templates_on_external_id"
+    t.index ["message_id"], name: "index_message_whats_app_templates_on_message_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -344,6 +353,7 @@ ActiveRecord::Schema.define(version: 2025_01_08_092828) do
   add_foreign_key "contributors", "organizations"
   add_foreign_key "json_web_tokens", "contributors"
   add_foreign_key "message_files", "messages"
+  add_foreign_key "message_whats_app_templates", "messages"
   add_foreign_key "messages", "contributors", column: "recipient_id"
   add_foreign_key "messages", "requests"
   add_foreign_key "organizations", "business_plans"

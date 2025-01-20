@@ -1,0 +1,74 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://waba-v2.360dialog.io/messages
+    body:
+      encoding: UTF-8
+      string: '{"messaging_product":"whatsapp","recipient_type":"individual","to":"4912345678","type":"text","text":{"body":"Some
+        text"}}'
+    headers:
+      D360-Api-Key:
+      - D360-API-KEY
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - waba-v2.360dialog.io
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      - h3=":443"; ma=86400
+      Cache-Control:
+      - private, no-cache, no-store, must-revalidate
+      Content-Type:
+      - application/json; charset=UTF-8
+      Expires:
+      - Sat, 01 Jan 2000 00:00:00 GMT
+      Facebook-Api-Version:
+      - v19.0
+      Pragma:
+      - no-cache
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Vary:
+      - Origin,Accept-Encoding
+      X-Business-Use-Case-Usage:
+      - '{"118406021245988":[{"type":"whatsapp","call_count":1,"total_cputime":1,"total_time":1,"estimated_time_to_regain_access":0}]}'
+      X-Fb-Connection-Quality:
+      - EXCELLENT; q=0.9, rtt=6, rtx=0, c=10, mss=1380, tbw=3386, tp=-1, tpl=-1, uplat=741,
+        ullat=0
+      X-Fb-Debug:
+      - q8MDuAeMdnM2u1jnYQi20LUDWt2EnhXh6EozAZD6dnrOGAP1NBa3w4unCU4+5wSygJ/mvlh045qNWB6nCff5WQ==
+      X-Fb-Request-Id:
+      - AdUzTu52yEA6-483MoWiecC
+      X-Fb-Rev:
+      - '1019343452'
+      X-Fb-Trace-Id:
+      - EmnLzs6q7L5
+      X-Cloud-Trace-Context:
+      - c43c487092fda3f3b93aeb1b5cbe6406
+      Date:
+      - Wed, 15 Jan 2025 10:08:13 GMT
+      Server:
+      - Google Frontend
+      Content-Length:
+      - '176'
+      Via:
+      - 1.1 google
+    body:
+      encoding: UTF-8
+      string: '{"messaging_product":"whatsapp","contacts":[{"input":"4912345678","wa_id":"494912345678"}],"messages":[{"id":"wamid.HBgMNDk0OTEyMzQ1Njc4FQIAERgSNERCRjFEOERFM0RDNDJBMDMyAA=="}]}'
+  recorded_at: Wed, 15 Jan 2025 10:08:14 GMT
+recorded_with: VCR 6.1.0

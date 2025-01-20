@@ -12,13 +12,8 @@ RSpec.shared_examples 'a Contributor unsubscribes' do |adapter|
   it { is_expected.to change { contributor.reload.unsubscribed_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone)) }
   it {
     is_expected.to(have_enqueued_job(adapter).on_queue('default').with do |params|
-      if adapter.eql?(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text)
-        expect(params[:payload][:to]).to eq(contributor.whats_app_phone_number.split('+').last)
-        expect(params[:payload][:text][:body]).to match(unsubscribe_successful_message)
-      else
-        expect(params[:contributor_id]).to eq(contributor.id)
-        expect(params[:text]).to match(unsubscribe_successful_message)
-      end
+      expect(params[:contributor_id]).to eq(contributor.id)
+      expect(params[:text]).to match(unsubscribe_successful_message)
     end)
   }
   it_behaves_like 'an ActivityNotification', 'ContributorMarkedInactive', 3

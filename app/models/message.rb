@@ -16,6 +16,7 @@ class Message < ApplicationRecord
   has_many :files, dependent: :destroy, class_name: 'Message::File'
   has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
   has_one :organization, through: :request
+  has_one :whats_app_template, dependent: :destroy, class_name: 'Message::WhatsAppTemplate'
 
   counter_culture :request,
                   column_name: proc { |model| model.reply? ? 'replies_count' : nil },

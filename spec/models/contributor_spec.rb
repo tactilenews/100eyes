@@ -586,7 +586,7 @@ RSpec.describe Contributor, type: :model do
         end
       end
 
-      describe 'givena a contributor with signal_uuid' do
+      describe 'given a contributor with signal_uuid' do
         let!(:contributor) { create(:contributor, signal_uuid: 'valid_uuid') }
 
         before { signal_message[:envelope][:sourceUuid] = 'valid_uuid' }

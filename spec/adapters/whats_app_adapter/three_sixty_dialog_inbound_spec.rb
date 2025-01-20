@@ -10,7 +10,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
     { contacts: [{ profile: { name: 'Matthew Rider' },
                    wa_id: '491511234567' }],
       messages: [{ from: '491511234567',
-                   id: 'some_valid_id',
+                   id: 'wamid.valid_uuid',
                    text: { body: 'Hey' },
                    timestamp: '1692118778',
                    type: 'text' }] }
@@ -30,31 +30,53 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
                    type: 'image' }] }
   end
 
-  let(:organization) { create(:organization) }
+  let(:organization) { create(:organization, contact_person: create(:user)) }
   let!(:contributor) { create(:contributor, whats_app_phone_number: phone_number, organization: organization) }
   let(:fetch_file_url) { 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693/some_valid_id' }
   let(:fetch_streamable_file) { 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693/somepath' }
+  let(:request) { create(:request, organization: contributor.organization) }
 
   before do
     allow(ENV).to receive(:fetch).with('THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT',
                                        'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693').and_return('https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693')
   end
+  subject { -> { adapter.consume(organization, whats_app_message) } }
 
   describe '#consume' do
-    let(:message) do
-      adapter.consume(organization, whats_app_message) do |message|
+    let(:reply) do
+      subject.call do |message|
         message
       end
     end
 
     describe '|message| block argument' do
-      subject { message }
-      it { is_expected.to be_a(Message) }
+      before do
+        request
+        allow(Sentry).to receive(:capture_exception)
+      end
+
+      it 'is expected to create a Message' do
+        expect { subject.call }.to change(Message, :count).from(0).to(1)
+      end
+
+      it 'saves the external id to the message record' do
+        expect(reply.external_id).to eq('wamid.valid_uuid')
+      end
 
       context 'from an unknown contributor' do
         let!(:phone_number) { '+495555555' }
 
-        it { is_expected.to be(nil) }
+        it 'is expected not to create a Message' do
+          expect { subject.call }.not_to change(Message, :count)
+        end
+
+        it 'reports an error to inform us there is a potential issue' do
+          subject.call
+
+          expect(Sentry).to have_received(:capture_exception).with(
+            WhatsAppAdapter::UnknownContributorError.new(whats_app_phone_number: '+491511234567')
+          )
+        end
       end
 
       context 'given a message with text and an attachment' do
@@ -66,17 +88,19 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
         end
 
         it 'is expected to store message text and attached file' do
-          expect(message.text).to eq('Look how cute')
-          expect(message.files.first.attachment).to be_attached
+          expect(reply.text).to eq('Look how cute')
+          expect(reply.files.first.attachment).to be_attached
         end
       end
     end
 
     describe '|message|text' do
-      subject { message.text }
+      before { request }
 
       context 'given a whats_app_message with a `message`' do
-        it { is_expected.to eq('Hey') }
+        it 'is expected to save the text' do
+          expect(reply.text).to eq('Hey')
+        end
       end
 
       context 'given a whats_app_message without a `message` and with an attachment' do
@@ -87,19 +111,62 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
           stub_request(:get, fetch_streamable_file).to_return(status: 200, body: 'some_streamable_file')
         end
 
-        it { is_expected.to be(nil) }
+        it 'is expected to be nil' do
+          expect(reply.text).to be(nil)
+        end
       end
     end
 
     describe '|message|raw_data' do
-      subject { message.raw_data }
-      it { is_expected.to be_attached }
+      before { request }
+
+      it 'is expected to be attached' do
+        expect(reply.raw_data).to be_attached
+      end
     end
 
     describe '#sender' do
-      subject { message.sender }
+      before { request }
 
-      it { is_expected.to eq(contributor) }
+      it 'is expected to equal the contributor' do
+        expect(reply.sender).to eq(contributor)
+      end
+    end
+
+    describe '#request' do
+      context 'given no quote reply id present in message payload' do
+        context 'given a received request' do
+          let(:newer_request) { create(:request, tag_list: ['not for you']) }
+          let(:outbound_message) { create(:message, :outbound, request: request, recipient: contributor) }
+
+          before do
+            request
+            outbound_message
+          end
+
+          it 'is expected to attach their latest request' do
+            expect(reply.request).to eq(request)
+          end
+        end
+
+        context 'given no received request, but a request in the db' do
+          let(:request) { create(:request, tag_list: ['not for you'], organization: contributor.organization) }
+
+          before do
+            request
+          end
+
+          it 'is expected to attach the latest request' do
+            expect(reply.request).to eq(request)
+          end
+        end
+
+        context 'given no request in the db' do
+          it 'is expected to raise an error' do
+            expect { subject.call }.to raise_error(ActiveRecord::RecordInvalid)
+          end
+        end
+      end
     end
 
     describe '|message|files' do
@@ -111,8 +178,9 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
       end
 
       describe 'handling different content types' do
-        let(:file) { message.files.first }
-        subject { file.attachment }
+        let(:file) { reply.files.first }
+
+        before { request }
 
         context 'given an audio file' do
           before do
@@ -126,10 +194,12 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
             }
           end
 
-          it { is_expected.to be_attached }
+          it 'attaches the audio file' do
+            expect(file.attachment).to be_attached
+          end
 
           it 'preserves the content_type' do
-            expect(subject.blob.content_type).to eq('audio/ogg')
+            expect(file.attachment.blob.content_type).to eq('audio/ogg')
           end
         end
 
@@ -145,26 +215,32 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
             }
           end
 
-          it { is_expected.to be_attached }
+          it 'attaches the audio file' do
+            expect(file.attachment).to be_attached
+          end
 
           it 'preserves the content_type' do
-            expect(subject.blob.content_type).to eq('audio/mpeg')
+            expect(file.attachment.blob.content_type).to eq('audio/mpeg')
           end
         end
 
         context 'given an image file' do
-          it { is_expected.to be_attached }
+          it 'attaches the image file' do
+            expect(file.attachment).to be_attached
+          end
 
           it 'preserves the content_type' do
-            expect(subject.blob.content_type).to eq('image/jpeg')
+            expect(file.attachment.blob.content_type).to eq('image/jpeg')
           end
         end
 
         context 'given attachment without filename' do
-          it { is_expected.to be_attached }
+          it 'attaches the audio file' do
+            expect(file.attachment).to be_attached
+          end
 
           it 'sets a fallback filename based on external file id' do
-            expect(subject.filename.to_s).to eq('some_valid_id')
+            expect(file.attachment.filename.to_s).to eq('some_valid_id')
           end
         end
 
@@ -182,17 +258,55 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
           end
 
           context 'with a filename' do
-            it { is_expected.to be_attached }
+            it 'attaches the supported document file' do
+              expect(file.attachment).to be_attached
+            end
 
             it 'favors the filename' do
-              expect(subject.filename.to_s).to eq('AUD-12345.mpeg')
+              expect(file.attachment.filename.to_s).to eq('AUD-12345.mpeg')
             end
           end
         end
 
-        context 'given an unsupported document' do
-          subject { message.files }
+        context 'voice' do
+          let(:voice) do
+            {
+              id: 'some_valid_id',
+              mime_type: 'audio/ogg; codecs=opus',
+              sha256: 'sha256_hash'
+            }
+          end
+          before do
+            first_message = whats_app_message[:messages].first
+            first_message[:type] = 'voice'
+            first_message[:voice] = voice
+          end
 
+          it 'attaches the voice file' do
+            expect(file.attachment).to be_attached
+          end
+        end
+
+        context 'video' do
+          let(:video) do
+            {
+              id: 'some_valid_id',
+              mime_type: 'video/mp4',
+              sha256: 'sha256_hash'
+            }
+          end
+          before do
+            first_message = whats_app_message[:messages].first
+            first_message[:type] = 'video'
+            first_message[:voice] = video
+          end
+
+          it 'attaches the video file' do
+            expect(file.attachment).to be_attached
+          end
+        end
+
+        context 'given an unsupported document' do
           before do
             first_message = whats_app_message[:messages].first
             first_message[:type] = 'document'
@@ -205,331 +319,242 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
             }
           end
 
-          it { is_expected.to be_empty }
+          it 'does not attach the file' do
+            expect(reply.files).to be_empty
+          end
         end
       end
     end
   end
 
-  describe '#on' do
-    describe 'UNKNOWN_CONTRIBUTOR' do
-      let(:unknown_contributor_callback) { spy('unknown_contributor_callback') }
+  describe 'given unsupported content' do
+    let(:message) { whats_app_message[:messages].first }
+    let(:unsupported_content_text) do
+      I18n.t('adapter.whats_app.unsupported_content_template', first_name: contributor.first_name,
+                                                               contact_person: contributor.organization.contact_person.name)
+    end
 
+    before do
+      request
+      message.delete(:text)
+    end
+
+    context 'document|pdf|' do
+      let(:document) do
+        {
+          filename: 'Comprovante.pdf',
+          id: 'some_valid_id',
+          mime_type: 'application/pdf',
+          sha256: 'sha256_hash'
+        }
+      end
       before do
-        adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::UNKNOWN_CONTRIBUTOR) do |whats_app_phone_number|
-          unknown_contributor_callback.call(whats_app_phone_number)
-        end
+        message[:type] = 'document'
+        message[:document] = document
       end
 
-      subject do
-        adapter.consume(organization, whats_app_message)
-        unknown_contributor_callback
-      end
-
-      describe 'if the sender is a contributor ' do
-        it { should_not have_received(:call) }
-      end
-
-      describe 'if the sender is unknown' do
-        before { whats_app_message[:contacts].first[:wa_id] = '4955443322' }
-        it { should have_received(:call).with('+4955443322') }
+      it 'it is expected to send a message to the contributor to inform them we do not accept the content' do
+        expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(
+          contributor_id: contributor.id,
+          type: :text,
+          text: unsupported_content_text
+        )
       end
     end
 
-    describe 'UNSUPPORTED_CONTENT' do
-      let(:unsupported_content_callback) { spy('unsupported_content_callback') }
+    context 'document|docx|' do
+      let(:document) do
+        {
+          filename: 'price-list.docx',
+          id: 'some_valid_id',
+          mime_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          sha256: 'sha256_hash'
+        }
+      end
+      before do
+        message[:type] = 'document'
+        message[:document] = document
+      end
+
+      it 'it is expected to send a message to the contributor to inform them we do not accept the content' do
+        expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(
+          contributor_id: contributor.id,
+          type: :text,
+          text: unsupported_content_text
+        )
+      end
+    end
+
+    context 'location' do
+      let(:location) do
+        {
+          latitude: '22.9871',
+          longitude: '43.2048'
+        }
+      end
+      before do
+        message[:type] = 'location'
+        message[:location] = location
+      end
+
+      it 'it is expected to send a message to the contributor to inform them we do not accept the content' do
+        expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(
+          contributor_id: contributor.id,
+          type: :text,
+          text: unsupported_content_text
+        )
+      end
+    end
+
+    context 'contacts' do
+      let(:contacts) do
+        {
+          contacts: [
+            { addresses: [],
+              emails: [],
+              ims: [],
+              name: {
+                first_name: '360dialog',
+                formatted_name: '360dialog Sandbox',
+                last_name: 'Sandbox'
+              },
+              org: {},
+              phones: [
+                { phone: '+49 30 609859535',
+                  type: 'Mobile',
+                  wa_id: '4930609859535' }
+              ], urls: [] }
+          ],
+          from: '4915143416265',
+          id: 'some_valid_id',
+          timestamp: '1692123428',
+          type: 'contacts'
+        }
+      end
+      before do
+        message[:type] = 'contacts'
+        message[:contacts] = contacts
+      end
+
+      it 'it is expected to send a message to the contributor to inform them we do not accept the content' do
+        expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(
+          contributor_id: contributor.id,
+          type: :text,
+          text: unsupported_content_text
+        )
+      end
+    end
+
+    context 'sticker' do
+      let(:sticker) do
+        {
+          mime_type: 'image/webp',
+          sha256: 'sha256_hash',
+          id: 'some_valid_id',
+          animated: false
+        }
+      end
 
       before do
-        adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::UNSUPPORTED_CONTENT) do |sender|
-          unsupported_content_callback.call(sender)
-        end
+        message[:type] = 'sticker'
+        message[:sticker] = sticker
       end
 
-      subject do
-        adapter.consume(organization, whats_app_message)
-        unsupported_content_callback
+      it 'it is expected to send a message to the contributor to inform them we do not accept the content' do
+        expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(
+          contributor_id: contributor.id,
+          type: :text,
+          text: unsupported_content_text
+        )
+      end
+    end
+  end
+
+  describe 'given a request to receive the message' do
+    let(:previous_message) { create(:message, :outbound, recipient: contributor) }
+    let(:latest_message) { create(:message, :outbound, recipient: contributor) }
+
+    before do
+      previous_message
+      latest_message
+      whats_app_message[:messages].first[:context] = { id: 'some_external_id' }
+    end
+
+    describe 'with no WhatsApp template sent' do
+      it 'does not schedule a job' do
+        expect { subject.call }.not_to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text)
       end
 
-      describe 'supported content' do
-        context 'if the message is a plaintext message' do
-          it { should_not have_received(:call) }
-        end
-
-        context 'files' do
-          let(:message) { whats_app_message[:messages].first }
-
-          before do
-            message.delete(:text)
-            stub_request(:get, fetch_file_url).to_return(status: 200, body: { url: 'https://someurl.com/somepath' }.to_json)
-            stub_request(:get, fetch_streamable_file).to_return(status: 200, body: 'some_streamable_file')
-          end
-
-          context 'image' do
-            let(:image) do
-              {
-                id: 'some_valid_id',
-                mime_type: 'image/jpeg',
-                sha256: 'sha256_hash'
-              }
-            end
-
-            before do
-              message[:type] = 'image'
-              message[:image] = image
-            end
-
-            it { should_not have_received(:call) }
-          end
-
-          context 'voice' do
-            let(:voice) do
-              {
-                id: 'some_valid_id',
-                mime_type: 'audio/ogg; codecs=opus',
-                sha256: 'sha256_hash'
-              }
-            end
-            before do
-              message[:type] = 'voice'
-              message[:voice] = voice
-            end
-
-            it { should_not have_received(:call) }
-          end
-
-          context 'video' do
-            let(:video) do
-              {
-                id: 'some_valid_id',
-                mime_type: 'video/mp4',
-                sha256: 'sha256_hash'
-              }
-            end
-            before do
-              message[:type] = 'video'
-              message[:video] = video
-            end
-
-            it { should_not have_received(:call) }
-          end
-
-          context 'audio' do
-            let(:audio) do
-              {
-                id: 'some_valid_id',
-                mime_type: 'audio/ogg',
-                sha256: 'sha256_hash'
-              }
-            end
-            before do
-              message[:type] = 'audio'
-              message[:audio] = audio
-            end
-
-            it { should_not have_received(:call) }
-          end
-
-          context 'document' do
-            context 'image' do
-              let(:document) do
-                {
-                  filename: 'animated-cat-image-0056.gif',
-                  id: 'some_valid_id',
-                  mime_type: 'image/gif',
-                  sha256: 'sha256_hash'
-                }
-              end
-
-              before do
-                message[:type] = 'document'
-                message[:document] = document
-              end
-
-              it { should_not have_received(:call) }
-            end
-
-            context 'audio' do
-              let(:document) do
-                {
-                  filename: 'AUD-12345.opus',
-                  id: 'some_valid_id',
-                  mime_type: 'audio/ogg',
-                  sha256: 'sha256_hash'
-                }
-              end
-
-              before do
-                message[:type] = 'document'
-                message[:document] = document
-              end
-
-              it { should_not have_received(:call) }
-            end
-
-            context 'video' do
-              let(:document) do
-                {
-                  filename: 'VID_12345.mp4',
-                  id: 'some_valid_id',
-                  mime_type: 'video/mp4',
-                  sha256: 'sha256_hash'
-                }
-              end
-
-              before do
-                message[:type] = 'document'
-                message[:document] = document
-              end
-
-              it { should_not have_received(:call) }
-            end
-          end
-        end
-      end
-
-      describe 'unsupported content' do
-        let(:message) { whats_app_message[:messages].first }
-
+      describe 'but sending the answer request keyword' do
         before do
-          message.delete(:text)
+          organization.whats_app_quick_reply_button_text['answer_request'] = 'Antworten'
+          organization.save
+
+          whats_app_message[:messages].first[:text][:body] = 'Antworten'
         end
 
-        context 'document|pdf|' do
-          let(:document) do
-            {
-              filename: 'Comprovante.pdf',
-              id: 'some_valid_id',
-              mime_type: 'application/pdf',
-              sha256: 'sha256_hash'
-            }
-          end
-          before do
-            message[:type] = 'document'
-            message[:document] = document
-          end
-
-          it { should have_received(:call).with(contributor) }
+        it 'updates the timestamp to mark they sent us a message' do
+          expect { subject.call }.to change {
+            contributor.reload.whats_app_message_template_responded_at
+          }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
         end
 
-        context 'document|docx|' do
-          let(:document) do
-            {
-              filename: 'price-list.docx',
-              id: 'some_valid_id',
-              mime_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-              sha256: 'sha256_hash'
-            }
-          end
-          before do
-            message[:type] = 'document'
-            message[:document] = document
-          end
-
-          it { should have_received(:call).with(contributor) }
-        end
-
-        context 'location' do
-          let(:location) do
-            {
-              latitude: '22.9871',
-              longitude: '43.2048'
-            }
-          end
-          before do
-            message[:type] = 'location'
-            message[:location] = location
-          end
-
-          it { should have_received(:call).with(contributor) }
-        end
-
-        context 'contacts' do
-          let(:contacts) do
-            {
-              contacts: [
-                { addresses: [],
-                  emails: [],
-                  ims: [],
-                  name: {
-                    first_name: '360dialog',
-                    formatted_name: '360dialog Sandbox',
-                    last_name: 'Sandbox'
-                  },
-                  org: {},
-                  phones: [
-                    { phone: '+49 30 609859535',
-                      type: 'Mobile',
-                      wa_id: '4930609859535' }
-                  ], urls: [] }
-              ],
-              from: '4915143416265',
-              id: 'some_valid_id',
-              timestamp: '1692123428',
-              type: 'contacts'
-            }
-          end
-          before do
-            message[:type] = 'contacts'
-            message[:contacts] = contacts
-          end
-
-          it { should have_received(:call).with(contributor) }
-        end
-
-        context 'sticker' do
-          let(:sticker) do
-            {
-              mime_type: 'image/webp',
-              sha256: 'sha256_hash',
-              id: 'some_valid_id',
-              animated: false
-            }
-          end
-
-          before do
-            message[:type] = 'sticker'
-            message[:sticker] = sticker
-          end
-
-          it 'triggers the unsupported content callback' do
-            expect(subject).to have_received(:call).with(contributor)
-          end
+        it "sends out the contributor's latest message" do
+          expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(
+            contributor_id: contributor.id,
+            type: :text,
+            message_id: latest_message.id
+          )
         end
       end
     end
 
-    describe 'REQUEST_TO_RECEIVE_MESSAGE' do
-      let(:request_to_receive_message_callback) { spy('request_to_receive_message_callback') }
+    describe 'with a WhatsApp template sent' do
+      let(:whats_app_template) { create(:message_whats_app_template, message: previous_message, external_id: 'some_external_id') }
 
-      before do
-        adapter.on(WhatsAppAdapter::ThreeSixtyDialogInbound::REQUEST_TO_RECEIVE_MESSAGE) do |contributor, message|
-          request_to_receive_message_callback.call(contributor, message)
-        end
+      before { whats_app_template }
+
+      it 'updates the timestamp to mark they sent us a message' do
+        expect { subject.call }.to change {
+          contributor.reload.whats_app_message_template_responded_at
+        }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
       end
 
-      subject do
-        adapter.consume(organization, whats_app_message)
-        request_to_receive_message_callback
+      it "sends out the contributor's latest message" do
+        expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).with(
+          contributor_id: contributor.id,
+          type: :text,
+          message_id: previous_message.id
+        )
       end
+    end
+  end
 
-      before do
-        create(:message, external_id: 'some_external_id')
-        whats_app_message[:messages].first[:context] = { id: 'some_external_id' }
-      end
+  describe 'given a request to unsubscribe' do
+    before do
+      whats_app_message[:messages].first[:text] = { body: 'Abbestellen' }
+    end
 
-      describe 'with no WhatsApp template sent' do
-        it 'does not trigger the callback' do
-          expect(subject).not_to have_received(:call)
-        end
-      end
+    it 'schedules a job to unsubscribe the contributor' do
+      expect { subject.call }.to have_enqueued_job(UnsubscribeContributorJob).with(
+        contributor.organization.id,
+        contributor.id,
+        WhatsAppAdapter::ThreeSixtyDialogOutbound
+      )
+    end
+  end
 
-      describe 'with a WhatsApp template sent' do
-        before { contributor.update!(whats_app_message_template_sent_at: 1.hour.ago) }
+  describe 'given a request to resubscribe' do
+    before do
+      whats_app_message[:messages].first[:text] = { body: 'Bestellen' }
+    end
 
-        it 'triggered the callback' do
-          expect(subject).to have_received(:call)
-        end
-      end
+    it 'schedules a job to resubscribe the contributor' do
+      expect { subject.call }.to have_enqueued_job(ResubscribeContributorJob).with(
+        contributor.organization.id,
+        contributor.id,
+        WhatsAppAdapter::ThreeSixtyDialogOutbound
+      )
     end
   end
 end
