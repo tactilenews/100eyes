@@ -81,8 +81,8 @@ RSpec.describe Threema::WebhookController do
         end
 
         context 'given a received status for a known message' do
-          it 'updates the received_at attr' do
-            expect { subject }.to change { messages.first.reload.received_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+          it 'updates the delivered_at attr' do
+            expect { subject }.to change { messages.first.reload.delivered_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
           end
         end
 
@@ -94,7 +94,7 @@ RSpec.describe Threema::WebhookController do
           end
 
           it 'updates receive_at if blank' do
-            expect { subject }.to change { messages.first.reload.received_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+            expect { subject }.to change { messages.first.reload.delivered_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
           end
         end
 

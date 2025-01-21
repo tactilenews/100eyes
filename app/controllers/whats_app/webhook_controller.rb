@@ -179,11 +179,10 @@ module WhatsApp
 
       delivered_status = SUCCESSFUL_DELIVERY.first
       read_status = SUCCESSFUL_DELIVERY.last
-      message.update(received_at: Time.current) if status_params['MessageStatus'].eql?(delivered_status)
+      message.update(delivered_at: Time.current) if status_params['MessageStatus'].eql?(delivered_status)
 
       return unless status_params['MessageStatus'].eql?(read_status)
 
-      message.received_at = Time.current if message.received_at.blank?
       message.update(read_at: Time.current)
     end
 

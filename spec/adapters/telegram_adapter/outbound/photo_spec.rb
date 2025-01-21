@@ -107,7 +107,7 @@ RSpec.describe TelegramAdapter::Outbound::Photo do
       let(:external_id) { successful_response.with_indifferent_access[:result].first[:message_id].to_s }
 
       it 'marks the message as received' do
-        expect { subject.call }.to change { message.reload.received_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+        expect { subject.call }.to change { message.reload.delivered_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
       end
 
       it "saves the message's external id" do

@@ -99,7 +99,7 @@ module SignalAdapter
       latest_received_message = contributor.received_messages.first
       return unless latest_received_message
 
-      latest_received_message.update(received_at: datetime) if delivery_receipt[:isDelivery]
+      latest_received_message.update(delivered_at: datetime) if delivery_receipt[:isDelivery]
       latest_received_message.update(read_at: datetime) if delivery_receipt[:isRead]
     end
 

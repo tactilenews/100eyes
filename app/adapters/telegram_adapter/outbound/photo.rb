@@ -35,7 +35,7 @@ module TelegramAdapter
           parse_mode: :HTML
         )
         response = response.with_indifferent_access
-        mark_message_as_received(response) if response[:ok]
+        mark_message_as_delivered(response) if response[:ok]
       rescue ActiveRecord::RecordNotFound => e
         ErrorNotifier.report(e)
       end
@@ -51,10 +51,10 @@ module TelegramAdapter
         end
       end
 
-      def mark_message_as_received(response)
+      def mark_message_as_delivered(response)
         timestamp = response[:result].first[:date]
         external_id = response[:result].first[:message_id].to_s
-        message.update!(received_at: Time.zone.at(timestamp).to_datetime, external_id: external_id)
+        message.update!(delivered_at: Time.zone.at(timestamp).to_datetime, external_id: external_id)
       end
     end
   end
