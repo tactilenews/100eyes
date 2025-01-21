@@ -73,6 +73,7 @@ module WhatsApp
     end
 
     def handle_successful_delivery(delivery_receipt)
+      delivery_receipt = delivery_receipt.deep_transform_keys(&:to_sym)
       WhatsAppAdapter::ThreeSixtyDialog::ProcessMessageStatusJob.perform_later(organization_id: @organization.id,
                                                                                delivery_receipt: delivery_receipt)
     end

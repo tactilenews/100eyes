@@ -25,7 +25,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessMessageStatusJob do
         'pricing' => {
           'billable' => 'true', 'pricing_model' => 'CBP', 'category' => 'marketing'
         }
-      }.with_indifferent_access
+      }.deep_transform_keys(&:to_sym)
     end
 
     describe 'unknown contributor' do
@@ -44,10 +44,13 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessMessageStatusJob do
     describe 'given a contributor' do
       let(:whats_app_phone_number) { '+49123456789' }
       let!(:contributor) { create(:contributor, whats_app_phone_number: whats_app_phone_number, organization: organization) }
+      let(:delivery_receipt) { base_delivery_receipt }
+
+      it 'is expected not to raise an error' do
+        expect { subject.call }.not_to raise_error
+      end
 
       context 'no message found by external id' do
-        let(:delivery_receipt) { base_delivery_receipt }
-
         it 'is expected not to raise an error' do
           expect { subject.call }.not_to raise_error
         end
@@ -55,7 +58,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessMessageStatusJob do
 
       context 'given a WhatsApp template with external id' do
         let!(:whats_app_template) { create(:message_whats_app_template, message: message, external_id: 'valid_message_id') }
-        let(:message) { create(:message) }
+        let(:message) { create(:message, recipient: contributor) }
         let(:datetime_from_timestamp) { Time.zone.at('1732132030'.to_i).to_datetime }
 
         context 'sent status' do
@@ -70,7 +73,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessMessageStatusJob do
           let(:delivery_receipt) { base_delivery_receipt.merge(status: 'delivered') }
 
           it 'updates the received at attribute of the record' do
-            expect { subject.call }.to (change { whats_app_template.reload.received_at }).from(nil).to(datetime_from_timestamp)
+            expect { subject.call }.to (change { whats_app_template.reload.delivered_at }).from(nil).to(datetime_from_timestamp)
           end
         end
 
@@ -81,18 +84,10 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessMessageStatusJob do
             expect { subject.call }.to (change { whats_app_template.reload.read_at }).from(nil).to(datetime_from_timestamp)
           end
 
-          context 'given received_at is blank' do
-            it 'updates received_at as well' do
-              expect { subject.call }.to (change { whats_app_template.reload.received_at }).from(nil).to(datetime_from_timestamp)
+          context 'given delivered_at is blank' do
+            it "also updates the `delivered_at`, because if you've read the message, you must have received it first" do
+              expect { subject.call }.to (change { whats_app_template.reload.delivered_at }).from(nil).to(datetime_from_timestamp)
             end
-          end
-        end
-
-        context 'given a status other than successful delivery' do
-          let(:delivery_receipt) { base_delivery_receipt.merge(status: 'undelivered') }
-
-          it 'is expected not to raise an error' do
-            expect { subject.call }.not_to raise_error
           end
         end
       end
@@ -112,8 +107,8 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessMessageStatusJob do
         context 'delivered status' do
           let(:delivery_receipt) { base_delivery_receipt.merge(status: 'delivered') }
 
-          it 'updates the received at attribute of the record' do
-            expect { subject.call }.to (change { message.reload.received_at }).from(nil).to(datetime_from_timestamp)
+          it 'updates the delivered at attribute of the record' do
+            expect { subject.call }.to (change { message.reload.delivered_at }).from(nil).to(datetime_from_timestamp)
           end
         end
 
@@ -124,9 +119,9 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessMessageStatusJob do
             expect { subject.call }.to (change { message.reload.read_at }).from(nil).to(datetime_from_timestamp)
           end
 
-          context 'given received_at is blank' do
-            it 'updates received_at as well' do
-              expect { subject.call }.to (change { message.reload.received_at }).from(nil).to(datetime_from_timestamp)
+          context 'given delivered_at is blank' do
+            it "also updates the `delivered_at`, because if you've read the message, you must have received it first" do
+              expect { subject.call }.to (change { message.reload.delivered_at }).from(nil).to(datetime_from_timestamp)
             end
           end
         end

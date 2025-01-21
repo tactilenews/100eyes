@@ -428,7 +428,7 @@ RSpec.describe WhatsApp::WebhookController do
               let!(:message) { create(:message, external_id: twilio_message_sid, organization: organization) }
 
               it 'is expected to mark the message as received' do
-                expect { subject.call }.to change { message.reload.received_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+                expect { subject.call }.to change { message.reload.delivered_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
               end
             end
           end
@@ -437,20 +437,20 @@ RSpec.describe WhatsApp::WebhookController do
             before { params['MessageStatus'] = 'read' }
 
             context 'given a message with the twilio message sid as external_id' do
-              let!(:message) { create(:message, external_id: twilio_message_sid, received_at: 1.hour.ago, organization: organization) }
+              let!(:message) { create(:message, external_id: twilio_message_sid, delivered_at: 1.hour.ago, organization: organization) }
 
               it 'is expected to mark the message as read' do
                 expect { subject.call }.to change { message.reload.read_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
               end
 
               context 'given a message has not been marked as received' do
-                before { message.update(received_at: nil) }
+                before { message.update(delivered_at: nil) }
 
-                it 'is expected to mark both received_at and read_at' do
-                  expect { subject.call }.to change { message.reload.received_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
-                                                                                  .and change {
-                                                                                         message.reload.read_at
-                                                                                       }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+                it 'is expected to mark both delivered_at and read_at' do
+                  expect { subject.call }.to change { message.reload.delivered_at }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
+                                                                                   .and change {
+                                                                                          message.reload.read_at
+                                                                                        }.from(nil).to(kind_of(ActiveSupport::TimeWithZone))
                 end
               end
             end

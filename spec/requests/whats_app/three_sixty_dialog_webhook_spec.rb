@@ -59,7 +59,7 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
           'pricing' => {
             'billable' => 'true', 'pricing_model' => 'CBP', 'category' => 'marketing'
           }
-        }.with_indifferent_access
+        }.deep_transform_keys(&:to_sym)
       end
 
       describe 'successful delivery' do

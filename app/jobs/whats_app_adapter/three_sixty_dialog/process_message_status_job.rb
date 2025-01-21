@@ -14,23 +14,13 @@ module WhatsAppAdapter
           return nil
         end
 
-        message = Message::WhatsAppTemplate.find_by(external_id: delivery_receipt[:id]) ||
+        message = contributor.whats_app_template_messages.find_by(external_id: delivery_receipt[:id]) ||
                   contributor.received_messages.find_by(external_id: delivery_receipt[:id])
-
         return unless message
 
         datetime = Time.zone.at(delivery_receipt[:timestamp].to_i).to_datetime
-        attributes_map = {
-          sent: :sent_at,
-          delivered: :received_at,
-          read: :read_at
-        }.with_indifferent_access
-        attribute = attributes_map[delivery_receipt[:status]]
-        return if attribute.blank?
 
-        message.received_at = datetime if attribute.eql?(:read_at) && message.received_at.blank?
-
-        message[attribute] = datetime
+        message.send("#{delivery_receipt[:status]}_at=", datetime)
         message.save!
       end
     end
