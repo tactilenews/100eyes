@@ -73,6 +73,12 @@ class Message < ApplicationRecord
     sender.is_a? Contributor
   end
 
+  def read_at=(datetime)
+    super
+
+    self.delivered_at = datetime if delivered_at.blank?
+  end
+
   private
 
   # rubocop:disable Metrics/AbcSize
