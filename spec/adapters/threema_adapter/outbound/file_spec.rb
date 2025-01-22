@@ -72,6 +72,10 @@ RSpec.describe ThreemaAdapter::Outbound::File do
       it "saves the returned message id to the message's external_id" do
         expect { subject.call }.to change { message.reload.external_id }.from(nil).to(message_id)
       end
+
+      it 'saves the current time as sent_at' do
+        expect { subject.call }.to change { message.reload.sent_at }.from(nil).to be_within(1.second).of(Time.current)
+      end
     end
 
     describe 'Unknown organization' do

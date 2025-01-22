@@ -11,10 +11,11 @@ RSpec.describe SignalAdapter::Outbound::Text do
     end
   end
   let(:contributor) { create(:contributor, signal_phone_number: '+4915112345678', email: nil, organization: organization) }
-  let(:message) { create(:message, :with_file, text: 'Hello Signal') }
+  let(:message) { nil }
+  let(:text) { 'Hello contributor' }
   let(:organization_id) { organization.id }
   let(:contributor_id) { contributor.id }
-  let(:perform) { -> { adapter.perform(organization_id: organization_id, contributor_id: contributor_id, text: message.text) } }
+  let(:perform) { -> { adapter.perform(organization_id: organization_id, contributor_id: contributor_id, text: text, message: message) } }
 
   describe 'perform' do
     subject { perform }
@@ -30,8 +31,22 @@ RSpec.describe SignalAdapter::Outbound::Text do
 
     describe 'signal-rest-cli HTTP response status' do
       describe 'on success' do
-        before { stub_request(:post, 'http://signal:8080/v2/send').to_return(status: 201) }
-        it { should_not raise_error }
+        let(:timestamp) { 1_737_540_424_393 }
+
+        before { stub_request(:post, 'http://signal:8080/v2/send').to_return(status: 201, body: { timestamp: 1_737_540_424_393 }.to_json) }
+
+        it 'should not raise an error' do
+          expect { subject.call }.not_to raise_error
+        end
+
+        context 'given a message' do
+          let(:message) { create(:message, :with_file, text: 'Hello Signal') }
+          let(:text) { message.text }
+
+          it 'updates the sent at using the timestamp' do
+            expect { subject.call }.to (change { message.reload.sent_at }).from(nil).to(Time.zone.at(timestamp / 1000).to_datetime)
+          end
+        end
       end
 
       describe 'on error' do
@@ -80,7 +95,7 @@ RSpec.describe SignalAdapter::Outbound::Text do
       subject { perform.call and WebMock }
 
       it { should have_requested(:post, 'http://signal:8080/v2/send') }
-      it { should have_requested(:post, 'http://signal:8080/v2/send').with(body: hash_including({ message: 'Hello Signal' })) }
+      it { should have_requested(:post, 'http://signal:8080/v2/send').with(body: hash_including({ message: 'Hello contributor' })) }
       it { should have_requested(:post, 'http://signal:8080/v2/send').with(body: hash_including({ recipients: ['+4915112345678'] })) }
       it { should have_requested(:post, 'http://signal:8080/v2/send').with(body: hash_including({ number: 'SIGNAL_SERVER_PHONE_NUMBER' })) }
     end

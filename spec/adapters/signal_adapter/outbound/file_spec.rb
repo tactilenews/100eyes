@@ -17,13 +17,26 @@ RSpec.describe SignalAdapter::Outbound::File do
       allow(ENV).to receive(:fetch).with(
         'SIGNAL_CLI_REST_API_ENDPOINT', 'http://localhost:8080'
       ).and_return('http://signal:8080')
+      allow(ENV).to receive(:fetch).with('ATTR_ENCRYPTED_KEY',
+                                         nil).and_return(Base64.encode64(OpenSSL::Cipher.new('aes-256-gcm').random_key))
       allow(Sentry).to receive(:capture_exception)
     end
 
     describe 'signal-rest-cli HTTP response status' do
       describe 'on success' do
-        before { stub_request(:post, 'http://signal:8080/v2/send').to_return(status: 201) }
-        it { should_not raise_error }
+        let(:timestamp) { 1_737_540_424_393 }
+
+        before { stub_request(:post, 'http://signal:8080/v2/send').to_return(status: 201, body: { timestamp: 1_737_540_424_393 }.to_json) }
+
+        it 'should not raise an error' do
+          expect { subject.call }.not_to raise_error
+        end
+
+        context 'given a message' do
+          it 'updates the sent at using the timestamp' do
+            expect { subject.call }.to (change { message.reload.sent_at }).from(nil).to(Time.zone.at(timestamp / 1000).to_datetime)
+          end
+        end
       end
 
       describe 'on error' do

@@ -66,7 +66,7 @@ RSpec.describe SignalAdapter::Outbound do
     subject { -> { described_class.send!(message) } }
 
     let(:expected_job_args) do
-      { organization_id: organization.id, contributor_id: contributor.id, text: message.text }
+      { organization_id: organization.id, contributor_id: contributor.id, text: message.text, message: message }
     end
     before { message } # we don't count the extra ::send here
 

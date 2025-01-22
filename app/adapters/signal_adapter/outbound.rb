@@ -11,7 +11,7 @@ module SignalAdapter
           SignalAdapter::Outbound::File.perform_later(message: message)
         else
           SignalAdapter::Outbound::Text.perform_later(organization_id: message.organization.id, contributor_id: recipient.id,
-                                                      text: message.text)
+                                                      text: message.text, message: message)
         end
       end
 

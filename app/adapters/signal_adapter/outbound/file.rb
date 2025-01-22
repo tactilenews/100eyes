@@ -16,10 +16,10 @@ module SignalAdapter
                                         'Content-Type': 'application/json'
                                       })
         request.body = data.to_json
-        SignalAdapter::Api.perform_request(organization, request, message.recipient) do
-          # TODO: Do something on success. For example, mark the message as delivered?
-          # Or should we use deliver receipts as the source of truth.
-          Rails.logger.debug 'Great!'
+        SignalAdapter::Api.perform_request(organization, request, message.recipient) do |response|
+          datetime = Time.zone.at(JSON.parse(response.body)['timestamp'].to_i / 1000).to_datetime
+
+          message.update(sent_at: datetime)
         end
       end
 
