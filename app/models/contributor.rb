@@ -72,10 +72,9 @@ class Contributor < ApplicationRecord
   end
 
   def reply(message_decorator)
-    request = active_request or return nil
     ActiveRecord::Base.transaction do
       message = message_decorator.message
-      message.request = request
+      message.request = active_request
       message.save!
     end
   end
@@ -109,9 +108,7 @@ class Contributor < ApplicationRecord
   end
 
   def active_request
-    # active_request is always the request of the contributors last received message or the last broadcasted request
-    # (first has to be used as the default order of messages and request is set to created_at desc)
-    received_messages.first&.request || organization.requests.broadcasted.first
+    received_messages.first&.request
   end
 
   def telegram?

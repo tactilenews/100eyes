@@ -156,8 +156,16 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
             request
           end
 
-          it 'is expected to attach the latest request' do
-            expect(reply.request).to eq(request)
+          it 'is expected not to raise an error' do
+            expect { subject.call }.not_to raise_error
+          end
+
+          it 'saves the reply' do
+            expect(reply).to be_persisted
+          end
+
+          it 'is expected to be nil' do
+            expect(reply.request).to be_nil
           end
         end
 

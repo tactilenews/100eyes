@@ -148,7 +148,9 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
         subject { -> { dispatch_message message, message_options } }
         let(:contributor) { create(:contributor, :with_an_avatar, telegram_id: 12_345, organization: organization) }
 
-        it { expect { subject.call }.not_to(change { Message.count }) }
+        it 'is expected to save the message' do
+          expect { subject.call }.to change(Message, :count).by(1)
+        end
 
         context 'given a recent request' do
           before { create(:request, organization: organization, user: user) }

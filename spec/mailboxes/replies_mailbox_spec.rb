@@ -31,7 +31,9 @@ RSpec.describe RepliesMailbox, type: :mailbox do
     let(:contributor) { create(:contributor, email: 'zora@example.org', organization: organization) }
     before(:each) { contributor }
 
-    it { should_not(change { Message.count }) }
+    it 'saves the message' do
+      expect { subject.call }.to change(Message, :count).by(1)
+    end
 
     describe 'given an active request' do
       let(:request) { create(:request, title: 'Wie geht es euren Haustieren in Corona-Zeiten?', organization: organization) }

@@ -454,7 +454,10 @@ RSpec.describe Contributor, type: :model do
       let(:message_inbound_adapter) { PostmarkAdapter::Inbound.new(mail) }
 
       it { should_not raise_error }
-      it { should_not(change { Message.count }) }
+
+      it 'is expected to create a message record' do
+        expect { subject.call }.to change(Message, :count).by(1)
+      end
 
       describe 'given a recent request' do
         let!(:contributor) { create(:contributor, email: 'contributor@example.org', organization: organization) }
@@ -498,7 +501,10 @@ RSpec.describe Contributor, type: :model do
       let!(:contributor) { create(:contributor, :with_an_avatar, telegram_id: 4711, organization: organization) }
 
       it { expect { subject.call }.not_to raise_error }
-      it { expect { subject.call }.not_to(change { Message.count }) }
+
+      it 'is expected to create a message record' do
+        expect { subject.call }.to change(Message, :count).by(1)
+      end
 
       describe 'given a recent request' do
         before(:each) { the_request }
@@ -601,7 +607,10 @@ RSpec.describe Contributor, type: :model do
       end
 
       it { should_not raise_error }
-      it { should_not(change { Message.count }) }
+
+      it 'is expected to create a message record' do
+        expect { subject.call }.to change(Message, :count).by(1)
+      end
 
       describe 'given a recent request' do
         before(:each) { the_request }
@@ -636,8 +645,8 @@ RSpec.describe Contributor, type: :model do
     describe 'given a request has gone out before the contributor onboarded' do
       let!(:previous_request) { create(:request, broadcasted_at: 1.day.ago, organization: contributor.organization) }
 
-      it 'is expected to be the most recent request' do
-        expect(subject).to eq(previous_request)
+      it 'is expected to be nil' do
+        expect(subject).to be_nil
       end
 
       context 'the previous request is from a different organization' do
@@ -655,10 +664,14 @@ RSpec.describe Contributor, type: :model do
     end
 
     describe 'if a request was broadcasted' do
-      before(:each) { the_request.update(broadcasted_at: 1.day.ago) }
+      before { the_request.update(broadcasted_at: 1.day.ago) }
+
       describe 'and afterwards a contributor joins' do
-        before(:each) { contributor }
-        it { should eq(the_request) }
+        before { contributor }
+
+        it 'is expected to be nil' do
+          expect(subject).to be_nil
+        end
       end
     end
 
