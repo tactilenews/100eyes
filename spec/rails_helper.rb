@@ -92,6 +92,7 @@ RSpec.configure do |config|
   config.include ActionView::Helpers::NumberHelper, type: :requests
   config.include Rails.application.routes.url_helpers, type: :component
   config.include Helpers
+  config.include ActionView::Helpers::SanitizeHelper, type: :component
 end
 
 Capybara.configure do |config|

@@ -3,7 +3,7 @@
 class MessageReceived < Noticed::Base
   deliver_by :database, format: :to_database, association: :notifications_as_recipient
 
-  param :contributor_id, :request_id, :message_id, :organization_id
+  param :contributor_id, :message_id, :organization_id
 
   def to_database
     {
@@ -37,7 +37,7 @@ class MessageReceived < Noticed::Base
   # rubocop:enable Rails/OutputSafety
 
   def url
-    organization_request_path(record.request.organization_id, record.request, anchor: "message-#{record.message.id}")
+    conversations_organization_contributor_path(record.organization_id, record.contributor_id, anchor: "message-#{record.message.id}")
   end
 
   def link_text

@@ -101,7 +101,7 @@ module ThreemaAdapter
 
       trigger(UNSUBSCRIBE_CONTRIBUTOR, sender, organization) if unsubscribe_text?(text)
       trigger(RESUBSCRIBE_CONTRIBUTOR, sender, organization) if resubscribe_text?(text)
-      message = Message.new(text: text, sender: sender)
+      message = Message.new(text: text, sender: sender, organization: organization)
       message.raw_data.attach(
         io: StringIO.new(decrypted_message.content),
         filename: 'threema_api.json',

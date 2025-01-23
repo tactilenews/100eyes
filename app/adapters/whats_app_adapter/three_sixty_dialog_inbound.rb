@@ -70,7 +70,7 @@ module WhatsAppAdapter
     end
 
     def initialize_message
-      message = Message.new(text: text, sender: sender, external_id: message_payload[:id])
+      message = Message.new(text: text, sender: sender, external_id: message_payload[:id], organization: organization)
       message.raw_data.attach(
         io: StringIO.new(JSON.generate(whats_app_payload)),
         filename: 'whats_app_payload.json',

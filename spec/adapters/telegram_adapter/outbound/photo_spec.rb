@@ -8,7 +8,9 @@ RSpec.describe TelegramAdapter::Outbound::Photo do
     create(:organization, name: '100eyes', telegram_bot_api_key: 'TELEGRAM_BOT_API_KEY', telegram_bot_username: 'USERNAME')
   end
   let(:contributor) { create(:contributor, telegram_id: 4, organization: organization) }
-  let(:message) { create(:message, :with_file, text: 'Did you get my image file?', broadcasted: true, recipient: contributor) }
+  let(:message) do
+    create(:message, :with_file, text: 'Did you get my image file?', broadcasted: true, recipient: contributor, organization: organization)
+  end
   let(:organization_id) { organization.id }
   let(:contributor_id) { contributor.id }
   let(:photos) { create_list(:file, 2, message: message) }

@@ -602,7 +602,9 @@ RSpec.describe 'Requests', type: :request do
             end.flatten
             responsive_recipient = delivered_messages_from_organization.first.recipient
             create_list(:message, 2, request: request, sender: responsive_recipient)
-            create(:message, :with_a_photo, sender: responsive_recipient, request: request) # counted
+            create(:message, sender: responsive_recipient, request: request) do |message| # counted
+              create(:photo, message: message)
+            end
             create(:message, :with_file, sender: responsive_recipient, request: request,
                                          attachment: fixture_file_upload('example-image.png')) # counted
             # Not counted for photos because it's a pdf, counted as a reply because a message record is created

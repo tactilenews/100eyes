@@ -8,13 +8,15 @@ RSpec.describe 'Conversation interactions', js: false do
   let(:contributor) { create(:contributor, email: 'contributor@example.org', organization: organization) }
   let(:request) { create(:request, organization: organization) }
   let(:first_received_message) do
-    create(:message, text: 'Message with the contributor as recipient 1', recipient: contributor, request: request)
+    create(:message, text: 'Message with the contributor as recipient 1', recipient: contributor, request: request,
+                     organization: organization)
   end
   let(:sent_message) do
-    create(:message, sender: contributor, request: request)
+    create(:message, sender: contributor, request: request, organization: organization)
   end
   let(:last_received_message) do
-    create(:message, text: 'Message with the contributor as recipient 2', recipient: contributor, request: request)
+    create(:message, text: 'Message with the contributor as recipient 2', recipient: contributor, request: request,
+                     organization: organization)
   end
 
   before do

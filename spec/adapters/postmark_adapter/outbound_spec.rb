@@ -56,7 +56,9 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
     let(:request) { create(:request, id: 4711, organization: organization) }
     let(:recipient) { create(:contributor, email: email_address) }
     let(:email_address) { 'recipient@example.org' }
-    let(:message) { create(:message, id: 42, text: text, recipient: recipient, broadcasted: broadcasted, request: request) }
+    let(:message) do
+      create(:message, id: 42, text: text, recipient: recipient, broadcasted: broadcasted, request: request, organization: organization)
+    end
     let(:text) { 'How do you do?' }
     let(:broadcasted) { false }
 

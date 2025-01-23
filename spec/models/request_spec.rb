@@ -215,7 +215,9 @@ RSpec.describe Request, type: :model do
         responsive_recipient, _, *other_recipients = delivered_messages.map(&:recipient)
         create_list(:message, 3, request: request, sender: responsive_recipient)
         other_recipients.each do |recipient|
-          create(:message, :with_a_photo, sender: recipient, request: request)
+          create(:message, sender: recipient, request: request) do |message|
+            create(:photo, message: message)
+          end
           create(:message, :with_file, sender: recipient, request: request, attachment: fixture_file_upload('example-image.png'))
           create(:message, :with_file, sender: recipient, request: request, attachment: fixture_file_upload('invalid_profile_picture.pdf'))
         end

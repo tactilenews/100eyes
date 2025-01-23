@@ -85,7 +85,7 @@ module WhatsAppAdapter
       if request_to_receive_message?(sender, whats_app_message)
         trigger(REQUEST_TO_RECEIVE_MESSAGE, sender, original_replied_message_sid, organization)
       end
-      message = Message.new(text: message_text, sender: sender)
+      message = Message.new(text: message_text, sender: sender, organization: organization)
       message.raw_data.attach(
         io: StringIO.new(JSON.generate(whats_app_message)),
         filename: 'whats_app_message.json',

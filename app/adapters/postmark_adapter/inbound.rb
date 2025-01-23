@@ -52,7 +52,7 @@ module PostmarkAdapter
     end
 
     def initialize_message(mail)
-      message = Message.new(text: text, sender: sender)
+      message = Message.new(text: text, sender: sender, organization: organization)
       message.raw_data.attach(
         io: StringIO.new(mail.encoded),
         filename: 'email.eml',

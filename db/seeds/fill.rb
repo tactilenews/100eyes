@@ -61,5 +61,7 @@ FactoryBot.build_list(:request, request_count) do |request|
   Rails.logger.debug 'Seeding requests replies...'
   FactoryBot.create_list(:message, replies_count, request: request)
   FactoryBot.create_list(:message, file_replies_count, :with_file, request: request)
-  FactoryBot.create_list(:message, photo_replies_count, :with_a_photo, request: request)
+  FactoryBot.create_list(:message, photo_replies_count, request: request) do |message|
+    create(:photo, message: message)
+  end
 end

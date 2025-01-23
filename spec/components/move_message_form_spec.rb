@@ -11,7 +11,7 @@ RSpec.describe MoveMessageForm::MoveMessageForm, type: :component do
   let!(:planned_request) { create(:request, broadcasted_at: 1.hour.from_now, organization: organization) }
   let!(:other_organizations_request) { create(:request, broadcasted_at: 1.hour.ago) }
 
-  let(:message) { create(:message, request: request_for_info) }
+  let(:message) { create(:message, request: request_for_info, organization: organization) }
 
   let(:params) { { message: message } }
 

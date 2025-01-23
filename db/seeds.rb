@@ -4,7 +4,7 @@
 password = ENV.fetch('SEED_USER_PASSWORD', SecureRandom.alphanumeric(20))
 otp_secret_key = ENV.fetch('SEED_USER_OTP_SECRET', User.otp_random_secret)
 
-business_plan = BusinessPlan.create!(
+business_plan = BusinessPlan.create_or_find_by!(
   name: 'Free',
   price_per_month: 0,
   setup_cost: 0,

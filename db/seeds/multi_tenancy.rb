@@ -12,6 +12,7 @@ organizations = 3.times.collect do
     project_name: Faker::Company.name,
     upgrade_discount: rand(0..25),
     business_plan: business_plan,
+    project_name: Faker::Company.name,
     telegram_bot_username: Faker::Internet.username
   )
 end

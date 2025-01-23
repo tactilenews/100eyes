@@ -46,7 +46,7 @@ RSpec.describe 'Charts' do
 
   describe 'GET /{organization_id}/charts/day-and-time-replies' do
     before do
-      create(:message, created_at: last_friday_midnight, request: request)
+      create(:message, created_at: last_friday_midnight, request: request, organization: organization)
       create(:message, created_at: last_friday_midnight, request: request_from_other_organization)
 
       data_dup.first[:y] = 1
@@ -89,7 +89,7 @@ RSpec.describe 'Charts' do
 
     context 'request, with direct message' do
       before do
-        create(:direct_message, created_at: last_friday_midnight, request: request)
+        create(:direct_message, created_at: last_friday_midnight, request: request, organization: organization)
         create(:direct_message, created_at: last_friday_midnight, request: request_from_other_organization)
         data_dup.first[:y] = 2
         friday[:data] = data_dup
@@ -143,7 +143,7 @@ RSpec.describe 'Charts' do
       let(:friday) { data_dup.find { |hash| hash[:x] == 'Freitag' } }
 
       before do
-        create(:message, created_at: last_friday_midnight, request: request)
+        create(:message, created_at: last_friday_midnight, request: request, organization: organization)
 
         friday[:y] = 1
         editorial[:data] = data_dup

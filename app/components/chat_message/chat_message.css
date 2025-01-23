@@ -61,17 +61,12 @@
   width: 5em;
 }
 
-.ChatMessage-header {
-  display: block;
-  margin-bottom: var(--spacing-unit-s);
-  color: var(--color-text-light);
-}
 
 .ChatMessagesGroup-messages .ChatMessage-requestReference {
   display: none;
 }
 
-.ChatMessage:hover .ChatMessage-header a {
+.ChatMessage:hover .ChatMessageHeader a {
   text-decoration: underline;
 }
 

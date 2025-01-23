@@ -11,11 +11,12 @@ class Message < ApplicationRecord
   belongs_to :sender, polymorphic: true, optional: true
   belongs_to :recipient, class_name: 'Contributor', optional: true
   belongs_to :creator, class_name: 'User', optional: true
-  belongs_to :request
+  belongs_to :request, optional: true
+  belongs_to :organization
+
   has_many :photos, dependent: :destroy
   has_many :files, dependent: :destroy, class_name: 'Message::File'
   has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
-  has_one :organization, through: :request
   has_one :whats_app_template, dependent: :destroy, class_name: 'Message::WhatsAppTemplate'
 
   counter_culture :request,
@@ -31,8 +32,6 @@ class Message < ApplicationRecord
   scope :direct_messages, -> { outbound.where(broadcasted: false) }
 
   delegate :name, to: :creator, allow_nil: true, prefix: true
-
-  delegate :organization_id, to: :request
 
   has_many_attached :raw_data
   validates :raw_data, presence: true, if: -> { sent_from_contributor? }
@@ -86,7 +85,7 @@ class Message < ApplicationRecord
     if reply?
       MessageReceived.with(
         contributor_id: sender_id,
-        request_id: request.id,
+        request_id: request&.id,
         message_id: id,
         organization_id: organization.id
       ).deliver_later(organization.users + User.admin.all)

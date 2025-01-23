@@ -19,6 +19,18 @@ module ChatMessage
       super + [:highlighted]
     end
 
+    def copy_url
+      if message.sent_from_contributor?
+        conversations_organization_contributor_url(
+          organization_id: message.organization_id,
+          id: message.contributor.id,
+          anchor: id
+        )
+      else
+        organization_request_url(message.organization_id, message.request_id, anchor: id)
+      end
+    end
+
     def id
       "message-#{message.id}"
     end
@@ -57,37 +69,6 @@ module ChatMessage
 
     def creator_name
       message.creator_name.presence || I18n.t('components.chat_message.anonymous_creator')
-    end
-
-    def sent_by_reference
-      if message.sent_from_contributor?
-        link_to_unless(
-          current_page?(contributor_path, check_parameters: false),
-          sent_by_text,
-          contributor_path(anchor: id),
-          data: { turbo: false }
-        )
-      else
-        content_tag(:p, sent_by_text)
-      end
-    end
-
-    def sent_by_text
-      name = message.sender ? message.sender.first_name : message.organization.project_name
-      I18n.t('components.chat_message.sent_by_x_at',
-             name: name, date: date_time(message.updated_at)).html_safe # rubocop:disable Rails/OutputSafety
-    end
-
-    def contributor_path(anchor: nil)
-      conversations_organization_contributor_path(
-        organization_id: message.organization_id,
-        id: message.contributor.id,
-        anchor: anchor
-      )
-    end
-
-    def request_link
-      link_to message.request.title, organization_request_path(message.organization_id, id: message.request, anchor: "message-#{message.id}")
     end
 
     def warnings

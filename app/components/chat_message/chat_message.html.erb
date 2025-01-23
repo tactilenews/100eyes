@@ -6,14 +6,12 @@
   data-chat-message-truncated-class="ChatMessage--truncated"
   data-chat-message-expanded-class="ChatMessage--expanded"
   data-chat-message-highlighted-class="ChatMessage--highlighted"
-  data-chat-message-copy-url-value="<%= organization_request_url(message.organization_id, message.request_id, anchor: id) %>"
+  data-chat-message-copy-url-value="<%= copy_url %>"
   data-chat-message-highlight-url-value="<%= organization_message_highlight_path(message.organization_id, message) %>"
   id="<%= id %>"
 >
-    <header class="ChatMessage-header">
-      <%= sent_by_reference -%><span class="ChatMessage-requestReference"><%= t('.about') -%><%= request_link %></span>
-    </header>
 
+    <%= c 'chat_message_header', message: message %>
     <section class="ChatMessage-body">
       <% if message.text.present? %>
         <div class="ChatMessage-text">

@@ -7,6 +7,7 @@ FactoryBot.define do
     text { Faker::Lorem.sentence }
     request
     inbound
+    organization
 
     after(:build) do |message|
       message.raw_data.attach(
@@ -32,12 +33,6 @@ FactoryBot.define do
       end
       after(:create) do |message, evaluator|
         create(:file, message: message, attachment: evaluator.attachment)
-      end
-    end
-
-    trait :with_a_photo do
-      after(:create) do |message|
-        create(:photo, message: message)
       end
     end
   end

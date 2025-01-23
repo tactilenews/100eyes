@@ -171,7 +171,7 @@ ActiveRecord::Schema.define(version: 2025_02_04_113104) do
 
   create_table "messages", force: :cascade do |t|
     t.bigint "sender_id"
-    t.bigint "request_id", null: false
+    t.bigint "request_id"
     t.string "text"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -188,7 +188,9 @@ ActiveRecord::Schema.define(version: 2025_02_04_113104) do
     t.datetime "read_at"
     t.string "external_id"
     t.datetime "sent_at"
+    t.bigint "organization_id"
     t.index ["creator_id"], name: "index_messages_on_creator_id"
+    t.index ["organization_id"], name: "index_messages_on_organization_id"
     t.index ["recipient_id"], name: "index_messages_on_recipient_id"
     t.index ["request_id"], name: "index_messages_on_request_id"
     t.index ["sender_id", "sender_type"], name: "index_messages_on_sender_id_and_sender_type"
@@ -359,6 +361,7 @@ ActiveRecord::Schema.define(version: 2025_02_04_113104) do
   add_foreign_key "message_files", "messages"
   add_foreign_key "message_whats_app_templates", "messages"
   add_foreign_key "messages", "contributors", column: "recipient_id"
+  add_foreign_key "messages", "organizations"
   add_foreign_key "messages", "requests"
   add_foreign_key "organizations", "business_plans"
   add_foreign_key "organizations", "users", column: "contact_person_id"

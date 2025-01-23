@@ -85,7 +85,9 @@ RSpec.describe ':organization_id/messages', type: :request do
     end
 
     context 'with a message of the organization' do
-      let(:message) { create(:message, creator_id: user.id, text: previous_text, request: request, sender: contributor) }
+      let(:message) do
+        create(:message, creator_id: user.id, text: previous_text, request: request, sender: contributor, organization: organization)
+      end
 
       subject { -> { patch organization_message_url(message.organization, message, as: user), params: { message: new_attrs } } }
 
@@ -107,7 +109,7 @@ RSpec.describe ':organization_id/messages', type: :request do
       end
 
       context 'not manually created message' do
-        let(:message) { create(:message, creator_id: nil, request: request) }
+        let(:message) { create(:message, creator_id: nil, request: request, organization: organization) }
 
         it 'does not update the requested message' do
           subject.call
