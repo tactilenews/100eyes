@@ -31,7 +31,7 @@ class MessageReceived < Noticed::Base
     t(".text_html.#{pluralization_key(count)}",
       contributor_one: unique_contributors.first.name,
       contributor_two: unique_contributors.second&.name,
-      request_title: record.request.title,
+      request_title: record.request&.title,
       others_count: count - 1).html_safe
   end
   # rubocop:enable Rails/OutputSafety

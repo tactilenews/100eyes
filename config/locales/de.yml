@@ -169,6 +169,9 @@ de:
     move_message_form:
       submit: Verschieben
       cancel: Abbrechen
+      no_request:
+        label: Keine Frage
+        help: Wenn sie nicht zu einer Frage gehört, wähle diese.
     copy_button:
       loading: lade…
       success: kopiert
