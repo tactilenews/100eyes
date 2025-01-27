@@ -45,29 +45,82 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
     end
 
     describe 'statuses' do
-      context 'successful delivery' do
-        let(:successful_delivery) do
-          [{
-            'id' => 'valid_message_id',
-            'status' => 'delivered',
-            'timestamp' => '1732132030',
-            'recipient_id' => '49123456789',
-            'conversation' => {
-              'id' => 'valid_conversation_id', 'origin' => {
-                'type' => 'marketing'
-              }
-            },
-            'pricing' => {
-              'billable' => true, 'pricing_model' => 'CBP', 'category' => 'marketing'
+      let(:message_delivery) do
+        {
+          'id' => 'valid_message_id',
+          'status' => '',
+          'timestamp' => '1732132030',
+          'recipient_id' => '49123456789',
+          'conversation' => {
+            'id' => 'valid_conversation_id', 'origin' => {
+              'type' => 'marketing'
             }
-          }]
+          },
+          'pricing' => {
+            'billable' => 'true', 'pricing_model' => 'CBP', 'category' => 'marketing'
+          }
+        }.deep_transform_keys(&:to_sym)
+      end
+
+      describe 'successful delivery' do
+        context 'sent' do
+          let(:sent_status) do
+            message_delivery.merge(status: 'sent')
+          end
+
+          before { components[:statuses] = [sent_status] }
+
+          it 'is successful' do
+            subject.call
+            expect(response).to be_successful
+          end
+
+          it 'schedules a job to process the messages statuses' do
+            expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::ProcessMessageStatusJob).with(
+              organization_id: organization.id,
+              delivery_receipt: sent_status
+            )
+          end
         end
 
-        before { components[:statuses] = successful_delivery }
+        context 'delivered' do
+          let(:delivered_status) do
+            message_delivery.merge({ status: 'delivered' })
+          end
 
-        it 'is successful' do
-          subject.call
-          expect(response).to be_successful
+          before { components[:statuses] = [delivered_status] }
+
+          it 'is successful' do
+            subject.call
+            expect(response).to be_successful
+          end
+
+          it 'schedules a job to process the messages statuses' do
+            expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::ProcessMessageStatusJob).with(
+              organization_id: organization.id,
+              delivery_receipt: delivered_status
+            )
+          end
+        end
+
+        context 'read' do
+          let(:read_status) do
+            message_delivery.merge({ status: 'read' })
+          end
+
+          before { components[:statuses] = [read_status] }
+
+          it 'is successful' do
+            subject.call
+            expect(response).to be_successful
+          end
+
+          it 'schedules a job to process the messages statuses' do
+            expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::ProcessMessageStatusJob).with(
+              organization_id: organization.id,
+              delivery_receipt: read_status
+            )
+          end
         end
       end
 

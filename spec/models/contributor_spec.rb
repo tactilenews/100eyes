@@ -992,4 +992,22 @@ RSpec.describe Contributor, type: :model do
 
     it_behaves_like 'an ActivityNotification', 'OnboardingCompleted', 2
   end
+
+  describe '::whats_app_template_messages' do
+    context 'given some messages with templates' do
+      subject { contributor.whats_app_template_messages }
+
+      let!(:for_contributor) do
+        3.times.collect do
+          create(:message_whats_app_template, message: create(:message, :outbound, recipient: contributor))
+        end
+      end
+
+      before { create(:message_whats_app_template, message: create(:message, :outbound, recipient: create(:contributor))) }
+
+      it 'only returns template messages for messages sent to the contributor' do
+        expect(subject.sort).to eq(for_contributor.sort)
+      end
+    end
+  end
 end

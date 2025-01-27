@@ -19,7 +19,7 @@ module ThreemaAdapter
                                                         caption: caption)
         return unless message
 
-        message.update(external_id: message_id)
+        message.update(external_id: message_id, sent_at: Time.current)
       rescue ActiveRecord::RecordNotFound => e
         ErrorNotifier.report(e)
       rescue RuntimeError => e

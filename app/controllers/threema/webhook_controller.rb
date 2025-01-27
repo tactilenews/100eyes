@@ -65,12 +65,11 @@ class Threema::WebhookController < ApplicationController
 
         local_datetime = Time.zone.at(delivery_receipt.timestamp).to_datetime
 
-        message.update(received_at: local_datetime) if delivery_receipt.status.eql?(:received)
+        message.update(delivered_at: local_datetime) if delivery_receipt.status.eql?(:received)
 
         next unless delivery_receipt.status.eql?(:read)
 
         message.read_at = local_datetime
-        message.received_at = local_datetime if message.received_at.blank?
         message.save
       end
     end

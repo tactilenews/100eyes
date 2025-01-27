@@ -14,6 +14,9 @@ class Contributor < ApplicationRecord
 
   has_many :replies, class_name: 'Message', as: :sender, dependent: :destroy
   has_many :received_messages, class_name: 'Message', inverse_of: :recipient, foreign_key: 'recipient_id', dependent: :destroy
+  has_many :whats_app_template_messages, lambda { |contributor|
+                                           contributor.received_messages
+                                         }, source: :whats_app_template, through: :received_messages
   has_many :replied_to_requests, -> { reorder(created_at: :desc).distinct }, source: :request, through: :replies
   has_many :received_requests, -> { broadcasted.reorder(broadcasted_at: :desc).distinct }, source: :request, through: :received_messages
   has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy

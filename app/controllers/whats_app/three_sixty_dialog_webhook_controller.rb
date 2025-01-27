@@ -5,6 +5,7 @@ module WhatsApp
     skip_before_action :require_login, :verify_authenticity_token, :user_permitted?
     before_action :extract_components, only: :message
 
+    SUCCESSFUL_DELIVERY = %w[sent delivered read].freeze
     UNSUCCESSFUL_DELIVERY = %w[undelivered failed].freeze
     INVALID_MESSAGE_RECIPIENT_ERROR_CODE = 131_026 # https://docs.360dialog.com/docs/useful/api-error-message-list#type-message-undeliverable
 
@@ -51,10 +52,11 @@ module WhatsApp
 
     def handle_statuses
       statuses = @components[:statuses]
-      statuses.each do |status|
-        invalid_recipient_error = status[:errors]&.select { |error| error[:code].to_i.eql?(INVALID_MESSAGE_RECIPIENT_ERROR_CODE) }
-        mark_inactive_contributor_inactive(status) if invalid_recipient_error.present?
-        handle_errors(status[:errors]) if status[:status].in?(UNSUCCESSFUL_DELIVERY)
+      statuses.each do |delivery_receipt|
+        invalid_recipient_error = delivery_receipt[:errors]&.select { |error| error[:code].to_i.eql?(INVALID_MESSAGE_RECIPIENT_ERROR_CODE) }
+        mark_inactive_contributor_inactive(delivery_receipt) if invalid_recipient_error.present?
+        handle_errors(delivery_receipt[:errors]) if delivery_receipt[:status].in?(UNSUCCESSFUL_DELIVERY)
+        handle_successful_delivery(delivery_receipt) if delivery_receipt[:status].in?(SUCCESSFUL_DELIVERY)
       end
     end
 
@@ -68,6 +70,12 @@ module WhatsApp
     def mark_inactive_contributor_inactive(status)
       contributor = @organization.contributors.find_by(whats_app_phone_number: "+#{status[:recipient_id]}")
       MarkInactiveContributorInactiveJob.perform_later(organization_id: @organization.id, contributor_id: contributor.id)
+    end
+
+    def handle_successful_delivery(delivery_receipt)
+      delivery_receipt = delivery_receipt.deep_transform_keys(&:to_sym)
+      WhatsAppAdapter::ThreeSixtyDialog::ProcessMessageStatusJob.perform_later(organization_id: @organization.id,
+                                                                               delivery_receipt: delivery_receipt)
     end
   end
 end

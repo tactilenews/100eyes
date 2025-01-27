@@ -174,8 +174,8 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         end
         let(:request) { create(:request, organization: organization) }
         let!(:message) { create(:message, :outbound, recipient: contributor, request: request) }
-        it 'updates message.received_at (#1914)' do
-          expect { subject.call }.to change { message.reload.received_at }.from(nil).to(Time.zone.at(1_719_664_635))
+        it 'updates message.delivered_at (#1914)' do
+          expect { subject.call }.to change { message.reload.delivered_at }.from(nil).to(Time.zone.at(1_719_664_635))
         end
       end
 

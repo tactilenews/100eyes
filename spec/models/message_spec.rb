@@ -208,4 +208,27 @@ RSpec.describe Message, type: :model do
       it { expect { subject }.to (change { request.replies_count }).from(4711).to(1) }
     end
   end
+
+  describe '#read_at=(datetime)' do
+    subject do
+      message.read_at = read_at
+      message.save
+    end
+
+    let!(:message) { create(:message, :outbound, delivered_at: nil, read_at: nil) }
+    let!(:read_at) { Time.zone.at(1_692_118_778).to_datetime }
+
+    it 'updates both read_at and delivered_at if blank, as you cannot read a message that has not been delivered' do
+      expect { subject }.to (change { message.reload.read_at }).from(nil).to(read_at)
+                                                               .and (change { message.reload.delivered_at }).from(nil).to(read_at)
+    end
+
+    context 'given delivered_at is present' do
+      before { message.update!(delivered_at: 1.day.ago) }
+
+      it 'does not update it' do
+        expect { subject }.not_to(change { message.reload.delivered_at })
+      end
+    end
+  end
 end
