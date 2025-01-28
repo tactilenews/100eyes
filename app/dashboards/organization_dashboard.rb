@@ -24,7 +24,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
     onboarding_additional_consent_text: Field::String,
     channel_image: Field::ActiveStorage,
     whats_app_more_info_message: Field::Text,
-    whats_app_profile_about: Field::Text,
+    whats_app_profile_description: Field::Text,
     signal_complete_onboarding_link: Field::Url,
     whats_app_quick_reply_button_text: Field::JSONB,
     email_from_address: Field::Email,
@@ -71,7 +71,8 @@ class OrganizationDashboard < Administrate::BaseDashboard
     business_plan
     contact_person
     upgrade_discount
-    whats_app_profile_about
+    whats_app_profile_description
+    whats_app_more_info_message
     onboarding_data_protection_link
     onboarding_data_processing_consent_additional_info
     onboarding_imprint_link
@@ -97,7 +98,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
     contact_person
     business_plan
     upgrade_discount
-    whats_app_profile_about
+    whats_app_profile_description
     whats_app_more_info_message
     onboarding_data_protection_link
     onboarding_data_processing_consent_additional_info
