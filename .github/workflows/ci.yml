@@ -8,7 +8,7 @@ jobs:
     timeout-minutes: 15
 
     env:
-      RUBYOPT: "-W:no-deprecated"
+      RUBYOPT: '-W:no-deprecated'
       RAILS_ENV: test
       DATABASE_URL: postgres://postgres:postgres@localhost:5432
 
@@ -19,7 +19,7 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: app_test
-        ports: [ "5432:5432" ]
+        ports: ['5432:5432']
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
@@ -38,15 +38,8 @@ jobs:
       - name: Install ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version:  ${{ steps.versions.outputs.ruby}}
+          ruby-version: ${{ steps.versions.outputs.ruby}}
           bundler-cache: true
-
-      - name: Cache NPM dependencies
-        uses: actions/cache@v3.2.6
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: ${{ runner.os }}-npm-
 
       - name: Install NPM dependencies
         run: npm install
