@@ -153,7 +153,9 @@
     bottom: 3px;
   }
 
-  .NavBar-item:not(.NavBar-profileLink):not(.NavBar-settings):not(.NavBar-logOut)
+  .NavBar-item:not(.NavBar-profileLink):not(.NavBar-settings):not(
+      .NavBar-logOut
+    )
     svg {
     display: none;
   }

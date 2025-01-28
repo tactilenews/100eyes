@@ -15,7 +15,7 @@ export default class extends Controller {
     this.messageTemplate = JSON.parse(this.messageTemplateValue);
     this.intervalHandle = setInterval(
       () => this.fetchMessages(),
-      POLLING_INTERVAL
+      POLLING_INTERVAL,
     );
   }
 

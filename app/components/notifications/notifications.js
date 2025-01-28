@@ -11,7 +11,7 @@ export default class extends Controller {
     newDocument.innerHTML = await event.detail.fetchResponse.responseHTML;
 
     const newNotifications = newDocument.querySelector(
-      '[data-controller="notifications"]'
+      '[data-controller="notifications"]',
     );
 
     this.element.replaceWith(newNotifications);

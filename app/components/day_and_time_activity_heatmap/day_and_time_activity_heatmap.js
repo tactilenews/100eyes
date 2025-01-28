@@ -27,7 +27,7 @@ export default class extends Controller {
   setupHeatmap(jsonResponse) {
     const values = jsonResponse.reduce(
       (acc, object) => [...acc, ...Object.values(object.data.map(o => o.y))],
-      []
+      [],
     );
     const maxValue = Math.max(...values);
     const maxValueDividedByColorSegments = Math.round(maxValue / 6);

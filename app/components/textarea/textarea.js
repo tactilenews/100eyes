@@ -25,7 +25,7 @@ export default class extends Controller {
     const highlightedText = replacePlaceholder(
       this.inputTarget.value,
       placeholder,
-      '<span class="Placeholder">$1</span>'
+      '<span class="Placeholder">$1</span>',
     );
 
     this.highlightsTarget.innerHTML = highlightedText;
