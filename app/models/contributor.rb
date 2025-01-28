@@ -143,8 +143,8 @@ class Contributor < ApplicationRecord
     tags.any?
   end
 
-  def recent_replies
-    result = replies.includes(:recipient, :request).reorder(created_at: :desc)
+  def most_recent_replies_to_some_request
+    result = replies.with_request_attached.includes(:recipient, :request).reorder(created_at: :desc)
     result = result.group_by(&:request).values # array or groups
     result = result.map(&:first) # choose most recent message per group
     result.sort_by(&:created_at).reverse # ensure descending order

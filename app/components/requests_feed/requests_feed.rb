@@ -14,7 +14,7 @@ module RequestsFeed
     attr_reader :organization, :contributor
 
     def replies
-      @replies ||= contributor.recent_replies
+      @replies ||= contributor.most_recent_replies_to_some_request
     end
   end
 end
