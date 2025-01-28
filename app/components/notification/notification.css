@@ -46,7 +46,9 @@
 .Notification--floating.Notification--closed {
   visibility: hidden;
   opacity: 0;
-  transition: visibility 0s linear 0.25s, opacity 0.25s;
+  transition:
+    visibility 0s linear 0.25s,
+    opacity 0.25s;
 }
 
 .Notification--success {

@@ -11,7 +11,7 @@ export default class extends Controller {
     open(
       this.permissionsUrlValue,
       'integratedOnboardingWindow',
-      windowFeatures
+      windowFeatures,
     );
   }
 }

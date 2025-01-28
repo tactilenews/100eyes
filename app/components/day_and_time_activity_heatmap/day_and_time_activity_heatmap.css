@@ -22,7 +22,9 @@
   color: var(--color-text);
 }
 
-.DayAndTimeActivityHeatmap-tabBarItem:not(.DayAndTimeActivityHeatmap-tabBarItem--active):hover {
+.DayAndTimeActivityHeatmap-tabBarItem:not(
+    .DayAndTimeActivityHeatmap-tabBarItem--active
+  ):hover {
   border-bottom-color: var(--color-gray);
   color: var(--color-text);
 }

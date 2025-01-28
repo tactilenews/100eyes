@@ -57,11 +57,11 @@ export default class extends Controller {
       this.addImagePreview(event.target.files, this.setCaption());
     if (this.requestFilesUrlValue.length) {
       this.filenamesTarget.parentNode.classList.remove(
-        'RequestForm-filenamesWrapper--hidden'
+        'RequestForm-filenamesWrapper--hidden',
       );
       this.addAttachedRequestFilesPreview(
         this.requestFilesUrlValue,
-        this.setCaption()
+        this.setCaption(),
       );
     }
   }
@@ -185,7 +185,7 @@ export default class extends Controller {
     const existingFigure = document.getElementById('file-preview');
     if (existingFigure) existingFigure.remove();
     const chatPreviewBubbles = document.querySelectorAll(
-      '.ChatPreview-bubble--preview'
+      '.ChatPreview-bubble--preview',
     );
     chatPreviewBubbles.forEach((element, index) => {
       if (index > 0) {
@@ -196,7 +196,7 @@ export default class extends Controller {
 
   removeExistingFilesname() {
     const listItems = document.querySelectorAll(
-      '.RequestForm-filenamesListItem'
+      '.RequestForm-filenamesListItem',
     );
     listItems.forEach(listItem => listItem.remove());
   }
@@ -231,7 +231,7 @@ export default class extends Controller {
     this.requestFilesUrlValue = this.requestFilesUrlValue.filter(u => u != url);
     const hiddenInputs = this.imageInputAttachedFileTargets;
     const inputToDelete = hiddenInputs.find(
-      image => image.getAttribute('value') == id
+      image => image.getAttribute('value') == id,
     );
     inputToDelete.remove();
     this.removeExistingImagePreview();
@@ -244,7 +244,7 @@ export default class extends Controller {
       this.imageInputAttachedFileTargets.length == 0
     ) {
       this.filenamesTarget.parentNode.classList.add(
-        'RequestForm-filenamesWrapper--hidden'
+        'RequestForm-filenamesWrapper--hidden',
       );
       this.previewTarget.innerHTML = this.setMessage();
       this.messageTarget.setAttribute('required', true);
@@ -252,7 +252,7 @@ export default class extends Controller {
       this.addImagePreview(this.imageInputTarget.files, this.setCaption());
       this.addAttachedRequestFilesPreview(
         this.requestFilesUrlValue,
-        this.setCaption()
+        this.setCaption(),
       );
     }
   }
@@ -298,7 +298,7 @@ export default class extends Controller {
 
       this.filenamesTarget.appendChild(listItem);
       this.filenamesTarget.parentNode.classList.remove(
-        'RequestForm-filenamesWrapper--hidden'
+        'RequestForm-filenamesWrapper--hidden',
       );
     }
   }
@@ -310,7 +310,7 @@ export default class extends Controller {
     const isInvalid = characters > maxLength;
     this.characterCounterTarget.classList.toggle(
       'CharacterCounter--invalidText',
-      isInvalid
+      isInvalid,
     );
     isInvalid
       ? this.submitButtonTarget.setAttribute('disabled', isInvalid)
