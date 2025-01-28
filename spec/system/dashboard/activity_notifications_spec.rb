@@ -60,6 +60,9 @@ RSpec.describe 'Activity Notifications' do
       reply = create(:message, :inbound, text: "I'm a reply to #{request.title}", request: request, sender: contributor_without_avatar,
                                          organization: organization)
 
+      reply_without_request = create(:message, text: 'Answer to welcome message, or unrelated to request', request: nil,
+                                               sender: contributor_without_avatar, organization: organization)
+
       Timecop.travel(1.day.from_now)
       visit organization_dashboard_path(organization, as: user)
 
@@ -68,14 +71,21 @@ RSpec.describe 'Activity Notifications' do
       )
       expect(page).to have_text('vor einem Tag')
       expect(page).to have_link('Zur Antwort',
-                                href: conversations_organization_contributor_path(organization.id, contributor_without_avatar.id,
-                                                                                  anchor: "message-#{reply.id}"))
+                                href: organization_request_path(request.organization_id, request, anchor: "message-#{reply.id}"))
+      expect(page).to have_css('svg.Avatar-initials')
+
+      expect(page).to have_text(
+        "#{contributor_without_avatar.name} hat geantwortet."
+      )
+      expect(page).to have_text('vor einem Tag')
+      expect(page).to have_link('Zur Antwort',
+                                href: conversations_organization_contributor_path(reply_without_request.organization_id,
+                                                                                  contributor_without_avatar.id,
+                                                                                  anchor: "message-#{reply_without_request.id}"))
       expect(page).to have_css('svg.Avatar-initials')
 
       # ChatMessageSent
-      click_link('Zur Antwort',
-                 href: conversations_organization_contributor_path(organization.id, contributor_without_avatar.id,
-                                                                   anchor: "message-#{reply.id}"))
+      click_link('Zur Antwort', href: organization_request_path(request.organization_id, request, anchor: "message-#{reply.id}"))
       expect(page).to have_text("I'm a reply to #{request.title}")
       find('p', text: "I'm a reply to #{request.title}").hover
       reply_path = conversations_organization_contributor_path(organization, id: contributor_without_avatar, reply_to: reply.id,
@@ -117,8 +127,7 @@ RSpec.describe 'Activity Notifications' do
       )
       expect(page).to have_text('vor weniger als eine Minute')
       expect(page).to have_link('Zur Antwort',
-                                href: conversations_organization_contributor_path(organization.id, contributor_two.id,
-                                                                                  anchor: "message-#{reply_two.id}"))
+                                href: organization_request_path(request.organization_id, request, anchor: "message-#{reply_two.id}"))
 
       reply_by_same_contributor = create(:message, :inbound, request: request, sender: contributor_two,
                                                              text: "I'm a reply from the same contributor: #{contributor_two.name}",
@@ -129,12 +138,11 @@ RSpec.describe 'Activity Notifications' do
         "#{contributor_two.name} und #{contributor_without_avatar.name} haben auf die Frage „#{request.title}” geantwortet."
       )
       expect(page).to have_link('Zur Antwort',
-                                href: conversations_organization_contributor_path(organization.id, contributor_two.id,
-                                                                                  anchor: "message-#{reply_by_same_contributor.id}"))
+                                href: organization_request_path(request.organization_id, request,
+                                                                anchor: "message-#{reply_by_same_contributor.id}"))
 
       click_link('Zur Antwort',
-                 href: conversations_organization_contributor_path(organization.id, contributor_two.id,
-                                                                   anchor: "message-#{reply_by_same_contributor.id}"))
+                 href: organization_request_path(request.organization_id, request, anchor: "message-#{reply_by_same_contributor.id}"))
       reply_text = "I'm a reply from the same contributor: #{contributor_two.name}"
       expect(page).to have_text(reply_text)
       find('p', text: reply_text).hover
@@ -164,8 +172,7 @@ RSpec.describe 'Activity Notifications' do
       )
 
       click_link('Zur Antwort',
-                 href: conversations_organization_contributor_path(organization.id, contributor_two.id,
-                                                                   anchor: "message-#{reply_by_same_contributor.id}"))
+                 href: organization_request_path(request.organization_id, request, anchor: "message-#{reply_by_same_contributor.id}"))
 
       reply_text = "I'm a reply from the same contributor: #{contributor_two.name}"
       expect(page).to have_text(reply_text).once
@@ -199,8 +206,7 @@ RSpec.describe 'Activity Notifications' do
       )
 
       click_link('Zur Antwort',
-                 href: conversations_organization_contributor_path(organization.id, contributor_two.id,
-                                                                   anchor: "message-#{reply_by_same_contributor.id}"))
+                 href: organization_request_path(request.organization_id, request, anchor: "message-#{reply_by_same_contributor.id}"))
 
       reply_text = "I'm a reply from the same contributor: #{contributor_two.name}"
       expect(page).to have_text(reply_text)
