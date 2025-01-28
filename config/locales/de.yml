@@ -1019,6 +1019,7 @@ de:
         one: '<strong>%{contributor_one}</strong> hat auf die Frage <strong>„%{request_title}”</strong> geantwortet.'
         two: '<strong>%{contributor_one}</strong> und <strong>%{contributor_two}</strong> haben auf die Frage <strong>„%{request_title}”</strong> geantwortet.'
         other: '<strong>%{contributor_one}</strong> und %{others_count} andere haben auf die Frage <strong>„%{request_title}”</strong> geantwortet.'
+      no_request: '<strong>%{contributor_name}</strong> hat geantwortet.'
       link_text: 'Zur Antwort'
     chat_message_sent:
       text_html:
