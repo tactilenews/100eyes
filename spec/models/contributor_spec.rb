@@ -314,6 +314,36 @@ RSpec.describe Contributor, type: :model do
     end
   end
 
+  describe '#signal?' do
+    subject { contributor.signal? }
+
+    describe 'given a contributor with a signal onboarding token' do
+      let(:contributor) do
+        create(:contributor, signal_uuid: nil, signal_phone_number: nil, signal_onboarding_token: 'ABC')
+      end
+
+      it 'is expected to be true' do
+        expect(subject).to be(true)
+      end
+    end
+
+    describe 'given a contributor with a signal phone number' do
+      let(:contributor) { create(:contributor, email: nil, signal_phone_number: '+491512345678') }
+
+      it 'is expected to be true' do
+        expect(subject).to be(true)
+      end
+    end
+
+    describe 'given a contributor with a signal uuid' do
+      let(:contributor) { create(:contributor, email: nil, signal_uuid: 'valid_uuid') }
+
+      it 'is expected to be true' do
+        expect(subject).to be(true)
+      end
+    end
+  end
+
   describe '#avatar?' do
     subject { contributor.avatar? }
 

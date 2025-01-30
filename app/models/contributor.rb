@@ -127,7 +127,7 @@ class Contributor < ApplicationRecord
   end
 
   def signal?
-    signal_phone_number.present? || signal_uuid.present?
+    signal_phone_number.present? || signal_uuid.present? || signal_onboarding_token.present?
   end
 
   def whats_app?
