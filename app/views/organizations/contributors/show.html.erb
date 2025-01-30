@@ -28,7 +28,15 @@
 
     <hr>
 
-    <% unless @contributor.unsubscribed_at.present? %>
+    <% if @contributor.unsubscribed_at.present? %>
+      <p>
+        <%= t('contributor.unsubscribed.text',
+              name: @contributor.name,
+              project_name: @contributor.organization.project_name,
+              first_name: @contributor.first_name
+        ).html_safe %>
+      </p>
+    <% else %>
       <%= c 'contributor_status_toggle', organization: @organization, contributor: @contributor %>
     <% end %>
   <% end %>

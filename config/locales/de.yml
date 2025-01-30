@@ -255,11 +255,6 @@ de:
         possible_reason_threema: 'Diese Threema-ID wurde möglicherweise von Threema als ungültig gemeldet. Bitte <strong>%{first_name}</strong>, die Threema-ID zu überprüfen.'
         possible_reason_email: 'Diese E-Mail-Adresse wurde vom Server als inaktiv gemeldet. Das bedeutet, es können keine E-Mails an diese Adresse zugestellt werden.'
         possible_reason_telegram: '<strong>%{first_name}</strong> hat sich aktiv vom Empfang von Nachrichten auf Telegram abgemeldet. Wenn du vermutest, dass dies eine versehentliche Abmeldung ist, kontaktiere %{first_name}.'
-      unsubscribed:
-        text: |
-          <strong>%{name}</strong> ist ein <strong>inaktives Mitglied</strong> deiner Community und erhält aktuell keine Recherchefragen über %{project_name}.
-          <strong>%{first_name}</strong> hat darum gebeten, vom Erhalt von Nachrichten über WhatsApp abgemeldet zu werden.
-          Wenn du vermutest, dass es sich um eine versehentliche Abmeldung handelt, kontaktiere <strong>%{first_name}</strong>.
     contributor_email_settings:
       heading: 'Ausgewählter Kanal: E-Mail'
       text: '%{name} hat sich via E-Mail angemeldet.'
@@ -296,6 +291,7 @@ de:
     contributor_header:
       created_at: Mitglied seit %{date}
       deactivated_at: deaktiviert am %{date}
+      unsubscribed_at: abbestellt am %{date}
       edit: Stammdaten bearbeiten
       avatar: Profilbild
       change_avatar: Profilbild ändern
@@ -654,6 +650,11 @@ de:
       data_processing_consent:
         label: Einwilligung zur Datenverarbeitung
         help: In unserer <a class="Link" href=%{link} target="_blank">Datenschutzerklärung</a> ist erklärt, welche Tools wir nutzen und mit welchen Firmen wir zusammenarbeiten. Ich habe die Datenschutzerklärung zur Kenntnis genommen und bin mit deren Geltung einverstanden.
+    unsubscribed:
+      text: |
+        <strong>%{name}</strong> ist ein <strong>inaktives Mitglied</strong> deiner Community und erhält aktuell keine Recherchefragen über %{project_name}.
+        <strong>%{first_name}</strong> hat darum gebeten, vom Erhalt von Nachrichten über WhatsApp abgemeldet zu werden.
+        Wenn du vermutest, dass es sich um eine versehentliche Abmeldung handelt, kontaktiere <strong>%{first_name}</strong>.
   request:
     request:
       one: Frage
