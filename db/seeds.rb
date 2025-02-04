@@ -17,8 +17,10 @@ business_plan = BusinessPlan.create!(
 )
 organization = Organization.create_or_find_by!(
   name: '100eyes',
+  project_name: 'HundredEyes',
   upgrade_discount: 10,
   business_plan: business_plan,
+  signal_username: 'HundredEyes',
   signal_server_phone_number: '+4915111111111'
 )
 admin = User.create_or_find_by!(email: 'redaktion@tactile.news', first_name: 'Dennis', last_name: 'Schröder', password: password,

@@ -9,9 +9,10 @@ business_plan = BusinessPlan.find_by(name: 'Free')
 organizations = 3.times.collect do
   Organization.create!(
     name: Faker::Company.name,
+    project_name: Faker::Company.name,
     upgrade_discount: rand(0..25),
     business_plan: business_plan,
-    telegram_bot_username: Faker::Internet.username
+    telegram_bot_username: Faker::Internet.username,
   )
 end
 users = 10.times.collect do
