@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_01_28_121133) do
+ActiveRecord::Schema.define(version: 2025_02_04_113104) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -212,8 +212,8 @@ ActiveRecord::Schema.define(version: 2025_01_28_121133) do
     t.string "onboarding_success_text", default: "Unsere Dialog-Recherche startet bald. Wir melden uns dann bei Ihnen.\n\nUm unseren Kanal abzubestellen, schreibe „abbestellen“.\n"
     t.string "onboarding_unauthorized_heading", default: "Leider ist dieser Einladungs-Link nicht mehr gültig.\n"
     t.string "onboarding_unauthorized_text", default: "Das ist aber nicht Ihre Schuld! Bitte kontaktieren Sie uns unter support@100ey.es, um einen neuen Link zu erhalten.\n\n"
-    t.string "onboarding_data_protection_link", default: "https://tactile.news/100eyes-datenschutz/"
-    t.string "onboarding_imprint_link", default: "https://tactile.news/impressum/"
+    t.string "onboarding_data_protection_link"
+    t.string "onboarding_imprint_link"
     t.boolean "onboarding_show_gdpr_modal", default: false
     t.boolean "onboarding_ask_for_additional_consent", default: false
     t.string "onboarding_additional_consent_heading", default: ""
