@@ -15,7 +15,6 @@ de:
           Um unseren Kanal abzubestellen, schreibe „abbestellen“.
         signal_server_phone_number: |
           Nummer z.B. bei Woopla bestellen für Signal und Whatsapp
-          Notion page mit verwendeten Nummern <a class="Link" href="https://www.notion.so/tactilenews/Woopla-Numbers-Overview-Current-Status-16-12-24-608d01d164de440b9a1870b91b9fcc71" target="_blank" rel="noopener noreferrer">hier</a>:
         signal_username: |
           Ein Signal-Benutzername ist erforderlich, wenn eine Signal-Telefonnummer hinzugefügt wird und das Onboarding nicht untersagt ist.
           Er muss zwischen 3 und 32 Zeichen lang sein, darf nicht mit einer Zahl beginnen und darf nur alphanumerische Zeichen und _ enthalten.
@@ -910,11 +909,13 @@ de:
         telegram_id: Telegram Id
       organization:
         name: Name des Kunden
+        contact_person_id: Ansprechpartner beim Kunden
         contact_person: Ansprechpartner beim Kunden
         project_name: Projektname
         messengers_about_text: Messenger Profilinfo (kurz)
         messengers_description_text: Messenger Profilbeschreibung (lang)
         whats_app_more_info_message: Whatsapp Mehr Info Text
+        whats_app_quick_reply_button_text: Vorlage Direktantworten WhatsApp
         signal_server_phone_number: Signal Rufnummer
         signal_username: Signal Username
         telegram_bot_username: Telegram Bot Benutzername
@@ -927,6 +928,10 @@ de:
         onboarding_ask_for_additional_consent: Zusätzliches Einverständnis beim Onboarding
         onboarding_additional_consent_heading: Überschrift für zusätzliches Einverständnis
         onboarding_additional_consent_text: Text für zusätzliches Einverständnis
+        business_plan_id: Business-Plan
+        upgrade_discount: Upgrade-Rabatt
+        onboarding_allowed: Onboarding nach Kanal ermöglichen
+        channel_image: Profilbild
   number:
     currency:
       format:
