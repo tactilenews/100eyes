@@ -33,7 +33,7 @@ module SignalAdapter
         base64_avatar: Base64.encode64(
           File.open(ActiveStorage::Blob.service.path_for(organization.channel_image.attachment.blob.key), 'rb').read
         ),
-        name: organization.name,
+        name: organization.project_name,
         about: organization.messengers_about_text
       }
     end
