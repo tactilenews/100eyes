@@ -23,6 +23,7 @@ class Organization < ApplicationRecord
   before_update :notify_admin
   after_create_commit :set_telegram_webhook
   after_update_commit :notify_admin_of_welcome_message_change
+  after_commit :update_signal_and_telegram_profiles
 
   validates :name, presence: true
   validates :project_name, presence: true
@@ -139,5 +140,12 @@ class Organization < ApplicationRecord
     return unless saved_change_to_onboarding_success_heading? || saved_change_to_onboarding_success_text?
 
     WhatsAppAdapter::ThreeSixtyDialog::CreateWelcomeMessageTemplateJob.perform_later(organization_id: id)
+  end
+
+  def update_signal_and_telegram_profiles
+    return unless saved_change_to_project_name? || saved_change_to_messengers_about_text? || saved_change_to_messengers_description_text?
+
+    SignalAdapter::SetProfileInfoJob.perform_later(organization_id: id) unless saved_change_to_messengers_description_text?
+    TelegramAdapter::SetProfileInfoJob.perform_later(organization_id: id)
   end
 end
