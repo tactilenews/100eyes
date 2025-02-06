@@ -12,7 +12,7 @@ RSpec.describe 'Organizations' do
 
       click_on 'Editieren'
       fill_in 'Name', with: 'Real name'
-      fill_in 'Whats app more info message', with: 'More info. Unsubscribe?'
+      fill_in 'Whatsapp Mehr Info Text', with: 'More info. Unsubscribe?'
       click_on 'Organization aktualisieren'
 
       expect(page).to have_text('Organization wurde erfolgreich aktualisiert.')
