@@ -27,7 +27,7 @@ module WhatsAppAdapter
 
       files = initialize_file
       @message.files = files
-      @message.request = sender.active_request
+      @message.request = sender.received_messages.first&.request
 
       @message.save!
       @message

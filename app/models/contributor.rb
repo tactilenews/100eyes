@@ -74,7 +74,7 @@ class Contributor < ApplicationRecord
   def reply(message_decorator)
     ActiveRecord::Base.transaction do
       message = message_decorator.message
-      message.request = active_request
+      message.request = received_messages.first&.request
       message.save!
     end
   end
@@ -105,10 +105,6 @@ class Contributor < ApplicationRecord
 
   def channels
     { email: email?, signal: signal?, telegram: telegram?, threema: threema?, whats_app: whats_app? }.select { |_k, v| v }.keys
-  end
-
-  def active_request
-    received_messages.first&.request
   end
 
   def telegram?
