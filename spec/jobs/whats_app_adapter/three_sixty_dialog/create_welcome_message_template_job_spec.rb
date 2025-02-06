@@ -24,7 +24,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::CreateWelcomeMessageTemplateJo
     end
 
     describe 'ActivityNotifications', vcr: { cassette_name: :three_sixty_dialog_welcome_message_created } do
-      it 'creates a notification for all admin and users of an organizaiton' do
+      it 'creates a notification for all admin and users of an organization' do
         subject.call
         whats_app_template_created_notifications = ActivityNotification.where(type: WhatsAppTemplateCreated.name)
         expect(whats_app_template_created_notifications.count).to eq(5)
