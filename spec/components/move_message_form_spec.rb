@@ -22,7 +22,7 @@ RSpec.describe MoveMessageForm::MoveMessageForm, type: :component do
     organization.requests.each do |request|
       expect(subject).to have_css(:strong, text: request.title)
     end
-    expect(subject).to have_css(:strong, text: 'Keine Frage')
+    expect(subject).to have_css(:strong, text: 'Gehört zu keiner Frage')
   end
 
   it 'displays current request checked' do

@@ -170,8 +170,8 @@ de:
       submit: Verschieben
       cancel: Abbrechen
       no_request:
-        label: Keine Frage
-        help: Wenn sie nicht zu einer Frage gehört, wähle diese.
+        label: Gehört zu keiner Frage
+        help: Wähle diese Option, wenn die Nachricht zu keiner Frage gehört.
     copy_button:
       loading: lade…
       success: kopiert
