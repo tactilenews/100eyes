@@ -8,6 +8,8 @@ module SignalAdapter
 
     def perform(organization_id:)
       @organization = Organization.find(organization_id)
+      return if organization.signal_server_phone_number.blank?
+
       uri = URI.parse("#{ENV.fetch('SIGNAL_CLI_REST_API_ENDPOINT', 'http://localhost:8080')}/v1/profiles/#{organization.signal_server_phone_number}")
       request = Net::HTTP::Put.new(uri, {
                                      Accept: 'application/json',
