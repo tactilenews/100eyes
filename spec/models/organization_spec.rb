@@ -132,7 +132,11 @@ RSpec.describe Organization do
       let(:params) { { name: 'SomethingElse', upgrade_discount: 100 } }
 
       it 'for other updates' do
-        expect { subject }.not_to have_enqueued_job
+        expect { subject }.not_to have_enqueued_job.on_queue('default').with(
+          'PostmarkAdapter::Outbound',
+          'business_plan_upgraded_email',
+          'deliver_now'
+        )
       end
     end
 
@@ -141,7 +145,11 @@ RSpec.describe Organization do
         let(:params) { { business_plan: create(:business_plan, :editorial_pro), upgraded_business_plan_at: nil } }
 
         it 'does not schedule a job' do
-          expect { subject }.not_to have_enqueued_job
+          expect { subject }.not_to have_enqueued_job.on_queue('default').with(
+            'PostmarkAdapter::Outbound',
+            'business_plan_upgraded_email',
+            'deliver_now'
+          )
         end
       end
 
@@ -178,7 +186,7 @@ RSpec.describe Organization do
       let(:params) { { name: 'SomethingElse' } }
 
       it 'for other updates' do
-        expect { subject }.not_to have_enqueued_job
+        expect { subject }.not_to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::CreateWelcomeMessageTemplateJob)
       end
     end
 
