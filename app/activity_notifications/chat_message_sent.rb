@@ -3,7 +3,7 @@
 class ChatMessageSent < Noticed::Base
   deliver_by :database, format: :to_database, association: :notifications_as_recipient
 
-  param :contributor_id, :request_id, :user_id, :message_id, :organization_id
+  param :contributor_id, :user_id, :message_id, :organization_id
 
   def to_database
     {
@@ -41,7 +41,11 @@ class ChatMessageSent < Noticed::Base
   # rubocop:enable Rails/OutputSafety
 
   def url
-    organization_request_path(record.request.organization_id, record.request, anchor: "message-#{record.message.id}")
+    if record.request_id.present?
+      organization_request_path(record.request.organization_id, record.request, anchor: "message-#{record.message.id}")
+    else
+      conversations_organization_contributor_path(record.organization_id, record.contributor_id, anchor: "message-#{record.message.id}")
+    end
   end
 
   def link_text

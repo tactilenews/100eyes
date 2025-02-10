@@ -43,6 +43,8 @@ module WhatsAppAdapter
           welcome_message_payload
         when :request_template
           request_payload
+        when :direct_message_template
+          direct_message_payload
         end
       end
 
@@ -60,22 +62,22 @@ module WhatsAppAdapter
         template_payload(template_name)
       end
 
-      def time_of_day
-        case Time.current.hour
-        when 6..11
-          'morning'
-        when 11..17
-          'day'
-        when 17..23
-          'evening'
-        else
-          'night'
-        end
-      end
-
       def request_payload
         template_name = "new_request_#{time_of_day}_#{rand(1..3)}"
-        template_payload(template_name).deep_merge(template_components)
+        template_payload(template_name).deep_merge(template_components(request_parameters))
+      end
+
+      def direct_message_payload
+        template_name = 'new_direct_message'
+        template_payload(template_name).deep_merge(template_components(base_parameters))
+      end
+
+      def base_payload
+        {
+          messaging_product: 'whatsapp',
+          recipient_type: 'individual',
+          to: contributor.whats_app_phone_number.split('+').last
+        }
       end
 
       def template_payload(name)
@@ -91,41 +93,53 @@ module WhatsAppAdapter
         )
       end
 
-      def base_payload
-        {
-          messaging_product: 'whatsapp',
-          recipient_type: 'individual',
-          to: contributor.whats_app_phone_number.split('+').last
-        }
+      def time_of_day
+        case Time.current.hour
+        when 6..11
+          'morning'
+        when 11..17
+          'day'
+        when 17..23
+          'evening'
+        else
+          'night'
+        end
       end
 
-      def template_components
+      def template_components(parameters)
         {
           template: {
             components: [
               {
                 type: 'body',
-                parameters: [
-                  {
-                    type: 'text',
-                    text: contributor.first_name
-                  },
-                  {
-                    type: 'text',
-                    text: message.request.title
-                  }
-                ]
+                parameters: parameters
               }
             ]
           }
         }
       end
 
+      def base_parameters
+        [
+          {
+            type: 'text',
+            text: contributor.first_name
+          }
+        ]
+      end
+
+      def request_parameters
+        base_parameters.push({
+                               type: 'text',
+                               text: message.request.title
+                             })
+      end
+
       def handle_response(response)
         case response
         when Net::HTTPSuccess
           external_id = JSON.parse(response.body)['messages'].first['id']
-          if type.eql?(:request_template)
+          if type.eql?(:request_template) || type.eql?(:direct_message_template)
             Message::WhatsAppTemplate.create!(message_id: message.id, external_id: external_id)
           else
             message&.update!(external_id: external_id)

@@ -22,7 +22,7 @@ RSpec.describe ChatForm::ChatForm, type: :component do
   end
 
   context 'with reply_to set' do
-    let(:reply_to) { create(:message) }
+    let(:reply_to) { create(:message, :with_request) }
     before do
       params[:reply_to] = reply_to
     end
@@ -36,7 +36,7 @@ RSpec.describe ChatForm::ChatForm, type: :component do
     end
 
     context 'message with nil text' do
-      before { params[:reply_to] = create(:message, text: '') }
+      before { params[:reply_to] = create(:message, :with_request, text: '') }
 
       it 'should display the time instead' do
         expect(subject).to have_css('textarea',
@@ -45,7 +45,7 @@ RSpec.describe ChatForm::ChatForm, type: :component do
     end
 
     context 'message with nil text' do
-      before { params[:reply_to] = create(:message, text: nil) }
+      before { params[:reply_to] = create(:message, :with_request, text: nil) }
 
       it 'should display the time instead' do
         expect(subject).to have_css('textarea',

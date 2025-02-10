@@ -505,6 +505,8 @@ de:
         new_request_night_1: "Hallo %{first_name}, heute Nacht ist mir etwas zum Thema „%{request_title}“ eingefallen. Wenn du antworten möchtest, klicke auf 'Antworten'."
         new_request_night_2: "Hallo %{first_name}, ich weiß, es ist schon spät. Aber ich möchte gern mehr zum Thema „%{request_title}“ erfahren. Wenn du antworten möchtest, klicke auf 'Antworten'."
         new_request_night_3: "Hallo %{first_name}, zum Thema „%{request_title}“ möchte ich heute noch gern mehr erfahren. Wenn du antworten möchtest, klicke auf 'Antworten'."
+      direct_message_template:
+        new_direct_message: "Hallo %{first_name}, wir haben eine neue Nachricht für dich. Wenn du antworten möchtest, klicke auf 'Antworten'."
       unsupported_content_template: 'Tut mir leid %{first_name}, leider kann unsere Software derzeit nur Textnachrichten, Sprachnachrichten, Bilder und Reaktionen auf Nachrichten verarbeiten, jedoch noch keine weiteren Inhalte wie z.B. Sticker oder Kontakte. In der Zwischenzeit senden Sie bitte Nachrichten mit solchen Inhalten an %{contact_person}. Herzlichen Dank!'
       quick_reply_button_text:
         answer: Antworten

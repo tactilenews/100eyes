@@ -93,7 +93,7 @@ class Message < ApplicationRecord
     elsif !broadcasted?
       ChatMessageSent.with(
         contributor_id: recipient.id,
-        request_id: request.id,
+        request_id: request&.id,
         user_id: sender_id,
         message_id: id,
         organization_id: organization.id

@@ -14,7 +14,7 @@ RSpec.describe ChatMessageHeader::ChatMessageHeader, type: :component do
 
     context 'given a message is a reply' do
       let(:contributor) { create(:contributor, first_name: 'Joaquin') }
-      let(:message) { create(:message, :inbound, sender: contributor) }
+      let(:message) { create(:message, :inbound, :with_request, sender: contributor) }
       let(:name) { 'Joaquin' }
 
       context 'given on the conversations path' do
@@ -55,7 +55,7 @@ RSpec.describe ChatMessageHeader::ChatMessageHeader, type: :component do
     end
 
     context 'given a message is not a reply' do
-      let(:message) { create(:message, :outbound, sender: user) }
+      let(:message) { create(:message, :outbound, :with_request, sender: user) }
       let(:user) { create(:user, first_name: 'Melinda') }
       let(:name) { 'Melinda' }
 

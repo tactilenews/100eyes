@@ -40,7 +40,7 @@ RSpec.describe ChatMessage::ChatMessage, type: :component do
 
     context 'given an outbound message' do
       context 'with a direct enquiry to a contributor from a user' do
-        let(:message) { create(:message, :outbound) }
+        let(:message) { create(:message, :outbound, :with_request) }
 
         it 'is present' do
           expect(subject).to have_css('a', text: I18n.t('components.chat_message.move'))
@@ -48,7 +48,7 @@ RSpec.describe ChatMessage::ChatMessage, type: :component do
       end
 
       context 'with a broadcasted message' do
-        let(:message) { create(:message, :outbound, broadcasted: true) }
+        let(:message) { create(:message, :outbound, :with_request, broadcasted: true) }
 
         it 'is hidden' do
           expect(subject).to_not have_css('a', text: I18n.t('components.chat_message.move'))
