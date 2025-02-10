@@ -5,6 +5,8 @@ module WhatsAppAdapter
     class SetProfileInfoJob < ApplicationJob
       def perform(organization_id:)
         organization = Organization.find(organization_id)
+        return if organization.three_sixty_dialog_client_api_key.blank?
+
         base_uri = URI.parse(ENV.fetch('THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693'))
         url = URI.parse("#{base_uri}/whatsapp_business_profile")
         headers = { 'D360-API-KEY' => organization.three_sixty_dialog_client_api_key }
