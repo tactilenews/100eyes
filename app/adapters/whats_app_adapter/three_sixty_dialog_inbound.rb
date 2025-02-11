@@ -27,7 +27,7 @@ module WhatsAppAdapter
 
       files = initialize_file
       @message.files = files
-      @message.request = sender.active_request
+      @message.request = sender.received_messages.first&.request
 
       @message.save!
       @message
@@ -70,7 +70,7 @@ module WhatsAppAdapter
     end
 
     def initialize_message
-      message = Message.new(text: text, sender: sender, external_id: message_payload[:id])
+      message = Message.new(text: text, sender: sender, external_id: message_payload[:id], organization: organization)
       message.raw_data.attach(
         io: StringIO.new(JSON.generate(whats_app_payload)),
         filename: 'whats_app_payload.json',

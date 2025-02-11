@@ -12,12 +12,12 @@ module Organizations
                   reply_to = contributor.replies.find(message_params[:reply_to_id])
                   reply_to.request
                 else
-                  contributor.active_request
+                  contributor.received_messages.first&.request
                 end
-      render(plain: 'No active request for this contributor', status: :bad_request) and return unless request
 
       text = message_params[:text]
-      message = Message.create!(text: text, request: request, recipient: contributor, sender: current_user)
+      message = Message.create!(text: text, request: request, recipient: contributor, sender: current_user,
+                                organization: contributor.organization)
       message.send!
       redirect_to message.chat_message_link, flash: { success: I18n.t('contributor.message-send', name: contributor.name) }
     end

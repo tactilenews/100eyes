@@ -454,7 +454,10 @@ RSpec.describe Contributor, type: :model do
       let(:message_inbound_adapter) { PostmarkAdapter::Inbound.new(mail) }
 
       it { should_not raise_error }
-      it { should_not(change { Message.count }) }
+
+      it 'is expected to create a message record' do
+        expect { subject.call }.to change(Message, :count).by(1)
+      end
 
       describe 'given a recent request' do
         let!(:contributor) { create(:contributor, email: 'contributor@example.org', organization: organization) }
@@ -498,7 +501,10 @@ RSpec.describe Contributor, type: :model do
       let!(:contributor) { create(:contributor, :with_an_avatar, telegram_id: 4711, organization: organization) }
 
       it { expect { subject.call }.not_to raise_error }
-      it { expect { subject.call }.not_to(change { Message.count }) }
+
+      it 'is expected to create a message record' do
+        expect { subject.call }.to change(Message, :count).by(1)
+      end
 
       describe 'given a recent request' do
         before(:each) { the_request }
@@ -601,7 +607,10 @@ RSpec.describe Contributor, type: :model do
       end
 
       it { should_not raise_error }
-      it { should_not(change { Message.count }) }
+
+      it 'is expected to create a message record' do
+        expect { subject.call }.to change(Message, :count).by(1)
+      end
 
       describe 'given a recent request' do
         before(:each) { the_request }
@@ -621,104 +630,6 @@ RSpec.describe Contributor, type: :model do
 
         before { signal_message[:envelope][:sourceUuid] = 'valid_uuid' }
       end
-    end
-  end
-
-  describe '#active_request' do
-    subject { contributor.active_request }
-
-    describe 'given no request has gone out' do
-      it 'is expected to be nil' do
-        expect(subject).to be_nil
-      end
-    end
-
-    describe 'given a request has gone out before the contributor onboarded' do
-      let!(:previous_request) { create(:request, broadcasted_at: 1.day.ago, organization: contributor.organization) }
-
-      it 'is expected to be the most recent request' do
-        expect(subject).to eq(previous_request)
-      end
-
-      context 'the previous request is from a different organization' do
-        before { previous_request.update!(organization: create(:organization)) }
-
-        it 'is expected to be nil' do
-          expect(subject).to be_nil
-        end
-      end
-    end
-
-    describe 'once a request was sent as a message to the contributor' do
-      before(:each) { create(:message, request: the_request, recipient: contributor) }
-      it { should eq(the_request) }
-    end
-
-    describe 'if a request was broadcasted' do
-      before(:each) { the_request.update(broadcasted_at: 1.day.ago) }
-      describe 'and afterwards a contributor joins' do
-        before(:each) { contributor }
-        it { should eq(the_request) }
-      end
-    end
-
-    describe 'when many requests are sent to the contributor' do
-      before(:each) do
-        previous_request = create(:request, broadcasted_at: 1.day.ago)
-        create(:message, request: the_request, recipient: contributor, created_at: the_request.broadcasted_at)
-        create(:message, request: previous_request, recipient: contributor, created_at: previous_request.broadcasted_at)
-      end
-
-      it { should eq(the_request) }
-    end
-
-    describe 'when most recently a direct message is sent out belonging to a previous request' do
-      let(:previous_request) { create(:request, broadcasted_at: 1.day.ago) }
-      before(:each) do
-        create(:message, request: the_request, recipient: contributor, created_at: the_request.broadcasted_at)
-        create(:message, request: previous_request, recipient: contributor)
-      end
-
-      it { should eq(previous_request) }
-    end
-
-    describe 'when there is a planned request' do
-      before(:each) do
-        create(:request, broadcasted_at: nil, schedule_send_for: 1.day.from_now)
-        create(:message, request: the_request, recipient: contributor)
-      end
-
-      it { should eq(the_request) }
-    end
-  end
-
-  describe '#recent_replies' do
-    subject { contributor.recent_replies }
-    let(:old_date) { ActiveSupport::TimeZone['Berlin'].parse('2011-04-12 2pm') }
-    let(:old_message) { create(:message, created_at: old_date, sender: contributor, request: the_request) }
-    let(:another_request) { create(:request) }
-    let(:old_request) { create(:request, created_at: (old_date - 1.day)) }
-
-    before(:each) do
-      create_list(:message, 3, sender: contributor, request: the_request)
-      create(:message, sender: contributor, request: old_request)
-      create(:message, sender: contributor, request: another_request)
-      old_message
-    end
-
-    it { expect(subject.length).to eq(3) }
-
-    it 'chooses one reply per request' do
-      expect(subject.map(&:request)).to match_array([the_request, another_request, old_request])
-    end
-
-    it 'orders replies chronologically in descending order' do
-      expect(subject).to eq(subject.sort_by(&:created_at).reverse)
-    end
-
-    describe 'number of database calls' do
-      subject { -> { contributor.recent_replies.first.request } }
-      it { should make_database_queries(count: 2) }
     end
   end
 

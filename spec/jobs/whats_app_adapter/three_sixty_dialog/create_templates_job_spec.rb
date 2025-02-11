@@ -16,9 +16,10 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::CreateTemplatesJob do
       allow(ENV).to receive(:fetch).with(
         'THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT', 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693'
       ).and_return('https://waba-v2.360dialog.io')
-      allow_any_instance_of(WhatsAppAdapter::ThreeSixtyDialog::CreateTemplatesJob).to receive(:whats_app_templates).and_return(
+      allow_any_instance_of(WhatsAppAdapter::ThreeSixtyDialog::CreateTemplatesJob).to receive(:new_request_templates).and_return(
         { 'new_request_morning2' => 'some text' }
       )
+      allow_any_instance_of(WhatsAppAdapter::ThreeSixtyDialog::CreateTemplatesJob).to receive(:new_direct_message_template).and_return({})
     end
 
     describe 'ActivityNotifications', vcr: { cassette_name: :three_sixty_dialog_create_template } do

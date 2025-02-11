@@ -10,7 +10,7 @@ RSpec.describe TelegramAdapter::Outbound::Text do
   let(:contributor) { create(:contributor, telegram_id: 4, organization: organization) }
   let(:organization_id) { organization.id }
   let(:contributor_id) { contributor.id }
-  let(:message) { create(:message, text: text, broadcasted: true, recipient: contributor) }
+  let(:message) { create(:message, text: text, broadcasted: true, recipient: contributor, organization: organization) }
   let(:successful_response) do
     {
       'ok' => true,

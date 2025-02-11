@@ -7,7 +7,7 @@
     <%= c 'choices',
       choices: choices,
       id: 'message[request_id]',
-      value: request.id
+      value: request&.id
     %>
 
     <%= c 'flex', styles: [:space_between, :reverse] do %>

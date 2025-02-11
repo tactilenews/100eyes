@@ -72,8 +72,9 @@ module WhatsAppAdapter
       end
 
       def send_message_template(message)
+        type = message.request_id.present? ? :request_template : :direct_message_template
         WhatsAppAdapter::ThreeSixtyDialogOutbound::Text.perform_later(contributor_id: message.recipient.id,
-                                                                      type: :request_template,
+                                                                      type: type,
                                                                       message_id: message.id)
       end
 

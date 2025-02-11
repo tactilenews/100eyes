@@ -72,10 +72,9 @@ class Contributor < ApplicationRecord
   end
 
   def reply(message_decorator)
-    request = active_request or return nil
     ActiveRecord::Base.transaction do
       message = message_decorator.message
-      message.request = request
+      message.request = received_messages.first&.request
       message.save!
     end
   end
@@ -108,12 +107,6 @@ class Contributor < ApplicationRecord
     { email: email?, signal: signal?, telegram: telegram?, threema: threema?, whats_app: whats_app? }.select { |_k, v| v }.keys
   end
 
-  def active_request
-    # active_request is always the request of the contributors last received message or the last broadcasted request
-    # (first has to be used as the default order of messages and request is set to created_at desc)
-    received_messages.first&.request || organization.requests.broadcasted.first
-  end
-
   def telegram?
     telegram_id.present? || telegram_onboarding_token.present?
   end
@@ -144,13 +137,6 @@ class Contributor < ApplicationRecord
 
   def tags?
     tags.any?
-  end
-
-  def recent_replies
-    result = replies.includes(:recipient, :request).reorder(created_at: :desc)
-    result = result.group_by(&:request).values # array or groups
-    result = result.map(&:first) # choose most recent message per group
-    result.sort_by(&:created_at).reverse # ensure descending order
   end
 
   def active?

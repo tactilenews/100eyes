@@ -16,7 +16,7 @@ RSpec.describe 'Dashboard' do
 
   before do
     request = create(:request, user: user, organization: organization)
-    create_list(:message, 2, request: request, sender: contributor)
+    create_list(:message, 2, request: request, sender: contributor, organization: organization)
   end
 
   after { Timecop.return }

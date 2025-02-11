@@ -8,7 +8,7 @@
       <%= t(
         'message.move.text',
         name: @message.contributor.name,
-        title: @message.request.title
+        title: @message.request&.title
       ).html_safe %>
     </p>
   <% end %>

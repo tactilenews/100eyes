@@ -64,11 +64,12 @@ RSpec.describe Message, type: :model do
     let(:organization) { create(:organization) }
     let(:contributor) { create(:contributor, id: 7) }
     let(:request) { create(:request, id: 6, organization: organization) }
-    let(:message) { create(:message, request: request, **params) }
+    let(:message) { create(:message, request: request, organization: organization, **params) }
 
     describe '#chat_message_link' do
       subject { message.chat_message_link }
       let(:params) { { id: 8, recipient: nil, sender: contributor } }
+
       it 'should link to message within the contributors conversations' do
         should eq("/#{message.organization_id}/contributors/7/conversations#message-8")
       end
@@ -76,8 +77,10 @@ RSpec.describe Message, type: :model do
   end
 
   describe 'validations' do
-    let(:message) { build(:message, sender: nil) }
     subject { message }
+
+    let(:message) { build(:message, sender: nil) }
+
     describe '#raw_data' do
       describe 'missing' do
         before(:each) { message.raw_data = nil }
@@ -86,6 +89,14 @@ RSpec.describe Message, type: :model do
           before(:each) { message.sender = build(:contributor) }
           it { should_not be_valid }
         end
+      end
+    end
+
+    describe '#request' do
+      before { message.request = nil }
+
+      it 'is expected to be valid' do
+        expect(subject).to be_valid
       end
     end
   end
@@ -139,7 +150,7 @@ RSpec.describe Message, type: :model do
     describe '#notify_recipient' do
       subject { message }
 
-      let(:message) { create(:message, sender: user, recipient: recipient, broadcasted: broadcasted, request: request) }
+      let(:message) { create(:message, sender: user, recipient: recipient, broadcasted: broadcasted, request: request, organization: organization) }
       let!(:admin) { create(:user, admin: true) }
 
       before do
@@ -175,7 +186,7 @@ RSpec.describe Message, type: :model do
       end
 
       context 'given an inbound message' do
-        subject { create(:message, :inbound, request: request) }
+        subject { create(:message, :inbound, request: request, organization: organization) }
 
         it 'it creates a MessageReceived for each user and admin' do
           subject

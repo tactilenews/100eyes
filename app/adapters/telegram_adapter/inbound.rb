@@ -99,7 +99,7 @@ module TelegramAdapter
 
       media_group_id = telegram_message['media_group_id']
       message = Message.find_by(telegram_media_group_id: media_group_id) if media_group_id
-      message ||= Message.new(text: text, sender: sender, telegram_media_group_id: media_group_id)
+      message ||= Message.new(text: text, sender: sender, telegram_media_group_id: media_group_id, organization: organization)
       message.raw_data.attach(
         io: StringIO.new(JSON.generate(telegram_message)),
         filename: 'telegram_api.json',

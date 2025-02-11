@@ -67,7 +67,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound::Text do
 
     describe 'given a request template type', vcr: { cassette_name: :three_sixty_dialog_send_template } do
       let(:type) { :request_template }
-      let(:message) { create(:message) }
+      let(:message) { create(:message, request: create(:request)) }
       let(:message_id) { message.id }
 
       it 'creates a Message::WhatsAppTemplate record' do
@@ -83,6 +83,27 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound::Text do
 
         whats_app_template = message.whats_app_template
         expect(whats_app_template.external_id).to eq('wamid.HBgMNDk0OTEyMzQ1Njc4FQIAERgSQTZCMzFCREE3NUUxMkE1QzVEAA==')
+      end
+    end
+
+    describe 'given a direct message template type', vcr: { cassette_name: :three_sixty_dialog_send_direct_message_template } do
+      let(:type) { :direct_message_template }
+      let(:message) { create(:message, recipient: contributor, broadcasted: false, request: nil) }
+      let(:message_id) { message.id }
+
+      it 'creates a Message::WhatsAppTemplate record' do
+        expect { subject.call }.to change(Message::WhatsAppTemplate, :count).from(0).to(1)
+      end
+
+      it 'assigns it to the message record' do
+        expect { subject.call }.to (change { message.reload.whats_app_template }).from(nil).to(an_instance_of(Message::WhatsAppTemplate))
+      end
+
+      it 'assigns the external_id' do
+        subject.call
+
+        whats_app_template = message.whats_app_template
+        expect(whats_app_template.external_id).to eq('wamid.HBgMNDk0OTEyMzQ1Njc4FQIAERgSNEU4MjRGNUIyNTZGMzlBNTRCAA==')
       end
     end
   end

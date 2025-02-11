@@ -121,7 +121,7 @@ module SignalAdapter
       trigger(UNSUBSCRIBE_CONTRIBUTOR, sender, organization) if unsubscribe_text?(message_text)
       trigger(RESUBSCRIBE_CONTRIBUTOR, sender, organization) if resubscribe_text?(message_text)
 
-      message = Message.new(text: message_text, sender: sender)
+      message = Message.new(text: message_text, sender: sender, organization: organization)
       message.raw_data.attach(
         io: StringIO.new(JSON.generate(signal_message)),
         filename: 'signal_message.json',

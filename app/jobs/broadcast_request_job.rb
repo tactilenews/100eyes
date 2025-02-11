@@ -30,6 +30,7 @@ class BroadcastRequestJob < ApplicationJob
         recipient: contributor,
         text: request.personalized_text(contributor),
         request: request,
+        organization: request.organization,
         broadcasted: true
       )
 

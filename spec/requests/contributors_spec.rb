@@ -3,7 +3,7 @@
 require 'rails_helper'
 require 'telegram/bot/rspec/integration/rails'
 
-RSpec.describe '/{organization_id}/contributors', type: :request do
+RSpec.describe '/:organization_id/contributors', type: :request do
   let(:organization) { create(:organization) }
   let!(:contributor) { create(:contributor, organization: organization) }
   let(:the_request) { create(:request, organization: organization) }
@@ -268,9 +268,10 @@ RSpec.describe '/{organization_id}/contributors', type: :request do
       let(:params) { {} }
       let(:contributor) { create(:contributor, :telegram_contributor, organization: organization, **params) }
 
-      describe 'response' do
-        before(:each) { subject.call }
-        it { expect(response).to have_http_status(:bad_request) }
+      describe 'given the contributor has not received any requests' do
+        it 'creates the message' do
+          expect { subject.call }.to change(Message, :count).by(1)
+        end
       end
 
       describe 'given an active request' do

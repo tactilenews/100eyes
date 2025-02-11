@@ -87,7 +87,7 @@ RSpec.describe WhatsApp::WebhookController do
 
       before do
         allow(mock_twilio_security_request_validator).to receive(:validate).and_return(true)
-        create(:message, request: request, recipient: contributor)
+        create(:message, request: request, recipient: contributor, organization: organization)
       end
 
       it 'returns 200' do
@@ -97,7 +97,7 @@ RSpec.describe WhatsApp::WebhookController do
       end
 
       context 'no message template sent' do
-        it 'creates a messsage' do
+        it 'creates a message' do
           expect { subject.call }.to change(Message, :count).from(1).to(2)
         end
       end
@@ -142,7 +142,9 @@ RSpec.describe WhatsApp::WebhookController do
             end
 
             describe 'previous request' do
-              let(:previous_message) { create(:message, request: previous_request, recipient_id: contributor.id) }
+              let(:previous_message) do
+                create(:message, request: previous_request, recipient_id: contributor.id, organization: organization)
+              end
               let(:requested_message_job_args) do
                 {
                   organization_id: organization.id,
@@ -370,7 +372,7 @@ RSpec.describe WhatsApp::WebhookController do
             end
 
             describe 'given a message is found by Twilio message sid body' do
-              let!(:message) { create(:message, text: body_text, request: request) }
+              let!(:message) { create(:message, text: body_text, request: request, organization: organization) }
               let(:body_text) { "Hey #{contributor.first_name}, because it was sent outside the allowed window" }
 
               it 'enqueues the Text job with WhatsApp template' do

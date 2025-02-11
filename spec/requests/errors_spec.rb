@@ -25,7 +25,9 @@ RSpec.describe 'Errors' do
   describe '500 internal server error' do
     subject { -> { patch organization_message_url(organization, message, as: user) } }
 
-    let(:message) { create(:message, creator_id: user.id, organization: organization) }
+    let(:message) do
+      create(:message, creator_id: user.id, organization: organization, request: create(:request, organization: organization))
+    end
     before do
       allow_any_instance_of(MessagesController).to receive(:update).and_raise(StandardError)
     end

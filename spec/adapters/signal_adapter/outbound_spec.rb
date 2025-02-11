@@ -5,7 +5,10 @@ require 'webmock/rspec'
 
 RSpec.describe SignalAdapter::Outbound do
   let(:adapter) { described_class.new }
-  let(:message) { create(:message, text: 'Forgot to ask: How are you?', broadcasted: true, recipient: contributor, request: request) }
+  let(:message) do
+    create(:message, text: 'Forgot to ask: How are you?', broadcasted: true, recipient: contributor, request: request,
+                     organization: organization)
+  end
   let(:request) { create(:request, organization: organization) }
   let(:contributor) { create(:contributor, email: nil, organization: organization) }
   let(:organization) { create(:organization) }
@@ -35,7 +38,7 @@ RSpec.describe SignalAdapter::Outbound do
       context 'has completed onboarding' do
         let(:onboarding_completed_at) { 1.minute.ago }
 
-        it 'enqueus the job to send out the welcome message' do
+        it 'enqueues the job to send out the welcome message' do
           expect { subject.call }.to enqueue_job(described_class::Text).with(expected_job_args)
         end
       end
@@ -55,7 +58,7 @@ RSpec.describe SignalAdapter::Outbound do
       context 'has completed onboarding' do
         let(:onboarding_completed_at) { 1.minute.ago }
 
-        it 'enqueus the job to send out the welcome message' do
+        it 'enqueues the job to send out the welcome message' do
           expect { subject.call }.to enqueue_job(described_class::Text).with(expected_job_args)
         end
       end
@@ -86,7 +89,7 @@ RSpec.describe SignalAdapter::Outbound do
       context 'has completed onboarding' do
         let(:onboarding_completed_at) { 1.minute.ago }
 
-        it 'enqueus the job to send out the welcome message' do
+        it 'enqueues the job to send out the welcome message' do
           expect { subject.call }.to enqueue_job(described_class::Text).with(expected_job_args)
         end
       end
@@ -106,7 +109,7 @@ RSpec.describe SignalAdapter::Outbound do
       context 'has completed onboarding' do
         let(:onboarding_completed_at) { 1.minute.ago }
 
-        it 'enqueus the job to send out the welcome message' do
+        it 'enqueues the job to send out the welcome message' do
           expect { subject.call }.to enqueue_job(described_class::Text).with(expected_job_args)
         end
       end

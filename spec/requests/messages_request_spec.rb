@@ -34,7 +34,7 @@ RSpec.describe 'Messages', type: :request do
     end
 
     describe 'given an non-highlighted message' do
-      let(:message) { create(:message, highlighted: false, request: request) }
+      let(:message) { create(:message, highlighted: false, request: request, organization: organization) }
 
       describe 'given highlighted=true' do
         let(:params) { { highlighted: true } }
@@ -48,7 +48,7 @@ RSpec.describe 'Messages', type: :request do
     end
 
     describe 'given a highlighted message' do
-      let(:message) { create(:message, highlighted: true, request: request) }
+      let(:message) { create(:message, highlighted: true, request: request, organization: organization) }
 
       describe 'given highlighted=true' do
         let(:params) { { highlighted: true } }
@@ -90,7 +90,9 @@ RSpec.describe 'Messages', type: :request do
         end
 
         context 'given an outbound message' do
-          let(:message) { create(:message, sender: user, recipient: contributor, broadcasted: true, organization: organization) }
+          let(:message) do
+            create(:message, sender: user, recipient: contributor, broadcasted: true, organization: organization, request: request)
+          end
 
           it 'renders successfully' do
             expect(response).to be_successful
@@ -109,26 +111,22 @@ RSpec.describe 'Messages', type: :request do
     end
   end
 
-  describe 'POST /:organization_id/messages/:id/request' do
+  describe 'PATCH /:organization_id/messages/:id/request' do
     let(:organization) { create(:organization) }
     let(:user) { create(:user, organizations: [organization]) }
     let(:request) { create(:request, organization: organization) }
 
     subject { -> { patch(organization_message_request_url(message.organization, message, as: user), params: params) } }
 
-    let(:message) { create(:message, request: request) }
+    let(:message) { create(:message, request: request, organization: organization) }
     let(:other_request) { create(:request) }
     let(:params) { { message: { request_id: request_id } } }
 
-    describe 'given an invalid request_id' do
-      let(:request_id) { 'NOT AN ID' }
+    describe 'given an blank request_id' do
+      let(:request_id) { nil }
 
-      it { should_not(change { message.request.id }) }
-
-      it 'shows error message' do
-        subject.call
-
-        expect(flash[:error]).to eq(I18n.t('message.move.error'))
+      it 'updates the request id' do
+        expect { subject.call }.to (change { message.reload.request_id }).from(request.id).to(nil)
       end
     end
 

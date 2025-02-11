@@ -10,11 +10,8 @@ module Messages
       previous_request = @message.request
 
       if @message.update(message_params)
-        anchor = "contributor-#{@message.contributor.id}"
-        redirect_url = organization_request_url(previous_request.organization_id, previous_request, anchor: anchor)
-
         flash[:success] = I18n.t('message.move.success')
-        redirect_to redirect_url
+        redirect_to redirect_url(previous_request)
       else
         flash.now[:error] = I18n.t('message.move.error')
         @message.restore_request_id!
@@ -30,6 +27,17 @@ module Messages
 
     def message_params
       params.require(:message).permit(:request_id)
+    end
+
+    def redirect_url(previous_request)
+      if previous_request.present?
+        organization_request_url(previous_request.organization_id, previous_request, anchor: "contributor-#{@message.contributor.id}")
+      else
+        conversations_organization_contributor_path(
+          organization_id: @message.organization_id,
+          id: @message.contributor.id
+        )
+      end
     end
   end
 end

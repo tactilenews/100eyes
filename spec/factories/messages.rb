@@ -5,8 +5,8 @@ FactoryBot.define do
     created_at { Time.zone.now }
     unknown_content { false }
     text { Faker::Lorem.sentence }
-    request
     inbound
+    organization
 
     after(:build) do |message|
       message.raw_data.attach(
@@ -35,10 +35,8 @@ FactoryBot.define do
       end
     end
 
-    trait :with_a_photo do
-      after(:create) do |message|
-        create(:photo, message: message)
-      end
+    trait :with_request do
+      request
     end
   end
 end
