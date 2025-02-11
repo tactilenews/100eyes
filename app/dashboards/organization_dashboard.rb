@@ -24,7 +24,6 @@ class OrganizationDashboard < Administrate::BaseDashboard
     onboarding_additional_consent_text: Field::String,
     channel_image: Field::ActiveStorage,
     whats_app_more_info_message: Field::Text,
-    whats_app_profile_about: Field::Text,
     signal_complete_onboarding_link: Field::Url,
     whats_app_quick_reply_button_text: Field::JSONB,
     email_from_address: Field::Email,
@@ -35,7 +34,8 @@ class OrganizationDashboard < Administrate::BaseDashboard
     threemarb_private: Field::String,
     signal_server_phone_number: SetupSignalLinkField,
     messengers_about_text: Field::String,
-    signal_username: Field::String
+    signal_username: Field::String,
+    messengers_description_text: Field::String
   }.freeze
 
   COLLECTION_ATTRIBUTES = %i[
@@ -50,66 +50,77 @@ class OrganizationDashboard < Administrate::BaseDashboard
   SHOW_PAGE_ATTRIBUTES = %i[
     name
     contact_person
-    business_plan
-    upgrade_discount
-    users
-    created_at
-    updated_at
-    upgraded_business_plan_at
+    project_name
+    messengers_about_text
+    messengers_description_text
     whats_app_more_info_message
-    email_from_address
+    whats_app_quick_reply_button_text
+    signal_server_phone_number
+    signal_username
     telegram_bot_username
     threemarb_api_identity
-    signal_server_phone_number
-    messengers_about_text
+    email_from_address
+    onboarding_data_protection_link
+    onboarding_imprint_link
+    onboarding_data_processing_consent_additional_info
+    onboarding_ask_for_additional_consent
+    onboarding_additional_consent_heading
+    onboarding_additional_consent_text
+    business_plan
+    upgrade_discount
+    onboarding_allowed
+    channel_image
   ].freeze
 
   FORM_ATTRIBUTES_NEW = %i[
     name
-    project_name
-    signal_username
-    business_plan
     contact_person
-    upgrade_discount
-    whats_app_profile_about
-    onboarding_data_protection_link
-    onboarding_data_processing_consent_additional_info
-    onboarding_imprint_link
-    onboarding_ask_for_additional_consent
-    onboarding_additional_consent_heading
-    onboarding_additional_consent_text
-    onboarding_allowed
-    channel_image
-    email_from_address
+    project_name
+    messengers_about_text
+    messengers_description_text
+    whats_app_more_info_message
+    whats_app_quick_reply_button_text
+    signal_server_phone_number
+    signal_username
     telegram_bot_username
     telegram_bot_api_key
     threemarb_api_identity
     threemarb_api_secret
     threemarb_private
-    signal_server_phone_number
-    messengers_about_text
+    email_from_address
+    onboarding_data_protection_link
+    onboarding_imprint_link
+    onboarding_ask_for_additional_consent
+    onboarding_data_processing_consent_additional_info
+    onboarding_additional_consent_heading
+    onboarding_additional_consent_text
+    business_plan
+    upgrade_discount
+    onboarding_allowed
+    channel_image
   ].freeze
 
   FORM_ATTRIBUTES_EDIT = %i[
     name
-    project_name
-    signal_username
     contact_person
-    business_plan
-    upgrade_discount
-    whats_app_profile_about
+    project_name
+    messengers_about_text
+    messengers_description_text
     whats_app_more_info_message
+    whats_app_quick_reply_button_text
+    signal_server_phone_number
+    signal_username
+    email_from_address
     onboarding_data_protection_link
-    onboarding_data_processing_consent_additional_info
     onboarding_imprint_link
+    onboarding_data_processing_consent_additional_info
     onboarding_ask_for_additional_consent
     onboarding_additional_consent_heading
     onboarding_additional_consent_text
+    business_plan
+    upgrade_discount
     onboarding_allowed
     channel_image
-    signal_complete_onboarding_link
-    whats_app_quick_reply_button_text
-    messengers_about_text
   ].freeze
 
   COLLECTION_FILTERS = {}.freeze

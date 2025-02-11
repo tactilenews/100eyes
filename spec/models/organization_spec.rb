@@ -132,7 +132,11 @@ RSpec.describe Organization do
       let(:params) { { name: 'SomethingElse', upgrade_discount: 100 } }
 
       it 'for other updates' do
-        expect { subject }.not_to have_enqueued_job
+        expect { subject }.not_to have_enqueued_job.on_queue('default').with(
+          'PostmarkAdapter::Outbound',
+          'business_plan_upgraded_email',
+          'deliver_now'
+        )
       end
     end
 
@@ -141,7 +145,11 @@ RSpec.describe Organization do
         let(:params) { { business_plan: create(:business_plan, :editorial_pro), upgraded_business_plan_at: nil } }
 
         it 'does not schedule a job' do
-          expect { subject }.not_to have_enqueued_job
+          expect { subject }.not_to have_enqueued_job.on_queue('default').with(
+            'PostmarkAdapter::Outbound',
+            'business_plan_upgraded_email',
+            'deliver_now'
+          )
         end
       end
 
@@ -178,7 +186,7 @@ RSpec.describe Organization do
       let(:params) { { name: 'SomethingElse' } }
 
       it 'for other updates' do
-        expect { subject }.not_to have_enqueued_job
+        expect { subject }.not_to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::CreateWelcomeMessageTemplateJob)
       end
     end
 
@@ -203,6 +211,120 @@ RSpec.describe Organization do
         expect { subject }.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::CreateWelcomeMessageTemplateJob).with(
           organization_id: organization.id
         )
+      end
+    end
+  end
+
+  describe '#set_telegram_and_whats_app_profiles_info' do
+    context 'given creation of a new organization' do
+      subject { organization.save! }
+
+      let(:organization) { build(:organization) }
+
+      it 'it is expected to schedule a job to update the profiles as project_name is required' do
+        subject
+
+        expect(TelegramAdapter::SetProfileInfoJob).to have_been_enqueued.with(organization_id: organization.id)
+        expect(WhatsAppAdapter::ThreeSixtyDialog::SetProfileInfoJob).to have_been_enqueued.with(organization_id: organization.id)
+      end
+    end
+
+    context 'given updating of an existing organization' do
+      subject { organization.update(params) }
+
+      before { organization.save! }
+
+      describe 'given an update to an attribute not used in Telegram or WhatsApp profiles' do
+        let(:params) { { name: 'Some other name' } }
+
+        it 'it is expected not to schedule either job to update the profiles' do
+          expect { subject }.not_to have_enqueued_job(TelegramAdapter::SetProfileInfoJob)
+          expect { subject }.not_to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::SetProfileInfoJob)
+        end
+      end
+
+      describe 'given an update to the project_name' do
+        let(:params) { {  project_name: 'New Project Name' } }
+
+        it 'it is expected to schedule a job to update Telegram profile, so it stays in sync' do
+          expect { subject }.to have_enqueued_job(TelegramAdapter::SetProfileInfoJob).with(organization_id: organization.id)
+        end
+
+        it 'it is expected to schedule a job to update WhatsApp profile, so it stays in sync' do
+          expect do
+            subject
+          end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::SetProfileInfoJob).with(organization_id: organization.id)
+        end
+      end
+
+      describe 'given an update to the messengers_about_text' do
+        let(:params) { { messengers_about_text: 'About the messenger' } }
+
+        it 'it is expected to schedule a job to update Telegram profile, so it stays in sync' do
+          expect { subject }.to have_enqueued_job(TelegramAdapter::SetProfileInfoJob).with(organization_id: organization.id)
+        end
+
+        it 'it is expected to schedule a job to update WhatsApp profile, so it stays in sync' do
+          expect do
+            subject
+          end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::SetProfileInfoJob).with(organization_id: organization.id)
+        end
+      end
+
+      describe 'given an update to the messengers_description_text' do
+        let(:params) { { messengers_description_text: 'Description of the messenger' } }
+
+        it 'it is expected to schedule a job to update Telegram profile, so it stays in sync' do
+          expect { subject }.to have_enqueued_job(TelegramAdapter::SetProfileInfoJob).with(organization_id: organization.id)
+        end
+
+        it 'it is expected to schedule a job to update WhatsApp profile, so it stays in sync' do
+          expect do
+            subject
+          end.to have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialog::SetProfileInfoJob).with(organization_id: organization.id)
+        end
+      end
+    end
+  end
+
+  describe '#set_signal_profile_info' do
+    context 'given creation of a new organization' do
+      subject { organization.save! }
+
+      let(:organization) { build(:organization) }
+
+      it 'it is expected not to schedule a job to update the signal profiles as signal is not registered at that point' do
+        expect { subject }.not_to have_enqueued_job(SignalAdapter::SetProfileInfoJob)
+      end
+    end
+
+    context 'given updating of an existing organization' do
+      subject { organization.update(params) }
+
+      before { organization.save! }
+
+      describe 'given an update to the messengers_description_text' do
+        let(:params) { { messengers_description_text: 'Description of the messenger' } }
+
+        it 'it is expected not to schedule a job to update Signal profile as it is not used' do
+          expect { subject }.not_to have_enqueued_job(SignalAdapter::SetProfileInfoJob)
+        end
+      end
+
+      describe 'given an update to the project_name' do
+        let(:params) { {  project_name: 'New Project Name' } }
+
+        it 'it is expected to schedule a job to update Signal profile, so it stays in sync' do
+          expect { subject }.to have_enqueued_job(SignalAdapter::SetProfileInfoJob).with(organization_id: organization.id)
+        end
+      end
+
+      describe 'given an update to the messengers_about_text' do
+        let(:params) { { messengers_about_text: 'About the messenger' } }
+
+        it 'it is expected to schedule a job to update Signal profile, so it stays in sync' do
+          expect { subject }.to have_enqueued_job(SignalAdapter::SetProfileInfoJob).with(organization_id: organization.id)
+        end
       end
     end
   end

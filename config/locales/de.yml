@@ -3,9 +3,34 @@ de:
   administrate:
     field_hints:
       organization:
+        project_name: z.B. WDR Dialog-Community (der Markenname muss erkennbar sein, sonst lehnt Meta die Bezeichnung ab)
+        messengers_about_text: z.B. Hey, hier schreibt dir das Team vom WDR.
+        messengers_description_text: |
+          z.B. Willkommen in der WDR Dialog-Community. Hier stellen wir dir Fragen und freuen uns auf deine Antworten.
+          Natürlich bleibt’s dir überlassen, ob du jede Frage beantwortest oder auch mal welche auslässt.
+          Falls du gar nicht mehr mitmachen willst, schreibe einfach „abbestellen“.
+        whats_app_more_info_message: |
+          Beispiel:
+          Sag uns, was dich interessiert oder nervt – deine ehrliche Meinung zählt! Wir wollen dich kennenlernen und das WDR-Programm für dich noch besser machen.
+          Um unseren Kanal abzubestellen, schreibe „abbestellen“.
+        signal_server_phone_number: |
+          Nummer z.B. bei Woopla bestellen für Signal und Whatsapp
         signal_username: |
           Ein Signal-Benutzername ist erforderlich, wenn eine Signal-Telefonnummer hinzugefügt wird und das Onboarding nicht untersagt ist.
           Er muss zwischen 3 und 32 Zeichen lang sein, darf nicht mit einer Zahl beginnen und darf nur alphanumerische Zeichen und _ enthalten.
+        telegram_bot_username: z.B. @WDRDialogCommunity. Der Name kann später nicht geändert werden, aber man kann einen neuen erstellen.
+        telegram_bot_api_key: Wird beim Bot anlegen generiert.
+        threemarb_api_identity: |
+          Neue ID beim Kunden erfragen. Wenn mehrere Projekte laufen evtl. vorhandene ID nutzen. Wichtig: Kann nicht geändert werden, braucht exakt 7 Zeichen, z.B. wdrtalk
+        threemarb_api_secret: Erstellt Dev, wenn ID vorliegt. Liegt dann in 1password
+        threemarb_private: Erstellt Dev, wenn ID von Threema bestätigt ist
+        email_from_address: |
+          nur relevant, wenn E-Mail als Kanal angeboten werden soll. Mailadresse des Kunden (Beispiel: userlab@wdr.de) nicht möglich. Postmark benötigt Adresse mit unserer Domain. Beispiel: userlab@wdr.100ey.es
+        onboarding_data_protection_link: Muss vom Kunden gehostet sein, keine tactile.news-Seite angeben.
+        onboarding_imprint_link: Muss vom Kunden gehostet sein, keine tactile.news-Seite angeben.
+        onboarding_ask_for_additional_consent: Nur relevant, wenn Teilnehmer auch Newsletter o.ä. von Kundenseite bekommen sollen
+        onboarding_additional_consent_heading: Bestellung Newsletter o.ä.
+
     custom_field_type:
       setup_signal_link_field:
         show:
@@ -883,14 +908,30 @@ de:
         threema_id: Threema Id
         telegram_id: Telegram Id
       organization:
-        name: Name
-        contact_person: Kontaktperson
-        email_from_address: E-Mail Adresse
-        telegram_bot_username: Telegram-Bot-Benutzername
-        threemarb_api_identity: Threema Id
-        threemarb_api_secret: Threema API secret
-        threemarb_private: Threema private key
-        signal_server_phone_number: Signal-Rufnummer
+        name: Name des Kunden
+        contact_person_id: Ansprechpartner beim Kunden
+        contact_person: Ansprechpartner beim Kunden
+        project_name: Projektname
+        messengers_about_text: Messenger Profilinfo (kurz)
+        messengers_description_text: Messenger Profilbeschreibung (lang)
+        whats_app_more_info_message: Whatsapp Mehr Info Text
+        whats_app_quick_reply_button_text: Vorlage Direktantworten WhatsApp
+        signal_server_phone_number: Signal Rufnummer
+        signal_username: Signal Username
+        telegram_bot_username: Telegram Bot Benutzername
+        threemarb_api_identity: Threema ID
+        threemarb_api_secret: Threema API Secret
+        threemarb_private: Threema Private Key
+        email_from_address: E-Mail-Adresse
+        onboarding_data_protection_link: Link zum Datenschutz beim Kunden
+        onboarding_imprint_link: Link zum Impressum des Kunden
+        onboarding_ask_for_additional_consent: Zusätzliches Einverständnis beim Onboarding
+        onboarding_additional_consent_heading: Überschrift für zusätzliches Einverständnis
+        onboarding_additional_consent_text: Text für zusätzliches Einverständnis
+        business_plan_id: Business-Plan
+        upgrade_discount: Upgrade-Rabatt
+        onboarding_allowed: Onboarding nach Kanal ermöglichen
+        channel_image: Profilbild
   number:
     currency:
       format:

@@ -8,6 +8,8 @@ module SignalAdapter
 
     def perform(organization_id:)
       @organization = Organization.find(organization_id)
+      return if organization.signal_server_phone_number.blank?
+
       uri = URI.parse("#{ENV.fetch('SIGNAL_CLI_REST_API_ENDPOINT', 'http://localhost:8080')}/v1/profiles/#{organization.signal_server_phone_number}")
       request = Net::HTTP::Put.new(uri, {
                                      Accept: 'application/json',
@@ -33,7 +35,7 @@ module SignalAdapter
         base64_avatar: Base64.encode64(
           File.open(ActiveStorage::Blob.service.path_for(organization.channel_image.attachment.blob.key), 'rb').read
         ),
-        name: organization.name,
+        name: organization.project_name,
         about: organization.messengers_about_text
       }
     end
