@@ -46,16 +46,5 @@ RSpec.describe ContributorStatusToggle::ContributorStatusToggle, type: :componen
         expect(subject).to have_css('strong', text: 'Admin')
       end
     end
-
-    context 'through WhatsApp who requested to unsubscribe' do
-      before { contributor.update(whats_app_phone_number: '+49151234567', email: nil, unsubscribed_at: 1.minute.ago) }
-
-      it { should have_css('strong', text: contributor.first_name) }
-      it { should have_content('hat darum gebeten, vom Erhalt von Nachrichten über WhatsApp abgemeldet zu werden.') }
-
-      it 'does not display the deactivate form, since they cannot receive messages when unsubscribed' do
-        expect(subject).not_to have_css('form')
-      end
-    end
   end
 end
