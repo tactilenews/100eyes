@@ -63,7 +63,7 @@ de:
       add_message: Notiz hinzufügen
     chat_form:
       reply_to_reference: 'Zur Nachricht: "%{text}"'
-      placeholder: Gib hier deine Nachfrage ein. Referenziere falls nötig die entsprechende Nachricht...
+      placeholder: Platz für deine Nachricht...
       submit: Absenden
     message_form:
       placeholder: Füge hier den Text der Antwort ein…
@@ -121,7 +121,7 @@ de:
       link: Zur Signal-App
       copy: Link kopieren
       help: Über den Button gelangst du direkt zum Signal-Profil von „%{project_name}”. Alternativ kannst du einen Link kopieren und auf deinem Smartphone öffnen.
-      message: 'Wenn du unser Signal-Konto gefunden hast, gebe diesen Code ein: <strong>%{token}</strong>'
+      message: 'Wenn du unser Signal-Konto gefunden hast, schreibe diesen Code <strong>%{token}</strong> als erste Nachricht in den Chat.'
     onboarding_signal_form:
       heading: Mit Signal teilnehmen
       text: Gib uns zunächst dein Einverständnis. Wir werden dann einen Code generieren, den du an uns senden kannst, um deine Registrierung abzuschließen.
