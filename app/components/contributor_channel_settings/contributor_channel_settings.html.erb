@@ -1,4 +1,4 @@
-<%= c 'stack', space: :large do %>
+<%= c 'section', styles: [:wide, :xlargeSpaceBetween, :noMarginTop], **attrs do %>
   <% if contributor.email? %>
     <%= c 'contributor_email_settings', organization: organization, contributor: contributor %>
   <% end %>
@@ -18,4 +18,5 @@
   <% if contributor.whats_app? %>
     <%= c 'contributor_whats_app_settings', contributor: contributor %>
   <% end %>
+  <hr>
 <% end %>
