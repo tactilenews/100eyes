@@ -13,23 +13,34 @@
     <% end %>
   <% end %>
 
-  <%= c 'section', styles: [:wide, :xlargeSpaceBetween, :noMarginTop] do %>
-    <%= c 'contributor_header', organization: @organization, contributor: @contributor %>
+  <div>
+    <%= c 'section', styles: [:wide, :xlargeSpaceBetween, :noMarginTop] do %>
+      <%= c 'contributor_header', organization: @organization, contributor: @contributor %>
+    <% end %>
 
-    <%= c 'contributor_quick_edit_form', organization: @organization, contributor: @contributor %>
-
-    <hr>
+    <%= c 'section', styles: [:wide, :xlargeSpaceBetween, :noMarginTop] do %>
+      <%= c 'contributor_quick_edit_form', organization: @organization, contributor: @contributor %>
+      <hr>
+    <% end %>
 
     <%= c 'contributor_channel_settings', organization: @organization, contributor: @contributor %>
 
-    <hr>
-
     <%= c 'requests_feed', organization: @organization, contributor: @contributor %>
 
-    <hr>
+    <%= c 'section', styles: [:wide, :xlargeSpaceBetween, :noMarginTop] do %>
+      <% if @contributor.unsubscribed_at.present? %>
 
-    <% unless @contributor.unsubscribed_at.present? %>
-      <%= c 'contributor_status_toggle', organization: @organization, contributor: @contributor %>
+        <p>
+          <%= t('contributor.unsubscribed.text',
+                name: @contributor.name,
+                project_name: @contributor.organization.project_name,
+                first_name: @contributor.first_name
+          ).html_safe %>
+        </p>
+
+      <% else %>
+        <%= c 'contributor_status_toggle', organization: @organization, contributor: @contributor %>
+      <% end %>
     <% end %>
-  <% end %>
+  </div>
 <% end %>

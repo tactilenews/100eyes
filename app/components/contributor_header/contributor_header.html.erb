@@ -13,7 +13,7 @@
       <%= t('.created_at', date: l(contributor.created_at.to_date)) %>
 
       <% if contributor.inactive? %>
-        · <%= t('.deactivated_at', date: l(contributor.deactivated_at.to_date)) %>
+        <%= inactive_message %>
       <% end %>
     </p>
 

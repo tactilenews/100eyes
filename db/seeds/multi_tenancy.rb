@@ -10,6 +10,7 @@ organizations = 3.times.collect do
   Organization.create!(
     name: Faker::Company.name,
     project_name: Faker::Company.name,
+    signal_username: Faker::Internet.username,
     upgrade_discount: rand(0..25),
     business_plan: business_plan,
     telegram_bot_username: Faker::Internet.username

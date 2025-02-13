@@ -14,7 +14,6 @@
       </p>
 
     <% else %>
-
       <%= c 'heading', tag: :h2 do %>
         <%= t('.inactive.heading') %>
       <% end %>
@@ -35,14 +34,6 @@
                  user_name: 'Admin',
                  project_name: organization.project_name,
                  first_name: contributor.first_name
-          ).html_safe %>
-        </p>
-      <% elsif contributor.unsubscribed_at.present? %>
-        <p>
-          <%= t('.unsubscribed.text',
-                name: contributor.name,
-                project_name: organization.project_name,
-                first_name: contributor.first_name
           ).html_safe %>
         </p>
       <% else %>

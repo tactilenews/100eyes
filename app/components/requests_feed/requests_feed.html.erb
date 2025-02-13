@@ -1,4 +1,4 @@
-<%= c 'stack', class: 'RequestsFeed' do %>
+<%= c 'section', styles: [:wide, :noMarginTop], **attrs do %>
   <% if replies.any? %>
     <%= c 'heading', tag: :h2 do %>
       <%= t('.heading') %>
@@ -30,4 +30,5 @@
       <%= link_to t(".show_all", count: replies.count ), conversations_organization_contributor_path(organization_id: contributor.organization_id, id: contributor.id), class: "Link" %>
     </p>
   <% end %>
+  <hr>
 <% end %>

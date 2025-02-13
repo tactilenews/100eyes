@@ -5,3 +5,7 @@
 .RequestsFeed li + li {
   margin-top: var(--spacing-unit-s);
 }
+
+.RequestsFeed hr {
+  margin-top: var(--spacing-unit-xl);
+}
