@@ -30,7 +30,8 @@ de:
         onboarding_imprint_link: Muss vom Kunden gehostet sein, keine tactile.news-Seite angeben.
         onboarding_ask_for_additional_consent: Nur relevant, wenn Teilnehmer auch Newsletter o.ä. von Kundenseite bekommen sollen
         onboarding_additional_consent_heading: Bestellung Newsletter o.ä.
-
+      user:
+        organizations: Einem Benutzer muss mindestens eine Organisation zugewiesen werden, wenn er kein Administrator ist.
     custom_field_type:
       setup_signal_link_field:
         show:

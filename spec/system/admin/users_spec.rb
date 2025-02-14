@@ -16,6 +16,9 @@ RSpec.describe 'Users' do
       fill_in 'Last name', with: 'Zimmermann'
       fill_in 'Email', with: 'zimmermann@example.org'
 
+      click_on 'User erstellen'
+      expect(page).to have_text('User konnte nicht gespeichert werden, es gab 1 Fehler. Organizations ist zu kurz (weniger als 1 Zeichen)')
+
       input = find('input[name="user[organization_ids][]"]', visible: false)
       input.set(organization.id)
       click_on 'User erstellen'

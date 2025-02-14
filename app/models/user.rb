@@ -14,6 +14,7 @@ class User < ApplicationRecord
 
   has_one_time_password
   validates :password, length: { in: 8..128 }, unless: :skip_password_validation?
+  validates :organizations, length: { minimum: 1 }, unless: :admin?
 
   scope :admin, ->(boolean = true) { where(admin: boolean) }
   scope :active, -> { where(deactivated_at: nil) }
