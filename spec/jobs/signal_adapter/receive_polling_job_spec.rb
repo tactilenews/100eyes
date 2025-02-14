@@ -43,8 +43,10 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
     end
 
     describe 'given a registered signal phone number on the server', vcr: { cassette_name: :receive_signal_messages } do
+      let(:user) { create(:user, first_name: 'why', organizations: [organization]) }
+
       before do
-        create(:request, organization: organization)
+        # create(:request, organization: organization, user: user)
 
         allow(ENV).to receive(:fetch).with('SIGNAL_CLI_REST_API_ENDPOINT', 'http://localhost:8080').and_return('http://localhost:8080')
         allow(job).to receive(:ping_monitoring_service).and_return(nil)
@@ -172,8 +174,8 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
           create(:contributor, signal_uuid: '4c941782-a59c-4428-a19f-8d7628b6ca42', signal_onboarding_completed_at: 2.weeks.ago,
                                organization: organization)
         end
-        let(:request) { create(:request, organization: organization) }
-        let!(:message) { create(:message, :outbound, recipient: contributor, request: request, organization: organization) }
+        let(:request) { create(:request, organization: organization, user: user) }
+        let!(:message) { create(:message, :outbound, recipient: contributor, request: request, organization: organization, sender: user) }
 
         it 'updates message.delivered_at' do
           expect { subject.call }.to change { message.reload.delivered_at }.from(nil).to(Time.zone.at(1_719_664_635))

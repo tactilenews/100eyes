@@ -214,7 +214,7 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
       end
 
       context 'user, not admin' do
-        let(:admin) { build(:user) }
+        let(:admin) { build(:user, organizations: [organization]) }
         let(:organization) { build(:organization) }
 
         it 'does not enqueue a Mailer' do
@@ -262,7 +262,7 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
       end
 
       context 'user, not admin' do
-        let(:admin) { build(:user) }
+        let(:admin) { build(:user, organizations: [organization]) }
         let(:organization) { build(:organization) }
 
         it 'does not enqueue a Mailer' do
@@ -310,7 +310,7 @@ RSpec.describe PostmarkAdapter::Outbound, type: :mailer do
       end
 
       context 'user without an admin role' do
-        let(:admin) { build(:user) }
+        let(:admin) { build(:user, organizations: [organization]) }
         let(:contributor) { create(:contributor, organization: organization) }
 
         it 'does not enqueue a Mailer' do

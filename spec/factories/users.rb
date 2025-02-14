@@ -7,5 +7,9 @@ FactoryBot.define do
     last_name { Faker::Name.last_name }
     password { Faker::Internet.password(min_length: 20, max_length: 128) }
     otp_enabled { true }
+
+    after(:build) do |user, evaluator|
+      user.organizations << create(:organization) unless user.admin? || evaluator.organizations.present?
+    end
   end
 end
