@@ -40,8 +40,10 @@ RSpec.describe 'Organization management' do
     context 'authenticated and authorized' do
       let(:user) { create(:user, admin: true) }
 
+      before { user }
+
       it 'creates the organization' do
-        expect { subject.call }.to change(Organization, :count).from(0).to(1)
+        expect { subject.call }.to change(Organization, :count).by(1)
       end
 
       it 'assigns the business plan to the organization' do

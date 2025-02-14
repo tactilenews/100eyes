@@ -40,6 +40,7 @@ class OrganizationDashboard < Administrate::BaseDashboard
 
   COLLECTION_ATTRIBUTES = %i[
     name
+    project_name
     contact_person
     email_from_address
     telegram_bot_username

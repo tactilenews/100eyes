@@ -15,6 +15,10 @@ RSpec.describe 'Users' do
       fill_in 'First name', with: 'Zora'
       fill_in 'Last name', with: 'Zimmermann'
       fill_in 'Email', with: 'zimmermann@example.org'
+
+      click_on 'User erstellen'
+      expect(page).to have_text('User konnte nicht gespeichert werden, es gab 1 Fehler. Organizations ist zu kurz (weniger als 1 Zeichen)')
+
       input = find('input[name="user[organization_ids][]"]', visible: false)
       input.set(organization.id)
       click_on 'User erstellen'
@@ -45,11 +49,6 @@ RSpec.describe 'Users' do
 
         fill_in 'First name', with: 'UpdatedZora'
         expect { click_on 'User aktualisieren' }.not_to(change { user.reload.encrypted_password })
-
-        visit edit_admin_user_path(user, as: user)
-
-        uncheck 'Otp enabled'
-        expect { click_on 'User aktualisieren' }.to(change { user.reload.otp_secret_key })
 
         visit edit_admin_user_path(user, as: user)
 

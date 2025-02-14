@@ -14,10 +14,14 @@ class UserDashboard < Administrate::BaseDashboard
     updated_at: Field::DateTime,
     deactivated_at: Field::DateTime,
     active: Field::Boolean,
-    organizations: Field::HasMany
+    organizations: Field::HasMany.with_options(
+      searchable: true,
+      searchable_fields: %w[name project_name]
+    )
   }.freeze
 
   COLLECTION_ATTRIBUTES = %i[
+    organizations
     id
     first_name
     last_name
@@ -37,6 +41,7 @@ class UserDashboard < Administrate::BaseDashboard
     created_at
     updated_at
     deactivated_at
+    organizations
   ].freeze
 
   FORM_ATTRIBUTES = %i[
@@ -44,7 +49,6 @@ class UserDashboard < Administrate::BaseDashboard
     last_name
     email
     admin
-    otp_enabled
     active
     organizations
   ].freeze

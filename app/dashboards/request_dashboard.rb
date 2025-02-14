@@ -10,10 +10,15 @@ class RequestDashboard < Administrate::BaseDashboard
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
     broadcasted_at: Field::DateTime,
-    messages: Field::HasMany
+    messages: Field::HasMany,
+    organization: Field::BelongsTo.with_options(
+      searchable: true,
+      searchable_fields: %w[name project_name]
+    )
   }.freeze
 
   COLLECTION_ATTRIBUTES = %i[
+    organization
     id
     title
     created_at
@@ -21,6 +26,7 @@ class RequestDashboard < Administrate::BaseDashboard
   ].freeze
 
   SHOW_PAGE_ATTRIBUTES = %i[
+    organization
     id
     title
     text

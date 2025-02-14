@@ -23,20 +23,25 @@ class ContributorDashboard < Administrate::BaseDashboard
     updated_at: Field::DateTime,
     deactivated_at: Field::DateTime,
     data_processing_consented_at: Field::DateTime,
-    additional_consent_given_at: Field::DateTime
+    additional_consent_given_at: Field::DateTime,
+    organization: Field::BelongsTo.with_options(
+      searchable: true,
+      searchable_fields: %w[name project_name]
+    )
   }.freeze
 
   COLLECTION_ATTRIBUTES = %i[
+    organization
     id
     first_name
     last_name
     channels
     active
     data_processing_consented_at
-    additional_consent_given_at
   ].freeze
 
   SHOW_PAGE_ATTRIBUTES = %i[
+    organization
     id
     first_name
     last_name
