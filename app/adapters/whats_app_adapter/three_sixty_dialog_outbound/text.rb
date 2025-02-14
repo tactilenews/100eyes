@@ -49,12 +49,14 @@ module WhatsAppAdapter
       end
 
       def text_payload
-        base_payload.merge({
-                             type: 'text',
-                             text: {
-                               body: text || message.text
-                             }
-                           })
+        payload = base_payload.merge({
+                                       type: 'text',
+                                       text: {
+                                         body: text || message.text
+                                       }
+                                     })
+        payload.merge!({ context: { message_id: message.reply_to_external_id } }) if message&.reply_to_external_id.present?
+        payload
       end
 
       def welcome_message_payload

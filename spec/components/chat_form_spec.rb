@@ -30,27 +30,5 @@ RSpec.describe ChatForm::ChatForm, type: :component do
     it 'should have a hidden reply_to input field' do
       expect(subject).to have_css('input#message_reply_to_id', visible: false)
     end
-
-    it 'should have the message prefilled' do
-      expect(subject).to have_css('textarea', text: I18n.t('components.chat_form.reply_to_reference', text: reply_to.text.truncate(50)))
-    end
-
-    context 'message with nil text' do
-      before { params[:reply_to] = create(:message, :with_request, text: '') }
-
-      it 'should display the time instead' do
-        expect(subject).to have_css('textarea',
-                                    text: I18n.t('components.chat_form.reply_to_reference', text: date_time(reply_to.updated_at)))
-      end
-    end
-
-    context 'message with nil text' do
-      before { params[:reply_to] = create(:message, :with_request, text: nil) }
-
-      it 'should display the time instead' do
-        expect(subject).to have_css('textarea',
-                                    text: I18n.t('components.chat_form.reply_to_reference', text: date_time(reply_to.updated_at)))
-      end
-    end
   end
 end

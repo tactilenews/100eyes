@@ -8,16 +8,20 @@ module Organizations
     before_action :contributors_params, only: :index
 
     def message
-      request = if message_params[:reply_to_id].present?
-                  reply_to = contributor.replies.find(message_params[:reply_to_id])
-                  reply_to.request
-                else
-                  contributor.received_messages.first&.request
-                end
-
+      reply_to, request = if message_params[:reply_to_id].present?
+                            [
+                              reply_to = contributor.replies.find(message_params[:reply_to_id]),
+                              reply_to.request
+                            ]
+                          else
+                            [
+                              nil,
+                              contributor.received_messages.first&.request
+                            ]
+                          end
       text = message_params[:text]
       message = Message.create!(text: text, request: request, recipient: contributor, sender: current_user,
-                                organization: contributor.organization)
+                                organization: contributor.organization, reply_to_external_id: reply_to&.external_id)
       message.send!
       redirect_to message.chat_message_link, flash: { success: I18n.t('contributor.message-send', name: contributor.name) }
     end

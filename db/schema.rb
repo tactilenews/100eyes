@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_02_11_105625) do
+ActiveRecord::Schema.define(version: 2025_02_11_113532) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -189,6 +189,7 @@ ActiveRecord::Schema.define(version: 2025_02_11_105625) do
     t.string "external_id"
     t.datetime "sent_at"
     t.bigint "organization_id"
+    t.string "reply_to_external_id"
     t.index ["creator_id"], name: "index_messages_on_creator_id"
     t.index ["organization_id"], name: "index_messages_on_organization_id"
     t.index ["recipient_id"], name: "index_messages_on_recipient_id"
