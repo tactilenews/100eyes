@@ -44,7 +44,6 @@ class UserDashboard < Administrate::BaseDashboard
     last_name
     email
     admin
-    otp_enabled
     active
     organizations
   ].freeze
