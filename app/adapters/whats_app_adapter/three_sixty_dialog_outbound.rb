@@ -14,8 +14,10 @@ module WhatsAppAdapter
         end
       end
 
-      def send_welcome_message!(contributor, organization)
+      def send_welcome_message!(contributor)
         return unless contributor_can_receive_messages?(contributor)
+
+        organization = contributor.organization
 
         if freeform_message_permitted?(contributor)
           welcome_message = ["*#{organization.onboarding_success_heading}*", organization.onboarding_success_text].join("\n\n")
@@ -41,7 +43,7 @@ module WhatsAppAdapter
                                                                       text: contributor.organization.whats_app_more_info_message)
       end
 
-      def send_unsubsribed_successfully_message!(contributor, _organization)
+      def send_unsubscribed_successfully_message!(contributor)
         return unless contributor_can_receive_messages?(contributor)
 
         text = [I18n.t('adapter.shared.unsubscribe.successful'),
@@ -50,7 +52,7 @@ module WhatsAppAdapter
         WhatsAppAdapter::ThreeSixtyDialogOutbound::Text.perform_later(contributor_id: contributor.id, type: :text, text: text)
       end
 
-      def send_resubscribe_error_message!(contributor, _organization)
+      def send_resubscribe_error_message!(contributor)
         return unless contributor_can_receive_messages?(contributor)
 
         text = I18n.t('adapter.shared.resubscribe.failure')

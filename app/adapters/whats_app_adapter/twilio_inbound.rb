@@ -79,9 +79,9 @@ module WhatsAppAdapter
       message_text = whats_app_message[:body]
       original_replied_message_sid = whats_app_message[:original_replied_message_sid]
 
-      trigger(REQUEST_FOR_MORE_INFO, sender, organization) if request_for_more_info?(message_text)
-      trigger(UNSUBSCRIBE_CONTRIBUTOR, sender, organization) if unsubscribe_text?(message_text)
-      trigger(RESUBSCRIBE_CONTRIBUTOR, sender, organization) if resubscribe_text?(message_text)
+      trigger(REQUEST_FOR_MORE_INFO, sender) if request_for_more_info?(message_text)
+      trigger(UNSUBSCRIBE_CONTRIBUTOR, sender) if unsubscribe_text?(message_text)
+      trigger(RESUBSCRIBE_CONTRIBUTOR, sender) if resubscribe_text?(message_text)
       if request_to_receive_message?(sender, whats_app_message)
         trigger(REQUEST_TO_RECEIVE_MESSAGE, sender, original_replied_message_sid, organization)
       end

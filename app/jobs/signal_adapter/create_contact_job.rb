@@ -4,12 +4,9 @@ require 'net/http'
 
 module SignalAdapter
   class CreateContactJob < ApplicationJob
-    def perform(organization_id:, contributor_id:)
-      organization = Organization.find_by(id: organization_id)
-      return unless organization
-
-      contributor = organization.contributors.find_by(id: contributor_id)
-      return unless contributor
+    def perform(contributor_id:)
+      contributor = Contributor.find(contributor_id)
+      organization = contributor.organization
 
       url = URI.parse("#{ENV.fetch('SIGNAL_CLI_REST_API_ENDPOINT', 'http://localhost:8080')}/v1/contacts/#{organization.signal_server_phone_number}")
       header = {

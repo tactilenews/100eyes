@@ -5,9 +5,9 @@ module WhatsAppAdapter
     class Text < ApplicationJob
       queue_as :default
 
-      def perform(organization_id:, contributor_id:, text:, message: nil)
-        organization = Organization.find(organization_id)
-        contributor = organization.contributors.find(contributor_id)
+      def perform(contributor_id:, text:, message: nil)
+        contributor = Contributor.find(contributor_id)
+        organization = contributor.organization
 
         response = organization.twilio_instance.messages.create(
           from: "whatsapp:#{organization.whats_app_server_phone_number}",
@@ -17,8 +17,6 @@ module WhatsAppAdapter
         return unless message
 
         message.update(external_id: response.sid)
-      rescue ActiveRecord::RecordNotFound => e
-        ErrorNotifier.report(e)
       end
     end
   end

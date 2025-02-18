@@ -17,11 +17,11 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
     end
 
     adapter.consume(payload) do |m|
-      m.contributor.send_welcome_message!(organization)
+      m.contributor.send_welcome_message!
     end
   end
 
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:disable Metrics/MethodLength
   def message(msg)
     adapter = TelegramAdapter::Inbound.new(organization)
 
@@ -31,7 +31,7 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
       contributor.organization = organization
       contributor.save!
       contributor_connected = true
-      contributor.send_welcome_message!(organization)
+      contributor.send_welcome_message!
     end
 
     adapter.on(TelegramAdapter::UNKNOWN_CONTENT) do
@@ -43,11 +43,11 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
     end
 
     adapter.on(TelegramAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
-      UnsubscribeContributorJob.perform_later(organization.id, contributor.id, TelegramAdapter::Outbound)
+      UnsubscribeContributorJob.perform_later(contributor.id, TelegramAdapter::Outbound)
     end
 
     adapter.on(TelegramAdapter::RESUBSCRIBE_CONTRIBUTOR) do |contributor|
-      ResubscribeContributorJob.perform_later(organization.id, contributor.id, TelegramAdapter::Outbound)
+      ResubscribeContributorJob.perform_later(contributor.id, TelegramAdapter::Outbound)
     end
 
     adapter.consume(msg) do |m|
@@ -57,5 +57,5 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
       end
     end
   end
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength
 end

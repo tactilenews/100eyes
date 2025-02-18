@@ -30,9 +30,10 @@ module PostmarkAdapter
         with(message: message, organization: message.organization).message_email.deliver_later
       end
 
-      def send_welcome_message!(contributor, organization)
+      def send_welcome_message!(contributor)
         return unless contributor&.email
 
+        organization = contributor.organization
         with(contributor: contributor, organization: organization).welcome_email.deliver_later
       end
 

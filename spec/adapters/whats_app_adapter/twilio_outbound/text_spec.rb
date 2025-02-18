@@ -17,7 +17,6 @@ RSpec.describe WhatsAppAdapter::TwilioOutbound::Text do
   let(:contributor) do
     create(:contributor, :whats_app_contributor, organization: organization)
   end
-  let(:organization_id) { organization.id }
   let(:contributor_id) { contributor.id }
   let(:expected_params) do
     { from: "whatsapp:#{organization.whats_app_server_phone_number}", body: text, to: "whatsapp:#{contributor.whats_app_phone_number}" }
@@ -27,7 +26,7 @@ RSpec.describe WhatsAppAdapter::TwilioOutbound::Text do
   let(:message) { nil }
 
   describe '#perform' do
-    subject { -> { adapter.perform(organization_id: organization_id, contributor_id: contributor_id, text: text, message: message) } }
+    subject { -> { adapter.perform(contributor_id: contributor_id, text: text, message: message) } }
 
     before do
       allow(Twilio::REST::Client).to receive(:new).with(valid_api_key_sid, valid_api_key_secret,
@@ -59,36 +58,6 @@ RSpec.describe WhatsAppAdapter::TwilioOutbound::Text do
 
       it 'saves the external id' do
         expect { subject.call }.to change { message.reload.external_id }.from(nil).to(twilio_message_sid)
-      end
-    end
-
-    describe 'Unknown organization' do
-      let(:organization_id) { 564_321 }
-
-      it 'reports the error' do
-        expect(Sentry).to receive(:capture_exception).with(ActiveRecord::RecordNotFound)
-
-        subject.call
-      end
-    end
-
-    describe 'Unknown contributor' do
-      let(:contributor_id) { 564_321 }
-
-      it 'reports the error' do
-        expect(Sentry).to receive(:capture_exception).with(ActiveRecord::RecordNotFound)
-
-        subject.call
-      end
-
-      context 'not part of organization' do
-        let(:contributor_id) { create(:contributor).id }
-
-        it 'reports the error' do
-          expect(Sentry).to receive(:capture_exception).with(ActiveRecord::RecordNotFound)
-
-          subject.call
-        end
       end
     end
   end

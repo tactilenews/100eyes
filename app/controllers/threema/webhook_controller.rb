@@ -42,16 +42,16 @@ class Threema::WebhookController < ApplicationController
       handle_delivery_receipt(delivery_receipt, organization)
     end
 
-    adapter.on(ThreemaAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor, organization|
-      UnsubscribeContributorJob.perform_later(organization.id, contributor.id, ThreemaAdapter::Outbound)
+    adapter.on(ThreemaAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
+      UnsubscribeContributorJob.perform_later(contributor.id, ThreemaAdapter::Outbound)
     end
 
-    adapter.on(ThreemaAdapter::RESUBSCRIBE_CONTRIBUTOR) do |contributor, organization|
-      ResubscribeContributorJob.perform_later(organization.id, contributor.id, ThreemaAdapter::Outbound)
+    adapter.on(ThreemaAdapter::RESUBSCRIBE_CONTRIBUTOR) do |contributor|
+      ResubscribeContributorJob.perform_later(contributor.id, ThreemaAdapter::Outbound)
     end
 
-    adapter.on(ThreemaAdapter::UNSUPPORTED_CONTENT) do |contributor, organization|
-      ThreemaAdapter::Outbound.send_unsupported_content_message!(contributor, organization)
+    adapter.on(ThreemaAdapter::UNSUPPORTED_CONTENT) do |contributor|
+      ThreemaAdapter::Outbound.send_unsupported_content_message!(contributor)
     end
   end
 

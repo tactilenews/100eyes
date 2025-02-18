@@ -594,7 +594,7 @@ RSpec.describe Contributor, type: :model do
       subject do
         lambda do
           message_inbound_adapter = SignalAdapter::Inbound.new
-          message_inbound_adapter.consume(signal_message) do |message|
+          message_inbound_adapter.consume(contributor, signal_message) do |message|
             message.contributor.reply(message_inbound_adapter)
           end
         end
@@ -873,7 +873,7 @@ RSpec.describe Contributor, type: :model do
   end
 
   describe '.send_welcome_message!', telegram_bot: :rails do
-    subject { -> { contributor.send_welcome_message!(organization) } }
+    subject { -> { contributor.send_welcome_message! } }
 
     let!(:organization) do
       create(:organization, onboarding_success_heading: 'Welcome new contributor!', onboarding_success_text: 'You onboarded successfully.')
@@ -887,7 +887,7 @@ RSpec.describe Contributor, type: :model do
 
     context 'signed up via telegram' do
       let(:expected_job_args) do
-        { organization_id: organization.id, contributor_id: contributor.id,
+        { contributor_id: contributor.id,
           text: "<b>Welcome new contributor!</b>\nYou onboarded successfully." }
       end
       let(:contributor) do
@@ -903,7 +903,7 @@ RSpec.describe Contributor, type: :model do
 
     context 'signed up via threema' do
       let(:expected_job_args) do
-        { organization_id: organization.id, contributor_id: contributor.id,
+        { contributor_id: contributor.id,
           text: "*Welcome new contributor!*\nYou onboarded successfully." }
       end
       let(:contributor) { create(:contributor, :skip_validations, :threema_contributor, organization: organization) }
@@ -911,7 +911,7 @@ RSpec.describe Contributor, type: :model do
     end
 
     context 'signed up via email' do
-      let(:contributor) { create(:contributor, email: 'text@example.org') }
+      let(:contributor) { create(:contributor, email: 'text@example.org', organization: organization) }
       it {
         should enqueue_job.with(
           'PostmarkAdapter::Outbound',

@@ -144,7 +144,6 @@ RSpec.describe 'Onboarding::Whatsapp' do
           subject.call
 
           expect(WhatsAppAdapter::TwilioOutbound::Text).to have_been_enqueued.with(
-            organization_id: organization.id,
             contributor_id: Contributor.unscoped.last.id,
             text: welcome_message
           )

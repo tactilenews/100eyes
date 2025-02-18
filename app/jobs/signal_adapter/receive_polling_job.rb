@@ -16,14 +16,13 @@ module SignalAdapter
       return if signal_server_phone_number_not_configured?
 
       signal_messages = request_new_messages
+      signal_messages.each do |message|
+        Rails.logger.debug message
+      end
       @adapter = SignalAdapter::Inbound.new
 
-      handle_callbacks
-
       signal_messages.each do |raw_message|
-        adapter.consume(raw_message) { |m| m.contributor.reply(adapter) }
-      rescue StandardError => e
-        ErrorNotifier.report(e)
+        consume_signal_message(raw_message)
       end
 
       ping_monitoring_service && return
@@ -46,34 +45,84 @@ module SignalAdapter
       end.flatten
     end
 
-    def handle_callbacks
-      adapter.on(SignalAdapter::UNKNOWN_ORGANIZATION) do |signal_server_phone_number|
-        handle_unknown_organization(signal_server_phone_number)
-      end
+    def consume_signal_message(raw_message)
+      signal_message = raw_message.with_indifferent_access
+      organization = initialize_organization(signal_message)
+      return unless organization
 
-      adapter.on(SignalAdapter::CONNECT) do |contributor, signal_uuid, organization|
-        handle_connect(contributor, signal_uuid, organization)
-      end
+      contributor = initialize_onboarded_contributor(organization, signal_message)
+      delivery_receipt = initialize_delivery_receipt(signal_message, contributor)
+      return if delivery_receipt
 
-      adapter.on(SignalAdapter::UNKNOWN_CONTRIBUTOR) do |signal_attr|
-        handle_unknown_contributor(signal_attr)
+      unless contributor
+        initialize_onboarding_contributor(signal_message, organization)
+        return
       end
+      adapter.consume(contributor, signal_message)
+    rescue StandardError => e
+      ErrorNotifier.report(e)
+    end
 
-      adapter.on(SignalAdapter::UNKNOWN_CONTENT) do |contributor, organization|
-        SignalAdapter::Outbound.send_unknown_content_message!(contributor, organization)
+    def initialize_organization(signal_message)
+      signal_server_phone_number = signal_message[:account]
+      organization = Organization.find_by(signal_server_phone_number: signal_server_phone_number)
+      unless organization
+        exception = SignalAdapter::UnknownOrganizationError.new(signal_server_phone_number: signal_server_phone_number)
+        ErrorNotifier.report(exception)
       end
+      organization
+    end
 
-      adapter.on(SignalAdapter::UNSUBSCRIBE_CONTRIBUTOR) do |contributor, organization|
-        UnsubscribeContributorJob.perform_later(organization.id, contributor.id, SignalAdapter::Outbound)
-      end
+    def initialize_onboarded_contributor(organization, signal_message)
+      envelope = signal_message[:envelope]
+      source = envelope[:source] || envelope[:sourceNumber] || source[:sourceUuid]
+      contributors = organization.contributors.with_signal
+      contributors.where(signal_phone_number: source).or(contributors.where(signal_uuid: source)).first
+    end
 
-      adapter.on(SignalAdapter::RESUBSCRIBE_CONTRIBUTOR) do |contributor, organization|
-        ResubscribeContributorJob.perform_later(organization.id, contributor.id, SignalAdapter::Outbound)
-      end
+    def initialize_delivery_receipt(signal_message, contributor)
+      return unless signal_message.dig(:envelope, :receiptMessage).present? && contributor
 
-      adapter.on(SignalAdapter::HANDLE_DELIVERY_RECEIPT) do |delivery_receipt, contributor|
-        handle_delivery_receipt(delivery_receipt, contributor)
+      delivery_receipt = signal_message.dig(:envelope, :receiptMessage)
+
+      datetime = Time.zone.at(delivery_receipt[:when] / 1000).to_datetime
+      received_messages = contributor.received_messages
+      receipt_for_message = received_messages.find_by(external_id: delivery_receipt[:when]) ||
+                            received_messages.first
+      return unless receipt_for_message
+
+      receipt_for_message.update(delivered_at: datetime) if delivery_receipt[:isDelivery]
+      receipt_for_message.update(read_at: datetime) if delivery_receipt[:isRead]
+      delivery_receipt
+    end
+
+    def initialize_onboarding_contributor(signal_message, organization)
+      signal_uuid = signal_message.dig(:envelope, :sourceUuid)
+      valid_signal_onboarding_token = signal_onboarding_token(signal_message.dig(:envelope, :dataMessage, :message))
+      contributor =
+        (organization.contributors.find_by(signal_onboarding_token: valid_signal_onboarding_token) if valid_signal_onboarding_token)
+
+      unless contributor
+        exception = SignalAdapter::UnknownContributorError.new(signal_attr: signal_message.dig(:envelope, :source))
+        ErrorNotifier.report(exception)
+        return
       end
+      return unless signal_uuid
+
+      handle_connect(contributor, signal_uuid)
+    end
+
+    def signal_onboarding_token(message)
+      return unless message.present? && message.strip.length.eql?(8)
+
+      message.strip
+    end
+
+    def handle_connect(contributor, signal_uuid)
+      contributor.update!(signal_uuid: signal_uuid, signal_onboarding_completed_at: Time.current)
+      SignalAdapter::CreateContactJob.perform_later(contributor_id: contributor.id)
+      SignalAdapter::AttachContributorsAvatarJob.perform_later(contributor_id: contributor.id)
+      SignalAdapter::Outbound.send_welcome_message!(contributor)
     end
 
     def ping_monitoring_service
@@ -85,32 +134,6 @@ module SignalAdapter
 
     def queue_empty?
       Delayed::Job.where(queue: queue_name, failed_at: nil).none?
-    end
-
-    def handle_connect(contributor, signal_uuid, organization)
-      contributor.update!(signal_uuid: signal_uuid, signal_onboarding_completed_at: Time.current)
-      SignalAdapter::CreateContactJob.perform_later(organization_id: organization.id, contributor_id: contributor.id)
-      SignalAdapter::AttachContributorsAvatarJob.perform_later(contributor_id: contributor.id)
-      SignalAdapter::Outbound.send_welcome_message!(contributor, organization)
-    end
-
-    def handle_delivery_receipt(delivery_receipt, contributor)
-      datetime = Time.zone.at(delivery_receipt[:when] / 1000).to_datetime
-      latest_received_message = contributor.received_messages.first
-      return unless latest_received_message
-
-      latest_received_message.update(delivered_at: datetime) if delivery_receipt[:isDelivery]
-      latest_received_message.update(read_at: datetime) if delivery_receipt[:isRead]
-    end
-
-    def handle_unknown_contributor(signal_attr)
-      exception = SignalAdapter::UnknownContributorError.new(signal_attr: signal_attr)
-      ErrorNotifier.report(exception)
-    end
-
-    def handle_unknown_organization(signal_server_phone_number)
-      exception = SignalAdapter::UnknownOrganizationError.new(signal_server_phone_number: signal_server_phone_number)
-      ErrorNotifier.report(exception)
     end
   end
 end

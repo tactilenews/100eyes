@@ -215,7 +215,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
         before { components[:messages].first[:text][:body] = 'Abbestellen' }
 
         it 'is expected to enqueue a job to unsubscribe' do
-          expect { subject.call }.to have_enqueued_job(UnsubscribeContributorJob).with(organization.id, contributor.id,
+          expect { subject.call }.to have_enqueued_job(UnsubscribeContributorJob).with(contributor.id,
                                                                                        WhatsAppAdapter::ThreeSixtyDialogOutbound)
         end
       end
@@ -227,7 +227,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
         end
 
         it 'is expected to enqueue a job to unsubscribe' do
-          expect { subject.call }.to have_enqueued_job(ResubscribeContributorJob).with(organization.id, contributor.id,
+          expect { subject.call }.to have_enqueued_job(ResubscribeContributorJob).with(contributor.id,
                                                                                        WhatsAppAdapter::ThreeSixtyDialogOutbound)
         end
       end

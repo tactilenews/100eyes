@@ -13,9 +13,8 @@ RSpec.describe SignalAdapter::Outbound::Text do
   let(:contributor) { create(:contributor, signal_phone_number: '+4915112345678', email: nil, organization: organization) }
   let(:message) { nil }
   let(:text) { 'Hello contributor' }
-  let(:organization_id) { organization.id }
   let(:contributor_id) { contributor.id }
-  let(:perform) { -> { adapter.perform(organization_id: organization_id, contributor_id: contributor_id, text: text, message: message) } }
+  let(:perform) { -> { adapter.perform(contributor_id: contributor_id, text: text, message: message) } }
 
   describe 'perform' do
     subject { perform }
@@ -61,33 +60,11 @@ RSpec.describe SignalAdapter::Outbound::Text do
       end
     end
 
-    describe 'Unknown organization' do
-      let(:organization_id) { 564_321 }
-
-      it 'reports the error' do
-        expect(Sentry).to receive(:capture_exception).with(ActiveRecord::RecordNotFound)
-
-        subject.call
-      end
-    end
-
     describe 'Unknown contributor' do
       let(:contributor_id) { 564_321 }
 
-      it 'reports the error' do
-        expect(Sentry).to receive(:capture_exception).with(ActiveRecord::RecordNotFound)
-
-        subject.call
-      end
-
-      context 'not part of organization' do
-        let(:contributor_id) { create(:contributor).id }
-
-        it 'reports the error' do
-          expect(Sentry).to receive(:capture_exception).with(ActiveRecord::RecordNotFound)
-
-          subject.call
-        end
+      it 'throws an error' do
+        expect { subject.call }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
 

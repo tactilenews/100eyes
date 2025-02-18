@@ -8,7 +8,6 @@ RSpec.describe TelegramAdapter::Outbound::Text do
     create(:organization, name: '100eyes', telegram_bot_api_key: 'TELEGRAM_BOT_API_KEY', telegram_bot_username: 'USERNAME')
   end
   let(:contributor) { create(:contributor, telegram_id: 4, organization: organization) }
-  let(:organization_id) { organization.id }
   let(:contributor_id) { contributor.id }
   let(:message) { create(:message, text: text, broadcasted: true, recipient: contributor, organization: organization) }
   let(:successful_response) do
@@ -50,7 +49,7 @@ RSpec.describe TelegramAdapter::Outbound::Text do
   end
 
   describe '#perform' do
-    subject { -> { adapter.perform(organization_id: organization_id, contributor_id: contributor_id, text: text, message: message) } }
+    subject { -> { adapter.perform(contributor_id: contributor_id, text: text, message: message) } }
 
     let(:expected_message) { { chat_id: 4, text: text, parse_mode: :HTML } }
 
@@ -82,33 +81,11 @@ RSpec.describe TelegramAdapter::Outbound::Text do
       end
     end
 
-    describe 'Unknown organization' do
-      let(:organization_id) { 564_321 }
-
-      it 'reports the error' do
-        expect(Sentry).to receive(:capture_exception).with(ActiveRecord::RecordNotFound)
-
-        subject.call
-      end
-    end
-
     describe 'Unknown contributor' do
       let(:contributor_id) { 564_321 }
 
-      it 'reports the error' do
-        expect(Sentry).to receive(:capture_exception).with(ActiveRecord::RecordNotFound)
-
-        subject.call
-      end
-
-      context 'not part of organization' do
-        let(:contributor_id) { create(:contributor).id }
-
-        it 'reports the error' do
-          expect(Sentry).to receive(:capture_exception).with(ActiveRecord::RecordNotFound)
-
-          subject.call
-        end
+      it 'throws an error' do
+        expect { subject.call }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end

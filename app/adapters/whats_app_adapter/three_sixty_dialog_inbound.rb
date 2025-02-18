@@ -165,11 +165,11 @@ module WhatsAppAdapter
     end
 
     def handle_unsubscribe
-      UnsubscribeContributorJob.perform_later(organization.id, sender.id, WhatsAppAdapter::ThreeSixtyDialogOutbound)
+      UnsubscribeContributorJob.perform_later(sender.id, WhatsAppAdapter::ThreeSixtyDialogOutbound)
     end
 
     def handle_resubscribe
-      ResubscribeContributorJob.perform_later(organization.id, sender.id, WhatsAppAdapter::ThreeSixtyDialogOutbound)
+      ResubscribeContributorJob.perform_later(sender.id, WhatsAppAdapter::ThreeSixtyDialogOutbound)
     end
 
     def handle_request_to_receive_message

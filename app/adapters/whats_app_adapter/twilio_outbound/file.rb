@@ -5,9 +5,9 @@ module WhatsAppAdapter
     class File < ApplicationJob
       queue_as :default
 
-      def perform(organization_id:, contributor_id:, message:)
-        organization = Organization.find(organization_id)
-        contributor = organization.contributors.find(contributor_id)
+      def perform(contributor_id:, message:)
+        contributor = Contributor.find(contributor_id)
+        organization = contributor.organization
 
         responses = message.files.each_with_index.map do |file, index|
           organization.twilio_instance.messages.create(
@@ -20,8 +20,6 @@ module WhatsAppAdapter
         end
 
         message.update(external_id: responses.first.sid)
-      rescue ActiveRecord::RecordNotFound => e
-        ErrorNotifier.report(e)
       end
     end
   end

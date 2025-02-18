@@ -29,7 +29,7 @@ RSpec.describe ThreemaAdapter::Outbound do
   end
 
   describe '::send_welcome_message!' do
-    subject { -> { described_class.send_welcome_message!(contributor, organization) } }
+    subject { -> { described_class.send_welcome_message!(contributor) } }
 
     let(:welcome_message) do
       ["*#{organization.onboarding_success_heading.strip}*", organization.onboarding_success_text].join("\n")
@@ -38,8 +38,8 @@ RSpec.describe ThreemaAdapter::Outbound do
     it 'queues the job to send the welcome message' do
       expect do
         subject.call
-      end.to have_enqueued_job(described_class::Text).with(organization_id: organization.id, contributor_id: contributor.id,
-                                                           text: welcome_message)
+      end.to have_enqueued_job(ThreemaAdapter::Outbound::Text).with(contributor_id: contributor.id,
+                                                                    text: welcome_message)
     end
 
     context 'contributor has no threema_id' do

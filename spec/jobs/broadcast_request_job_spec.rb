@@ -55,8 +55,7 @@ RSpec.describe BroadcastRequestJob do
               args: []
             }
           )
-          expect(TelegramAdapter::Outbound::Text).to have_been_enqueued.with({ organization_id: request.organization.id,
-                                                                               contributor_id: 2,
+          expect(TelegramAdapter::Outbound::Text).to have_been_enqueued.with({ contributor_id: 2,
                                                                                text: request.text,
                                                                                message: request.messages.where(recipient_id: 2).first })
         end

@@ -549,7 +549,6 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
 
     it 'schedules a job to unsubscribe the contributor' do
       expect { subject.call }.to have_enqueued_job(UnsubscribeContributorJob).with(
-        contributor.organization.id,
         contributor.id,
         WhatsAppAdapter::ThreeSixtyDialogOutbound
       )
@@ -563,7 +562,6 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
 
     it 'schedules a job to resubscribe the contributor' do
       expect { subject.call }.to have_enqueued_job(ResubscribeContributorJob).with(
-        contributor.organization.id,
         contributor.id,
         WhatsAppAdapter::ThreeSixtyDialogOutbound
       )
