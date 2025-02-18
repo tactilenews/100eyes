@@ -19,7 +19,7 @@ module SignalAdapter
         SignalAdapter::Api.perform_request(organization, request, message.recipient) do |response|
           datetime = Time.zone.at(JSON.parse(response.body)['timestamp'].to_i / 1000).to_datetime
 
-          message.update(sent_at: datetime)
+          message.update(sent_at: datetime, external_id: JSON.parse(response.body)['timestamp'])
         end
       end
 

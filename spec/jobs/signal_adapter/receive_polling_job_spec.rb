@@ -53,6 +53,11 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
       end
 
       context 'if consuming the message fails' do
+        let!(:contributor) do
+          create(:contributor, signal_phone_number: '+4915112345789', signal_onboarding_completed_at: 2.weeks.ago,
+                               organization: organization)
+        end
+
         before do
           allow(Sentry).to receive(:capture_exception).with(an_instance_of(StandardError))
           allow_any_instance_of(SignalAdapter::Inbound).to receive(:consume).and_raise(StandardError)
@@ -89,7 +94,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         it 'enqueues a job to create the contact' do
           expect do
             subject.call
-          end.to have_enqueued_job(SignalAdapter::CreateContactJob).with(organization_id: organization.id, contributor_id: contributor.id)
+          end.to have_enqueued_job(SignalAdapter::CreateContactJob).with(contributor_id: contributor.id)
         end
 
         it 'enqueues a job to attach contributors avatar' do
@@ -105,7 +110,6 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
 
         it 'sends the welcome message' do
           expect { subject.call }.to have_enqueued_job(SignalAdapter::Outbound::Text).with(
-            organization_id: organization.id,
             contributor_id: contributor.id,
             text: [organization.onboarding_success_heading, organization.onboarding_success_text].join("\n")
           )
@@ -146,6 +150,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         describe 'that is supported',
                  vcr: { cassette_name: :receive_signal_messages_containing_supported_attachment } do
           let(:attached_file) { Message.first.files.first.attachment }
+
           it 'is expected to save the attachments as attached files' do
             subject.call
             expect(attached_file).to be_attached
@@ -160,7 +165,6 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
 
           it 'bounces a warning to the contributor' do
             should have_enqueued_job(SignalAdapter::Outbound::Text).with(
-              organization_id: organization.id,
               contributor_id: contributor.id,
               text: 'We cannot process this content'
             )
@@ -191,7 +195,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
           create(:contributor, signal_phone_number: '+4915112345789', signal_onboarding_completed_at: 2.weeks.ago,
                                organization: organization)
         end
-        it { is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(organization.id, contributor.id, SignalAdapter::Outbound) }
+        it { is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(contributor.id, SignalAdapter::Outbound) }
       end
 
       describe 'given a contributor who has unsubscribed and requests to resubscribe',
@@ -206,7 +210,7 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
         end
 
         it {
-          is_expected.to have_enqueued_job(ResubscribeContributorJob).with(organization.id, contributor.id, SignalAdapter::Outbound)
+          is_expected.to have_enqueued_job(ResubscribeContributorJob).with(contributor.id, SignalAdapter::Outbound)
         }
       end
 
