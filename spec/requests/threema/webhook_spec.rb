@@ -163,7 +163,7 @@ RSpec.describe Threema::WebhookController do
         let(:threema_mock) { instance_double(Threema::Receive::Text, content: 'Abbestellen') }
 
         it 'enqueues a job to unsubscribe the contributor' do
-          expect { subject }.to have_enqueued_job(UnsubscribeContributorJob).with(organization.id, contributor.id, ThreemaAdapter::Outbound)
+          expect { subject }.to have_enqueued_job(UnsubscribeContributorJob).with(contributor.id, ThreemaAdapter::Outbound)
         end
       end
 
@@ -175,7 +175,7 @@ RSpec.describe Threema::WebhookController do
         end
 
         it 'enqueues a job to resubscribe the contributor' do
-          expect { subject }.to have_enqueued_job(ResubscribeContributorJob).with(organization.id, contributor.id, ThreemaAdapter::Outbound)
+          expect { subject }.to have_enqueued_job(ResubscribeContributorJob).with(contributor.id, ThreemaAdapter::Outbound)
         end
       end
     end

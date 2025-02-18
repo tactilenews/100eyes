@@ -16,9 +16,9 @@ module TelegramAdapter
 
       attr_reader :telegram_id, :message
 
-      def perform(organization_id:, contributor_id:, media:, message:)
-        organization = Organization.find(organization_id)
-        contributor = organization.contributors.find(contributor_id)
+      def perform(contributor_id:, media:, message:)
+        contributor = Contributor.find(contributor_id)
+        organization = contributor.organization
 
         @telegram_id = contributor.telegram_id
         @message = message
@@ -36,8 +36,6 @@ module TelegramAdapter
         )
         response = response.with_indifferent_access
         mark_message_as_sent(response) if response[:ok]
-      rescue ActiveRecord::RecordNotFound => e
-        ErrorNotifier.report(e)
       end
 
       private

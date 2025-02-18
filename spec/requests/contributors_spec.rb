@@ -290,7 +290,6 @@ RSpec.describe '/:organization_id/contributors', type: :request do
 
           it 'schedules a job to send out the message' do
             expect(TelegramAdapter::Outbound::Text).to have_been_enqueued.with(
-              organization_id: newest_message.organization.id,
               contributor_id: newest_message.recipient.id,
               text: newest_message.text,
               message: newest_message

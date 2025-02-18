@@ -92,24 +92,24 @@ module WhatsApp
         handle_unknown_contributor(whats_app_phone_number)
       end
 
-      adapter.on(WhatsAppAdapter::TwilioInbound::REQUEST_FOR_MORE_INFO) do |contributor, organization|
-        handle_request_for_more_info(contributor, organization)
+      adapter.on(WhatsAppAdapter::TwilioInbound::REQUEST_FOR_MORE_INFO) do |contributor|
+        handle_request_for_more_info(contributor)
       end
 
       adapter.on(WhatsAppAdapter::TwilioInbound::REQUEST_TO_RECEIVE_MESSAGE) do |contributor, twilio_message_sid, organization|
         handle_request_to_receive_message(contributor, twilio_message_sid, organization)
       end
 
-      adapter.on(WhatsAppAdapter::TwilioInbound::UNSUPPORTED_CONTENT) do |contributor, organization|
-        WhatsAppAdapter::TwilioOutbound.send_unsupported_content_message!(contributor, organization)
+      adapter.on(WhatsAppAdapter::TwilioInbound::UNSUPPORTED_CONTENT) do |contributor|
+        WhatsAppAdapter::TwilioOutbound.send_unsupported_content_message!(contributor)
       end
 
-      adapter.on(WhatsAppAdapter::TwilioInbound::UNSUBSCRIBE_CONTRIBUTOR) do |contributor, organization|
-        UnsubscribeContributorJob.perform_later(organization.id, contributor.id, WhatsAppAdapter::TwilioOutbound)
+      adapter.on(WhatsAppAdapter::TwilioInbound::UNSUBSCRIBE_CONTRIBUTOR) do |contributor|
+        UnsubscribeContributorJob.perform_later(contributor.id, WhatsAppAdapter::TwilioOutbound)
       end
 
-      adapter.on(WhatsAppAdapter::TwilioInbound::RESUBSCRIBE_CONTRIBUTOR) do |contributor, organization|
-        ResubscribeContributorJob.perform_later(organization.id, contributor.id, WhatsAppAdapter::TwilioOutbound)
+      adapter.on(WhatsAppAdapter::TwilioInbound::RESUBSCRIBE_CONTRIBUTOR) do |contributor|
+        ResubscribeContributorJob.perform_later(contributor.id, WhatsAppAdapter::TwilioOutbound)
       end
     end
 
@@ -186,10 +186,10 @@ module WhatsApp
       message.update(read_at: Time.current)
     end
 
-    def handle_request_for_more_info(contributor, organization)
+    def handle_request_for_more_info(contributor)
       contributor.update!(whats_app_message_template_responded_at: Time.current)
 
-      WhatsAppAdapter::TwilioOutbound.send_more_info_message!(contributor, organization)
+      WhatsAppAdapter::TwilioOutbound.send_more_info_message!(contributor)
     end
   end
 end

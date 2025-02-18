@@ -107,7 +107,6 @@ RSpec.describe WhatsApp::WebhookController do
         let(:message) { contributor.received_messages.first }
         let(:latest_message_job_args) do
           {
-            organization_id: organization.id,
             contributor_id: contributor.id,
             text: message.text,
             message: message
@@ -147,7 +146,6 @@ RSpec.describe WhatsApp::WebhookController do
               end
               let(:requested_message_job_args) do
                 {
-                  organization_id: organization.id,
                   contributor_id: contributor.id,
                   text: previous_message.text,
                   message: message
@@ -168,7 +166,6 @@ RSpec.describe WhatsApp::WebhookController do
               let(:newer_message) { create(:message, request: newer_request, recipient_id: contributor.id) }
               let(:requested_message_job_args) do
                 {
-                  organization_id: organization.id,
                   contributor_id: contributor.id,
                   text: message.text,
                   message: message
@@ -204,7 +201,6 @@ RSpec.describe WhatsApp::WebhookController do
           end
           let(:more_info_job_args) do
             {
-              organization_id: organization.id,
               contributor_id: contributor.id,
               text: ['Here is more info', "_#{I18n.t('adapter.shared.unsubscribe.instructions')}_"].join("\n\n")
             }
@@ -223,7 +219,7 @@ RSpec.describe WhatsApp::WebhookController do
           before { params['Body'] = 'Abbestellen' }
 
           it {
-            is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(organization.id, contributor.id,
+            is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(contributor.id,
                                                                              WhatsAppAdapter::TwilioOutbound)
           }
         end
@@ -235,7 +231,7 @@ RSpec.describe WhatsApp::WebhookController do
           end
 
           it {
-            is_expected.to have_enqueued_job(ResubscribeContributorJob).with(organization.id, contributor.id,
+            is_expected.to have_enqueued_job(ResubscribeContributorJob).with(contributor.id,
                                                                              WhatsAppAdapter::TwilioOutbound)
           }
         end

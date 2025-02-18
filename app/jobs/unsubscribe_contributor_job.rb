@@ -3,16 +3,13 @@
 class UnsubscribeContributorJob < ApplicationJob
   queue_as :unsubscribe_contributor
 
-  def perform(organization_id, contributor_id, adapter)
-    organization = Organization.find_by(id: organization_id)
-    return unless organization
-
-    contributor = organization.contributors.find_by(id: contributor_id)
-    return unless contributor
+  def perform(contributor_id, adapter)
+    contributor = Contributor.find(contributor_id)
+    organization = contributor.organization
     return if contributor.unsubscribed_at.present?
 
     contributor.update!(unsubscribed_at: Time.current)
-    adapter.send_unsubsribed_successfully_message!(contributor, organization)
+    adapter.send_unsubscribed_successfully_message!(contributor)
     ContributorMarkedInactive.with(
       contributor_id: contributor.id,
       organization_id: organization.id

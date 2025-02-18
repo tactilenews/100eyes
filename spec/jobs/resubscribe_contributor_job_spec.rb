@@ -7,7 +7,7 @@ RSpec.describe ResubscribeContributorJob do
     let(:user) { create(:user, organizations: [organization]) }
     let(:organization) { create(:organization, project_name: 'Test Project') }
 
-    subject { -> { described_class.new.perform(organization.id, contributor.id, adapter) } }
+    subject { -> { described_class.new.perform(contributor.id, adapter) } }
 
     context 'unsubscribed Signal contributor' do
       let(:adapter) { SignalAdapter::Outbound }

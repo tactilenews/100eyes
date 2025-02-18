@@ -25,7 +25,7 @@ RSpec.describe ThreemaAdapter::Outbound::Text do
   end
 
   describe '#perform' do
-    subject { -> { adapter.perform(organization_id: organization_id, contributor_id: contributor_id, text: message.text) } }
+    subject { -> { adapter.perform(contributor_id: contributor_id, text: message.text) } }
 
     it 'sends the message' do
       expect(threema_double).to receive(:send).with(type: :text, threema_id: threema_id, text: message.text)
@@ -46,7 +46,7 @@ RSpec.describe ThreemaAdapter::Outbound::Text do
     context 'when a message is passed in' do
       subject do
         lambda {
-          adapter.perform(organization_id: organization_id, contributor_id: contributor_id, text: message.text, message: message)
+          adapter.perform(contributor_id: contributor_id, text: message.text, message: message)
         }
       end
 
@@ -59,33 +59,11 @@ RSpec.describe ThreemaAdapter::Outbound::Text do
       end
     end
 
-    describe 'Unknown organization' do
-      let(:organization_id) { 564_321 }
-
-      it 'reports the error' do
-        expect(Sentry).to receive(:capture_exception).with(ActiveRecord::RecordNotFound)
-
-        subject.call
-      end
-    end
-
     describe 'Unknown contributor' do
       let(:contributor_id) { 564_321 }
 
-      it 'reports the error' do
-        expect(Sentry).to receive(:capture_exception).with(ActiveRecord::RecordNotFound)
-
-        subject.call
-      end
-
-      context 'not part of organization' do
-        let(:contributor_id) { create(:contributor).id }
-
-        it 'reports the error' do
-          expect(Sentry).to receive(:capture_exception).with(ActiveRecord::RecordNotFound)
-
-          subject.call
-        end
+      it 'throws an error' do
+        expect { subject.call }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
 

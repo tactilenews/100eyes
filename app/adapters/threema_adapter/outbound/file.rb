@@ -7,9 +7,9 @@ module ThreemaAdapter
 
       attr_reader :organization
 
-      def perform(organization_id:, contributor_id:, file_path:, file_name: nil, caption: nil, render_type: nil, message: nil)
-        @organization = Organization.find(organization_id)
-        recipient = organization.contributors.find(contributor_id)
+      def perform(contributor_id:, file_path:, file_name: nil, caption: nil, render_type: nil, message: nil)
+        recipient = Contributor.find(contributor_id)
+        @organization = recipient.organization
 
         message_id = organization.threema_instance.send(type: :file,
                                                         threema_id: recipient.threema_id.upcase,
@@ -20,8 +20,6 @@ module ThreemaAdapter
         return unless message
 
         message.update(external_id: message_id, sent_at: Time.current)
-      rescue ActiveRecord::RecordNotFound => e
-        ErrorNotifier.report(e)
       rescue RuntimeError => e
         handle_runtime_error(e)
       end

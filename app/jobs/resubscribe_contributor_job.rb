@@ -5,12 +5,9 @@ class ResubscribeContributorJob < ApplicationJob
 
   class ResubscribeError < StandardError; end
 
-  def perform(organization_id, contributor_id, adapter)
-    organization = Organization.find_by(id: organization_id)
-    return unless organization
-
-    contributor = organization.contributors.find_by(id: contributor_id)
-    return unless contributor
+  def perform(contributor_id, adapter)
+    contributor = Contributor.find(contributor_id)
+    organization = contributor.organization
 
     if contributor.deactivated_by_user.present? || contributor.deactivated_by_admin?
       deactivated_by = (contributor.deactivated_by_user&.name || 'an admin')
@@ -18,12 +15,12 @@ class ResubscribeContributorJob < ApplicationJob
         "Contributor #{contributor.name} has been deactivated by #{deactivated_by} and has tried to re-subscribe"
       )
       ErrorNotifier.report(exception)
-      adapter.send_resubscribe_error_message!(contributor, organization)
+      adapter.send_resubscribe_error_message!(contributor)
       return
     end
 
     contributor.update!(unsubscribed_at: nil)
-    adapter.send_welcome_message!(contributor, organization)
+    adapter.send_welcome_message!(contributor)
     ContributorSubscribed.with(
       contributor_id: contributor.id,
       organization_id: organization.id

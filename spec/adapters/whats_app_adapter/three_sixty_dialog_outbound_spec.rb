@@ -93,7 +93,7 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
   end
 
   describe '#send_welcome_message!' do
-    subject { -> { described_class.send_welcome_message!(contributor, organization) } }
+    subject { -> { described_class.send_welcome_message!(contributor) } }
 
     it { is_expected.not_to enqueue_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text) }
 
@@ -176,8 +176,8 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogOutbound do
     end
   end
 
-  describe '#send_unsubsribed_successfully_message!' do
-    subject { -> { described_class.send_unsubsribed_successfully_message!(contributor, organization) } }
+  describe '#send_unsubscribed_successfully_message!' do
+    subject { -> { described_class.send_unsubscribed_successfully_message!(contributor) } }
 
     it { is_expected.not_to enqueue_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text) }
 

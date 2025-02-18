@@ -168,7 +168,7 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
           let(:message) { 'Abbestellen' }
 
           it {
-            is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(organization.id, contributor.id, TelegramAdapter::Outbound)
+            is_expected.to have_enqueued_job(UnsubscribeContributorJob).with(contributor.id, TelegramAdapter::Outbound)
           }
         end
 
@@ -177,7 +177,7 @@ RSpec.describe Telegram::WebhookController, telegram_bot: :rails do
           before { contributor.update!(unsubscribed_at: 1.day.ago) }
 
           it {
-            is_expected.to have_enqueued_job(ResubscribeContributorJob).with(organization.id, contributor.id, TelegramAdapter::Outbound)
+            is_expected.to have_enqueued_job(ResubscribeContributorJob).with(contributor.id, TelegramAdapter::Outbound)
           }
         end
       end

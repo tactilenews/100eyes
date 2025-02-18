@@ -9,16 +9,16 @@ RSpec.describe WhatsAppAdapter::TwilioOutbound do
   let(:organization) do
     create(:organization, onboarding_success_heading: onboarding_success_heading, onboarding_success_text: onboarding_success_text)
   end
-  let(:contributor) { create(:contributor, email: nil) }
+  let(:contributor) { create(:contributor, email: nil, organization: organization) }
   let(:onboarding_success_heading) { 'Thanks for onboarding' }
   let(:onboarding_success_text) { 'We will start sending messages soon.' }
 
   describe '::send_welcome_message!' do
     let(:expected_job_args) do
-      { organization_id: organization.id, contributor_id: contributor.id,
+      { contributor_id: contributor.id,
         text: "*Thanks for onboarding*\n\nWe will start sending messages soon." }
     end
-    subject { -> { described_class.send_welcome_message!(contributor, organization) } }
+    subject { -> { described_class.send_welcome_message!(contributor) } }
     before do
       message # we don't count the extra ::send here
     end
@@ -30,7 +30,8 @@ RSpec.describe WhatsAppAdapter::TwilioOutbound do
         create(
           :contributor,
           whats_app_phone_number: '+491511234567',
-          email: nil
+          email: nil,
+          organization: organization
         )
       end
 

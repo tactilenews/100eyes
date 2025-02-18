@@ -59,7 +59,7 @@ RSpec.describe WhatsAppAdapter::Delegator do
   end
 
   describe '::send_welcome_message!' do
-    subject { -> { adapter.send_welcome_message!(contributor, organization) } }
+    subject { -> { adapter.send_welcome_message!(contributor) } }
 
     context 'with 360dialog configured' do
       before do
@@ -69,7 +69,7 @@ RSpec.describe WhatsAppAdapter::Delegator do
       end
 
       it 'it is expected to send the welcome message with 360dialog' do
-        expect(WhatsAppAdapter::ThreeSixtyDialogOutbound).to receive(:send_welcome_message!).with(contributor, organization)
+        expect(WhatsAppAdapter::ThreeSixtyDialogOutbound).to receive(:send_welcome_message!).with(contributor)
 
         subject.call
       end
@@ -94,7 +94,7 @@ RSpec.describe WhatsAppAdapter::Delegator do
       end
 
       it 'it is expected to send the welcome message with Twilio' do
-        expect(WhatsAppAdapter::TwilioOutbound).to receive(:send_welcome_message!).with(contributor, organization)
+        expect(WhatsAppAdapter::TwilioOutbound).to receive(:send_welcome_message!).with(contributor)
 
         subject.call
       end

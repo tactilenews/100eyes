@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe UnsubscribeContributorJob do
   describe '#perform_later(contributor_id, adapter)' do
-    subject { -> { described_class.new.perform(organization.id, contributor.id, adapter) } }
+    subject { -> { described_class.new.perform(contributor.id, adapter) } }
 
     let(:organization) { create(:organization) }
 

@@ -99,8 +99,8 @@ module ThreemaAdapter
     def initialize_message(decrypted_message)
       text = initialize_text(decrypted_message)
 
-      trigger(UNSUBSCRIBE_CONTRIBUTOR, sender, organization) if unsubscribe_text?(text)
-      trigger(RESUBSCRIBE_CONTRIBUTOR, sender, organization) if resubscribe_text?(text)
+      trigger(UNSUBSCRIBE_CONTRIBUTOR, sender) if unsubscribe_text?(text)
+      trigger(RESUBSCRIBE_CONTRIBUTOR, sender) if resubscribe_text?(text)
       message = Message.new(text: text, sender: sender, organization: organization)
       message.raw_data.attach(
         io: StringIO.new(decrypted_message.content),
@@ -114,7 +114,7 @@ module ThreemaAdapter
       return unless file_type_unsupported?(decrypted_message)
 
       message.unknown_content = true
-      trigger(UNSUPPORTED_CONTENT, sender, organization)
+      trigger(UNSUPPORTED_CONTENT, sender)
     end
 
     def initialize_files(decrypted_message)

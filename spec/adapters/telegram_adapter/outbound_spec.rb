@@ -32,11 +32,24 @@ RSpec.describe TelegramAdapter::Outbound do
   end
 
   describe '::send_welcome_message!' do
-    subject { -> { described_class.send_welcome_message!(contributor, organization) } }
-    it { should enqueue_job(described_class::Text) }
+    subject { -> { described_class.send_welcome_message!(contributor) } }
+    let(:welcome_message) do
+      ["<b>#{organization.onboarding_success_heading}</b>", organization.onboarding_success_text].join("\n")
+    end
+
+    it 'schedules a job to send out the welcome message' do
+      expect { subject.call }.to have_enqueued_job(TelegramAdapter::Outbound::Text).with(
+        contributor_id: contributor.id,
+        text: welcome_message
+      )
+    end
+
     context 'contributor has no telegram_id' do
       let(:contributor) { create(:contributor, telegram_id: nil, email: nil) }
-      it { should_not enqueue_job(described_class) }
+
+      it 'does not schedule a job' do
+        expect { subject.call }.not_to have_enqueued_job(TelegramAdapter::Outbound::Text)
+      end
     end
   end
 end
