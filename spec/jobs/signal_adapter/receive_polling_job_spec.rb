@@ -71,13 +71,33 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
       end
 
       describe 'given a message from an unknown contributor' do
-        before { allow(Sentry).to receive(:capture_exception).with(an_instance_of(SignalAdapter::UnknownContributorError)) }
+        let(:exception) { SignalAdapter::UnknownContributorError.new(signal_attr: '+4915112345789') }
 
         it { should_not(change { Message.count }) }
 
-        it 'sends an error to Sentry so that our admins get notified' do
-          subject.call
-          expect(Sentry).to have_received(:capture_exception)
+        context 'ErrorNotifier' do
+          before do
+            allow(ErrorNotifier).to receive(:report).with(exception, context: { message: 'Hello World!', organization_id: organization.id })
+          end
+
+          it 'sends additional context to help debug' do
+            subject.call
+
+            expect(ErrorNotifier).to have_received(:report).with(exception,
+                                                                 context: { message: 'Hello World!', organization_id: organization.id })
+          end
+        end
+
+        context 'Sentry' do
+          before do
+            allow(Sentry).to receive(:capture_exception).with(exception)
+          end
+
+          it 'sends an error to Sentry so that our admins get notified' do
+            subject.call
+
+            expect(Sentry).to have_received(:capture_exception).with(exception)
+          end
         end
       end
 

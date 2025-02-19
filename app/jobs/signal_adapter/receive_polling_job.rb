@@ -103,8 +103,7 @@ module SignalAdapter
         (organization.contributors.find_by(signal_onboarding_token: valid_signal_onboarding_token) if valid_signal_onboarding_token)
 
       unless contributor
-        exception = SignalAdapter::UnknownContributorError.new(signal_attr: signal_message.dig(:envelope, :source))
-        ErrorNotifier.report(exception)
+        handle_unknown_contributor(signal_message, organization)
         return
       end
       return unless signal_uuid
@@ -123,6 +122,17 @@ module SignalAdapter
       SignalAdapter::CreateContactJob.perform_later(contributor_id: contributor.id)
       SignalAdapter::AttachContributorsAvatarJob.perform_later(contributor_id: contributor.id)
       SignalAdapter::Outbound.send_welcome_message!(contributor)
+    end
+
+    def handle_unknown_contributor(signal_message, organization)
+      envelope = signal_message[:envelope]
+      context = {
+        message: envelope.dig(:dataMessage, :message) ||
+                 envelope.dig(:dataMessage, :reaction, :emoji),
+        organization_id: organization.id
+      }
+      exception = SignalAdapter::UnknownContributorError.new(signal_attr: envelope[:source])
+      ErrorNotifier.report(exception, context: context)
     end
 
     def ping_monitoring_service
