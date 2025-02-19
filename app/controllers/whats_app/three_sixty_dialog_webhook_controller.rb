@@ -32,6 +32,7 @@ module WhatsApp
                                   contacts: [:wa_id, { profile: [:name] }],
                                   messages: [:from, :id, :type, :timestamp,
                                              { text: [:body] }, { button: %i[payload text] },
+                                             { reaction: %i[message_id emoji] },
                                              { image: %i[id mime_type sha256 caption] }, { voice: %i[id mime_type sha256] },
                                              { video: %i[id mime_type sha256 caption] }, { audio: %i[id mime_type sha256] },
                                              { document: %i[filename id mime_type sha256] }, { location: %i[latitude longitude] },
