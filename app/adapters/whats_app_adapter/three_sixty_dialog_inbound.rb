@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# TODO: Refactor similar to SignalAdapter::Inbound to remove this disabling of rubocop
+# rubocop:disable Metrics/ClassLength
 module WhatsAppAdapter
   class ThreeSixtyDialogInbound
     UNSUPPORTED_CONTENT_TYPES = %w[location contacts application sticker].freeze
@@ -16,7 +18,7 @@ module WhatsAppAdapter
       return unless @sender
 
       @message_payload = whats_app_payload[:messages].first
-      @quote_reply_message_id = message_payload.dig(:context, :id)
+      @quote_reply_message_id = reply_to_external_id
       @text = initialize_text
 
       return if ephemeral_data_handled?
@@ -27,7 +29,7 @@ module WhatsAppAdapter
 
       files = initialize_file
       @message.files = files
-      @message.request = sender.received_messages.first&.request
+      @message.request = attach_request
 
       @message.save!
       @message
@@ -48,8 +50,12 @@ module WhatsAppAdapter
       sender
     end
 
+    def reply_to_external_id
+      message_payload.dig(:context, :id) || message_payload.dig(:reaction, :message_id)
+    end
+
     def initialize_text
-      message_payload[:text]&.dig(:body) || message_payload[:button]&.dig(:text)
+      message_payload.dig(:text, :body) || message_payload.dig(:button, :text) || message_payload.dig(:reaction, :emoji)
     end
 
     def ephemeral_data_handled?
@@ -70,7 +76,13 @@ module WhatsAppAdapter
     end
 
     def initialize_message
-      message = Message.new(text: text, sender: sender, external_id: message_payload[:id], organization: organization)
+      message = Message.new(
+        text: text,
+        sender: sender,
+        external_id: message_payload[:id],
+        organization: organization,
+        reply_to_external_id: quote_reply_message_id
+      )
       message.raw_data.attach(
         io: StringIO.new(JSON.generate(whats_app_payload)),
         filename: 'whats_app_payload.json',
@@ -108,6 +120,14 @@ module WhatsAppAdapter
       message.text = caption if caption
 
       [file]
+    end
+
+    def attach_request
+      if quote_reply_message_id
+        Message.find_by(external_id: quote_reply_message_id)&.request
+      else
+        sender.received_messages.first&.request
+      end
     end
 
     def file_type_supported?(message)
@@ -178,3 +198,4 @@ module WhatsAppAdapter
     end
   end
 end
+# rubocop:enable Metrics/ClassLength

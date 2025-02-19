@@ -30,6 +30,23 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
                    type: 'image' }] }
   end
 
+  let(:whats_app_reaction) do
+    {
+      contacts: [{ profile: { name: 'Matthew Rider' },
+                   wa_id: '491511234567' }],
+      messages: [{
+        from: '491511234567',
+        id: 'wamid.valid_uuid',
+        timestamp: '1692118778',
+        type: 'reaction',
+        reaction: {
+          message_id: 'wamid.HBgNNDkxNTE0MzQxNjI2NRUCABEYEjAwNEM1QzE4M0IxNUFDRTAxQgA=',
+          emoji: '❤'
+        }
+      }]
+    }
+  end
+
   let(:organization) { create(:organization, contact_person: create(:user)) }
   let!(:contributor) { create(:contributor, whats_app_phone_number: phone_number, organization: organization) }
   let(:fetch_file_url) { 'https://stoplight.io/mocks/360dialog/360dialog-partner-api/24588693/some_valid_id' }
@@ -61,6 +78,15 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
 
       it 'saves the external id to the message record' do
         expect(reply.external_id).to eq('wamid.valid_uuid')
+      end
+
+      context 'given a reaction' do
+        let(:whats_app_message) { whats_app_reaction }
+
+        it "saves the reaction's message_id to the reply_to_external_id" do
+          subject.call
+          expect(reply.reply_to_external_id).to eq('wamid.HBgNNDkxNTE0MzQxNjI2NRUCABEYEjAwNEM1QzE4M0IxNUFDRTAxQgA=')
+        end
       end
 
       context 'from an unknown contributor' do
@@ -115,6 +141,15 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
           expect(reply.text).to be(nil)
         end
       end
+
+      context 'reactions' do
+        let(:whats_app_message) { whats_app_reaction }
+
+        it 'saves the emoji as text of the message' do
+          subject.call
+          expect(reply.text).to eq('❤')
+        end
+      end
     end
 
     describe '|message|raw_data' do
@@ -140,8 +175,8 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
           let(:outbound_message) { create(:message, :outbound, request: request, recipient: contributor) }
 
           before do
-            request
             outbound_message
+            newer_request
           end
 
           it 'is expected to attach their latest request' do
@@ -176,6 +211,27 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
 
           it 'saves the reply' do
             expect(reply).to be_persisted
+          end
+        end
+      end
+
+      context 'given a reaction' do
+        let(:whats_app_message) { whats_app_reaction }
+
+        context 'given a message with the external id the emoji is reacting to is not the latest request' do
+          let(:newer_message) { create(:message, :outbound, request: create(:request), recipient: contributor) }
+          let(:older_message) do
+            create(:message, :outbound, external_id: 'wamid.HBgNNDkxNTE0MzQxNjI2NRUCABEYEjAwNEM1QzE4M0IxNUFDRTAxQgA=', request: request,
+                                        recipient: contributor)
+          end
+
+          before do
+            older_message
+            newer_message
+          end
+
+          it 'is expected to attach their latest request' do
+            expect(reply.request).to eq(older_message.request)
           end
         end
       end
