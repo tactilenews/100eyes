@@ -562,6 +562,31 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialog::ProcessWebhookJob do
           end
         end
       end
+
+      context 'reactions' do
+        before do
+          components[:messages] = [{
+            from: '491511234567',
+            id: 'some_valid_id',
+            timestamp: '1692118778',
+            type: 'reaction',
+            reaction: {
+              message_id: 'wamid.HBgNNDkxNTE0MzQxNjI2NRUCABEYEjAwNEM1QzE4M0IxNUFDRTAxQgA=',
+              emoji: '❤'
+            }
+          }]
+        end
+
+        it 'saves the message' do
+          expect { subject.call }.to change(Message, :count).from(1).to(2)
+        end
+
+        it 'saves the emoji as text of the message' do
+          subject.call
+          message = contributor.replies.first
+          expect(message.text).to eq('❤')
+        end
+      end
     end
   end
 end
