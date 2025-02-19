@@ -215,23 +215,42 @@ RSpec.describe WhatsAppAdapter::ThreeSixtyDialogInbound do
         end
       end
 
-      context 'given a reaction' do
-        let(:whats_app_message) { whats_app_reaction }
+      context 'given a quote_reply_message_id' do
+        let(:newer_message) { create(:message, :outbound, request: create(:request), recipient: contributor) }
+        let(:older_message) do
+          create(:message, :outbound, external_id: 'wamid.HBgNNDkxNTE0MzQxNjI2NRUCABEYEjAwNEM1QzE4M0IxNUFDRTAxQgA=', request: request,
+                                      recipient: contributor)
+        end
 
-        context 'given a message with the external id the emoji is reacting to is not the latest request' do
-          let(:newer_message) { create(:message, :outbound, request: create(:request), recipient: contributor) }
-          let(:older_message) do
-            create(:message, :outbound, external_id: 'wamid.HBgNNDkxNTE0MzQxNjI2NRUCABEYEjAwNEM1QzE4M0IxNUFDRTAxQgA=', request: request,
-                                        recipient: contributor)
+        before do
+          older_message
+          newer_message
+        end
+
+        context 'given a reaction' do
+          context 'given a message with the external id the emoji is reacting to is not the latest request' do
+            let(:whats_app_message) { whats_app_reaction }
+
+            it 'is expected to attach their latest request' do
+              expect(reply.request).to eq(older_message.request)
+            end
           end
+        end
 
+        context 'given a quote reply' do
           before do
-            older_message
-            newer_message
+            whats_app_message[:messages].first.merge!({
+                                                        context: {
+                                                          from: '+4912345578',
+                                                          id: 'wamid.HBgNNDkxNTE0MzQxNjI2NRUCABEYEjAwNEM1QzE4M0IxNUFDRTAxQgA='
+                                                        }
+                                                      })
           end
 
-          it 'is expected to attach their latest request' do
-            expect(reply.request).to eq(older_message.request)
+          context 'given a message with the external id the emoji is reacting to is not the latest request' do
+            it 'is expected to attach their latest request' do
+              expect(reply.request).to eq(older_message.request)
+            end
           end
         end
       end
