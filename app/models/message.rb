@@ -30,6 +30,7 @@ class Message < ApplicationRecord
   scope :replies, -> { where(sender_type: Contributor.name) }
   scope :outbound, -> { where(sender_type: [User.name, nil]) }
   scope :direct_messages, -> { outbound.where(broadcasted: false) }
+  scope :broadcasted_messages, -> { where(broadcasted: true) }
   scope :with_request_attached, -> { where.not(request_id: nil) }
 
   delegate :name, to: :creator, allow_nil: true, prefix: true
