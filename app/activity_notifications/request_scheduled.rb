@@ -24,7 +24,11 @@ class RequestScheduled < Noticed::Base
   # rubocop:disable Rails/OutputSafety
   def group_message(notifications:)
     request = notifications.first.request
-    recipients = request.recipients.count.positive? ? request.recipients : organization.contributors.active.with_tags(request.tag_list)
+    recipients = if request.recipients.count.positive?
+                   request.recipients
+                 else
+                   request.organization.contributors.active.with_tags(request.tag_list)
+                 end
     t('.text_html',
       request_title: request.title,
       date: I18n.l(request.schedule_send_for, format: '%A, %-d.%-m.%Y'),
