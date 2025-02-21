@@ -31,6 +31,7 @@ class Request < ApplicationRecord
 
   delegate :replies, to: :messages
   delegate :outbound, to: :messages
+  delegate :broadcasted_messages, to: :messages
 
   def personalized_text(contributor)
     replace_placeholder(text, I18n.t('request.personalization.first_name'), contributor.first_name.strip)
@@ -39,12 +40,16 @@ class Request < ApplicationRecord
   def stats
     {
       counts: {
-        recipients: outbound.select(:recipient_id).distinct.count,
+        recipients: recipients.count,
         contributors: replies.select(:sender_id).distinct.count,
         photos: replies.sum(:photos_count),
         replies: replies_count
       }
     }
+  end
+
+  def recipients
+    broadcasted_messages.select(:recipient_id).distinct
   end
 
   def trigger_broadcast

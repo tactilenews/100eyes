@@ -210,7 +210,7 @@ RSpec.describe Request, type: :model do
       before(:each) do
         create_list(:message, 2)
         delivered_messages = create_list(:message, 7, :outbound, request: request, broadcasted: true)
-        create(:message, :with_file, :outbound, request: request, broadcasted: false, attachment: fixture_file_upload('example-image.png'))
+        create(:message, :with_file, :outbound, request: request, broadcasted: true, attachment: fixture_file_upload('example-image.png'))
         # _ is some unresponsive recipient
         responsive_recipient, _, *other_recipients = delivered_messages.map(&:recipient)
         create_list(:message, 3, request: request, sender: responsive_recipient)
