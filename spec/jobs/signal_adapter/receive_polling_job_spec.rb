@@ -199,10 +199,25 @@ RSpec.describe SignalAdapter::ReceivePollingJob, type: :job do
                                organization: organization)
         end
         let(:request) { create(:request, organization: organization, user: user) }
-        let!(:message) { create(:message, :outbound, recipient: contributor, request: request, organization: organization, sender: user) }
+        let(:message) { create(:message, :outbound, recipient: contributor, request: request, organization: organization, sender: user) }
 
         it 'updates message.delivered_at' do
           expect { subject.call }.to change { message.reload.delivered_at }.from(nil).to(Time.zone.at(1_719_664_635))
+        end
+
+        context 'given the delivery_receipt is for a previous message' do
+          let(:previous_message) do
+            create(:message, :outbound, recipient: contributor, organization: organization, sender: user, external_id: '1719664633851')
+          end
+
+          before do
+            previous_message
+            message
+          end
+
+          it "updates the previous message's delivered_at" do
+            expect { subject.call }.to change { previous_message.reload.delivered_at }.from(nil).to(Time.zone.at(1_719_664_635))
+          end
         end
       end
 

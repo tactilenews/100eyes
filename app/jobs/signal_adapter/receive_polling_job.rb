@@ -16,9 +16,6 @@ module SignalAdapter
       return if signal_server_phone_number_not_configured?
 
       signal_messages = request_new_messages
-      signal_messages.each do |message|
-        Rails.logger.debug message
-      end
       @adapter = SignalAdapter::Inbound.new
 
       signal_messages.each do |raw_message|
@@ -75,9 +72,22 @@ module SignalAdapter
 
     def initialize_onboarded_contributor(organization, signal_message)
       envelope = signal_message[:envelope]
-      source = envelope[:source] || envelope[:sourceNumber] || source[:sourceUuid]
+      signal_phone_number = envelope[:sourceNumber]
+      signal_uuid = envelope[:sourceUuid]
+
       contributors = organization.contributors.with_signal
-      contributors.where(signal_phone_number: source).or(contributors.where(signal_uuid: source)).first
+      contributor = if signal_phone_number
+                      contributors.find_by(signal_phone_number: signal_phone_number)
+                    else
+                      contributors.find_by(signal_uuid: signal_uuid)
+                    end
+      update_contributor(contributor, signal_phone_number, signal_uuid) if contributor
+      contributor
+    end
+
+    def update_contributor(contributor, signal_phone_number, signal_uuid)
+      contributor.update!(signal_phone_number: signal_phone_number) if signal_phone_number && contributor.signal_phone_number.blank?
+      contributor.update!(signal_uuid: signal_uuid) if signal_uuid && contributor.signal_uuid.blank?
     end
 
     def initialize_delivery_receipt(signal_message, contributor)
@@ -87,7 +97,7 @@ module SignalAdapter
 
       datetime = Time.zone.at(delivery_receipt[:when] / 1000).to_datetime
       received_messages = contributor.received_messages
-      receipt_for_message = received_messages.find_by(external_id: delivery_receipt[:when]) ||
+      receipt_for_message = received_messages.find_by(external_id: delivery_receipt[:timestamps].first) ||
                             received_messages.first
       return unless receipt_for_message
 
