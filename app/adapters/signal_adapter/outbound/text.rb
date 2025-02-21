@@ -35,7 +35,7 @@ module SignalAdapter
 
         if quote_message.present?
           base_data.merge!({
-                             quote_author: quote_message.sender.signal_phone_number,
+                             quote_author: quote_message.sender.signal_phone_number || organization.sender.signal_uuid,
                              quote_timestamp: quote_message.external_id.to_i
                            })
         end
