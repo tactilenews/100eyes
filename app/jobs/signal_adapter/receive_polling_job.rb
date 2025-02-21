@@ -76,11 +76,9 @@ module SignalAdapter
       signal_uuid = envelope[:sourceUuid]
 
       contributors = organization.contributors.with_signal
-      contributor = if signal_phone_number
-                      contributors.find_by(signal_phone_number: signal_phone_number)
-                    else
-                      contributors.find_by(signal_uuid: signal_uuid)
-                    end
+      contributor = contributors.find_by(signal_phone_number: signal_phone_number) if signal_phone_number
+      contributor =
+        (contributors.find_by(signal_uuid: signal_uuid) if !contributor && signal_uuid)
       update_contributor(contributor, signal_phone_number, signal_uuid) if contributor
       contributor
     end
