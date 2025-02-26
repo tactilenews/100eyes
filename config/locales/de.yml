@@ -1030,10 +1030,12 @@ de:
         one: '<strong>%{user_name}</strong> hat <strong>%{contributor_one}</strong> auf <strong>„%{request_title}”</strong> geantwortet.'
         two: '<strong>%{user_name}</strong> hat <strong>%{contributor_one}</strong> und <strong>%{contributor_two}</strong> auf die Frage <strong>„%{request_title}”</strong> geantwortet.'
         other: '<strong>%{user_name}</strong> hat <strong>%{contributor_one}</strong> und %{others_count} anderen auf die Frage <strong>„%{request_title}”</strong> geantwortet.'
+        no_request: '<strong>%{user_name}</strong> hat <strong>%{contributor_name}</strong> geantwortet.'
       my_text_html:
         one: '<strong>Du</strong> hast <strong>%{contributor_one}</strong> auf <strong>„%{request_title}”</strong> geantwortet.'
         two: '<strong>Du</strong> hast <strong>%{contributor_one}</strong> und <strong>%{contributor_two}</strong> auf die Frage <strong>„%{request_title}”</strong> geantwortet.'
         other: '<strong>Du</strong> hast <strong>%{contributor_one}</strong> und %{others_count} anderen auf die Frage <strong>„%{request_title}”</strong> geantwortet.'
+        no_request: '<strong>Du</strong> hast <strong>%{contributor_name}</strong> geantwortet.'
       link_text: 'Zur Nachricht'
     request_scheduled:
       text_html: 'Die Frage <strong>%{request_title}</strong> wurde für den Versand am %{date} um %{time} geplant und wird an %{contributors_count} Community-Mitgliedern versendet.'
