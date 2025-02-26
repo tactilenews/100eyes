@@ -238,8 +238,8 @@ RSpec.describe 'Activity Notifications' do
         "#{another_contributor.name} und 2 andere haben auf die Frage „#{request.title}” geantwortet."
       )
 
-      create(:direct_message, text: 'I am a direct message with no request', request: nil,
-                              sender: user, organization: organization, recipient: contributor)
+      direct_message = create(:direct_message, text: 'I am a direct message with no request', request: nil,
+                                               sender: user, organization: organization, recipient: contributor)
 
       create(:direct_message, text: 'I am a direct message to another contributor', request: nil,
                               sender: user, organization: organization, recipient: contributor_two)
@@ -248,6 +248,10 @@ RSpec.describe 'Activity Notifications' do
 
       expect(page).to have_text("Du hast #{contributor.name} geantwortet.")
       expect(page).to have_text("Du hast #{contributor_two.name} geantwortet.")
+      click_link('Zur Nachricht',
+                 href: conversations_organization_contributor_path(organization.id, contributor.id, anchor: "message-#{direct_message.id}"))
+
+      expect(page).to have_text('I am a direct message with no request')
 
       visit organization_dashboard_path(organization, as: coworker)
 

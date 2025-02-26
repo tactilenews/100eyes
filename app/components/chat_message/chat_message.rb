@@ -20,7 +20,7 @@ module ChatMessage
     end
 
     def copy_url
-      if message.sent_from_contributor?
+      if message.sent_from_contributor? || message.request.blank?
         conversations_organization_contributor_url(
           organization_id: message.organization_id,
           id: message.contributor.id,
