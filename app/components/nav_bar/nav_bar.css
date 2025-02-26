@@ -87,6 +87,10 @@
   display: none;
 }
 
+.NavBar-search:hover {
+  color: var(--color-text);
+}
+
 .NavBar-logOut svg {
   width: var(--spacing-unit);
   margin-right: var(--spacing-unit-xs);
