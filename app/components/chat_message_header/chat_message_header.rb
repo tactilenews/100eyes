@@ -15,6 +15,8 @@ module ChatMessageHeader
     def header_content
       if reply?
         reply_header_content
+      elsif !attached_to_request?
+        header_with_text
       else
         header_with_link
       end
