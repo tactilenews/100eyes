@@ -37,7 +37,7 @@ module MoveMessageForm
     def cancel_link
       if request.present?
         organization_request_url(request.organization_id, request, anchor: "message-#{message.id}")
-      elsif reply?
+      elsif message.reply?
         conversations_organization_contributor_url(message.organization_id, message.sender.id)
       else
         conversations_organization_contributor_url(message.organization_id, message.contributor.id)
