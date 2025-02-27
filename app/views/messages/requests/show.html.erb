@@ -4,13 +4,7 @@
       <%= t('message.move.heading') %>
     <% end %>
 
-    <p>
-      <%= t(
-        'message.move.text',
-        name: @message.contributor.name,
-        title: @message.request&.title
-      ).html_safe %>
-    </p>
+    <p><%= t('message.move.text') %></p>
   <% end %>
 
   <%= c 'section', style: :xnarrow do %>

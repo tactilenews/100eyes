@@ -712,7 +712,7 @@ de:
   message:
     move:
       heading: Nachricht verschieben
-      text: Gehört diese Nachricht von <strong>%{name}</strong> nicht zur Frage <strong>„%{title}”</strong>? Dann kannst du sie hier zu einer anderen Frage verschieben.
+      text: Gehört diese Nachricht nicht hierher? Dann kannst du sie an eine andere Stelle verschieben.
       success: Die Nachricht wurde erfolgreich verschoben
       error: Die Nachricht konnte nicht verschoben werden
     create:

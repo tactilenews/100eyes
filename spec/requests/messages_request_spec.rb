@@ -85,7 +85,7 @@ RSpec.describe 'Messages', type: :request do
 
           it 'renders successfully' do
             expect(response).to be_successful
-            expect(response.body).to include('Zora Zimmermann')
+            expect(response.body).to include('Gehört diese Nachricht nicht hierher?')
           end
         end
 
@@ -96,7 +96,7 @@ RSpec.describe 'Messages', type: :request do
 
           it 'renders successfully' do
             expect(response).to be_successful
-            expect(response.body).to include('Zora Zimmermann')
+            expect(response.body).to include('Gehört diese Nachricht nicht hierher?')
           end
         end
       end
@@ -145,6 +145,19 @@ RSpec.describe 'Messages', type: :request do
 
         expect(flash[:success]).not_to be_empty
         expect(response).to redirect_to url
+      end
+
+      describe 'given a message previously had no request' do
+        before { message.update!(request: nil) }
+
+        it 'redirects back to conversations path' do
+          subject.call
+
+          url = conversations_organization_contributor_path(organization_id: message.organization_id, id: message.contributor.id)
+
+          expect(flash[:success]).not_to be_empty
+          expect(response).to redirect_to url
+        end
       end
     end
   end
