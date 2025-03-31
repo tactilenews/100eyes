@@ -91,6 +91,10 @@ class RequestsController < ApplicationController
     render(InlineMetrics::InlineMetrics.new(metrics: metrics), content_type: 'text/html')
   end
 
+  def generate_csv
+    PostmarkAdapter::Outbound.send_request_csv_to_user!(user_id: current_user.id, request_id: params[:id])
+  end
+
   private
 
   def set_request
