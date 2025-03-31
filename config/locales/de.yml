@@ -488,6 +488,8 @@ de:
       welcome_message_updated:
         subject: '%{project_name} hat seine Willkommensnachricht aktualisiert'
         text: 'Wenn die Instanz WhatsApp verwendet, muss eine neue Vorlage erstellt werden, bevor versucht wird, die Willkommensnachricht zu senden.'
+      request_csv_email:
+        subject: 'Die angeforderte CSV für die Anfrage „%{request_title}“'
     whats_app:
       request_template:
         new_request_morning_1: "Guten Morgen %{first_name}, wir haben eine neue Frage zum Thema „%{request_title}“. Wenn du sie öffnen möchtest, klicke 'Öffnen'."
