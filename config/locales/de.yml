@@ -700,6 +700,7 @@ de:
     personalization:
       first_name: VORNAME
     subheading: Die besten Fragen an deine Community
+    generate_csv: Tabelle anfordern
   conversation:
     conversation:
       one: Nachrichtenverlauf

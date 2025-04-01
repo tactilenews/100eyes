@@ -11,7 +11,7 @@
 
       <%= c 'form', url: generate_csv_organization_request_path, method: :post do %>
         <%= c 'button', style: :secondary do %>
-          Generate CSV
+          <%= I18n.t('request.generate_csv') %>
         <% end %>
       <% end %>
     <% end %>
