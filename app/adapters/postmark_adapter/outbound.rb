@@ -80,13 +80,6 @@ module PostmarkAdapter
 
         with(admin: admin, organization: organization).welcome_message_updated_email.deliver_later
       end
-
-      def send_request_csv_to_user!(user_id:, request_id:)
-        user = User.find(user_id)
-        request = Request.find(request_id)
-
-        with(user: user, request_id: request_id, organization: request.organization).request_csv_email.deliver_later
-      end
     end
 
     def bounce_email
@@ -176,20 +169,6 @@ module PostmarkAdapter
       message_stream = ENV.fetch('POSTMARK_TRANSACTIONAL_STREAM', 'outbound')
       @text = [subject, text].join("\n")
       mail(to: admin.email, subject: subject, message_stream: message_stream)
-    end
-
-    def request_csv_email
-      user = params[:user]
-      request_id = params[:request_id]
-
-      file = Requests::GenerateCsvService.call(request_id: request_id)
-      request = Request.find(request_id)
-      subject = I18n.t('adapter.postmark.request_csv_email.subject', request_title: request.title)
-      message_stream = ENV.fetch('POSTMARK_TRANSACTIONAL_STREAM', 'outbound')
-      file_name = "#{Time.zone.now.strftime('%Y_%m_%d')}_#{request.title.parameterize.underscore}.csv"
-      attachments.inline[file_name] = file.read
-      file.close!
-      mail(to: user.email, subject: subject, message_stream: message_stream)
     end
 
     def message_email
