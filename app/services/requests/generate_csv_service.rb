@@ -16,8 +16,6 @@ module Requests
           writer << [message.id, message.sender.name, message.text, message.created_at.strftime('%Y-%m-%d um %H:%M')]
         end
       end
-
-      # binding.pry
     end
   end
 end
