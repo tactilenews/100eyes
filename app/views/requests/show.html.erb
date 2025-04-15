@@ -9,13 +9,8 @@
         <%= @request.title %>
       <% end %>
 
-      <%= c 'form', url: generate_csv_organization_request_path, method: :post do %>
-        <%= c 'button', style: :secondary do %>
-          <%= I18n.t('request.generate_csv') %>
-        <% end %>
-      <% end %>
+      <%= link_to I18n.t('request.generate_csv'), generate_csv_organization_request_path, download: "#{@request.title.parameterize.underscore.to_s}.csv" %>
     <% end %>
-
 
     <%= c 'flex', style: :small_gap do %>
       <% if @request.tags.any? %>
