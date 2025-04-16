@@ -1057,6 +1057,8 @@ de:
   service:
     requests:
       generate_csv_service:
+        files_attached: Angehängte Dateien
+        files_attached_with_caption: Angehängte Dateien mit Untertitel
         sender_info:
           request: "Frage von am %{sender_name}, %{sent_at}"
           reply: "Antwort von am %{sender_name}, %{sent_at}"
