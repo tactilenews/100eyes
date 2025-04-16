@@ -9,7 +9,12 @@
         <%= @request.title %>
       <% end %>
 
-      <%= link_to I18n.t('request.generate_csv'), generate_csv_organization_request_path, download: "#{@request.title.parameterize.underscore.to_s}.csv" %>
+      <%= c 'button',
+        link: generate_csv_organization_request_path,
+        style: :secondary,
+        download: "#{@request.title.parameterize.underscore.to_s}.csv" do %>
+        <%= I18n.t('request.generate_csv') %>
+      <% end %>
     <% end %>
 
     <%= c 'flex', style: :small_gap do %>
