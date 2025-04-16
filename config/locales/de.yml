@@ -1053,3 +1053,10 @@ de:
   shared:
     community: Community
     editorial: Redaktion
+
+  service:
+    requests:
+      generate_csv_service:
+        sender_info:
+          request: "Frage von am %{sender_name}, %{sent_at}"
+          reply: "Antwort von am %{sender_name}, %{sent_at}"
