@@ -32,6 +32,7 @@ Rails.application.routes.draw do
         get 'notifications', format: /json/
         get 'messages-by-contributor'
         get 'stats'
+        get 'generate-csv'
       end
     end
 
