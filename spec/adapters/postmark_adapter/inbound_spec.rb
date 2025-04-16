@@ -21,7 +21,7 @@ RSpec.describe PostmarkAdapter::Inbound do
       mail
     end
 
-    it { should_not raise_error }
+    it { expect { subject.call }.not_to raise_error }
     it { expect(subject.call).to eq('This is a text body part') }
 
     describe 'given no multipart' do
@@ -33,7 +33,7 @@ RSpec.describe PostmarkAdapter::Inbound do
           m.body html_part
         end
       end
-      it { should_not raise_error }
+      it { expect { subject.call }.not_to raise_error }
       it { expect(subject.call).to eq('This is a text body part') }
 
       describe '<html> tags present in text' do
@@ -193,7 +193,8 @@ RSpec.describe PostmarkAdapter::Inbound do
         mail
       end
       it { should_not be_empty }
-      it { should all be_a(Photo) }
+      it { should all be_a(Message::File) }
+      it { should all satisfy(&:image_attachment?) }
     end
   end
 end

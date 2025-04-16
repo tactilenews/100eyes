@@ -14,7 +14,6 @@ class Message < ApplicationRecord
   belongs_to :request, optional: true
   belongs_to :organization
 
-  has_many :photos, dependent: :destroy
   has_many :files, dependent: :destroy, class_name: 'Message::File'
   has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
   has_one :whats_app_template, dependent: :destroy, class_name: 'Message::WhatsAppTemplate'

@@ -36,7 +36,7 @@ module TelegramAdapter
 
       @photos = initialize_photos(telegram_message)
       @photos.each do |photo|
-        @message.association(:photos).add_to_target(photo)
+        @message.association(:files).add_to_target(photo)
       end
 
       files = initialize_files(telegram_message)
@@ -120,9 +120,12 @@ module TelegramAdapter
       return [] unless telegram_message[:photo]
 
       telegram_file = telegram_message[:photo].max { |a, b| a[:file_size] <=> b[:file_size] }
-      photo = Photo.new
+      photo = Message::File.new
       remote_file_location = file_url(telegram_file)
-      photo.attachment.attach(io: remote_file_location.open, filename: File.basename(remote_file_location.path))
+      photo.attachment.attach(
+        io: remote_file_location.open,
+        filename: File.basename(remote_file_location.path)
+      )
       [photo]
     end
 

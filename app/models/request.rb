@@ -11,7 +11,6 @@ class Request < ApplicationRecord
   belongs_to :organization
   has_many :messages, dependent: :destroy
   has_many :contributors, through: :messages, source: :recipient
-  has_many :photos, through: :messages
   default_scope { order(broadcasted_at: :desc) }
   has_many :notifications_as_mentioned, class_name: 'ActivityNotification', dependent: :destroy
   has_many_attached :files
@@ -71,7 +70,6 @@ class Request < ApplicationRecord
       .includes(
         [
           { sender: { avatar_attachment: :blob } },
-          { photos: { attachment_attachment: :blob } },
           { files: { attachment_attachment: :blob } },
           { recipient: { avatar_attachment: :blob } }
         ]

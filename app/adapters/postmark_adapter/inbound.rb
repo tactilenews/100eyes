@@ -30,7 +30,7 @@ module PostmarkAdapter
       @photos, @unknown_content = initialize_photos_and_unknown_content(mail)
       @message.unknown_content = unknown_content
       @photos.each do |photo|
-        @message.association(:photos).add_to_target(photo)
+        @message.association(:files).add_to_target(photo)
       end
     end
 
@@ -64,13 +64,13 @@ module PostmarkAdapter
 
     def initialize_photos_and_unknown_content(mail)
       photos = mail.attachments.map do |attachment|
-        photo = Photo.new
+        photo = Message::File.new
         photo.message = message
         photo.attachment.attach(io: StringIO.new(attachment.decoded), filename: attachment.filename)
         photo
       end
-      unknown_content = photos.any?(&:invalid?)
-      photos = photos.select(&:valid?) # this might not be an image
+      photos, unknown_files = photos.partition(&:image_attachment?)
+      unknown_content = unknown_files.present?
       [photos, unknown_content]
     end
 

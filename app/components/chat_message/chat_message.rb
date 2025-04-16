@@ -47,10 +47,6 @@ module ChatMessage
       files.any? { |file| file.attachment.blob.content_type.match? /video/ }
     end
 
-    def photos
-      message.photos
-    end
-
     def image_files
       files.select { |file| file.attachment.blob.content_type.match? /image/ }
     end
