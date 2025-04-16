@@ -57,7 +57,7 @@ module Organizations
     end
 
     def conversations
-      @messages = @contributor.conversations.includes(%i[files photos request recipient sender])
+      @messages = @contributor.conversations.includes(%i[files request recipient sender])
       @reply_to = @contributor.replies.find(params[:reply_to]) if params[:reply_to].present?
     end
 
