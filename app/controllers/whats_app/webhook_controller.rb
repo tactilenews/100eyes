@@ -159,7 +159,7 @@ module WhatsApp
       return unless @contributor
 
       if status_params['ErrorCode'].to_i.eql?(INVALID_MESSAGE_RECIPIENT_ERROR_CODE)
-        MarkInactiveContributorInactiveJob.perform_later(organization_id: @organization.id, contributor_id: @contributor.id)
+        MarkInactiveContributorInactiveJob.perform_later(contributor_id: @contributor.id)
         return
       end
       if status_params['ErrorCode'].to_i.eql?(FREEFORM_MESSAGE_NOT_ALLOWED_ERROR_CODE) && status_params['MessageStatus'].eql?('failed')

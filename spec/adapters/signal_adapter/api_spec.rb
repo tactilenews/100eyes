@@ -55,7 +55,6 @@ RSpec.describe SignalAdapter::Api do
 
           it {
             is_expected.to have_enqueued_job(MarkInactiveContributorInactiveJob).with do |params|
-              expect(params[:organization_id].to(eq(organization.id)))
               expect(params[:contributor_id].to(eq(recipient.id)))
             end
           }

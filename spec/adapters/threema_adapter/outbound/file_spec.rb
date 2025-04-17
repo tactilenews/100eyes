@@ -89,7 +89,6 @@ RSpec.describe ThreemaAdapter::Outbound::File do
 
       it 'enqueues a job to mark inactive contributor inactive' do
         expect { subject.call }.to have_enqueued_job(MarkInactiveContributorInactiveJob).with(
-          organization_id: organization.id,
           contributor_id: contributor.id
         )
       end
