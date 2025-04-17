@@ -3,12 +3,9 @@
 class MarkInactiveContributorInactiveJob < ApplicationJob
   queue_as :mark_inactive_contributor_inactive
 
-  def perform(organization_id:, contributor_id:)
-    organization = Organization.find_by(id: organization_id)
-    return unless organization
-
-    contributor = organization.contributors.where(id: contributor_id).first
-    return unless contributor
+  def perform(contributor_id:)
+    contributor = Contributor.find(contributor_id)
+    organization = contributor.organization
 
     contributor.deactivated_at = Time.current
     contributor.save(validate: false)

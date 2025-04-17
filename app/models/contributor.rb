@@ -173,7 +173,8 @@ class Contributor < ApplicationRecord
     update!(
       deactivated_at: nil,
       deactivated_by_user_id: nil,
-      deactivated_by_admin: false
+      deactivated_by_admin: false,
+      whats_app_message_failed_count: 0
     )
   end
 
