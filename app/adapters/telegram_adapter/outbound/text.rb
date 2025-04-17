@@ -10,8 +10,7 @@ module TelegramAdapter
         contributor = message&.recipient
         return unless contributor
 
-        MarkInactiveContributorInactiveJob.perform_later(organization_id: job.arguments.first[:organization_id],
-                                                         contributor_id: contributor.id)
+        MarkInactiveContributorInactiveJob.perform_later(contributor_id: contributor.id)
       end
 
       def perform(contributor_id:, text:, message: nil)

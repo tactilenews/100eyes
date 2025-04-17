@@ -749,6 +749,14 @@ RSpec.describe Contributor, type: :model do
       it 'reactivates the contributor' do
         expect { subject }.to change { contributor.reload.deactivated_at }.from(kind_of(ActiveSupport::TimeWithZone)).to(nil)
       end
+
+      context 'given a contributor has a whats_app_failed_message_count' do
+        before { contributor.update(whats_app_message_failed_count: 3) }
+
+        it 'resets the count' do
+          expect { subject }.to change { contributor.reload.whats_app_message_failed_count }.from(3).to(0)
+        end
+      end
     end
 
     describe 'given a deactivated contributor by a user' do

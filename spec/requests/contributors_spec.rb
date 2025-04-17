@@ -52,6 +52,32 @@ RSpec.describe '/:organization_id/contributors', type: :request do
         expect(page).not_to have_content other_organizations_contributor.first_name
       end
     end
+
+    context 'given a WhatsApp contributor marked inactive' do
+      let(:message_explaining_reason_for_being_marked_inactive) do
+        <<~HELLO
+          Die Rufnummer wurde möglicherweise nicht bei WhatsApp registriert oder der Empfänger hat die neuen Nutzungsbedingungen und Datenschutzrichtlinien von WhatsApp nicht akzeptiert.
+        HELLO
+      end
+      let(:message_continued) do
+        <<~HELLO
+          Es ist auch möglich, dass der Empfänger eine alte, nicht unterstützte Version des WhatsApp-Clients für sein Telefon verwendet. Bitte überprüfe dies mit Johnny
+        HELLO
+      end
+      let!(:contributor) do
+        create(:contributor,
+               :whats_app_contributor,
+               organization: organization,
+               deactivated_at: Time.current.beginning_of_day,
+               first_name: 'Johnny')
+      end
+
+      it 'displays a message to inform the contributor the potential reason' do
+        subject.call
+        expect(page).to have_content(message_explaining_reason_for_being_marked_inactive.strip)
+        expect(page).to have_content(message_continued.strip)
+      end
+    end
   end
 
   describe 'GET /count' do

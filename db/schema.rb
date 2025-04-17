@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_02_11_113532) do
+ActiveRecord::Schema.define(version: 2025_04_17_113224) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -119,6 +119,7 @@ ActiveRecord::Schema.define(version: 2025_02_11_113532) do
     t.datetime "unsubscribed_at"
     t.string "signal_uuid"
     t.string "signal_onboarding_token"
+    t.integer "whats_app_message_failed_count", default: 0
     t.index ["organization_id", "email"], name: "idx_org_email", unique: true
     t.index ["organization_id", "signal_phone_number"], name: "idx_org_signal_phone_number", unique: true
     t.index ["organization_id", "telegram_id"], name: "idx_org_telegram_id", unique: true

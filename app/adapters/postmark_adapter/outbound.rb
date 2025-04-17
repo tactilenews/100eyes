@@ -13,7 +13,7 @@ module PostmarkAdapter
         contributor = organization.contributors.find_by(email: email_address)
         next unless contributor
 
-        MarkInactiveContributorInactiveJob.perform_later(organization_id: organization.id, contributor_id: contributor.id)
+        MarkInactiveContributorInactiveJob.perform_later(contributor_id: contributor.id)
       end
     end
 

@@ -55,7 +55,8 @@ module WhatsApp
       statuses = @components[:statuses]
       statuses.each do |delivery_receipt|
         invalid_recipient_error = delivery_receipt[:errors]&.select { |error| error[:code].to_i.eql?(INVALID_MESSAGE_RECIPIENT_ERROR_CODE) }
-        mark_inactive_contributor_inactive(delivery_receipt) if invalid_recipient_error.present?
+        handle_invalid_recipient(delivery_receipt) and next if invalid_recipient_error.present?
+
         handle_errors(delivery_receipt[:errors]) if delivery_receipt[:status].in?(UNSUCCESSFUL_DELIVERY)
         handle_successful_delivery(delivery_receipt) if delivery_receipt[:status].in?(SUCCESSFUL_DELIVERY)
       end
@@ -68,9 +69,11 @@ module WhatsApp
       end
     end
 
-    def mark_inactive_contributor_inactive(status)
+    def handle_invalid_recipient(status)
       contributor = @organization.contributors.find_by(whats_app_phone_number: "+#{status[:recipient_id]}")
-      MarkInactiveContributorInactiveJob.perform_later(organization_id: @organization.id, contributor_id: contributor.id)
+      WhatsAppAdapter::HandleFailedMessageJob.delay(run_at: Time.current.tomorrow.beginning_of_day).perform_later(
+        contributor_id: contributor.id, external_message_id: status[:id]
+      )
     end
 
     def handle_successful_delivery(delivery_receipt)

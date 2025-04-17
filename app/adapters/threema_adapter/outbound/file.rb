@@ -34,7 +34,7 @@ module ThreemaAdapter
           threema_id = exception.message.split('Threema ID').last.strip
           contributor = organization.contributors.where('lower(threema_id) = ?', threema_id.downcase).first
 
-          MarkInactiveContributorInactiveJob.perform_later(organization_id: organization.id, contributor_id: contributor.id)
+          MarkInactiveContributorInactiveJob.perform_later(contributor_id: contributor.id)
         end
         ErrorNotifier.report(exception, tags: tags)
       end
