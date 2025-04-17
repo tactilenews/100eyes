@@ -3,7 +3,7 @@
 module SignalAdapter
   class Api
     class << self
-      def perform_request(_organization, request, contributor)
+      def perform_request(request, contributor)
         uri = request.uri
         response = Net::HTTP.start(uri.host, uri.port) do |http|
           http.request(request)

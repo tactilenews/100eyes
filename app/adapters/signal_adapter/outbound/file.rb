@@ -16,7 +16,7 @@ module SignalAdapter
                                         'Content-Type': 'application/json'
                                       })
         request.body = data.to_json
-        SignalAdapter::Api.perform_request(organization, request, message.recipient) do |response|
+        SignalAdapter::Api.perform_request(request, message.recipient) do |response|
           datetime = Time.zone.at(JSON.parse(response.body)['timestamp'].to_i / 1000).to_datetime
 
           message.update(sent_at: datetime, external_id: JSON.parse(response.body)['timestamp'])
