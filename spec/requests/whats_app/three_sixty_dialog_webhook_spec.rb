@@ -153,12 +153,11 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
             before { components[:statuses] = failed_status }
 
             it 'schedules a job to handle the failed delivery' do
-              subject.call
-              Delayed::Job.all.find do |job|
-                handler = YAML.safe_load(job.handler)
-                expect(handler.object).to eq(WhatsAppAdapter::HandleFailedMessageJob)
-                expect(handler.args.first).to eq({ contributor_id: contributor.id, external_message_id: 'valid_external_message_id' })
-              end
+              allow(WhatsAppAdapter::HandleFailedMessageJob).to receive(:delay).and_return(WhatsAppAdapter::HandleFailedMessageJob)
+              expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::HandleFailedMessageJob).with(
+                contributor_id: contributor.id,
+                external_message_id: 'valid_external_message_id'
+              )
             end
 
             it 'delays the job for the future' do
