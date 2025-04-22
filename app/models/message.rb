@@ -42,7 +42,7 @@ class Message < ApplicationRecord
 
   def send!
     [PostmarkAdapter::Outbound, SignalAdapter::Outbound, TelegramAdapter::Outbound, ThreemaAdapter::Outbound,
-     WhatsAppAdapter::Delegator.new(organization)].each do |adapter|
+     WhatsAppAdapter::ThreeSixtyDialogOutbound].each do |adapter|
       adapter.send!(self)
     end
   end

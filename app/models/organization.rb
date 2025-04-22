@@ -3,7 +3,6 @@
 class Organization < ApplicationRecord
   attr_encrypted_options.merge!(key: Base64.decode64(ENV.fetch('ATTR_ENCRYPTED_KEY', nil)))
   attr_encrypted :threemarb_api_secret, :threemarb_private
-  attr_encrypted :twilio_api_key_secret
   attr_encrypted :three_sixty_dialog_client_api_key
   attr_encrypted :telegram_bot_api_key
 
@@ -50,11 +49,7 @@ class Organization < ApplicationRecord
   end
 
   def whats_app_configured?
-    twilio_configured? || three_sixty_dialog_configured?
-  end
-
-  def twilio_configured?
-    whats_app_server_phone_number.present? && twilio_api_key_sid.present? && twilio_api_key_secret.present? && twilio_account_sid.present?
+    three_sixty_dialog_configured?
   end
 
   def three_sixty_dialog_configured?
@@ -91,10 +86,6 @@ class Organization < ApplicationRecord
 
   def telegram_bot
     Telegram.bots[id]
-  end
-
-  def twilio_instance
-    Twilio::REST::Client.new(twilio_api_key_sid, twilio_api_key_secret, twilio_account_sid)
   end
 
   def threema_instance
