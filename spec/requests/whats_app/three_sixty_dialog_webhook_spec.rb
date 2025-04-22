@@ -149,39 +149,20 @@ RSpec.describe WhatsApp::ThreeSixtyDialogWebhookController do
             let!(:contributor) do
               create(:contributor, whats_app_phone_number: '+49123456789', organization: organization, email: nil, first_name: 'Johnny')
             end
-            let(:message_explaining_reason_for_being_marked_inactive) do
-              <<~HELLO
-                Die Rufnummer wurde möglicherweise nicht bei WhatsApp registriert oder der Empfänger hat die neuen Nutzungsbedingungen und Datenschutzrichtlinien von WhatsApp nicht akzeptiert.
-              HELLO
-            end
-            let(:message_continued) do
-              <<~HELLO
-                Es ist auch möglich, dass der Empfänger eine alte, nicht unterstützte Version des WhatsApp-Clients für sein Telefon verwendet. Bitte überprüfe dies mit Johnny
-              HELLO
-            end
+
             before { components[:statuses] = failed_status }
 
-            it 'reports any errors' do
-              expect(Sentry).to receive(:capture_exception).with(exception)
-
-              subject.call
+            it 'schedules a job to handle the failed delivery' do
+              allow(WhatsAppAdapter::HandleFailedMessageJob).to receive(:delay).and_return(WhatsAppAdapter::HandleFailedMessageJob)
+              expect { subject.call }.to have_enqueued_job(WhatsAppAdapter::HandleFailedMessageJob).with(
+                contributor_id: contributor.id,
+                external_message_id: 'valid_external_message_id'
+              )
             end
 
-            it 'marks the contributor as inactive since we are unable to send them a message' do
-              subject.call
-              expect(MarkInactiveContributorInactiveJob).to have_been_enqueued.with do |params|
-                expect(params[:organization_id]).to eq(organization.id)
-                expect(params[:contributor_id]).to eq(contributor.id)
-              end
-            end
-
-            it 'displays a message to inform the contributor the potential reason' do
-              perform_enqueued_jobs(only: MarkInactiveContributorInactiveJob) do
-                subject.call
-                get organization_contributor_path(organization, contributor, as: user)
-                expect(page).to have_content(message_explaining_reason_for_being_marked_inactive.strip)
-                expect(page).to have_content(message_continued.strip)
-              end
+            it 'delays the job for the future' do
+              expect { subject.call }.to change(DelayedJob, :count).from(0).to(1)
+              expect(Delayed::Job.last.run_at).to be_within(1.second).of(Time.current.tomorrow.beginning_of_day)
             end
           end
         end
