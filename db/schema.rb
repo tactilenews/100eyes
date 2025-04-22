@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_04_17_113224) do
+ActiveRecord::Schema.define(version: 2025_04_22_090855) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -233,13 +233,9 @@ ActiveRecord::Schema.define(version: 2025_04_17_113224) do
     t.string "encrypted_threemarb_api_secret_iv"
     t.string "encrypted_threemarb_private"
     t.string "encrypted_threemarb_private_iv"
-    t.string "twilio_api_key_sid"
-    t.string "encrypted_twilio_api_key_secret"
-    t.string "encrypted_twilio_api_key_secret_iv"
     t.string "signal_server_phone_number"
     t.string "signal_monitoring_url"
     t.string "signal_unknown_content_message", default: "Unsere Software kann derzeit Textnachrichten, Sprachnachrichten, Bilder und Reaktionen auf Nachrichten verarbeiten, jedoch noch keine weiteren Inhalte wie z.B. Sticker oder Kontakte. In der Zwischenzeit senden Sie bitte Nachrichten mit solchen Inhalten an <KONTAKTDATEN EINFÜGEN>. Herzlichen Dank!\n"
-    t.string "twilio_account_sid"
     t.string "whats_app_server_phone_number"
     t.string "three_sixty_dialog_whats_app_template_namespace"
     t.string "encrypted_three_sixty_dialog_client_api_key"
@@ -249,7 +245,6 @@ ActiveRecord::Schema.define(version: 2025_04_17_113224) do
     t.string "email_from_address"
     t.string "messengers_description_text", default: ""
     t.jsonb "onboarding_allowed", default: {"email"=>true, "signal"=>true, "threema"=>true, "telegram"=>true, "whats_app"=>true}
-    t.jsonb "twilio_content_sids", default: {"new_request_day1"=>"", "new_request_day2"=>"", "new_request_day3"=>"", "new_request_night1"=>"", "new_request_night2"=>"", "new_request_night3"=>"", "new_request_evening1"=>"", "new_request_evening2"=>"", "new_request_evening3"=>"", "new_request_morning1"=>"", "new_request_morning2"=>"", "new_request_morning3"=>""}
     t.string "signal_complete_onboarding_link"
     t.string "messengers_about_text"
     t.jsonb "whats_app_quick_reply_button_text", default: {"more_info"=>"Mehr Infos", "answer_request"=>"Öffnen"}

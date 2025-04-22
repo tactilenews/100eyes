@@ -107,8 +107,9 @@ RSpec.describe Message, type: :model do
     let(:message) { create(:message, :outbound, recipient: create(:contributor, :whats_app_contributor)) }
 
     it 'enqueues a job to send the message' do
-      expect { subject }.to(have_enqueued_job(WhatsAppAdapter::TwilioOutbound::Template).on_queue('default').with do |params|
-        expect(params[:content_sid]).to be_kind_of(String)
+      expect { subject }.to(have_enqueued_job(WhatsAppAdapter::ThreeSixtyDialogOutbound::Text).on_queue('default').with do |params|
+        expect(params[:contributor_id]).to eq(message.recipient.id)
+        expect(params[:type]).to eq(:direct_message_template)
         expect(params[:message_id]).to eq(message.id)
       end)
     end

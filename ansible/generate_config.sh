@@ -68,8 +68,6 @@ rails:
   email_from_address: "redaktion@${domain}"
   sentry:
     dsn: # (REQUIRED) Sentry DSN to enable error tracking
-  twilio:
-    auth_token: ""
   three_sixty_dialog:
     partner:
       id: ""

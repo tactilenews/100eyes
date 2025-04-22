@@ -173,23 +173,8 @@ RSpec.describe 'Profile' do
       expect(page).to have_button('WhatsApp einrichten')
     end
 
-    # Twilio configured
-    organization.update!(
-      whats_app_server_phone_number: '+491234567',
-      twilio_api_key_sid: Faker::Internet.uuid,
-      twilio_api_key_secret: SecureRandom.alphanumeric(16),
-      twilio_account_sid: Faker::Internet.uuid,
-      three_sixty_dialog_client_api_key: nil
-    )
-
-    visit organization_profile_path(organization, as: user)
-    expect(page).not_to have_selector(:element, 'section', 'data-testid': 'whats-app-setup')
-
     # 360dialog configured
     organization.update!(
-      twilio_api_key_sid: nil,
-      twilio_api_key_secret: nil,
-      twilio_account_sid: nil,
       three_sixty_dialog_client_api_key: SecureRandom.alphanumeric(26)
     )
 

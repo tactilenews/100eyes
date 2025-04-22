@@ -45,7 +45,6 @@
     SIGNAL_MONITORING_URL: "{{ rails.signal.monitoring_url | default('') }}"
     SENTRY_DSN: "{{ rails.sentry.dsn }}"
     ONBOARDING_SHOW_GDPR_MODAL: "{{ rails.onboarding.show_gdpr_modal | default('') | string | lower }}"
-    TWILIO_AUTH_TOKEN: "{{ rails.twilio.auth_token | default('') }}"
     THREE_SIXTY_DIALOG_PARTNER_ID: "{{ rails.three_sixty_dialog.partner.id | default('') }}"
     THREE_SIXTY_DIALOG_PARTNER_USERNAME: "{{ rails.three_sixty_dialog.partner.username | default('') }}"
     THREE_SIXTY_DIALOG_PARTNER_PASSWORD: "{{ rails.three_sixty_dialog.partner.password | default('') }}"

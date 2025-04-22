@@ -68,7 +68,6 @@ gem 'rack-attack', '~> 6.6'
 gem 'postmark-rails'
 gem 'telegram-bot'
 gem 'threema', git: 'https://github.com/threemarb/threema.git', branch: 'master'
-gem 'twilio-ruby'
 
 # User management
 gem 'active_model_otp'
