@@ -40,10 +40,6 @@ Once the authorized SSH keys are in place, you can run deploy the latest with:
 ansible-playbook ansible/site.yml -i ansible/inventories/custom --ask-vault-pass
 ```
 
-## Provider specific instructions
-
-See [Netcup](./Netcup.md).
-
 ## Backup and Restore
 
 You can create a manual backup and download it by running:
