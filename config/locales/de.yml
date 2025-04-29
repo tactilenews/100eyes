@@ -1060,5 +1060,5 @@ de:
         files_attached: Angehängte Dateien
         files_attached_with_caption: Angehängte Dateien mit Untertitel
         sender_info:
-          request: "Frage von am %{sender_name}, %{sent_at}"
-          reply: "Antwort von am %{sender_name}, %{sent_at}"
+          request: "Frage von %{sender_name} am %{sent_day}, %{sent_date} um %{sent_at}"
+          reply: "Antwort von %{sender_name} am %{sent_day}, %{sent_date} um %{sent_at}"

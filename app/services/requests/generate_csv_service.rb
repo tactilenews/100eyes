@@ -15,7 +15,9 @@ module Requests
         writer << [request.id,
                    I18n.t('service.requests.generate_csv_service.sender_info.request',
                           sender_name: request.user.name,
-                          sent_at: request.broadcasted_at.strftime('%Y.%m.%d um %H:%M')),
+                          sent_day: request.broadcasted_at.strftime('%A'),
+                          sent_date: request.broadcasted_at.strftime('%Y.%m.%d'),
+                          sent_at: request.broadcasted_at.strftime('%H:%M')),
                    request.text]
         request.messages.includes(:sender).where(broadcasted: false).reverse_order.each do |message|
           text = if message.text.present? && message.files.any? { |file| file.attachment.attached? }
@@ -28,7 +30,9 @@ module Requests
           writer << [message.id,
                      I18n.t('service.requests.generate_csv_service.sender_info.reply',
                             sender_name: message.sender.name,
-                            sent_at: message.created_at.strftime('%Y.%m.%d um %H:%M')),
+                            sent_day: message.created_at.strftime('%A'),
+                            sent_date: message.created_at.strftime('%Y.%m.%d'),
+                            sent_at: message.created_at.strftime('%H:%M')),
                      text]
         end
       end
