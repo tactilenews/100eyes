@@ -2,7 +2,7 @@
 
 # TODO: Refactor to remove the need to disable rubocop
 class RequestsController < ApplicationController
-  before_action :set_request, only: %i[show edit update notifications destroy messages_by_contributor stats]
+  before_action :set_request, except: %i[index create new]
   before_action :notifications_params, only: :notifications
   before_action :disallow_edit, only: %i[edit update]
   before_action :disallow_destroy, only: :destroy
@@ -89,6 +89,11 @@ class RequestsController < ApplicationController
       }
     ]
     render(InlineMetrics::InlineMetrics.new(metrics: metrics), content_type: 'text/html')
+  end
+
+  def generate_csv
+    request_csv = Requests::GenerateCsvService.call(request_id: params[:id])
+    send_data request_csv
   end
 
   private

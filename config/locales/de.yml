@@ -698,6 +698,7 @@ de:
     personalization:
       first_name: VORNAME
     subheading: Die besten Fragen an deine Community
+    generate_csv: Dialog herunterladen
   conversation:
     conversation:
       one: Nachrichtenverlauf
@@ -1052,3 +1053,12 @@ de:
   shared:
     community: Community
     editorial: Redaktion
+
+  service:
+    requests:
+      generate_csv_service:
+        files_attached: Angehängte Dateien
+        files_attached_with_caption: Angehängte Dateien mit Untertitel
+        sender_info:
+          request: "Frage von %{sender_name} am %{sent_day}, %{sent_date} um %{sent_at}"
+          reply: "Antwort von %{sender_name} am %{sent_day}, %{sent_date} um %{sent_at}"

@@ -3,9 +3,18 @@
     <%= c 'request_notification', request_for_info: @request %>
   <% end %>
 
-  <%= c 'page_header', styles: [:largeMarginBottom, :flexboxColumn] do %>
-    <%= c 'heading', style: :alpha do %>
-      <%= @request.title %>
+  <%= c 'page_header', styles: [:largeMarginBottom, :flexboxColumn, :wide] do %>
+    <%= c 'flex', style: :spaceBetween do %>
+      <%= c 'heading', style: :alpha do %>
+        <%= @request.title %>
+      <% end %>
+
+      <%= c 'button',
+        link: generate_csv_organization_request_path,
+        style: :secondary,
+        download: "#{@request.title.parameterize.underscore.to_s}.csv" do %>
+        <%= I18n.t('request.generate_csv') %>
+      <% end %>
     <% end %>
 
     <%= c 'flex', style: :small_gap do %>
@@ -26,7 +35,7 @@
     <% end %>
   <% end %>
 
-  <%= c 'section', style: :xlargeSpaceBetween do %>
+  <%= c 'section', styles: [:xlargeSpaceBetween, :wide] do %>
     <%= c 'request_metrics', request_for_info: @request, style: :cards %>
 
     <%= c 'stack' do %>
