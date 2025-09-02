@@ -17,7 +17,6 @@ module SignalAdapter
       adapter = SignalAdapter::Inbound.new
 
       adapter.consume(contributor, signal_message)
-  
     rescue StandardError => e
       ErrorNotifier.report(e)
     end
@@ -92,7 +91,6 @@ module SignalAdapter
       update_contributor(contributor, signal_phone_number, signal_uuid) if contributor
       contributor
     end
-
 
     def initialize_delivery_receipt(signal_message, contributor)
       return unless signal_message.dig(:envelope, :receiptMessage).present? && contributor
