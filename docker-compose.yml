@@ -21,10 +21,11 @@ services:
     depends_on: [signal]
 
   signal:
-    image: bbernhard/signal-cli-rest-api:0.90
+    image: bbernhard/signal-cli-rest-api:0.94
     environment:
-      - MODE=native
-        #- AUTO_RECEIVE_SCHEDULE=0 22 * * * #enable this parameter on demand (see description below)
+      MODE: json-rpc
+      RECEIVE_WEBHOOK_URL: "https://${APPLICATION_HOSTNAME}/signal/webhook"
+      LOG_LEVEL: debug
     ports:
       - '8080:8080' #map docker port 8080 to host port 8080.
     volumes:

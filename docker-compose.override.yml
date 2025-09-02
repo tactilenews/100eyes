@@ -9,6 +9,7 @@ x-dev-defaults: &x-dev-defaults
     MAILSERVER_PORT: 1025
     POSTGRES_HOST: db
     CHROME_URL: "http://chrome:3333"
+    APPLICATION_HOSTNAME: "${APPLICATION_HOSTNAME}"
 
   stdin_open: true
   tty: true
