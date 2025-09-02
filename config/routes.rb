@@ -112,6 +112,10 @@ Rails.application.routes.draw do
     post '/webhook', to: 'webhook#message'
   end
 
+  namespace :signal do
+    post '/webhook', to: 'webhook#message'
+  end
+
   namespace :whats_app do
     post '/webhook', to: 'webhook#message'
     post '/errors', to: 'webhook#errors'

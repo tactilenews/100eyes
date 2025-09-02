@@ -62,8 +62,8 @@
     body:
       trust_mode: "always"
 
-- name: Setup cronjob to receive messages
-  ansible.builtin.cron:
-    name: "Receive signal messages"
-    minute: "*" # job gets run every minute
-    job: "/usr/bin/docker compose -f /home/ansible/docker-compose.yml -f /home/ansible/docker-compose.prod.yml exec -T app bin/rails signal:receive_messages"
+# - name: Setup cronjob to receive messages
+#   ansible.builtin.cron:
+#     name: "Receive signal messages"
+#     minute: "*" # job gets run every minute
+#     job: "/usr/bin/docker compose -f /home/ansible/docker-compose.yml -f /home/ansible/docker-compose.prod.yml exec -T app bin/rails signal:receive_messages"
