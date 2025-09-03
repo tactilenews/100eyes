@@ -1,69 +1,12 @@
 ---
-- name: Check if signal_server_phone_number is registered
-  uri:
-    url: "{{ signal_cli_rest_api_endpoint }}/v1/receive/{{ signal_server_phone_number }}"
-  ignore_errors: true
-  register: response
+- name: Deploy signal-cli REST API health check script
+  copy:
+    src: files/signal_cli_health_check.sh
+    dest: /usr/local/bin/signal_cli_health_check.sh
+    mode: '0755'
 
-- name: Set error message
-  set_fact:
-    error_message: "User {{ signal_server_phone_number }} is not registered.\n"
-
-- name: Set signal_phone_number_not_registered variable
-  set_fact:
-    signal_phone_number_not_registered: "{{ response['status'] != 200 and response['json']['error'] == error_message }}"
-
-- name: Register, verify phone number
-  block:
-    - name: Ask for captcha result
-      pause:
-        prompt: "{{ lookup('template', 'enter_captcha.j2') | trim }}"
-      register: captcha_prompt_result
-
-    - name: Set captcha result
-      set_fact:
-        captcha: "{{ captcha_prompt_result.user_input }}"
-
-    - name: Register phone number
-      uri:
-        url: "{{ signal_cli_rest_api_endpoint }}/v1/register/{{ signal_server_phone_number }}"
-        method: POST
-        status_code: 201
-        body_format: json
-        body:
-          captcha: "{{ captcha }}"
-          # use_voice: true
-
-    - name: Ask for verification token
-      pause:
-        prompt: "{{ lookup('template', 'enter_verification_token.j2') | trim }}"
-      register: verification_token_prompt_result
-
-    - name: Set verification token
-      set_fact:
-        verification_token: "{{ verification_token_prompt_result.user_input }}"
-
-    - name: Verify phone number
-      uri:
-        url: "{{ signal_cli_rest_api_endpoint }}/v1/register/{{ signal_server_phone_number }}/verify/{{ verification_token }}"
-        method: POST
-        status_code: 201
-        body_format: json
-        body:
-          ping: "string"
-  when: signal_phone_number_not_registered
-
-- name: Set trust mode to always
-  uri:
-    url: "{{ signal_cli_rest_api_endpoint }}/v1/configuration/{{ signal_server_phone_number }}/settings"
-    method: POST
-    status_code: 204
-    body_format: json
-    body:
-      trust_mode: "always"
-
-# - name: Setup cronjob to receive messages
-#   ansible.builtin.cron:
-#     name: "Receive signal messages"
-#     minute: "*" # job gets run every minute
-#     job: "/usr/bin/docker compose -f /home/ansible/docker-compose.yml -f /home/ansible/docker-compose.prod.yml exec -T app bin/rails signal:receive_messages"
+- name: Setup cronjob to run health check and ping monitoring every minute
+  ansible.builtin.cron:
+    name: "Signal API health check and monitoring ping"
+    minute: "*"
+    job: 'SIGNAL_API="{{ signal_cli_rest_api_endpoint }}" SIGNAL_MONITORING_URL="{{ signal_monitoring_url }}" SIGNAL_DOCKER_CONTAINER="ansible-signal-1" /usr/local/bin/signal_cli_health_check.sh'
