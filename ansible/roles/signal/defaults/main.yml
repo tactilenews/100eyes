@@ -1,2 +1,4 @@
 signal_cli_rest_api_endpoint: http://localhost:8080
 signal_server_phone_number: "{{ rails.signal.server_phone_number }}"
+signal_monitoring_url: "{{ rails.signal.monitoring_url | default('') }}"
+
