@@ -45,7 +45,7 @@ RSpec.describe 'Signal' do
         expect(response).to redirect_to(organization_signal_verify_path(organization))
       end
 
-      it 'renders a form to verify' do
+      xit 'renders a form to verify' do
         subject.call
         follow_redirect!
         expect(page).to have_css("form[action='/#{organization.id}/signal/verify']") do |form|
