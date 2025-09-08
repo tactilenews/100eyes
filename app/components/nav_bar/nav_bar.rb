@@ -12,5 +12,9 @@ module NavBar
     private
 
     attr_reader :current_user, :organization
+
+    def enterprise_instance?
+      ActiveModel::Type::Boolean.new.cast(ENV.fetch('IS_ENTERPRISE_INSTANCE', 'false'))
+    end
   end
 end

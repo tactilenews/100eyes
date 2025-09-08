@@ -49,6 +49,7 @@
     THREE_SIXTY_DIALOG_PARTNER_USERNAME: "{{ rails.three_sixty_dialog.partner.username | default('') }}"
     THREE_SIXTY_DIALOG_PARTNER_PASSWORD: "{{ rails.three_sixty_dialog.partner.password | default('') }}"
     ATTR_ENCRYPTED_KEY: "{{ rails.attr_encrypted_key | default('') }}"
+    IS_ENTERPRISE_INSTANCE: "{{ rails.is_enterprise_instance | default('false') | string | lower }}"
 
   community.docker.docker_compose_v2:
     project_src: /home/ansible

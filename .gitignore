@@ -45,3 +45,4 @@ backups/
 traefik/
 
 signal-cli-config/
+.vscode
