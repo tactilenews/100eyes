@@ -44,15 +44,17 @@
           <% end %>
         </li>
       <% end %>
-      <li class="NavBar-item NavBar-profileLink">
-        <%= link_to organization_profile_path(organization), aria: { label: t('.profile_path') } do %>
-          <span>
-            <%= t '.profile_link' %>
-          </span>
-          <%= svg 'profile-fig' %>
-        <% end %>
-      </li>
-      <li class="NavBar-item NavBar-settings" >
+      <% unless enterprise_instance? %>
+        <li class="NavBar-item NavBar-profileLink">
+          <%= link_to organization_profile_path(organization), aria: { label: t('.profile_path') } do %>
+            <span>
+              <%= t '.profile_link' %>
+            </span>
+            <%= svg 'profile-fig' %>
+          <% end %>
+        </li>
+      <% end %>
+      <li class="<%= ['NavBar-item', 'NavBar-settings', ('NavBar-autoMarginLeft' if enterprise_instance?)].compact.join(' ') %>">
         <%= link_to organization_settings_path(organization) do %>
           <%= svg 'settings-wheel' %>
         <% end %>

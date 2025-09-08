@@ -145,6 +145,10 @@
     height: var(--line-height);
   }
 
+  .NavBar-item.NavBar-autoMarginLeft {
+    margin-left: auto;
+  }
+
   .NavBar-logOut {
     margin-right: var(--spacing-unit-s);
     color: var(--color-primary);
