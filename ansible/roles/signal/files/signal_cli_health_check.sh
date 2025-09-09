@@ -59,36 +59,42 @@ end=$(date +%s.%N)
 runtime=$(awk "BEGIN {printf \"%.3f\", $end - $start}")
 
 memory=""
-# try to detect memory via docker stats if docker is available
-if [ -n "$SIGNAL_DOCKER_CONTAINER" ] && command -v docker >/dev/null 2>&1; then
-  raw=$(docker stats --no-stream --format '{{.MemUsage}}' "$SIGNAL_DOCKER_CONTAINER" 2>/dev/null || true)
-  # raw may look like: "27.34MiB / 1.944GiB"
-  first=$(printf "%s" "$raw" | awk '{print $1}')
-  if [ -n "$first" ]; then
-    case "$first" in
-      *KiB) val=$(printf "%s" "$first" | sed 's/KiB$//'); memory=$(awk "BEGIN {printf \"%d\", $val * 1024}") ;;
-      *MiB) val=$(printf "%s" "$first" | sed 's/MiB$//'); memory=$(awk "BEGIN {printf \"%d\", $val * 1024 * 1024}") ;;
-      *GiB) val=$(printf "%s" "$first" | sed 's/GiB$//'); memory=$(awk "BEGIN {printf \"%d\", $val * 1024 * 1024 * 1024}") ;;
-      *kB)  val=$(printf "%s" "$first" | sed 's/kB$//'); memory=$(awk "BEGIN {printf \"%d\", $val * 1000}") ;;
-      *MB)  val=$(printf "%s" "$first" | sed 's/MB$//');  memory=$(awk "BEGIN {printf \"%d\", $val * 1000 * 1000}") ;;
-      *GB)  val=$(printf "%s" "$first" | sed 's/GB$//');  memory=$(awk "BEGIN {printf \"%d\", $val * 1000 * 1000 * 1000}") ;;
-      *)    memory=$(printf "%s" "$first") ;;
-    esac
+total_memory=""
+# Check system-wide memory usage from /proc/meminfo
+if [ -r "/proc/meminfo" ]; then
+  # Get total and available memory in kB from /proc/meminfo
+  mem_total_kb=$(awk '/^MemTotal:/ {print $2}' /proc/meminfo 2>/dev/null || echo "")
+  mem_available_kb=$(awk '/^MemAvailable:/ {print $2}' /proc/meminfo 2>/dev/null || echo "")
+  
+  if [ -n "$mem_total_kb" ] && [ -n "$mem_available_kb" ]; then
+    # Convert to bytes
+    total_memory=$(awk "BEGIN {printf \"%d\", $mem_total_kb * 1024}")
+    mem_available_bytes=$(awk "BEGIN {printf \"%d\", $mem_available_kb * 1024}")
+    # Used memory = Total - Available
+    memory=$(awk "BEGIN {printf \"%d\", $total_memory - $mem_available_bytes}")
   fi
 fi
 
 # memory threshold check
-# Defaults: total memory 25GB, threshold percent 85% (configurable via SIGNAL_TOTAL_MEMORY_BYTES and SIGNAL_MEMORY_THRESHOLD_PERCENT)
-TOTAL_MEMORY_BYTES="${SIGNAL_TOTAL_MEMORY_BYTES:-26843545600}"
+# Uses actual system memory if available, otherwise falls back to configured value
+# Default threshold: 85% of total system memory
 THRESHOLD_PERCENT="${SIGNAL_MEMORY_THRESHOLD_PERCENT:-85}"
 
-# compute threshold bytes
-threshold_bytes=$(awk "BEGIN {printf \"%d\", ${TOTAL_MEMORY_BYTES} * ${THRESHOLD_PERCENT} / 100}")
+# Use actual system memory if detected, otherwise fall back to configured value
+if [ -n "$total_memory" ] && printf "%s" "$total_memory" | grep -Eq '^[0-9]+$'; then
+  threshold_bytes=$(awk "BEGIN {printf \"%d\", ${total_memory} * ${THRESHOLD_PERCENT} / 100}")
+else
+  # Fallback to configured total memory (default: ~25GB)
+  TOTAL_MEMORY_BYTES="${SIGNAL_TOTAL_MEMORY_BYTES:-26843545600}"
+  threshold_bytes=$(awk "BEGIN {printf \"%d\", ${TOTAL_MEMORY_BYTES} * ${THRESHOLD_PERCENT} / 100}")
+fi
 
 if [ -n "$memory" ] && printf "%s" "$memory" | grep -Eq '^[0-9]+$'; then
   if [ "$memory" -gt "$threshold_bytes" ]; then
     exit_code=3
-    failure_message="Memory ${memory} bytes exceeds threshold ${threshold_bytes} bytes (${THRESHOLD_PERCENT}%)"
+    memory_mb=$(awk "BEGIN {printf \"%.1f\", $memory / 1024 / 1024}")
+    threshold_mb=$(awk "BEGIN {printf \"%.1f\", $threshold_bytes / 1024 / 1024}")
+    failure_message="System memory ${memory_mb}MB exceeds threshold ${threshold_mb}MB (${THRESHOLD_PERCENT}%)"
   fi
 fi
 
