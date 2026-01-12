@@ -47,3 +47,5 @@ traefik/
 signal-cli-config/
 .vscode/
 
+.github
+AGENTS.md
