@@ -1,4 +1,4 @@
-FROM ruby:3.0.5-alpine3.16
+FROM ruby:3.2.2-alpine3.16
 
 ARG git_commit_sha
 ARG git_commit_date
