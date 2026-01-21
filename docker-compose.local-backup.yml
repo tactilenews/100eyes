@@ -1,4 +1,0 @@
-services:
-  db:
-    volumes:
-      - ./tmp/db/:/tmp
