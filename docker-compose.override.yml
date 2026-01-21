@@ -1,4 +1,5 @@
 x-dev-defaults: &x-dev-defaults
+  image: tactilenews/hundred-eyes:latest
   build:
     context: .
   environment:
