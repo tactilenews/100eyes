@@ -27,8 +27,12 @@ services:
       - /tmp
 
   assets:
-    command: npm run dev
     <<: *x-dev-defaults
+    # As we have mounted the app directory into the container and esbuild expects the
+    # node_module folder therein: In case there is no node_module folder on the host machine
+    # run npm install to build node_modules in this mounted directory (app). Then just run npm run dev.
+    command: >
+      bash -c 'if [ ! -d "node_modules" ]; then npm install; fi && npm run dev'
 
   job-worker:
     <<: *x-dev-defaults
