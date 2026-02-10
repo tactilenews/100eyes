@@ -3,6 +3,9 @@
 module SignalAdapter
   class ProcessWebhookJob < ApplicationJob
     def perform(signal_message:)
+      handle_invalid_message(signal_message)
+      return if typing_message_only?(signal_message)
+
       organization = initialize_organization(signal_message)
       return unless organization
 
@@ -22,6 +25,28 @@ module SignalAdapter
     end
 
     private
+
+    def handle_invalid_message(signal_message)
+      exception = signal_message[:exception]
+      return unless exception
+
+      error = SignalAdapter::InvalidMessageError.new(
+        exception_message: exception[:message],
+        exception_type: exception[:type]
+      )
+      ErrorNotifier.report(error)
+    end
+
+    def typing_message_only?(signal_message)
+      envelope = signal_message[:envelope]
+      return false unless envelope
+
+      has_typing_message = envelope[:typingMessage].present?
+      has_data_message = envelope[:dataMessage].present?
+      has_reaction = envelope[:reaction].present?
+
+      has_typing_message && !has_data_message && !has_reaction
+    end
 
     def initialize_organization(signal_message)
       signal_server_phone_number = signal_message[:account]
