@@ -2,12 +2,12 @@ x-defaults: &x-defaults
   environment:
     BINDING: 0.0.0.0
     PORT: 3000
-    POSTGRES_HOST: '${POSTGRES_HOST:-db}'
-    POSTGRES_PORT: '${POSTGRES_PORT:-5432}'
-    SIGNAL_CLI_REST_API_ENDPOINT: 'http://signal:8080'
-    SIGNAL_CLI_REST_API_ATTACHMENT_PATH: 'signal-cli-config/attachments/'
-    THREE_SIXTY_DIALOG_PARTNER_REST_API_ENDPOINT: 'https://hub.360dialog.io/api/v2'
-    THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT: 'https://waba-v2.360dialog.io'
+    POSTGRES_HOST: "${POSTGRES_HOST:-db}"
+    POSTGRES_PORT: "${POSTGRES_PORT:-5432}"
+    SIGNAL_CLI_REST_API_ENDPOINT: "http://signal:8080"
+    SIGNAL_CLI_REST_API_ATTACHMENT_PATH: "signal-cli-config/attachments/"
+    THREE_SIXTY_DIALOG_PARTNER_REST_API_ENDPOINT: "https://hub.360dialog.io/api/v2"
+    THREE_SIXTY_DIALOG_WHATS_APP_REST_API_ENDPOINT: "https://waba-v2.360dialog.io"
 
 services:
   app:
@@ -21,12 +21,12 @@ services:
     depends_on: [signal]
 
   signal:
-    image: bbernhard/signal-cli-rest-api:0.94
+    image: bbernhard/signal-cli-rest-api:0.97
     environment:
       MODE: json-rpc
       RECEIVE_WEBHOOK_URL: "https://${APPLICATION_HOSTNAME}/signal/webhook"
       LOG_LEVEL: debug
     ports:
-      - '8080:8080' #map docker port 8080 to host port 8080.
+      - "8080:8080" #map docker port 8080 to host port 8080.
     volumes:
       - ./signal-cli-config:/home/.local/share/signal-cli
