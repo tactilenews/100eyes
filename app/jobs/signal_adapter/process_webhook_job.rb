@@ -38,7 +38,7 @@ module SignalAdapter
     end
 
     def typing_message_only?(signal_message)
-      envelope = signal_message.dig(:envelope)
+      envelope = signal_message[:envelope]
       return false unless envelope
 
       has_typing_message = envelope[:typingMessage].present?
