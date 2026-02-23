@@ -74,8 +74,9 @@ module ChatMessageHeader
 
     def sent_by_text
       name = message.sender ? message.sender.first_name : message.organization.project_name
+      timestamp = message.sent_from_contributor? ? message.created_at : (message.sent_at || message.created_at)
       I18n.t('components.chat_message.sent_by_x_at',
-             name: name, date: date_time(message.updated_at)).html_safe # rubocop:disable Rails/OutputSafety
+             name: name, date: date_time(timestamp)).html_safe # rubocop:disable Rails/OutputSafety
     end
   end
 end

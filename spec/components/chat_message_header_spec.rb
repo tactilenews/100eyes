@@ -9,7 +9,7 @@ RSpec.describe ChatMessageHeader::ChatMessageHeader, type: :component do
   let(:params) { { message: message } }
 
   describe 'header_content' do
-    let(:sent_by_text) { strip_tags(I18n.t('components.chat_message.sent_by_x_at', name: name, date: I18n.l(message.updated_at)).strip) }
+    let(:sent_by_text) { strip_tags(I18n.t('components.chat_message.sent_by_x_at', name: name, date: I18n.l(message.created_at)).strip) }
     let(:conversations_path) { "/#{message.organization.id}/contributors/#{message.sender.id}/conversations" }
 
     context 'given a message is a reply' do
