@@ -25,6 +25,7 @@ services:
     environment:
       MODE: json-rpc
       RECEIVE_WEBHOOK_URL: "https://${APPLICATION_HOSTNAME}/signal/webhook"
+      JSON_RPC_TRUST_NEW_IDENTITIES: "always"
       LOG_LEVEL: debug
     ports:
       - "8080:8080" #map docker port 8080 to host port 8080.
