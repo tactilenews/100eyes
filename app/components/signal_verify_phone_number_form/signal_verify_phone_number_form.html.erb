@@ -1,6 +1,6 @@
 <%= c 'main', **attrs do %>
   <%= c 'page_header', styles: [:wide, :inheritBackgroundColor, :xlargePaddingTop] do %>
-    <%= c 'heading' do %>
+    <%= c 'heading', tag: :h1 do %>
       <%= t('.main_heading') %>
     <% end %>
   <% end %>

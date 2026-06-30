@@ -1,5 +1,5 @@
 <%= c 'section', **attrs.merge(styles: [:wide, :xlargeMarginTop, :noSpaceBetween], data: { controller: 'user-management' }) do %>
-  <%= c 'heading', style: :beta do %>
+  <%= c 'heading', style: :beta, tag: :h2 do %>
     <%= t('.main_heading') %>
   <% end %>
   <p><%= t('.number_of_users_of_business_plan_used', users_count: organization.users.active.count, allocated_users: organization.business_plan.number_of_users) %>
