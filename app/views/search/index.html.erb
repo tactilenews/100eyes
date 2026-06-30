@@ -1,6 +1,6 @@
 <%= c 'main' do %>
   <%= c 'page_header' do %>
-    <%= c 'heading' do %>
+    <%= c 'heading', tag: :h1 do %>
       <%= I18n.t 'search.result', count: :many %>
     <% end %>
   <% end %>

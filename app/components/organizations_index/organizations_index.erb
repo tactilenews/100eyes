@@ -1,6 +1,6 @@
 <%= c 'main', style: :lightestGrayBackground, **attrs do %>
   <%= c 'page_header', styles: [:flexboxColumn, :wide, :xlargePaddingTop] do %>
-    <%= c 'heading' do %>
+    <%= c 'heading', tag: :h1 do %>
       <%= t('.main_heading', first_name: current_user.first_name) %>
     <% end %>
     <%= c 'heading', tag: :h2 do %>

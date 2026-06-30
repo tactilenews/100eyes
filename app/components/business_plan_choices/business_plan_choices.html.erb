@@ -17,7 +17,7 @@
           <%= 'disabled' if choice[:price] < current_plan.price_per_month %>
         />
         <div class="BusinessPlanChoices-name">
-          <%= c 'heading', style: :gamma do %>
+          <%= c 'heading', style: :gamma, tag: :h3 do %>
             <%= choice[:name] %>
           <% end %>  
         </div>

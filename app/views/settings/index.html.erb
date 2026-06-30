@@ -1,6 +1,6 @@
 <%= c 'main' do %>
   <%= c 'page_header', styles: [:largeMarginBottom, :flexboxColumn, :noGap] do %>
-    <%= c 'heading', style: :alpha do %>
+    <%= c 'heading', style: :alpha, tag: :h1 do %>
       <%= t 'settings.header' %>
     <% end %>
     <p><%= t('settings.subheading')%></p>

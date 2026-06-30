@@ -4,7 +4,7 @@
    data: { controller: 'day-activity-linechart',
            day_activity_linechart_url_value: "/#{organization.id}/charts/day-requests-replies",
          } do %>
-  <%= c 'heading', style: :beta do %>
+  <%= c 'heading', style: :beta, tag: :h2 do %>
     <%= t '.heading' %>
   <% end %>
 

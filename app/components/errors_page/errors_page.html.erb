@@ -1,6 +1,6 @@
 <%= c 'main', **attrs do %>
   <%= c 'page_header', styles: [:flexboxColumn, :xlargePaddingTop, :largeMarginBottom, :wide] do %>
-    <%= c 'heading' do %>
+    <%= c 'heading', tag: :h1 do %>
       <%= header %>
     <% end %>
     <p class="ErrorsPage-description"><%= text %></p>

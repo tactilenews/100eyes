@@ -1,7 +1,7 @@
 <%= c 'main', data: { controller: 'contributors-index' }, **attrs do %>
   <%= c 'page_header', styles: [:lightGrayBackground, :spaceBetween, :largeMarginBottom] do |header| %>
     <div>
-      <%= c 'heading' do %>
+      <%= c 'heading', tag: :h1 do %>
         <%= I18n.t 'contributor.contributor', count: :other %>
       <% end %>
       <p><%= t('.subheading') %></p>

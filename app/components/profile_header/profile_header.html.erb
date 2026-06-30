@@ -1,5 +1,5 @@
 <%= c 'page_header', **attrs.merge(styles: [:inheritBackgroundColor, :flexboxColumn, :wide, :xlargePaddingTop], data: { controller: 'profile-header' }) do %>
-  <%= c 'heading' do %>
+  <%= c 'heading', tag: :h1 do %>
     <%= t('.main_heading', business_plan_name: organization.business_plan.name) %>
   <% end %>
 
