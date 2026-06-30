@@ -1,7 +1,7 @@
 <%= c 'main' do %>
   <%= c 'page_header', styles: [:largeMarginBottom, :spaceBetween, :wide]  do |header| %>
     <div>
-      <%= c 'heading', style: :alpha do %>
+      <%= c 'heading', style: :alpha, tag: :h1 do %>
         <%= I18n.t 'request.request', count: :many %>
       <% end %>
       <p><%= t('request.subheading') %></p>

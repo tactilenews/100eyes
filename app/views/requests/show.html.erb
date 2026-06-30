@@ -5,7 +5,7 @@
 
   <%= c 'page_header', styles: [:largeMarginBottom, :flexboxColumn, :wide] do %>
     <%= c 'flex', style: :spaceBetween do %>
-      <%= c 'heading', style: :alpha do %>
+      <%= c 'heading', style: :alpha, tag: :h1 do %>
         <%= @request.title %>
       <% end %>
 

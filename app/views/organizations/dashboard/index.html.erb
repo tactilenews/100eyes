@@ -1,6 +1,6 @@
 <%= c 'main', style: :lightestGrayBackground do %>
   <%= c 'page_header', styles: [:wide, :inheritBackgroundColor, :xlargePaddingTop, :spaceBetween] do %>
-    <%= c 'heading' do %>
+    <%= c 'heading', tag: :h1 do %>
       <%= t "dashboard.heading#{time_based_heading}", first_name: current_user.first_name %>
     <% end %>
     <%= c 'new_request_link', organization: @organization %>
