@@ -1,0 +1,27 @@
+name: Deploy to datenfreunde staging
+
+on:
+  push:
+    branches: [datenfreunde-staging]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    concurrency: datenfreunde_staging_environment
+
+    steps:
+      - name: Deploy to staging server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 100eyes-staging.labs.datenfreunde.net
+          username: ubuntu
+          key: ${{ secrets.STAGING_SSH_PRIVATE_KEY }}
+          script: |
+            set -e
+            cd /home/ubuntu/100eyes
+            git fetch origin
+            git checkout datenfreunde-staging
+            git pull origin datenfreunde-staging
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.staging.yml build app
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.staging.yml up -d --remove-orphans
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.staging.yml exec -T app rails db:prepare
