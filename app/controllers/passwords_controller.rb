@@ -7,7 +7,7 @@ class PasswordsController < Clearance::PasswordsController
     @user = find_user_for_update
 
     if @user.update_password(password_from_password_reset_params)
-      @user.update_columns(must_reset_password: false)
+      @user.update(must_reset_password: false)
       session[:password_reset_token] = nil
       redirect_to url_after_update, status: :see_other
     else
