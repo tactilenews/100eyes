@@ -8,6 +8,7 @@ RSpec.describe 'Sign in' do
   let(:password) { '12345678' }
   let(:otp_enabled) { true }
   let!(:user) { create(:user, email: email, password: password, otp_enabled: otp_enabled, organizations: [organization]) }
+
   it 'editor tries to visit protected page' do
     visit organization_dashboard_path(organization)
     expect(page).to have_current_path(sign_in_path)
