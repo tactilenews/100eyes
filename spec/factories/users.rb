@@ -7,10 +7,14 @@ FactoryBot.define do
     last_name { Faker::Name.last_name }
     password { Faker::Internet.password(min_length: 20, max_length: 128) }
     otp_enabled { true }
-    skip_must_reset_password { true }
 
     after(:build) do |user, evaluator|
       user.organizations << create(:organization) unless user.admin? || evaluator.organizations.present?
+      user.class.skip_callback(:create, :before, :set_must_reset_password, raise: false)
+    end
+
+    after(:create) do |_user|
+      User.set_callback(:create, :before, :set_must_reset_password)
     end
   end
 end

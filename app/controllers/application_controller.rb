@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
     super(user) do |status|
       if status.success?
         redirect_to redirect_path
-      elsif user.must_reset_password?
+      elsif user&.must_reset_password?
         redirect_to edit_user_password_path(user_id: user.id, token: user.confirmation_token)
       else
         flash.now.alert = status.failure_message
