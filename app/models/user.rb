@@ -20,6 +20,8 @@ class User < ApplicationRecord
   scope :active, -> { where(deactivated_at: nil) }
   scope :inactive, -> { where.not(deactivated_at: nil) }
 
+  attr_accessor :skip_must_reset_password
+
   before_create :set_must_reset_password
   after_create_commit :notify_admin
   after_update_commit :reset_otp
@@ -69,6 +71,6 @@ class User < ApplicationRecord
   end
 
   def set_must_reset_password
-    self.must_reset_password = true
+    self.must_reset_password = true unless skip_must_reset_password
   end
 end
