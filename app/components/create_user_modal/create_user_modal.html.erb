@@ -19,6 +19,10 @@
         <%= c 'input', id: 'user[email]', required: true, type: :email %>
       <% end %>
 
+      <%= c 'base_field', id: 'user[password]', label: t('.password.label') do %>
+        <%= c 'password_input', id: 'user[password]', required: true %>
+      <% end %>
+
       <%= c 'button',
         type: 'submit',
         label: t('.submit_button'),

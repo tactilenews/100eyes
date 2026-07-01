@@ -15,6 +15,7 @@ RSpec.describe 'Users' do
       fill_in 'First name', with: 'Zora'
       fill_in 'Last name', with: 'Zimmermann'
       fill_in 'Email', with: 'zimmermann@example.org'
+      fill_in 'Password', with: 'password123'
 
       click_on 'User erstellen'
       expect(page).to have_text('User konnte nicht gespeichert werden, es gab 1 Fehler. Organizations ist zu kurz (weniger als 1 Zeichen)')
@@ -35,6 +36,7 @@ RSpec.describe 'Users' do
       fill_in 'First name', with: 'New'
       fill_in 'Last name', with: 'Admin'
       fill_in 'Email', with: 'new_admin@example.org'
+      fill_in 'Password', with: 'password123'
       check 'Admin'
 
       click_on 'User erstellen'

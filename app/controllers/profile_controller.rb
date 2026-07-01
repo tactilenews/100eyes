@@ -6,8 +6,7 @@ class ProfileController < ApplicationController
   def index; end
 
   def create_user
-    password = SecureRandom.alphanumeric(20)
-    user = User.new(user_params.merge(password: password, organizations: [@organization]))
+    user = User.new(user_params.merge(organizations: [@organization]))
     if user.save
       redirect_to organization_profile_path(@organization), flash: { success: I18n.t('profile.user.created_successfully') }
     else
@@ -32,7 +31,7 @@ class ProfileController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(%i[first_name last_name email])
+    params.require(:user).permit(%i[first_name last_name email password])
   end
 
   def upgrade_business_plan_params

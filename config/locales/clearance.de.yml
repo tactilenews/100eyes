@@ -15,3 +15,4 @@ de:
     failure_when_forbidden: Der Link zum Ändern deines deines Passworts ist ungültig. Probiere es noch einmal oder wende dich an unseren Support.
     failure_when_not_signed_in: Bitte logge dich ein.
     failure_when_missing_email: Das Feld für E-Mail darf nicht leer sein.
+    must_reset_password: "Du musst dein Passwort zurücksetzen, bevor du fortfahren kannst."

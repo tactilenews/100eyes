@@ -404,6 +404,8 @@ de:
         label: Nachname
       email:
         label: E-Mail-Adresse
+      password:
+        label: Passwort
       submit_button: 'Teammitglied hinzufügen'
       close_modal: Modal schließen
     pagination:
