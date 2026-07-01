@@ -45,15 +45,25 @@ class UserDashboard < Administrate::BaseDashboard
     organizations
   ].freeze
 
-  FORM_ATTRIBUTES = %i[
+  FORM_ATTRIBUTES_NEW = %i[
     first_name
     last_name
     email
     password
     admin
+    organizations
+  ].freeze
+
+  FORM_ATTRIBUTES_EDIT = %i[
+    first_name
+    last_name
+    email
+    admin
     active
     organizations
   ].freeze
+
+  FORM_ATTRIBUTES = FORM_ATTRIBUTES_EDIT
 
   COLLECTION_FILTERS = {}.freeze
 

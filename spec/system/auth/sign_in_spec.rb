@@ -137,7 +137,7 @@ RSpec.describe 'Sign in' do
       click_button 'Anmelden'
 
       # Redirected directly to reset form — no email needed
-      expect(page).to have_current_path(%r{/passwords/\d+/edit})
+      expect(page).to have_current_path(%r{/users/\d+/password/edit})
       expect(page).to have_text('Passwort ändern')
 
       fill_in 'password_reset[password]', with: new_password

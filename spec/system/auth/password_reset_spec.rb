@@ -62,7 +62,7 @@ RSpec.describe 'Password Reset' do
       fill_in 'session[password]', with: password
       click_button 'Anmelden'
 
-      expect(page).to have_current_path(%r{/passwords/\d+/edit})
+      expect(page).to have_current_path(%r{/users/\d+/password/edit})
 
       fill_in 'password_reset[password]', with: new_password
       click_button 'Passwort ändern'
