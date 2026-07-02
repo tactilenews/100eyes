@@ -67,4 +67,4 @@ Contributors self-onboard at `/:organization_id/onboarding/<channel>`. Each chan
 3. On submit, a `Contributor` record is created and a welcome message sent via the chosen channel.
 4. Contributor is redirected to the success page.
 
-Telegram onboarding uses a deep-link token (`telegram_onboarding_token`) that links the browser session to the Telegram chat. Signal onboarding collects the contributor's name and issues an onboarding token; when the contributor messages the Signal number, their UUID is saved by matching against that token (phone number alone is not sufficient to identify the incoming webhook).
+Telegram onboarding uses a deep-link token (`telegram_onboarding_token`) that links the browser session to the Telegram chat. Signal onboarding collects the contributor's name and issues an onboarding token; when the contributor messages the Signal number, the webhook delivers only their UUID — the UUID is matched against the onboarding token to identify the contributor and saved to their record.
