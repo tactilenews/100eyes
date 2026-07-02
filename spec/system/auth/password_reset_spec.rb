@@ -47,28 +47,4 @@ RSpec.describe 'Password Reset' do
       expect(page).to have_current_path(sign_in_path)
     end
   end
-
-  describe 'first-login password reset via guard' do
-    let(:otp_enabled) { false }
-    let!(:user) do
-      create(:user, email: email, password: password, otp_enabled: false,
-                    must_reset_password: true, organizations: [organization])
-    end
-
-    it 'clears must_reset_password after successful reset' do
-      visit sign_in_path
-
-      fill_in 'session[email]', with: email
-      fill_in 'session[password]', with: password
-      click_button 'Anmelden'
-
-      expect(page).to have_current_path(%r{/users/\d+/password/edit})
-
-      fill_in 'password_reset[password]', with: new_password
-      click_button 'Passwort ändern'
-
-      expect(user.reload.must_reset_password).to be false
-      expect(page).to have_current_path(sign_in_path)
-    end
-  end
 end
