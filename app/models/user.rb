@@ -20,6 +20,7 @@ class User < ApplicationRecord
   scope :active, -> { where(deactivated_at: nil) }
   scope :inactive, -> { where.not(deactivated_at: nil) }
 
+  before_create :set_must_reset_password
   after_create_commit :notify_admin
   after_update_commit :reset_otp
 
@@ -65,5 +66,9 @@ class User < ApplicationRecord
     return unless saved_change_to_otp_enabled? && otp_enabled_previously_was == true
 
     update(otp_secret_key: User.otp_random_secret)
+  end
+
+  def set_must_reset_password
+    self.must_reset_password = true
   end
 end

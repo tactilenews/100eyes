@@ -93,6 +93,7 @@ RSpec.describe 'Profile' do
       fill_in 'Vorname', with: 'New'
       fill_in 'Nachname', with: 'Editor'
       fill_in 'E-Mail-Adresse', with: email
+      fill_in 'Passwort', with: 'password123'
       click_button 'Teammitglied hinzufügen'
     end
 
@@ -105,6 +106,7 @@ RSpec.describe 'Profile' do
       fill_in 'Vorname', with: 'New'
       fill_in 'Nachname', with: 'Editor'
       fill_in 'E-Mail-Adresse', with: 'new-editor@example.org'
+      fill_in 'Passwort', with: 'password123'
       click_button 'Teammitglied hinzufügen'
     end
 

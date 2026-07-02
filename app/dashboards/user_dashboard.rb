@@ -8,6 +8,7 @@ class UserDashboard < Administrate::BaseDashboard
     first_name: Field::String,
     last_name: Field::String,
     email: Field::String,
+    password: Field::Password,
     admin: Field::Boolean,
     otp_enabled: Field::Boolean.with_options(searchable: false),
     created_at: Field::DateTime,
@@ -44,7 +45,16 @@ class UserDashboard < Administrate::BaseDashboard
     organizations
   ].freeze
 
-  FORM_ATTRIBUTES = %i[
+  FORM_ATTRIBUTES_NEW = %i[
+    first_name
+    last_name
+    email
+    password
+    admin
+    organizations
+  ].freeze
+
+  FORM_ATTRIBUTES_EDIT = %i[
     first_name
     last_name
     email
@@ -52,6 +62,8 @@ class UserDashboard < Administrate::BaseDashboard
     active
     organizations
   ].freeze
+
+  FORM_ATTRIBUTES = FORM_ATTRIBUTES_EDIT
 
   COLLECTION_FILTERS = {}.freeze
 

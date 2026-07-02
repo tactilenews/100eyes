@@ -59,4 +59,21 @@ RSpec.describe User do
       end
     end
   end
+
+  describe '#must_reset_password' do
+    it 'is set to true on create' do
+      user = User.create!(
+        first_name: 'New',
+        last_name: 'Editor',
+        email: 'new-editor@example.org',
+        password: 'password123',
+        organizations: [organization]
+      )
+      expect(user.reload.must_reset_password).to be true
+    end
+
+    it 'is false for factory-created users by default' do
+      expect(create(:user).must_reset_password).to be false
+    end
+  end
 end

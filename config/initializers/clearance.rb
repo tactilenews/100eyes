@@ -11,6 +11,7 @@ Clearance.configure do |config|
   config.redirect_url = '/sign_in'
   config.routes = false
   config.sign_in_on_password_reset = false
+  config.sign_in_guards = ['MustResetPasswordGuard']
 
   Rails.application.config.to_prepare do
     Clearance::BaseController.layout 'minimal'

@@ -20,7 +20,7 @@ RSpec.describe '/profile' do
   end
 
   describe 'POST /create_user' do
-    let(:params) { { user: { first_name: 'Daniel', last_name: 'Theis', email: 'daniel-theis@example.org' } } }
+    let(:params) { { user: { first_name: 'Daniel', last_name: 'Theis', email: 'daniel-theis@example.org', password: 'password123' } } }
 
     context 'unauthenticated' do
       subject { -> { post organization_profile_user_path(organization), params: params } }
@@ -35,6 +35,11 @@ RSpec.describe '/profile' do
 
       it 'creates a user' do
         expect { subject.call }.to(change { User.count }.from(2).to(3))
+      end
+
+      it 'creates a user with must_reset_password set to true' do
+        subject.call
+        expect(User.find_by(email: 'daniel-theis@example.org').must_reset_password).to be true
       end
 
       it 'redirects to profile page' do

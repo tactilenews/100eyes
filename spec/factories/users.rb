@@ -10,6 +10,11 @@ FactoryBot.define do
 
     after(:build) do |user, evaluator|
       user.organizations << create(:organization) unless user.admin? || evaluator.organizations.present?
+      user.class.skip_callback(:create, :before, :set_must_reset_password, raise: false)
+    end
+
+    after(:create) do |_user|
+      User.set_callback(:create, :before, :set_must_reset_password)
     end
   end
 end

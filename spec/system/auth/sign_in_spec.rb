@@ -121,4 +121,38 @@ RSpec.describe 'Sign in' do
       end
     end
   end
+
+  describe 'new editor who must reset password', js: true do
+    let(:new_password) { 'newpassword123' }
+    let!(:user) do
+      create(:user, email: email, password: password, otp_enabled: false,
+                    must_reset_password: true, organizations: [organization])
+    end
+
+    it 'is redirected to password reset form on first sign in, then to OTP setup' do
+      visit sign_in_path
+
+      fill_in 'session[email]', with: email
+      fill_in 'session[password]', with: password
+      click_button 'Anmelden'
+
+      # Redirected directly to reset form — no email needed
+      expect(page).to have_current_path(%r{/users/\d+/password/edit})
+      expect(page).to have_text('Passwort ändern')
+
+      fill_in 'password_reset[password]', with: new_password
+      click_button 'Passwort ändern'
+
+      # Redirected back to sign in (sign_in_on_password_reset = false)
+      expect(page).to have_current_path(sign_in_path)
+      expect(user.reload.must_reset_password).to be false
+
+      # Sign in with new password — now redirected to OTP setup
+      fill_in 'session[email]', with: email
+      fill_in 'session[password]', with: new_password
+      click_button 'Anmelden'
+
+      expect(page).to have_current_path(otp_setup_path)
+    end
+  end
 end
