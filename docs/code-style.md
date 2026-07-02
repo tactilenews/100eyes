@@ -33,7 +33,7 @@ read_when:
 
 ## ViewComponents
 
-- **All UI is ViewComponent** — no ERB partials. ~140 components under `app/components/`.
+- **All UI is ViewComponent** — no ERB partials. Components live under `app/components/` (run `ls app/components/ | wc -l` for current count).
 - Each component is a directory: `component_name/component.rb` (+ optional `component.css`).
 - Naming: snake_case directory, `ComponentName::Component` class.
 - Test components in `spec/components/` using `ViewComponent::TestHelpers`.
