@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "docmap": "docmap",
     "build:css": "postcss ./app/assets/stylesheets/application.css -o ./app/assets/builds/application.css",
     "build:js": "bin/esbuild",
     "build": "run-p -l build:**",
@@ -18,6 +19,7 @@
   },
   "devDependencies": {
     "@arkweid/lefthook": "^0.7.7",
+    "@paleo/docmap": "^0.6.3",
     "cssnano": "^7.0.3",
     "esbuild": "^0.17.10",
     "esbuild-plugin-import-glob": "^0.1.1",

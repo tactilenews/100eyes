@@ -1,5 +1,17 @@
 # AI Agent Instructions
 
+## Docmap - Seek Documentation
+
+**Before any investigation or code exploration**, run `npm run docmap`, then read the relevant documentation. Mandatory for every task.
+
+### Essential Documentation
+
+Always read before any investigation or work:
+
+- `docs/architecture.md` — core domain models, multi-tenancy, request lifecycle, adapter layer overview
+- `docs/code-style.md` — Rails conventions, ViewComponent pattern, service objects, Rubocop rules
+
+
 ## Agent Operations
 
 This section documents how an AI agent (e.g. the factory agent on the agent server) should
