@@ -71,9 +71,9 @@ module WhatsApp
 
     def handle_invalid_recipient(status)
       contributor = @organization.contributors.find_by(whats_app_phone_number: "+#{status[:recipient_id]}")
-      WhatsAppAdapter::HandleFailedMessageJob.delay(run_at: Time.current.tomorrow.beginning_of_day).perform_later(
-        contributor_id: contributor.id, external_message_id: status[:id]
-      )
+      WhatsAppAdapter::HandleFailedMessageJob
+        .set(wait_until: Time.current.tomorrow.beginning_of_day)
+        .perform_later(contributor_id: contributor.id, external_message_id: status[:id])
     end
 
     def handle_successful_delivery(delivery_receipt)
