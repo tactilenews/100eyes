@@ -87,6 +87,7 @@ Rails.application.routes.draw do
 
       collection do
         get 'count'
+        get 'sidebar'
       end
     end
 
