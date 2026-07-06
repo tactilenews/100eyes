@@ -330,11 +330,9 @@ ActiveRecord::Schema.define(version: 2025_07_01_120000) do
     t.string "first_name"
     t.string "last_name"
     t.boolean "admin", default: false
-    t.bigint "organization_id"
     t.datetime "deactivated_at"
     t.boolean "must_reset_password", default: false, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["organization_id"], name: "index_users_on_organization_id"
     t.index ["remember_token"], name: "index_users_on_remember_token"
   end
 
@@ -368,7 +366,6 @@ ActiveRecord::Schema.define(version: 2025_07_01_120000) do
   add_foreign_key "requests", "organizations"
   add_foreign_key "requests", "users"
   add_foreign_key "taggings", "tags"
-  add_foreign_key "users", "organizations"
   add_foreign_key "users_organizations", "organizations"
   add_foreign_key "users_organizations", "users"
 end
