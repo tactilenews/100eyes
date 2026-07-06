@@ -96,3 +96,15 @@ docker compose run --rm \
 - The `assets` service runs `npm run dev` (watch mode) by default. Always override it with
   `docker compose run --rm assets npm run build:js && npm run build:css` for a one-time build in CI/agent contexts.
 - `ATTR_ENCRYPTED_KEY` must be set or `attr_encrypted` will raise on model load.
+
+### Preview
+
+- **Compose file**: `docker-compose.preview.yml`
+- **Health path**: `/health`
+- **Env template**: `.env.preview` (substitutes `$PREVIEW_HOST` and `$DB_NAME`)
+
+Preview environments are deployed by the `factory-preview` skill to `previews.labs.datenfreunde.net`.
+URL pattern: `pr-{number}-100eyes.previews.labs.datenfreunde.net`
+
+Signal and email are stubbed out in `.env.preview` — the preview is UI/DB only.
+The app image is built from source on the preview server; first deploy may take several minutes.

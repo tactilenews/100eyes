@@ -1,0 +1,51 @@
+services:
+  app:
+    build:
+      context: .
+    command: >
+      bash -c "bundle exec rails db:migrate &&
+               bundle exec rails server -b 0.0.0.0 -p 3000"
+    env_file:
+      - .env.resolved
+    environment:
+      RAILS_ENV: production
+      RAILS_SERVE_STATIC_FILES: "true"
+      POSTGRES_HOST: db
+      POSTGRES_PORT: "5432"
+    depends_on:
+      db:
+        condition: service_healthy
+    labels:
+      - traefik.enable=true
+      - "traefik.http.routers.${PREVIEW_ID}.rule=Host(`${PREVIEW_HOST}`)"
+      - traefik.http.routers.${PREVIEW_ID}.entrypoints=websecure
+      - "traefik.http.routers.${PREVIEW_ID}.tls.certresolver=letsencrypt"
+      - traefik.http.services.${PREVIEW_ID}.loadbalancer.server.port=3000
+    networks:
+      - traefik_net
+      - internal
+    restart: unless-stopped
+
+  db:
+    image: postgres:14.3-alpine3.16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: "${DB_NAME}"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - internal
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
+
+networks:
+  traefik_net:
+    external: true
+  internal:
