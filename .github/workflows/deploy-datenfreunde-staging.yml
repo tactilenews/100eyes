@@ -21,7 +21,7 @@ jobs:
             cd /home/ubuntu/100eyes
             git fetch origin
             git checkout datenfreunde-staging
-            git pull origin datenfreunde-staging
+            git reset --hard origin/datenfreunde-staging
             docker compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.staging.yml build app
             docker compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.staging.yml up -d --remove-orphans
             docker compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.staging.yml exec -T app rails db:prepare
