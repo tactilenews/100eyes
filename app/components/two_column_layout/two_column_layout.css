@@ -38,3 +38,18 @@
     var(--color-gray-lightest) 90%
   );
 }
+
+@media screen and (max-width: 52.999rem) {
+  .TwoColumnLayout {
+    flex-direction: column;
+  }
+
+  .TwoColumnLayout-sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+    max-height: 40vh;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+}
