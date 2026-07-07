@@ -29,7 +29,7 @@ organization = Organization.create_or_find_by!(
 )
 admin = User.create_or_find_by!(email: 'redaktion@tactile.news') do |u|
   u.first_name = 'Dennis'
-  u.last_name = 'Schroeder'
+  u.last_name = 'Schröder'
   u.password = password
   u.admin = true
   u.otp_secret_key = otp_secret_key
@@ -108,7 +108,7 @@ puts 'Seeding reply messages...'
 requests.each do |request|
   reply_count = rand(3..12)
   active_contributors.sample(reply_count).each do |contributor|
-    replied_at = rand(request.broadcasted_at..Time.current)
+    replied_at = Time.zone.at(rand(request.broadcasted_at.to_i..Time.current.to_i))
     Message.create!(
       organization: organization,
       request: request,
