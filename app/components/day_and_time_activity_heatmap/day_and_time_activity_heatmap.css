@@ -37,3 +37,16 @@
   font-size: var(--font-size-s);
   padding: var(--spacing-unit-xs);
 }
+
+@media screen and (max-width: 52.999rem) {
+  .DayAndTimeActivityHeatmap-chart {
+    height: 20rem;
+    overflow-x: auto;
+  }
+
+  .DayAndTimeActivityHeatmap-tabBar {
+    margin-left: 0;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
