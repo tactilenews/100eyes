@@ -108,3 +108,4 @@ URL pattern: `pr-{number}-100eyes.previews.labs.datenfreunde.net`
 
 Signal and email are stubbed out in `.env.preview` — the preview is UI/DB only.
 The app image is built from source on the preview server; first deploy may take several minutes.
+`db:seed` runs automatically after migrations — the preview DB is pre-seeded with an admin user and default organization, so no manual setup is needed.
