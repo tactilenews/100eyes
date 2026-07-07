@@ -28,6 +28,12 @@
   flex-grow: 1;
 }
 
+@media screen and (max-width: 539px) {
+  .Flex--spaceBetween > .Button {
+    align-self: flex-start;
+  }
+}
+
 @media screen and (min-width: 540px) {
   .Flex {
     --gap: var(--spacing-unit);
