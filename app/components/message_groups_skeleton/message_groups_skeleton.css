@@ -25,7 +25,8 @@
   width: 9rem;
   height: var(--spacing-unit);
   margin-right: var(--spacing-unit);
-  background: linear-gradient(
+  background:
+    linear-gradient(
       to right,
       rgba(255, 255, 255, 0),
       rgba(255, 255, 255, 0.5) 50%,
@@ -39,7 +40,8 @@
   width: 8rem;
   height: var(--spacing-unit);
   margin-right: var(--spacing-unit);
-  background: linear-gradient(
+  background:
+    linear-gradient(
       to right,
       rgba(255, 255, 255, 0),
       rgba(255, 255, 255, 0.5) 50%,
@@ -76,7 +78,8 @@
 }
 
 .MessageGroupsSkeleton-text {
-  background: linear-gradient(
+  background:
+    linear-gradient(
       to right,
       rgba(255, 255, 255, 0),
       rgba(255, 255, 255, 0.5) 50%,
@@ -89,7 +92,8 @@
 }
 
 .MessageGroupsSkeleton-itemFooterText {
-  background: linear-gradient(
+  background:
+    linear-gradient(
       to right,
       rgba(255, 255, 255, 0),
       rgba(255, 255, 255, 0.5) 50%,
@@ -102,7 +106,8 @@
 }
 
 .MessageGroupsSkeleton-itemFooterButton {
-  background: linear-gradient(
+  background:
+    linear-gradient(
       to right,
       rgba(255, 255, 255, 0),
       rgba(255, 255, 255, 0.5) 50%,
