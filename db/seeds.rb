@@ -29,9 +29,6 @@ organization.assign_attributes(
   signal_server_phone_number: '+491****1111'
 )
 organization.save!
-# Skip the before_create callback that unconditionally sets must_reset_password: true,
-# so seed users can sign in to previews without being forced to change their password.
-User.skip_callback(:create, :before, :set_must_reset_password)
 admin = User.create_or_find_by!(email: 'redaktion@tactile.news') do |u|
   u.first_name = 'Dennis'
   u.last_name = 'Schröder'
@@ -48,7 +45,6 @@ user = User.create_or_find_by!(email: 'contact-person@example-organization.org')
   u.organizations = [organization]
   u.must_reset_password = false
 end
-User.set_callback(:create, :before, :set_must_reset_password)
 organization.update(contact_person: user)
 puts "Organization with name #{organization.name}"
 puts "Admin with email #{admin.email} and password #{password}"
