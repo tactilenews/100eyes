@@ -1,4 +1,4 @@
-<%= tag.turbo_frame id: 'contributors-sidebar-frame' do %>
+<%= tag.turbo_frame id: 'contributors-sidebar' do %>
   <% @contributors_sidebar.each do |contributor| %>
     <%= c 'sidebar_item', active: contributor.id == @active_contributor_id do %>
       <%= c 'contributor_row', organization: @organization, contributor: contributor, style: :compact %>

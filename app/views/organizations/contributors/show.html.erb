@@ -4,7 +4,7 @@
       <%= t 'contributor.skip_to_profile' %>
     </a>
 
-    <%= tag.turbo_frame id: 'contributors-sidebar-frame', src: sidebar_organization_contributors_path(@organization, active_id: @contributor.id) do %>
+    <%= tag.turbo_frame id: 'contributors-sidebar', src: sidebar_organization_contributors_path(@organization, active_id: @contributor.id) do %>
       <%= c 'sidebar_item', active: true do %>
         <%= c 'contributor_row', organization: @organization, contributor: @contributor, style: :compact %>
       <% end %>
