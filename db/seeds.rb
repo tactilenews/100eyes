@@ -31,22 +31,29 @@ organization.assign_attributes(
 organization.save!
 # Skip the before_create callback that unconditionally sets must_reset_password: true,
 # so seed users can sign in to previews without being forced to change their password.
+# Use find_or_initialize_by + save! so re-runs are idempotent: Clearance adds a model-level
+# uniqueness validation that causes create_or_find_by! to raise RecordInvalid (not
+# RecordNotUnique) on duplicates, which create_or_find_by! does not rescue.
 User.skip_callback(:create, :before, :set_must_reset_password)
-admin = User.create_or_find_by!(email: 'redaktion@tactile.news') do |u|
-  u.first_name = 'Dennis'
-  u.last_name = 'Schröder'
-  u.password = password
-  u.admin = true
-  u.otp_secret_key = otp_secret_key
-  u.must_reset_password = false
+admin = User.find_or_initialize_by(email: 'redaktion@tactile.news')
+if admin.new_record?
+  admin.first_name = 'Dennis'
+  admin.last_name = 'Schröder'
+  admin.password = password
+  admin.admin = true
+  admin.otp_secret_key = otp_secret_key
+  admin.must_reset_password = false
+  admin.save!
 end
-user = User.create_or_find_by!(email: 'contact-person@example-organization.org') do |u|
-  u.first_name = 'Contact Person'
-  u.last_name = 'Organization'
-  u.password = password
-  u.otp_secret_key = otp_secret_key
-  u.organizations = [organization]
-  u.must_reset_password = false
+user = User.find_or_initialize_by(email: 'contact-person@example-organization.org')
+if user.new_record?
+  user.first_name = 'Contact Person'
+  user.last_name = 'Organization'
+  user.password = password
+  user.otp_secret_key = otp_secret_key
+  user.organizations = [organization]
+  user.must_reset_password = false
+  user.save!
 end
 User.set_callback(:create, :before, :set_must_reset_password)
 organization.update(contact_person: user)
