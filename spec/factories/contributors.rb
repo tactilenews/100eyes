@@ -2,6 +2,9 @@
 
 # rubocop:disable Metrics/BlockLength
 FactoryBot.define do
+  sequence(:whats_app_phone_number) { |n| "+4915111#{n.to_s.rjust(5, '0')}" }
+  sequence(:signal_phone_number) { |n| "+4915111#{n.to_s.rjust(5, '0')}" }
+
   factory :contributor do
     organization
     first_name { Faker::Name.first_name }
@@ -43,7 +46,7 @@ FactoryBot.define do
     trait :signal_contributor do
       after(:build) do |contributor|
         contributor.email = nil
-        contributor.signal_phone_number = Faker::PhoneNumber.unique.cell_phone_in_e164
+        contributor.signal_phone_number = generate(:signal_phone_number)
       end
     end
 
@@ -57,8 +60,7 @@ FactoryBot.define do
     trait :whats_app_contributor do
       after(:build) do |contributor|
         contributor.email = nil
-        # FIXME: Faker seems to create invalid phone numbers sometimes
-        contributor.whats_app_phone_number = Faker::PhoneNumber.unique.cell_phone_in_e164
+        contributor.whats_app_phone_number = generate(:whats_app_phone_number)
       end
     end
 
