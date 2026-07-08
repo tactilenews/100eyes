@@ -129,6 +129,15 @@ RSpec.describe '/:organization_id/contributors', type: :request do
         expect(page).not_to have_content inactive_contributor.first_name
       end
     end
+
+    context 'when the active_id refers to an inactive contributor' do
+      let(:contributor) { create(:contributor, :inactive, organization: organization) }
+
+      it 'still includes the inactive contributor in the sidebar' do
+        subject.call
+        expect(page).to have_content contributor.first_name
+      end
+    end
   end
 
   describe 'GET /conversations' do

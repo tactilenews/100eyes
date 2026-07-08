@@ -56,11 +56,13 @@ module Organizations
     end
 
     def sidebar
+      active_id = params[:active_id].to_i
       @contributors_sidebar = @organization
                               .contributors
                               .active
+                              .or(@organization.contributors.where(id: active_id))
                               .with_attached_avatar
-      @active_contributor_id = params[:active_id].to_i
+      @active_contributor_id = active_id
       render layout: false
     end
 
