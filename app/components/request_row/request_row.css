@@ -36,3 +36,19 @@
   border-color: var(--color-focus);
   box-shadow: var(--input-focus-shadow);
 }
+
+@media screen and (max-width: 52.999rem) {
+  .RequestRow-meta {
+    flex-wrap: wrap;
+    gap: var(--spacing-unit-xs);
+  }
+
+  .RequestRow .TagsList {
+    max-width: 100%;
+  }
+
+  .RequestRow .InlineMetrics {
+    margin-left: 0;
+    width: 100%;
+  }
+}

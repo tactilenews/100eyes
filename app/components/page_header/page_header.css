@@ -74,3 +74,13 @@
 .PageHeader--noGap > .PageHeader-flexbox {
   gap: 0;
 }
+
+@media screen and (max-width: 539px) {
+  .PageHeader--spaceBetween > .PageHeader-flexbox {
+    flex-wrap: wrap;
+  }
+
+  .PageHeader--spaceBetween > .PageHeader-flexbox > .Button {
+    align-self: flex-start;
+  }
+}
