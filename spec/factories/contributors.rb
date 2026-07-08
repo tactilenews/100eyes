@@ -2,6 +2,8 @@
 
 # rubocop:disable Metrics/BlockLength
 FactoryBot.define do
+  sequence(:whats_app_phone_number) { |n| "+4915111#{n.to_s.rjust(5, '0')}" }
+
   factory :contributor do
     organization
     first_name { Faker::Name.first_name }
@@ -53,8 +55,6 @@ FactoryBot.define do
         contributor.signal_uuid = Faker::Internet.uuid
       end
     end
-
-    sequence(:whats_app_phone_number) { |n| "+4915111#{n.to_s.rjust(5, '0')}" }
 
     trait :whats_app_contributor do
       after(:build) do |contributor|
