@@ -54,11 +54,12 @@ FactoryBot.define do
       end
     end
 
+    sequence(:whats_app_phone_number) { |n| "+4915111#{n.to_s.rjust(5, '0')}" }
+
     trait :whats_app_contributor do
       after(:build) do |contributor|
         contributor.email = nil
-        # FIXME: Faker seems to create invalid phone numbers sometimes
-        contributor.whats_app_phone_number = Faker::PhoneNumber.unique.cell_phone_in_e164
+        contributor.whats_app_phone_number = generate(:whats_app_phone_number)
       end
     end
 
