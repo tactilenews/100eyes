@@ -30,7 +30,7 @@ RSpec.describe 'Profile pictures' do
     it 'renders show with error message' do
       visit organization_contributor_path(organization, contributor, as: user)
 
-      within('#contributors-sidebar') do
+      within('[data-testid="contributors-sidebar"]') do
         active_contributors.each do |contributor|
           expect(page).to have_content(contributor.name)
         end
@@ -49,7 +49,7 @@ RSpec.describe 'Profile pictures' do
       expect(page).to have_content("Informationen zu #{contributor.name} sind ungültig")
       expect(page).to have_css('.Avatar svg')
 
-      within('#contributors-sidebar') do
+      within('[data-testid="contributors-sidebar"]') do
         active_contributors.each do |contributor|
           expect(page).to have_content(contributor.name)
         end

@@ -14,6 +14,12 @@ export default class extends Controller {
       '[data-controller="notifications"]',
     );
 
-    this.element.replaceWith(newNotifications);
+    // Only replace if the new response includes a notifications container.
+    // Turbo Frame responses that render without a layout (e.g. sidebar) do not
+    // carry a notifications container, so we leave the existing flash messages
+    // in place rather than removing them.
+    if (newNotifications) {
+      this.element.replaceWith(newNotifications);
+    }
   }
 }

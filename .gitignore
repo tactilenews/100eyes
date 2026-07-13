@@ -46,3 +46,5 @@ traefik/
 
 signal-cli-config/
 .vscode/
+.hermes/
+

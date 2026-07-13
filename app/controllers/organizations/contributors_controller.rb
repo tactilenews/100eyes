@@ -3,7 +3,6 @@
 module Organizations
   class ContributorsController < ApplicationController
     before_action :set_contributor, only: %i[update destroy show edit message conversations]
-    before_action :contributors_sidebar, only: %i[show update]
     before_action :count_params, only: :count
     before_action :contributors_params, only: :index
 
@@ -56,6 +55,17 @@ module Organizations
       render json: { count: @organization.contributors.active.with_tags(params[:tag_list]).count }
     end
 
+    def sidebar
+      active_id = params[:active_id].to_i
+      @contributors_sidebar = @organization
+                              .contributors
+                              .active
+                              .or(@organization.contributors.where(id: active_id))
+                              .with_attached_avatar
+      @active_contributor_id = active_id
+      render layout: false
+    end
+
     def conversations
       @messages = @contributor.conversations.includes(%i[files request recipient sender])
       @reply_to = @contributor.replies.find(params[:reply_to]) if params[:reply_to].present?
@@ -65,14 +75,6 @@ module Organizations
 
     def set_contributor
       @contributor = @organization.contributors.find(params[:id])
-    end
-
-    def contributors_sidebar
-      @contributors_sidebar ||= @organization
-                                .contributors
-                                .active
-                                .or(@organization.contributors.where(id: @contributor.id))
-                                .with_attached_avatar
     end
 
     def toggle_active_state

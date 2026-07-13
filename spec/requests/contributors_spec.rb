@@ -46,11 +46,6 @@ RSpec.describe '/:organization_id/contributors', type: :request do
         get organization_contributor_url(organization, create(:contributor), as: user)
         expect(response).to be_not_found
       end
-
-      it 'doesn\'t have the other contributor in the sidebar' do
-        subject.call
-        expect(page).not_to have_content other_organizations_contributor.first_name
-      end
     end
 
     context 'given a WhatsApp contributor marked inactive' do
@@ -100,6 +95,47 @@ RSpec.describe '/:organization_id/contributors', type: :request do
 
       it 'returns the count of contributors with a specific tag for active contributors' do
         expect(response.body).to eq({ count: 2 }.to_json)
+      end
+    end
+  end
+
+  describe 'GET /sidebar' do
+    subject { -> { get sidebar_organization_contributors_path(organization, active_id: contributor.id, as: user) } }
+
+    it 'is successful' do
+      subject.call
+      expect(response).to be_successful
+    end
+
+    it 'contains the active contributor' do
+      subject.call
+      expect(page).to have_content contributor.first_name
+    end
+
+    context 'with contributors of other organizations' do
+      let!(:other_organizations_contributor) { create(:contributor, first_name: 'WhatAName') }
+
+      it 'does not include contributors from other organizations' do
+        subject.call
+        expect(page).not_to have_content other_organizations_contributor.first_name
+      end
+    end
+
+    context 'given an inactive contributor' do
+      let!(:inactive_contributor) { create(:contributor, :inactive, organization: organization) }
+
+      it 'does not include inactive contributors' do
+        subject.call
+        expect(page).not_to have_content inactive_contributor.first_name
+      end
+    end
+
+    context 'when the active_id refers to an inactive contributor' do
+      let(:contributor) { create(:contributor, :inactive, organization: organization) }
+
+      it 'still includes the inactive contributor in the sidebar' do
+        subject.call
+        expect(page).to have_content contributor.first_name
       end
     end
   end
