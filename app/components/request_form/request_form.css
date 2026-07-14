@@ -70,3 +70,13 @@
   font-size: var(--font-size-xs);
   color: var(--color-red);
 }
+
+@media screen and (max-width: 52.999rem) {
+  .RequestForm {
+    grid-template-columns: 1fr;
+  }
+
+  .RequestForm-preview {
+    position: static;
+  }
+}
