@@ -1,23 +1,19 @@
 ---
-- name: Create tmp/db/ folder for sharing files between host and container
+- name: Wipe out target locations of backup folders
   file:
-    dest: "{{ playbook_dir }}/../tmp/db"
-    state: directory
-
-- name: Copy database dump into shared volume of db container
-  copy:
-    src: "{{ backup_host_folder.path }}/tmp/100eyes-db-dump.gz"
-    dest: "{{ playbook_dir }}/../tmp/db"
-
-- name: Wipe out local storage folder
-  file:
-    dest: "{{ playbook_dir }}/../storage"
+    dest: "{{ item }}"
     state: absent
+  with_items:
+    - "{{ playbook_dir }}/../storage"
+    - "{{ playbook_dir }}/../signal-cli-config"
 
-- name: Unarchive compressed storage archive into storage folder
+- name: Unarchive backed up folders
   unarchive:
-    src: "{{ backup_host_folder.path }}/tmp/100eyes-storage.tgz"
+    src: "{{ item }}"
     dest: "{{ playbook_dir }}/.."
+  with_items:
+    - "{{ backup_host_folder.path }}/tmp/100eyes-storage.tgz"
+    - "{{ backup_host_folder.path }}/tmp/100eyes-signal-cli-config.tgz"
 
 - name: Run `docker compose up`
   community.docker.docker_compose_v2:
@@ -29,7 +25,9 @@
     files:
       - docker-compose.yml
       - docker-compose.override.yml
-      - docker-compose.local-backup.yml
+
+- name: Copy database dump into db container
+  command: "docker compose cp {{ backup_host_folder.path }}/tmp/100eyes-db-dump.gz db:/tmp"
 
 - name: Re-create empty databse and restore database backup
   command:
@@ -47,4 +45,3 @@
     files:
       - docker-compose.yml
       - docker-compose.override.yml
-      - docker-compose.local-backup.yml
