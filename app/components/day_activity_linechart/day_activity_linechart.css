@@ -1,3 +1,10 @@
 .DayActivityLinechart-chart {
   height: 39rem;
 }
+
+@media screen and (max-width: 52.999rem) {
+  .DayActivityLinechart-chart {
+    height: 20rem;
+    overflow-x: auto;
+  }
+}
