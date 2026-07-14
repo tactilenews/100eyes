@@ -23,3 +23,16 @@
 .ContributorsIndex .Pagination-list {
   justify-content: flex-start;
 }
+
+@media screen and (max-width: 52.999rem) {
+  .ContributorsIndex-toggleFilterSectionButton.TabBar-item {
+    margin-left: auto;
+  }
+
+  .ContributorsIndex-filterSection .Button {
+    margin-right: 0;
+    margin-bottom: var(--spacing-unit-s);
+    width: 100%;
+    display: block;
+  }
+}
