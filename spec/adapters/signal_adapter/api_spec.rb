@@ -59,6 +59,23 @@ RSpec.describe SignalAdapter::Api do
             end
           }
         end
+
+        describe 'Specified account does not exist error' do
+          let!(:admin) { create_list(:user, 2, admin: true) }
+          let!(:non_admin_user) { create(:user) }
+
+          before do
+            stub_request(:post, uri).to_return(status: 400, body: { error: 'Specified account does not exist' }.to_json)
+          end
+
+          subject { -> { api.perform_request(request, recipient) } }
+
+          it {
+            is_expected.to have_enqueued_job(MarkInactiveContributorInactiveJob).with do |params|
+              expect(params[:contributor_id].to(eq(recipient.id)))
+            end
+          }
+        end
       end
     end
   end
